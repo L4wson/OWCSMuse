@@ -1,19 +1,16 @@
 """End-to-end collector tests against a real Postgres.
 
-Skipped unless OWCS_TEST_DATABASE_URL is set. The URL should point at a scratch
-schema, e.g.
-
-    postgresql://owcs:owcs@localhost:5432/owcsmuse?options=-c%20search_path%3Downcs_test
-
-The test drops and recreates that schema, so never point it at production.
-FACEIT is never contacted: a fake client serves the captured fixtures.
+Skipped unless OWCS_TEST_DATABASE_URL is set. Objects are created in a scratch
+schema named by OWCS_TEST_SCHEMA (default `owcs_test`), never in `public`.
+The test drops and recreates that schema at the start of every test, so the
+role must be allowed to create schemas. FACEIT is never contacted: a fake
+client serves the captured fixtures.
 """
 
 from __future__ import annotations
 
 import json
 import os
-import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -33,6 +30,8 @@ def load_fixture(name: str):
 
 
 DB_URL = os.environ.get("OWCS_TEST_DATABASE_URL")
+SCHEMA = os.environ.get("OWCS_TEST_SCHEMA", "owcs_test")
+MIGRATIONS = os.path.join(os.path.dirname(__file__), "..", "migrations")
 pytestmark = pytest.mark.skipif(not DB_URL, reason="OWCS_TEST_DATABASE_URL not set")
 
 CHAMP = "f57f9c5f-7840-4a49-8c32-24682dece3fc"
@@ -73,23 +72,16 @@ class FakeClient:
         return self._fetch(f"/matches/{match_id}/stats", self.stats[match_id], match_id=match_id)
 
 
-def _schema_from_url(url: str) -> str:
-    m = re.search(r"search_path(?:%3D|=)([A-Za-z0-9_]+)", url)
-    return m.group(1) if m else "public"
-
-
 @pytest.fixture
 def db():
-    schema = _schema_from_url(DB_URL)
-    assert schema != "public", "point OWCS_TEST_DATABASE_URL at a scratch schema via ?options=-c search_path=..."
-    admin = connect(DB_URL, autocommit=True)
-    admin.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
-    admin.execute(f"CREATE SCHEMA {schema}")
+    assert SCHEMA != "public", "OWCS_TEST_SCHEMA must be a scratch schema, never public"
+    admin = connect(DB_URL, autocommit=True, schema=SCHEMA)
+    admin.execute(f"DROP SCHEMA IF EXISTS {SCHEMA} CASCADE")
     admin.close()
 
-    conn = connect(DB_URL)
-    raw_conn = connect(DB_URL, autocommit=True)
-    migrate(conn, os.path.join(os.path.dirname(__file__), "..", "migrations"))
+    conn = connect(DB_URL, schema=SCHEMA)
+    raw_conn = connect(DB_URL, autocommit=True, schema=SCHEMA)
+    migrate(conn, MIGRATIONS, SCHEMA)
     yield conn, raw_conn
     conn.close()
     raw_conn.close()
@@ -127,8 +119,14 @@ def _counts(conn):
 
 def test_migrations_apply_once(db):
     conn, _ = db
-    assert migrate(conn, os.path.join(os.path.dirname(__file__), "..", "migrations")) == []
-    assert _one(conn, "SELECT count(*) AS n FROM schema_migrations")["n"] == 1
+    assert migrate(conn, MIGRATIONS, SCHEMA) == []
+    n_files = len([f for f in os.listdir(MIGRATIONS) if f.endswith(".sql")])
+    assert _one(conn, "SELECT count(*) AS n FROM schema_migrations")["n"] == n_files
+    # everything landed in the scratch schema, nothing leaked into public
+    tables = conn.execute(
+        "SELECT table_schema, table_name FROM information_schema.tables WHERE table_name = 'matches'").fetchall()
+    conn.commit()
+    assert [t["table_schema"] for t in tables if t["table_name"] == "matches"].count(SCHEMA) == 1
 
 
 def test_list_then_detail_overwrites_first_map_result_and_is_idempotent(db):
@@ -222,9 +220,10 @@ def test_stats_404_marks_failed_and_retry_flag_reprocesses(db):
     col = Collector(conn, client, _settings(), sink)
     col.run_list()
     ds = col.run_detail()
-    assert ds.complete == 1 and ds.failed == 1
+    assert ds.complete == 1 and ds.failed == 0
     row = _one(conn, "SELECT ingest_state, ingest_error, winner_faction, result_source FROM matches WHERE match_id=%s", PLAIN)
-    assert row["ingest_state"] == "failed" and "404" in row["ingest_error"]
+    # series result known, map stats absent on FACEIT: kept for team records, retried with --include-failed
+    assert row["ingest_state"] == "result_only" and "404" in row["ingest_error"]
     assert row["result_source"] == "detail" and row["winner_faction"] == "faction1"  # detail still applied
     assert _one(conn, "SELECT count(*) AS n FROM match_rounds WHERE match_id=%s", PLAIN)["n"] == 0
 

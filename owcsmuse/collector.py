@@ -80,9 +80,14 @@ class Collector:
 
     # ================================================================ manifest
 
-    def load_manifest(self, manifest: dict[str, Any]) -> dict[str, int]:
-        """Upsert organizers + championships from a reviewed discovery manifest."""
-        n_inc = 0
+    def load_manifest(self, manifest: dict[str, Any], accept_proposals: bool = False) -> dict[str, int]:
+        """Upsert organizers + championships from a reviewed discovery manifest.
+
+        `include` is only honoured for entries with a manual decision unless
+        accept_proposals=True; classifier proposals alone never mark a
+        championship included.
+        """
+        n_inc = n_manual = n_proposed_only = 0
         with self.conn.cursor() as cur:
             for org in manifest.get("organizers") or []:
                 cur.execute(
@@ -100,14 +105,26 @@ class Collector:
                         "INSERT INTO organizers (organizer_id, name) VALUES (%s, %s) ON CONFLICT DO NOTHING",
                         (c["organizer_id"], c.get("organizer_name")),
                     )
-                include = bool(c.get("include", False))
+                manual = c.get("decision_source") == "manual"
+                proposed_include = bool(c.get("include", False))
+                include = proposed_include and (manual or accept_proposals)
                 n_inc += int(include)
+                n_manual += int(manual)
+                n_proposed_only += int(proposed_include and not include)
+                is_history = c.get("found_via") == "history_crawl"
                 cur.execute(
                     """
                     INSERT INTO championships (championship_id, organizer_id, name, game_id, region, derived_region,
-                        status, type, championship_start, subscription_start, subscription_end, faceit_url, include)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        status, type, championship_start, subscription_start, subscription_end, faceit_url, include,
+                        scope_region, tier, season, classification_source, classification_evidence, decision_note, classified_at,
+                        source, organizer_name, first_match_at, last_match_at, matches_seen)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), %s, %s, %s, %s, %s)
                     ON CONFLICT (championship_id) DO UPDATE SET
+                        source = EXCLUDED.source,
+                        organizer_name = COALESCE(EXCLUDED.organizer_name, championships.organizer_name),
+                        first_match_at = COALESCE(EXCLUDED.first_match_at, championships.first_match_at),
+                        last_match_at = COALESCE(EXCLUDED.last_match_at, championships.last_match_at),
+                        matches_seen = COALESCE(EXCLUDED.matches_seen, championships.matches_seen),
                         organizer_id = COALESCE(EXCLUDED.organizer_id, championships.organizer_id),
                         name = EXCLUDED.name,
                         game_id = COALESCE(EXCLUDED.game_id, championships.game_id),
@@ -120,6 +137,13 @@ class Collector:
                         subscription_end = COALESCE(EXCLUDED.subscription_end, championships.subscription_end),
                         faceit_url = COALESCE(EXCLUDED.faceit_url, championships.faceit_url),
                         include = EXCLUDED.include,
+                        scope_region = EXCLUDED.scope_region,
+                        tier = EXCLUDED.tier,
+                        season = EXCLUDED.season,
+                        classification_source = EXCLUDED.classification_source,
+                        classification_evidence = EXCLUDED.classification_evidence,
+                        decision_note = EXCLUDED.decision_note,
+                        classified_at = now(),
                         updated_at = now()
                     """,
                     (
@@ -127,10 +151,15 @@ class Collector:
                         c.get("region"), c.get("derived_region"), c.get("status"), c.get("type"),
                         c.get("championship_start"), c.get("subscription_start"), c.get("subscription_end"),
                         c.get("faceit_url"), include,
+                        c.get("scope_region"), c.get("tier"), c.get("season"),
+                        "manual" if manual else "auto", Jsonb(c.get("evidence") or []), c.get("decision_note"),
+                        "history" if is_history else "championship_api", c.get("organizer_name"),
+                        c.get("first_match_at"), c.get("last_match_at"), c.get("matches_seen"),
                     ),
                 )
         self.conn.commit()
-        out = {"championships": len(manifest["championships"]), "included": n_inc}
+        out = {"championships": len(manifest["championships"]), "included": n_inc, "manual_decisions": n_manual,
+               "proposed_but_not_included": n_proposed_only}
         log_event(log, logging.INFO, "manifest_loaded", **out)
         return out
 
@@ -288,7 +317,7 @@ class Collector:
         if states is None:
             states = list(RESUMABLE_STATES)
             if include_failed:
-                states.append("failed")
+                states += ["failed", "result_only"]
             if refresh:
                 states += ["complete", "skipped"]
         sql = """
@@ -445,23 +474,31 @@ class Collector:
 
                 self._upsert_teams(cur, rec)
                 seen_at = rec.event_time or _now()
-                for entry in rec.roster:
-                    self._upsert_player(cur, entry.player_id, entry.nickname, entry.game_player_id,
-                                        entry.game_player_name, entry.avatar, seen_at)
                 # Stats rows can name players missing from the declared roster; make sure they exist.
                 # The roster (detail payload) is authoritative for nicknames seen at this match.
-                roster_ids = {e.player_id for e in rec.roster}
+                player_batch: dict[str, dict[str, Any]] = {}
+                for entry in rec.roster:
+                    player_batch.setdefault(entry.player_id, {
+                        "id": entry.player_id, "nick": entry.nickname or entry.player_id, "nickname": entry.nickname,
+                        "gpid": entry.game_player_id, "gpname": entry.game_player_name, "avatar": entry.avatar or None, "seen": seen_at,
+                    })
                 for rnd in rounds:
                     for t in rnd.teams:
                         self._upsert_team(cur, t.team_id, t.name, None, seen_at)
                     for p in rnd.players:
-                        if p.player_id not in roster_ids:
-                            self._upsert_player(cur, p.player_id, p.nickname, None, None, None, seen_at)
-                            roster_ids.add(p.player_id)
+                        player_batch.setdefault(p.player_id, {
+                            "id": p.player_id, "nick": p.nickname or p.player_id, "nickname": p.nickname,
+                            "gpid": None, "gpname": None, "avatar": None, "seen": seen_at,
+                        })
+                self._upsert_players_batch(cur, list(player_batch.values()))
 
                 if rec.status == "FINISHED":
                     if rounds:
                         state, error = "complete", None
+                    elif stats_error and "404" in stats_error:
+                        # FACEIT has the series result but no map stats (admin-scored decider, LAN event):
+                        # keep the result for team records, nothing for map/player aggregates.
+                        state, error = "result_only", stats_error
                     else:
                         state, error = "failed", stats_error or "stats missing or empty rounds[]"
                 else:
@@ -550,62 +587,75 @@ class Collector:
                 )
 
                 # roster + picks: replace wholesale (scoped to this match => idempotent)
+                # Batched writes (executemany pipelines the round trips, which matters on a remote pooler).
                 cur.execute("DELETE FROM match_rosters WHERE match_id = %s", (mid,))
+                seen_roster: dict[str, Any] = {}
                 for e in rec.roster:
-                    cur.execute(
+                    prev = seen_roster.get(e.player_id)
+                    if prev is None or (prev.is_substitute and not e.is_substitute):
+                        seen_roster[e.player_id] = e
+                if seen_roster:
+                    cur.executemany(
                         """
                         INSERT INTO match_rosters (match_id, player_id, faction, team_id, is_substitute,
                                                    nickname_at_match, game_player_name)
                         VALUES (%s, %s, %s, %s, %s, %s, %s)
-                        ON CONFLICT (match_id, player_id) DO UPDATE SET
-                            faction = EXCLUDED.faction, team_id = EXCLUDED.team_id,
-                            is_substitute = match_rosters.is_substitute AND EXCLUDED.is_substitute
                         """,
-                        (mid, e.player_id, e.faction, e.team_id, e.is_substitute, e.nickname, e.game_player_name),
+                        [(mid, e.player_id, e.faction, e.team_id, e.is_substitute, e.nickname, e.game_player_name)
+                         for e in seen_roster.values()],
                     )
                 cur.execute("DELETE FROM match_map_picks WHERE match_id = %s", (mid,))
-                for p in rec.picks:
-                    cur.execute(
+                if rec.picks:
+                    cur.executemany(
                         "INSERT INTO match_map_picks (match_id, pick_order, map_guid, map_name) VALUES (%s, %s, %s, %s)",
-                        (mid, p.pick_order, p.map_guid, p.map_name),
+                        [(mid, p.pick_order, p.map_guid, p.map_name) for p in rec.picks],
                     )
 
                 # rounds + per-round players: only when we have stats (never wipe good data on a stats miss)
                 if stats_payload is not None:
                     cur.execute("DELETE FROM match_rounds WHERE match_id = %s", (mid,))  # cascades match_players
-                    for rnd in rounds:
-                        t1, t2 = rnd.team1, rnd.team2
-                        cur.execute(
+                    if rounds:
+                        cur.executemany(
                             """
                             INSERT INTO match_rounds (match_id, round_number, map_guid, map_name, game_mode, score_summary,
                                 winner_team_id, team1_team_id, team1_score, team2_team_id, team2_score, team_stats, raw_round_stats)
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                             """,
-                            (
-                                mid, rnd.round_number, rnd.map_guid, rnd.map_name, rnd.game_mode, rnd.score_summary,
-                                rnd.winner_team_id,
-                                t1.team_id if t1 else None, t1.score if t1 else None,
-                                t2.team_id if t2 else None, t2.score if t2 else None,
-                                Jsonb({t.team_id: t.stats for t in rnd.teams}), Jsonb(rnd.raw_round_stats),
-                            ),
+                            [
+                                (
+                                    mid, rnd.round_number, rnd.map_guid, rnd.map_name, rnd.game_mode, rnd.score_summary,
+                                    rnd.winner_team_id,
+                                    rnd.team1.team_id if rnd.team1 else None, rnd.team1.score if rnd.team1 else None,
+                                    rnd.team2.team_id if rnd.team2 else None, rnd.team2.score if rnd.team2 else None,
+                                    Jsonb({t.team_id: t.stats for t in rnd.teams}), Jsonb(rnd.raw_round_stats),
+                                )
+                                for rnd in rounds
+                            ],
                         )
-                        for p in rnd.players:
-                            cur.execute(
+                        player_rows = []
+                        seen_pr: set[tuple[int, str]] = set()
+                        for rnd in rounds:
+                            for p in rnd.players:
+                                key = (rnd.round_number, p.player_id)
+                                if key in seen_pr:
+                                    continue
+                                seen_pr.add(key)
+                                player_rows.append((
+                                    mid, rnd.round_number, p.player_id, p.team_id, p.nickname, p.role, p.result,
+                                    p.eliminations, p.final_blows, p.deaths, p.assists, p.solo_kills, p.multi_kills,
+                                    p.environmental_kills, p.damage_dealt, p.healing_done, p.damage_mitigated,
+                                    p.objective_time, p.time_played, Jsonb(p.stats),
+                                ))
+                        if player_rows:
+                            cur.executemany(
                                 """
                                 INSERT INTO match_players (match_id, round_number, player_id, team_id, nickname_at_match, role,
                                     result, eliminations, final_blows, deaths, assists, solo_kills, multi_kills,
                                     environmental_kills, damage_dealt, healing_done, damage_mitigated, objective_time,
                                     time_played, stats)
                                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                                ON CONFLICT (match_id, round_number, player_id) DO UPDATE SET
-                                    team_id = EXCLUDED.team_id, stats = EXCLUDED.stats
                                 """,
-                                (
-                                    mid, rnd.round_number, p.player_id, p.team_id, p.nickname, p.role, p.result,
-                                    p.eliminations, p.final_blows, p.deaths, p.assists, p.solo_kills, p.multi_kills,
-                                    p.environmental_kills, p.damage_dealt, p.healing_done, p.damage_mitigated,
-                                    p.objective_time, p.time_played, Jsonb(p.stats),
-                                ),
+                                player_rows,
                             )
             self.conn.commit()
         except Exception:
@@ -667,8 +717,14 @@ class Collector:
             rounds = cur.fetchone()
             cur.execute("SELECT count(*) AS n FROM raw_payloads")
             raw = cur.fetchone()
+            cur.execute("SELECT championship_id, name FROM championships WHERE include AND list_truncated ORDER BY name")
+            truncated = cur.fetchall()
         self.conn.commit()
+        if truncated:
+            log_event(log, logging.WARNING, "included_championships_truncated", count=len(truncated),
+                      championships=[t["name"] for t in truncated])
         return {
+            "truncated_included_championships": truncated,
             "matches_by_state": by_state,
             "rounds": rounds["n"],
             "matches_with_rounds": rounds["matches"],
@@ -725,6 +781,41 @@ class Collector:
                     last_seen_at  = GREATEST(team_names.last_seen_at, EXCLUDED.last_seen_at)
                 """,
                 {"id": team_id, "name": name, "seen": seen_at},
+            )
+
+    @staticmethod
+    def _upsert_players_batch(cur: psycopg.Cursor, rows: list[dict[str, Any]]) -> None:
+        """Batched form of _upsert_player: one executemany for players, one for nickname history."""
+        if not rows:
+            return
+        cur.executemany(
+            """
+            INSERT INTO players (player_id, nickname, game_player_id, game_player_name, avatar, first_seen_at, last_seen_at)
+            VALUES (%(id)s, %(nick)s, %(gpid)s, %(gpname)s, %(avatar)s, %(seen)s, %(seen)s)
+            ON CONFLICT (player_id) DO UPDATE SET
+                nickname = CASE WHEN %(seen)s >= COALESCE(players.last_seen_at, %(seen)s) THEN EXCLUDED.nickname ELSE players.nickname END,
+                game_player_name = CASE WHEN EXCLUDED.game_player_name IS NOT NULL
+                                         AND %(seen)s >= COALESCE(players.last_seen_at, %(seen)s)
+                                        THEN EXCLUDED.game_player_name ELSE players.game_player_name END,
+                game_player_id = COALESCE(EXCLUDED.game_player_id, players.game_player_id),
+                avatar = COALESCE(EXCLUDED.avatar, players.avatar),
+                first_seen_at = LEAST(players.first_seen_at, EXCLUDED.first_seen_at),
+                last_seen_at  = GREATEST(players.last_seen_at, EXCLUDED.last_seen_at),
+                updated_at = now()
+            """,
+            rows,
+        )
+        nick_rows = [{"id": r["id"], "nick": r["nickname"], "seen": r["seen"]} for r in rows if r.get("nickname")]
+        if nick_rows:
+            cur.executemany(
+                """
+                INSERT INTO player_nicknames (player_id, nickname, first_seen_at, last_seen_at)
+                VALUES (%(id)s, %(nick)s, %(seen)s, %(seen)s)
+                ON CONFLICT (player_id, nickname) DO UPDATE SET
+                    first_seen_at = LEAST(player_nicknames.first_seen_at, EXCLUDED.first_seen_at),
+                    last_seen_at  = GREATEST(player_nicknames.last_seen_at, EXCLUDED.last_seen_at)
+                """,
+                nick_rows,
             )
 
     @staticmethod
