@@ -24,7 +24,13 @@ class Settings(BaseSettings):
     )
     faceit_base_url: str = "https://open.faceit.com/data/v4"
 
-    database_url: str = "postgresql://owcs:owcs@localhost:5432/owcsmuse"
+    # Required, no default: an unset DATABASE_URL fails at startup rather than
+    # silently connecting to some local database.
+    database_url: str = Field(
+        validation_alias=AliasChoices("DATABASE_URL", "OWCS_DATABASE_URL"),
+    )
+    # Schema the migrations create objects in and connections pin search_path to.
+    db_schema: str = "public"
     migrations_dir: str = "migrations"
 
     # FACEIT list endpoints accept limit<=100 and reject offset>500 (offset must

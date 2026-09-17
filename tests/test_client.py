@@ -20,7 +20,7 @@ class ListSink:
 
 
 def make_settings(**kw) -> Settings:
-    base = dict(faceit_api_key="test-key", max_retries=3, backoff_base_seconds=0.01, backoff_cap_seconds=0.02)
+    base = dict(faceit_api_key="test-key", database_url="postgresql://unused", max_retries=3, backoff_base_seconds=0.01, backoff_cap_seconds=0.02)
     base.update(kw)
     return Settings(_env_file=None, **base)
 

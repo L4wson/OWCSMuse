@@ -19,14 +19,41 @@ log = get_logger("owcsmuse.db")
 _MIGRATION_RE = re.compile(r"^(\d+)_.+\.sql$")
 
 
-def connect(database_url: str, autocommit: bool = False) -> psycopg.Connection:
-    return psycopg.connect(database_url, row_factory=dict_row, autocommit=autocommit)
+_IDENT_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 
-def migrate(conn: psycopg.Connection, migrations_dir: str | Path) -> list[str]:
-    """Apply every migrations/NNN_*.sql not yet recorded, in order. Returns applied names."""
+def _check_ident(schema: str) -> str:
+    if not _IDENT_RE.match(schema):
+        raise ValueError(f"invalid schema name: {schema!r}")
+    return schema
+
+
+def connect(database_url: str, autocommit: bool = False, schema: str = "public") -> psycopg.Connection:
+    """Open a connection with search_path pinned to `schema` for the whole session.
+
+    Pinning explicitly (rather than relying on the server default of
+    "$user", public) keeps every unqualified table name in our SQL inside one
+    known schema. On Supabase that is `public`; the integration tests use a
+    scratch schema.
+    """
+    conn = psycopg.connect(database_url, row_factory=dict_row, autocommit=autocommit)
+    conn.execute(f"SET search_path TO {_check_ident(schema)}")
+    if not autocommit:
+        conn.commit()
+    return conn
+
+
+def migrate(conn: psycopg.Connection, migrations_dir: str | Path, schema: str = "public") -> list[str]:
+    """Apply every migrations/NNN_*.sql not yet recorded, in order, inside `schema`.
+
+    Each migration runs in its own transaction with `SET LOCAL search_path`
+    so its objects land in `schema` explicitly. Returns applied file names.
+    """
+    schema = _check_ident(schema)
     path = Path(migrations_dir)
     with conn.cursor() as cur:
+        cur.execute(f"CREATE SCHEMA IF NOT EXISTS {schema}")
+        cur.execute(f"SET LOCAL search_path TO {schema}")
         cur.execute(
             """
             CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -47,6 +74,7 @@ def migrate(conn: psycopg.Connection, migrations_dir: str | Path) -> list[str]:
         sql = f.read_text(encoding="utf-8")
         try:
             with conn.cursor() as cur:
+                cur.execute(f"SET LOCAL search_path TO {schema}")
                 cur.execute(sql)
                 cur.execute("INSERT INTO schema_migrations (version) VALUES (%s)", (f.name,))
             conn.commit()
