@@ -1,0 +1,18 @@
+{
+ "items": [
+  {
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "name": "OWCS | Overwatch Champions Series",
+   "partner": true,
+   "avatar": "https://assets.faceit-cdn.net/organizer_avatar/abd401de-e6ec-4ef1-8d4b-3d820f8f62ce_1706791889706.jpg",
+   "games": [
+    "ow2"
+   ],
+   "countries": null,
+   "active": false,
+   "regions": null
+  }
+ ],
+ "start": 0,
+ "end": 5
+}

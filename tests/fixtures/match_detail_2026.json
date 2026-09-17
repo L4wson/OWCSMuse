@@ -1,0 +1,1343 @@
+{
+ "match_id": "1-c2fc412d-fe01-4bce-ada5-99b5a6dc9e67",
+ "version": 2,
+ "game": "ow2",
+ "region": "EMEA",
+ "competition_id": "05eef1be-c479-45d7-b5c7-d07c5875bb6e",
+ "competition_type": "championship",
+ "competition_name": "OWCS 2026 OQ - EMEA",
+ "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+ "teams": {
+  "faction1": {
+   "faction_id": "d1f402ec-7374-4a16-a86c-87149d962f7a",
+   "leader": "55b59aa3-f050-4f75-a901-b6ea2e4f4649",
+   "avatar": "https://distribution.faceit-cdn.net/images/7297ef98-8dc1-440c-aef1-b2019c0243b6.jpg",
+   "roster": [
+    {
+     "player_id": "55b59aa3-f050-4f75-a901-b6ea2e4f4649",
+     "nickname": "NRG2013",
+     "avatar": "https://distribution.faceit-cdn.net/images/20ac3cab-7c30-4623-966c-0ba9bc56b971.jpeg",
+     "membership": "free",
+     "game_player_id": "441898649",
+     "game_player_name": "NRG",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "d4460919-4e51-4e38-aac8-1b96b4dfbba5",
+     "nickname": "PureIrish",
+     "avatar": "https://distribution.faceit-cdn.net/images/d532fef8-3e0f-41d4-9445-c2b61443138d.jpg",
+     "membership": "free",
+     "game_player_id": "407737067",
+     "game_player_name": "PureIrish",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "6f83f965-656b-4170-8c2d-8427927ad3f9",
+     "nickname": "Nut_ow",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "450440175",
+     "game_player_name": "Nut",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "3a7eade9-4261-4105-9d64-a560b0a4b09a",
+     "nickname": "Shull_",
+     "avatar": "https://distribution.faceit-cdn.net/images/8f5d4f2c-6b54-49dd-b562-1c55566818cb.jpeg",
+     "membership": "free",
+     "game_player_id": "445697512",
+     "game_player_name": "Shull",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "7e9c46cc-e531-494b-8d08-95ba544d4a5e",
+     "nickname": "_gcb",
+     "avatar": "https://distribution.faceit-cdn.net/images/71d84c9c-cc96-4a00-877f-58ed84c2dcf4.jpeg",
+     "membership": "free",
+     "game_player_id": "470266334",
+     "game_player_name": "gcb",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    }
+   ],
+   "substitutes": [
+    {
+     "player_id": "161d3d78-97e6-4df4-a253-1752de88b5ce",
+     "nickname": "LuanSpruce",
+     "avatar": "https://distribution.faceit-cdn.net/images/53a936a3-8a2a-4da3-afb1-bc578ef70d97.jpeg",
+     "membership": "free",
+     "game_player_id": "415459664",
+     "game_player_name": "Luan",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    }
+   ],
+   "stats": {
+    "winProbability": 0,
+    "skillLevel": {
+     "average": 9,
+     "range": {
+      "min": 9,
+      "max": 10
+     }
+    },
+    "rating": 0
+   },
+   "substituted": true,
+   "name": "Uncs N Chuds",
+   "type": "premade"
+  },
+  "faction2": {
+   "faction_id": "3f2fe26e-70a1-480f-a7ac-74ac1623ed34",
+   "leader": "d1c5b576-4d49-4a74-8cdb-5efa07068735",
+   "avatar": "https://distribution.faceit-cdn.net/images/44a2b6f6-13e6-470a-a8e0-07eb79a753e8.jpg",
+   "roster": [
+    {
+     "player_id": "d1c5b576-4d49-4a74-8cdb-5efa07068735",
+     "nickname": "yukin0o",
+     "avatar": "https://distribution.faceit-cdn.net/images/d87563e4-0d4e-4009-9283-ad35ee1325c3.jpeg",
+     "membership": "free",
+     "game_player_id": "489080262",
+     "game_player_name": "yukino",
+     "game_skill_level": 8,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "02f2a6ca-6078-450a-81d6-fdbbe3b9f9f3",
+     "nickname": "Javi44",
+     "avatar": "https://distribution.faceit-cdn.net/images/b26e9c13-d554-4b3d-a7db-09ec5e554962.jpg",
+     "membership": "free",
+     "game_player_id": "453297875",
+     "game_player_name": "Javi",
+     "game_skill_level": 8,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "78174d69-c467-489f-bcd0-9e2d500d4f31",
+     "nickname": "DNA321",
+     "avatar": "",
+     "membership": "ow2_league_pass",
+     "game_player_id": "1168294839",
+     "game_player_name": "DNA",
+     "game_skill_level": 8,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "5e8c4563-6ba0-4d7c-8200-a1185b4cd0e4",
+     "nickname": "TONASA",
+     "avatar": "https://distribution.faceit-cdn.net/images/8628dda3-09c5-4846-8404-ea1a847851fd.jpg",
+     "membership": "ow2_league_pass",
+     "game_player_id": "1122677767",
+     "game_player_name": "TONA",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "2d7eb148-c2a9-4044-b477-b9e90c4dd1b9",
+     "nickname": "_HEATHER",
+     "avatar": "https://distribution.faceit-cdn.net/images/ed0d2109-34f9-4ffc-877e-a199242b3716.jpg",
+     "membership": "ow2_league_pass",
+     "game_player_id": "1113690623",
+     "game_player_name": "HEATHER",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    }
+   ],
+   "substitutes": [
+    {
+     "player_id": "67a21ddd-f767-45ca-b925-54d932e07b62",
+     "nickname": "Alisonn",
+     "avatar": "https://distribution.faceit-cdn.net/images/e970a76e-3804-4a0c-8e8f-78e43df6723f.jpg",
+     "membership": "ow2_league_pass",
+     "game_player_id": "1409428882",
+     "game_player_name": "wwwwwwwwww",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    }
+   ],
+   "stats": {
+    "winProbability": 0,
+    "skillLevel": {
+     "average": 8,
+     "range": {
+      "min": 8,
+      "max": 9
+     }
+    },
+    "rating": 0
+   },
+   "substituted": true,
+   "name": "Redline",
+   "type": "premade"
+  }
+ },
+ "voting": {
+  "map": {
+   "entities": [
+    {
+     "class_name": "Busan",
+     "filters": {
+      "voting_tags": [
+       "cat:Control",
+       "tcat:Control"
+      ]
+     },
+     "game_map_id": "0x08000000000007E2",
+     "guid": "0x08000000000007E2",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7dd13f7f-84a0-4d4f-ba7e-d5a6c737c650_1703103122177.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/60cbb1be-fcb6-452d-83ba-33d4e174a37f_1703102990425.jpeg",
+     "name": "Busan"
+    },
+    {
+     "class_name": "Ilios",
+     "filters": {
+      "voting_tags": [
+       "cat:Control",
+       "tcat:Control"
+      ]
+     },
+     "game_map_id": "0x080000000000066D",
+     "guid": "0x080000000000066D",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f2d716e6-cb55-4759-b0f4-28cd8fd24323_1703103126376.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5ebad419-993f-4fda-9e78-446759a05c4d_1703102993834.jpeg",
+     "name": "Ilios"
+    },
+    {
+     "name": "Lijiang Tower",
+     "class_name": "Lijiang Tower",
+     "filters": {
+      "voting_tags": [
+       "cat:Control",
+       "tcat:Control"
+      ]
+     },
+     "game_map_id": "0x0800000000000662",
+     "guid": "0x0800000000000662",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ee3fe75-971a-4d37-9448-fd78cf975bd8_1703103130214.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ffb0acdb-ce25-41d8-a589-e0a7c447b2dd_1703102999443.jpeg"
+    },
+    {
+     "guid": "0x0800000000000A44",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/9eed6b86-4f59-43ee-b60b-ece620d6cac3_1703103159738.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6a8fb4e8-23ca-4f89-814c-61fa1a502d5f_1703103022670.jpeg",
+     "name": "Havana",
+     "class_name": "Havana",
+     "filters": {
+      "voting_tags": [
+       "cat:Escort",
+       "tcat:Escort"
+      ]
+     },
+     "game_map_id": "0x0800000000000A44"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/93838223-c8b3-40e4-8186-90c6637e12c6_1703103174907.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ad9437ab-ef72-45ba-b217-f15a65dcb375_1703103043929.jpeg",
+     "name": "Shambali Monastery",
+     "class_name": "Shambali Monastery",
+     "filters": {
+      "voting_tags": [
+       "cat:Escort",
+       "tcat:Escort"
+      ]
+     },
+     "game_map_id": "0x0800000000000C85",
+     "guid": "0x0800000000000C85"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f3d21e15-7224-4d0f-b13b-49635d560e85_1703103177880.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/61799228-c171-41b3-acde-3db1d313f78d_1703103046536.jpeg",
+     "name": "Watchpoint Gibraltar",
+     "class_name": "Watchpoint Gibraltar",
+     "filters": {
+      "voting_tags": [
+       "cat:Escort",
+       "tcat:Escort"
+      ]
+     },
+     "game_map_id": "0x0800000000000184",
+     "guid": "0x0800000000000184"
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/eb003902-8da9-4ed2-9b1f-975a7f797f8a_1703103050586.jpeg",
+     "name": "New Junk City",
+     "class_name": "New Junk City",
+     "filters": {
+      "voting_tags": [
+       "cat:Flashpoint",
+       "tcat:Hybrid/Flashpoint"
+      ]
+     },
+     "game_map_id": "0x0800000000000E13",
+     "guid": "0x0800000000000E13",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c13859b8-7ac1-46a3-a869-2ccafb5d3ebe_1703103182898.jpeg"
+    },
+    {
+     "class_name": "Blizzard World",
+     "filters": {
+      "voting_tags": [
+       "cat:Hybrid",
+       "tcat:Hybrid/Flashpoint"
+      ]
+     },
+     "game_map_id": "0x080000000000075E",
+     "guid": "0x080000000000075E",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be278cb2-9c83-49d3-abfb-7c94ffcc0d1f_1703103190096.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ac7b6281-24f1-4f5f-bfbf-04a1ea2c8942_1703103059008.jpeg",
+     "name": "Blizzard World"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a21644d1-c0b7-4a36-8bd7-fff0f0c524aa_1703103198643.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fa920bd3-0fcc-4887-b96b-0660844ce18d_1703103061885.jpeg",
+     "name": "Eichenwalde",
+     "class_name": "Eichenwalde",
+     "filters": {
+      "voting_tags": [
+       "cat:Hybrid",
+       "tcat:Hybrid/Flashpoint"
+      ]
+     },
+     "game_map_id": "0x080000000000068D",
+     "guid": "0x080000000000068D"
+    },
+    {
+     "class_name": "Midtown",
+     "filters": {
+      "voting_tags": [
+       "cat:Hybrid",
+       "tcat:Hybrid/Flashpoint"
+      ]
+     },
+     "game_map_id": "0x0800000000000B4C",
+     "guid": "0x0800000000000B4C",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/02b1222d-2b5e-4c7f-82e1-48bf1ef4bd8a_1703103209971.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8a66c21b-bab9-4fa0-923d-f954b5bc8d4a_1703103072451.jpeg",
+     "name": "Midtown"
+    },
+    {
+     "class_name": "Colosseo",
+     "filters": {
+      "voting_tags": [
+       "cat:Push",
+       "tcat:Push"
+      ]
+     },
+     "game_map_id": "0x0800000000000B34",
+     "guid": "0x0800000000000B34",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/81178286-d627-4f34-ac4c-eca25239ab88_1703103220387.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2dcec9b5-b9d1-4647-aece-a9980cee2c4d_1703103105258.jpeg",
+     "name": "Colosseo"
+    },
+    {
+     "class_name": "Esperança",
+     "filters": {
+      "voting_tags": [
+       "cat:Push",
+       "tcat:Push"
+      ]
+     },
+     "game_map_id": "0x0800000000000D53",
+     "guid": "0x0800000000000D53",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/32c9964e-2b63-4495-b3f2-9f947bad5e4a_1703103225824.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/57d6237f-9228-42e5-8035-07a734e2e5cc_1703103087193.jpeg",
+     "name": "Esperança"
+    },
+    {
+     "guid": "0x0800000000000F35",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f056a265-d0a0-4783-9cb0-cca8edd640af_1750663219620.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8f289acc-ddf6-44b9-9c95-1ca4eded1297_1750663211851.jpeg",
+     "name": "Aatlis",
+     "class_name": "Aatlis",
+     "filters": {
+      "voting_tags": [
+       "cat:Flashpoint",
+       "tcat:Hybrid/Flashpoint"
+      ]
+     },
+     "game_map_id": "0x0800000000000F35"
+    }
+   ],
+   "pick": [
+    "0x0800000000000662",
+    "0x0800000000000C85",
+    "0x0800000000000B34"
+   ]
+  },
+  "attacking_first": {
+   "entities": [
+    {
+     "class_name": "Faction 1",
+     "filters": {
+      "voting_tags": [
+       "faction_id"
+      ]
+     },
+     "game_attacking_first_id": "faction1",
+     "guid": "faction1",
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction 1"
+    },
+    {
+     "class_name": "Faction2",
+     "filters": {
+      "voting_tags": [
+       "faction_id"
+      ]
+     },
+     "game_attacking_first_id": "faction2",
+     "guid": "faction2",
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction2"
+    }
+   ],
+   "pick": [
+    "faction1",
+    "faction2",
+    "faction2"
+   ]
+  },
+  "voted_entity_types": [
+   "map",
+   "attacking_first",
+   "heroes"
+  ],
+  "heroes": {
+   "entities": [
+    {
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000007A",
+     "guid": "0x02E000000000007A",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4442f521-f08e-4ace-b88d-2a5260c66a76_1724317895065.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/02e72707-64cf-4b8b-be44-b8d394479811_1724317875644.jpeg",
+     "name": "DVa",
+     "class_name": "DVa"
+    },
+    {
+     "class_name": "Junker Queen",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000236",
+     "guid": "0x02E0000000000236",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4448c2d9-3bed-4b63-8ee7-0a0423237658_1724318013394.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/bd0d7f58-776d-49e2-ada9-e01c553e3104_1724318005602.jpeg",
+     "name": "Junker Queen"
+    },
+    {
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000030A",
+     "guid": "0x02E000000000030A",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3232b802-017c-4c63-8b32-07f124c2163c_1724318031725.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/391e4a9b-1b65-45cb-9b94-3a0265086c2b_1724318023119.jpeg",
+     "name": "Mauga",
+     "class_name": "Mauga"
+    },
+    {
+     "game_heroes_id": "0x02E000000000013E",
+     "guid": "0x02E000000000013E",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/dc83e18c-b390-4435-afc5-37906b374f80_1724318149936.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/9bad5faf-7aee-439f-825e-26ef80e27613_1724318135908.jpeg",
+     "name": "Orisa",
+     "class_name": "Orisa",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     }
+    },
+    {
+     "name": "Ramattra",
+     "class_name": "Ramattra",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000028D",
+     "guid": "0x02E000000000028D",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ceb7cdab-ef87-456c-977a-644af3418135_1724318071685.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6808be28-9c62-4190-82fd-19179aa3a980_1724318065210.jpeg"
+    },
+    {
+     "class_name": "Reinhardt",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000007",
+     "guid": "0x02E0000000000007",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c5d067fb-5b4c-47a2-a80e-0963ecb7d0ce_1724318096473.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b91e6bbf-03cd-4489-9877-82f608b22ab4_1724318085496.jpeg",
+     "name": "Reinhardt"
+    },
+    {
+     "guid": "0x02E0000000000040",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2a7fbb94-ea11-4fc0-b564-a35973e97b57_1724318168858.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/421da96d-438e-4f9d-9c4d-af18afc871fa_1724318161355.jpeg",
+     "name": "Roadhog",
+     "class_name": "Roadhog",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000040"
+    },
+    {
+     "name": "Sigma",
+     "class_name": "Sigma",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000023B",
+     "guid": "0x02E000000000023B",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/09620ce5-430e-4cf4-ad92-593fff299b1d_1724318187670.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d284cc3c-fd99-437f-b592-08838be5b64d_1724318178654.jpeg"
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/77a70f46-b4ab-4241-b410-1cf1a7b51bff_1724318194527.jpeg",
+     "name": "Winston",
+     "class_name": "Winston",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000009",
+     "guid": "0x02E0000000000009",
+     "id": "99679930038874",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/13e9922c-2e2f-4f07-9a1b-90aac138c2c5_1724318199247.jpeg"
+    },
+    {
+     "name": "Wrecking Ball",
+     "class_name": "Wrecking Ball",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000001CA",
+     "guid": "0x02E00000000001CA",
+     "id": "99679930038875",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f27e066a-bf9c-4e2e-b347-145a4952ac8a_1724318210456.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e1dbee8d-9875-4db1-a554-61571f2fa19e_1724318206587.jpeg"
+    },
+    {
+     "guid": "0x02E0000000000068",
+     "id": "99679930038876",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2a9a1f74-c823-4b5f-a2d3-0dcf0a5219ae_1724318219092.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/73667bf3-f672-4a48-a8da-7638a05a8bca_1724318215700.jpeg",
+     "name": "Zarya",
+     "class_name": "Zarya",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000068"
+    },
+    {
+     "name": "Ashe",
+     "class_name": "Ashe",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000200",
+     "guid": "0x02E0000000000200",
+     "id": "99679930038877",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8d7331e4-eeda-4b02-9a0c-692cb4d41fac_1724318229069.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c8d5dee5-897c-4f1a-839f-d6106b6a7d06_1724318224849.jpeg"
+    },
+    {
+     "class_name": "Bastion",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000015",
+     "guid": "0x02E0000000000015",
+     "id": "99679930038878",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d726c45b-08c8-4b75-950d-1272cae9ea81_1724318241773.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2689399e-6752-4018-9f45-a3736e8bbbd4_1724318235776.jpeg",
+     "name": "Bastion"
+    },
+    {
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000012F",
+     "guid": "0x02E000000000012F",
+     "id": "99679930038879",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cc21e178-0049-4082-a205-d048897bbb17_1724318251368.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/47ba1336-374e-40b5-b28a-e0e2c32f190e_1724318246872.jpeg",
+     "name": "Doomfist",
+     "class_name": "Doomfist"
+    },
+    {
+     "guid": "0x02E0000000000206",
+     "id": "99679930038880",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/27d3163e-c665-4ee8-9ba2-4b4d926e6ca5_1724318265742.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/90257fba-8acc-4d8f-8348-0f7637123c67_1724318261603.jpeg",
+     "name": "Echo",
+     "class_name": "Echo",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000206"
+    },
+    {
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000029",
+     "guid": "0x02E0000000000029",
+     "id": "99679930038881",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d69d3588-df86-44ad-b317-202f0181feed_1724318276866.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f7fb18cd-799b-40f1-ae6e-e5e03f11a660_1724318271234.jpeg",
+     "name": "Genji",
+     "class_name": "Genji"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/42486b98-5cdf-4b8d-b0a6-bf5baa3fb99f_1724318289338.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c27514e1-ce19-4500-b823-4a38db92aed3_1724318284742.jpeg",
+     "name": "Hanzo",
+     "class_name": "Hanzo",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000005",
+     "guid": "0x02E0000000000005",
+     "id": "99679930038882"
+    },
+    {
+     "game_heroes_id": "0x02E0000000000065",
+     "guid": "0x02E0000000000065",
+     "id": "99679930038883",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/9d2f36c3-27ca-4d8d-975d-149de216762c_1724318300455.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/24f141cb-a51b-4c4e-aee1-36c54c2f7b47_1724318296764.jpeg",
+     "name": "Junkrat",
+     "class_name": "Junkrat",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     }
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6d265ed7-e8d8-4d2f-b2a1-9abaa810a9d0_1724318309772.jpeg",
+     "name": "Cassidy",
+     "class_name": "Cassidy",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000042",
+     "guid": "0x02E0000000000042",
+     "id": "99679930038884",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2660ec0d-9028-4385-a0a2-e5d2d124a204_1724318318233.jpeg"
+    },
+    {
+     "class_name": "Mei",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000000DD",
+     "guid": "0x02E00000000000DD",
+     "id": "99679930038885",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7ad94493-d35f-4973-93fd-92a281141346_1724318333053.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fcf077c4-a016-478a-a4e8-d7424dfef193_1724318324639.jpeg",
+     "name": "Mei"
+    },
+    {
+     "guid": "0x02E0000000000008",
+     "id": "99679930038886",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cffe56f4-ea5f-4e24-b27c-0cac89499375_1724318351464.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b42389bf-b7cb-4aaa-90cd-ac6c9902d191_1724318356713.jpeg",
+     "name": "Pharah",
+     "class_name": "Pharah",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000008"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/feae1f6d-c66b-4c61-99f7-d1ea0a303a81_1724318369170.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/281572ff-396a-4cf9-97d0-f279ee8e348d_1724318363783.jpeg",
+     "name": "Reaper",
+     "class_name": "Reaper",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000002",
+     "guid": "0x02E0000000000002",
+     "id": "99679930038887"
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0dbd25e2-cee4-4b0f-807c-ec7157ddfee4_1724318376539.jpeg",
+     "name": "Soldier 76",
+     "class_name": "Soldier 76",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000006E",
+     "guid": "0x02E000000000006E",
+     "id": "99679930038888",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2500b42c-e272-4da6-9a7d-4ff516b7f9f6_1724318381556.jpeg"
+    },
+    {
+     "name": "Sombra",
+     "class_name": "Sombra",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000012E",
+     "guid": "0x02E000000000012E",
+     "id": "99679930038889",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d4d2112b-deaa-445b-8cb8-d69e113f8ece_1724318396328.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/53dcb056-694b-4de0-a4c7-62bd30483647_1724318388304.jpeg"
+    },
+    {
+     "name": "Sojourn",
+     "class_name": "Sojourn",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000001EC",
+     "guid": "0x02E00000000001EC",
+     "id": "99679930038890",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/53b29679-55ad-4acb-b065-bbc2e6d8cfdf_1724318411615.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/173aa5e4-2750-42c3-893c-3e9e18aeb9c7_1724318404540.jpeg"
+    },
+    {
+     "id": "99679930038891",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4dc87492-7e1c-4d68-bd30-dbf7b712e79c_1724318428941.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c4e9d275-fb39-4308-9b66-ac132f1183d7_1724318419312.jpeg",
+     "name": "Symmetra",
+     "class_name": "Symmetra",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000016",
+     "guid": "0x02E0000000000016"
+    },
+    {
+     "name": "Torbjorn",
+     "class_name": "Torbjorn",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000006",
+     "guid": "0x02E0000000000006",
+     "id": "99679930038892",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/766dfaac-eb47-4141-8368-3581967c7510_1724318441437.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ddda9664-2b70-478f-acbe-79acd25cd440_1724318436375.jpeg"
+    },
+    {
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000003",
+     "guid": "0x02E0000000000003",
+     "id": "99679930038893",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c0836865-c072-4071-b7d2-b7b4ee3476b1_1724318454195.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f4da4c0f-4c8f-435a-bbe0-440fe203e4c7_1724318448558.jpeg",
+     "name": "Tracer",
+     "class_name": "Tracer"
+    },
+    {
+     "id": "99679930038894",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/33526f73-981d-4805-89e9-341eb9142101_1724318464638.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a6c472a4-25e3-45e5-bc20-4d9f655f0192_1724318460027.jpeg",
+     "name": "Widowmaker",
+     "class_name": "Widowmaker",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000000A",
+     "guid": "0x02E000000000000A"
+    },
+    {
+     "game_heroes_id": "0x02E000000000032B",
+     "guid": "0x02E000000000032B",
+     "id": "99679930038895",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/69479b6d-c65a-4f46-834b-0ef26b3429f5_1724318478749.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c9a2661b-4ade-40c4-b518-5fa86f803503_1724318473682.jpeg",
+     "name": "Venture",
+     "class_name": "Venture",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     }
+    },
+    {
+     "class_name": "Ana",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000013B",
+     "guid": "0x02E000000000013B",
+     "id": "99679930038896",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4730eb7b-212d-47dd-894b-2d75fe1fcb57_1724318485684.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3997ddcd-0f88-4fb8-a3c4-3be60586bfe5_1724318482368.jpeg",
+     "name": "Ana"
+    },
+    {
+     "id": "99679930038897",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5d9fe844-590b-40dd-b45c-db3cc6c19336_1724318499974.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e8359257-8a58-4b7e-9a3c-421220771812_1724318490079.jpeg",
+     "name": "Baptiste",
+     "class_name": "Baptiste",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000221",
+     "guid": "0x02E0000000000221"
+    },
+    {
+     "name": "Brigitte",
+     "class_name": "Brigitte",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000195",
+     "guid": "0x02E0000000000195",
+     "id": "99679930038898",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/01e6c335-e9cc-488c-92e4-2397f9e42487_1724318510058.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6c15a438-deae-403f-b24f-493dc475aa61_1724318504870.jpeg"
+    },
+    {
+     "name": "Illari",
+     "class_name": "Illari",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000031C",
+     "guid": "0x02E000000000031C",
+     "id": "99679930038899",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/36a5f642-da4c-4ed7-a719-5a2ca8ec0c5c_1724318530248.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0fa90343-166b-4cda-a763-4267485bef41_1724318522371.jpeg"
+    },
+    {
+     "game_heroes_id": "0x02E0000000000231",
+     "guid": "0x02E0000000000231",
+     "id": "99679930038900",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5a2d35bd-fff6-4a63-bb2b-d0e5f6f3c331_1724318558194.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8dc55e51-5f05-4d9e-96ad-19578bfd97f2_1724318548730.jpeg",
+     "name": "Kiriko",
+     "class_name": "Kiriko",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     }
+    },
+    {
+     "class_name": "LifeWeaver",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000291",
+     "guid": "0x02E0000000000291",
+     "id": "99679930038901",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d2fea39f-a0bc-4e64-a7f1-a5f51e2cb15b_1724318579750.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2ab48619-3398-4c41-a47d-1b7e393f96a8_1724318573743.jpeg",
+     "name": "LifeWeaver"
+    },
+    {
+     "id": "99679930038902",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8573085c-bb20-4e89-b607-02eb20725364_1724318610844.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/191e6d3e-1575-49b3-a3fe-5a06f2b8fb59_1724318605712.jpeg",
+     "name": "Lucio",
+     "class_name": "Lucio",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000079",
+     "guid": "0x02E0000000000079"
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ce36cb20-bd92-41ca-aa79-61acc11cf8cd_1724318618124.jpeg",
+     "name": "Mercy",
+     "class_name": "Mercy",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000004",
+     "guid": "0x02E0000000000004",
+     "id": "99679930038903",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ffb661b-58f8-4b50-9e85-617bcdc93830_1724318623231.jpeg"
+    },
+    {
+     "name": "Moira",
+     "class_name": "Moira",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000001A2",
+     "guid": "0x02E00000000001A2",
+     "id": "99679930038904",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cefe7484-623e-4ae3-ae2c-d166884853b8_1724318637800.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c509bd4f-baa9-4609-a0b7-65cec29f83f0_1724318629760.jpeg"
+    },
+    {
+     "game_heroes_id": "0x02E0000000000020",
+     "guid": "0x02E0000000000020",
+     "id": "99679930038905",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/73921d1c-62c7-4a74-8a66-227209ae8018_1724318651690.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/610fe2c3-03f4-4295-90ee-fb76e6d1c383_1724318648056.jpeg",
+     "name": "Zenyatta",
+     "class_name": "Zenyatta",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     }
+    },
+    {
+     "game_heroes_id": "0x02E0000000000365",
+     "guid": "0x02E0000000000365",
+     "id": "99679930038906",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/23ae1b85-bcb5-4891-b944-f57f5f1ee306_1724318661140.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/47087c68-5579-4af0-964e-b8bfd41dc276_1724318657265.jpeg",
+     "name": "Juno",
+     "class_name": "Juno",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     }
+    },
+    {
+     "game_heroes_id": "0x02E0000000000362",
+     "guid": "0x02E0000000000362",
+     "id": "132705676395816",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b0c2933c-e644-4a46-a6cf-f5a992ae33c6_1732201051633.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/369e409e-9e21-43f9-8700-5eb8100494a3_1732201046515.jpeg",
+     "name": "Hazard",
+     "class_name": "Hazard",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     }
+    },
+    {
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E000000000032A",
+     "guid": "0x02E000000000032A",
+     "id": "735813916679363",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b5870b2e-0ccb-42a7-bbaf-ea1009a1e640_1742378499588.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/784ecd05-927f-46e6-aca4-432185befd59_1742378487164.jpeg",
+     "name": "Freja",
+     "class_name": "Freja"
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b0c5d4a7-70e7-4f58-9206-35fd4bda4035_1765875602227.jpeg",
+     "name": "Wuyang",
+     "class_name": "Wuyang",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000003C3",
+     "guid": "0x02E00000000003C3",
+     "id": "12642122687405",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a5f1a03b-9a40-4f62-a7a5-bfde24e95707_1765875607067.png"
+    },
+    {
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000472",
+     "guid": "0x02E0000000000472",
+     "id": "544894597036631",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/64e0e033-7c5c-4e0b-a085-ddaee66a3a4b_1764934623545.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6035ab36-9e43-4fd9-80d2-92bf666d8374_1764934618141.jpeg",
+     "name": "Vendetta",
+     "class_name": "Vendetta"
+    },
+    {
+     "class_name": "Anran",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000004DD",
+     "guid": "0x02E00000000004DD",
+     "id": "527235847983606",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b87eec99-ad50-4dd4-becf-6b338b517061_1770830170106.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cfe4792b-e4af-47b1-bef4-a1f05a868b3d_1770830165101.jpeg",
+     "name": "Anran"
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/40a100f1-5fca-445c-88a9-f3cb0f14afa2_1770830175879.jpeg",
+     "name": "Mizuki",
+     "class_name": "Mizuki",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000004E3",
+     "guid": "0x02E00000000004E3",
+     "id": "527235847983607",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e1d34c05-b0f0-4180-85bb-27ebafc29815_1770830179650.jpeg"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8a3784f1-003f-49dc-b598-622cf27d6b82_1770830188817.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/414c7c26-6c85-4658-9f3e-8f3d73e61526_1770830184165.jpeg",
+     "name": "Domina",
+     "class_name": "Domina",
+     "filters": {
+      "voting_tags": [
+       "role:Tank"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000004C4",
+     "guid": "0x02E00000000004C4",
+     "id": "527235847983608"
+    },
+    {
+     "class_name": "Jetpack Cat",
+     "filters": {
+      "voting_tags": [
+       "role:Support"
+      ]
+     },
+     "game_heroes_id": "0x02E0000000000516",
+     "guid": "0x02E0000000000516",
+     "id": "527235847983609",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e8945074-e055-40ee-b9ea-2d0d2e23f7ae_1770830199660.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5a06eea5-ac07-4987-a217-75d304f0a8e3_1770830194565.jpeg",
+     "name": "Jetpack Cat"
+    },
+    {
+     "guid": "0x02E00000000004D8",
+     "id": "527235847983610",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/08371b03-5431-4ff8-8644-51a341df0f1b_1770830205119.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3dd29e8f-7418-4c5c-935f-eb0c4539a14e_1770830202272.jpeg",
+     "name": "Emre",
+     "class_name": "Emre",
+     "filters": {
+      "voting_tags": [
+       "role:Damage"
+      ]
+     },
+     "game_heroes_id": "0x02E00000000004D8"
+    }
+   ],
+   "pick": [
+    [
+     "0x02E000000000007A",
+     "0x02E0000000000236",
+     "0x02E000000000030A",
+     "0x02E000000000013E",
+     "0x02E000000000028D",
+     "0x02E0000000000007",
+     "0x02E0000000000040",
+     "0x02E000000000023B",
+     "0x02E0000000000009",
+     "0x02E00000000001CA",
+     "0x02E0000000000200",
+     "0x02E0000000000015",
+     "0x02E000000000012F",
+     "0x02E0000000000206",
+     "0x02E0000000000029",
+     "0x02E0000000000005",
+     "0x02E0000000000065",
+     "0x02E0000000000042",
+     "0x02E00000000000DD",
+     "0x02E0000000000008",
+     "0x02E0000000000002",
+     "0x02E000000000006E",
+     "0x02E000000000012E",
+     "0x02E00000000001EC",
+     "0x02E0000000000016",
+     "0x02E0000000000006",
+     "0x02E0000000000003",
+     "0x02E000000000000A",
+     "0x02E000000000032B",
+     "0x02E000000000013B",
+     "0x02E0000000000221",
+     "0x02E0000000000195",
+     "0x02E000000000031C",
+     "0x02E0000000000231",
+     "0x02E0000000000291",
+     "0x02E0000000000079",
+     "0x02E0000000000004",
+     "0x02E00000000001A2",
+     "0x02E0000000000020",
+     "0x02E0000000000365",
+     "0x02E0000000000362",
+     "0x02E000000000032A",
+     "0x02E0000000000472",
+     "0x02E00000000004DD",
+     "0x02E00000000004E3",
+     "0x02E00000000004C4",
+     "0x02E0000000000516",
+     "0x02E00000000004D8"
+    ],
+    [
+     "0x02E000000000007A",
+     "0x02E0000000000236",
+     "0x02E000000000030A",
+     "0x02E000000000013E",
+     "0x02E0000000000007",
+     "0x02E0000000000040",
+     "0x02E000000000023B",
+     "0x02E0000000000009",
+     "0x02E00000000001CA",
+     "0x02E0000000000068",
+     "0x02E0000000000200",
+     "0x02E0000000000015",
+     "0x02E000000000012F",
+     "0x02E0000000000206",
+     "0x02E0000000000029",
+     "0x02E0000000000005",
+     "0x02E0000000000065",
+     "0x02E00000000000DD",
+     "0x02E0000000000008",
+     "0x02E0000000000002",
+     "0x02E000000000006E",
+     "0x02E000000000012E",
+     "0x02E00000000001EC",
+     "0x02E0000000000016",
+     "0x02E0000000000006",
+     "0x02E0000000000003",
+     "0x02E000000000000A",
+     "0x02E000000000032B",
+     "0x02E000000000013B",
+     "0x02E0000000000221",
+     "0x02E0000000000195",
+     "0x02E000000000031C",
+     "0x02E0000000000231",
+     "0x02E0000000000291",
+     "0x02E0000000000079",
+     "0x02E0000000000004",
+     "0x02E00000000001A2",
+     "0x02E0000000000020",
+     "0x02E0000000000365",
+     "0x02E0000000000362",
+     "0x02E000000000032A",
+     "0x02E00000000003C3",
+     "0x02E0000000000472",
+     "0x02E00000000004DD",
+     "0x02E00000000004E3",
+     "0x02E00000000004C4",
+     "0x02E0000000000516",
+     "0x02E00000000004D8"
+    ],
+    [
+     "0x02E000000000007A",
+     "0x02E0000000000236",
+     "0x02E000000000030A",
+     "0x02E000000000013E",
+     "0x02E000000000028D",
+     "0x02E0000000000007",
+     "0x02E0000000000040",
+     "0x02E000000000023B",
+     "0x02E00000000001CA",
+     "0x02E0000000000068",
+     "0x02E0000000000200",
+     "0x02E0000000000015",
+     "0x02E000000000012F",
+     "0x02E0000000000206",
+     "0x02E0000000000029",
+     "0x02E0000000000005",
+     "0x02E0000000000065",
+     "0x02E0000000000042",
+     "0x02E00000000000DD",
+     "0x02E0000000000008",
+     "0x02E0000000000002",
+     "0x02E000000000006E",
+     "0x02E000000000012E",
+     "0x02E00000000001EC",
+     "0x02E0000000000016",
+     "0x02E0000000000006",
+     "0x02E0000000000003",
+     "0x02E000000000000A",
+     "0x02E000000000032B",
+     "0x02E000000000013B",
+     "0x02E0000000000221",
+     "0x02E0000000000195",
+     "0x02E000000000031C",
+     "0x02E0000000000231",
+     "0x02E0000000000291",
+     "0x02E0000000000079",
+     "0x02E0000000000004",
+     "0x02E00000000001A2",
+     "0x02E0000000000020",
+     "0x02E0000000000365",
+     "0x02E0000000000362",
+     "0x02E000000000032A",
+     "0x02E00000000003C3",
+     "0x02E00000000004DD",
+     "0x02E00000000004E3",
+     "0x02E00000000004C4",
+     "0x02E0000000000516",
+     "0x02E00000000004D8"
+    ]
+   ]
+  }
+ },
+ "calculate_elo": true,
+ "scheduled_at": 1771793100,
+ "configured_at": 1771795680,
+ "started_at": 1771795700,
+ "finished_at": 1771796387,
+ "demo_url": [
+  "XW3CY4",
+  "TZT8DE",
+  "KR3Q2E"
+ ],
+ "chat_room_id": "match-1-c2fc412d-fe01-4bce-ada5-99b5a6dc9e67",
+ "best_of": 5,
+ "results": {
+  "winner": "faction1",
+  "score": {
+   "faction1": 3,
+   "faction2": 0
+  }
+ },
+ "detailed_results": [
+  {
+   "asc_score": false,
+   "winner": "faction1",
+   "factions": {
+    "faction1": {
+     "score": 2
+    },
+    "faction2": {
+     "score": 1
+    }
+   }
+  },
+  {
+   "asc_score": false,
+   "winner": "faction1",
+   "factions": {
+    "faction1": {
+     "score": 3
+    },
+    "faction2": {
+     "score": 2
+    }
+   }
+  },
+  {
+   "asc_score": false,
+   "winner": "faction1",
+   "factions": {
+    "faction1": {
+     "score": 1
+    },
+    "faction2": {
+     "score": 0
+    }
+   }
+  }
+ ],
+ "status": "FINISHED",
+ "round": 6,
+ "group": 1,
+ "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-c2fc412d-fe01-4bce-ada5-99b5a6dc9e67",
+ "instances": [
+  {
+   "id": "1-c2fc412d-fe01-4bce-ada5-99b5a6dc9e67-1-1",
+   "round": 1,
+   "demos": [
+    "XW3CY4"
+   ]
+  },
+  {
+   "id": "1-c2fc412d-fe01-4bce-ada5-99b5a6dc9e67-2-1",
+   "round": 2,
+   "demos": [
+    "TZT8DE"
+   ]
+  },
+  {
+   "id": "1-c2fc412d-fe01-4bce-ada5-99b5a6dc9e67-3-1",
+   "round": 3,
+   "demos": [
+    "KR3Q2E"
+   ]
+  }
+ ]
+}

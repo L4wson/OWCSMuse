@@ -1,0 +1,989 @@
+{
+ "rounds": [
+  {
+   "best_of": "6",
+   "competition_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
+   "game_id": "ow2",
+   "game_mode": "5v5",
+   "match_id": "1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+   "match_round": "1",
+   "played": "1",
+   "round_stats": {
+    "Map": "0x08000000000004B7",
+    "OW2 Mode": "Control",
+    "Score Summary": "2 / 1",
+    "Winner": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e"
+   },
+   "teams": [
+    {
+     "team_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+     "premade": true,
+     "team_stats": {
+      "Team": "Twisted Minds",
+      "Team Win": "1",
+      "Team Total Eliminations": "156",
+      "Team Total Deaths": "31",
+      "Team Avg Eliminations": "31.2",
+      "Team Avg Deaths": "6.2",
+      "Team Score": "2"
+     },
+     "players": [
+      {
+       "player_id": "b273a710-800f-4638-9858-461d81ac55b9",
+       "nickname": "kellemanden",
+       "player_stats": {
+        "Damage Mitigated": "2634",
+        "Deaths": "7",
+        "K/D Ratio": "3.86",
+        "Role": "Support",
+        "Assists": "21",
+        "Result": "1",
+        "Eliminations": "27",
+        "Damage Dealt": "8013",
+        "Healing Done": "6246"
+       }
+      },
+      {
+       "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+       "nickname": "Quartz03",
+       "player_stats": {
+        "Deaths": "6",
+        "K/D Ratio": "5.5",
+        "Damage Dealt": "15040",
+        "Damage Mitigated": "0",
+        "Result": "1",
+        "Eliminations": "33",
+        "Assists": "8",
+        "Healing Done": "99",
+        "Role": "Damage"
+       }
+      },
+      {
+       "player_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+       "nickname": "KSAA0",
+       "player_stats": {
+        "Eliminations": "30",
+        "Damage Dealt": "11583",
+        "Result": "1",
+        "K/D Ratio": "4.29",
+        "Assists": "8",
+        "Role": "Tank",
+        "Deaths": "7",
+        "Healing Done": "476",
+        "Damage Mitigated": "29444"
+       }
+      },
+      {
+       "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+       "nickname": "Youbi1",
+       "player_stats": {
+        "Result": "1",
+        "Role": "Damage",
+        "Eliminations": "31",
+        "Deaths": "5",
+        "Damage Dealt": "11050",
+        "Healing Done": "0",
+        "K/D Ratio": "6.2",
+        "Assists": "0",
+        "Damage Mitigated": "0"
+       }
+      },
+      {
+       "player_id": "a9518828-6359-4b76-926f-b0d9be499a46",
+       "nickname": "Kenneth21",
+       "player_stats": {
+        "Damage Dealt": "7913",
+        "Healing Done": "20178",
+        "Damage Mitigated": "0",
+        "Result": "1",
+        "Eliminations": "35",
+        "K/D Ratio": "5.83",
+        "Assists": "36",
+        "Role": "Support",
+        "Deaths": "6"
+       }
+      }
+     ]
+    },
+    {
+     "team_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+     "premade": true,
+     "team_stats": {
+      "Team Avg Eliminations": "18",
+      "Team": "ENCE",
+      "Team Win": "0",
+      "Team Score": "1",
+      "Team Total Eliminations": "90",
+      "Team Total Deaths": "46",
+      "Team Avg Deaths": "9.2"
+     },
+     "players": [
+      {
+       "player_id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+       "nickname": "kevsteer",
+       "player_stats": {
+        "Damage Mitigated": "1963",
+        "Deaths": "7",
+        "K/D Ratio": "2.71",
+        "Damage Dealt": "12462",
+        "Result": "0",
+        "Role": "Damage",
+        "Eliminations": "19",
+        "Assists": "4",
+        "Healing Done": "193"
+       }
+      },
+      {
+       "player_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+       "nickname": "yung_kai",
+       "player_stats": {
+        "K/D Ratio": "2.4",
+        "Damage Dealt": "11446",
+        "Assists": "3",
+        "Healing Done": "0",
+        "Damage Mitigated": "0",
+        "Result": "0",
+        "Deaths": "10",
+        "Role": "Damage",
+        "Eliminations": "24"
+       }
+      },
+      {
+       "player_id": "62fe43ad-afb1-4ca9-bcb2-09ad8fdff606",
+       "nickname": "tappomasa666",
+       "player_stats": {
+        "Deaths": "11",
+        "Damage Mitigated": "2577",
+        "K/D Ratio": "1.27",
+        "Assists": "12",
+        "Healing Done": "11209",
+        "Result": "0",
+        "Role": "Support",
+        "Eliminations": "14",
+        "Damage Dealt": "5999"
+       }
+      },
+      {
+       "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+       "nickname": "vestola",
+       "player_stats": {
+        "Result": "0",
+        "Role": "Tank",
+        "Deaths": "10",
+        "K/D Ratio": "1.7",
+        "Assists": "7",
+        "Healing Done": "1152",
+        "Eliminations": "17",
+        "Damage Dealt": "13351",
+        "Damage Mitigated": "9941"
+       }
+      },
+      {
+       "player_id": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa",
+       "nickname": "iCrimzo",
+       "player_stats": {
+        "Deaths": "8",
+        "Damage Mitigated": "0",
+        "K/D Ratio": "2",
+        "Assists": "22",
+        "Role": "Support",
+        "Eliminations": "16",
+        "Damage Dealt": "3923",
+        "Healing Done": "15607",
+        "Result": "0"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "best_of": "6",
+   "competition_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
+   "game_id": "ow2",
+   "game_mode": "5v5",
+   "match_id": "1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+   "match_round": "2",
+   "played": "2",
+   "round_stats": {
+    "OW2 Mode": "Hybrid",
+    "Score Summary": "5 / 3",
+    "Map": "0x08000000000002AF",
+    "Winner": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e"
+   },
+   "teams": [
+    {
+     "team_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+     "premade": true,
+     "team_stats": {
+      "Team Total Eliminations": "234",
+      "Team Total Deaths": "59",
+      "Team Avg Eliminations": "46.8",
+      "Team Win": "1",
+      "Team Avg Deaths": "11.8",
+      "Team": "Twisted Minds",
+      "Team Score": "5"
+     },
+     "players": [
+      {
+       "player_id": "b273a710-800f-4638-9858-461d81ac55b9",
+       "nickname": "kellemanden",
+       "player_stats": {
+        "Damage Mitigated": "3510",
+        "Role": "Support",
+        "Eliminations": "40",
+        "K/D Ratio": "3.64",
+        "Assists": "39",
+        "Result": "1",
+        "Deaths": "11",
+        "Healing Done": "10063",
+        "Damage Dealt": "11634"
+       }
+      },
+      {
+       "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+       "nickname": "Quartz03",
+       "player_stats": {
+        "K/D Ratio": "3.64",
+        "Damage Mitigated": "0",
+        "Deaths": "14",
+        "Damage Dealt": "23408",
+        "Healing Done": "0",
+        "Role": "Damage",
+        "Result": "1",
+        "Assists": "10",
+        "Eliminations": "51"
+       }
+      },
+      {
+       "player_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+       "nickname": "KSAA0",
+       "player_stats": {
+        "Assists": "20",
+        "Eliminations": "48",
+        "K/D Ratio": "4",
+        "Healing Done": "2341",
+        "Damage Mitigated": "35065",
+        "Result": "1",
+        "Role": "Tank",
+        "Damage Dealt": "17500",
+        "Deaths": "12"
+       }
+      },
+      {
+       "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+       "nickname": "Youbi1",
+       "player_stats": {
+        "Deaths": "12",
+        "K/D Ratio": "3.67",
+        "Assists": "8",
+        "Role": "Damage",
+        "Eliminations": "44",
+        "Healing Done": "51",
+        "Damage Mitigated": "886",
+        "Damage Dealt": "19966",
+        "Result": "1"
+       }
+      },
+      {
+       "player_id": "a9518828-6359-4b76-926f-b0d9be499a46",
+       "nickname": "Kenneth21",
+       "player_stats": {
+        "Deaths": "10",
+        "K/D Ratio": "5.1",
+        "Assists": "47",
+        "Damage Dealt": "12576",
+        "Healing Done": "28732",
+        "Result": "1",
+        "Damage Mitigated": "0",
+        "Eliminations": "51",
+        "Role": "Support"
+       }
+      }
+     ]
+    },
+    {
+     "team_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+     "premade": true,
+     "team_stats": {
+      "Team": "ENCE",
+      "Team Score": "3",
+      "Team Avg Deaths": "13.8",
+      "Team Win": "0",
+      "Team Total Eliminations": "189",
+      "Team Total Deaths": "69",
+      "Team Avg Eliminations": "37.8"
+     },
+     "players": [
+      {
+       "player_id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+       "nickname": "kevsteer",
+       "player_stats": {
+        "Result": "0",
+        "Eliminations": "44",
+        "Damage Mitigated": "6081",
+        "Role": "Damage",
+        "Deaths": "19",
+        "Assists": "11",
+        "Healing Done": "372",
+        "K/D Ratio": "2.32",
+        "Damage Dealt": "18308"
+       }
+      },
+      {
+       "player_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+       "nickname": "yung_kai",
+       "player_stats": {
+        "Eliminations": "42",
+        "Assists": "9",
+        "Damage Dealt": "19238",
+        "Healing Done": "0",
+        "Result": "0",
+        "Role": "Damage",
+        "Deaths": "12",
+        "K/D Ratio": "3.5",
+        "Damage Mitigated": "0"
+       }
+      },
+      {
+       "player_id": "62fe43ad-afb1-4ca9-bcb2-09ad8fdff606",
+       "nickname": "tappomasa666",
+       "player_stats": {
+        "Healing Done": "18424",
+        "Result": "0",
+        "Role": "Support",
+        "Damage Dealt": "8586",
+        "Eliminations": "34",
+        "Assists": "29",
+        "Damage Mitigated": "4428",
+        "Deaths": "12",
+        "K/D Ratio": "2.83"
+       }
+      },
+      {
+       "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+       "nickname": "vestola",
+       "player_stats": {
+        "Result": "0",
+        "Assists": "29",
+        "Healing Done": "5240",
+        "Eliminations": "41",
+        "Deaths": "14",
+        "K/D Ratio": "2.93",
+        "Damage Dealt": "22269",
+        "Role": "Tank",
+        "Damage Mitigated": "15245"
+       }
+      },
+      {
+       "player_id": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa",
+       "nickname": "iCrimzo",
+       "player_stats": {
+        "K/D Ratio": "2.33",
+        "Healing Done": "23144",
+        "Damage Mitigated": "0",
+        "Damage Dealt": "7296",
+        "Eliminations": "28",
+        "Deaths": "12",
+        "Role": "Support",
+        "Assists": "46",
+        "Result": "0"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "best_of": "6",
+   "competition_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
+   "game_id": "ow2",
+   "game_mode": "5v5",
+   "match_id": "1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+   "match_round": "3",
+   "played": "3",
+   "round_stats": {
+    "OW2 Mode": "Push",
+    "Winner": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "Map": "0x0800000000000B34",
+    "Score Summary": "1 / 0"
+   },
+   "teams": [
+    {
+     "team_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+     "premade": true,
+     "team_stats": {
+      "Team Win": "1",
+      "Team Total Eliminations": "123",
+      "Team Avg Eliminations": "24.6",
+      "Team Avg Deaths": "5.4",
+      "Team Score": "1",
+      "Team Total Deaths": "27",
+      "Team": "Twisted Minds"
+     },
+     "players": [
+      {
+       "player_id": "b273a710-800f-4638-9858-461d81ac55b9",
+       "nickname": "kellemanden",
+       "player_stats": {
+        "K/D Ratio": "5.5",
+        "Assists": "22",
+        "Damage Mitigated": "1906",
+        "Role": "Support",
+        "Deaths": "4",
+        "Healing Done": "4799",
+        "Result": "1",
+        "Eliminations": "22",
+        "Damage Dealt": "5631"
+       }
+      },
+      {
+       "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+       "nickname": "Quartz03",
+       "player_stats": {
+        "Damage Dealt": "14685",
+        "Result": "1",
+        "Eliminations": "29",
+        "K/D Ratio": "7.25",
+        "Damage Mitigated": "0",
+        "Deaths": "4",
+        "Assists": "4",
+        "Healing Done": "0",
+        "Role": "Damage"
+       }
+      },
+      {
+       "player_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+       "nickname": "KSAA0",
+       "player_stats": {
+        "Role": "Tank",
+        "Deaths": "5",
+        "Healing Done": "675",
+        "Eliminations": "25",
+        "K/D Ratio": "5",
+        "Damage Dealt": "9883",
+        "Damage Mitigated": "21588",
+        "Assists": "10",
+        "Result": "1"
+       }
+      },
+      {
+       "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+       "nickname": "Youbi1",
+       "player_stats": {
+        "Deaths": "8",
+        "Damage Dealt": "7643",
+        "Role": "Damage",
+        "K/D Ratio": "2.75",
+        "Assists": "0",
+        "Damage Mitigated": "0",
+        "Healing Done": "0",
+        "Result": "1",
+        "Eliminations": "22"
+       }
+      },
+      {
+       "player_id": "a9518828-6359-4b76-926f-b0d9be499a46",
+       "nickname": "Kenneth21",
+       "player_stats": {
+        "Assists": "27",
+        "Result": "1",
+        "Healing Done": "15885",
+        "Eliminations": "25",
+        "K/D Ratio": "4.17",
+        "Damage Dealt": "7338",
+        "Damage Mitigated": "0",
+        "Role": "Support",
+        "Deaths": "6"
+       }
+      }
+     ]
+    },
+    {
+     "team_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+     "premade": true,
+     "team_stats": {
+      "Team Win": "0",
+      "Team Score": "0",
+      "Team Avg Eliminations": "16.2",
+      "Team": "ENCE",
+      "Team Total Eliminations": "81",
+      "Team Total Deaths": "37",
+      "Team Avg Deaths": "7.4"
+     },
+     "players": [
+      {
+       "player_id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+       "nickname": "kevsteer",
+       "player_stats": {
+        "Assists": "4",
+        "Healing Done": "210",
+        "Role": "Damage",
+        "Deaths": "8",
+        "K/D Ratio": "1.75",
+        "Damage Dealt": "7245",
+        "Damage Mitigated": "2396",
+        "Result": "0",
+        "Eliminations": "14"
+       }
+      },
+      {
+       "player_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+       "nickname": "yung_kai",
+       "player_stats": {
+        "Deaths": "8",
+        "K/D Ratio": "2.75",
+        "Healing Done": "0",
+        "Damage Mitigated": "0",
+        "Role": "Damage",
+        "Result": "0",
+        "Assists": "6",
+        "Damage Dealt": "8540",
+        "Eliminations": "22"
+       }
+      },
+      {
+       "player_id": "62fe43ad-afb1-4ca9-bcb2-09ad8fdff606",
+       "nickname": "tappomasa666",
+       "player_stats": {
+        "Healing Done": "10268",
+        "Result": "0",
+        "K/D Ratio": "1.5",
+        "Damage Dealt": "4766",
+        "Damage Mitigated": "2416",
+        "Role": "Support",
+        "Eliminations": "12",
+        "Assists": "14",
+        "Deaths": "8"
+       }
+      },
+      {
+       "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+       "nickname": "vestola",
+       "player_stats": {
+        "K/D Ratio": "3.29",
+        "Assists": "9",
+        "Damage Dealt": "11510",
+        "Healing Done": "3117",
+        "Damage Mitigated": "6509",
+        "Role": "Tank",
+        "Eliminations": "23",
+        "Deaths": "7",
+        "Result": "0"
+       }
+      },
+      {
+       "player_id": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa",
+       "nickname": "iCrimzo",
+       "player_stats": {
+        "Assists": "19",
+        "Healing Done": "12403",
+        "Damage Mitigated": "0",
+        "Result": "0",
+        "Role": "Support",
+        "K/D Ratio": "1.67",
+        "Damage Dealt": "4122",
+        "Deaths": "6",
+        "Eliminations": "10"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "best_of": "6",
+   "competition_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
+   "game_id": "ow2",
+   "game_mode": "5v5",
+   "match_id": "1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+   "match_round": "4",
+   "played": "4",
+   "round_stats": {
+    "OW2 Mode": "Flashpoint",
+    "Winner": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+    "Map": "0x0800000000000D3E",
+    "Score Summary": "0 / 3"
+   },
+   "teams": [
+    {
+     "team_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+     "premade": true,
+     "team_stats": {
+      "Team Score": "0",
+      "Team Avg Eliminations": "13.4",
+      "Team Total Eliminations": "67",
+      "Team Total Deaths": "42",
+      "Team Avg Deaths": "8.4",
+      "Team": "Twisted Minds",
+      "Team Win": "0"
+     },
+     "players": [
+      {
+       "player_id": "b273a710-800f-4638-9858-461d81ac55b9",
+       "nickname": "kellemanden",
+       "player_stats": {
+        "Damage Dealt": "4247",
+        "Healing Done": "5584",
+        "Result": "0",
+        "Role": "Support",
+        "Deaths": "6",
+        "Assists": "12",
+        "Damage Mitigated": "1822",
+        "K/D Ratio": "1.67",
+        "Eliminations": "10"
+       }
+      },
+      {
+       "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+       "nickname": "Quartz03",
+       "player_stats": {
+        "Healing Done": "0",
+        "Result": "0",
+        "Eliminations": "17",
+        "Assists": "3",
+        "Damage Mitigated": "0",
+        "Role": "Damage",
+        "Deaths": "8",
+        "Damage Dealt": "8683",
+        "K/D Ratio": "2.12"
+       }
+      },
+      {
+       "player_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+       "nickname": "KSAA0",
+       "player_stats": {
+        "Assists": "4",
+        "Healing Done": "225",
+        "Damage Mitigated": "16628",
+        "Deaths": "10",
+        "Result": "0",
+        "K/D Ratio": "1.1",
+        "Damage Dealt": "9067",
+        "Role": "Tank",
+        "Eliminations": "11"
+       }
+      },
+      {
+       "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+       "nickname": "Youbi1",
+       "player_stats": {
+        "Role": "Damage",
+        "Damage Dealt": "8570",
+        "Healing Done": "4",
+        "Eliminations": "20",
+        "Assists": "1",
+        "Result": "0",
+        "Deaths": "9",
+        "K/D Ratio": "2.22",
+        "Damage Mitigated": "0"
+       }
+      },
+      {
+       "player_id": "a9518828-6359-4b76-926f-b0d9be499a46",
+       "nickname": "Kenneth21",
+       "player_stats": {
+        "Assists": "12",
+        "Healing Done": "14159",
+        "Deaths": "9",
+        "Damage Dealt": "5300",
+        "Damage Mitigated": "0",
+        "Role": "Support",
+        "Eliminations": "9",
+        "K/D Ratio": "1",
+        "Result": "0"
+       }
+      }
+     ]
+    },
+    {
+     "team_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+     "premade": true,
+     "team_stats": {
+      "Team Win": "1",
+      "Team Avg Eliminations": "26.6",
+      "Team Avg Deaths": "4.8",
+      "Team Score": "3",
+      "Team Total Eliminations": "133",
+      "Team Total Deaths": "24",
+      "Team": "ENCE"
+     },
+     "players": [
+      {
+       "player_id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+       "nickname": "kevsteer",
+       "player_stats": {
+        "Damage Mitigated": "0",
+        "Result": "1",
+        "Role": "Damage",
+        "Deaths": "2",
+        "Assists": "0",
+        "K/D Ratio": "16",
+        "Damage Dealt": "10540",
+        "Healing Done": "0",
+        "Eliminations": "32"
+       }
+      },
+      {
+       "player_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+       "nickname": "yung_kai",
+       "player_stats": {
+        "Damage Mitigated": "0",
+        "Eliminations": "29",
+        "Healing Done": "0",
+        "Deaths": "5",
+        "K/D Ratio": "5.8",
+        "Assists": "6",
+        "Damage Dealt": "10439",
+        "Result": "1",
+        "Role": "Damage"
+       }
+      },
+      {
+       "player_id": "62fe43ad-afb1-4ca9-bcb2-09ad8fdff606",
+       "nickname": "tappomasa666",
+       "player_stats": {
+        "Assists": "20",
+        "Damage Dealt": "3856",
+        "Healing Done": "6045",
+        "Result": "1",
+        "Role": "Support",
+        "Eliminations": "18",
+        "Deaths": "7",
+        "K/D Ratio": "2.57",
+        "Damage Mitigated": "2377"
+       }
+      },
+      {
+       "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+       "nickname": "vestola",
+       "player_stats": {
+        "Deaths": "4",
+        "K/D Ratio": "7.25",
+        "Healing Done": "390",
+        "Damage Mitigated": "13903",
+        "Result": "1",
+        "Assists": "7",
+        "Role": "Tank",
+        "Eliminations": "29",
+        "Damage Dealt": "9635"
+       }
+      },
+      {
+       "player_id": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa",
+       "nickname": "iCrimzo",
+       "player_stats": {
+        "Result": "1",
+        "Role": "Support",
+        "Damage Mitigated": "0",
+        "Deaths": "6",
+        "Damage Dealt": "6801",
+        "K/D Ratio": "4.17",
+        "Eliminations": "25",
+        "Assists": "31",
+        "Healing Done": "13911"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "best_of": "6",
+   "competition_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
+   "game_id": "ow2",
+   "game_mode": "5v5",
+   "match_id": "1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+   "match_round": "5",
+   "played": "5",
+   "round_stats": {
+    "OW2 Mode": "Escort",
+    "Winner": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "Score Summary": "3 / 2",
+    "Map": "0x0800000000000C85"
+   },
+   "teams": [
+    {
+     "team_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+     "premade": true,
+     "team_stats": {
+      "Team": "Twisted Minds",
+      "Team Total Eliminations": "177",
+      "Team Total Deaths": "54",
+      "Team Avg Eliminations": "35.4",
+      "Team Win": "1",
+      "Team Score": "3",
+      "Team Avg Deaths": "10.8"
+     },
+     "players": [
+      {
+       "player_id": "b273a710-800f-4638-9858-461d81ac55b9",
+       "nickname": "kellemanden",
+       "player_stats": {
+        "Damage Dealt": "8519",
+        "Eliminations": "29",
+        "Deaths": "10",
+        "K/D Ratio": "2.9",
+        "Damage Mitigated": "5096",
+        "Role": "Support",
+        "Assists": "29",
+        "Healing Done": "12908",
+        "Result": "1"
+       }
+      },
+      {
+       "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+       "nickname": "Quartz03",
+       "player_stats": {
+        "Result": "1",
+        "K/D Ratio": "3.9",
+        "Healing Done": "0",
+        "Deaths": "10",
+        "Assists": "7",
+        "Damage Dealt": "18408",
+        "Eliminations": "39",
+        "Damage Mitigated": "0",
+        "Role": "Damage"
+       }
+      },
+      {
+       "player_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+       "nickname": "KSAA0",
+       "player_stats": {
+        "Role": "Tank",
+        "Deaths": "8",
+        "Damage Dealt": "22359",
+        "Damage Mitigated": "22408",
+        "Result": "1",
+        "K/D Ratio": "4.38",
+        "Healing Done": "3382",
+        "Eliminations": "35",
+        "Assists": "21"
+       }
+      },
+      {
+       "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+       "nickname": "Youbi1",
+       "player_stats": {
+        "Assists": "12",
+        "Damage Mitigated": "2731",
+        "Role": "Damage",
+        "Eliminations": "42",
+        "K/D Ratio": "3",
+        "Damage Dealt": "13781",
+        "Healing Done": "120",
+        "Result": "1",
+        "Deaths": "14"
+       }
+      },
+      {
+       "player_id": "a9518828-6359-4b76-926f-b0d9be499a46",
+       "nickname": "Kenneth21",
+       "player_stats": {
+        "K/D Ratio": "2.67",
+        "Damage Dealt": "8284",
+        "Damage Mitigated": "0",
+        "Result": "1",
+        "Eliminations": "32",
+        "Assists": "41",
+        "Healing Done": "23656",
+        "Role": "Support",
+        "Deaths": "12"
+       }
+      }
+     ]
+    },
+    {
+     "team_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+     "premade": true,
+     "team_stats": {
+      "Team Total Eliminations": "165",
+      "Team Avg Deaths": "10.6",
+      "Team Score": "2",
+      "Team Total Deaths": "53",
+      "Team Avg Eliminations": "33",
+      "Team": "ENCE",
+      "Team Win": "0"
+     },
+     "players": [
+      {
+       "player_id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+       "nickname": "kevsteer",
+       "player_stats": {
+        "Result": "0",
+        "K/D Ratio": "4.11",
+        "Healing Done": "0",
+        "Role": "Damage",
+        "Eliminations": "37",
+        "Deaths": "9",
+        "Assists": "0",
+        "Damage Dealt": "15864",
+        "Damage Mitigated": "0"
+       }
+      },
+      {
+       "player_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+       "nickname": "yung_kai",
+       "player_stats": {
+        "Healing Done": "0",
+        "Eliminations": "35",
+        "Deaths": "11",
+        "Damage Dealt": "16828",
+        "Damage Mitigated": "0",
+        "Result": "0",
+        "K/D Ratio": "3.18",
+        "Assists": "8",
+        "Role": "Damage"
+       }
+      },
+      {
+       "player_id": "62fe43ad-afb1-4ca9-bcb2-09ad8fdff606",
+       "nickname": "tappomasa666",
+       "player_stats": {
+        "Deaths": "11",
+        "K/D Ratio": "2.36",
+        "Damage Dealt": "8760",
+        "Assists": "29",
+        "Healing Done": "13167",
+        "Result": "0",
+        "Role": "Support",
+        "Eliminations": "26",
+        "Damage Mitigated": "4918"
+       }
+      },
+      {
+       "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+       "nickname": "vestola",
+       "player_stats": {
+        "Damage Mitigated": "30445",
+        "Result": "0",
+        "Assists": "9",
+        "Damage Dealt": "18481",
+        "Eliminations": "32",
+        "K/D Ratio": "2.67",
+        "Healing Done": "813",
+        "Role": "Tank",
+        "Deaths": "12"
+       }
+      },
+      {
+       "player_id": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa",
+       "nickname": "iCrimzo",
+       "player_stats": {
+        "Eliminations": "35",
+        "Deaths": "10",
+        "Damage Mitigated": "0",
+        "Result": "0",
+        "Damage Dealt": "13050",
+        "K/D Ratio": "3.5",
+        "Assists": "33",
+        "Healing Done": "23516",
+        "Role": "Support"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

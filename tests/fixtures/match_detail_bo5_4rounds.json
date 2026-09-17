@@ -1,0 +1,488 @@
+{
+ "match_id": "1-7553f194-b7d7-4bc9-bda4-3484592e014f",
+ "version": 2,
+ "game": "ow2",
+ "region": "GLOBAL",
+ "competition_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
+ "competition_type": "championship",
+ "competition_name": "OWCS 2024: EMEA Stage 1 - Main Event",
+ "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+ "teams": {
+  "faction2": {
+   "faction_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+   "leader": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+   "avatar": "https://distribution.faceit-cdn.net/images/d9fda819-4e7b-4e26-8332-89d3cc636782.jpeg",
+   "roster": [
+    {
+     "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+     "nickname": "zzcrispy",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "420766079",
+     "game_player_name": "Crispy",
+     "game_skill_level": 9,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+     "nickname": "Chaseeeeeee_",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "446362182",
+     "game_player_name": "Chasetorch",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+     "nickname": "Khenail",
+     "avatar": "https://distribution.faceit-cdn.net/images/4d6300f3-b496-4036-b3b5-51df96767d00.jpeg",
+     "membership": "free",
+     "game_player_id": "469045322",
+     "game_player_name": "Khenail",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+     "nickname": "sHockWaveOW",
+     "avatar": "https://distribution.faceit-cdn.net/images/74893a1b-552b-4305-b9f4-b91527b6e5a2.jpeg",
+     "membership": "free",
+     "game_player_id": "402679526",
+     "game_player_name": "sHockWave",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5",
+     "nickname": "Clowdeyyy",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "141927792",
+     "game_player_name": "Clowd",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    }
+   ],
+   "substitutes": [
+    {
+     "player_id": "59643d3f-fad7-4182-87be-63d2371bedae",
+     "nickname": "cookie084",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "439072109",
+     "game_player_name": "cookie084",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    }
+   ],
+   "substituted": true,
+   "name": "Ex Oblivione",
+   "type": "premade"
+  },
+  "faction1": {
+   "faction_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+   "leader": "92695183-d00e-4c31-9707-ff9d8500f52a",
+   "avatar": "https://distribution.faceit-cdn.net/images/801624fc-c42b-416e-95fe-795ca8c71eee.jpeg",
+   "roster": [
+    {
+     "player_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+     "nickname": "KSAA0",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "440520999",
+     "game_player_name": "KSAA",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "b273a710-800f-4638-9858-461d81ac55b9",
+     "nickname": "kellemanden",
+     "avatar": "https://distribution.faceit-cdn.net/images/a0b5fff7-758e-44ae-a5cf-78b85278e37b.jpeg",
+     "membership": "free",
+     "game_player_id": "100902864",
+     "game_player_name": "kellex",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+     "nickname": "Quartz03",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "489480573",
+     "game_player_name": "Quartz",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+     "nickname": "Youbi1",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "489508402",
+     "game_player_name": "Youbi",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "a9518828-6359-4b76-926f-b0d9be499a46",
+     "nickname": "Kenneth21",
+     "avatar": "https://assets.faceit-cdn.net/avatars/a9518828-6359-4b76-926f-b0d9be499a46_1550613229862.jpg",
+     "membership": "free",
+     "game_player_id": "136716614",
+     "game_player_name": "Slay",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    }
+   ],
+   "substitutes": [
+    {
+     "player_id": "5fe6035f-0dd7-4003-abd2-392aef32351f",
+     "nickname": "Skairipa00",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "440017432",
+     "game_player_name": "SKAI",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "dc0acf39-2b73-4664-af06-f0d7d9cda8fe",
+     "nickname": "Akay_OW",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "467752394",
+     "game_player_name": "AKAY",
+     "game_skill_level": 8,
+     "anticheat_required": false
+    },
+    {
+     "player_id": "462c6480-274d-48a6-a5cf-d29d3b2dd786",
+     "nickname": "LBBD7",
+     "avatar": "",
+     "membership": "free",
+     "game_player_id": "495592752",
+     "game_player_name": "LBBD7",
+     "game_skill_level": 10,
+     "anticheat_required": false
+    }
+   ],
+   "substituted": true,
+   "name": "Twisted Minds",
+   "type": "premade"
+  }
+ },
+ "voting": {
+  "voted_entity_types": [
+   "map",
+   "attacking_first"
+  ],
+  "map": {
+   "entities": [
+    {
+     "game_map_id": "0x080000000000066D",
+     "guid": "0x080000000000066D",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f2d716e6-cb55-4759-b0f4-28cd8fd24323_1703103126376.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5ebad419-993f-4fda-9e78-446759a05c4d_1703102993834.jpeg",
+     "name": "Ilios",
+     "class_name": "Ilios"
+    },
+    {
+     "game_map_id": "0x0800000000000662",
+     "guid": "0x0800000000000662",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ee3fe75-971a-4d37-9448-fd78cf975bd8_1703103130214.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ffb0acdb-ce25-41d8-a589-e0a7c447b2dd_1703102999443.jpeg",
+     "name": "Lijiang Tower",
+     "class_name": "Lijiang Tower"
+    },
+    {
+     "class_name": "Nepal",
+     "game_map_id": "0x08000000000004B7",
+     "guid": "0x08000000000004B7",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ec4b4329-5b16-48b3-bf1d-2c8d0efbcf1a_1703103133129.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7747138d-6711-4257-99d2-739e2f205419_1703103002544.jpeg",
+     "name": "Nepal"
+    },
+    {
+     "class_name": "Samoa",
+     "game_map_id": "0x0800000000000EC0",
+     "guid": "0x0800000000000EC0",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2d8d0bb3-b098-4482-861c-0af4590c95c3_1703103149418.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/387a7de6-d8f0-4b4e-b7dd-eba9a3c06d6c_1703103013339.jpeg",
+     "name": "Samoa"
+    },
+    {
+     "name": "Blizzard World",
+     "class_name": "Blizzard World",
+     "game_map_id": "0x080000000000075E",
+     "guid": "0x080000000000075E",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be278cb2-9c83-49d3-abfb-7c94ffcc0d1f_1703103190096.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ac7b6281-24f1-4f5f-bfbf-04a1ea2c8942_1703103059008.jpeg"
+    },
+    {
+     "guid": "0x08000000000002AF",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/856aa4df-a6a0-4713-9d9b-c17d5e1830e1_1703103203800.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/45e0201d-ae45-48f1-a336-74bbd8006c47_1703103065745.jpeg",
+     "name": "Hollywood",
+     "class_name": "Hollywood",
+     "game_map_id": "0x08000000000002AF"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3071e358-5426-4a05-a928-519353b29fc4_1703103206776.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8c3011bf-be5b-4e65-99f5-28c9cb80a6f4_1703103068622.jpeg",
+     "name": "King's Row",
+     "class_name": "King's Row",
+     "game_map_id": "0x08000000000000D4",
+     "guid": "0x08000000000000D4"
+    },
+    {
+     "game_map_id": "0x0800000000000B4C",
+     "guid": "0x0800000000000B4C",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/02b1222d-2b5e-4c7f-82e1-48bf1ef4bd8a_1703103209971.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8a66c21b-bab9-4fa0-923d-f954b5bc8d4a_1703103072451.jpeg",
+     "name": "Midtown",
+     "class_name": "Midtown"
+    },
+    {
+     "game_map_id": "0x0800000000000B34",
+     "guid": "0x0800000000000B34",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/81178286-d627-4f34-ac4c-eca25239ab88_1703103220387.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2dcec9b5-b9d1-4647-aece-a9980cee2c4d_1703103105258.jpeg",
+     "name": "Colosseo",
+     "class_name": "Colosseo"
+    },
+    {
+     "name": "Esperança",
+     "class_name": "Esperança",
+     "game_map_id": "0x0800000000000D53",
+     "guid": "0x0800000000000D53",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/32c9964e-2b63-4495-b3f2-9f947bad5e4a_1703103225824.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/57d6237f-9228-42e5-8035-07a734e2e5cc_1703103087193.jpeg"
+    },
+    {
+     "name": "New Queen Street",
+     "class_name": "New Queen Street",
+     "game_map_id": "0x0800000000000AEB",
+     "guid": "0x0800000000000AEB",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0083a86e-a5bf-472b-857a-4141790606a4_1703103228854.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/16b005d0-eef2-4af4-b689-576286a8c9fc_1703103091604.jpeg"
+    },
+    {
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c13859b8-7ac1-46a3-a869-2ccafb5d3ebe_1703103182898.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/eb003902-8da9-4ed2-9b1f-975a7f797f8a_1703103050586.jpeg",
+     "name": "New Junk City",
+     "class_name": "New Junk City",
+     "game_map_id": "0x0800000000000E13",
+     "guid": "0x0800000000000E13"
+    },
+    {
+     "game_map_id": "0x0800000000000D3E",
+     "guid": "0x0800000000000D3E",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fa702302-43a4-49d5-b782-59e17d343db8_1703103186824.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f0b94a8e-bfbb-414b-b2ac-6135a2c902da_1703103053805.jpeg",
+     "name": "Suravasa",
+     "class_name": "Suravasa"
+    },
+    {
+     "class_name": "Circuit Royal",
+     "game_map_id": "0x0800000000000827",
+     "guid": "0x0800000000000827",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be5588c6-b069-42c8-8f92-a5bf0039b367_1703103152414.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/94728215-cdfc-42c9-878b-059a136dbe34_1703103016007.jpeg",
+     "name": "Circuit Royal"
+    },
+    {
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a83c8b41-cc66-4e7a-a92a-20b14b83bb4a_1703103019601.jpeg",
+     "name": "Dorado",
+     "class_name": "Dorado",
+     "game_map_id": "0x08000000000002C3",
+     "guid": "0x08000000000002C3",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8de33243-a6ec-44ab-b1a9-f92a3cd6154f_1703103154990.jpeg"
+    },
+    {
+     "name": "Rialto",
+     "class_name": "Rialto",
+     "game_map_id": "0x0800000000000871",
+     "guid": "0x0800000000000871",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7153ec7e-e06a-4d9d-a840-44d0beaa145e_1703103165472.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b6b435d0-e9b9-415c-b383-64de98ee6e5b_1703103037608.jpeg"
+    },
+    {
+     "class_name": "Shambali Monastery",
+     "game_map_id": "0x0800000000000C85",
+     "guid": "0x0800000000000C85",
+     "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/93838223-c8b3-40e4-8186-90c6637e12c6_1703103174907.jpeg",
+     "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ad9437ab-ef72-45ba-b217-f15a65dcb375_1703103043929.jpeg",
+     "name": "Shambali Monastery"
+    }
+   ],
+   "pick": [
+    "0x0800000000000662",
+    "0x080000000000075E",
+    "0x0800000000000D53",
+    "0x0800000000000D3E",
+    "0x0800000000000C85"
+   ]
+  },
+  "attacking_first": {
+   "entities": [
+    {
+     "image_sm": "",
+     "name": "Faction 1",
+     "class_name": "Faction 1",
+     "game_attacking_first_id": "faction1",
+     "guid": "faction1",
+     "image_lg": ""
+    },
+    {
+     "class_name": "Faction2",
+     "game_attacking_first_id": "faction2",
+     "guid": "faction2",
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction2"
+    },
+    {
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction 1",
+     "class_name": "Faction 1",
+     "game_attacking_first_id": "faction1",
+     "guid": "faction1"
+    },
+    {
+     "name": "Faction2",
+     "class_name": "Faction2",
+     "game_attacking_first_id": "faction2",
+     "guid": "faction2",
+     "image_lg": "",
+     "image_sm": ""
+    },
+    {
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction 1",
+     "class_name": "Faction 1",
+     "game_attacking_first_id": "faction1",
+     "guid": "faction1"
+    },
+    {
+     "class_name": "Faction2",
+     "game_attacking_first_id": "faction2",
+     "guid": "faction2",
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction2"
+    },
+    {
+     "image_sm": "",
+     "name": "Faction 1",
+     "class_name": "Faction 1",
+     "game_attacking_first_id": "faction1",
+     "guid": "faction1",
+     "image_lg": ""
+    },
+    {
+     "game_attacking_first_id": "faction2",
+     "guid": "faction2",
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction2",
+     "class_name": "Faction2"
+    },
+    {
+     "guid": "faction1",
+     "image_lg": "",
+     "image_sm": "",
+     "name": "Faction 1",
+     "class_name": "Faction 1",
+     "game_attacking_first_id": "faction1"
+    },
+    {
+     "image_sm": "",
+     "name": "Faction2",
+     "class_name": "Faction2",
+     "game_attacking_first_id": "faction2",
+     "guid": "faction2",
+     "image_lg": ""
+    }
+   ],
+   "pick": [
+    "faction2",
+    "faction1",
+    "faction2",
+    "faction1",
+    "faction2"
+   ]
+  }
+ },
+ "calculate_elo": false,
+ "scheduled_at": 1711299600,
+ "configured_at": 1711303626,
+ "started_at": 1711303776,
+ "finished_at": 1711304475,
+ "chat_room_id": "match-1-7553f194-b7d7-4bc9-bda4-3484592e014f",
+ "best_of": 5,
+ "results": {
+  "winner": "faction1",
+  "score": {
+   "faction1": 3,
+   "faction2": 1
+  }
+ },
+ "detailed_results": [
+  {
+   "asc_score": false,
+   "winner": "faction1",
+   "factions": {
+    "faction1": {
+     "score": 2
+    },
+    "faction2": {
+     "score": 1
+    }
+   }
+  },
+  {
+   "asc_score": false,
+   "winner": "faction1",
+   "factions": {
+    "faction1": {
+     "score": 3
+    },
+    "faction2": {
+     "score": 1
+    }
+   }
+  },
+  {
+   "asc_score": false,
+   "winner": "faction2",
+   "factions": {
+    "faction2": {
+     "score": 1
+    },
+    "faction1": {
+     "score": 0
+    }
+   }
+  },
+  {
+   "asc_score": false,
+   "winner": "faction1",
+   "factions": {
+    "faction2": {
+     "score": 1
+    },
+    "faction1": {
+     "score": 3
+    }
+   }
+  }
+ ],
+ "status": "FINISHED",
+ "round": 4,
+ "group": 2,
+ "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-7553f194-b7d7-4bc9-bda4-3484592e014f"
+}

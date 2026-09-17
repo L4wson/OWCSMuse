@@ -1,0 +1,14 @@
+# Local Postgres for development: `docker compose up -d`
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: owcs
+      POSTGRES_PASSWORD: owcs
+      POSTGRES_DB: owcsmuse
+    ports:
+      - "5432:5432"
+    volumes:
+      - owcs_pgdata:/var/lib/postgresql/data
+volumes:
+  owcs_pgdata:

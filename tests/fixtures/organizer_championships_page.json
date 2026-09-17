@@ -1,0 +1,668 @@
+{
+ "items": [
+  {
+   "id": "d3d61baf-1ce8-4fb7-a2dd-6e9d70e61397",
+   "championship_id": "d3d61baf-1ce8-4fb7-a2dd-6e9d70e61397",
+   "name": "OWCS 2024: EMEA Stage 1 - Open Qualifiers",
+   "cover_image": "https://assets.faceit-cdn.net/championships/cover/d3d61baf-1ce8-4fb7-a2dd-6e9d70e61397_1706263591800.png",
+   "background_image": "",
+   "avatar": "",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "description": "\n* Discord Server: https://discord.gg/overwatchesports\n* [Player Know-Before-You-Go PDF](https://shorturl.at/AFPVZ)\n* Requirements: Must be in good standing with respect to any Battle.Net or FACEIT accounts and be over the age of seventeen (17). \n* Game Platform: PC Only\n* All matches will be played using the FACEIT OW2 game integration, which will automatically host the lobby and report your match results. Reach out to an Admin on tournament day if you have questions! \n* For further information on joining a FACEIT OW2 game integrated match, view this article! https://support.faceit.com/hc/en-us/articles/12348725948572\n* Structure & format\n   * Swiss (512 Teams)\n       * Each Team will player nine (9) matches against other Open Qualifier teams. \n       * Teams will be paired each round per Swiss-tournament style rules, pairing similar performing teams in each round. \n       * Each Match in the Swiss phase will be played until the first Team to win two (FT2) maps will win the Match.\n       * Upon conclusion of the 9th round of Matches in Swiss, the Top 16 Teams will be invited to advance to Groups. \n   * Groups\n       * The 16 Teams will be seed into 4 Groups as determined at the sole discretion of Administration. \n       * Each Group will be conducted using GSL-tournament style rules. \n       * Each Match in the Swiss phase will be played until the first Team to win three (FT3) maps will win the Match.\n       * Upon conclusion of Groups, the Top 2 Teams from each Group will be invited to advance to the Main Event\n   * Main Event\n       * 8 Teams will be seeded into the Main Event as determined at the sole discretion of Administration. \n       * The Main Event will be a Double-Elimination Bracket; does not include a bracket reset in the Grand Finals Match. \n       * Each Match in the Swiss phase will be played until the first Team to win four (FT4) maps will win the Match.\n* Swiss - Game modes & maps: \n  * Map 1 Game Mode: Control\n    * Control Available Maps: Illios, Lijang Tower, Nepal, Samoa\n  * Map 2 Game Mode: Hybrid\n    * Hybrid Available Maps: Blizzard World, King&#39;s Row, Midtown, Hollywood\n  * Map 3 Game Mode: Escort\n    * Escort Available Maps: Circuit Royale, Dorado, Rialto, Shambali Monastery\n  * Tiebreaker  Game Mode: Flashpoint\n    * Flashpoint Available Maps: New Junk City, Suravasa\n* Swiss - Server Host\n    * All matches will be played on the in-game \"Netherlands\" server. \n* Stage 1 Main Event - Prizing\n   * The Top 8 Teams in the Main Event will earn the following prizing based on their placement. \n       * 1st Place: $30,000 USD Team prizing\n       * 2nd Place: $15,000 USD Team prizing\n       * 3rd Place: $10,000 USD Team prizing\n       * 4th Place: $7,000 USD Team prizing\n       * 5th/6th Place: $4,000 USD Team prizing\n       * 7th/8th Place:  $2,500 USD Team prizing\n* Circuit Points\n   * The Top 16 Teams will earn circuit points based on their placement, which help qualify your Team for LAN Events. \n       * 1st Place: 50 Circuit Points\n       * 2nd Place: 40 Circuit Points\n       * 3rd Place: 30 Circuit Points\n       * 4th Place: 25 Circuit Points\n       * 5th/6th Place: 20 Circuit Points\n       * 7th/8th Place: 15 Circuit Points\n       * 9th-12th Place: 10 Circuit Points\n       * 13th-16th Place: 5 Circuit Points\n",
+   "type": "swiss",
+   "status": "finished",
+   "game_id": "ow2",
+   "region": "GLOBAL",
+   "featured": true,
+   "subscription_start": 1706677200000,
+   "checkin_start": 1709309100000,
+   "checkin_clear": 1709310900000,
+   "subscription_end": 1709312700000,
+   "championship_start": 1709313600000,
+   "slots": 512,
+   "current_subscriptions": 239,
+   "join_checks": {
+    "min_skill_level": 1,
+    "max_skill_level": 10,
+    "whitelist_geo_countries": [
+     "DZ",
+     "AT",
+     "BH",
+     "BE",
+     "BA",
+     "BG",
+     "HR",
+     "CY",
+     "CZ",
+     "DK",
+     "EG",
+     "EE",
+     "FI",
+     "FR",
+     "DE",
+     "GE",
+     "GR",
+     "HU",
+     "IS",
+     "IE",
+     "IL",
+     "IT",
+     "KZ",
+     "KW",
+     "LV",
+     "LT",
+     "LU",
+     "MT",
+     "MK",
+     "MA",
+     "NL",
+     "NO",
+     "OM",
+     "PL",
+     "PT",
+     "QA",
+     "MD",
+     "RO",
+     "SA",
+     "RS",
+     "SK",
+     "SI",
+     "ZA",
+     "ES",
+     "SE",
+     "CH",
+     "TN",
+     "TR",
+     "UA",
+     "AE",
+     "GB",
+     "US"
+    ],
+    "whitelist_geo_countries_min_players": 2,
+    "blacklist_geo_countries": [],
+    "join_policy": "public",
+    "membership_type": "",
+    "allowed_team_types": [
+     "premade",
+     "mix"
+    ]
+   },
+   "anticheat_required": false,
+   "rules_id": "01d6e749-a027-4925-b28e-5dd09a7f72d2",
+   "substitution_configuration": {
+    "max_substitutes": 3,
+    "max_substitutions": 100
+   },
+   "full": false,
+   "checkin_enabled": false,
+   "total_rounds": 9,
+   "schedule": {
+    "6": {
+     "date": 1709406000000,
+     "status": "created"
+    },
+    "4": {
+     "date": 1709398800000,
+     "status": "created"
+    },
+    "8": {
+     "date": 1709488800000,
+     "status": "created"
+    },
+    "1": {
+     "date": 1709313600000,
+     "status": "created"
+    },
+    "3": {
+     "date": 1709319600000,
+     "status": "created"
+    },
+    "9": {
+     "date": 1709492400000,
+     "status": "created"
+    },
+    "2": {
+     "date": 1709316300000,
+     "status": "created"
+    },
+    "7": {
+     "date": 1709485200000,
+     "status": "created"
+    },
+    "5": {
+     "date": 1709402400000,
+     "status": "created"
+    }
+   },
+   "total_groups": 1,
+   "subscriptions_locked": true,
+   "seeding_strategy": "uniformGroupDistribution",
+   "faceit_url": "https://www.faceit.com/{lang}/championship/d3d61baf-1ce8-4fb7-a2dd-6e9d70e61397/",
+   "prizes": [
+    {
+     "rank": 1,
+     "faceit_points": 0
+    },
+    {
+     "rank": 2,
+     "faceit_points": 0
+    },
+    {
+     "rank": 3,
+     "faceit_points": 0
+    },
+    {
+     "rank": 4,
+     "faceit_points": 0
+    },
+    {
+     "rank": 5,
+     "faceit_points": 0
+    },
+    {
+     "rank": 6,
+     "faceit_points": 0
+    },
+    {
+     "rank": 7,
+     "faceit_points": 0
+    },
+    {
+     "rank": 8,
+     "faceit_points": 0
+    },
+    {
+     "rank": 9,
+     "faceit_points": 0
+    },
+    {
+     "rank": 10,
+     "faceit_points": 0
+    },
+    {
+     "rank": 11,
+     "faceit_points": 0
+    },
+    {
+     "rank": 12,
+     "faceit_points": 0
+    },
+    {
+     "rank": 13,
+     "faceit_points": 0
+    },
+    {
+     "rank": 14,
+     "faceit_points": 0
+    },
+    {
+     "rank": 15,
+     "faceit_points": 0
+    },
+    {
+     "rank": 16,
+     "faceit_points": 0
+    }
+   ],
+   "total_prizes": 0,
+   "stream": {
+    "active": false,
+    "platform": "",
+    "source": "",
+    "title": ""
+   }
+  },
+  {
+   "id": "2ee00312-6794-48d7-b757-82e778d8a4ac",
+   "championship_id": "2ee00312-6794-48d7-b757-82e778d8a4ac",
+   "name": "OWCS 2024: NA Stage 1 - Open Qualifiers",
+   "cover_image": "https://assets.faceit-cdn.net/championships/cover/2ee00312-6794-48d7-b757-82e778d8a4ac_1706263658794.png",
+   "background_image": "",
+   "avatar": "",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "description": "\n* Discord Server: https://discord.gg/overwatchesports\n* [Player Know-Before-You-Go PDF](https://shorturl.at/AFPVZ)\n* Requirements: Must be in good standing with respect to any Battle.Net or FACEIT accounts and be over the age of seventeen (17). \n* Game Platform: PC Only\n* All matches will be played using the FACEIT OW2 game integration, which will automatically host the lobby and report your match results. Reach out to an Admin on tournament day if you have questions! \n* For further information on joining a FACEIT OW2 game integrated match, view this article! https://support.faceit.com/hc/en-us/articles/12348725948572\n* Structure & format\n   * Swiss (512 Teams)\n       * Each Team will player nine (9) matches against other Open Qualifier teams. \n       * Teams will be paired each round per Swiss-tournament style rules, pairing similar performing teams in each round. \n       * Each Match in the Swiss phase will be played until the first Team to win two (FT2) maps will win the Match.\n       * Upon conclusion of the 9th round of Matches in Swiss, the Top 16 Teams will be invited to advance to Groups. \n   * Groups\n       * The 16 Teams will be seed into 4 Groups as determined at the sole discretion of Administration. \n       * Each Group will be conducted using GSL-tournament style rules. \n       * Each Match in the Swiss phase will be played until the first Team to win three (FT3) maps will win the Match.\n       * Upon conclusion of Groups, the Top 2 Teams from each Group will be invited to advance to the Main Event\n   * Main Event\n       * 8 Teams will be seeded into the Main Event as determined at the sole discretion of Administration. \n       * The Main Event will be a Double-Elimination Bracket; does not include a bracket reset in the Grand Finals Match. \n       * Each Match in the Swiss phase will be played until the first Team to win four (FT4) maps will win the Match.\n* Swiss - Game modes & maps: \n  * Map 1 Game Mode: Control\n    * Control Available Maps: Illios, Lijang Tower, Nepal, Samoa\n  * Map 2 Game Mode: Hybrid\n    * Hybrid Available Maps: Blizzard World, King&#39;s Row, Midtown, Hollywood\n  * Map 3 Game Mode: Escort\n    * Escort Available Maps: Circuit Royale, Dorado, Rialto, Shambali Monastery\n  * Tiebreaker  Game Mode: Flashpoint\n    * Flashpoint Available Maps: New Junk City, Suravasa\n* Swiss - Server Host\n    * All matches will be played on the in-game \"USA - Central\" server. \n* Stage 1 Main Event - Prizing\n   * The Top 8 Teams in the Main Event will earn the following prizing based on their placement. \n       * 1st Place: $30,000 USD Team prizing\n       * 2nd Place: $15,000 USD Team prizing\n       * 3rd Place: $10,000 USD Team prizing\n       * 4th Place: $7,000 USD Team prizing\n       * 5th/6th Place: $4,000 USD Team prizing\n       * 7th/8th Place:  $2,500 USD Team prizing\n* Circuit Points\n   * The Top 16 Teams will earn circuit points based on their placement, which help qualify your Team for LAN Events. \n       * 1st Place: 50 Circuit Points\n       * 2nd Place: 40 Circuit Points\n       * 3rd Place: 30 Circuit Points\n       * 4th Place: 25 Circuit Points\n       * 5th/6th Place: 20 Circuit Points\n       * 7th/8th Place: 15 Circuit Points\n       * 9th-12th Place: 10 Circuit Points\n       * 13th-16th Place: 5 Circuit Points\n",
+   "type": "swiss",
+   "status": "finished",
+   "game_id": "ow2",
+   "region": "GLOBAL",
+   "featured": true,
+   "subscription_start": 1706688000000,
+   "checkin_start": 1709338200000,
+   "checkin_clear": 1709340000000,
+   "subscription_end": 1709341800000,
+   "championship_start": 1709342700000,
+   "slots": 512,
+   "current_subscriptions": 418,
+   "join_checks": {
+    "min_skill_level": 1,
+    "max_skill_level": 10,
+    "whitelist_geo_countries": [
+     "AR",
+     "BZ",
+     "BO",
+     "BR",
+     "CA",
+     "CL",
+     "CO",
+     "CR",
+     "CU",
+     "DO",
+     "SV",
+     "EC",
+     "GT",
+     "HT",
+     "HN",
+     "JM",
+     "MX",
+     "NI",
+     "PY",
+     "PE",
+     "PR",
+     "UY",
+     "US",
+     "VE",
+     "BS",
+     "PA"
+    ],
+    "whitelist_geo_countries_min_players": 2,
+    "blacklist_geo_countries": [],
+    "join_policy": "public",
+    "membership_type": "",
+    "allowed_team_types": [
+     "premade",
+     "mix"
+    ]
+   },
+   "anticheat_required": false,
+   "rules_id": "01d6e749-a027-4925-b28e-5dd09a7f72d2",
+   "substitution_configuration": {
+    "max_substitutes": 3,
+    "max_substitutions": 100
+   },
+   "full": false,
+   "checkin_enabled": false,
+   "total_rounds": 9,
+   "schedule": {
+    "6": {
+     "date": 1709427600000,
+     "status": "created"
+    },
+    "2": {
+     "date": 1709345100000,
+     "status": "created"
+    },
+    "3": {
+     "date": 1709348400000,
+     "status": "created"
+    },
+    "4": {
+     "date": 1709420400000,
+     "status": "created"
+    },
+    "5": {
+     "date": 1709424000000,
+     "status": "created"
+    },
+    "7": {
+     "date": 1709506800000,
+     "status": "created"
+    },
+    "9": {
+     "date": 1709514000000,
+     "status": "created"
+    },
+    "1": {
+     "date": 1709342700000,
+     "status": "created"
+    },
+    "8": {
+     "date": 1709510400000,
+     "status": "created"
+    }
+   },
+   "total_groups": 1,
+   "subscriptions_locked": true,
+   "seeding_strategy": "uniformGroupDistribution",
+   "faceit_url": "https://www.faceit.com/{lang}/championship/2ee00312-6794-48d7-b757-82e778d8a4ac/",
+   "prizes": [
+    {
+     "rank": 1,
+     "faceit_points": 0
+    },
+    {
+     "rank": 2,
+     "faceit_points": 0
+    },
+    {
+     "rank": 3,
+     "faceit_points": 0
+    },
+    {
+     "rank": 4,
+     "faceit_points": 0
+    },
+    {
+     "rank": 5,
+     "faceit_points": 0
+    },
+    {
+     "rank": 6,
+     "faceit_points": 0
+    },
+    {
+     "rank": 7,
+     "faceit_points": 0
+    },
+    {
+     "rank": 8,
+     "faceit_points": 0
+    },
+    {
+     "rank": 9,
+     "faceit_points": 0
+    },
+    {
+     "rank": 10,
+     "faceit_points": 0
+    },
+    {
+     "rank": 11,
+     "faceit_points": 0
+    },
+    {
+     "rank": 12,
+     "faceit_points": 0
+    },
+    {
+     "rank": 13,
+     "faceit_points": 0
+    },
+    {
+     "rank": 14,
+     "faceit_points": 0
+    },
+    {
+     "rank": 15,
+     "faceit_points": 0
+    },
+    {
+     "rank": 16,
+     "faceit_points": 0
+    }
+   ],
+   "total_prizes": 0,
+   "stream": {
+    "active": false,
+    "platform": "",
+    "source": "",
+    "title": ""
+   }
+  },
+  {
+   "id": "9c926cbf-2f1a-4cc0-bf7d-a6961539e15a",
+   "championship_id": "9c926cbf-2f1a-4cc0-bf7d-a6961539e15a",
+   "name": "OWCS 2024: EMEA Stage 1 - Group A",
+   "cover_image": "",
+   "background_image": "",
+   "avatar": "",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "description": "* Discord Server: https://discord.gg/overwatchesports\n* Requirements: Must be in good standing with respect to any Battle.Net or FACEIT accounts and be over the age of seventeen (17). \n* Game Platform: PC Only\n* All matches will be played using the FACEIT OW2 game integration, which will automatically host the lobby and report your match results. Reach out to an Admin on tournament day if you have questions! \n* For further information on joining a FACEIT OW2 game integrated match, view this article! https://support.faceit.com/hc/en-us/articles/12348725948572\n* Structure & format\n   * Groups\n       * The 16 Teams will be seed into 4 Groups as determined at the sole discretion of Administration. \n       * Each Group will be conducted using GSL-tournament style rules. \n       * Each Match in the Swiss phase will be played until the first Team to win three (FT3) maps will win the Match.\n       * Upon conclusion of Groups, the Top 2 Teams from each Group will be invited to advance to the Main Event\n   * Main Event\n       * 8 Teams will be seeded into the Main Event as determined at the sole discretion of Administration. \n       * The Main Event will be a Double-Elimination Bracket; does not include a bracket reset in the Grand Finals Match. \n       * Each Match in the Swiss phase will be played until the first Team to win four (FT4) maps will win the Match.\n* Groups - Game modes & maps: \n  * Map 1 Game Mode: Control\n    * Control Available Maps: Illios, Lijang Tower, Nepal, Samoa\n  * Map 2 Game Mode: Hybrid\n    * Hybrid Available Maps: Blizzard World, King&#39;s Row, Midtown, Hollywood\n  * Map 3 Game Mode: Push\n    * Escort Available Maps: Colosseo, Esperanca, New Queen Street\n  * Map 4 Game Mode: Flashpoint\n    * Flashpoint Available Maps: New Junk City, Suravasa\n  * Map 5 Game Mode: Escort\n    * Flashpoint Available Maps: Circuit Royale, Dorado, Rialto, Shambali Monastery\n  * Map 6 (Tiebreaker): Control\n    * The final map not banned or played will be selected for the Map. Team A selects side for Map 6.\n  * Map 7 (Tiebreaker): Push\n    * The final map not banned or played will be selected for the Map. Team B selects side for Map 6.\n* Server Host\n    * All matches will be played on the in-game \"Netherlands\" server. \n* Stage 2 Main Event - Prizing\n   * The Top 8 Teams in the Main Event will earn the following prizing based on their placement. \n       * 1st Place: $30,000 USD Team prizing\n       * 2nd Place: $15,000 USD Team prizing\n       * 3rd Place: $10,000 USD Team prizing\n       * 4th Place: $7,000 USD Team prizing\n       * 5th/6th Place: $4,000 USD Team prizing\n       * 7th/8th Place:  $2,500 USD Team prizing\n* Circuit Points\n   * The Top 16 Teams will earn circuit points based on their placement, which help qualify your Team for LAN Events. \n       * 1st Place: 100 Circuit Points\n       * 2nd Place: 80 Circuit Points\n       * 3rd Place: 60 Circuit Points\n       * 4th Place: 50 Circuit Points\n       * 5th/6th Place: 40 Circuit Points\n       * 7th/8th Place: 30 Circuit Points\n       * 9th-12th Place: 20 Circuit Points\n       * 13th-16th Place: 10 Circuit Points\n",
+   "type": "doubleElimination",
+   "status": "finished",
+   "game_id": "ow2",
+   "region": "GLOBAL",
+   "featured": false,
+   "subscription_start": 1709876520000,
+   "checkin_start": 1709913000000,
+   "checkin_clear": 1709914800000,
+   "subscription_end": 1709916600000,
+   "championship_start": 1709917800000,
+   "slots": 4,
+   "current_subscriptions": 4,
+   "join_checks": {
+    "min_skill_level": 1,
+    "max_skill_level": 10,
+    "whitelist_geo_countries": [],
+    "whitelist_geo_countries_min_players": 0,
+    "blacklist_geo_countries": [],
+    "join_policy": "invitedOnly",
+    "membership_type": "",
+    "allowed_team_types": [
+     "premade",
+     "mix"
+    ]
+   },
+   "anticheat_required": false,
+   "rules_id": "01d6e749-a027-4925-b28e-5dd09a7f72d2",
+   "substitution_configuration": {
+    "max_substitutes": 3,
+    "max_substitutions": 100
+   },
+   "full": true,
+   "checkin_enabled": false,
+   "total_rounds": 2,
+   "schedule": {
+    "1": {
+     "date": 1709917800000,
+     "status": "waiting"
+    },
+    "2": {
+     "date": 1710086400000,
+     "status": "waiting"
+    }
+   },
+   "total_groups": 3,
+   "subscriptions_locked": true,
+   "seeding_strategy": "doubleEliminationDistribution",
+   "faceit_url": "https://www.faceit.com/{lang}/championship/9c926cbf-2f1a-4cc0-bf7d-a6961539e15a/",
+   "prizes": null,
+   "total_prizes": 0,
+   "stream": {
+    "active": false,
+    "platform": "",
+    "source": "",
+    "title": ""
+   }
+  },
+  {
+   "id": "af043e0a-90f3-485e-8556-fe2ff57276b1",
+   "championship_id": "af043e0a-90f3-485e-8556-fe2ff57276b1",
+   "name": "OWCS 2024: EMEA Stage 1 - Group C",
+   "cover_image": "",
+   "background_image": "",
+   "avatar": "",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "description": "* Discord Server: https://discord.gg/overwatchesports\n* Requirements: Must be in good standing with respect to any Battle.Net or FACEIT accounts and be over the age of seventeen (17). \n* Game Platform: PC Only\n* All matches will be played using the FACEIT OW2 game integration, which will automatically host the lobby and report your match results. Reach out to an Admin on tournament day if you have questions! \n* For further information on joining a FACEIT OW2 game integrated match, view this article! https://support.faceit.com/hc/en-us/articles/12348725948572\n* Structure & format\n   * Groups\n       * The 16 Teams will be seed into 4 Groups as determined at the sole discretion of Administration. \n       * Each Group will be conducted using GSL-tournament style rules. \n       * Each Match in the Swiss phase will be played until the first Team to win three (FT3) maps will win the Match.\n       * Upon conclusion of Groups, the Top 2 Teams from each Group will be invited to advance to the Main Event\n   * Main Event\n       * 8 Teams will be seeded into the Main Event as determined at the sole discretion of Administration. \n       * The Main Event will be a Double-Elimination Bracket; does not include a bracket reset in the Grand Finals Match. \n       * Each Match in the Swiss phase will be played until the first Team to win four (FT4) maps will win the Match.\n* Groups - Game modes & maps: \n  * Map 1 Game Mode: Control\n    * Control Available Maps: Illios, Lijang Tower, Nepal, Samoa\n  * Map 2 Game Mode: Hybrid\n    * Hybrid Available Maps: Blizzard World, King&#39;s Row, Midtown, Hollywood\n  * Map 3 Game Mode: Push\n    * Escort Available Maps: Colosseo, Esperanca, New Queen Street\n  * Map 4 Game Mode: Flashpoint\n    * Flashpoint Available Maps: New Junk City, Suravasa\n  * Map 5 Game Mode: Escort\n    * Flashpoint Available Maps: Circuit Royale, Dorado, Rialto, Shambali Monastery\n  * Map 6 (Tiebreaker): Control\n    * The final map not banned or played will be selected for the Map. Team A selects side for Map 6.\n  * Map 7 (Tiebreaker): Push\n    * The final map not banned or played will be selected for the Map. Team B selects side for Map 6.\n* Server Host\n    * All matches will be played on the in-game \"Netherlands\" server. \n* Stage 2 Main Event - Prizing\n   * The Top 8 Teams in the Main Event will earn the following prizing based on their placement. \n       * 1st Place: $30,000 USD Team prizing\n       * 2nd Place: $15,000 USD Team prizing\n       * 3rd Place: $10,000 USD Team prizing\n       * 4th Place: $7,000 USD Team prizing\n       * 5th/6th Place: $4,000 USD Team prizing\n       * 7th/8th Place:  $2,500 USD Team prizing\n* Circuit Points\n   * The Top 16 Teams will earn circuit points based on their placement, which help qualify your Team for LAN Events. \n       * 1st Place: 100 Circuit Points\n       * 2nd Place: 80 Circuit Points\n       * 3rd Place: 60 Circuit Points\n       * 4th Place: 50 Circuit Points\n       * 5th/6th Place: 40 Circuit Points\n       * 7th/8th Place: 30 Circuit Points\n       * 9th-12th Place: 20 Circuit Points\n       * 13th-16th Place: 10 Circuit Points\n",
+   "type": "doubleElimination",
+   "status": "finished",
+   "game_id": "ow2",
+   "region": "GLOBAL",
+   "featured": false,
+   "subscription_start": 1709915230121,
+   "checkin_start": 1709913000000,
+   "checkin_clear": 1709914800000,
+   "subscription_end": 1709916600000,
+   "championship_start": 1709917800000,
+   "slots": 4,
+   "current_subscriptions": 4,
+   "join_checks": {
+    "min_skill_level": 1,
+    "max_skill_level": 10,
+    "whitelist_geo_countries": [],
+    "whitelist_geo_countries_min_players": 0,
+    "blacklist_geo_countries": [],
+    "join_policy": "invitedOnly",
+    "membership_type": "",
+    "allowed_team_types": [
+     "premade",
+     "mix"
+    ]
+   },
+   "anticheat_required": false,
+   "rules_id": "01d6e749-a027-4925-b28e-5dd09a7f72d2",
+   "substitution_configuration": {
+    "max_substitutes": 3,
+    "max_substitutions": 100
+   },
+   "full": true,
+   "checkin_enabled": false,
+   "total_rounds": 2,
+   "schedule": {
+    "2": {
+     "date": 1710596149599,
+     "status": "waiting"
+    },
+    "1": {
+     "date": 1709917800000,
+     "status": "waiting"
+    }
+   },
+   "total_groups": 3,
+   "subscriptions_locked": false,
+   "seeding_strategy": "doubleEliminationDistribution",
+   "faceit_url": "https://www.faceit.com/{lang}/championship/af043e0a-90f3-485e-8556-fe2ff57276b1/",
+   "prizes": null,
+   "total_prizes": 0,
+   "stream": {
+    "active": false,
+    "platform": "",
+    "source": "",
+    "title": ""
+   }
+  },
+  {
+   "id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+   "championship_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+   "name": "OWCS 2024: EMEA Stage 1 - Group D",
+   "cover_image": "",
+   "background_image": "",
+   "avatar": "",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "description": "* Discord Server: https://discord.gg/overwatchesports\n* Requirements: Must be in good standing with respect to any Battle.Net or FACEIT accounts and be over the age of seventeen (17). \n* Game Platform: PC Only\n* All matches will be played using the FACEIT OW2 game integration, which will automatically host the lobby and report your match results. Reach out to an Admin on tournament day if you have questions! \n* For further information on joining a FACEIT OW2 game integrated match, view this article! https://support.faceit.com/hc/en-us/articles/12348725948572\n* Structure & format\n   * Groups\n       * The 16 Teams will be seed into 4 Groups as determined at the sole discretion of Administration. \n       * Each Group will be conducted using GSL-tournament style rules. \n       * Each Match in the Swiss phase will be played until the first Team to win three (FT3) maps will win the Match.\n       * Upon conclusion of Groups, the Top 2 Teams from each Group will be invited to advance to the Main Event\n   * Main Event\n       * 8 Teams will be seeded into the Main Event as determined at the sole discretion of Administration. \n       * The Main Event will be a Double-Elimination Bracket; does not include a bracket reset in the Grand Finals Match. \n       * Each Match in the Swiss phase will be played until the first Team to win four (FT4) maps will win the Match.\n* Groups - Game modes & maps: \n  * Map 1 Game Mode: Control\n    * Control Available Maps: Illios, Lijang Tower, Nepal, Samoa\n  * Map 2 Game Mode: Hybrid\n    * Hybrid Available Maps: Blizzard World, King&#39;s Row, Midtown, Hollywood\n  * Map 3 Game Mode: Push\n    * Escort Available Maps: Colosseo, Esperanca, New Queen Street\n  * Map 4 Game Mode: Flashpoint\n    * Flashpoint Available Maps: New Junk City, Suravasa\n  * Map 5 Game Mode: Escort\n    * Flashpoint Available Maps: Circuit Royale, Dorado, Rialto, Shambali Monastery\n  * Map 6 (Tiebreaker): Control\n    * The final map not banned or played will be selected for the Map. Team A selects side for Map 6.\n  * Map 7 (Tiebreaker): Push\n    * The final map not banned or played will be selected for the Map. Team B selects side for Map 6.\n* Server Host\n    * All matches will be played on the in-game \"Netherlands\" server. \n* Stage 2 Main Event - Prizing\n   * The Top 8 Teams in the Main Event will earn the following prizing based on their placement. \n       * 1st Place: $30,000 USD Team prizing\n       * 2nd Place: $15,000 USD Team prizing\n       * 3rd Place: $10,000 USD Team prizing\n       * 4th Place: $7,000 USD Team prizing\n       * 5th/6th Place: $4,000 USD Team prizing\n       * 7th/8th Place:  $2,500 USD Team prizing\n* Circuit Points\n   * The Top 16 Teams will earn circuit points based on their placement, which help qualify your Team for LAN Events. \n       * 1st Place: 100 Circuit Points\n       * 2nd Place: 80 Circuit Points\n       * 3rd Place: 60 Circuit Points\n       * 4th Place: 50 Circuit Points\n       * 5th/6th Place: 40 Circuit Points\n       * 7th/8th Place: 30 Circuit Points\n       * 9th-12th Place: 20 Circuit Points\n       * 13th-16th Place: 10 Circuit Points\n",
+   "type": "doubleElimination",
+   "status": "finished",
+   "game_id": "ow2",
+   "region": "GLOBAL",
+   "featured": false,
+   "subscription_start": 1709915397461,
+   "checkin_start": 1709913000000,
+   "checkin_clear": 1709914800000,
+   "subscription_end": 1709916600000,
+   "championship_start": 1709917800000,
+   "slots": 4,
+   "current_subscriptions": 4,
+   "join_checks": {
+    "min_skill_level": 1,
+    "max_skill_level": 10,
+    "whitelist_geo_countries": [],
+    "whitelist_geo_countries_min_players": 0,
+    "blacklist_geo_countries": [],
+    "join_policy": "invitedOnly",
+    "membership_type": "",
+    "allowed_team_types": [
+     "premade",
+     "mix"
+    ]
+   },
+   "anticheat_required": false,
+   "rules_id": "01d6e749-a027-4925-b28e-5dd09a7f72d2",
+   "substitution_configuration": {
+    "max_substitutes": 3,
+    "max_substitutions": 100
+   },
+   "full": true,
+   "checkin_enabled": false,
+   "total_rounds": 2,
+   "schedule": {
+    "1": {
+     "date": 1709917800000,
+     "status": "waiting"
+    },
+    "2": {
+     "date": 1710596208403,
+     "status": "waiting"
+    }
+   },
+   "total_groups": 3,
+   "subscriptions_locked": false,
+   "seeding_strategy": "doubleEliminationDistribution",
+   "faceit_url": "https://www.faceit.com/{lang}/championship/f34c5377-e946-4569-ac81-9a66bb4ed71a/",
+   "prizes": null,
+   "total_prizes": 0,
+   "stream": {
+    "active": false,
+    "platform": "",
+    "source": "",
+    "title": ""
+   }
+  },
+  {
+   "id": "418710f7-e2c4-47a7-ada9-5d173adbfbb9",
+   "championship_id": "418710f7-e2c4-47a7-ada9-5d173adbfbb9",
+   "name": "OWCS 2024: EMEA Stage 1 - Group B",
+   "cover_image": "",
+   "background_image": "",
+   "avatar": "",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "description": "* Discord Server: https://discord.gg/overwatchesports\n* Requirements: Must be in good standing with respect to any Battle.Net or FACEIT accounts and be over the age of seventeen (17). \n* Game Platform: PC Only\n* All matches will be played using the FACEIT OW2 game integration, which will automatically host the lobby and report your match results. Reach out to an Admin on tournament day if you have questions! \n* For further information on joining a FACEIT OW2 game integrated match, view this article! https://support.faceit.com/hc/en-us/articles/12348725948572\n* Structure & format\n   * Groups\n       * The 16 Teams will be seed into 4 Groups as determined at the sole discretion of Administration. \n       * Each Group will be conducted using GSL-tournament style rules. \n       * Each Match in the Swiss phase will be played until the first Team to win three (FT3) maps will win the Match.\n       * Upon conclusion of Groups, the Top 2 Teams from each Group will be invited to advance to the Main Event\n   * Main Event\n       * 8 Teams will be seeded into the Main Event as determined at the sole discretion of Administration. \n       * The Main Event will be a Double-Elimination Bracket; does not include a bracket reset in the Grand Finals Match. \n       * Each Match in the Swiss phase will be played until the first Team to win four (FT4) maps will win the Match.\n* Groups - Game modes & maps: \n  * Map 1 Game Mode: Control\n    * Control Available Maps: Illios, Lijang Tower, Nepal, Samoa\n  * Map 2 Game Mode: Hybrid\n    * Hybrid Available Maps: Blizzard World, King&#39;s Row, Midtown, Hollywood\n  * Map 3 Game Mode: Push\n    * Escort Available Maps: Colosseo, Esperanca, New Queen Street\n  * Map 4 Game Mode: Flashpoint\n    * Flashpoint Available Maps: New Junk City, Suravasa\n  * Map 5 Game Mode: Escort\n    * Flashpoint Available Maps: Circuit Royale, Dorado, Rialto, Shambali Monastery\n  * Map 6 (Tiebreaker): Control\n    * The final map not banned or played will be selected for the Map. Team A selects side for Map 6.\n  * Map 7 (Tiebreaker): Push\n    * The final map not banned or played will be selected for the Map. Team B selects side for Map 6.\n* Server Host\n    * All matches will be played on the in-game \"Netherlands\" server. \n* Stage 2 Main Event - Prizing\n   * The Top 8 Teams in the Main Event will earn the following prizing based on their placement. \n       * 1st Place: $30,000 USD Team prizing\n       * 2nd Place: $15,000 USD Team prizing\n       * 3rd Place: $10,000 USD Team prizing\n       * 4th Place: $7,000 USD Team prizing\n       * 5th/6th Place: $4,000 USD Team prizing\n       * 7th/8th Place:  $2,500 USD Team prizing\n* Circuit Points\n   * The Top 16 Teams will earn circuit points based on their placement, which help qualify your Team for LAN Events. \n       * 1st Place: 100 Circuit Points\n       * 2nd Place: 80 Circuit Points\n       * 3rd Place: 60 Circuit Points\n       * 4th Place: 50 Circuit Points\n       * 5th/6th Place: 40 Circuit Points\n       * 7th/8th Place: 30 Circuit Points\n       * 9th-12th Place: 20 Circuit Points\n       * 13th-16th Place: 10 Circuit Points\n",
+   "type": "doubleElimination",
+   "status": "finished",
+   "game_id": "ow2",
+   "region": "GLOBAL",
+   "featured": false,
+   "subscription_start": 1709914987485,
+   "checkin_start": 1709913000000,
+   "checkin_clear": 1709914800000,
+   "subscription_end": 1709916600000,
+   "championship_start": 1709917800000,
+   "slots": 4,
+   "current_subscriptions": 4,
+   "join_checks": {
+    "min_skill_level": 1,
+    "max_skill_level": 10,
+    "whitelist_geo_countries": [],
+    "whitelist_geo_countries_min_players": 0,
+    "blacklist_geo_countries": [],
+    "join_policy": "invitedOnly",
+    "membership_type": "",
+    "allowed_team_types": [
+     "premade",
+     "mix"
+    ]
+   },
+   "anticheat_required": false,
+   "rules_id": "01d6e749-a027-4925-b28e-5dd09a7f72d2",
+   "substitution_configuration": {
+    "max_substitutes": 3,
+    "max_substitutions": 100
+   },
+   "full": true,
+   "checkin_enabled": false,
+   "total_rounds": 2,
+   "schedule": {
+    "1": {
+     "date": 1709917800000,
+     "status": "waiting"
+    },
+    "2": {
+     "date": 1710598005901,
+     "status": "waiting"
+    }
+   },
+   "total_groups": 3,
+   "subscriptions_locked": false,
+   "seeding_strategy": "doubleEliminationDistribution",
+   "faceit_url": "https://www.faceit.com/{lang}/championship/418710f7-e2c4-47a7-ada9-5d173adbfbb9/",
+   "prizes": null,
+   "total_prizes": 0,
+   "stream": {
+    "active": false,
+    "platform": "",
+    "source": "",
+    "title": ""
+   }
+  }
+ ],
+ "start": 0,
+ "end": 100
+}
