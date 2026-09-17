@@ -1,0 +1,97 @@
+"""The structured query object. Everything downstream consumes this, never free text."""
+
+from __future__ import annotations
+
+from typing import Literal, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
+
+Intent = Literal[
+    "leaderboard",        # rank players/teams by a metric
+    "entity_stat",        # one player's or team's number(s)
+    "team_record",        # a team's series / map record
+    "head_to_head",       # two teams against each other
+    "map_stats",          # rows are maps or modes
+    "stat_availability",  # which stats exist for which season
+]
+EntityType = Literal["player", "team", "map", "mode"]
+Aggregation = Literal["total", "avg_per_map", "count", "rate"]
+Region = Literal["na", "emea", "international"]
+
+# Derived metrics the compiler knows how to compute. Anything else must be a
+# FACEIT stat key that exists in stat_coverage (validated against the schema).
+DERIVED_METRICS: dict[str, str] = {
+    "kd_ratio": "eliminations divided by deaths",
+    "win_rate": "series won / series played",
+    "map_win_rate": "maps won / maps played",
+    "wins": "series won",
+    "losses": "series lost",
+    "matches": "series played",
+    "maps": "maps played",
+    "map_wins": "maps won",
+    "map_losses": "maps lost",
+    "record": "wins-losses record",
+}
+
+ReasonCode = Literal[
+    "unsupported_metric",
+    "unsupported_question",
+    "out_of_scope",
+    "ambiguous_entity",
+    "unknown_entity",
+    "no_data",
+    "invalid_query",
+]
+
+
+class Filters(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    player: Optional[str] = None       # a player name as typed (resolved later)
+    team: Optional[str] = None         # a team name as typed
+    opponent: Optional[str] = None     # second team for head-to-head
+    subject: Optional[str] = None      # a name whose kind (player/team) is not stated
+    championship: Optional[str] = None # free text, matched against championship names
+    season: Optional[int] = Field(default=None, ge=2020, le=2035)
+    map: Optional[str] = None
+    mode: Optional[str] = None
+    region: Optional[Region] = None
+
+    def names(self) -> list[tuple[str, str]]:
+        """(role, name) pairs that need entity resolution."""
+        out = []
+        for role in ("player", "team", "opponent", "subject"):
+            v = getattr(self, role)
+            if v:
+                out.append((role, v))
+        return out
+
+
+class StructuredQuery(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    intent: Intent
+    entity: EntityType
+    metric: Optional[str] = None
+    filters: Filters = Field(default_factory=Filters)
+    aggregation: Aggregation = "total"
+    sort: Literal["desc", "asc"] = "desc"
+    limit: int = Field(default=10, ge=1, le=100)
+    min_maps: int = Field(default=1, ge=1, le=1000)
+
+    def compact(self) -> dict:
+        """Dict without None / default noise, for tests and logs."""
+        d = self.model_dump(exclude_none=True)
+        f = {k: v for k, v in d.get("filters", {}).items() if v is not None}
+        d["filters"] = f
+        return d
+
+
+class Unanswerable(BaseModel):
+    """First-class "can't answer" with a specific reason."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    code: ReasonCode
+    reason: str
+    suggestions: list[str] = Field(default_factory=list)
