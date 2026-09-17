@@ -1,0 +1,144 @@
+{
+ "match_id": "1-2e89a222-e0f2-40c3-bd87-6b4d268d8495",
+ "game_id": "ow2",
+ "region": "GLOBAL",
+ "match_type": "",
+ "game_mode": "5v5",
+ "max_players": 10,
+ "teams_size": 5,
+ "teams": {
+  "faction1": {
+   "team_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+   "nickname": "Twisted Minds",
+   "avatar": "https://distribution.faceit-cdn.net/images/0c90e373-2ac1-432e-ae9e-0534bef51aa1.jpeg",
+   "type": "",
+   "players": [
+    {
+     "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+     "nickname": "Quartz03",
+     "avatar": "",
+     "skill_level": 10,
+     "game_player_id": "489480573",
+     "game_player_name": "Quartz",
+     "faceit_url": "https://www.faceit.com/{lang}/players/Quartz03"
+    },
+    {
+     "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+     "nickname": "Youbi1",
+     "avatar": "https://distribution.faceit-cdn.net/images/fcb336a1-5e19-4140-9029-006b25723f9e.jpeg",
+     "skill_level": 10,
+     "game_player_id": "489508402",
+     "game_player_name": "Youbi",
+     "faceit_url": "https://www.faceit.com/{lang}/players/Youbi1"
+    },
+    {
+     "player_id": "b371a120-4be1-4677-aeee-81f5ebc80731",
+     "nickname": "TVNT_",
+     "avatar": "https://distribution.faceit-cdn.net/images/220e7fc5-e788-4470-9ce9-352d97236942.jpeg",
+     "skill_level": 10,
+     "game_player_id": "476327883",
+     "game_player_name": "TVNT",
+     "faceit_url": "https://www.faceit.com/{lang}/players/TVNT_"
+    },
+    {
+     "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+     "nickname": "FunnyAstro1",
+     "avatar": "https://distribution.faceit-cdn.net/images/dad52e39-40f6-45ee-947d-b48a61aa33c6.jpeg",
+     "skill_level": 10,
+     "game_player_id": "408221114",
+     "game_player_name": "FunnyAstro",
+     "faceit_url": "https://www.faceit.com/{lang}/players/FunnyAstro1"
+    },
+    {
+     "player_id": "635737a5-3456-43c5-aa74-d7ccb1a30da1",
+     "nickname": "SimpleOW",
+     "avatar": "https://distribution.faceit-cdn.net/images/39ef6601-23f3-49e6-8ea9-7729dd1a5f6a.jpeg",
+     "skill_level": 10,
+     "game_player_id": "700138393",
+     "game_player_name": "Simple",
+     "faceit_url": "https://www.faceit.com/{lang}/players/SimpleOW"
+    }
+   ]
+  },
+  "faction2": {
+   "team_id": "97ef2653-81b3-45e4-b57f-4df4c27d3ea0",
+   "nickname": "qadsiah",
+   "avatar": "https://distribution.faceit-cdn.net/images/157a0a10-7f2f-4a31-a50f-710bc100ba93.jpg",
+   "type": "",
+   "players": [
+    {
+     "player_id": "9aa12273-c1db-4df9-a952-847d4aea8801",
+     "nickname": "Ade417",
+     "avatar": "",
+     "skill_level": 8,
+     "game_player_id": "710343153",
+     "game_player_name": "Ade",
+     "faceit_url": "https://www.faceit.com/{lang}/players/Ade417"
+    },
+    {
+     "player_id": "cc65de21-58d0-4534-81a2-7316a15cb2dd",
+     "nickname": "Taejong2",
+     "avatar": "https://distribution.faceit-cdn.net/images/5db8e6c2-61bf-4052-a11e-578713feedfb.jpg",
+     "skill_level": 9,
+     "game_player_id": "771130155",
+     "game_player_name": "Taejong",
+     "faceit_url": "https://www.faceit.com/{lang}/players/Taejong2"
+    },
+    {
+     "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+     "nickname": "vestola",
+     "avatar": "https://distribution.faceit-cdn.net/images/77c80cda-0fcc-42b7-8412-bb1496bc8460.jpeg",
+     "skill_level": 10,
+     "game_player_id": "415113262",
+     "game_player_name": "Vestola",
+     "faceit_url": "https://www.faceit.com/{lang}/players/vestola"
+    },
+    {
+     "player_id": "04d8399b-8ae4-4142-92dd-512021980e5f",
+     "nickname": "Galaavv",
+     "avatar": "https://distribution.faceit-cdn.net/images/ae397c28-4f7c-4f94-a715-efe493e3f317.jpeg",
+     "skill_level": 10,
+     "game_player_id": "466024737",
+     "game_player_name": "Galaa",
+     "faceit_url": "https://www.faceit.com/{lang}/players/Galaavv"
+    },
+    {
+     "player_id": "a1fb03ff-9977-4d0b-b4bd-82fa6085f0ed",
+     "nickname": "zox_ow",
+     "avatar": "https://distribution.faceit-cdn.net/images/4297b19f-c257-4262-84a7-f90e4776a4db.jpg",
+     "skill_level": 10,
+     "game_player_id": "487257565",
+     "game_player_name": "zox",
+     "faceit_url": "https://www.faceit.com/{lang}/players/zox_ow"
+    }
+   ]
+  }
+ },
+ "playing_players": [
+  "9adef42b-599b-41ff-9893-1942ac6a4402",
+  "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+  "b371a120-4be1-4677-aeee-81f5ebc80731",
+  "423b8943-30c9-4436-8a22-51ca77aa7fca",
+  "635737a5-3456-43c5-aa74-d7ccb1a30da1",
+  "9aa12273-c1db-4df9-a952-847d4aea8801",
+  "cc65de21-58d0-4534-81a2-7316a15cb2dd",
+  "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+  "04d8399b-8ae4-4142-92dd-512021980e5f",
+  "a1fb03ff-9977-4d0b-b4bd-82fa6085f0ed"
+ ],
+ "competition_id": "f2f36b25-2979-4681-bc74-6a4d869cd1d5",
+ "competition_name": "S9 EMEA OWCS Central - Playoffs",
+ "competition_type": "championship",
+ "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+ "status": "finished",
+ "started_at": 1783186751,
+ "finished_at": 1783187335,
+ "results": {
+  "winner": "faction1",
+  "score": {
+   "faction1": 2,
+   "faction2": 1
+  }
+ },
+ "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-2e89a222-e0f2-40c3-bd87-6b4d268d8495"
+}

@@ -206,6 +206,53 @@ def parse_match(payload: dict[str, Any]) -> MatchRecord:
     )
 
 
+def parse_history_item(item: dict[str, Any]) -> MatchRecord:
+    """A /players/{id}/history item -> MatchRecord stub.
+
+    History items have a different team shape from championship listings
+    (teams.faction1.nickname / .players[]) and, like listings, their `results`
+    can describe only the first map. The DETAIL phase overwrites the result.
+    """
+    teams = item.get("teams") or {}
+
+    def team_ref(faction: str) -> Optional[TeamRef]:
+        t = teams.get(faction) or {}
+        tid = t.get("team_id") or t.get("faction_id")
+        return TeamRef(team_id=tid, name=t.get("nickname") or t.get("name"), avatar=t.get("avatar") or None) if tid else None
+
+    f1, f2 = team_ref("faction1"), team_ref("faction2")
+    roster: list[RosterEntry] = []
+    for faction, ref in (("faction1", f1), ("faction2", f2)):
+        for p in (teams.get(faction) or {}).get("players") or []:
+            pid = p.get("player_id")
+            if pid:
+                roster.append(RosterEntry(faction=faction, team_id=ref.team_id if ref else None, player_id=pid,
+                                          nickname=p.get("nickname"), game_player_id=p.get("game_player_id"),
+                                          game_player_name=p.get("game_player_name"), avatar=p.get("avatar") or None,
+                                          is_substitute=False))
+    return MatchRecord(
+        match_id=item["match_id"],
+        championship_id=item.get("competition_id"),
+        competition_name=item.get("competition_name"),
+        organizer_id=item.get("organizer_id"),
+        game_id=item.get("game_id") or item.get("game"),
+        region=item.get("region"),
+        best_of=to_int(item.get("best_of")),
+        status=(item.get("status") or "").upper() or None,
+        round=None,
+        group=None,
+        scheduled_at=None,
+        configured_at=None,
+        started_at=ts_from_epoch(item.get("started_at")),
+        finished_at=ts_from_epoch(item.get("finished_at")),
+        faceit_url=faceit_url(item.get("faceit_url")),
+        faction1=f1,
+        faction2=f2,
+        result=parse_results(item.get("results")),
+        roster=roster,
+    )
+
+
 # Explicit aliases so call sites read as the phase they belong to.
 parse_match_stub = parse_match     # LIST phase: provisional, result may be first-map only
 parse_match_detail = parse_match  # DETAIL phase: authoritative series result

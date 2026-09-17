@@ -1,0 +1,25 @@
+{
+  "note": "FACEIT competition id -> Liquipedia page whose {{Match}} templates (with |faceit= ids) cover that competition. Used by `python -m owcsmuse liquipedia check-all`. FACEIT League season numbers map to OWCS stages: S4/S5/S6 = 2025 Stage 1/2/3, S8/S9/S10 = 2026 Stage 1/2/3.",
+  "pages": {
+    "a2b8a832-96f4-4016-ac52-a7e1d39bbc70": {"name": "S4 EMEA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2025/EMEA/Stage 1/Regular Season"},
+    "f0d5002c-dc08-43ef-818b-402dac458056": {"name": "S4 EMEA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2025/EMEA/Stage 1"},
+    "faa79a76-ffd7-4f25-acda-e2006cf29b72": {"name": "S4 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2025/NA/Stage 1/Regular Season"},
+    "f976d341-4447-41ca-8782-7c5d1790db99": {"name": "S4 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2025/NA/Stage 1"},
+    "23ef9477-28a6-45d0-98bc-5b4a92ee3f54": {"name": "S5 EMEA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2025/EMEA/Stage 2/Regular Season"},
+    "db6fa8ba-c929-4470-a785-e2d5bf7edb07": {"name": "S5 EMEA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2025/EMEA/Stage 2"},
+    "f1be7b75-9e54-4d57-b524-9d32f5398682": {"name": "S5 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2025/NA/Stage 2/Regular Season"},
+    "4a55d40d-6160-4297-a212-1e81098b15f5": {"name": "S5 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2025/NA/Stage 2"},
+    "7f60d9ea-1288-49bd-b6f2-16b68aae4e7f": {"name": "S6 EMEA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2025/EMEA/Stage 3/Regular Season"},
+    "144f67c6-d4e9-4c58-a122-0bba755c5201": {"name": "S6 EMEA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2025/EMEA/Stage 3"},
+    "1933d87e-1047-44f2-8f8a-20d2dea73fb5": {"name": "S6 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2025/NA/Stage 3/Regular Season"},
+    "f350948c-b338-41d3-a063-8702026dd008": {"name": "S6 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2025/NA/Stage 3"},
+    "a2473623-aea5-4757-b733-0618cbbf8323": {"name": "S8 EMEA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/EMEA/Stage 1/Regular Season"},
+    "7803fa53-82c0-409a-b8ab-7f693c57886f": {"name": "S8 EMEA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/EMEA/Stage 1"},
+    "cdef9bcb-85fc-4017-b2dc-59f8e35a1306": {"name": "S8 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/NA/Stage 1/Regular Season"},
+    "51740a2d-0e80-4faa-9b47-06085b9b4a35": {"name": "S8 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/NA/Stage 1"},
+    "9d718a3c-bb20-4988-ba53-aa24eaf084d6": {"name": "S9 EMEA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/EMEA/Stage 2/Regular Season"},
+    "f2f36b25-2979-4681-bc74-6a4d869cd1d5": {"name": "S9 EMEA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/EMEA/Stage 2"},
+    "db1a7544-766d-4a46-bb69-163429310826": {"name": "S9 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/NA/Stage 2/Regular Season"},
+    "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a": {"name": "S9 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/NA/Stage 2"}
+  }
+}

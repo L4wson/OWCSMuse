@@ -272,6 +272,28 @@ class FaceitClient:
             championship_id=championship_id,
         )
 
+    def player_history(
+        self,
+        player_id: str,
+        game: str = "ow2",
+        from_ts: Optional[int] = None,
+        to_ts: Optional[int] = None,
+        offset: int = 0,
+        limit: int = 100,
+    ) -> FetchResult:
+        params: dict[str, Any] = {"game": game, "offset": offset, "limit": limit}
+        if from_ts is not None:
+            params["from"] = from_ts
+        if to_ts is not None:
+            params["to"] = to_ts
+        return self.get(f"/players/{player_id}/history", params)
+
+    def search_teams(self, name: str, game: str = "ow2") -> ListResult:
+        return self.list_all("/search/teams", {"nickname": name, "game": game})
+
+    def get_team(self, team_id: str) -> FetchResult:
+        return self.get(f"/teams/{team_id}")
+
     def get_match(self, match_id: str) -> FetchResult:
         return self.get(f"/matches/{match_id}", match_id=match_id)
 
