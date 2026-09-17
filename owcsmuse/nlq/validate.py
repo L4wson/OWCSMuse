@@ -40,6 +40,7 @@ PLAYER_DERIVED = {"kd_ratio", "maps", "matches", "map_win_rate", "map_wins", "ma
 @dataclass
 class SchemaInfo:
     stat_keys: dict[str, set[int]] = field(default_factory=dict)   # key -> seasons with the key
+    stat_kinds: dict[str, str] = field(default_factory=dict)       # key -> countable | derived_rate | non_numeric
     maps: set[str] = field(default_factory=set)
     modes: set[str] = field(default_factory=set)
     seasons: set[int] = field(default_factory=set)
@@ -50,9 +51,10 @@ class SchemaInfo:
     def from_db(cls, conn: psycopg.Connection) -> "SchemaInfo":
         info = cls()
         with conn.cursor() as cur:
-            cur.execute("SELECT stat_key, season FROM stat_coverage_season")
+            cur.execute("SELECT stat_key, season, stat_kind FROM stat_coverage_season")
             for r in cur.fetchall():
                 info.stat_keys.setdefault(r["stat_key"], set()).add(r["season"])
+                info.stat_kinds[r["stat_key"]] = r["stat_kind"]
             cur.execute("SELECT DISTINCT map_name, game_mode, season, region FROM agg_map_modes")
             for r in cur.fetchall():
                 if r["map_name"]:
@@ -134,6 +136,12 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
         if q.metric in DERIVED_METRICS:
             if q.entity == "player" and q.metric not in PLAYER_DERIVED and q.intent in ("leaderboard", "entity_stat"):
                 return Unanswerable(code="unsupported_metric", reason=f"{q.metric} is a team metric; ask about a team or use K/D for players")
+        elif info.stat_kinds.get(q.metric) == "non_numeric":
+            return Unanswerable(
+                code="unsupported_metric",
+                reason=f"'{q.metric}' is a label, not a number, so it cannot be ranked or totalled",
+                suggestions=[f"'{q.metric}' can filter or group results once that is supported; "
+                             "ask `what stats are available` for the numeric keys."])
         elif q.metric not in info.stat_keys:
             close = get_close_matches(q.metric, list(info.stat_keys), n=3, cutoff=0.6)
             base = q.metric.replace("/10m", "")

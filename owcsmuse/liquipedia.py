@@ -1,15 +1,20 @@
 """Cross-check crawled matches against Liquipedia's published results.
 
-Read-only use of the Liquipedia MediaWiki API (wikitext of a stage page),
-throttled to one parse request every two seconds as their terms ask, with an
-identifying User-Agent. Match templates in the wikitext are parsed for the two
-teams, the date and the map winners; each is then looked up in our matches
-for the mapped championship by (folded) team names and date.
+Read-only use of the Liquipedia MediaWiki API (wikitext of a stage page), with
+an identifying User-Agent and the per-action rate limits their terms set: one
+request per 30 seconds for parse/ask/askargs, one per 2 seconds otherwise.
+Requests are refused entirely unless OWCS_LIQUIPEDIA_ENABLED is set.
+
+Match templates in the wikitext are parsed for the two teams, the date, the map
+winners and the FACEIT match id Liquipedia records on most OWCS matches; each is
+then looked up in our matches, by that id where present and by team names plus
+date otherwise.
 """
 
 from __future__ import annotations
 
 import logging
+import os
 import re
 import time
 from dataclasses import asdict, dataclass, field
@@ -29,9 +34,41 @@ log = get_logger("owcsmuse.liquipedia")
 # request here goes to api.php; nothing in this module fetches or parses HTML.
 API = "https://liquipedia.net/overwatch/api.php"
 USER_AGENT = "OWCSMuse/0.1 (https://github.com/L4wson/OWCSMuse; stats warehouse cross-check)"
-# Their rate limits are per action: parse is allowed far more often than the rest.
-PARSE_INTERVAL = 2.0
-OTHER_INTERVAL = 30.0
+
+# Rate limits are per action and the EXPENSIVE actions are the slow ones:
+#   parse / ask / askargs : 1 request per 30 seconds
+#   everything else       : 1 request per 2 seconds
+# Getting this backwards is what got us rate limited: 20 parse requests at 2s
+# intervals is 15x over the parse allowance.
+SLOW_ACTIONS = frozenset({"parse", "ask", "askargs"})
+SLOW_INTERVAL = 30.0
+DEFAULT_INTERVAL = 2.0
+
+# Hard guard: nothing in this module contacts Liquipedia unless the operator
+# opts in explicitly, so no retry, diagnostic or availability check can fire by
+# accident while access is blocked or pending approval.
+ENABLE_ENV = "OWCS_LIQUIPEDIA_ENABLED"
+
+
+class LiquipediaDisabled(RuntimeError):
+    """Raised when a request is attempted without the opt-in environment flag."""
+
+
+def requests_enabled() -> bool:
+    return os.environ.get(ENABLE_ENV, "").strip().lower() in ("1", "true", "yes", "on")
+
+
+def _require_enabled(action: str) -> None:
+    if not requests_enabled():
+        raise LiquipediaDisabled(
+            f"refusing to send action={action} to Liquipedia: set {ENABLE_ENV}=1 to allow requests. "
+            "Access is off by default while the API access request is pending."
+        )
+
+
+def interval_for(action: str) -> float:
+    return SLOW_INTERVAL if action in SLOW_ACTIONS else DEFAULT_INTERVAL
+
 
 # Known FACEIT nickname -> Liquipedia name differences.
 TEAM_ALIASES = {
@@ -81,8 +118,8 @@ class LiquipediaClient:
         self._last = 0.0
 
     def _throttle(self, action: str) -> None:
-        interval = PARSE_INTERVAL if action == "parse" else OTHER_INTERVAL
-        wait = interval - (time.monotonic() - self._last)
+        _require_enabled(action)
+        wait = interval_for(action) - (time.monotonic() - self._last)
         if wait > 0:
             time.sleep(wait)
         self._last = time.monotonic()

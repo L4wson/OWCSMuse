@@ -24,6 +24,9 @@ from typing import Any, Iterable, Optional
 
 import psycopg
 
+# A FACEIT player/team id, so an ambiguous name can be disambiguated by id.
+ENTITY_ID = re.compile(r"^(?:(?P<kind>player|team):)?(?P<id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$", re.I)
+
 _NON_ALNUM = re.compile(r"[^0-9a-z ]+")
 _SPACES = re.compile(r"\s+")
 # Letters with no Unicode decomposition that NFKD cannot strip.
@@ -121,7 +124,34 @@ def load_names(conn: psycopg.Connection, entity_type: Optional[str] = None) -> l
     return rows
 
 
+def resolve_id(conn: psycopg.Connection, entity_id: str, entity_type: Optional[str] = None) -> list[Candidate]:
+    """Exact lookup by FACEIT entity id, which is how an identical-name tie is broken."""
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT entity_type, entity_id, current_name, name, name_kind
+            FROM entity_names
+            WHERE entity_id = %s AND (%s::text IS NULL OR entity_type = %s) AND name_kind LIKE 'current%%'
+            LIMIT 1
+            """,
+            (entity_id, entity_type, entity_type),
+        )
+        row = cur.fetchone()
+    conn.commit()
+    if not row:
+        return []
+    return [Candidate(entity_type=row["entity_type"], entity_id=row["entity_id"], current_name=row["current_name"],
+                      matched_name=row["name"], name_kind="entity_id", score=1.0)]
+
+
 def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = None,
             limit: int = 5, min_score: float = 0.5) -> list[Candidate]:
-    """Rank all known names for `entity_type` ('player', 'team' or None for both)."""
+    """Rank all known names for `entity_type` ('player', 'team' or None for both).
+
+    A bare FACEIT id (optionally prefixed `player:` / `team:`) resolves exactly,
+    so two entities with identical names can still be told apart.
+    """
+    m = ENTITY_ID.match((query or "").strip())
+    if m:
+        return resolve_id(conn, m.group("id").lower(), m.group("kind") or entity_type)
     return rank_candidates(query, load_names(conn, entity_type), limit=limit, min_score=min_score)

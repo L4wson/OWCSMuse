@@ -31,6 +31,15 @@ from .scope import DEFAULT_DECISIONS_PATH, REGIONS, TIERS, Decisions
 DEFAULT_REPORT_PATH = "scope/classification_report.md"
 
 
+def _safe_stdout() -> None:
+    """A cp1252 console cannot encode every FACEIT nickname; never crash on output."""
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError):
+        pass
+
+
 def _print(obj: Any) -> None:
     print(json.dumps(obj, indent=2, default=str))
 
@@ -161,7 +170,7 @@ def cmd_stats(args: argparse.Namespace, settings: Settings) -> int:
             else:
                 out = stat_coverage_summary(conn, args.stat, args.season, args.championship)
         else:
-            out = available_stats(conn, args.season)
+            out = available_stats(conn, args.season, args.include_non_numeric)
     _print(out)
     return 0
 
@@ -397,6 +406,7 @@ def build_parser() -> argparse.ArgumentParser:
     st.add_argument("--min-maps", type=int, default=1)
     st.add_argument("--limit", type=int, default=20)
     st.add_argument("--order", choices=["total", "avg"], default="total")
+    st.add_argument("--include-non-numeric", action="store_true", help="also list label keys such as Role")
     st.set_defaults(func=cmd_stats)
 
     rs = sub.add_parser("resolve", help="resolve a typed player/team name to candidates")
@@ -466,6 +476,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Optional[list[str]] = None) -> int:
     args = build_parser().parse_args(argv)
+    _safe_stdout()
     settings = load_settings()
     configure_logging(args.log_level or settings.log_level, args.log_format or settings.log_format)
     return args.func(args, settings)

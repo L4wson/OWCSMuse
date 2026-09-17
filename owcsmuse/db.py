@@ -108,13 +108,14 @@ class RawPayloadStore:
         fetched_at: datetime,
         match_id: Optional[str] = None,
         championship_id: Optional[str] = None,
+        headers: Optional[dict[str, str]] = None,
     ) -> int:
         with self.conn.cursor() as cur:
             cur.execute(
                 """
                 INSERT INTO raw_payloads
-                    (endpoint, params, http_status, payload, body_text, fetched_at, match_id, championship_id)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    (endpoint, params, http_status, payload, body_text, fetched_at, match_id, championship_id, headers)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
                 """,
                 (
@@ -126,6 +127,7 @@ class RawPayloadStore:
                     fetched_at,
                     match_id,
                     championship_id,
+                    Jsonb(dict(headers)) if headers else None,
                 ),
             )
             row = cur.fetchone()

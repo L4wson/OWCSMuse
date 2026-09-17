@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import asdict, dataclass, field
+from decimal import Decimal, ROUND_HALF_UP
 from typing import Any, Optional
 
 import psycopg
@@ -51,6 +52,11 @@ def _cannot(question: str, u: Unanswerable, query: Optional[StructuredQuery] = N
                   reason=u.reason, suggestions=list(u.suggestions), parser=parser)
 
 
+def question_hint(name: str, entity_id: str) -> str:
+    """How to re-ask using an id instead of an ambiguous name."""
+    return entity_id
+
+
 def _decide(cands: list[Candidate]) -> tuple[Optional[Candidate], bool]:
     """(chosen, ambiguous). A tie between different entities is ambiguous."""
     if not cands:
@@ -79,8 +85,15 @@ def resolve_entities(conn: psycopg.Connection, q: StructuredQuery) -> tuple[Opti
                 return None, Answer(status="cannot_answer", question="", code="unknown_entity",
                                     reason=f"no {etype or 'player or team'} matches '{name}'",
                                     suggestions=["Check the spelling, or try the FACEIT nickname or in-game name."])
+            identical = sum(1 for c in cands if (c.current_name or "").lower() == (cands[0].current_name or "").lower())
+            if identical > 1:
+                tip = ("These are different FACEIT entities with the same name, so no spelling tells them apart. "
+                       f"Re-ask with the id, e.g. \"{question_hint(name, cands[0].entity_id)}\".")
+            else:
+                tip = "Re-ask with the exact name, or with the id shown in brackets."
             return None, Answer(status="clarify", question="", code="ambiguous_entity",
                                 reason=f"'{name}' could be several {etype or 'player/team'}s; which one?",
+                                suggestions=[tip],
                                 candidates={role: [c.as_dict() for c in cands]})
         entities[role] = chosen.as_dict()
         r.names[role] = chosen.current_name or chosen.matched_name
@@ -173,7 +186,12 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
     coverage = None
     notes = list(v.notes)
     if c.coverage_stat:
-        coverage = stat_coverage_summary(conn, c.coverage_stat, c.coverage_season, c.coverage_championship)
+        # Coverage must describe the slice actually queried, not the warehouse.
+        coverage = stat_coverage_summary(
+            conn, c.coverage_stat, c.coverage_season, c.coverage_championship,
+            player_id=r.player_id, team_id=r.team_id, map_name=v.map_name, game_mode=v.mode_name,
+            region=q.filters.region,
+        )
         cov_pct = float(coverage.get("coverage_pct") or 0)
         without = coverage.get("seasons_without_stat") or []
         if coverage.get("maps_total", 0) == 0:
@@ -207,8 +225,13 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
 def _fmt(v: Any) -> str:
     if v is None:
         return "-"
-    if isinstance(v, float):
-        return f"{v:.2f}".rstrip("0").rstrip(".")
+    if isinstance(v, bool):
+        return "yes" if v else "no"
+    if isinstance(v, (float, Decimal)):
+        # Postgres numeric arrives as Decimal; quantize both so an average does not
+        # print 22.6326530612244898.
+        q = Decimal(str(v)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        return format(q.normalize(), "f")
     if hasattr(v, "isoformat"):
         return v.isoformat()[:10]
     if isinstance(v, list):
@@ -230,7 +253,8 @@ def render_text(a: Answer, max_rows: int = 25) -> str:
         for role, cands in a.candidates.items():
             for c in cands:
                 lines.append(f"  - {c['current_name']}  [{c['entity_type']} {c['entity_id']}] matched '{c['matched_name']}' ({c['name_kind']}, score {c['score']})")
-        lines.append("Re-ask with the exact name.")
+        for tip in (a.suggestions or ["Re-ask with the exact name, or with the id shown in brackets."]):
+            lines.append(tip)
         return "\n".join(lines)
 
     lines.append(f"{a.description}" + (f"  [{a.parser} parser]" if a.parser else ""))

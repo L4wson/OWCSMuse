@@ -169,7 +169,7 @@ def classify(
 _HISTORY_MAIN = re.compile(r"^S(?P<s>\d+)\s+(?P<r>NA|EMEA)\s+OWCS Central\s*-\s*(?P<stage>Regular Season|Playoffs)\s*$", re.I)
 _HISTORY_MSC_LCQ = re.compile(r"^OWCS Midseason Championship: Last Chance Qualifier", re.I)
 _HISTORY_S8_RELEGATION = re.compile(r"^S8\s+(?P<r>NA|EMEA)\s+OWCS Relegation", re.I)
-_HISTORY_OTHER_RELEGATION = re.compile(r"OWCS\s+(Relegation|P&R)", re.I)
+_HISTORY_OTHER_RELEGATION = re.compile(r"OWCS\s+(Relegation|P\s*[&|/]\s*R|Promotion)", re.I)
 HISTORY_SEASON_RANGE = (4, 10)  # S4..S10 = 2025 Stage 1 .. 2026 Stage 3
 
 
@@ -323,6 +323,12 @@ def classify_manifest_entries(entries: Iterable[dict[str, Any]], decisions: Deci
     return out
 
 
+def _cell(value: Any) -> str:
+    """Escape a value for a markdown table cell. A literal | in a competition name
+    ("S10 EMEA OWCS P|R Bracket") silently truncates the column otherwise."""
+    return str(value if value is not None else "").replace("|", "\\|").replace("\n", " ")
+
+
 def render_report(manifest: dict[str, Any]) -> str:
     """Markdown review table: one row per championship, evidence included."""
     rows = sorted(
@@ -351,9 +357,9 @@ def render_report(manifest: dict[str, Any]) -> str:
         via = "history" if c.get("found_via") == "history_crawl" else "api"
         seen = c.get("matches_seen") if c.get("matches_seen") is not None else ""
         lines.append(
-            f"| {'YES' if c.get('include') else 'no'} | {c.get('decision_source', 'auto')} | {via} | {c.get('season') or ''} | "
-            f"{c.get('scope_region') or ''} | {c.get('tier') or ''} | {c.get('name')} | {c.get('region') or ''} | "
-            f"{c.get('status') or ''} | {c.get('type') or ''} | {start} | {seen} | `{c['championship_id']}` | {ev}{note} |"
+            f"| {'YES' if c.get('include') else 'no'} | {c.get('decision_source', 'auto')} | {via} | {_cell(c.get('season'))} | "
+            f"{_cell(c.get('scope_region'))} | {_cell(c.get('tier'))} | {_cell(c.get('name'))} | {_cell(c.get('region'))} | "
+            f"{_cell(c.get('status'))} | {_cell(c.get('type'))} | {start} | {seen} | `{c['championship_id']}` | {_cell(ev)}{_cell(note)} |"
         )
     lines.append("")
     return "\n".join(lines)

@@ -49,9 +49,15 @@ def refresh(conn: psycopg.Connection, views: Optional[list[str]] = None) -> dict
 
 
 def stat_coverage_summary(conn: psycopg.Connection, stat: str, season: Optional[int] = None,
-                          championship_id: Optional[str] = None) -> dict[str, Any]:
+                          championship_id: Optional[str] = None, player_id: Optional[str] = None,
+                          team_id: Optional[str] = None, map_name: Optional[str] = None,
+                          game_mode: Optional[str] = None, region: Optional[str] = None) -> dict[str, Any]:
+    """Coverage of `stat` within exactly the slice given, not the whole warehouse."""
     with conn.cursor() as cur:
-        cur.execute("SELECT * FROM stat_coverage_summary(%s, %s, %s)", (stat, season, championship_id))
+        cur.execute(
+            "SELECT * FROM stat_coverage_summary(%s, %s, %s, %s, %s, %s, %s, %s)",
+            (stat, season, championship_id, player_id, team_id, map_name, game_mode, region),
+        )
         row = cur.fetchone()
     conn.commit()
     return dict(row) if row else {}
@@ -70,16 +76,21 @@ def stat_leaderboard(conn: psycopg.Connection, stat: str, season: Optional[int] 
     return {"stat": stat, "season": season, "championship_id": championship_id, "coverage": summary, "rows": rows}
 
 
-def available_stats(conn: psycopg.Connection, season: Optional[int] = None) -> list[dict[str, Any]]:
+def available_stats(conn: psycopg.Connection, season: Optional[int] = None,
+                    include_non_numeric: bool = False) -> list[dict[str, Any]]:
+    """Stat availability per season. Non-numeric keys (Role, Team, ...) are hidden by
+    default because they can never be a metric."""
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT season, stat_key, rows_with_stat, rows_total, coverage_pct, championships_with_stat, championships_total
+            SELECT season, stat_key, stat_kind, rows_with_stat, rows_total, coverage_pct,
+                   championships_with_stat, championships_total
             FROM stat_coverage_season
-            WHERE %s::int IS NULL OR season = %s
-            ORDER BY season, stat_key
+            WHERE (%s::int IS NULL OR season = %s)
+              AND (%s OR stat_kind <> 'non_numeric')
+            ORDER BY season, stat_kind, stat_key
             """,
-            (season, season),
+            (season, season, include_non_numeric),
         )
         rows = [dict(r) for r in cur.fetchall()]
     conn.commit()

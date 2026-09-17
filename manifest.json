@@ -121,14 +121,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:27+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -156,14 +157,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:28+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -191,14 +193,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:28+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -226,14 +229,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:28+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -331,14 +335,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:29+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -366,14 +371,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:29+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -401,14 +407,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:30+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -436,14 +443,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:30+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -471,14 +479,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:30+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -506,14 +515,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:31+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -1031,14 +1041,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:31+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -1066,14 +1077,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:32+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -1101,14 +1113,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:32+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -1136,14 +1149,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:33+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -1171,14 +1185,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:33+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -1206,14 +1221,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:33+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -1241,14 +1257,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:34+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -1276,14 +1293,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:34+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -1626,14 +1644,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region emea: name has EMEA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:35+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -1696,14 +1715,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from name",
         "name matches OWCS pattern",
         "region na: name has NA",
         "tier main: name has a main-competition token",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:35+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -1731,14 +1751,15 @@
       "scope_region": "international",
       "tier": "main",
       "season": 2024,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
       "evidence": [
         "season 2024 from championship_start",
         "name is a known OWCS event without 'OWCS' in it",
         "region international from known-event table",
         "tier main from known-event table",
-        "include: OWCS main competition in NA/EMEA/international"
+        "include: OWCS main competition in NA/EMEA/international",
+        "manual decision (2026-09-17T22:17:35+00:00): region=international, tier=main, include=True"
       ]
     },
     {
@@ -4801,14 +4822,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S4 OWCS Central Regular Season",
-        "include: S4 is within the reviewed S4-S10 main-series range"
+        "include: S4 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:10+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -4840,14 +4862,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S4 OWCS Central Regular Season",
-        "include: S4 is within the reviewed S4-S10 main-series range"
+        "include: S4 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:11+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -5815,14 +5838,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S4 OWCS Central Playoffs",
-        "include: S4 is within the reviewed S4-S10 main-series range"
+        "include: S4 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:11+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -5854,14 +5878,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S4 OWCS Central Playoffs",
-        "include: S4 is within the reviewed S4-S10 main-series range"
+        "include: S4 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:12+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -9520,14 +9545,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S5 OWCS Central Regular Season",
-        "include: S5 is within the reviewed S4-S10 main-series range"
+        "include: S5 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:12+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -9559,14 +9585,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S5 OWCS Central Regular Season",
-        "include: S5 is within the reviewed S4-S10 main-series range"
+        "include: S5 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:12+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -10456,14 +10483,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S5 OWCS Central Playoffs",
-        "include: S5 is within the reviewed S4-S10 main-series range"
+        "include: S5 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:13+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -10495,14 +10523,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S5 OWCS Central Playoffs",
-        "include: S5 is within the reviewed S4-S10 main-series range"
+        "include: S5 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:13+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -11186,7 +11215,7 @@
       "subscription_start": null,
       "subscription_end": null,
       "faceit_url": null,
-      "include": true,
+      "include": false,
       "found_via": "history_crawl",
       "proposed": {
         "region": "international",
@@ -11197,14 +11226,15 @@
       "scope_region": "international",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "registration bracket, not the real LCQ: 4 matches and a registration name",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region international: Midseason Championship (EWC)",
         "tier main: Midseason Championship last chance qualifier",
-        "include: Midseason Championship LCQ is in the reviewed target set"
+        "include: Midseason Championship LCQ is in the reviewed target set",
+        "manual decision (2026-09-17T22:16:20+00:00): include=False"
       ]
     },
     {
@@ -12991,14 +13021,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S6 OWCS Central Regular Season",
-        "include: S6 is within the reviewed S4-S10 main-series range"
+        "include: S6 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:14+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -13030,14 +13061,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S6 OWCS Central Regular Season",
-        "include: S6 is within the reviewed S4-S10 main-series range"
+        "include: S6 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:14+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -14005,14 +14037,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S6 OWCS Central Playoffs",
-        "include: S6 is within the reviewed S4-S10 main-series range"
+        "include: S6 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:15+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -14044,14 +14077,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2025,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2025 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S6 OWCS Central Playoffs",
-        "include: S6 is within the reviewed S4-S10 main-series range"
+        "include: S6 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:15+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -16189,14 +16223,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S8 OWCS Central Regular Season",
-        "include: S8 is within the reviewed S4-S10 main-series range"
+        "include: S8 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:15+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -16228,14 +16263,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S8 OWCS Central Regular Season",
-        "include: S8 is within the reviewed S4-S10 main-series range"
+        "include: S8 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:16+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -16423,14 +16459,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S8 OWCS Central Playoffs",
-        "include: S8 is within the reviewed S4-S10 main-series range"
+        "include: S8 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:16+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -16462,14 +16499,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S8 OWCS Central Playoffs",
-        "include: S8 is within the reviewed S4-S10 main-series range"
+        "include: S8 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:17+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -16813,14 +16851,15 @@
       "scope_region": "emea",
       "tier": "relegation",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S8 relegation, explicitly in the target set",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region emea: name has EMEA",
         "tier relegation: S8 relegation for Season 9",
-        "include: S8 relegation is explicitly in the reviewed target set"
+        "include: S8 relegation is explicitly in the reviewed target set",
+        "manual decision (2026-09-17T22:16:17+00:00): region=emea, tier=relegation, include=True"
       ]
     },
     {
@@ -16852,14 +16891,15 @@
       "scope_region": "na",
       "tier": "relegation",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S8 relegation, explicitly in the target set",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region na: name has NA",
         "tier relegation: S8 relegation for Season 9",
-        "include: S8 relegation is explicitly in the reviewed target set"
+        "include: S8 relegation is explicitly in the reviewed target set",
+        "manual decision (2026-09-17T22:16:18+00:00): region=na, tier=relegation, include=True"
       ]
     },
     {
@@ -17008,14 +17048,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S9 OWCS Central Regular Season",
-        "include: S9 is within the reviewed S4-S10 main-series range"
+        "include: S9 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:18+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -17047,14 +17088,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S9 OWCS Central Regular Season",
-        "include: S9 is within the reviewed S4-S10 main-series range"
+        "include: S9 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:18+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -17554,14 +17596,15 @@
       "scope_region": "emea",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region emea: name has EMEA",
         "tier main: FACEIT League S9 OWCS Central Playoffs",
-        "include: S9 is within the reviewed S4-S10 main-series range"
+        "include: S9 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:19+00:00): region=emea, tier=main, include=True"
       ]
     },
     {
@@ -17593,14 +17636,15 @@
       "scope_region": "na",
       "tier": "main",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S4-S9 OWCS Central main series, both regions",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region na: name has NA",
         "tier main: FACEIT League S9 OWCS Central Playoffs",
-        "include: S9 is within the reviewed S4-S10 main-series range"
+        "include: S9 is within the reviewed S4-S10 main-series range",
+        "manual decision (2026-09-17T22:16:19+00:00): region=na, tier=main, include=True"
       ]
     },
     {
@@ -17976,21 +18020,22 @@
       "found_via": "history_crawl",
       "proposed": {
         "region": "emea",
-        "tier": "unknown",
+        "tier": "relegation",
         "season": 2026,
         "include": false
       },
       "scope_region": "emea",
-      "tier": "unknown",
+      "tier": "relegation",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S10 promotion/relegation bracket for 2026 Stage 3, not the main series; revisit when S10 OWCS Central starts",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region emea",
-        "tier unknown: OWCS-named but not a recognised main-series pattern (review)",
-        "exclude: tier unknown"
+        "tier relegation: promotion/relegation event",
+        "exclude: only S8 relegation is in the target set",
+        "manual decision (2026-09-17T22:16:20+00:00): include=False"
       ]
     },
     {
@@ -18015,21 +18060,22 @@
       "found_via": "history_crawl",
       "proposed": {
         "region": "na",
-        "tier": "unknown",
+        "tier": "relegation",
         "season": 2026,
         "include": false
       },
       "scope_region": "na",
-      "tier": "unknown",
+      "tier": "relegation",
       "season": 2026,
-      "decision_source": "auto",
-      "decision_note": null,
+      "decision_source": "manual",
+      "decision_note": "S10 promotion/relegation bracket for 2026 Stage 3, not the main series; revisit when S10 OWCS Central starts",
       "evidence": [
         "discovered via player history (not exposed by championship endpoints)",
         "season 2026 from first match date",
         "region na",
-        "tier unknown: OWCS-named but not a recognised main-series pattern (review)",
-        "exclude: tier unknown"
+        "tier relegation: promotion/relegation event",
+        "exclude: only S8 relegation is in the target set",
+        "manual decision (2026-09-17T22:16:20+00:00): include=False"
       ]
     },
     {
@@ -18618,6 +18664,6 @@
       ]
     }
   ],
-  "reclassified_at": "2026-09-17T21:11:06.307525+00:00",
+  "reclassified_at": "2026-09-17T22:17:36.424120+00:00",
   "history_competitions_merged": 407
 }

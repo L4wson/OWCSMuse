@@ -1,0 +1,367 @@
+{
+  "note": "Reviewed scope decisions. Keys are FACEIT championship ids; values override the classifier's region/tier/season/include. Edit by hand or with `python -m owcsmuse decide`.",
+  "decisions": {
+    "33781289-61ea-43d5-ac79-1af825dcb291": {
+      "region": "international",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "Dreamhack Dallas",
+      "decided_at": "2026-09-17T22:17:35+00:00"
+    },
+    "9c926cbf-2f1a-4cc0-bf7d-a6961539e15a": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 1 - Group A",
+      "decided_at": "2026-09-17T22:17:27+00:00"
+    },
+    "418710f7-e2c4-47a7-ada9-5d173adbfbb9": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 1 - Group B",
+      "decided_at": "2026-09-17T22:17:28+00:00"
+    },
+    "af043e0a-90f3-485e-8556-fe2ff57276b1": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 1 - Group C",
+      "decided_at": "2026-09-17T22:17:28+00:00"
+    },
+    "f34c5377-e946-4569-ac81-9a66bb4ed71a": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 1 - Group D",
+      "decided_at": "2026-09-17T22:17:28+00:00"
+    },
+    "f57f9c5f-7840-4a49-8c32-24682dece3fc": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 1 - Main Event",
+      "decided_at": "2026-09-17T22:17:30+00:00"
+    },
+    "aebe836c-5768-44fd-9e1f-f4c5e907a0fa": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 2 - Group A",
+      "decided_at": "2026-09-17T22:17:31+00:00"
+    },
+    "893a90ab-7522-47de-8124-ae6c389a4004": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 2 - Group B",
+      "decided_at": "2026-09-17T22:17:32+00:00"
+    },
+    "6d081879-ac11-4625-9b8c-07ab84f38762": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 2 - Group C",
+      "decided_at": "2026-09-17T22:17:32+00:00"
+    },
+    "b6914a12-a3be-480a-bfc2-e55841b761c4": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 2 - Group D",
+      "decided_at": "2026-09-17T22:17:33+00:00"
+    },
+    "32271a28-7b4c-465d-a928-9e84e9391495": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: EMEA Stage 2 - Main Event",
+      "decided_at": "2026-09-17T22:17:35+00:00"
+    },
+    "06696475-56d5-4e61-a71e-4290c3e32dcb": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 1 - Group A",
+      "decided_at": "2026-09-17T22:17:30+00:00"
+    },
+    "7cd57eb2-001b-4865-a7cb-01c9b9749ad8": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 1 - Group B",
+      "decided_at": "2026-09-17T22:17:30+00:00"
+    },
+    "537fffb7-a63e-4fd7-8806-346f9ac290ff": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 1 - Group C",
+      "decided_at": "2026-09-17T22:17:29+00:00"
+    },
+    "af65b06e-02eb-4dab-9478-59fe1989d7de": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 1 - Group D",
+      "decided_at": "2026-09-17T22:17:29+00:00"
+    },
+    "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 1 - Main Event",
+      "decided_at": "2026-09-17T22:17:31+00:00"
+    },
+    "d0b3ff2e-4e80-416c-b759-e20b1403d5ef": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 2 - Group A",
+      "decided_at": "2026-09-17T22:17:33+00:00"
+    },
+    "fe42f3fe-33fb-413f-a09a-803afa033864": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 2 - Group B",
+      "decided_at": "2026-09-17T22:17:33+00:00"
+    },
+    "a5598e90-a70a-4556-9cf1-6ef306d5dfb1": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 2 - Group C",
+      "decided_at": "2026-09-17T22:17:34+00:00"
+    },
+    "69924042-c4cc-4631-b9e5-36ca9d7a8a3a": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 2 - Group D",
+      "decided_at": "2026-09-17T22:17:34+00:00"
+    },
+    "72922677-c191-48fc-aaac-1db52c410a26": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "approved in the 2024 scope review (previously applied via --accept-proposals)",
+      "name": "OWCS 2024: NA Stage 2 - Main Event",
+      "decided_at": "2026-09-17T22:17:35+00:00"
+    },
+    "e2d8302f-32b0-4dd6-9263-26352438581a": {
+      "include": false,
+      "note": "registration bracket, not the real LCQ: 4 matches and a registration name",
+      "name": "OWCS Midseason Championship: Last Chance Qualifier at EWC (Registration)",
+      "decided_at": "2026-09-17T22:16:20+00:00"
+    },
+    "53c0f37e-57cd-4b25-acda-ab8fb93efcc9": {
+      "include": false,
+      "note": "S10 promotion/relegation bracket for 2026 Stage 3, not the main series; revisit when S10 OWCS Central starts",
+      "name": "S10 EMEA OWCS P|R Bracket - Stage 3",
+      "decided_at": "2026-09-17T22:16:20+00:00"
+    },
+    "2ed3a86b-4fbf-4840-af51-ec0e27a49542": {
+      "include": false,
+      "note": "S10 promotion/relegation bracket for 2026 Stage 3, not the main series; revisit when S10 OWCS Central starts",
+      "name": "S10 NA OWCS P|R Bracket - Stage 3",
+      "decided_at": "2026-09-17T22:16:20+00:00"
+    },
+    "f0d5002c-dc08-43ef-818b-402dac458056": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S4 EMEA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:11+00:00"
+    },
+    "a2b8a832-96f4-4016-ac52-a7e1d39bbc70": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S4 EMEA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:10+00:00"
+    },
+    "f976d341-4447-41ca-8782-7c5d1790db99": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S4 NA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:12+00:00"
+    },
+    "faa79a76-ffd7-4f25-acda-e2006cf29b72": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S4 NA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:11+00:00"
+    },
+    "db6fa8ba-c929-4470-a785-e2d5bf7edb07": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S5 EMEA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:13+00:00"
+    },
+    "23ef9477-28a6-45d0-98bc-5b4a92ee3f54": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S5 EMEA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:12+00:00"
+    },
+    "4a55d40d-6160-4297-a212-1e81098b15f5": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S5 NA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:13+00:00"
+    },
+    "f1be7b75-9e54-4d57-b524-9d32f5398682": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S5 NA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:12+00:00"
+    },
+    "144f67c6-d4e9-4c58-a122-0bba755c5201": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S6 EMEA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:15+00:00"
+    },
+    "7f60d9ea-1288-49bd-b6f2-16b68aae4e7f": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S6 EMEA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:14+00:00"
+    },
+    "f350948c-b338-41d3-a063-8702026dd008": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S6 NA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:15+00:00"
+    },
+    "1933d87e-1047-44f2-8f8a-20d2dea73fb5": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S6 NA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:14+00:00"
+    },
+    "7803fa53-82c0-409a-b8ab-7f693c57886f": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S8 EMEA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:16+00:00"
+    },
+    "a2473623-aea5-4757-b733-0618cbbf8323": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S8 EMEA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:15+00:00"
+    },
+    "65671857-160c-43b5-af82-a4d9504f8a56": {
+      "region": "emea",
+      "tier": "relegation",
+      "include": true,
+      "note": "S8 relegation, explicitly in the target set",
+      "name": "S8 EMEA OWCS Relegation S9 - Season 9",
+      "decided_at": "2026-09-17T22:16:17+00:00"
+    },
+    "51740a2d-0e80-4faa-9b47-06085b9b4a35": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S8 NA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:17+00:00"
+    },
+    "cdef9bcb-85fc-4017-b2dc-59f8e35a1306": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S8 NA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:16+00:00"
+    },
+    "9a1e40aa-f622-4b57-9762-f6b05501c708": {
+      "region": "na",
+      "tier": "relegation",
+      "include": true,
+      "note": "S8 relegation, explicitly in the target set",
+      "name": "S8 NA OWCS Relegation S9 - Season 9",
+      "decided_at": "2026-09-17T22:16:18+00:00"
+    },
+    "f2f36b25-2979-4681-bc74-6a4d869cd1d5": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S9 EMEA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:19+00:00"
+    },
+    "9d718a3c-bb20-4988-ba53-aa24eaf084d6": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S9 EMEA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:18+00:00"
+    },
+    "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S9 NA OWCS Central - Playoffs",
+      "decided_at": "2026-09-17T22:16:19+00:00"
+    },
+    "db1a7544-766d-4a46-bb69-163429310826": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "note": "S4-S9 OWCS Central main series, both regions",
+      "name": "S9 NA OWCS Central - Regular Season",
+      "decided_at": "2026-09-17T22:16:18+00:00"
+    }
+  }
+}

@@ -73,6 +73,7 @@ class RawPayloadSink(Protocol):
         fetched_at: datetime,
         match_id: Optional[str] = None,
         championship_id: Optional[str] = None,
+        headers: Optional[dict[str, str]] = None,
     ) -> Optional[int]: ...
 
 
@@ -162,6 +163,7 @@ class FaceitClient:
                     fetched_at=fetched_at,
                     match_id=match_id,
                     championship_id=championship_id,
+                    headers=dict(resp.headers),
                 )
 
             log_event(
