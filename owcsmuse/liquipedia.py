@@ -25,9 +25,13 @@ from .resolve import fold
 
 log = get_logger("owcsmuse.liquipedia")
 
+# API only. Liquipedia's terms forbid automated access to rendered pages, so every
+# request here goes to api.php; nothing in this module fetches or parses HTML.
 API = "https://liquipedia.net/overwatch/api.php"
 USER_AGENT = "OWCSMuse/0.1 (https://github.com/L4wson/OWCSMuse; stats warehouse cross-check)"
-MIN_INTERVAL = 2.0
+# Their rate limits are per action: parse is allowed far more often than the rest.
+PARSE_INTERVAL = 2.0
+OTHER_INTERVAL = 30.0
 
 # Known FACEIT nickname -> Liquipedia name differences.
 TEAM_ALIASES = {
@@ -76,20 +80,21 @@ class LiquipediaClient:
         self.http = http or httpx.Client(headers={"User-Agent": USER_AGENT, "Accept-Encoding": "gzip"}, timeout=30)
         self._last = 0.0
 
-    def _throttle(self) -> None:
-        wait = MIN_INTERVAL - (time.monotonic() - self._last)
+    def _throttle(self, action: str) -> None:
+        interval = PARSE_INTERVAL if action == "parse" else OTHER_INTERVAL
+        wait = interval - (time.monotonic() - self._last)
         if wait > 0:
             time.sleep(wait)
         self._last = time.monotonic()
 
     def search(self, query: str, limit: int = 10) -> list[dict[str, Any]]:
-        self._throttle()
+        self._throttle("query")
         r = self.http.get(API, params={"action": "query", "list": "search", "srsearch": query, "srlimit": limit, "format": "json"})
         r.raise_for_status()
         return [{"title": s["title"], "snippet": re.sub(r"<[^>]+>", "", s.get("snippet", ""))} for s in r.json().get("query", {}).get("search", [])]
 
     def wikitext(self, page: str) -> str:
-        self._throttle()
+        self._throttle("parse")
         r = self.http.get(API, params={"action": "parse", "page": page, "prop": "wikitext", "format": "json"})
         r.raise_for_status()
         data = r.json()

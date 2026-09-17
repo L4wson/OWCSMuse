@@ -227,12 +227,17 @@ class Crawler:
         new_main = new_players = main_items = 0
         try:
             with self.conn.cursor() as cur:
+                # Every history item is archived, but one INSERT per item is a round trip
+                # per item against a remote pooler; batch them first.
+                batch: list[tuple[dict[str, Any], MatchRecord, bool]] = []
                 for it in seen.values():
                     rec = parse_history_item(it)
                     cls = self._classify(rec.championship_id or "", rec.competition_name or "", rec.started_at, rec.region)
                     is_main = cls.include
                     main_items += int(is_main)
-                    inserted = self._record_history_match(cur, it, rec, is_main, generation, pid)
+                    batch.append((it, rec, is_main))
+                self._record_history_matches(cur, batch, generation, pid)
+                for it, rec, is_main in batch:
                     if is_main:
                         self._ensure_history_championship(cur, rec, cls)
                         self.collector._upsert_teams(cur, rec)
@@ -242,15 +247,19 @@ class Crawler:
                                 "UPDATE matches SET discovered_via = 'history', discovered_generation = %s, discovered_by_player = %s WHERE match_id = %s",
                                 (generation, pid, rec.match_id),
                             )
-                        for entry in rec.roster:
-                            cur.execute(
+                        if rec.roster:
+                            before = cur.execute(
+                                "SELECT count(*) AS n FROM crawl_players WHERE player_id = ANY(%s)",
+                                ([e.player_id for e in rec.roster],),
+                            ).fetchone()["n"]
+                            cur.executemany(
                                 """
                                 INSERT INTO crawl_players (player_id, nickname, source, discovered_from_match, generation)
                                 VALUES (%s, %s, 'history_roster', %s, %s) ON CONFLICT (player_id) DO NOTHING
                                 """,
-                                (entry.player_id, entry.nickname, rec.match_id, generation + 1),
+                                [(e.player_id, e.nickname, rec.match_id, generation + 1) for e in rec.roster],
                             )
-                            new_players += cur.rowcount
+                            new_players += len({e.player_id for e in rec.roster}) - before
                 cur.execute(
                     """
                     UPDATE crawl_players SET crawled_at = now(), history_items = %s, main_series_items = %s, requests = %s, last_error = NULL
@@ -279,26 +288,29 @@ class Crawler:
             )
         self.conn.commit()
 
-    def _record_history_match(self, cur: psycopg.Cursor, item: dict[str, Any], rec: MatchRecord, is_main: bool,
-                              generation: int, pid: str) -> bool:
-        teams = [{"team_id": t.team_id, "name": t.name} for t in (rec.faction1, rec.faction2) if t]
-        cur.execute(
+    def _record_history_matches(self, cur: psycopg.Cursor, batch: list[tuple[dict[str, Any], MatchRecord, bool]],
+                                generation: int, pid: str) -> None:
+        """Archive every history item seen, in one round trip."""
+        if not batch:
+            return
+        rows = []
+        for item, rec, is_main in batch:
+            teams = [{"team_id": t.team_id, "name": t.name} for t in (rec.faction1, rec.faction2) if t]
+            rows.append((
+                rec.match_id, rec.championship_id, rec.competition_name, item.get("competition_type"), rec.organizer_id,
+                rec.region, rec.status, rec.started_at, rec.finished_at, Jsonb(item.get("results")), Jsonb(teams),
+                list(item.get("playing_players") or [e.player_id for e in rec.roster]), is_main, generation, pid,
+            ))
+        cur.executemany(
             """
             INSERT INTO history_matches (match_id, competition_id, competition_name, competition_type, organizer_id, region, status,
                 started_at, finished_at, list_results, teams, player_ids, main_series, first_seen_generation, first_seen_player)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (match_id) DO UPDATE SET seen_count = history_matches.seen_count + 1,
                 main_series = history_matches.main_series OR EXCLUDED.main_series
-            RETURNING (xmax = 0) AS inserted
             """,
-            (
-                rec.match_id, rec.championship_id, rec.competition_name, item.get("competition_type"), rec.organizer_id, rec.region,
-                rec.status, rec.started_at, rec.finished_at, Jsonb(item.get("results")), Jsonb(teams),
-                list(item.get("playing_players") or [e.player_id for e in rec.roster]), is_main, generation, pid,
-            ),
+            rows,
         )
-        row = cur.fetchone()
-        return bool(row and row["inserted"])
 
     def _ensure_history_championship(self, cur: psycopg.Cursor, rec: MatchRecord, cls: Classification) -> None:
         if rec.organizer_id:
