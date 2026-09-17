@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-17T16:29:16.341658+00:00",
+  "generated_at": "2026-09-17T18:04:21.122424+00:00",
   "search_names": [
     "OWCS",
     "Overwatch Champions Series"
   ],
   "pattern": "\\bOWCS\\b|Overwatch\\s+Champions\\s+Series",
   "game": "ow2",
-  "note": "Review before ingest. Set include=true/false per championship, then run `python -m owcsmuse load-manifest <file>`. Only include=true championships are collected.",
+  "note": "Review before ingest. `include`, `scope_region`, `tier` and `season` are classifier proposals unless decision_source is 'manual'. Record corrections with `python -m owcsmuse decide`, re-render with `classify`, then `load-manifest`. Only reviewed (manual) decisions mark a championship included unless load-manifest is run with --accept-proposals.",
   "organizers": [
     {
       "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
@@ -40,8 +40,26 @@
       "subscription_start": "2024-01-31T05:00:00+00:00",
       "subscription_end": "2024-03-01T17:05:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/d3d61baf-1ce8-4fb7-a2dd-6e9d70e61397/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "2ee00312-6794-48d7-b757-82e778d8a4ac",
@@ -57,8 +75,26 @@
       "subscription_start": "2024-01-31T08:00:00+00:00",
       "subscription_end": "2024-03-02T01:10:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/2ee00312-6794-48d7-b757-82e778d8a4ac/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "9c926cbf-2f1a-4cc0-bf7d-a6961539e15a",
@@ -75,7 +111,25 @@
       "subscription_end": "2024-03-08T16:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/9c926cbf-2f1a-4cc0-bf7d-a6961539e15a/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "418710f7-e2c4-47a7-ada9-5d173adbfbb9",
@@ -92,7 +146,25 @@
       "subscription_end": "2024-03-08T16:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/418710f7-e2c4-47a7-ada9-5d173adbfbb9/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "af043e0a-90f3-485e-8556-fe2ff57276b1",
@@ -109,7 +181,25 @@
       "subscription_end": "2024-03-08T16:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/af043e0a-90f3-485e-8556-fe2ff57276b1/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
@@ -126,7 +216,25 @@
       "subscription_end": "2024-03-08T16:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/f34c5377-e946-4569-ac81-9a66bb4ed71a/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "7b4d3e4c-9984-4204-9c71-3d7b7fc68323",
@@ -142,8 +250,26 @@
       "subscription_start": "2024-03-08T18:04:27.592000+00:00",
       "subscription_end": "2024-03-08T20:20:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/7b4d3e4c-9984-4204-9c71-3d7b7fc68323/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "exclude: status=cancelled"
+      ]
     },
     {
       "championship_id": "6af10408-0561-4a7f-b94b-b9e2cf7c50c8",
@@ -159,8 +285,26 @@
       "subscription_start": "2024-03-08T18:05:04.791000+00:00",
       "subscription_end": "2024-03-08T20:20:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/6af10408-0561-4a7f-b94b-b9e2cf7c50c8/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "exclude: status=cancelled"
+      ]
     },
     {
       "championship_id": "537fffb7-a63e-4fd7-8806-346f9ac290ff",
@@ -177,7 +321,25 @@
       "subscription_end": "2024-03-08T20:20:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/537fffb7-a63e-4fd7-8806-346f9ac290ff/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "af65b06e-02eb-4dab-9478-59fe1989d7de",
@@ -194,7 +356,25 @@
       "subscription_end": "2024-03-08T20:15:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/af65b06e-02eb-4dab-9478-59fe1989d7de/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "7cd57eb2-001b-4865-a7cb-01c9b9749ad8",
@@ -211,7 +391,25 @@
       "subscription_end": "2024-03-08T21:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/7cd57eb2-001b-4865-a7cb-01c9b9749ad8/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "06696475-56d5-4e61-a71e-4290c3e32dcb",
@@ -228,7 +426,25 @@
       "subscription_end": "2024-03-08T21:05:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/06696475-56d5-4e61-a71e-4290c3e32dcb/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
@@ -245,7 +461,25 @@
       "subscription_end": "2024-03-18T23:51:43.839000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/f57f9c5f-7840-4a49-8c32-24682dece3fc/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1",
@@ -262,7 +496,25 @@
       "subscription_end": "2024-03-19T00:52:02.019000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "c9fa3baa-ff49-4dc4-a112-645e5b212db5",
@@ -279,7 +531,25 @@
       "subscription_end": "2024-03-29T16:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/c9fa3baa-ff49-4dc4-a112-645e5b212db5/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "fe598751-cab2-47b2-aada-b3d4402f8dd8",
@@ -296,7 +566,25 @@
       "subscription_end": "2024-03-29T23:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/fe598751-cab2-47b2-aada-b3d4402f8dd8/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "01cbdd8c-0192-4705-8509-2da3370b992d",
@@ -313,7 +601,25 @@
       "subscription_end": "2024-03-31T15:25:13.471000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/01cbdd8c-0192-4705-8509-2da3370b992d/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "cdfd3c02-df19-4d8a-a4e5-a438e9ef83a1",
@@ -330,7 +636,25 @@
       "subscription_end": "2024-03-31T20:46:23.853000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/cdfd3c02-df19-4d8a-a4e5-a438e9ef83a1/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "97c22370-2147-4780-9418-1139ac51b445",
@@ -346,8 +670,26 @@
       "subscription_start": "2024-01-29T19:44:00+00:00",
       "subscription_end": "2024-04-05T16:30:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/97c22370-2147-4780-9418-1139ac51b445/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: status=cancelled, tier=qualifier"
+      ]
     },
     {
       "championship_id": "b6243c70-a4a5-4649-9e32-71a0e0356353",
@@ -363,8 +705,26 @@
       "subscription_start": "2024-04-05T17:06:00.330000+00:00",
       "subscription_end": "2024-04-05T17:08:00.160000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/b6243c70-a4a5-4649-9e32-71a0e0356353/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "df05f34a-2f8d-4ba9-bdbf-4bbb3de95b49",
@@ -380,8 +740,26 @@
       "subscription_start": "2024-01-29T19:15:00+00:00",
       "subscription_end": "2024-04-05T23:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/df05f34a-2f8d-4ba9-bdbf-4bbb3de95b49/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "61ac3608-8695-4737-8667-a6706a380fc0",
@@ -398,7 +776,25 @@
       "subscription_end": "2024-04-06T05:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/61ac3608-8695-4737-8667-a6706a380fc0/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "3c08b743-2b9d-4920-afd8-cbfaa01a6d79",
@@ -415,7 +811,25 @@
       "subscription_end": "2024-04-06T21:07:30.645000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/3c08b743-2b9d-4920-afd8-cbfaa01a6d79/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "ad0fc3c2-9765-45b5-958d-8b138386cb6a",
@@ -432,7 +846,25 @@
       "subscription_end": "2024-04-07T20:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/ad0fc3c2-9765-45b5-958d-8b138386cb6a/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "c0367332-24ae-4937-b5d6-387c69399c85",
@@ -449,7 +881,25 @@
       "subscription_end": "2024-04-09T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/c0367332-24ae-4937-b5d6-387c69399c85/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "971a41cc-e20d-4dd2-9cb7-1f8b3a30e4ac",
@@ -466,7 +916,25 @@
       "subscription_end": "2024-04-09T22:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/971a41cc-e20d-4dd2-9cb7-1f8b3a30e4ac/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "dcfc5e39-5a34-4103-a9b8-8d12ecf10a46",
@@ -483,7 +951,25 @@
       "subscription_end": "2024-04-10T18:33:12.119000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/dcfc5e39-5a34-4103-a9b8-8d12ecf10a46/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "47e69fb4-a827-4b04-9da9-7d31ca2bd4b8",
@@ -500,7 +986,25 @@
       "subscription_end": "2024-04-11T03:12:01.736000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/47e69fb4-a827-4b04-9da9-7d31ca2bd4b8/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "aebe836c-5768-44fd-9e1f-f4c5e907a0fa",
@@ -517,7 +1021,25 @@
       "subscription_end": "2024-04-11T20:56:57.547000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/aebe836c-5768-44fd-9e1f-f4c5e907a0fa/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "893a90ab-7522-47de-8124-ae6c389a4004",
@@ -534,7 +1056,25 @@
       "subscription_end": "2024-04-11T19:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/893a90ab-7522-47de-8124-ae6c389a4004/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "6d081879-ac11-4625-9b8c-07ab84f38762",
@@ -551,7 +1091,25 @@
       "subscription_end": "2024-04-11T19:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/6d081879-ac11-4625-9b8c-07ab84f38762/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "b6914a12-a3be-480a-bfc2-e55841b761c4",
@@ -568,7 +1126,25 @@
       "subscription_end": "2024-04-12T15:45:40.387000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/b6914a12-a3be-480a-bfc2-e55841b761c4/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "d0b3ff2e-4e80-416c-b759-e20b1403d5ef",
@@ -585,7 +1161,25 @@
       "subscription_end": "2024-04-11T19:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/d0b3ff2e-4e80-416c-b759-e20b1403d5ef/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "fe42f3fe-33fb-413f-a09a-803afa033864",
@@ -602,7 +1196,25 @@
       "subscription_end": "2024-04-11T19:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/fe42f3fe-33fb-413f-a09a-803afa033864/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "a5598e90-a70a-4556-9cf1-6ef306d5dfb1",
@@ -619,7 +1231,25 @@
       "subscription_end": "2024-04-11T19:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/a5598e90-a70a-4556-9cf1-6ef306d5dfb1/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "69924042-c4cc-4631-b9e5-36ca9d7a8a3a",
@@ -636,7 +1266,25 @@
       "subscription_end": "2024-04-11T19:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/69924042-c4cc-4631-b9e5-36ca9d7a8a3a/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "ec74d1c0-fdad-44da-abc8-6c6062d61738",
@@ -653,7 +1301,25 @@
       "subscription_end": "2024-04-13T05:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/ec74d1c0-fdad-44da-abc8-6c6062d61738/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "9c8cfa4b-6cd6-48c4-ade1-1b8b86463dfe",
@@ -670,7 +1336,25 @@
       "subscription_end": "2024-04-13T20:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/9c8cfa4b-6cd6-48c4-ade1-1b8b86463dfe/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "cb98f266-e882-4683-bbed-0f767ff6423a",
@@ -687,7 +1371,25 @@
       "subscription_end": "2024-04-07T06:17:42.129000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/cb98f266-e882-4683-bbed-0f767ff6423a/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "e15c8b7d-11b0-41f1-99cf-4951e36b8df6",
@@ -704,7 +1406,25 @@
       "subscription_end": "2024-04-14T13:23:31.329000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/e15c8b7d-11b0-41f1-99cf-4951e36b8df6/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "d677c064-dd66-4695-af88-459a4ee42d0f",
@@ -721,7 +1441,25 @@
       "subscription_end": "2024-04-17T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/d677c064-dd66-4695-af88-459a4ee42d0f/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "80892aec-3495-4fca-8eab-ccfcfeea8330",
@@ -738,7 +1476,25 @@
       "subscription_end": "2024-04-17T22:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/80892aec-3495-4fca-8eab-ccfcfeea8330/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "fc260eff-3b46-4d55-8880-46ff8c7ac01e",
@@ -755,7 +1511,25 @@
       "subscription_end": "2024-04-18T19:29:41.817000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/fc260eff-3b46-4d55-8880-46ff8c7ac01e/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "58fbf3be-4f96-4490-b525-ddadc925b470",
@@ -772,7 +1546,25 @@
       "subscription_end": "2024-04-19T03:42:03.414000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/58fbf3be-4f96-4490-b525-ddadc925b470/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "bfce9fd8-771b-4e46-983f-6273b135c09f",
@@ -789,7 +1581,25 @@
       "subscription_end": "2024-04-14T06:19:13.909000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/bfce9fd8-771b-4e46-983f-6273b135c09f/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "32271a28-7b4c-465d-a928-9e84e9391495",
@@ -806,7 +1616,25 @@
       "subscription_end": "2024-04-22T00:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/32271a28-7b4c-465d-a928-9e84e9391495/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "0f4d51dd-ff57-470a-9c0d-3fd2e485566e",
@@ -822,8 +1650,26 @@
       "subscription_start": "2024-04-22T19:58:27.621000+00:00",
       "subscription_end": "2024-04-22T20:47:47.006000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/0f4d51dd-ff57-470a-9c0d-3fd2e485566e/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "exclude: status=cancelled"
+      ]
     },
     {
       "championship_id": "72922677-c191-48fc-aaac-1db52c410a26",
@@ -840,7 +1686,25 @@
       "subscription_end": "2024-04-22T21:15:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/72922677-c191-48fc-aaac-1db52c410a26/",
       "include": true,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "33781289-61ea-43d5-ac79-1af825dcb291",
@@ -856,8 +1720,26 @@
       "subscription_start": "2024-05-10T16:29:55.779000+00:00",
       "subscription_end": "2024-05-10T17:21:54.846000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/33781289-61ea-43d5-ac79-1af825dcb291/",
-      "include": false,
-      "found_via": "organizer_listing"
+      "include": true,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "international",
+        "tier": "main",
+        "season": 2024,
+        "include": true
+      },
+      "scope_region": "international",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name is a known OWCS event without 'OWCS' in it",
+        "region international from known-event table",
+        "tier main from known-event table",
+        "include: OWCS main competition in NA/EMEA/international"
+      ]
     },
     {
       "championship_id": "57233837-0bcd-4fed-a5d7-6e58412f2179",
@@ -874,7 +1756,25 @@
       "subscription_end": "2024-06-10T16:20:06.652000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/57233837-0bcd-4fed-a5d7-6e58412f2179/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "main",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier main: name has a main-competition token",
+        "exclude: not an OWCS event"
+      ]
     },
     {
       "championship_id": "76c3ac1c-de23-472f-8dea-9b632ccfc76b",
@@ -891,7 +1791,25 @@
       "subscription_end": "2024-06-10T16:46:28.980000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/76c3ac1c-de23-472f-8dea-9b632ccfc76b/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "main",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "main",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier main: name has a main-competition token",
+        "exclude: not an OWCS event"
+      ]
     },
     {
       "championship_id": "7e09fd36-ba9f-4537-941e-83933237b556",
@@ -908,7 +1826,25 @@
       "subscription_end": "2024-07-02T17:52:20.695000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/7e09fd36-ba9f-4537-941e-83933237b556/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "relegation",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "relegation",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier relegation: name has Relegation",
+        "exclude: not an OWCS event, tier=relegation"
+      ]
     },
     {
       "championship_id": "79d52713-c75c-44e1-806b-61ef5524cad8",
@@ -925,7 +1861,25 @@
       "subscription_end": "2024-07-02T17:52:25.195000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/79d52713-c75c-44e1-806b-61ef5524cad8/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "relegation",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "relegation",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier relegation: name has Relegation",
+        "exclude: not an OWCS event, tier=relegation"
+      ]
     },
     {
       "championship_id": "3ffe30c8-443e-4240-9fee-0a517b5aea45",
@@ -942,7 +1896,25 @@
       "subscription_end": "2024-07-02T17:52:28.175000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/3ffe30c8-443e-4240-9fee-0a517b5aea45/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "relegation",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "relegation",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier relegation: name has Relegation",
+        "exclude: not an OWCS event, tier=relegation"
+      ]
     },
     {
       "championship_id": "1a2d1cdb-09f4-4ba7-8c2c-0e0b36755cda",
@@ -959,7 +1931,25 @@
       "subscription_end": "2024-07-02T17:52:31.192000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/1a2d1cdb-09f4-4ba7-8c2c-0e0b36755cda/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "relegation",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "relegation",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier relegation: name has Relegation",
+        "exclude: not an OWCS event, tier=relegation"
+      ]
     },
     {
       "championship_id": "76707d66-65f9-4839-b5e5-4e6e29e4dbd8",
@@ -976,7 +1966,25 @@
       "subscription_end": "2024-07-06T15:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/76707d66-65f9-4839-b5e5-4e6e29e4dbd8/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "26bbc475-8065-4746-9eb4-d6f33f57c879",
@@ -993,7 +2001,25 @@
       "subscription_end": "2024-07-06T23:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/26bbc475-8065-4746-9eb4-d6f33f57c879/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "78666f52-4f0c-42fa-8d79-7833d7e9916f",
@@ -1009,8 +2035,26 @@
       "subscription_start": "2024-01-29T19:45:00+00:00",
       "subscription_end": "2024-08-09T15:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/78666f52-4f0c-42fa-8d79-7833d7e9916f/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "8f18c54d-3a86-4a85-85ee-ab69b3282008",
@@ -1026,8 +2070,26 @@
       "subscription_start": "2024-01-29T19:33:00+00:00",
       "subscription_end": "2024-08-09T23:10:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/8f18c54d-3a86-4a85-85ee-ab69b3282008/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "b7caa267-f9bb-4d91-8dc0-c4e157d92203",
@@ -1043,8 +2105,26 @@
       "subscription_start": "2024-01-29T19:46:00+00:00",
       "subscription_end": "2024-09-20T15:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/b7caa267-f9bb-4d91-8dc0-c4e157d92203/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "3976270f-6138-4289-81d9-998927cce41e",
@@ -1060,8 +2140,26 @@
       "subscription_start": "2024-01-29T19:43:00+00:00",
       "subscription_end": "2024-09-20T23:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/3976270f-6138-4289-81d9-998927cce41e/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "a287cfb1-84c3-442c-9392-fab9d750d6f1",
@@ -1078,7 +2176,25 @@
       "subscription_end": "2024-09-17T11:49:37.251000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/a287cfb1-84c3-442c-9392-fab9d750d6f1/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "relegation",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "relegation",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier relegation: name has Relegation",
+        "exclude: not an OWCS event, tier=relegation"
+      ]
     },
     {
       "championship_id": "c7977e9b-6a44-4f83-a1fc-2d4d1fe9dc86",
@@ -1095,7 +2211,25 @@
       "subscription_end": "2024-09-22T17:36:33.054000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/c7977e9b-6a44-4f83-a1fc-2d4d1fe9dc86/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "relegation",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "relegation",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier relegation: name has Relegation",
+        "exclude: not an OWCS event, tier=relegation"
+      ]
     },
     {
       "championship_id": "63ed0efb-bdea-4366-ae8c-22652eccc3fc",
@@ -1112,7 +2246,25 @@
       "subscription_end": "2024-09-20T18:55:54.436000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/63ed0efb-bdea-4366-ae8c-22652eccc3fc/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "relegation",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "relegation",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier relegation: name has Relegation",
+        "exclude: not an OWCS event, tier=relegation"
+      ]
     },
     {
       "championship_id": "6491314e-c045-4151-b2d1-7e0e8ed3bbd0",
@@ -1129,7 +2281,25 @@
       "subscription_end": "2024-09-30T16:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/6491314e-c045-4151-b2d1-7e0e8ed3bbd0/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "dc094754-2384-4053-9da8-69fdff8e6591",
@@ -1146,7 +2316,25 @@
       "subscription_end": "2024-09-30T22:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/dc094754-2384-4053-9da8-69fdff8e6591/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "adebc10b-b57f-48ea-9fa6-36415938c273",
@@ -1163,7 +2351,25 @@
       "subscription_end": "2024-10-01T16:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/adebc10b-b57f-48ea-9fa6-36415938c273/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "e1c81d7c-a1aa-43db-a5ac-9d086f891540",
@@ -1180,7 +2386,25 @@
       "subscription_end": "2024-10-01T23:09:12.749000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/e1c81d7c-a1aa-43db-a5ac-9d086f891540/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2024,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2024,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2024 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "602e9eb3-6b9d-47a8-b203-6ec803471b4c",
@@ -1196,8 +2420,26 @@
       "subscription_start": "2024-11-20T14:55:00+00:00",
       "subscription_end": "2025-01-16T15:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/602e9eb3-6b9d-47a8-b203-6ec803471b4c/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "fa629b3b-5bf2-4270-8923-d55b6ee8915f",
@@ -1213,8 +2455,26 @@
       "subscription_start": "2024-11-20T14:53:00+00:00",
       "subscription_end": "2025-01-16T23:30:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/fa629b3b-5bf2-4270-8923-d55b6ee8915f/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "d903dcb7-fd1f-4254-a62c-01abde100b93",
@@ -1230,8 +2490,26 @@
       "subscription_start": "2025-01-18T00:05:00+00:00",
       "subscription_end": "2025-01-18T16:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/d903dcb7-fd1f-4254-a62c-01abde100b93/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "a0c8a6d9-e74f-448e-bf37-c3e67b59f4de",
@@ -1247,8 +2525,26 @@
       "subscription_start": "2025-01-18T06:15:00+00:00",
       "subscription_end": "2025-01-18T23:40:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/a0c8a6d9-e74f-448e-bf37-c3e67b59f4de/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "45b4e48d-e1e5-4f0f-afe8-044fc514f1e8",
@@ -1264,8 +2560,26 @@
       "subscription_start": "2025-01-19T18:43:00+00:00",
       "subscription_end": "2025-01-19T20:42:55.175000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/45b4e48d-e1e5-4f0f-afe8-044fc514f1e8/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "9cf79c17-0cb8-4d79-bea5-a8fb3d05bcb5",
@@ -1282,7 +2596,25 @@
       "subscription_end": "2025-01-25T16:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/9cf79c17-0cb8-4d79-bea5-a8fb3d05bcb5/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "7d84a3da-3dbd-458e-9268-0acc4a4c277a",
@@ -1299,7 +2631,25 @@
       "subscription_end": "2025-01-25T23:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/7d84a3da-3dbd-458e-9268-0acc4a4c277a/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "e9557cc5-0094-4044-9fc8-95ac3fff739e",
@@ -1316,7 +2666,25 @@
       "subscription_end": "2025-01-25T21:53:58.806000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/e9557cc5-0094-4044-9fc8-95ac3fff739e/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "32c36cd4-b9c0-4900-b1bf-c7c5edb1f4f2",
@@ -1333,7 +2701,25 @@
       "subscription_end": "2025-01-26T04:27:10.978000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/32c36cd4-b9c0-4900-b1bf-c7c5edb1f4f2/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "a8c40315-e712-40f9-b8d1-47afa76a93f6",
@@ -1350,7 +2736,25 @@
       "subscription_end": "2025-01-27T17:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/a8c40315-e712-40f9-b8d1-47afa76a93f6/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "d7e275af-9f78-46cb-8bdb-fbf0be1e0d56",
@@ -1367,7 +2771,25 @@
       "subscription_end": "2025-01-28T00:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/d7e275af-9f78-46cb-8bdb-fbf0be1e0d56/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "76cdd469-94f5-4c4a-845b-e41581a470b5",
@@ -1384,7 +2806,25 @@
       "subscription_end": "2025-01-28T17:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/76cdd469-94f5-4c4a-845b-e41581a470b5/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "af9acc9b-3377-49fe-9c90-c7bccf787108",
@@ -1401,7 +2841,25 @@
       "subscription_end": "2025-01-29T00:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/af9acc9b-3377-49fe-9c90-c7bccf787108/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "2936a1a5-b5b2-479e-9876-bdec99fd5485",
@@ -1418,7 +2876,25 @@
       "subscription_end": "2025-04-26T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/2936a1a5-b5b2-479e-9876-bdec99fd5485/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "199a6fd3-be42-4508-b792-dd9c8dd519ad",
@@ -1435,7 +2911,25 @@
       "subscription_end": "2025-04-26T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/199a6fd3-be42-4508-b792-dd9c8dd519ad/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, status=cancelled, tier=qualifier"
+      ]
     },
     {
       "championship_id": "471b0560-3c9b-4f0f-8d65-dff99773a234",
@@ -1452,7 +2946,25 @@
       "subscription_end": "2025-04-26T21:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/471b0560-3c9b-4f0f-8d65-dff99773a234/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "d07b52ab-6dc7-4b40-a7ba-5c441987b09a",
@@ -1469,7 +2981,25 @@
       "subscription_end": "2025-04-26T21:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/d07b52ab-6dc7-4b40-a7ba-5c441987b09a/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, status=cancelled, tier=qualifier"
+      ]
     },
     {
       "championship_id": "15128549-7752-4aea-b5f2-9bb0db0f95c7",
@@ -1486,7 +3016,25 @@
       "subscription_end": "2025-04-27T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/15128549-7752-4aea-b5f2-9bb0db0f95c7/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, status=cancelled, tier=qualifier"
+      ]
     },
     {
       "championship_id": "4387fccf-feea-43b3-9683-d8abbb35bd6a",
@@ -1503,7 +3051,25 @@
       "subscription_end": "2025-04-27T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/4387fccf-feea-43b3-9683-d8abbb35bd6a/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "d8a5dc5e-0d1a-4702-b207-3f55ff09cf1e",
@@ -1520,7 +3086,25 @@
       "subscription_end": "2025-04-27T21:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/d8a5dc5e-0d1a-4702-b207-3f55ff09cf1e/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, status=cancelled, tier=qualifier"
+      ]
     },
     {
       "championship_id": "94aaffb8-9e78-4b27-9362-acb816d62cb7",
@@ -1537,7 +3121,25 @@
       "subscription_end": "2025-04-27T21:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/94aaffb8-9e78-4b27-9362-acb816d62cb7/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "b6a70e51-d3d9-48aa-9732-407f039ec3e3",
@@ -1553,8 +3155,26 @@
       "subscription_start": "2025-07-13T19:37:58.925000+00:00",
       "subscription_end": "2025-07-13T19:45:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/b6a70e51-d3d9-48aa-9732-407f039ec3e3/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "relegation",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "relegation",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier relegation: name has Relegation",
+        "exclude: status=cancelled, name marks it as test/unused, tier=relegation"
+      ]
     },
     {
       "championship_id": "8d5f550a-ce2d-4403-aeea-53f304529e78",
@@ -1571,7 +3191,25 @@
       "subscription_end": "2025-07-26T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/8d5f550a-ce2d-4403-aeea-53f304529e78/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "385137f9-03d6-4ead-a5b2-34b485b1fcbc",
@@ -1588,7 +3226,25 @@
       "subscription_end": "2025-07-26T21:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/385137f9-03d6-4ead-a5b2-34b485b1fcbc/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "241940df-67ae-4245-b04a-803387a34841",
@@ -1605,7 +3261,25 @@
       "subscription_end": "2025-07-27T15:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/241940df-67ae-4245-b04a-803387a34841/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "c46343c5-4b5f-4dfa-82ce-d425933a9e3d",
@@ -1622,7 +3296,25 @@
       "subscription_end": "2025-07-27T21:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/c46343c5-4b5f-4dfa-82ce-d425933a9e3d/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "5e9572fc-ca5c-4c63-945c-09156cbe1f53",
@@ -1639,7 +3331,25 @@
       "subscription_end": "2025-07-27T21:55:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/5e9572fc-ca5c-4c63-945c-09156cbe1f53/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, status=cancelled, tier=qualifier"
+      ]
     },
     {
       "championship_id": "f70ed230-5ec0-404a-ac83-ef0e739c5749",
@@ -1656,7 +3366,25 @@
       "subscription_end": "2025-11-08T16:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/f70ed230-5ec0-404a-ac83-ef0e739c5749/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "545b2c63-12e8-46c8-b5ed-51447f0f1165",
@@ -1673,7 +3401,25 @@
       "subscription_end": "2025-11-08T23:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/545b2c63-12e8-46c8-b5ed-51447f0f1165/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "1bee8581-5d4b-43e3-92e7-30b79ac4fdf8",
@@ -1690,7 +3436,25 @@
       "subscription_end": "2025-11-15T16:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/1bee8581-5d4b-43e3-92e7-30b79ac4fdf8/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "44779112-2945-454a-8b54-7137d4f27ae2",
@@ -1707,7 +3471,25 @@
       "subscription_end": "2025-11-15T23:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/44779112-2945-454a-8b54-7137d4f27ae2/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2025,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2025,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2025 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "05eef1be-c479-45d7-b5c7-d07c5875bb6e",
@@ -1723,8 +3505,26 @@
       "subscription_start": "2026-01-15T18:16:00+00:00",
       "subscription_end": "2026-02-21T08:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/05eef1be-c479-45d7-b5c7-d07c5875bb6e/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from name",
+        "name matches OWCS pattern",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "6165cc94-3d1f-4851-ad95-f0c99198e0d2",
@@ -1740,8 +3540,26 @@
       "subscription_start": "2026-01-15T18:17:00+00:00",
       "subscription_end": "2026-02-21T08:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/6165cc94-3d1f-4851-ad95-f0c99198e0d2/",
-      "include": true,
-      "found_via": "organizer_listing"
+      "include": false,
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from name",
+        "name matches OWCS pattern",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: tier=qualifier"
+      ]
     },
     {
       "championship_id": "04877660-1989-40c1-a30f-35cc26ff42f4",
@@ -1758,7 +3576,25 @@
       "subscription_end": "2026-03-02T12:17:24.020000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/04877660-1989-40c1-a30f-35cc26ff42f4/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "a8fc59a5-4435-4edf-ba6b-77b7b52e7af9",
@@ -1775,7 +3611,25 @@
       "subscription_end": "2026-03-02T12:30:39.236000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/a8fc59a5-4435-4edf-ba6b-77b7b52e7af9/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from name",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "200c6a34-c8eb-4143-ab7f-5df3e45d2d26",
@@ -1792,7 +3646,25 @@
       "subscription_end": "2026-03-07T19:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/200c6a34-c8eb-4143-ab7f-5df3e45d2d26/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "7fa5c1d2-06b5-40ee-8b0c-bddc29811728",
@@ -1809,7 +3681,25 @@
       "subscription_end": "2026-03-07T23:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/7fa5c1d2-06b5-40ee-8b0c-bddc29811728/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier, region=other"
+      ]
     },
     {
       "championship_id": "8ba794b4-d462-486e-b348-8615f25914ea",
@@ -1826,7 +3716,25 @@
       "subscription_end": "2026-03-08T02:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/8ba794b4-d462-486e-b348-8615f25914ea/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "8cc70499-b6be-4d0f-8fca-129e8eefb035",
@@ -1843,7 +3751,25 @@
       "subscription_end": "2026-03-12T23:38:10.704000+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/8cc70499-b6be-4d0f-8fca-129e8eefb035/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "other",
+        "tier": "unknown",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "other",
+      "tier": "unknown",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region other: name has a non-NA/EMEA region token",
+        "tier unknown: no tier token in name",
+        "exclude: not an OWCS event, tier=unknown, region=other"
+      ]
     },
     {
       "championship_id": "70866927-9288-46f8-abc1-aeacee86ef9c",
@@ -1860,7 +3786,25 @@
       "subscription_end": "2026-05-30T18:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/70866927-9288-46f8-abc1-aeacee86ef9c/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "b19af459-d802-47d8-a5bc-ba874234254c",
@@ -1877,7 +3821,25 @@
       "subscription_end": "2026-05-31T01:00:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/b19af459-d802-47d8-a5bc-ba874234254c/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "e7a104a3-47e7-473a-aa5b-acf7234ab3b2",
@@ -1894,7 +3856,25 @@
       "subscription_end": "2026-08-20T15:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/e7a104a3-47e7-473a-aa5b-acf7234ab3b2/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "emea",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "emea",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region emea: name has EMEA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     },
     {
       "championship_id": "3c4272dc-1720-4ccf-a755-84838355c511",
@@ -1911,7 +3891,25 @@
       "subscription_end": "2026-08-20T22:50:00+00:00",
       "faceit_url": "https://www.faceit.com/en/championship/3c4272dc-1720-4ccf-a755-84838355c511/",
       "include": false,
-      "found_via": "organizer_listing"
+      "found_via": "organizer_listing",
+      "proposed": {
+        "region": "na",
+        "tier": "qualifier",
+        "season": 2026,
+        "include": false
+      },
+      "scope_region": "na",
+      "tier": "qualifier",
+      "season": 2026,
+      "decision_source": "auto",
+      "decision_note": null,
+      "evidence": [
+        "season 2026 from championship_start",
+        "name does not match OWCS pattern (hosted by an OWCS organizer, review)",
+        "region na: name has NA",
+        "tier qualifier: name has a qualifier token",
+        "exclude: not an OWCS event, tier=qualifier"
+      ]
     }
   ]
 }

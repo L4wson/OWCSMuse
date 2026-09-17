@@ -6,10 +6,12 @@ Strategy (all read-only):
      (catches seasons hosted under a differently named organizer)
   3. plus any --organizer-id passed explicitly
   4. /organizers/{id} + /organizers/{id}/championships for every organizer found;
-     every championship is written to the manifest, with include=true pre-set
-     when its name matches the OWCS pattern.
+     every championship is written to the manifest.
+  5. owcsmuse.scope classifies each entry (region / tier / season / include)
+     with evidence, and reviewed decisions from scope/decisions.json override
+     the classifier. A markdown report is written next to the manifest.
 
-The user reviews manifest.json, flips `include` where needed, then runs
+The user reviews the report, records corrections with `decide`, then runs
 `load-manifest` before any bulk ingest.
 """
 
@@ -26,6 +28,7 @@ from typing import Any, Iterable, Optional
 from .faceit.client import FaceitClient, FaceitClientError
 from .logging import get_logger, log_event
 from .parsers.championships import OWCS_PATTERN, is_owcs, parse_championship, parse_organizer
+from .scope import Decisions, classify_manifest_entries, render_report
 
 log = get_logger("owcsmuse.discovery")
 
@@ -61,6 +64,7 @@ def discover(
     extra_organizer_ids: Iterable[str] = (),
     pattern: re.Pattern[str] = OWCS_PATTERN,
     game: str = "ow2",
+    decisions: Optional[Decisions] = None,
 ) -> dict[str, Any]:
     search_names = list(search_names)
     organizers: dict[str, dict[str, Any]] = {}
@@ -166,21 +170,68 @@ def discover(
         )
 
     ordered = sorted(entries.values(), key=lambda e: (e.championship_start or "", e.name))
+    champ_dicts = [asdict(e) for e in ordered]
+    classify_manifest_entries(champ_dicts, decisions or Decisions(), owcs_organizer_ids=organizers.keys())
     manifest = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "search_names": search_names,
         "pattern": pattern.pattern,
         "game": game,
         "note": (
-            "Review before ingest. Set include=true/false per championship, then run "
-            "`python -m owcsmuse load-manifest <file>`. Only include=true championships are collected."
+            "Review before ingest. `include`, `scope_region`, `tier` and `season` are classifier proposals "
+            "unless decision_source is 'manual'. Record corrections with `python -m owcsmuse decide`, "
+            "re-render with `classify`, then `load-manifest`. Only reviewed (manual) decisions mark a "
+            "championship included unless load-manifest is run with --accept-proposals."
         ),
         "organizers": org_summaries,
-        "championships": [asdict(e) for e in ordered],
+        "championships": champ_dicts,
     }
     log_event(log, logging.INFO, "discovery_complete", organizers=len(org_summaries),
-              championships=len(ordered), included=sum(e.include for e in ordered))
+              championships=len(champ_dicts), included=sum(1 for c in champ_dicts if c["include"]),
+              manual=sum(1 for c in champ_dicts if c["decision_source"] == "manual"))
     return manifest
+
+
+HISTORY_COMPETITIONS_PATH = Path("scope") / "history_competitions.json"
+
+
+def merge_history_competitions(manifest: dict[str, Any], path: str | Path = HISTORY_COMPETITIONS_PATH) -> int:
+    """Add / refresh competitions discovered by the history crawl (written by `crawl competitions`)."""
+    p = Path(path)
+    if not p.exists():
+        return 0
+    with open(p, encoding="utf-8") as f:
+        comps = json.load(f)
+    by_id = {c["championship_id"]: c for c in manifest["championships"]}
+    n = 0
+    for c in comps:
+        c = dict(c)
+        c["found_via"] = "history_crawl"
+        if c["championship_id"] in by_id:
+            by_id[c["championship_id"]].update(c)
+        else:
+            manifest["championships"].append(c)
+            by_id[c["championship_id"]] = c
+        n += 1
+    return n
+
+
+def reclassify_manifest(manifest: dict[str, Any], decisions: Optional[Decisions] = None,
+                        history_path: str | Path = HISTORY_COMPETITIONS_PATH) -> dict[str, Any]:
+    """Re-run the classifier + decisions over an existing manifest without touching FACEIT."""
+    org_ids = [o["organizer_id"] for o in manifest.get("organizers") or []]
+    merged = merge_history_competitions(manifest, history_path)
+    classify_manifest_entries(manifest["championships"], decisions or Decisions(), owcs_organizer_ids=org_ids)
+    manifest["reclassified_at"] = datetime.now(timezone.utc).isoformat()
+    manifest["history_competitions_merged"] = merged
+    return manifest
+
+
+def write_report(manifest: dict[str, Any], path: str | Path) -> Path:
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(render_report(manifest), encoding="utf-8")
+    return p
 
 
 def write_manifest(manifest: dict[str, Any], path: str | Path) -> Path:
