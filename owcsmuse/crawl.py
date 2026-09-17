@@ -408,7 +408,9 @@ class Crawler:
         with self.conn.cursor() as cur:
             cur.execute(
                 """
-                SELECT competition_id, competition_name, organizer_id, max(region) AS region, count(*) AS matches_seen,
+                -- count DISTINCT match_id: the lateral join over teams duplicates each match row per side
+                SELECT competition_id, competition_name, organizer_id, max(region) AS region,
+                       count(DISTINCT match_id) AS matches_seen,
                        min(started_at) AS first_match_at, max(started_at) AS last_match_at, bool_or(main_series) AS main_series,
                        count(DISTINCT t->>'team_id') AS teams
                 FROM history_matches LEFT JOIN LATERAL jsonb_array_elements(teams) AS t ON true
