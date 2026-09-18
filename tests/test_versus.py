@@ -12,7 +12,7 @@ from owcsmuse.nlq.parser import parse_question
 from owcsmuse.nlq.schema import Filters, StructuredQuery, Unanswerable
 from owcsmuse.nlq.validate import SchemaInfo, Validated, validate
 from owcsmuse.orgs import (GENERIC_TOKENS, OrgDecisions, Proposal, TeamFacts, _adjacency, _overlap,
-                           name_contains, slugify)
+                           name_contains, pair_key, render_report, slugify)
 
 # ------------------------------------------------------------------ parsing
 
@@ -133,6 +133,61 @@ def test_a_pair_is_only_marked_decided_when_both_ids_agree(tmp_path):
     assert d.apply([p])[0].include is True
 
 
+def _pair(a="a", b="b", names=("Geekay Esports", "NTMR"), overlap=1.0):
+    return Proposal(team_ids=[a, b], names=list(names), org_id="org-x", org_name=names[1], roster_overlap=overlap,
+                    shared_players=5, smaller_roster=5, name_exact=False, name_contained=False, date_adjacent=True,
+                    gap_days=62, seasons=[2024, 2025], matches=43, strength="review_required")
+
+
+def test_a_rejection_is_a_decision_and_survives_a_reload(tmp_path):
+    """A pair that was looked at and turned down must not come back as pending review."""
+    d = OrgDecisions(tmp_path / "o.json")
+    d.reject("b", "a", "roster movement between distinct orgs")   # order must not matter
+    d.save()
+    again = OrgDecisions(tmp_path / "o.json")
+    assert again.rejection("a", "b")["reason"] == "roster movement between distinct orgs"
+    assert again.rejection("a", "b")["team_ids"] == ["a", "b"]
+    assert again.rejection("a", "unrelated") is None
+    assert pair_key("b", "a") == pair_key("a", "b")
+
+    p = again.apply([_pair()])[0]
+    assert p.include is False
+    assert p.decision_source == "rejected"
+    assert p.note == "roster movement between distinct orgs"
+
+
+def test_a_rejected_pair_leaves_the_pending_section_of_the_report(tmp_path):
+    d = OrgDecisions(tmp_path / "o.json")
+    report = render_report(d.apply([_pair()]))
+    assert "| no | NTMR" in report                     # pending, awaiting review
+
+    d.reject("a", "b", "different orgs; a squad transferred")
+    report = render_report(d.apply([_pair()]))
+    assert "Reviewed and rejected (1)" in report
+    assert "different orgs; a squad transferred" in report
+    assert "1 reviewed and rejected" in report
+    assert "0 needing review" in report
+
+
+def test_a_rejection_can_be_withdrawn(tmp_path):
+    d = OrgDecisions(tmp_path / "o.json")
+    d.reject("a", "b", "reviewed")
+    assert d.unreject("a", "b") is True
+    assert d.unreject("a", "b") is False
+    assert d.apply([_pair()])[0].decision_source == "auto"
+
+
+def test_a_rejection_does_not_touch_the_merge_decisions(tmp_path):
+    d = OrgDecisions(tmp_path / "o.json")
+    d.set("a", "org-x", "Org X")
+    d.set("b", "org-x", "Org X")
+    d.reject("a", "c", "different orgs")
+    d.save()
+    again = OrgDecisions(tmp_path / "o.json")
+    assert again.apply([_pair()])[0].include is True            # a/b still merged
+    assert again.apply([_pair(a="a", b="c")])[0].decision_source == "rejected"
+
+
 # ------------------------------------------------------------------ compiling
 
 INFO = SchemaInfo(
@@ -212,7 +267,9 @@ dbonly = pytest.mark.skipif(not DB_URL, reason="OWCS_TEST_DATABASE_URL not set")
 
 @dbonly
 def test_org_layer_groups_team_ids_and_leaves_the_rest_alone(agg_db):
-    q = lambda s, *a: agg_db.execute(s, a).fetchall()
+    def q(sql, *a):
+        return agg_db.execute(sql, a).fetchall()
+
     rows = q("SELECT team_id, org_id, org_key, mapped FROM team_identity")
     agg_db.commit()
     assert rows, "team_identity should cover every team"

@@ -18,6 +18,16 @@ A pair is never proposed on name similarity: "Team Liquid" and "Liquid Academy"
 fold differently and would fail `name_exact`, and nothing here does fuzzy
 matching. Proposals with different names require strong roster evidence and are
 marked `review_required` so they cannot pass without being looked at.
+
+What review then found, and what the evidence ordering above gets wrong: in
+esports whole rosters migrate between organisations, so a high roster overlap is
+weak evidence for org identity and sometimes points the other way. On this data
+the one real rename (Al qadsiah -> qadsiah) shared 1 of 8 players, while four
+pairs at 80-100% overlap were distinct orgs that a squad moved between. Name
+identity with academy/B-team exclusion is the reliable signal; roster overlap is
+corroboration only and never merges a pair by itself. A reviewed rejection is
+recorded in the decisions file, so a pair that was looked at and turned down
+never comes back as pending review.
 """
 
 from __future__ import annotations
@@ -89,6 +99,12 @@ def slugify(name: str) -> str:
     return n or "org"
 
 
+def pair_key(a: str, b: str) -> str:
+    """Order-independent key for a team-id pair, so one decision cannot be recorded twice."""
+    x, y = sorted((a, b))
+    return f"{x}|{y}"
+
+
 @dataclass
 class TeamFacts:
     team_id: str
@@ -118,7 +134,7 @@ class Proposal:
     strength: str                   # strong | review_required
     evidence: list[str] = field(default_factory=list)
     include: bool = False           # only a reviewed decision sets this
-    decision_source: str = "auto"
+    decision_source: str = "auto"   # auto | manual | rejected
     note: Optional[str] = None
 
     def as_dict(self) -> dict[str, Any]:
@@ -247,9 +263,12 @@ class OrgDecisions:
     def __init__(self, path: str | Path = DEFAULT_ORG_DECISIONS_PATH) -> None:
         self.path = Path(path)
         self.data: dict[str, dict[str, Any]] = {}
+        self.rejections: dict[str, dict[str, Any]] = {}
         if self.path.exists():
             with open(self.path, encoding="utf-8") as f:
-                self.data = dict(json.load(f).get("decisions") or {})
+                doc = json.load(f)
+            self.data = dict(doc.get("decisions") or {})
+            self.rejections = dict(doc.get("rejections") or {})
 
     def get(self, team_id: str) -> Optional[dict[str, Any]]:
         return self.data.get(team_id)
@@ -264,10 +283,32 @@ class OrgDecisions:
     def unset(self, team_id: str) -> bool:
         return self.data.pop(team_id, None) is not None
 
+    # A rejection is as much a decision as a merge. Without one, a pair that was
+    # looked at and turned down comes back as pending review on every run, and
+    # the reviewer has no record of having already answered it.
+    def reject(self, team_a: str, team_b: str, reason: str,
+               names: Optional[list[str]] = None) -> dict[str, Any]:
+        d = {"team_ids": sorted((team_a, team_b)), "names": names or [], "reason": reason,
+             "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+        self.rejections[pair_key(team_a, team_b)] = d
+        return d
+
+    def unreject(self, team_a: str, team_b: str) -> bool:
+        return self.rejections.pop(pair_key(team_a, team_b), None) is not None
+
+    def rejection(self, team_a: str, team_b: str) -> Optional[dict[str, Any]]:
+        return self.rejections.get(pair_key(team_a, team_b))
+
     def apply(self, proposals: Iterable[Proposal]) -> list[Proposal]:
-        """Mark proposals whose team ids are already decided."""
+        """Mark proposals that are already decided, whether merged or rejected."""
         out = []
         for p in proposals:
+            rejected = self.rejection(*p.team_ids) if len(p.team_ids) == 2 else None
+            if rejected:
+                p.include, p.decision_source = False, "rejected"
+                p.note = rejected.get("reason")
+                out.append(p)
+                continue
             decided = [self.data.get(t) for t in p.team_ids]
             if all(d and d["org_id"] == decided[0]["org_id"] for d in decided):
                 p.include, p.decision_source = True, "manual"
@@ -279,10 +320,12 @@ class OrgDecisions:
     def save(self) -> Path:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         doc = {
-            "note": ("Reviewed org identity. Keys are FACEIT team ids; each maps to the org it belongs to. "
-                     "A team id absent from this file stays unmapped and is queryable as itself. "
-                     "Edit by hand or with `python -m owcsmuse orgs decide`."),
+            "note": ("Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it "
+                     "belongs to. A team id absent from this file stays unmapped and is queryable as itself. "
+                     "`rejections` are pairs that were reviewed and turned down; they are never proposed again. "
+                     "Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`."),
             "decisions": dict(sorted(self.data.items(), key=lambda kv: (kv[1].get("org_id", ""), kv[0]))),
+            "rejections": dict(sorted(self.rejections.items())),
         }
         self.path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         return self.path
@@ -291,7 +334,7 @@ class OrgDecisions:
 def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[str, int]:
     """Write the decided mappings into orgs / team_orgs. Only decided ids are written."""
     by_org: dict[str, str] = {}
-    for team_id, d in decisions.data.items():
+    for d in decisions.data.values():
         by_org[d["org_id"]] = d.get("org_name") or d["org_id"]
     with conn.cursor() as cur:
         for org_id, name in by_org.items():
@@ -331,24 +374,32 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
 # --------------------------------------------------------------------- report
 
 def render_report(proposals: list[Proposal], unmapped: Optional[list[dict[str, Any]]] = None) -> str:
-    strong = [p for p in proposals if p.strength == "strong"]
-    review = [p for p in proposals if p.strength != "strong"]
-    decided = [p for p in proposals if p.decision_source == "manual"]
+    rejected = [p for p in proposals if p.decision_source == "rejected"]
+    pending = [p for p in proposals if p.decision_source != "rejected"]
+    strong = [p for p in pending if p.strength == "strong"]
+    review = [p for p in pending if p.strength != "strong"]
+    decided = [p for p in pending if p.decision_source == "manual"]
     lines = [
         "# Org identity proposals",
         "",
         f"Generated {datetime.now(timezone.utc).isoformat(timespec='seconds')}. "
         f"{len(proposals)} candidate pairs: {len(strong)} strong, {len(review)} needing review, "
-        f"{len(decided)} already decided.",
+        f"{len(decided)} already merged, {len(rejected)} reviewed and rejected.",
         "",
         "A pair is proposed only with evidence. Names that merely look alike are never merged: a pair whose "
         "names differ must be carried by roster overlap and is marked **review required**. "
         "Nothing merges until it is in `scope/org_decisions.json`.",
         "",
-        "Apply one with:",
+        "Roster overlap is the weakest of the three signals, not the strongest. Whole rosters move between "
+        "organisations, so a squad that transferred looks exactly like a rename: the one real rename here "
+        "(Al qadsiah / qadsiah) shared 1 of 8 players, while four pairs at 80-100% overlap are distinct orgs. "
+        "Name identity is what merges a pair; overlap only corroborates it.",
+        "",
+        "Apply or turn down one with:",
         "",
         "```",
         "python -m owcsmuse orgs decide <team_id> --org <org-id> --org-name \"<Display Name>\" --note \"...\"",
+        "python -m owcsmuse orgs reject <team_id_a> <team_id_b> --reason \"...\"   # decided: not the same org",
         "python -m owcsmuse orgs load      # write decisions into orgs / team_orgs",
         "```",
         "",
@@ -363,7 +414,8 @@ def render_report(proposals: list[Proposal], unmapped: Optional[list[dict[str, A
         ids = "<br>".join(f"`{t}`" for t in p.team_ids)
         names = " / ".join(p.names)
         note = f" **note:** {p.note}" if p.note else ""
-        return (f"| {'YES' if p.include else 'no'} | {p.org_name} | {p.roster_overlap:.0%} | "
+        mark = "YES" if p.include else ("REJECTED" if p.decision_source == "rejected" else "no")
+        return (f"| {mark} | {p.org_name} | {p.roster_overlap:.0%} | "
                 f"{p.shared_players}/{p.smaller_roster} | {names} | {', '.join(map(str, p.seasons))} | "
                 f"{p.matches} | {ids} | {ev}{note} |")
 
@@ -372,6 +424,12 @@ def render_report(proposals: list[Proposal], unmapped: Optional[list[dict[str, A
               "| decided | org | overlap | shared | names | seasons | matches | team ids | evidence |",
               "|---|---|---|---|---|---|---|---|---|"]
     lines += [row(p) for p in review] or ["| | | | | none | | | | |"]
+    lines += ["", f"## Reviewed and rejected ({len(rejected)})", "",
+              "Decided: these are different organisations. They are not proposed again.", "",
+              "| names | overlap | shared | seasons | reason | team ids |", "|---|---|---|---|---|---|"]
+    lines += [f"| {' / '.join(p.names)} | {p.roster_overlap:.0%} | {p.shared_players}/{p.smaller_roster} | "
+              f"{', '.join(map(str, p.seasons))} | {p.note or ''} | "
+              f"{'<br>'.join('`' + t + '`' for t in p.team_ids)} |" for p in rejected] or ["| none | | | | | |"]
     if unmapped:
         lines += ["", f"## Unmapped team ids ({len(unmapped)})", "",
                   "These stay queryable as themselves; nothing is assumed about them.", "",

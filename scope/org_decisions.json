@@ -1,5 +1,5 @@
 {
-  "note": "Reviewed org identity. Keys are FACEIT team ids; each maps to the org it belongs to. A team id absent from this file stays unmapped and is queryable as itself. Edit by hand or with `python -m owcsmuse orgs decide`.",
+  "note": "Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it belongs to. A team id absent from this file stays unmapped and is queryable as itself. `rejections` are pairs that were reviewed and turned down; they are never proposed again. Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`.",
   "decisions": {
     "c6248ff8-64ff-47ad-8602-7eec0eeda9b0": {
       "org_id": "dhillducks",
@@ -157,6 +157,20 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "0c629c99-0333-47f6-96c9-87c0617a9d21": {
+      "org_id": "students-of-the-game",
+      "org_name": "Students of the Game",
+      "note": "reviewed merge: same org, 100% roster overlap across a 3 day gap in 2024; SOG is the abbreviation the org played under later that season",
+      "evidence": [],
+      "decided_at": "2026-09-18T01:43:48+00:00"
+    },
+    "d566d889-7885-4e74-a9dc-d29c111d2c1e": {
+      "org_id": "students-of-the-game",
+      "org_name": "Students of the Game",
+      "note": "reviewed merge: same org, 100% roster overlap across a 3 day gap in 2024; SOG is the abbreviation the org played under later that season",
+      "evidence": [],
+      "decided_at": "2026-09-18T01:43:49+00:00"
+    },
     "9870dc60-9607-4fde-8e81-c729349f4087": {
       "org_id": "team-peps",
       "org_name": "Team Peps",
@@ -182,6 +196,20 @@
         "seasons 2024, 2025, 2026; 40 + 16 matches"
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "bb5dd404-213c-430f-8d12-8687fc3ff747": {
+      "org_id": "virtus-pro",
+      "org_name": "Virtus pro",
+      "note": "reviewed merge: same org, one FACEIT name with a space and one without",
+      "evidence": [],
+      "decided_at": "2026-09-18T01:43:50+00:00"
+    },
+    "c02a9899-1ab2-46fb-a87d-8e7dcecb0cba": {
+      "org_id": "virtus-pro",
+      "org_name": "Virtus pro",
+      "note": "reviewed merge: same org, one FACEIT name with a space and one without",
+      "evidence": [],
+      "decided_at": "2026-09-18T01:43:51+00:00"
     },
     "0fb417ca-dbf3-4fa7-a4b7-538f73234069": {
       "org_id": "vision-esports",
@@ -234,6 +262,68 @@
         "seasons 2024; 2 + 4 matches"
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
+    }
+  },
+  "rejections": {
+    "10fdda79-bf26-4b61-8823-48d9d531c027|46f8e560-76fe-4b5f-85e7-397957e0dc74": {
+      "team_ids": [
+        "10fdda79-bf26-4b61-8823-48d9d531c027",
+        "46f8e560-76fe-4b5f-85e7-397957e0dc74"
+      ],
+      "names": [
+        "Al qadsiah",
+        "Geekay Esports"
+      ],
+      "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
+      "decided_at": "2026-09-18T01:43:55+00:00"
+    },
+    "3c56dcad-8041-4214-86bd-ac75db1d610f|590b7d3b-a200-47b9-a967-f02274c1977b": {
+      "team_ids": [
+        "3c56dcad-8041-4214-86bd-ac75db1d610f",
+        "590b7d3b-a200-47b9-a967-f02274c1977b"
+      ],
+      "names": [
+        "LeftRightGnight",
+        "Geekay Esports"
+      ],
+      "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
+      "decided_at": "2026-09-18T01:43:53+00:00"
+    },
+    "3c56dcad-8041-4214-86bd-ac75db1d610f|cefc3f72-5641-43f4-ae4f-bb5eee3b564d": {
+      "team_ids": [
+        "3c56dcad-8041-4214-86bd-ac75db1d610f",
+        "cefc3f72-5641-43f4-ae4f-bb5eee3b564d"
+      ],
+      "names": [
+        "LeftRightGnight",
+        "NTMR"
+      ],
+      "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
+      "decided_at": "2026-09-18T01:43:54+00:00"
+    },
+    "590b7d3b-a200-47b9-a967-f02274c1977b|cefc3f72-5641-43f4-ae4f-bb5eee3b564d": {
+      "team_ids": [
+        "590b7d3b-a200-47b9-a967-f02274c1977b",
+        "cefc3f72-5641-43f4-ae4f-bb5eee3b564d"
+      ],
+      "names": [
+        "Geekay Esports",
+        "NTMR"
+      ],
+      "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
+      "decided_at": "2026-09-18T01:43:51+00:00"
+    },
+    "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e|cd157523-5c58-41bc-b62d-e1a635ea61b8": {
+      "team_ids": [
+        "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+        "cd157523-5c58-41bc-b62d-e1a635ea61b8"
+      ],
+      "names": [
+        "NTMR",
+        "Dallas Fuel"
+      ],
+      "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
+      "decided_at": "2026-09-18T01:43:52+00:00"
     }
   }
 }
