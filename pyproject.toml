@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "ruff>=0.6"]
 
 [project.scripts]
 owcsmuse = "owcsmuse.cli:main"
@@ -25,3 +25,20 @@ include = ["owcsmuse*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+# Lint for correctness, not for style: undefined and unused names, mutable
+# defaults, except-without-type, loop-variable bugs. Line length and statement
+# layout are left alone deliberately - a gate that fires on formatting stops
+# being read, and this codebase's long lines are SQL and argparse tables that
+# are clearer in one piece.
+[tool.ruff]
+line-length = 130
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+ignore = [
+    "E501",   # line length: see above
+    "E702",   # `x = p.add_parser(...); x.add_argument(...)` reads as one unit in the CLI table
+    "E741",   # `l` as a name: only ever a short loop variable here
+]

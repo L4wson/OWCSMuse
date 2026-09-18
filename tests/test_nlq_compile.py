@@ -1,6 +1,5 @@
 """Validator and compiler tests with a hand-built SchemaInfo: no database, no model."""
 
-import pytest
 
 from owcsmuse.nlq.compile import Compiled, Resolved, compile_query
 from owcsmuse.nlq.parser import parse_question

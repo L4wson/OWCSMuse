@@ -9,7 +9,7 @@ import pytest
 
 from owcsmuse import liquipedia as LP
 from owcsmuse.nlq.pipeline import _fmt
-from owcsmuse.nlq.schema import Filters, StructuredQuery, Unanswerable
+from owcsmuse.nlq.schema import StructuredQuery, Unanswerable
 from owcsmuse.nlq.validate import SchemaInfo, Validated, validate
 from owcsmuse.resolve import ENTITY_ID, rank_candidates
 
@@ -109,7 +109,9 @@ dbonly = pytest.mark.skipif(not DB_URL, reason="OWCS_TEST_DATABASE_URL not set")
 
 @dbonly
 def test_stat_kinds_classify_the_real_key_set(agg_db):
-    q = lambda s, *a: agg_db.execute(s, a).fetchall()
+    def q(sql, *a):
+        return agg_db.execute(sql, a).fetchall()
+
     kinds = {k: q("select stat_kind(%s) k", k)[0]["k"] for k in
              ("Eliminations", "Final Blows", "Role", "Team", "K/D Ratio", "Eliminations/10m",
               "Damage as percent of total output", "Healing Done", "Time Played")}

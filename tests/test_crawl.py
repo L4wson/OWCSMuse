@@ -9,7 +9,7 @@ from datetime import date, datetime, timezone
 import pytest
 
 from owcsmuse.crawl import _gap_flags
-from owcsmuse.liquipedia import LPMatch, parse_matches
+from owcsmuse.liquipedia import parse_matches
 from owcsmuse.parsers.matches import parse_history_item, parse_match_detail, results_differ, winner_flipped
 from owcsmuse.parsers.stats import parse_match_stats
 from owcsmuse.scope import Decisions, classify_history_competition

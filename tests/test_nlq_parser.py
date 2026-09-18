@@ -1,6 +1,7 @@
 """Question -> structured query pairs for the deterministic parser. No database, no model."""
 
 import pytest
+from pydantic import ValidationError
 
 from owcsmuse.nlq.parser import parse_question
 from owcsmuse.nlq.schema import StructuredQuery, Unanswerable
@@ -140,9 +141,9 @@ def test_unanswerable_questions_return_a_specific_reason(question, codes):
 def test_parsed_object_is_validated_by_pydantic():
     q = parse_question("top 500 players by eliminations")
     assert isinstance(q, StructuredQuery) and q.limit == 100  # clamped to the schema max
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         StructuredQuery(intent="leaderboard", entity="player", metric="Eliminations", limit=0)
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         StructuredQuery(intent="teleport", entity="player")
 
 

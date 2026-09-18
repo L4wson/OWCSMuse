@@ -237,7 +237,7 @@ class Crawler:
                     main_items += int(is_main)
                     batch.append((it, rec, is_main))
                 self._record_history_matches(cur, batch, generation, pid)
-                for it, rec, is_main in batch:
+                for _item, rec, is_main in batch:
                     if is_main:
                         self._ensure_history_championship(cur, rec, cls)
                         self.collector._upsert_teams(cur, rec)
