@@ -1,5 +1,7 @@
 # OWCS Muse: ingestion layer
 
+[![CI](https://github.com/L4wson/OWCSMuse/actions/workflows/ci.yml/badge.svg)](https://github.com/L4wson/OWCSMuse/actions/workflows/ci.yml)
+
 Pulls Overwatch Champions Series (OWCS) match data from the FACEIT Data API v4
 into a local Postgres warehouse. No web layer, no ORM: Python 3.11+, `httpx`,
 `psycopg`, `pydantic-settings`, plain SQL migrations, `pytest`.
@@ -250,9 +252,129 @@ What FACEIT holds, as of 2026-09-17:
   Their matches are fully served by `/matches/{id}` and `/matches/{id}/stats`
   (2026 payloads, ~47 stat keys) and are discoverable only through
   `/players/{id}/history`, which reports the competition id and name per
-  match. Ingesting them needs a history-crawl LIST phase seeded from known
-  rosters; that is not built yet and nothing from it is ingested.
+  match. They are ingested through the history crawl below.
 - 2024 Stages 3 and 4 exist on FACEIT only as open qualifiers.
+
+### History crawl
+
+`owcsmuse/crawl.py` is a LIST phase for the competitions the championship
+endpoints hide. It seeds from the rosters already ingested, reads
+`/players/{id}/history`, records every match under a competition that
+classifies as in scope, and adds the opposing rosters to the next generation's
+frontier. It is resumable and instrumented for completeness: `crawl status`
+reports the convergence curve (players crawled, new matches per generation),
+the frontier, per-competition coverage and gap flags.
+
+```bash
+python -m owcsmuse crawl seed --from-rosters
+python -m owcsmuse crawl run --dry-run      # request projection, before spending any
+python -m owcsmuse crawl run
+python -m owcsmuse crawl status
+python -m owcsmuse crawl competitions       # discovered competitions, for the same review gate
+```
+
+It converged in two generations: 315 players / 2,273 requests / 232 new
+matches, then 99 players / 724 requests / 0 new matches. Discovered
+competitions go through `classify` and `scope/decisions.json` exactly like
+anything found by `discover`; the crawl marks nothing included by itself.
+
+## Known limitations
+
+Coverage percentages say how much of a stat exists. They do not say why it is
+missing, and here the gaps are not random. `owcsmuse/limitations.py` holds these
+as data; `python -m owcsmuse limitations` prints them, and `ask` attaches the
+ones a question lands in to its answer.
+
+### Offline and LAN days have series results but no map stats
+
+`offline_map_stats` - FACEIT records a result for an offline series without
+per-map player stats, so those series land in `result_only`: the winner and
+series score are known, the maps are not. 100 of 509 finished series in scope
+are `result_only`, and they are not spread evenly - 52 of 118 series in playoff
+and LAN competitions have no map stats against 48 of 391 elsewhere, and all 14
+Dreamhack Dallas matches are `result_only`. **Map-grain answers therefore
+under-represent exactly the matches that mattered most.** Series-grain answers
+(`record`, `series record against`) still count them, and a versus answer names
+the series it had to exclude.
+
+### 2024 carries 9 stat keys; 2025 and 2026 carry 47
+
+`stats_2024` - the 2024 payloads expose only Eliminations, Deaths, Assists,
+Damage Dealt, Healing Done, Damage Mitigated, K/D Ratio, Result and Role. Per-10
+minute rates, Final Blows, Solo Kills, Objective Time and Time Played do not
+exist for that season at all, so an all-seasons leaderboard for any of them is a
+2025+ leaderboard wearing an all-time label. `stat_coverage_season` is the
+machine-readable form of this.
+
+### Map duration is derived, and only from 2025 onward
+
+`map_duration` - no payload carries a map duration field. `map_durations`
+derives it from the per-player `Time Played` stat, which 2024 does not have, so
+1,004 of 1,482 ingested maps carry a duration and every one that does not is
+2024.
+
+### Scope is OWCS NA + EMEA main competition
+
+`scope_na_emea` - Korea, China, Japan and the Pacific regions are not ingested,
+nor are open qualifiers, community cups or relegation brackets held outside the
+main series. Korea in particular has no usable FACEIT data at all. A leaderboard
+here ranks NA and EMEA main-competition play, not OWCS worldwide.
+
+### The 2025 and 2026 main series is reconstructed from player history
+
+`main_series_2025_2026` - FACEIT publishes those OWCS Central divisions on no
+championship, hub or league endpoint and in no search result. They were
+assembled by the roster-seeded crawl above, which ran to convergence, so a
+series played entirely by players the crawl never reached would be absent with
+nothing to indicate it. 2024 comes from the championship endpoints directly and
+carries no such caveat.
+
+## Team identity (orgs)
+
+FACEIT issues a new team id per season, so one organisation appears as several
+team ids and every cross-season team query silently undercounts. `orgs` and
+`team_orgs` (migration `009_orgs.sql`) give an organisation a stable id with
+team ids as the mutable handles, mirroring how `players.player_id` is stable and
+nicknames are history. A team id belongs to exactly one org.
+
+```bash
+python -m owcsmuse orgs propose                  # writes scope/org_report.md with the evidence
+python -m owcsmuse orgs decide <team_id> --org <org-id> --org-name "Name" --note "..."
+python -m owcsmuse orgs reject <id_a> <id_b> --reason "..."   # decided: different orgs
+python -m owcsmuse orgs load                     # write decided mappings into orgs / team_orgs
+python -m owcsmuse orgs status
+python -m owcsmuse refresh                       # required: the aggregates carry org_key
+```
+
+Nothing merges without review. Proposals go through `scope/org_decisions.json`
+the same way scope decisions go through `scope/decisions.json`, and a rejection
+is recorded as a decision too, so a pair that was looked at and turned down
+never returns as pending review. An unmapped team id stays unmapped and keys as
+`team:<id>`, visibly itself in any grouping - there is no silent fallback.
+
+**What the evidence is actually worth.** The proposer weighs three signals:
+name identity after folding, roster overlap across the two date windows, and
+date adjacency. Reviewing the output on real data inverted the expected
+ordering:
+
+- **Roster overlap is weak evidence, and sometimes points the wrong way.** In
+  esports whole rosters move between organisations, so a squad that transferred
+  looks identical to a rename. Four pairs at 80-100% overlap - Geekay Esports /
+  NTMR, NTMR / Dallas Fuel, LeftRightGnight / Geekay Esports, Al qadsiah /
+  Geekay Esports - are distinct organisations. Meanwhile the one real rename in
+  the data, Al qadsiah to qadsiah, shared **1 of 8** players, because the roster
+  turned over at the same time. Merging on overlap would have made four wrong
+  merges and missed the right one.
+- **Name identity is the reliable signal**, with two guards: generic tokens
+  (`team`, `esports`, `gaming`, ...) carry no identity, so "Team X" and "X" are
+  the same handle; and an added academy or B-team token refuses the match
+  outright, so `name_contains("Team Liquid", "Liquid Academy")` is `False` and
+  says why. Nothing here does fuzzy string similarity.
+- **Date adjacency corroborates.** Two ids whose match windows overlap may be
+  two teams that coexisted, which is reported rather than assumed.
+
+Current state: 11 orgs covering 22 team ids, 5 pairs recorded as reviewed
+rejections, 58 team ids unmapped and queryable as themselves.
 
 ## Aggregation layer
 
@@ -369,12 +491,73 @@ Tests: `tests/test_nlq_parser.py` holds 60+ question / expected-object pairs
 hand-built schema, all without a database or model. `tests/test_nlq_db.py`
 runs `ask()` end to end on the fixture data when a database is configured.
 
+## Versus queries
+
+`versus` answers "X against Y" at **map** grain for any two entities - player vs
+player, player vs org, org vs org - from `fact_player_versus` and
+`agg_org_versus_maps`, each row carrying maps, matches and the seasons covered.
+`season_compare` puts one entity's season against its own other season.
+
+```bash
+python -m owcsmuse ask "Sugarfree map record against Zeruhh"
+python -m owcsmuse ask "Twisted Minds vs Al Qadsiah"
+python -m owcsmuse ask "2024 Twisted Minds vs 2026 Twisted Minds"
+python -m owcsmuse ask "Twisted Minds series record against ENCE"   # series grain instead
+```
+
+`result_only` series contribute no map rows, so they cannot deflate a record
+unnoticed: the answer counts them separately and says how many series and how
+many maps by series score are excluded. An empty result distinguishes "never
+met" from "met, but FACEIT recorded no maps".
+
+## Consistency checks
+
+Three bugs in this project had the same shape: a join or key mismatch that
+returned a plausible, smaller answer instead of failing - a NULL season that
+made a coverage join false, a NULL `started_at` that hid 30 matches from every
+date-keyed view, and team aggregates still keyed on `team_id` after the resolver
+began returning org ids. None raised anything. A wrong answer that looks like a
+right one is the worst failure this product has.
+
+`python -m owcsmuse check` asserts the invariants against whatever is loaded,
+and exits 1 with the specific discrepancy:
+
+| check | invariant |
+|---|---|
+| `fact_view_reconciliation` | every fact view's row count equals what its source tables say it must be, at that view's grain |
+| `date_visibility` | every in-scope match has a usable `match_time()` and appears in the date-keyed views; no fact row has a NULL date |
+| `org_key_resolution` | every team id resolves to an org key, unmapped ids are counted explicitly, and no materialized view is still carrying a superseded org key |
+| `aggregate_sums` | the aggregates' sums equal the facts' sums, per stat, per season, in both the wide and long formats |
+| `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
+
+```bash
+python -m owcsmuse check
+python -m owcsmuse check --only aggregate_sums --json
+```
+
+`tests/test_consistency.py` covers both directions: the checks pass on the
+fixture warehouse, and each one fails with the right discrepancy when its
+invariant is deliberately broken (an undated match, an edited stat under a stale
+aggregate, a deleted player row, an unrefreshed org merge).
+
+## CI
+
+`.github/workflows/ci.yml` runs on every push and pull request:
+
+| job | what it runs |
+|---|---|
+| `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
+| `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
+| `database tests` | `pytest` against a `postgres:16` service container, with the full integration suite |
+| `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it |
+
 ## Tests
 
 ```bash
 pytest                                        # parsers, rate limiter, client, classifier, resolver: no network, no DB
 OWCS_TEST_DATABASE_URL="postgresql://..." pytest            # adds the Postgres integration tests
 OWCS_TEST_DATABASE_URL="postgresql://..." OWCS_TEST_SCHEMA=owcs_test pytest
+ruff check .                                  # the lint gate CI runs
 ```
 
 The database tests never touch `public`: they drop and recreate the scratch
@@ -403,12 +586,21 @@ EMEA Stage 1 Main Event and OWCS 2026 OQ EMEA:
 migrations/001_initial.sql      schema
 migrations/002_scope.sql        scope_region / tier / season / classification columns
 migrations/003_aggregates.sql   fact views, materialized aggregates, coverage functions, entity_names
+migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus facts
 owcsmuse/scope.py               classifier, decisions file, review report
+owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
+owcsmuse/crawl.py               history crawl: frontier, generations, completeness instrumentation
+owcsmuse/consistency.py         warehouse invariants behind `python -m owcsmuse check`
+owcsmuse/limitations.py         known gaps, surfaced by `ask` and documented above
 owcsmuse/aggregates.py          refresh + coverage-aware leaderboard helpers
 owcsmuse/resolve.py             entity resolver
 owcsmuse/nlq/                   question -> StructuredQuery -> validate -> compile -> answer
 scope/decisions.json            reviewed scope decisions (commit this)
+scope/org_decisions.json        reviewed org merges and rejections (commit this)
 scope/classification_report.md  generated review table
+scope/org_report.md             generated org proposal table
+tools/build_fixture_db.py       CI: a warehouse from the captured fixtures
+.github/workflows/ci.yml        lint, offline tests, database tests, consistency checks
 owcsmuse/config.py              pydantic-settings
 owcsmuse/logging.py             JSON / text structured logging
 owcsmuse/db.py                  connect, migrate, RawPayloadStore
