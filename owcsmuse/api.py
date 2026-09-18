@@ -55,9 +55,8 @@ class ConnectionPool:
 
     def __init__(self, settings: Settings, size: int = 4) -> None:
         self.settings = settings
-        self.size = size
+        self.size = size                      # idle connections kept, not a concurrency cap
         self._free: list[psycopg.Connection] = []
-        self._created = 0
         self._lock = threading.Lock()
 
     def _new(self) -> psycopg.Connection:
@@ -67,17 +66,12 @@ class ConnectionPool:
     def connection(self) -> Iterator[psycopg.Connection]:
         with self._lock:
             conn = self._free.pop() if self._free else None
-            if conn is None:
-                self._created += 1
-        if conn is None:
-            conn = self._new()
+        conn = conn or self._new()
         try:
             yield conn
         except Exception:
             # A connection that saw an error is not returned to the pool; an
             # aborted transaction would poison the next request.
-            with self._lock:
-                self._created -= 1
             try:
                 conn.close()
             except Exception:
@@ -88,12 +82,11 @@ class ConnectionPool:
                 if len(self._free) < self.size:
                     self._free.append(conn)
                     return
-                self._created -= 1
             conn.close()
 
     def close(self) -> None:
         with self._lock:
-            conns, self._free, self._created = self._free, [], 0
+            conns, self._free = self._free, []
         for c in conns:
             try:
                 c.close()
