@@ -26,6 +26,9 @@ from .faceit.client import FaceitClient
 from .logging import configure_logging
 from .parsers.championships import OWCS_PATTERN
 from .resolve import resolve
+from .orgs import (DEFAULT_ORG_DECISIONS_PATH, DEFAULT_ORG_REPORT_PATH, OrgDecisions,
+                   load_decisions as load_org_decisions, propose as propose_orgs,
+                   render_report as render_org_report, unmapped_teams)
 from .scope import DEFAULT_DECISIONS_PATH, REGIONS, TIERS, Decisions
 
 DEFAULT_REPORT_PATH = "scope/classification_report.md"
@@ -275,6 +278,51 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
     return 0
 
 
+def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
+    decisions = OrgDecisions(args.decisions)
+    with connect(settings.database_url, schema=settings.db_schema) as conn:
+        if args.orgs_cmd == "decide":
+            decisions.set(args.team_id, args.org, args.org_name or args.org, args.note)
+            path = decisions.save()
+            _print({"decisions_file": str(path), "team_id": args.team_id, "decision": decisions.get(args.team_id)})
+            return 0
+        if args.orgs_cmd == "forget":
+            removed = decisions.unset(args.team_id)
+            decisions.save()
+            _print({"team_id": args.team_id, "removed": removed})
+            return 0
+        if args.orgs_cmd == "load":
+            _print(load_org_decisions(conn, decisions))
+            return 0
+        proposals = decisions.apply(propose_orgs(conn))
+        if args.orgs_cmd == "propose":
+            report = Path(args.report)
+            report.parent.mkdir(parents=True, exist_ok=True)
+            report.write_text(render_org_report(proposals, unmapped_teams(conn)), encoding="utf-8")
+            _print({
+                "report": str(report),
+                "proposals": len(proposals),
+                "strong": sum(1 for p in proposals if p.strength == "strong"),
+                "review_required": sum(1 for p in proposals if p.strength != "strong"),
+                "already_decided": sum(1 for p in proposals if p.decision_source == "manual"),
+                "pairs": [{"org": p.org_name, "names": p.names, "overlap": p.roster_overlap,
+                           "shared": f"{p.shared_players}/{p.smaller_roster}", "seasons": p.seasons,
+                           "strength": p.strength, "decided": p.include, "team_ids": p.team_ids}
+                          for p in proposals],
+            })
+            return 0
+        if args.orgs_cmd == "status":
+            with conn.cursor() as cur:
+                cur.execute("SELECT o.org_id, o.name, count(tm.team_id) AS team_ids,"
+                            " array_agg(tm.team_id) AS ids FROM orgs o"
+                            " LEFT JOIN team_orgs tm USING (org_id) GROUP BY o.org_id, o.name ORDER BY o.name")
+                orgs = [dict(r) for r in cur.fetchall()]
+            conn.commit()
+            _print({"orgs": orgs, "unmapped_team_ids": len(unmapped_teams(conn))})
+            return 0
+    return 0
+
+
 def cmd_ask(args: argparse.Namespace, settings: Settings) -> int:
     from .nlq.pipeline import ask, render_text
 
@@ -443,6 +491,18 @@ def build_parser() -> argparse.ArgumentParser:
     ca.add_argument("--map", default="scope/liquipedia_map.json")
     ca.add_argument("--date-tolerance", type=int, default=1)
     lq.set_defaults(func=cmd_liquipedia)
+
+    og = sub.add_parser("orgs", help="org-level team identity: propose, review, apply")
+    og.add_argument("--decisions", default=str(DEFAULT_ORG_DECISIONS_PATH))
+    ogs = og.add_subparsers(dest="orgs_cmd", required=True)
+    pr = ogs.add_parser("propose", help="write the proposal report with evidence")
+    pr.add_argument("--report", default=str(DEFAULT_ORG_REPORT_PATH))
+    de = ogs.add_parser("decide", help="map one team id to an org")
+    de.add_argument("team_id"); de.add_argument("--org", required=True); de.add_argument("--org-name"); de.add_argument("--note")
+    fg = ogs.add_parser("forget", help="unmap a team id"); fg.add_argument("team_id")
+    ogs.add_parser("load", help="write decided mappings into orgs / team_orgs")
+    ogs.add_parser("status", help="orgs and how many team ids each covers")
+    og.set_defaults(func=cmd_orgs)
 
     ak = sub.add_parser("ask", help="answer a natural-language stats question (structured query, never free SQL)")
     ak.add_argument("question")

@@ -102,8 +102,11 @@ def test_team_metric_asked_of_a_player_is_rejected():
     assert isinstance(u, Unanswerable) and u.code == "unsupported_metric"
 
 
-def test_head_to_head_cannot_take_a_map_filter():
-    u = validate(parse("Twisted Minds vs ENCE on Lijiang Tower"), INFO)
+def test_map_filter_is_allowed_on_versus_but_not_on_a_series_record():
+    # "X vs Y" is answered at map grain now, so filtering to one map is meaningful
+    assert isinstance(validate(parse("Twisted Minds vs ENCE on Lijiang Tower"), INFO), Validated)
+    # the series-grain record has no map dimension to filter on
+    u = validate(parse("Twisted Minds series record against ENCE on Lijiang Tower"), INFO)
     assert isinstance(u, Unanswerable) and u.code == "unsupported_question"
 
 
@@ -165,7 +168,8 @@ def test_kd_ratio_compiles_from_sums():
 def test_team_record_and_map_record():
     v = validate(StructuredQuery(intent="team_record", entity="team", metric="record", filters=Filters(team="tm", season=2024)), INFO)
     c = _sql(v, R_TEAM)
-    assert "agg_team_matches" in c.sql and c.params == ["t1", 2024]
+    # team-level aggregates key on org_key; an unmapped team id keys as team:<id>
+    assert "agg_team_matches" in c.sql and c.params == ["team:t1", 2024]
     v = validate(StructuredQuery(intent="team_record", entity="team", metric="record", filters=Filters(team="tm", mode="Control")), INFO)
     c = _sql(v, R_TEAM)
     assert "agg_team_maps" in c.sql and "game_mode = %s" in c.sql
@@ -177,7 +181,7 @@ def test_team_leaderboard_by_win_rate():
 
 
 def test_head_to_head_orders_pair_and_presents_from_first_team():
-    v = validate(parse("Twisted Minds vs ENCE in 2024"), INFO)
+    v = validate(parse("Twisted Minds series record against ENCE in 2024"), INFO)
     c = _sql(v, Resolved(team_id="t2", opponent_id="t1", names={"team": "Twisted Minds", "opponent": "ENCE"}))
     assert "agg_head_to_head" in c.sql and c.params[2:4] == ["t1", "t2"]
     assert "sum(b_wins) AS wins" in c.sql  # first-named team is team_b

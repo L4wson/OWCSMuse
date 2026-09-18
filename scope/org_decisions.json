@@ -1,0 +1,239 @@
+{
+  "note": "Reviewed org identity. Keys are FACEIT team ids; each maps to the org it belongs to. A team id absent from this file stays unmapped and is queryable as itself. Edit by hand or with `python -m owcsmuse orgs decide`.",
+  "decisions": {
+    "c6248ff8-64ff-47ad-8602-7eec0eeda9b0": {
+      "org_id": "dhillducks",
+      "org_name": "Dhillducks",
+      "team_name": "DhillDucks",
+      "note": "merged on name identity: names fold identically ('dhillducks')",
+      "evidence": [
+        "names fold identically ('dhillducks')",
+        "roster overlap 57%: 4 of the smaller 7-player roster shared",
+        "match windows do not overlap, 225 day gap (2024-04-12..2025-10-12 then 2026-05-26..2026-05-27)",
+        "seasons 2024, 2025, 2026; 17 + 2 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "db345f31-2da8-4212-b3f5-5c5442e17f68": {
+      "org_id": "dhillducks",
+      "org_name": "Dhillducks",
+      "team_name": "Dhillducks",
+      "note": "merged on name identity: names fold identically ('dhillducks')",
+      "evidence": [
+        "names fold identically ('dhillducks')",
+        "roster overlap 57%: 4 of the smaller 7-player roster shared",
+        "match windows do not overlap, 225 day gap (2024-04-12..2025-10-12 then 2026-05-26..2026-05-27)",
+        "seasons 2024, 2025, 2026; 17 + 2 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "46f8e560-76fe-4b5f-85e7-397957e0dc74": {
+      "org_id": "geekay-esports",
+      "org_name": "Geekay Esports",
+      "team_name": "Geekay Esports",
+      "note": "merged on name identity: names fold identically ('geekay esports')",
+      "evidence": [
+        "names fold identically ('geekay esports')",
+        "roster overlap 0%: 0 of the smaller 5-player roster shared",
+        "match windows do not overlap, 146 day gap (2025-05-11..2025-10-26 then 2026-03-22..2026-07-05)",
+        "seasons 2025, 2026; 16 + 23 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "590b7d3b-a200-47b9-a967-f02274c1977b": {
+      "org_id": "geekay-esports",
+      "org_name": "Geekay Esports",
+      "team_name": "Geekay Esports",
+      "note": "merged on name identity: names fold identically ('geekay esports')",
+      "evidence": [
+        "names fold identically ('geekay esports')",
+        "roster overlap 0%: 0 of the smaller 5-player roster shared",
+        "match windows do not overlap, 146 day gap (2025-05-11..2025-10-26 then 2026-03-22..2026-07-05)",
+        "seasons 2025, 2026; 16 + 23 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e": {
+      "org_id": "ntmr",
+      "org_name": "NTMR",
+      "team_name": "NTMR",
+      "note": "merged on name identity: names fold identically ('ntmr')",
+      "evidence": [
+        "names fold identically ('ntmr')",
+        "roster overlap 15%: 2 of the smaller 13-player roster shared",
+        "match windows overlap, so these may be two teams that coexisted",
+        "seasons 2024, 2025; 45 + 20 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "cefc3f72-5641-43f4-ae4f-bb5eee3b564d": {
+      "org_id": "ntmr",
+      "org_name": "NTMR",
+      "team_name": "NTMR",
+      "note": "merged on name identity: names fold identically ('ntmr')",
+      "evidence": [
+        "names fold identically ('ntmr')",
+        "roster overlap 15%: 2 of the smaller 13-player roster shared",
+        "match windows overlap, so these may be two teams that coexisted",
+        "seasons 2024, 2025; 45 + 20 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "10fdda79-bf26-4b61-8823-48d9d531c027": {
+      "org_id": "qadsiah",
+      "org_name": "qadsiah",
+      "team_name": "Al qadsiah",
+      "note": "merged on name identity: names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
+      "evidence": [
+        "names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
+        "roster overlap 12%: 1 of the smaller 8-player roster shared",
+        "match windows do not overlap, 145 day gap (2025-01-31..2025-10-26 then 2026-03-21..2026-07-04)",
+        "seasons 2025, 2026; 34 + 14 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "97ef2653-81b3-45e4-b57f-4df4c27d3ea0": {
+      "org_id": "qadsiah",
+      "org_name": "qadsiah",
+      "team_name": "qadsiah",
+      "note": "merged on name identity: names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
+      "evidence": [
+        "names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
+        "roster overlap 12%: 1 of the smaller 8-player roster shared",
+        "match windows do not overlap, 145 day gap (2025-01-31..2025-10-26 then 2026-03-21..2026-07-04)",
+        "seasons 2025, 2026; 34 + 14 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "13576d6f-57ae-4b08-9755-89c14455667e": {
+      "org_id": "sheer-cold",
+      "org_name": "Sheer Cold",
+      "team_name": "Sheer Cold",
+      "note": "merged on name identity: names fold identically ('sheer cold')",
+      "evidence": [
+        "names fold identically ('sheer cold')",
+        "roster overlap 0%: 0 of the smaller 6-player roster shared",
+        "match windows do not overlap, 21 day gap (2024-03-08..2024-03-21 then 2024-04-12..2024-04-14)",
+        "seasons 2024; 2 + 6 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "23527e20-26a5-4798-a832-088749c4bde1": {
+      "org_id": "sheer-cold",
+      "org_name": "Sheer Cold",
+      "team_name": "Sheer Cold",
+      "note": "merged on name identity: names fold identically ('sheer cold')",
+      "evidence": [
+        "names fold identically ('sheer cold')",
+        "roster overlap 0%: 0 of the smaller 6-player roster shared",
+        "match windows do not overlap, 21 day gap (2024-03-08..2024-03-21 then 2024-04-12..2024-04-14)",
+        "seasons 2024; 2 + 6 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf": {
+      "org_id": "spacestation-gaming",
+      "org_name": "SpaceStation Gaming",
+      "team_name": "SpaceStation Gaming",
+      "note": "merged on name identity: names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
+      "evidence": [
+        "names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
+        "roster overlap 0%: 0 of the smaller 7-player roster shared",
+        "match windows do not overlap, 278 day gap (2024-03-08..2024-04-28 then 2025-02-01..2026-07-06)",
+        "seasons 2024, 2025, 2026; 50 + 19 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "a359db61-26e2-44e0-8961-e0b373f4db21": {
+      "org_id": "spacestation-gaming",
+      "org_name": "SpaceStation Gaming",
+      "team_name": "SpaceStation",
+      "note": "merged on name identity: names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
+      "evidence": [
+        "names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
+        "roster overlap 0%: 0 of the smaller 7-player roster shared",
+        "match windows do not overlap, 278 day gap (2024-03-08..2024-04-28 then 2025-02-01..2026-07-06)",
+        "seasons 2024, 2025, 2026; 50 + 19 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "9870dc60-9607-4fde-8e81-c729349f4087": {
+      "org_id": "team-peps",
+      "org_name": "Team Peps",
+      "team_name": "Team Peps",
+      "note": "merged on name identity: names fold identically ('team peps')",
+      "evidence": [
+        "names fold identically ('team peps')",
+        "roster overlap 33%: 4 of the smaller 12-player roster shared",
+        "match windows do not overlap, 278 day gap (2024-03-08..2024-04-28 then 2025-01-31..2026-05-27)",
+        "seasons 2024, 2025, 2026; 40 + 16 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "e85cb266-39cc-4840-ac56-c22c942bd093": {
+      "org_id": "team-peps",
+      "org_name": "Team Peps",
+      "team_name": "Team Peps",
+      "note": "merged on name identity: names fold identically ('team peps')",
+      "evidence": [
+        "names fold identically ('team peps')",
+        "roster overlap 33%: 4 of the smaller 12-player roster shared",
+        "match windows do not overlap, 278 day gap (2024-03-08..2024-04-28 then 2025-01-31..2026-05-27)",
+        "seasons 2024, 2025, 2026; 40 + 16 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "0fb417ca-dbf3-4fa7-a4b7-538f73234069": {
+      "org_id": "vision-esports",
+      "org_name": "Vision Esports",
+      "team_name": "Vision Esports",
+      "note": "merged on name identity: names fold identically ('vision esports')",
+      "evidence": [
+        "names fold identically ('vision esports')",
+        "roster overlap 14%: 1 of the smaller 7-player roster shared",
+        "match windows do not overlap, 195 day gap (2025-02-01..2025-02-23 then 2025-09-06..2025-10-19)",
+        "seasons 2025; 7 + 10 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "fca26779-47e9-4270-ad26-a3564812c1c6": {
+      "org_id": "vision-esports",
+      "org_name": "Vision Esports",
+      "team_name": "Vision Esports",
+      "note": "merged on name identity: names fold identically ('vision esports')",
+      "evidence": [
+        "names fold identically ('vision esports')",
+        "roster overlap 14%: 1 of the smaller 7-player roster shared",
+        "match windows do not overlap, 195 day gap (2025-02-01..2025-02-23 then 2025-09-06..2025-10-19)",
+        "seasons 2025; 7 + 10 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "1552cd57-967b-4d4e-b5ec-87b1a8318ee4": {
+      "org_id": "who-is-goldfish",
+      "org_name": "Who Is Goldfish",
+      "team_name": "Who Is Goldfish",
+      "note": "merged on name identity: names fold identically ('who is goldfish')",
+      "evidence": [
+        "names fold identically ('who is goldfish')",
+        "roster overlap 100%: 5 of the smaller 5-player roster shared",
+        "match windows do not overlap, 4 day gap (2024-04-12..2024-04-21 then 2024-04-25..2024-04-26)",
+        "seasons 2024; 2 + 4 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "6468b0e3-30d7-42e2-bc89-d71dd875eeb2": {
+      "org_id": "who-is-goldfish",
+      "org_name": "Who Is Goldfish",
+      "team_name": "Who is Goldfish",
+      "note": "merged on name identity: names fold identically ('who is goldfish')",
+      "evidence": [
+        "names fold identically ('who is goldfish')",
+        "roster overlap 100%: 5 of the smaller 5-player roster shared",
+        "match windows do not overlap, 4 day gap (2024-04-12..2024-04-21 then 2024-04-25..2024-04-26)",
+        "seasons 2024; 2 + 4 matches"
+      ],
+      "decided_at": "2026-09-17T22:39:36+00:00"
+    }
+  }
+}

@@ -10,11 +10,13 @@ Intent = Literal[
     "leaderboard",        # rank players/teams by a metric
     "entity_stat",        # one player's or team's number(s)
     "team_record",        # a team's series / map record
-    "head_to_head",       # two teams against each other
+    "head_to_head",       # two teams against each other (series grain)
+    "versus",             # any two entities against each other, at MAP grain
+    "season_compare",     # one entity in one season against itself in another
     "map_stats",          # rows are maps or modes
     "stat_availability",  # which stats exist for which season
 ]
-EntityType = Literal["player", "team", "map", "mode"]
+EntityType = Literal["player", "team", "org", "map", "mode"]
 Aggregation = Literal["total", "avg_per_map", "count", "rate"]
 Region = Literal["na", "emea", "international"]
 
@@ -50,7 +52,9 @@ class Filters(BaseModel):
     player: Optional[str] = None       # a player name as typed (resolved later)
     team: Optional[str] = None         # a team name as typed
     opponent: Optional[str] = None     # second team for head-to-head
-    subject: Optional[str] = None      # a name whose kind (player/team) is not stated
+    subject: Optional[str] = None      # a name whose kind (player/team/org) is not stated
+    subject_season: Optional[int] = Field(default=None, ge=2020, le=2035)   # per-side season, for "2024 X vs 2026 X"
+    opponent_season: Optional[int] = Field(default=None, ge=2020, le=2035)
     championship: Optional[str] = None # free text, matched against championship names
     season: Optional[int] = Field(default=None, ge=2020, le=2035)
     map: Optional[str] = None

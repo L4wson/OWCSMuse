@@ -58,9 +58,19 @@ def question_hint(name: str, entity_id: str) -> str:
 
 
 def _decide(cands: list[Candidate]) -> tuple[Optional[Candidate], bool]:
-    """(chosen, ambiguous). A tie between different entities is ambiguous."""
+    """(chosen, ambiguous). A genuine tie between entities is ambiguous.
+
+    An entity with no matches in scope is not a real alternative: when several
+    candidates score equally and only one of them has data, that one is the
+    answer. The empty namesake stays addressable by its id.
+    """
     if not cands:
         return None, False
+    top_score = cands[0].score
+    tied = [c for c in cands if c.score == top_score]
+    tied_with_data = [c for c in tied if c.matches]
+    if len(tied) > 1 and len(tied_with_data) == 1:
+        return tied_with_data[0], False
     top = cands[0]
     others = [c for c in cands[1:] if (c.entity_type, c.entity_id) != (top.entity_type, top.entity_id)]
     if top.score >= ACCEPT_SCORE and (not others or others[0].score <= top.score - CLEAR_MARGIN or others[0].score < ACCEPT_SCORE):
@@ -77,7 +87,8 @@ def resolve_entities(conn: psycopg.Connection, q: StructuredQuery) -> tuple[Opti
     r = Resolved()
     entities: dict[str, dict] = {}
     for role, name in q.filters.names():
-        etype = {"player": "player", "team": "team", "opponent": "team", "subject": None}[role]
+        # an org is a team-shaped entity; None lets a bare name resolve to either kind
+        etype = {"player": "player", "team": None, "opponent": None, "subject": None}[role]
         cands = resolve(conn, name, etype, limit=6)
         chosen, ambiguous = _decide(cands)
         if chosen is None:
@@ -97,12 +108,13 @@ def resolve_entities(conn: psycopg.Connection, q: StructuredQuery) -> tuple[Opti
                                 candidates={role: [c.as_dict() for c in cands]})
         entities[role] = chosen.as_dict()
         r.names[role] = chosen.current_name or chosen.matched_name
-        if role == "player" or (role == "subject" and chosen.entity_type == "player"):
+        if role == "opponent":
+            r.opponent_id, r.opponent_type = chosen.entity_id, chosen.entity_type
+        elif chosen.entity_type == "player":
             r.player_id = chosen.entity_id
-        elif role == "opponent":
-            r.opponent_id = chosen.entity_id
+            r.subject_type = "player"
         else:
-            r.team_id = chosen.entity_id
+            r.team_id, r.subject_type = chosen.entity_id, chosen.entity_type
     ans = Answer(status="ok", question="", entities=entities)
     return r, ans
 
@@ -126,6 +138,61 @@ def _retarget(q: StructuredQuery, r: Resolved) -> StructuredQuery:
                                         "metric": _PLAYER_EQUIVALENT.get(q.metric, q.metric)})
         return q.model_copy(update={"entity": "player" if q.intent != "map_stats" else q.entity, "filters": f})
     return q
+
+
+def _entity_match_filter(role_id: str, role_type: Optional[str]) -> tuple[str, list[Any]]:
+    """SQL that restricts `matches m` to those this entity took part in."""
+    if role_type == "player":
+        return ("EXISTS (SELECT 1 FROM match_rosters r WHERE r.match_id = m.match_id AND r.player_id = %s)", [role_id])
+    if role_type == "org":
+        return ("EXISTS (SELECT 1 FROM team_identity ti WHERE ti.org_id = %s"
+                " AND ti.team_id IN (m.faction1_team_id, m.faction2_team_id))", [role_id])
+    return ("%s IN (m.faction1_team_id, m.faction2_team_id)", [role_id])
+
+
+def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved, rows: list[dict]) -> list[str]:
+    """Series both sides played that carry no map stats.
+
+    A versus record is map grain, so a `result_only` series contributes nothing.
+    Saying so is the difference between "0-0" meaning "never met" and meaning
+    "met, but FACEIT recorded no maps".
+    """
+    left_id = r.player_id if r.subject_type == "player" else r.team_id
+    left_type = r.subject_type
+    if not (left_id and r.opponent_id):
+        return []
+    a_sql, a_params = _entity_match_filter(left_id, left_type)
+    b_sql, b_params = _entity_match_filter(r.opponent_id, r.opponent_type)
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                f"""
+                SELECT count(*) AS matches,
+                       sum(coalesce(m.faction1_score, 0) + coalesce(m.faction2_score, 0)) AS maps,
+                       array_agg(DISTINCT c.season ORDER BY c.season) AS seasons
+                FROM matches m JOIN championships c USING (championship_id)
+                WHERE c.include AND m.ingest_state = 'result_only' AND {a_sql} AND {b_sql}
+                  AND (%s::int IS NULL OR c.season = %s)
+                """,
+                a_params + b_params + [q.filters.season, q.filters.season],
+            )
+            row = cur.fetchone()
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        log_event(log, logging.WARNING, "missing_maps_note_failed", exc_info=True)
+        return []
+    if not row or not row["matches"]:
+        return []
+    seasons = ", ".join(map(str, row["seasons"] or []))
+    n = row["matches"]
+    plural = "series" if n == 1 else "series"
+    maps = row["maps"] or 0
+    if not rows or not (rows[0].get("maps") or 0):
+        return [f"They did meet: {n} {plural} in season {seasons} ({maps} maps by series score), "
+                "but FACEIT recorded no map stats for them, so none can count toward a map record."]
+    return [f"A further {n} {plural} between them in season {seasons} ({maps} maps by series score) "
+            "carry no map stats on FACEIT and are excluded from the record above."]
 
 
 def run_compiled(conn: psycopg.Connection, c: Compiled) -> list[dict]:
@@ -203,6 +270,37 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
                 + f"; seasons with it: {', '.join(map(str, coverage.get('seasons_with_stat') or []))}. "
                 "Rankings cover only the maps that have the stat."
             )
+    if q.intent == "versus":
+        notes += _missing_maps_note(conn, q, r, rows)
+        if rows and not (rows[0].get("maps") or 0):
+            left = r.names.get("subject") or r.names.get("player") or r.names.get("team") or ""
+            right = r.names.get("opponent") or ""
+            where = f" in {q.filters.season}" if q.filters.season else ""
+            if notes:
+                reason = f"{left} and {right} met{where}, but none of those series has map stats on FACEIT"
+                tips = ["The series results are known; only the per-map breakdown is missing."]
+            else:
+                reason = f"{left} and {right} never faced each other{where} in the competitions in scope"
+                tips = ["Check the spelling, or widen the season; scope is OWCS NA + EMEA main competition."]
+            u = Unanswerable(code="no_data", reason=reason, suggestions=tips)
+            a = _cannot(question, u, q, used)
+            a.entities, a.notes = pre.entities, notes
+            if debug:
+                a.sql, a.params = c.sql, c.params
+            return a
+    if not rows and q.intent == "season_compare":
+        name = r.names.get("subject") or r.names.get("team") or ""
+        yrs = [y for y in (q.filters.subject_season, q.filters.opponent_season) if y]
+        u = Unanswerable(
+            code="no_data",
+            reason=f"{name} has no maps with stats in {' or '.join(map(str, yrs))}, so there is nothing to compare",
+            suggestions=["The entity may have played only series whose maps FACEIT never recorded, "
+                         "or not played in those seasons at all. `ask \"<name> record\"` shows what is known."])
+        a = _cannot(question, u, q, used)
+        a.entities = pre.entities
+        if debug:
+            a.sql, a.params = c.sql, c.params
+        return a
     if not rows:
         u = Unanswerable(code="no_data", reason="the query is valid but nothing in scope matches these filters",
                          suggestions=["Loosen the season / championship / map filter, or check `status` for what has been ingested."])

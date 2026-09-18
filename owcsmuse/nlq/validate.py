@@ -129,8 +129,19 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
                             reason="the warehouse has no included, ingested matches yet, so nothing can be answered",
                             suggestions=["Review scope/classification_report.md, then `load-manifest --accept-proposals`, `backfill` and `refresh`."])
 
+    # --- per-side seasons on a comparison
+    for side in ("subject_season", "opponent_season"):
+        val = getattr(f, side, None)
+        if val is not None and val not in info.seasons:
+            have = ", ".join(str(s) for s in sorted(info.seasons)) or "none"
+            return Unanswerable(code="no_data", reason=f"no data for the {val} season; seasons with data: {have}")
+
     # --- metric
-    if q.intent != "stat_availability":
+    if q.intent in ("versus", "season_compare"):
+        if q.metric and q.metric not in DERIVED_METRICS and q.metric not in info.stat_keys:
+            return Unanswerable(code="unsupported_metric",
+                                reason=f"'{q.metric}' is not a stat in the warehouse")
+    elif q.intent != "stat_availability":
         if q.metric is None:
             return Unanswerable(code="invalid_query", reason="no metric given")
         if q.metric in DERIVED_METRICS:
@@ -198,6 +209,8 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
             return Unanswerable(code="unsupported_metric",
                                 reason=f"'{stat_key}' can only be sliced by season or championship, not by map, mode, team or region "
                                        f"(only these stats support that: {', '.join(TYPED_STATS)})")
+    if q.intent == "season_compare" and f.subject_season == f.opponent_season:
+        return Unanswerable(code="invalid_query", reason="both sides name the same season, so there is nothing to compare")
     if q.intent == "head_to_head" and (map_name or mode_name):
         return Unanswerable(code="unsupported_question", reason="head-to-head is tracked per series, not per map; drop the map/mode filter")
     if q.intent == "stat_availability" and (f.map or f.mode or f.championship):

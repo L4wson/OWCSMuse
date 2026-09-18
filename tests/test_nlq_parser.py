@@ -70,12 +70,12 @@ SUPPORTED = [
      {"intent": "team_record", "entity": "team", "metric": "record", "filters": {"subject": "twisted minds"}}),
     # ---- head to head
     ("Twisted Minds vs ENCE",
-     {"intent": "head_to_head", "entity": "team", "metric": "record", "filters": {"team": "twisted minds", "opponent": "ence"}}),
+     {"intent": "versus", "entity": "team", "metric": "map_win_rate", "filters": {"subject": "twisted minds", "opponent": "ence"}}),
     ("How did Twisted Minds do against ENCE in 2024?",
-     {"intent": "head_to_head", "entity": "team", "metric": "record", "filters": {"team": "twisted minds", "opponent": "ence", "season": 2024}}),
+     {"intent": "versus", "entity": "team", "metric": "map_win_rate", "filters": {"subject": "twisted minds", "opponent": "ence", "season": 2024}}),
     ("Head to head between Spacestation and Ex Oblivione",
-     {"intent": "head_to_head", "entity": "team", "metric": "record", "filters": {"team": "spacestation", "opponent": "ex oblivione"}}),
-    ("Twisted Minds vs ENCE in stage 1",
+     {"intent": "versus", "entity": "team", "metric": "map_win_rate", "filters": {"subject": "spacestation", "opponent": "ex oblivione"}}),
+    ("Twisted Minds series record against ENCE in stage 1",
      {"intent": "head_to_head", "entity": "team", "metric": "record", "filters": {"team": "twisted minds", "opponent": "ence", "championship": "stage 1"}}),
     # ---- map / mode rows
     ("Which map does Twisted Minds win the most?",

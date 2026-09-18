@@ -25,7 +25,10 @@ from typing import Any, Iterable, Optional
 import psycopg
 
 # A FACEIT player/team id, so an ambiguous name can be disambiguated by id.
-ENTITY_ID = re.compile(r"^(?:(?P<kind>player|team):)?(?P<id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$", re.I)
+ENTITY_ID = re.compile(
+    r"^(?:(?P<kind>player|team|org):)?"
+    r"(?P<id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$", re.I)
+ORG_ID = re.compile(r"^org:(?P<id>[a-z0-9-]+)$", re.I)
 
 _NON_ALNUM = re.compile(r"[^0-9a-z ]+")
 _SPACES = re.compile(r"\s+")
@@ -55,6 +58,7 @@ class Candidate:
     matched_name: str
     name_kind: str
     score: float
+    matches: int = 0          # in-scope matches, used only to break an exact tie
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -100,12 +104,16 @@ def rank_candidates(
             matched_name=row.get("name") or "",
             name_kind=row.get("name_kind") or "",
             score=round(s, 3),
+            matches=int(row.get("matches") or 0),
         )
         prev = best.get(key)
         # prefer higher score, then current names over historical ones
         if prev is None or (cand.score, cand.name_kind.startswith("current")) > (prev.score, prev.name_kind.startswith("current")):
             best[key] = cand
-    ranked = sorted(best.values(), key=lambda c: (-c.score, c.name_kind != "current_nickname", c.matched_name.lower()))
+    # On an exact tie, an entity with matches in scope beats one with none: two team
+    # ids can share a name while only one of them ever played.
+    ranked = sorted(best.values(),
+                    key=lambda c: (-c.score, -c.matches, c.name_kind != "current_nickname", c.matched_name.lower()))
     return ranked[:limit]
 
 
@@ -113,7 +121,7 @@ def load_names(conn: psycopg.Connection, entity_type: Optional[str] = None) -> l
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT entity_type, entity_id, name, name_kind, name_folded, current_name
+            SELECT entity_type, entity_id, name, name_kind, name_folded, current_name, matches
             FROM entity_names
             WHERE %s::text IS NULL OR entity_type = %s
             """,
@@ -129,7 +137,7 @@ def resolve_id(conn: psycopg.Connection, entity_id: str, entity_type: Optional[s
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT entity_type, entity_id, current_name, name, name_kind
+            SELECT entity_type, entity_id, current_name, name, name_kind, matches
             FROM entity_names
             WHERE entity_id = %s AND (%s::text IS NULL OR entity_type = %s) AND name_kind LIKE 'current%%'
             LIMIT 1
@@ -141,7 +149,8 @@ def resolve_id(conn: psycopg.Connection, entity_id: str, entity_type: Optional[s
     if not row:
         return []
     return [Candidate(entity_type=row["entity_type"], entity_id=row["entity_id"], current_name=row["current_name"],
-                      matched_name=row["name"], name_kind="entity_id", score=1.0)]
+                      matched_name=row["name"], name_kind="entity_id", score=1.0,
+                      matches=int(row.get("matches") or 0))]
 
 
 def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = None,
@@ -151,7 +160,11 @@ def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = N
     A bare FACEIT id (optionally prefixed `player:` / `team:`) resolves exactly,
     so two entities with identical names can still be told apart.
     """
-    m = ENTITY_ID.match((query or "").strip())
+    q = (query or "").strip()
+    m = ENTITY_ID.match(q)
     if m:
         return resolve_id(conn, m.group("id").lower(), m.group("kind") or entity_type)
+    m = ORG_ID.match(q)
+    if m:
+        return resolve_id(conn, m.group("id").lower(), "org")
     return rank_candidates(query, load_names(conn, entity_type), limit=limit, min_score=min_score)

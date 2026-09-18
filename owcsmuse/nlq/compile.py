@@ -16,11 +16,22 @@ from .validate import TYPED_STATS, Validated
 
 @dataclass
 class Resolved:
-    """Entity ids after resolution, keyed by filter role."""
+    """Entity ids after resolution, keyed by filter role.
+
+    `subject_type` / `opponent_type` are 'player', 'org' or 'team', which is what
+    decides whether a versus question is answered from the player-vs-player, the
+    player-vs-org or the org-vs-org fact.
+    """
     player_id: Optional[str] = None
     team_id: Optional[str] = None
     opponent_id: Optional[str] = None
+    subject_type: Optional[str] = None
+    opponent_type: Optional[str] = None
     names: dict[str, str] = field(default_factory=dict)  # role -> display name
+
+    def org_key(self, entity_id: str, entity_type: Optional[str]) -> str:
+        """How an org or unmapped team id is keyed in the fact views."""
+        return entity_id if entity_type == "org" else f"team:{entity_id}"
 
 
 @dataclass
@@ -72,6 +83,96 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
             params=params, description="stat availability per season", coverage_stat=None, sample_columns=("rows_total",),
         )
 
+    # ------------------------------------------------------------------ versus
+    # Map grain: the question "map record against X" is about maps, not series.
+    if q.intent == "versus":
+        if not (r.opponent_id and (r.player_id or r.team_id)):
+            return Unanswerable(code="invalid_query", reason="a versus question needs both sides resolved")
+        subject_is_player = r.subject_type == "player"
+        opponent_is_player = r.opponent_type == "player"
+        clauses, params = [], []
+        _where(clauses, params, "season", f.season)
+        _where(clauses, params, "championship_id", champ)
+        _where(clauses, params, "map_name", v.map_name)
+        _where(clauses, params, "game_mode", v.mode_name)
+
+        if subject_is_player and opponent_is_player:
+            head = ["player_id = %s", "opponent_player_id = %s"]
+            lead = [r.player_id, r.opponent_id]
+            table, desc = "fact_player_versus", "player vs player, map grain"
+        elif subject_is_player and not opponent_is_player:
+            head = ["player_id = %s", "opponent_org_key = %s"]
+            lead = [r.player_id, r.org_key(r.opponent_id, r.opponent_type)]
+            table, desc = "fact_player_versus", "player vs org, map grain"
+        elif not subject_is_player and opponent_is_player:
+            head = ["opponent_org_key = %s", "player_id = %s"]
+            lead = [r.org_key(r.team_id, r.subject_type), r.opponent_id]
+            table, desc = "fact_player_versus", "org vs player, map grain"
+        else:
+            head = ["org_key = %s", "opponent_org_key = %s"]
+            lead = [r.org_key(r.team_id, r.subject_type), r.org_key(r.opponent_id, r.opponent_type)]
+            table, desc = "fact_team_maps", "org vs org, map grain"
+
+        if table == "fact_player_versus" and not (subject_is_player and opponent_is_player):
+            # one row per map, not per opposing player, or a map counts five times
+            distinct = "DISTINCT (match_id, round_number)"
+        else:
+            distinct = None
+        where = " WHERE " + " AND ".join(head + clauses)
+        if table == "fact_player_versus":
+            base = (f"SELECT DISTINCT match_id, round_number, season, map_name, game_mode, won, drawn, started_at "
+                    f"FROM {table}{where}") if distinct else (
+                   f"SELECT match_id, round_number, season, map_name, game_mode, won, drawn, started_at "
+                   f"FROM {table}{where}")
+        else:
+            base = (f"SELECT match_id, round_number, season, map_name, game_mode, won, drawn, started_at "
+                    f"FROM {table}{where}")
+        sql = (
+            "WITH m AS (" + base + ") "
+            "SELECT %s AS subject, %s AS opponent, "
+            "count(*) AS maps, count(DISTINCT match_id) AS matches, "
+            "count(*) FILTER (WHERE won) AS map_wins, "
+            "count(*) FILTER (WHERE NOT won AND NOT drawn) AS map_losses, "
+            "count(*) FILTER (WHERE drawn) AS draws, "
+            "round(100.0 * count(*) FILTER (WHERE won) / nullif(count(*), 0), 1) AS map_win_pct, "
+            "array_agg(DISTINCT season ORDER BY season) AS seasons, "
+            "min(started_at) AS first_map_at, max(started_at) AS last_map_at "
+            "FROM m"
+        )
+        return Compiled(sql=sql, params=lead + params + [r.names.get("subject") or r.names.get("player") or r.names.get("team"),
+                                                          r.names.get("opponent")],
+                        description=desc, coverage_season=f.season, coverage_championship=single_champ,
+                        sample_columns=("maps", "matches"))
+
+    # ------------------------------------------------- one entity, two seasons
+    if q.intent == "season_compare":
+        if not (r.team_id or r.player_id):
+            return Unanswerable(code="invalid_query", reason="a season comparison needs the entity resolved")
+        seasons = [f.subject_season, f.opponent_season]
+        if not all(seasons):
+            return Unanswerable(code="invalid_query", reason="a season comparison needs a season on each side")
+        if r.player_id and r.subject_type == "player":
+            sql = ("SELECT season, %s AS entity, count(*) AS maps, count(DISTINCT match_id) AS matches, "
+                   "count(*) FILTER (WHERE map_won) AS map_wins, "
+                   "count(*) FILTER (WHERE NOT map_won AND NOT map_drawn) AS map_losses, "
+                   "round(100.0 * count(*) FILTER (WHERE map_won) / nullif(count(*), 0), 1) AS map_win_pct, "
+                   "sum(eliminations) AS eliminations, sum(deaths) AS deaths, "
+                   "round(sum(eliminations)::numeric / nullif(sum(deaths), 0), 2) AS kd_ratio, "
+                   "min(started_at) AS first_map_at, max(started_at) AS last_map_at "
+                   "FROM fact_player_maps WHERE player_id = %s AND season = ANY(%s) GROUP BY season ORDER BY season")
+            params = [r.names.get("subject") or r.names.get("player"), r.player_id, seasons]
+        else:
+            sql = ("SELECT season, %s AS entity, count(*) AS maps, count(DISTINCT match_id) AS matches, "
+                   "count(*) FILTER (WHERE won) AS map_wins, "
+                   "count(*) FILTER (WHERE NOT won AND NOT drawn) AS map_losses, "
+                   "round(100.0 * count(*) FILTER (WHERE won) / nullif(count(*), 0), 1) AS map_win_pct, "
+                   "sum(score) AS points_for, sum(opp_score) AS points_against, "
+                   "min(started_at) AS first_map_at, max(started_at) AS last_map_at "
+                   "FROM fact_team_maps WHERE org_key = %s AND season = ANY(%s) GROUP BY season ORDER BY season")
+            params = [r.names.get("subject") or r.names.get("team"), r.org_key(r.team_id, r.subject_type), seasons]
+        return Compiled(sql=sql, params=params, description="the same entity compared across seasons",
+                        sample_columns=("maps", "matches"))
+
     # ------------------------------------------------------------- head to head
     if q.intent == "head_to_head":
         if not (r.team_id and r.opponent_id):
@@ -103,7 +204,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         if not per_team:
             if not r.team_id:
                 return Unanswerable(code="invalid_query", reason="team record needs a resolved team")
-            _where(clauses, params, "t.team_id", r.team_id)
+            _where(clauses, params, "t.org_key", r.org_key(r.team_id, r.subject_type))
         _where(clauses, params, "t.season", f.season)
         _where(clauses, params, "t.championship_id", champ)
         _where(clauses, params, "t.region", f.region)
@@ -111,20 +212,20 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         if use_maps:
             _where(clauses, params, "t.map_name", v.map_name)
             _where(clauses, params, "t.game_mode", v.mode_name)
-            select = ("t.team_id, tm.name AS team, sum(t.maps) AS maps, sum(t.matches) AS matches, sum(t.wins) AS map_wins, "
+            select = ("t.org_key, t.display_name AS team, sum(t.maps) AS maps, sum(t.matches) AS matches, sum(t.wins) AS map_wins, "
                       "sum(t.losses) AS map_losses, sum(t.draws) AS draws, "
                       "round(100.0 * sum(t.wins) / nullif(sum(t.maps), 0), 1) AS map_win_pct, "
                       "array_agg(DISTINCT t.season ORDER BY t.season) AS seasons")
             table, order_key = "agg_team_maps", {"map_win_rate": "map_win_pct", "map_wins": "map_wins", "map_losses": "map_losses"}.get(q.metric, "maps")
         else:
-            select = ("t.team_id, tm.name AS team, sum(t.matches) AS matches, sum(t.wins) AS wins, sum(t.losses) AS losses, "
+            select = ("t.org_key, t.display_name AS team, sum(t.matches) AS matches, sum(t.wins) AS wins, sum(t.losses) AS losses, "
                       "sum(t.map_wins) AS map_wins, sum(t.map_losses) AS map_losses, sum(t.maps) AS maps, "
                       "round(100.0 * sum(t.wins) / nullif(sum(t.matches), 0), 1) AS win_pct, "
                       "min(t.first_match_at) AS first_match_at, max(t.last_match_at) AS last_match_at, "
                       "array_agg(DISTINCT t.season ORDER BY t.season) AS seasons")
             table, order_key = "agg_team_matches", {"win_rate": "win_pct", "wins": "wins", "losses": "losses", "matches": "matches"}.get(q.metric, "win_pct")
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-        sql = f"SELECT {select} FROM {table} t JOIN teams tm ON tm.team_id = t.team_id{where} GROUP BY t.team_id, tm.name"
+        sql = f"SELECT {select} FROM {table} t{where} GROUP BY t.org_key, t.display_name"
         if per_team:
             sql += f" HAVING sum(t.matches) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, matches DESC LIMIT %s"
             params += [q.min_maps, q.limit]
@@ -143,7 +244,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         else:
             _where(clauses, params, "map_name", v.map_name)
         if r.team_id:
-            _where(clauses, params, "team_id", r.team_id)
+            _where(clauses, params, "org_key", r.org_key(r.team_id, r.subject_type))
             select = (f"{group}, sum(maps) AS maps, sum(matches) AS matches, sum(wins) AS wins, sum(losses) AS losses, sum(draws) AS draws, "
                       "round(100.0 * sum(wins) / nullif(sum(maps), 0), 1) AS win_pct")
             table, order_key = "agg_team_maps", "win_pct" if q.metric in ("map_win_rate", "win_rate") else "maps"
@@ -176,17 +277,19 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         if q.intent == "entity_stat":
             if not r.team_id:
                 return Unanswerable(code="invalid_query", reason="needs a resolved team")
-            _where(clauses, params, "a.team_id", r.team_id)
+            _where(clauses, params, "a.org_key", r.org_key(r.team_id, r.subject_type))
         _where(clauses, params, "a.season", f.season)
         _where(clauses, params, "a.championship_id", champ)
         _where(clauses, params, "a.region", f.region)
         _where(clauses, params, "a.map_name", v.map_name)
         _where(clauses, params, "a.game_mode", v.mode_name)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-        sql = (f"SELECT a.team_id, tm.name AS team, sum(a.sum_{col}) AS total, sum(a.maps_with_{col}) AS player_map_rows, "
+        sql = (f"SELECT a.org_key, coalesce(ti.display_name, a.org_key) AS team, sum(a.sum_{col}) AS total, "
+               f"sum(a.maps_with_{col}) AS player_map_rows, "
                f"round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 1) AS avg_per_player_map, "
                f"array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-               f"FROM agg_player_stats a JOIN teams tm ON tm.team_id = a.team_id{where} GROUP BY a.team_id, tm.name")
+               f"FROM agg_player_stats a LEFT JOIN team_identity ti ON ti.org_key = a.org_key{where} "
+               f"GROUP BY a.org_key, ti.display_name")
         if q.intent == "leaderboard":
             sql += f" HAVING sum(a.maps_with_{col}) >= %s ORDER BY {'avg_per_player_map' if q.aggregation == 'avg_per_map' else 'total'} {_dir(q.sort)} NULLS LAST LIMIT %s"
             params += [q.min_maps, q.limit]
@@ -202,7 +305,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, "a.season", f.season)
         _where(clauses, params, "a.championship_id", champ)
         _where(clauses, params, "a.region", f.region)
-        _where(clauses, params, "a.team_id", r.team_id)
+        _where(clauses, params, "a.org_key", r.org_key(r.team_id, r.subject_type))
         _where(clauses, params, "a.map_name", v.map_name)
         _where(clauses, params, "a.game_mode", v.mode_name)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
@@ -235,7 +338,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
             _where(clauses, params, "a.season", f.season)
             _where(clauses, params, "a.championship_id", champ)
             _where(clauses, params, "a.region", f.region)
-            _where(clauses, params, "a.team_id", r.team_id)
+            _where(clauses, params, "a.org_key", r.org_key(r.team_id, r.subject_type))
             _where(clauses, params, "a.map_name", v.map_name)
             _where(clauses, params, "a.game_mode", v.mode_name)
             sql = (f"SELECT a.player_id, p.nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
@@ -281,7 +384,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
     _where(clauses, params, "a.season", f.season)
     _where(clauses, params, "a.championship_id", champ)
     _where(clauses, params, "a.region", f.region)
-    _where(clauses, params, "a.team_id", r.team_id)
+    _where(clauses, params, "a.org_key", r.org_key(r.team_id, r.subject_type))
     _where(clauses, params, "a.map_name", v.map_name)
     _where(clauses, params, "a.game_mode", v.mode_name)
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""

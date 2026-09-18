@@ -57,13 +57,24 @@ def test_subject_that_is_a_team_becomes_a_team_record(agg_db):
     assert (r["matches"], r["wins"], r["losses"], r["map_wins"], r["map_losses"]) == (2, 2, 0, 6, 2)
 
 
-def test_head_to_head(agg_db):
-    a = ask(agg_db, "Twisted Minds vs Ex Oblivione")
-    assert a.status == "ok"
+def test_head_to_head_series_grain(agg_db):
+    a = ask(agg_db, "Twisted Minds series record against Ex Oblivione")
+    assert a.status == "ok", a.reason
     r = a.rows[0]
     assert (r["team"], r["wins"], r["losses"], r["matches"]) == ("Twisted Minds", 2, 0, 2)
-    b = ask(agg_db, "Ex Oblivione vs Twisted Minds")
+    b = ask(agg_db, "Ex Oblivione series record against Twisted Minds")
     assert (b.rows[0]["team"], b.rows[0]["wins"], b.rows[0]["losses"]) == ("Ex Oblivione", 0, 2)
+
+
+def test_versus_map_grain(agg_db):
+    a = ask(agg_db, "Twisted Minds vs Ex Oblivione")
+    assert a.status == "ok", a.reason
+    r = a.rows[0]
+    # two series of 4 maps each: map grain, not series grain
+    assert r["maps"] == 8 and r["matches"] == 2
+    assert r["map_wins"] == 6 and r["map_losses"] == 2
+    b = ask(agg_db, "Ex Oblivione vs Twisted Minds")
+    assert b.rows[0]["map_wins"] == 2 and b.rows[0]["map_losses"] == 6
 
 
 def test_unknown_entity_and_ambiguous_entity(agg_db):

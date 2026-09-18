@@ -47,6 +47,8 @@ METRIC_SYNONYMS: list[tuple[str, str]] = sorted(
         ("time played", "Time Played"), ("playtime", "Time Played"),
         ("kill death ratio", "kd_ratio"), ("kd ratio", "kd_ratio"), ("kd", "kd_ratio"),
         ("map win rate", "map_win_rate"), ("map winrate", "map_win_rate"),
+        ("map record", "map_win_rate"), ("maps record", "map_win_rate"),
+        ("series record", "record"), ("match record", "record"), ("series win rate", "win_rate"),
         ("win rate", "win_rate"), ("winrate", "win_rate"), ("win percentage", "win_rate"), ("win pct", "win_rate"),
         ("map wins", "map_wins"), ("maps won", "map_wins"), ("map losses", "map_losses"), ("maps lost", "map_losses"),
         ("how many maps", "maps"), ("maps played", "maps"), ("how many matches", "matches"), ("how many series", "matches"),
@@ -124,6 +126,10 @@ CHAMPIONSHIP_TERMS = [
     "group c", "group d", "playoffs", "playoff", "dreamhack dallas", "dreamhack", "midseason championship", "midseason",
     "world finals", "champions clash", "major",
 ]
+
+VERSUS_CUES = ["map record against", "record against", "against", " vs ", " vs. ", "versus", "head to head", "h2h",
+               "matchup", "when they played", "when they met"]
+MAP_RECORD_CUES = ["map record", "map wins", "map win rate", "maps against", "record against", "head to head", "h2h", "vs", "versus", "against"]
 
 LEADERBOARD_CUES = ["most", "top", "highest", "best", "leader", "leaderboard", "who has", "who had", "who have", "who got",
                     "rank", "ranking", "lowest", "fewest", "least", "worst", "which player", "which team", "who leads", "who led",
@@ -250,10 +256,15 @@ def _find_min_maps(q: str) -> Optional[int]:
     return int(m.group(1)) if m else None
 
 
-def _strip_filters(q: str) -> str:
-    """Remove filter phrases so they are not captured as entity names."""
-    q = re.sub(r"\b(in|during|for|of|from|the)\s+(the\s+)?20[2-3]\d(\s+season)?\b", " ", q)
-    q = re.sub(r"\b20[2-3]\d\b", " ", q)
+def _strip_filters(q: str, keep_years: bool = False) -> str:
+    """Remove filter phrases so they are not captured as entity names.
+
+    `keep_years` leaves years alone for versus parsing, where "2024 X vs 2026 X"
+    binds a year to each side rather than to the whole question.
+    """
+    if not keep_years:
+        q = re.sub(r"\b(in|during|for|of|from|the)\s+(the\s+)?20[2-3]\d(\s+season)?\b", " ", q)
+        q = re.sub(r"\b20[2-3]\d\b", " ", q)
     q = re.sub(r"\b(on|in|at)\s+(control|hybrid|escort|push|flashpoint|clash)(\s+maps?)?\b", " ", q)
     q = re.sub(r"\b(control|hybrid|escort|push|flashpoint|clash)(\s+maps?)?\b", " ", q)
     for term in sorted(CHAMPIONSHIP_TERMS, key=len, reverse=True):
@@ -272,7 +283,7 @@ _H2H = [
     re.compile(r"^(?:how (?:did|does|do|has|have)\s+)?(?P<a>.+?)\s+(?:vs\.?|versus|against|v)\s+(?P<b>.+?)(?:\s+(?:record|head to head|h2h|results?|matchup))?$"),
     re.compile(r"^(?:head to head|h2h|record|matchup)\s+(?:between|for|of)\s+(?P<a>.+?)\s+and\s+(?P<b>.+)$"),
     re.compile(r"^(?:.*\bbetween\s+)(?P<a>.+?)\s+and\s+(?P<b>.+)$"),
-    re.compile(r"^(?P<a>.+?)\s+head to head\s+(?:with\s+)?(?P<b>.+)$"),
+    re.compile(r"^(?P<a>.+?)\s+(?:head to head|h2h|matchup)\s+(?:with\s+|against\s+|vs\.?\s+)?(?P<b>.+)$"),
 ]
 
 _NAME = r"[a-z0-9_.\-' ]+?"
@@ -284,6 +295,19 @@ _SUBJECT_PATTERNS = [
     re.compile(r"^(?P<n>" + _NAME + r")\s+(?:stats?|numbers?|totals?|averages?)$"),
     re.compile(r"^(?P<n>[a-z0-9_.\-' ]{2,40})$"),   # a bare name
 ]
+
+
+_SIDE_SEASON = re.compile(r"^\s*(?P<y>20[2-3]\d)\s+(?P<rest>.+)$|^(?P<rest2>.+?)\s+(?:in\s+)?(?P<y2>20[2-3]\d)\s*$")
+
+
+def _side_season(text: str) -> tuple[Optional[int], str]:
+    """Split a leading or trailing year off one side of a versus question."""
+    m = _SIDE_SEASON.match((text or "").strip())
+    if not m:
+        return None, text
+    if m.group("y"):
+        return int(m.group("y")), m.group("rest")
+    return int(m.group("y2")), m.group("rest2")
 
 
 def _find_subject(q: str) -> Optional[str]:
@@ -329,16 +353,40 @@ def parse_question(question: str) -> ParseResult:
                                filters=Filters(season=filters.season))
 
     body = _strip_filters(q_wo_metric if metric else q)
+    versus_body = _strip_filters(q_wo_metric if metric else q, keep_years=True)
     q_cue = re.sub(r"\bper map\b|\bon average\b", " ", q_wo_metric if metric else q)
 
-    # --- head to head
+    # --- versus / head to head / season comparison
     for rx in _H2H:
-        m = rx.match(body)
+        m = rx.match(versus_body)
         if m:
-            a, b = _clean_name(m.group("a")), _clean_name(m.group("b"))
+            left_raw, right_raw = m.group("a"), m.group("b")
+            a_season, a = _side_season(left_raw)
+            b_season, b = _side_season(right_raw)
+            a, b = _clean_name(a), _clean_name(b)
             if a and b:
-                return StructuredQuery(intent="head_to_head", entity="team", metric="record",
-                                       filters=filters.model_copy(update={"team": a, "opponent": b}))
+                # A year binds to one side only when BOTH sides carry one
+                # ("2024 X vs 2026 X"). A single trailing year in "X vs Y in 2025"
+                # scopes the whole matchup instead.
+                if a_season and b_season:
+                    global_season = None  # each side carries its own
+                else:
+                    global_season = filters.season or a_season or b_season
+                    a_season = b_season = None
+                f = filters.model_copy(update={"subject": a, "opponent": b, "season": global_season,
+                                               "subject_season": a_season, "opponent_season": b_season})
+                # the same entity named on both sides with different seasons is a
+                # comparison of an org against its later self, not a fixture
+                if fold(a) == fold(b) and (a_season or b_season) and a_season != b_season:
+                    return StructuredQuery(intent="season_compare", entity="team", metric=metric or "map_win_rate",
+                                           filters=f, aggregation=aggregation)
+                # "series record against X" is the series-grain question; everything
+                # else at this shape is a map record.
+                if metric in ("record", "win_rate", "wins", "losses", "matches"):
+                    return StructuredQuery(intent="head_to_head", entity="team", metric="record",
+                                           filters=f.model_copy(update={"team": a, "opponent": b, "subject": None}))
+                return StructuredQuery(intent="versus", entity="player" if _has(q, PLAYER_CUES) else "team",
+                                       metric=metric or "map_win_rate", filters=f, aggregation=aggregation)
 
     # --- map / mode as the row entity
     if _has(q_cue, MAP_ENTITY_CUES) or _has(q_cue, MODE_ENTITY_CUES):
