@@ -281,3 +281,104 @@ def test_numbers_are_serialized_as_numbers(client):
     assert isinstance(row["eliminations"], int)
     assert isinstance(row["damage_dealt"], (int, float))
     assert json_safe({"a": [{"b": 1}]}) == {"a": [{"b": 1}]}
+
+# ------------------------------------------------------- what the client needs
+
+def test_every_table_arrives_described(client):
+    """Columns come with a label and a type, so no client re-derives either."""
+    answer = _ask(client, "who had the most eliminations", page_size=3)
+    for block in (answer["aggregate"], answer["evidence"]):
+        assert block["columns"], block
+        for column in block["columns"]:
+            assert set(column) <= {"key", "label", "type", "pair_key"}
+            assert column["label"] and column["type"]
+    types = {c["key"]: c["type"] for c in answer["evidence"]["columns"]}
+    assert types["played_at"] == "date"
+    assert types["score"] == "score"
+    assert types["result"] == "result"
+    assert types["match_url"] == "link"
+    score = next(c for c in answer["evidence"]["columns"] if c["key"] == "score")
+    assert score["pair_key"] == "opponent_score"
+
+
+def test_a_ranked_row_names_its_own_entity(client):
+    answer = _ask(client, "who had the most eliminations", page_size=5)
+    for row in answer["aggregate"]["rows"]:
+        entity = row["entity"]
+        assert entity["id"] and entity["type"] == "player" and entity["name"]
+        assert entity["column"] == answer["evidence"]["expandable_by"]
+    # and that id is what expands it
+    second = answer["aggregate"]["rows"][1]["entity"]["id"]
+    expanded = _ask(client, "who had the most eliminations", evidence_for=second, page_size=3)
+    assert expanded["evidence"]["expanded_for"]["id"] == second
+
+
+def test_an_entity_object_is_not_offered_as_a_column(client):
+    answer = _ask(client, "who had the most eliminations", page_size=3)
+    assert "entity" not in {c["key"] for c in answer["aggregate"]["columns"]}
+    assert "entity" in answer["aggregate"]["rows"][0]
+
+
+def test_a_refusal_offers_questions_that_work_not_only_advice(client, never_met):
+    """A resolved entity with no data in this slice yields a question that has some."""
+    a, b = never_met
+    answer = _ask(client, f"{a} map record against {b}")
+    assert answer["status"] == "cannot_answer"
+    assert answer["alternatives"], answer["reason"]
+    assert answer["alternatives"] != [f"{a} map record against {b}"]      # never the question that just failed
+
+    for alternative in answer["alternatives"]:
+        retried = _ask(client, alternative)
+        assert retried["status"] == "ok", (alternative, retried["reason"])
+
+
+def test_advice_stays_where_advice_is_the_right_answer(client):
+    """A typo has no better question to offer, so it gets the tip and no alternatives."""
+    answer = _ask(client, "who has the best hero pool")
+    assert answer["suggestions"] and not answer["alternatives"]
+
+
+def test_a_stat_missing_from_one_season_offers_the_season_that_has_it(client):
+    answer = _ask(client, "who had the most final blows in 2024")
+    if answer["status"] == "ok":
+        pytest.skip("the fixtures do carry Final Blows in 2024")
+    assert answer["alternatives"], answer["reason"]
+    assert any("2026" in alternative or "2025" in alternative for alternative in answer["alternatives"])
+
+
+def test_a_shared_link_says_for_itself_whether_the_parse_changed(client):
+    slug = _ask(client, "who had the most eliminations in 2024")["slug"]
+    shared = client.get(f"/query/{slug}").json()["shared"]
+    assert shared["parse_changed"] is False and shared["parse_change"] == []
+    assert "parsed_when_saved" in shared      # still there, for anyone who wants the detail
+
+
+def test_a_database_outage_is_a_503_on_every_endpoint():
+    """Up but unable to read is not a refused question, and must not look like one."""
+    from owcsmuse.api import ConnectionPool, create_app
+    from owcsmuse.config import Settings
+
+    dead = Settings(_env_file=None, faceit_api_key="not-used",
+                    database_url="postgresql://nobody:nobody@127.0.0.1:59999/none", db_schema="public")
+    app = create_app(dead, ConnectionPool(dead, size=1))
+    with TestClient(app, raise_server_exceptions=False) as broken:
+        for response in (broken.get("/healthz"),
+                         broken.post("/ask", json={"question": "who had the most eliminations"}),
+                         broken.get("/query/abcd1234")):
+            assert response.status_code == 503, (response.request.url, response.status_code)
+            assert "database" in response.json()["detail"]
+
+
+def test_result_is_a_label_and_cannot_be_ranked(client):
+    answer = _ask(client, "who had the most result")
+    assert answer["status"] == "cannot_answer"
+    assert answer["code"] in ("unsupported_metric", "no_data")
+    availability = _ask(client, "what stats are available")
+    kinds = {row["stat_key"]: row.get("stat_kind") for row in availability["aggregate"]["rows"]}
+    if "Result" in kinds:
+        assert kinds["Result"] == "non_numeric"
+
+
+def test_no_suggestion_offers_a_label_as_a_metric(client):
+    for suggestion in client.get("/suggestions").json()["suggestions"]:
+        assert "result" not in suggestion["question"].lower()

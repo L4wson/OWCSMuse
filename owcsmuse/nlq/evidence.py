@@ -17,6 +17,7 @@ from typing import Any, Optional
 
 import psycopg
 
+from .columns import describe
 from .compile import Resolved
 from .validate import Validated
 
@@ -48,6 +49,7 @@ class Evidence:
     total_rows: int = 0
     total_pages: int = 0
     has_more: bool = False
+    columns: list[dict[str, Any]] = field(default_factory=list)   # {key, label, type} per shown column
     expanded_for: Optional[dict[str, Any]] = None   # which ranked row these rows belong to
     expandable_by: Optional[str] = None             # the column a UI passes back as evidence_for
     reason: Optional[str] = None                    # why there are no rows
@@ -333,6 +335,24 @@ def compile_evidence(v: Validated, r: Resolved, expand: Optional[dict[str, Any]]
 
 # ------------------------------------------------------------------- execution
 
+def entity_of(row: dict[str, Any]) -> Optional[dict[str, Any]]:
+    """The entity a ranked row is about: its id, its kind and its name.
+
+    Carried on the row itself so expansion is mechanical - no client has to work
+    out that a leaderboard is keyed on `player_id` and labelled by `nickname`.
+    """
+    if row.get("player_id"):
+        return {"id": row["player_id"], "type": "player", "name": row.get("nickname"), "column": "player_id"}
+    if row.get("org_key"):
+        return {"id": row["org_key"], "type": "org", "name": row.get("team") or row.get("display_name"),
+                "column": "org_key"}
+    if row.get("map_name"):
+        return {"id": row["map_name"], "type": "map", "name": row["map_name"], "column": "map_name"}
+    if row.get("game_mode"):
+        return {"id": row["game_mode"], "type": "mode", "name": row["game_mode"], "column": "game_mode"}
+    return None
+
+
 def expansion_target(rows: list[dict[str, Any]], evidence_for: Optional[str]) -> Optional[dict[str, Any]]:
     """Which ranked row to show proof for: the one asked for, else the top one.
 
@@ -341,17 +361,7 @@ def expansion_target(rows: list[dict[str, Any]], evidence_for: Optional[str]) ->
     """
     if not rows:
         return None
-    def target(row: dict[str, Any]) -> Optional[dict[str, Any]]:
-        if row.get("player_id"):
-            return {"id": row["player_id"], "type": "player", "name": row.get("nickname"), "column": "player_id"}
-        if row.get("org_key"):
-            return {"id": row["org_key"], "type": "org", "name": row.get("team") or row.get("display_name"),
-                    "column": "org_key"}
-        if row.get("map_name"):
-            return {"id": row["map_name"], "type": "map", "name": row["map_name"], "column": "map_name"}
-        if row.get("game_mode"):
-            return {"id": row["game_mode"], "type": "mode", "name": row["game_mode"], "column": "game_mode"}
-        return None
+    target = entity_of
     if evidence_for:
         for row in rows:
             if evidence_for in (row.get("player_id"), row.get("org_key"), row.get("map_name"), row.get("game_mode")):
@@ -377,6 +387,7 @@ def _run(conn: psycopg.Connection, compiled: EvidenceQuery, page: int, page_size
         row.pop("total_rows", None)
     return Evidence(
         available=True, grain=compiled.grain, description=compiled.description, rows=fetched,
+        columns=describe(fetched),
         page=page, page_size=page_size, total_rows=total,
         total_pages=(total + page_size - 1) // page_size if total else 0,
         has_more=page * page_size < total,

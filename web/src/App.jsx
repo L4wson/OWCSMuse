@@ -127,7 +127,6 @@ export default function App() {
               <>
                 <Result
                   answer={answer}
-                  question={question}
                   suggestions={suggestions?.suggestions ?? []}
                   busy={phase === "loading"}
                   onAsk={runQuestion}

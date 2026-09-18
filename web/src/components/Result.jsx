@@ -4,19 +4,20 @@ import Context from "./Context.jsx";
 import DataTable from "./DataTable.jsx";
 import Evidence from "./Evidence.jsx";
 import Refusal from "./Refusal.jsx";
-import { describeParseChange } from "../format.js";
 
 /** An answer, whichever of the three kinds it turned out to be. */
-export default function Result({ answer, question, suggestions, busy, onAsk, onPage, onExpand }) {
+export default function Result({ answer, suggestions, busy, onAsk, onPage, onExpand }) {
   if (!answer) return null;
 
-  const parseChanged = describeParseChange(answer.shared?.parsed_when_saved, answer.query);
+  // The service decides whether a shared link now reads differently; the client
+  // used to diff two parse objects to find out.
+  const parseChanged = answer.shared?.parse_changed ? (answer.shared.parse_change ?? []) : [];
 
   if (answer.status === "clarify") {
     return (
       <>
         <ParseChange changes={parseChanged} />
-        <Clarify answer={answer} question={question} onAsk={onAsk} />
+        <Clarify answer={answer} onAsk={onAsk} />
       </>
     );
   }
@@ -45,8 +46,8 @@ export default function Result({ answer, question, suggestions, busy, onAsk, onP
         <section className="aggregate" data-testid="aggregate">
           <DataTable
             rows={rows}
+            columns={aggregate.columns ?? []}
             caption={aggregate.description}
-            idKey={evidence?.expandable_by}
             expandedId={evidence?.expanded_for?.id}
             onExpand={ranked ? onExpand : null}
           />

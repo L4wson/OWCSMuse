@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 
 import Evidence from "../src/components/Evidence.jsx";
 import Result from "../src/components/Result.jsx";
-import { deriveColumns } from "../src/format.js";
 import { LEADERBOARD, LEADERBOARD_PARTIAL, REFUSAL_WITH_EVIDENCE, VERSUS, pageOf } from "./fixtures.js";
 
 describe("evidence table", () => {
@@ -27,10 +26,21 @@ describe("evidence table", () => {
     expect(screen.getByTestId("evidence")).toHaveTextContent("2 series");
   });
 
-  it("drops a column that is empty on this page instead of showing a blank one", () => {
-    const seriesColumns = deriveColumns(REFUSAL_WITH_EVIDENCE.evidence.rows);
-    expect(seriesColumns).not.toContain("round_number"); // always null on a series row
-    expect(deriveColumns(VERSUS.evidence.rows)).toContain("round_number");
+  it("renders exactly the columns the service described, in that order", () => {
+    render(<Evidence evidence={VERSUS.evidence} />);
+    const headers = screen.getAllByRole("columnheader").map((th) => th.textContent);
+    expect(headers).toEqual(VERSUS.evidence.columns.map((column) => column.label));
+    // the service already dropped what is empty at this grain
+    expect(REFUSAL_WITH_EVIDENCE.evidence.columns.map((c) => c.key)).not.toContain("round_number");
+  });
+
+  it("formats by the declared type, not by the name of a key", () => {
+    render(<Evidence evidence={VERSUS.evidence} />);
+    const row = VERSUS.evidence.rows[0];
+    const cells = screen.getAllByRole("row")[1];
+    expect(cells).toHaveTextContent(row.played_at.slice(0, 10)); // a date, not a timestamp
+    expect(cells).toHaveTextContent(`${row.score}-${row.opponent_score}`); // a score, one fact
+    expect(within(cells).getByRole("link", { name: "FACEIT" })).toBeInTheDocument();
   });
 
   it("merges a score and its opposite number into one cell", () => {

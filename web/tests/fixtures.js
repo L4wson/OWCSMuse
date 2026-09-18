@@ -30,17 +30,61 @@ export const PAYLOADS = {
     "aggregate": {
       "description": "player vs player, map grain",
       "columns": [
-        "subject",
-        "opponent",
-        "maps",
-        "matches",
-        "map_wins",
-        "map_losses",
-        "draws",
-        "map_win_pct",
-        "seasons",
-        "first_map_at",
-        "last_map_at"
+        {
+          "key": "subject",
+          "label": "Subject",
+          "type": "text"
+        },
+        {
+          "key": "opponent",
+          "label": "Opponent",
+          "type": "text"
+        },
+        {
+          "key": "maps",
+          "label": "Maps",
+          "type": "integer"
+        },
+        {
+          "key": "matches",
+          "label": "Matches",
+          "type": "integer"
+        },
+        {
+          "key": "map_wins",
+          "label": "Map wins",
+          "type": "integer"
+        },
+        {
+          "key": "map_losses",
+          "label": "Map losses",
+          "type": "integer"
+        },
+        {
+          "key": "draws",
+          "label": "Draws",
+          "type": "integer"
+        },
+        {
+          "key": "map_win_pct",
+          "label": "Map win %",
+          "type": "percent"
+        },
+        {
+          "key": "seasons",
+          "label": "Seasons",
+          "type": "list"
+        },
+        {
+          "key": "first_map_at",
+          "label": "First",
+          "type": "date"
+        },
+        {
+          "key": "last_map_at",
+          "label": "Last",
+          "type": "date"
+        }
       ],
       "rows": [
         {
@@ -142,6 +186,99 @@ export const PAYLOADS = {
       "total_rows": 42,
       "total_pages": 14,
       "has_more": true,
+      "columns": [
+        {
+          "key": "round_number",
+          "label": "Map #",
+          "type": "integer"
+        },
+        {
+          "key": "played_at",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "key": "season",
+          "label": "Season",
+          "type": "integer"
+        },
+        {
+          "key": "competition",
+          "label": "Competition",
+          "type": "text"
+        },
+        {
+          "key": "team",
+          "label": "Team",
+          "type": "text"
+        },
+        {
+          "key": "opponent",
+          "label": "Opponent",
+          "type": "text"
+        },
+        {
+          "key": "map_name",
+          "label": "Map",
+          "type": "text"
+        },
+        {
+          "key": "game_mode",
+          "label": "Mode",
+          "type": "text"
+        },
+        {
+          "key": "score",
+          "label": "Score",
+          "type": "score",
+          "pair_key": "opponent_score"
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "type": "result"
+        },
+        {
+          "key": "role",
+          "label": "Role",
+          "type": "text"
+        },
+        {
+          "key": "eliminations",
+          "label": "Eliminations",
+          "type": "integer"
+        },
+        {
+          "key": "deaths",
+          "label": "Deaths",
+          "type": "integer"
+        },
+        {
+          "key": "assists",
+          "label": "Assists",
+          "type": "integer"
+        },
+        {
+          "key": "damage_dealt",
+          "label": "Damage",
+          "type": "integer"
+        },
+        {
+          "key": "healing_done",
+          "label": "Healing",
+          "type": "integer"
+        },
+        {
+          "key": "damage_mitigated",
+          "label": "Mitigated",
+          "type": "integer"
+        },
+        {
+          "key": "match_url",
+          "label": "Source",
+          "type": "link"
+        }
+      ],
       "expanded_for": null,
       "expandable_by": null,
       "reason": null
@@ -165,7 +302,15 @@ export const PAYLOADS = {
         "matched_name": "zeruhh",
         "name_kind": "current_nickname",
         "score": 1.0,
-        "matches": 48
+        "matches": 48,
+        "seasons": [
+          2024,
+          2025,
+          2026
+        ],
+        "first_at": "2024-03-08 22:45:27+00:00",
+        "last_at": "2026-07-05 23:15:35+00:00",
+        "question": null
       },
       "subject": {
         "entity_type": "player",
@@ -174,7 +319,15 @@ export const PAYLOADS = {
         "matched_name": "sugarfree",
         "name_kind": "game_name",
         "score": 1.0,
-        "matches": 53
+        "matches": 53,
+        "seasons": [
+          2024,
+          2025,
+          2026
+        ],
+        "first_at": "2024-03-08 21:36:11+00:00",
+        "last_at": "2026-07-06 01:20:11+00:00",
+        "question": null
       }
     },
     "candidates": {},
@@ -194,6 +347,7 @@ export const PAYLOADS = {
     "code": null,
     "reason": null,
     "suggestions": [],
+    "alternatives": [],
     "parser": "rules"
   },
   "leaderboard": {
@@ -223,14 +377,41 @@ export const PAYLOADS = {
     "aggregate": {
       "description": "Eliminations leaderboard",
       "columns": [
-        "player_id",
-        "nickname",
-        "maps_with_stat",
-        "maps_played",
-        "coverage_pct",
-        "total",
-        "avg_per_map",
-        "seasons"
+        {
+          "key": "nickname",
+          "label": "Player",
+          "type": "text"
+        },
+        {
+          "key": "maps_with_stat",
+          "label": "Maps with stat",
+          "type": "integer"
+        },
+        {
+          "key": "maps_played",
+          "label": "Maps played",
+          "type": "integer"
+        },
+        {
+          "key": "coverage_pct",
+          "label": "Coverage %",
+          "type": "percent"
+        },
+        {
+          "key": "total",
+          "label": "Total",
+          "type": "integer"
+        },
+        {
+          "key": "avg_per_map",
+          "label": "Per map",
+          "type": "decimal"
+        },
+        {
+          "key": "seasons",
+          "label": "Seasons",
+          "type": "list"
+        }
       ],
       "rows": [
         {
@@ -243,7 +424,13 @@ export const PAYLOADS = {
           "avg_per_map": 22.632653061224488,
           "seasons": [
             2024
-          ]
+          ],
+          "entity": {
+            "id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+            "type": "player",
+            "name": "kevsteer",
+            "column": "player_id"
+          }
         },
         {
           "player_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
@@ -255,7 +442,13 @@ export const PAYLOADS = {
           "avg_per_map": 22.489795918367346,
           "seasons": [
             2024
-          ]
+          ],
+          "entity": {
+            "id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+            "type": "player",
+            "name": "yung_kai",
+            "column": "player_id"
+          }
         },
         {
           "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
@@ -267,7 +460,13 @@ export const PAYLOADS = {
           "avg_per_map": 22.065217391304348,
           "seasons": [
             2024
-          ]
+          ],
+          "entity": {
+            "id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+            "type": "player",
+            "name": "sug2rfree",
+            "column": "player_id"
+          }
         }
       ]
     },
@@ -357,6 +556,109 @@ export const PAYLOADS = {
       "total_rows": 49,
       "total_pages": 17,
       "has_more": true,
+      "columns": [
+        {
+          "key": "round_number",
+          "label": "Map #",
+          "type": "integer"
+        },
+        {
+          "key": "played_at",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "key": "season",
+          "label": "Season",
+          "type": "integer"
+        },
+        {
+          "key": "competition",
+          "label": "Competition",
+          "type": "text"
+        },
+        {
+          "key": "team",
+          "label": "Team",
+          "type": "text"
+        },
+        {
+          "key": "opponent",
+          "label": "Opponent",
+          "type": "text"
+        },
+        {
+          "key": "map_name",
+          "label": "Map",
+          "type": "text"
+        },
+        {
+          "key": "game_mode",
+          "label": "Mode",
+          "type": "text"
+        },
+        {
+          "key": "score",
+          "label": "Score",
+          "type": "score",
+          "pair_key": "opponent_score"
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "type": "result"
+        },
+        {
+          "key": "role",
+          "label": "Role",
+          "type": "text"
+        },
+        {
+          "key": "eliminations",
+          "label": "Eliminations",
+          "type": "integer"
+        },
+        {
+          "key": "deaths",
+          "label": "Deaths",
+          "type": "integer"
+        },
+        {
+          "key": "assists",
+          "label": "Assists",
+          "type": "integer"
+        },
+        {
+          "key": "damage_dealt",
+          "label": "Damage",
+          "type": "integer"
+        },
+        {
+          "key": "healing_done",
+          "label": "Healing",
+          "type": "integer"
+        },
+        {
+          "key": "damage_mitigated",
+          "label": "Mitigated",
+          "type": "integer"
+        },
+        {
+          "key": "stat_value",
+          "label": "Value",
+          "type": "decimal"
+        },
+        {
+          "key": "stat_key",
+          "label": "Stat",
+          "type": "text"
+        },
+        {
+          "key": "match_url",
+          "label": "Source",
+          "type": "link"
+        }
+      ],
       "expanded_for": {
         "id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
         "type": "player",
@@ -410,282 +712,8 @@ export const PAYLOADS = {
     "code": null,
     "reason": null,
     "suggestions": [],
+    "alternatives": [],
     "parser": "rules"
-  },
-  "clarify": {
-    "slug": "PXFay31aKx-G",
-    "url": "/query/PXFay31aKx-G",
-    "status": "clarify",
-    "question": "tea record",
-    "sentence": null,
-    "aggregate": {
-      "description": null,
-      "columns": [],
-      "rows": []
-    },
-    "evidence": null,
-    "coverage": null,
-    "limitations": [],
-    "notes": [],
-    "entities": {},
-    "candidates": {
-      "subject": [
-        {
-          "entity_type": "org",
-          "entity_id": "team-peps",
-          "current_name": "Team Peps",
-          "matched_name": "Team Peps",
-          "name_kind": "current_name",
-          "score": 0.9,
-          "matches": 55
-        },
-        {
-          "entity_type": "team",
-          "entity_id": "a58dedff-8045-46be-a13e-2402495b6a9d",
-          "current_name": "Team Liquid",
-          "matched_name": "Team Liquid",
-          "name_kind": "current_name",
-          "score": 0.9,
-          "matches": 48
-        },
-        {
-          "entity_type": "team",
-          "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
-          "current_name": "Team Z",
-          "matched_name": "Team Z",
-          "name_kind": "current_name",
-          "score": 0.9,
-          "matches": 20
-        }
-      ]
-    },
-    "query": {
-      "intent": "team_record",
-      "entity": "team",
-      "metric": "record",
-      "filters": {
-        "subject": "tea"
-      },
-      "aggregation": "total",
-      "sort": "desc",
-      "limit": 10,
-      "min_maps": 1
-    },
-    "code": "ambiguous_entity",
-    "reason": "'tea' could be several player/teams; which one?",
-    "suggestions": [
-      "Re-ask with the exact name, or with the id shown in brackets."
-    ],
-    "parser": "rules"
-  },
-  "refusalWithEvidence": {
-    "slug": "bgwoMdUT-1uE",
-    "url": "/query/bgwoMdUT-1uE",
-    "status": "cannot_answer",
-    "question": "Team Falcons vs Crazy Raccoons",
-    "sentence": {
-      "text": "Team Falcons and Crazy Raccoons met, but none of those series has map stats on FACEIT.",
-      "spans": [
-        {
-          "start": 17,
-          "end": 31,
-          "kind": "team",
-          "text": "Crazy Raccoons",
-          "entity_id": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7"
-        },
-        {
-          "start": 0,
-          "end": 12,
-          "kind": "team",
-          "text": "Team Falcons",
-          "entity_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e"
-        }
-      ]
-    },
-    "aggregate": {
-      "description": null,
-      "columns": [],
-      "rows": []
-    },
-    "evidence": {
-      "available": true,
-      "grain": "series",
-      "description": "series they played whose maps FACEIT never recorded",
-      "rows": [
-        {
-          "match_id": "1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b",
-          "round_number": null,
-          "played_at": "2024-06-02 23:59:13+00:00",
-          "season": 2024,
-          "championship_id": "33781289-61ea-43d5-ac79-1af825dcb291",
-          "competition": "Dreamhack Dallas",
-          "team": "Team Falcons",
-          "opponent": "Crazy Raccoons",
-          "best_of": 1,
-          "score": 2,
-          "opponent_score": 4,
-          "result": "lost",
-          "map_stats_recorded": false,
-          "match_url": "https://www.faceit.com/en/ow2/room/1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b"
-        },
-        {
-          "match_id": "1-cd3ccc44-1b18-463d-a4de-2d400ef020e9",
-          "round_number": null,
-          "played_at": "2024-06-02 19:30:37+00:00",
-          "season": 2024,
-          "championship_id": "33781289-61ea-43d5-ac79-1af825dcb291",
-          "competition": "Dreamhack Dallas",
-          "team": "Team Falcons",
-          "opponent": "Crazy Raccoons",
-          "best_of": 1,
-          "score": 3,
-          "opponent_score": 2,
-          "result": "won",
-          "map_stats_recorded": false,
-          "match_url": "https://www.faceit.com/en/ow2/room/1-cd3ccc44-1b18-463d-a4de-2d400ef020e9"
-        }
-      ],
-      "page": 1,
-      "page_size": 3,
-      "total_rows": 2,
-      "total_pages": 1,
-      "has_more": false,
-      "expanded_for": null,
-      "expandable_by": null,
-      "reason": null
-    },
-    "coverage": null,
-    "limitations": [
-      {
-        "id": "main_series_2025_2026",
-        "title": "The 2025 and 2026 main series is reconstructed from player history",
-        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's championship endpoints, which do not publish those divisions."
-      }
-    ],
-    "notes": [
-      "They did meet: 2 series in season 2024 (11 maps by series score), but FACEIT recorded no map stats for them, so none can count toward a map record."
-    ],
-    "entities": {
-      "opponent": {
-        "entity_type": "team",
-        "entity_id": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7",
-        "current_name": "Crazy Raccoons",
-        "matched_name": "Crazy Raccoons",
-        "name_kind": "current_name",
-        "score": 1.0,
-        "matches": 5
-      },
-      "subject": {
-        "entity_type": "team",
-        "entity_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
-        "current_name": "Team Falcons",
-        "matched_name": "Team Falcons",
-        "name_kind": "current_name",
-        "score": 0.8,
-        "matches": 4
-      }
-    },
-    "candidates": {},
-    "query": {
-      "intent": "versus",
-      "entity": "team",
-      "metric": "map_win_rate",
-      "filters": {
-        "team": "falcons",
-        "opponent": "crazy raccoons"
-      },
-      "aggregation": "total",
-      "sort": "desc",
-      "limit": 10,
-      "min_maps": 1
-    },
-    "code": "no_data",
-    "reason": "Team Falcons and Crazy Raccoons met, but none of those series has map stats on FACEIT",
-    "suggestions": [
-      "The series results are known; only the per-map breakdown is missing."
-    ],
-    "parser": "rules"
-  },
-  "refusal": {
-    "slug": "bRw9zEqYL64M",
-    "url": "/query/bRw9zEqYL64M",
-    "status": "cannot_answer",
-    "question": "who has the best hero pool",
-    "sentence": {
-      "text": "hero picks are not in the FACEIT payloads.",
-      "spans": []
-    },
-    "aggregate": {
-      "description": null,
-      "columns": [],
-      "rows": []
-    },
-    "evidence": null,
-    "coverage": null,
-    "limitations": [],
-    "notes": [],
-    "entities": {},
-    "candidates": {},
-    "query": null,
-    "code": "unsupported_metric",
-    "reason": "hero picks are not in the FACEIT payloads",
-    "suggestions": [
-      "Ask `what stats are available` to see the tracked stat keys."
-    ],
-    "parser": "rules"
-  },
-  "suggestions": {
-    "groups": [
-      "Leaderboards",
-      "Teams",
-      "Head to head",
-      "Players",
-      "Across seasons",
-      "Coverage",
-      "Maps and modes"
-    ],
-    "suggestions": [
-      {
-        "question": "who had the most deaths in 2026",
-        "group": "Leaderboards",
-        "slug": "wyNCzeNmqMzS"
-      },
-      {
-        "question": "who had the most healing done in 2026",
-        "group": "Leaderboards",
-        "slug": "n7_leBPZaKEg"
-      },
-      {
-        "question": "who had the most damage mitigated in 2026",
-        "group": "Leaderboards",
-        "slug": "yDI9LPuk3de6"
-      },
-      {
-        "question": "who had the most assists in 2026",
-        "group": "Leaderboards",
-        "slug": "ZNEImzg6R1RC"
-      },
-      {
-        "question": "SpaceStation Gaming record",
-        "group": "Teams",
-        "slug": "yAt7cXRbIt1_"
-      },
-      {
-        "question": "Twisted Minds record",
-        "group": "Teams",
-        "slug": "THQ4v32WVMcE"
-      },
-      {
-        "question": "NTMR record",
-        "group": "Teams",
-        "slug": "jqEXT4So053D"
-      },
-      {
-        "question": "Virtus pro record",
-        "group": "Teams",
-        "slug": "QEDjPofHxGku"
-      }
-    ]
   },
   "leaderboardPartial": {
     "slug": "iiyLDKg-gUEl",
@@ -714,14 +742,41 @@ export const PAYLOADS = {
     "aggregate": {
       "description": "Final Blows leaderboard",
       "columns": [
-        "player_id",
-        "nickname",
-        "maps_with_stat",
-        "maps_played",
-        "coverage_pct",
-        "total",
-        "avg_per_map",
-        "seasons"
+        {
+          "key": "nickname",
+          "label": "Player",
+          "type": "text"
+        },
+        {
+          "key": "maps_with_stat",
+          "label": "Maps with stat",
+          "type": "integer"
+        },
+        {
+          "key": "maps_played",
+          "label": "Maps played",
+          "type": "integer"
+        },
+        {
+          "key": "coverage_pct",
+          "label": "Coverage %",
+          "type": "percent"
+        },
+        {
+          "key": "total",
+          "label": "Total",
+          "type": "integer"
+        },
+        {
+          "key": "avg_per_map",
+          "label": "Per map",
+          "type": "decimal"
+        },
+        {
+          "key": "seasons",
+          "label": "Seasons",
+          "type": "list"
+        }
       ],
       "rows": [
         {
@@ -735,7 +790,13 @@ export const PAYLOADS = {
           "seasons": [
             2025,
             2026
-          ]
+          ],
+          "entity": {
+            "id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+            "type": "player",
+            "name": "sug2rfree",
+            "column": "player_id"
+          }
         },
         {
           "player_id": "58faa695-b501-4642-a4d9-0e4c2ed8526d",
@@ -748,7 +809,13 @@ export const PAYLOADS = {
           "seasons": [
             2025,
             2026
-          ]
+          ],
+          "entity": {
+            "id": "58faa695-b501-4642-a4d9-0e4c2ed8526d",
+            "type": "player",
+            "name": "zeruhh",
+            "column": "player_id"
+          }
         },
         {
           "player_id": "462c6480-274d-48a6-a5cf-d29d3b2dd786",
@@ -761,7 +828,13 @@ export const PAYLOADS = {
           "seasons": [
             2025,
             2026
-          ]
+          ],
+          "entity": {
+            "id": "462c6480-274d-48a6-a5cf-d29d3b2dd786",
+            "type": "player",
+            "name": "LBBD7",
+            "column": "player_id"
+          }
         }
       ]
     },
@@ -851,6 +924,109 @@ export const PAYLOADS = {
       "total_rows": 206,
       "total_pages": 69,
       "has_more": true,
+      "columns": [
+        {
+          "key": "round_number",
+          "label": "Map #",
+          "type": "integer"
+        },
+        {
+          "key": "played_at",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "key": "season",
+          "label": "Season",
+          "type": "integer"
+        },
+        {
+          "key": "competition",
+          "label": "Competition",
+          "type": "text"
+        },
+        {
+          "key": "team",
+          "label": "Team",
+          "type": "text"
+        },
+        {
+          "key": "opponent",
+          "label": "Opponent",
+          "type": "text"
+        },
+        {
+          "key": "map_name",
+          "label": "Map",
+          "type": "text"
+        },
+        {
+          "key": "game_mode",
+          "label": "Mode",
+          "type": "text"
+        },
+        {
+          "key": "score",
+          "label": "Score",
+          "type": "score",
+          "pair_key": "opponent_score"
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "type": "result"
+        },
+        {
+          "key": "role",
+          "label": "Role",
+          "type": "text"
+        },
+        {
+          "key": "eliminations",
+          "label": "Eliminations",
+          "type": "integer"
+        },
+        {
+          "key": "deaths",
+          "label": "Deaths",
+          "type": "integer"
+        },
+        {
+          "key": "assists",
+          "label": "Assists",
+          "type": "integer"
+        },
+        {
+          "key": "damage_dealt",
+          "label": "Damage",
+          "type": "integer"
+        },
+        {
+          "key": "healing_done",
+          "label": "Healing",
+          "type": "integer"
+        },
+        {
+          "key": "damage_mitigated",
+          "label": "Mitigated",
+          "type": "integer"
+        },
+        {
+          "key": "stat_value",
+          "label": "Value",
+          "type": "decimal"
+        },
+        {
+          "key": "stat_key",
+          "label": "Stat",
+          "type": "text"
+        },
+        {
+          "key": "match_url",
+          "label": "Source",
+          "type": "link"
+        }
+      ],
       "expanded_for": {
         "id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
         "type": "player",
@@ -917,7 +1093,377 @@ export const PAYLOADS = {
     "code": null,
     "reason": null,
     "suggestions": [],
+    "alternatives": [],
     "parser": "rules"
+  },
+  "clarify": {
+    "slug": "PXFay31aKx-G",
+    "url": "/query/PXFay31aKx-G",
+    "status": "clarify",
+    "question": "tea record",
+    "sentence": null,
+    "aggregate": {
+      "description": null,
+      "columns": [],
+      "rows": []
+    },
+    "evidence": null,
+    "coverage": null,
+    "limitations": [],
+    "notes": [],
+    "entities": {},
+    "candidates": {
+      "subject": [
+        {
+          "entity_type": "org",
+          "entity_id": "team-peps",
+          "current_name": "Team Peps",
+          "matched_name": "Team Peps",
+          "name_kind": "current_name",
+          "score": 0.9,
+          "matches": 55,
+          "seasons": [
+            2024,
+            2025,
+            2026
+          ],
+          "first_at": "2024-03-08 19:24:10+00:00",
+          "last_at": "2026-05-27 19:02:40+00:00",
+          "question": "org:team-peps record"
+        },
+        {
+          "entity_type": "team",
+          "entity_id": "a58dedff-8045-46be-a13e-2402495b6a9d",
+          "current_name": "Team Liquid",
+          "matched_name": "Team Liquid",
+          "name_kind": "current_name",
+          "score": 0.9,
+          "matches": 48,
+          "seasons": [
+            2025,
+            2026
+          ],
+          "first_at": "2025-01-31 23:22:34+00:00",
+          "last_at": "2026-07-05 23:15:35+00:00",
+          "question": "team:a58dedff-8045-46be-a13e-2402495b6a9d record"
+        },
+        {
+          "entity_type": "team",
+          "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
+          "current_name": "Team Z",
+          "matched_name": "Team Z",
+          "name_kind": "current_name",
+          "score": 0.9,
+          "matches": 20,
+          "seasons": [
+            2024,
+            2025
+          ],
+          "first_at": "2024-03-08 22:01:32+00:00",
+          "last_at": "2025-10-19 22:42:17+00:00",
+          "question": "team:d20d1868-8937-4a85-8706-bf936d265392 record"
+        }
+      ]
+    },
+    "query": {
+      "intent": "team_record",
+      "entity": "team",
+      "metric": "record",
+      "filters": {
+        "subject": "tea"
+      },
+      "aggregation": "total",
+      "sort": "desc",
+      "limit": 10,
+      "min_maps": 1
+    },
+    "code": "ambiguous_entity",
+    "reason": "'tea' could be several player/teams; which one?",
+    "suggestions": [
+      "Re-ask with the exact name, or with the id shown in brackets."
+    ],
+    "alternatives": [],
+    "parser": "rules"
+  },
+  "refusalWithEvidence": {
+    "slug": "bgwoMdUT-1uE",
+    "url": "/query/bgwoMdUT-1uE",
+    "status": "cannot_answer",
+    "question": "Team Falcons vs Crazy Raccoons",
+    "sentence": {
+      "text": "Team Falcons and Crazy Raccoons met, but none of those series has map stats on FACEIT.",
+      "spans": [
+        {
+          "start": 17,
+          "end": 31,
+          "kind": "team",
+          "text": "Crazy Raccoons",
+          "entity_id": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7"
+        },
+        {
+          "start": 0,
+          "end": 12,
+          "kind": "team",
+          "text": "Team Falcons",
+          "entity_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e"
+        }
+      ]
+    },
+    "aggregate": {
+      "description": null,
+      "columns": [],
+      "rows": []
+    },
+    "evidence": {
+      "available": true,
+      "grain": "series",
+      "description": "series they played whose maps FACEIT never recorded",
+      "rows": [
+        {
+          "match_id": "1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b",
+          "round_number": null,
+          "played_at": "2024-06-02 23:59:13+00:00",
+          "season": 2024,
+          "championship_id": "33781289-61ea-43d5-ac79-1af825dcb291",
+          "competition": "Dreamhack Dallas",
+          "team": "Team Falcons",
+          "opponent": "Crazy Raccoons",
+          "best_of": 1,
+          "score": 2,
+          "opponent_score": 4,
+          "result": "lost",
+          "map_stats_recorded": false,
+          "match_url": "https://www.faceit.com/en/ow2/room/1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b"
+        },
+        {
+          "match_id": "1-cd3ccc44-1b18-463d-a4de-2d400ef020e9",
+          "round_number": null,
+          "played_at": "2024-06-02 19:30:37+00:00",
+          "season": 2024,
+          "championship_id": "33781289-61ea-43d5-ac79-1af825dcb291",
+          "competition": "Dreamhack Dallas",
+          "team": "Team Falcons",
+          "opponent": "Crazy Raccoons",
+          "best_of": 1,
+          "score": 3,
+          "opponent_score": 2,
+          "result": "won",
+          "map_stats_recorded": false,
+          "match_url": "https://www.faceit.com/en/ow2/room/1-cd3ccc44-1b18-463d-a4de-2d400ef020e9"
+        }
+      ],
+      "page": 1,
+      "page_size": 3,
+      "total_rows": 2,
+      "total_pages": 1,
+      "has_more": false,
+      "columns": [
+        {
+          "key": "played_at",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "key": "season",
+          "label": "Season",
+          "type": "integer"
+        },
+        {
+          "key": "competition",
+          "label": "Competition",
+          "type": "text"
+        },
+        {
+          "key": "team",
+          "label": "Team",
+          "type": "text"
+        },
+        {
+          "key": "opponent",
+          "label": "Opponent",
+          "type": "text"
+        },
+        {
+          "key": "best_of",
+          "label": "Best of",
+          "type": "integer"
+        },
+        {
+          "key": "score",
+          "label": "Score",
+          "type": "score",
+          "pair_key": "opponent_score"
+        },
+        {
+          "key": "result",
+          "label": "Result",
+          "type": "result"
+        },
+        {
+          "key": "map_stats_recorded",
+          "label": "Map stats",
+          "type": "flag"
+        },
+        {
+          "key": "match_url",
+          "label": "Source",
+          "type": "link"
+        }
+      ],
+      "expanded_for": null,
+      "expandable_by": null,
+      "reason": null
+    },
+    "coverage": null,
+    "limitations": [
+      {
+        "id": "main_series_2025_2026",
+        "title": "The 2025 and 2026 main series is reconstructed from player history",
+        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's championship endpoints, which do not publish those divisions."
+      }
+    ],
+    "notes": [
+      "They did meet: 2 series in season 2024 (11 maps by series score), but FACEIT recorded no map stats for them, so none can count toward a map record."
+    ],
+    "entities": {
+      "opponent": {
+        "entity_type": "team",
+        "entity_id": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7",
+        "current_name": "Crazy Raccoons",
+        "matched_name": "Crazy Raccoons",
+        "name_kind": "current_name",
+        "score": 1.0,
+        "matches": 5,
+        "seasons": [
+          2024
+        ],
+        "first_at": "2024-06-01 00:34:38+00:00",
+        "last_at": "2024-06-02 23:59:13+00:00",
+        "question": null
+      },
+      "subject": {
+        "entity_type": "team",
+        "entity_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
+        "current_name": "Team Falcons",
+        "matched_name": "Team Falcons",
+        "name_kind": "current_name",
+        "score": 0.8,
+        "matches": 4,
+        "seasons": [
+          2024
+        ],
+        "first_at": "2024-05-31 22:43:22+00:00",
+        "last_at": "2024-06-02 23:59:13+00:00",
+        "question": null
+      }
+    },
+    "candidates": {},
+    "query": {
+      "intent": "versus",
+      "entity": "team",
+      "metric": "map_win_rate",
+      "filters": {
+        "team": "falcons",
+        "opponent": "crazy raccoons"
+      },
+      "aggregation": "total",
+      "sort": "desc",
+      "limit": 10,
+      "min_maps": 1
+    },
+    "code": "no_data",
+    "reason": "Team Falcons and Crazy Raccoons met, but none of those series has map stats on FACEIT",
+    "suggestions": [
+      "The series results are known; only the per-map breakdown is missing."
+    ],
+    "alternatives": [
+      "Team Falcons series record against Crazy Raccoons",
+      "Team Falcons record",
+      "Crazy Raccoons record"
+    ],
+    "parser": "rules"
+  },
+  "refusal": {
+    "slug": "bRw9zEqYL64M",
+    "url": "/query/bRw9zEqYL64M",
+    "status": "cannot_answer",
+    "question": "who has the best hero pool",
+    "sentence": {
+      "text": "hero picks are not in the FACEIT payloads.",
+      "spans": []
+    },
+    "aggregate": {
+      "description": null,
+      "columns": [],
+      "rows": []
+    },
+    "evidence": null,
+    "coverage": null,
+    "limitations": [],
+    "notes": [],
+    "entities": {},
+    "candidates": {},
+    "query": null,
+    "code": "unsupported_metric",
+    "reason": "hero picks are not in the FACEIT payloads",
+    "suggestions": [
+      "Ask `what stats are available` to see the tracked stat keys."
+    ],
+    "alternatives": [],
+    "parser": "rules"
+  },
+  "suggestions": {
+    "groups": [
+      "Leaderboards",
+      "Teams",
+      "Head to head",
+      "Players",
+      "Across seasons",
+      "Coverage",
+      "Maps and modes"
+    ],
+    "suggestions": [
+      {
+        "question": "who had the most eliminations in 2026",
+        "group": "Leaderboards",
+        "slug": "fGsf5Y26Um35"
+      },
+      {
+        "question": "who had the most healing done in 2026",
+        "group": "Leaderboards",
+        "slug": "n7_leBPZaKEg"
+      },
+      {
+        "question": "who had the most assists in 2026",
+        "group": "Leaderboards",
+        "slug": "ZNEImzg6R1RC"
+      },
+      {
+        "question": "who had the most damage mitigated in 2026",
+        "group": "Leaderboards",
+        "slug": "yDI9LPuk3de6"
+      },
+      {
+        "question": "SpaceStation Gaming record",
+        "group": "Teams",
+        "slug": "yAt7cXRbIt1_"
+      },
+      {
+        "question": "Twisted Minds record",
+        "group": "Teams",
+        "slug": "THQ4v32WVMcE"
+      },
+      {
+        "question": "NTMR record",
+        "group": "Teams",
+        "slug": "jqEXT4So053D"
+      },
+      {
+        "question": "Virtus pro record",
+        "group": "Teams",
+        "slug": "QEDjPofHxGku"
+      }
+    ]
   }
 };
 

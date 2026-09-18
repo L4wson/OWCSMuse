@@ -1,4 +1,4 @@
-import { disambiguatedQuestion, selectorFor } from "../format.js";
+import { activeRange } from "../format.js";
 
 /**
  * "Which one did you mean?" - the state a resolver reaches honestly rather than
@@ -9,7 +9,7 @@ import { disambiguatedQuestion, selectorFor } from "../format.js";
  * it is, how many matches it has in scope, and the id itself. Two identical rows
  * would make the choice meaningless.
  */
-export default function Clarify({ answer, question, onAsk }) {
+export default function Clarify({ answer, onAsk }) {
   const roles = Object.entries(answer?.candidates ?? {});
   if (!roles.length) return null;
 
@@ -35,14 +35,18 @@ export default function Clarify({ answer, question, onAsk }) {
             <ul className="candidates">
               {candidates.map((candidate) => {
                 const shared = (counts.get((candidate.current_name ?? "").toLowerCase()) ?? 0) > 1;
-                const { exact } = selectorFor(candidate);
+                const active = activeRange(candidate);
+                // The service ships a question per candidate that resolves to
+                // exactly this entity; substituting a name is what fails when two
+                // of them share one.
                 return (
                   <li key={`${candidate.entity_type}:${candidate.entity_id}`}>
                     <button
                       type="button"
                       className="candidate"
-                      onClick={() => onAsk(disambiguatedQuestion(question, typed, candidate))}
+                      onClick={() => onAsk(candidate.question)}
                       data-entity-id={candidate.entity_id}
+                      data-question={candidate.question}
                     >
                       <span className="candidate-name">{candidate.current_name ?? candidate.matched_name}</span>
                       <span className="candidate-facts">
@@ -52,16 +56,12 @@ export default function Clarify({ answer, question, onAsk }) {
                             ? `${candidate.matches.toLocaleString("en-GB")} matches in scope`
                             : "no matches in scope"}
                         </span>
+                        {active ? <span className="candidate-active">{active}</span> : null}
                         {candidate.matched_name && candidate.matched_name !== candidate.current_name ? (
                           <span>matched &ldquo;{candidate.matched_name}&rdquo;</span>
                         ) : null}
                         {shared ? <span className="candidate-id">id {candidate.entity_id}</span> : null}
                       </span>
-                      {shared && !exact ? (
-                        <span className="candidate-warn">
-                          shares this name and cannot be picked by id yet - this asks by name
-                        </span>
-                      ) : null}
                     </button>
                   </li>
                 );

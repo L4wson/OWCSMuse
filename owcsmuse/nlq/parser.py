@@ -156,9 +156,22 @@ _BAD_NAME_WORDS = {"most", "top", "highest", "best", "lowest", "fewest", "least"
                    "season", "overall", "leaderboard", "ranking", "rank", "many", "much"}
 
 
+ENTITY_TOKEN = re.compile(
+    r"^(?:(?:player|team|org):)?"
+    r"(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[a-z0-9][a-z0-9-]*)$", re.I)
+
+
+def is_entity_token(text: Optional[str]) -> bool:
+    """A prefixed id (`org:team-peps`) names exactly one entity, so it is a name."""
+    t = (text or "").strip()
+    return bool(t) and ":" in t and bool(ENTITY_TOKEN.match(t))
+
+
 def _clean_name(s: Optional[str]) -> Optional[str]:
     if not s:
         return None
+    if is_entity_token(s):
+        return s.strip()      # never stop-worded, stripped or metric-matched
     s = re.sub(r"\s+", " ", s).strip(" ?.,!'\"")
     s = re.sub(r"'s$", "", s)
     for phrase, _ in METRIC_SYNONYMS:
@@ -286,14 +299,14 @@ _H2H = [
     re.compile(r"^(?P<a>.+?)\s+(?:head to head|h2h|matchup)\s+(?:with\s+|against\s+|vs\.?\s+)?(?P<b>.+)$"),
 ]
 
-_NAME = r"[a-z0-9_.\-' ]+?"
+_NAME = r"[a-z0-9_.:\-' ]+?"
 _SUBJECT_PATTERNS = [
     re.compile(r"\b(?:did|does|do|has|have|had|is|was|are|were)\s+(?P<n>" + _NAME + r")\s+(?:have|get|got|score|scored|record|recorded|play|played|average|averaged|win|won|lose|lost|deal|dealt|heal|healed|do|done|die|died|post|posted|put up|finish|finished|go|gone|fare|perform)\b"),
     re.compile(r"(?:^|\s)(?P<n>(?:[a-z0-9_.\-']+\s+)?[a-z0-9_.\-']+)'s\b"),
-    re.compile(r"\b(?:for|by|of|from)\s+(?P<n>[a-z0-9_.\-' ]+)$"),
+    re.compile(r"\b(?:for|by|of|from)\s+(?P<n>[a-z0-9_.:\-' ]+)$"),
     re.compile(r"^(?:show|show me|give me|get|what is|what's|what are|whats|tell me|tell me about)\s+(?P<n>" + _NAME + r")(?:\s+(?:stats?|numbers?|totals?|averages?))?$"),
     re.compile(r"^(?P<n>" + _NAME + r")\s+(?:stats?|numbers?|totals?|averages?)$"),
-    re.compile(r"^(?P<n>[a-z0-9_.\-' ]{2,40})$"),   # a bare name
+    re.compile(r"^(?P<n>[a-z0-9_.:\-' ]{2,72})$"),   # a bare name, or an entity id
 ]
 
 

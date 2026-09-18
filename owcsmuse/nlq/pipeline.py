@@ -14,7 +14,8 @@ from ..limitations import applicable as applicable_limitations, entity_match_fil
 from ..logging import get_logger, log_event
 from ..resolve import Candidate, resolve
 from .compile import Compiled, Resolved, compile_query
-from .evidence import DEFAULT_PAGE_SIZE, Evidence, fetch_evidence, fetch_missing_series, is_map_grain
+from .evidence import (DEFAULT_PAGE_SIZE, Evidence, entity_of, fetch_evidence, fetch_missing_series,
+                       is_map_grain)
 from .parser import parse_question
 from .sentence import render_sentence, render_unanswerable
 from .schema import StructuredQuery, Unanswerable
@@ -35,7 +36,8 @@ class Answer:
     query: Optional[dict] = None
     code: Optional[str] = None
     reason: Optional[str] = None
-    suggestions: list[str] = field(default_factory=list)
+    suggestions: list[str] = field(default_factory=list)          # advice, when advice is the answer
+    alternatives: list[str] = field(default_factory=list)         # questions that do work, ready to run
     candidates: dict[str, list[dict]] = field(default_factory=dict)   # role -> candidate dicts (clarify)
     entities: dict[str, dict] = field(default_factory=dict)           # role -> resolved entity
     rows: list[dict] = field(default_factory=list)
@@ -54,9 +56,10 @@ class Answer:
 
 
 def _cannot(question: str, u: Unanswerable, query: Optional[StructuredQuery] = None, parser: Optional[str] = None,
-            entities: Optional[dict[str, dict]] = None) -> Answer:
+            entities: Optional[dict[str, dict]] = None, alternatives: Optional[list[str]] = None) -> Answer:
     a = Answer(status="cannot_answer", question=question, query=query.compact() if query else None, code=u.code,
-               reason=u.reason, suggestions=list(u.suggestions), parser=parser, entities=dict(entities or {}))
+               reason=u.reason, suggestions=list(u.suggestions), parser=parser, entities=dict(entities or {}),
+               alternatives=list(alternatives or []))
     # A refusal gets a sentence too: it is what the UI shows, and its entities
     # are marked so a name in it stays clickable.
     a.sentence = render_unanswerable(u.reason, a.entities).as_dict()
@@ -93,7 +96,28 @@ def _decide(cands: list[Candidate]) -> tuple[Optional[Candidate], bool]:
     return top, False
 
 
-def resolve_entities(conn: psycopg.Connection, q: StructuredQuery) -> tuple[Optional[Resolved], Optional[Answer]]:
+def candidate_question(question: str, typed: Optional[str], candidate: Candidate) -> str:
+    """A question that resolves to exactly this candidate.
+
+    The id goes in where the ambiguous name was, so the rest of the question -
+    season, map, opponent - survives. Substituting a *name* is what fails when two
+    entities share one, which is the only time this is needed, so the token is
+    always the id. If the name cannot be found in the text the question falls back
+    to that entity's record, which still answers about the right entity.
+    """
+    token = candidate.token()
+    text = question or ""
+    for name in (typed, candidate.matched_name, candidate.current_name):
+        if not name:
+            continue
+        at = text.lower().find(str(name).lower())
+        if at >= 0:
+            return text[:at] + token + text[at + len(str(name)):]
+    return f"{token} record"
+
+
+def resolve_entities(conn: psycopg.Connection, q: StructuredQuery,
+                     question: str = "") -> tuple[Optional[Resolved], Optional[Answer]]:
     """Resolve every name in the filters. Returns (resolved, None) or (None, clarify/cannot answer)."""
     r = Resolved()
     entities: dict[str, dict] = {}
@@ -113,6 +137,8 @@ def resolve_entities(conn: psycopg.Connection, q: StructuredQuery) -> tuple[Opti
                        f"Re-ask with the id, e.g. \"{question_hint(name, cands[0].entity_id)}\".")
             else:
                 tip = "Re-ask with the exact name, or with the id shown in brackets."
+            for c in cands:
+                c.question = candidate_question(question, name, c)
             return None, Answer(status="clarify", question="", code="ambiguous_entity",
                                 reason=f"'{name}' could be several {etype or 'player/team'}s; which one?",
                                 suggestions=[tip],
@@ -160,6 +186,46 @@ def _entities_for_limitations(r: Resolved) -> list[tuple[str, Optional[str]]]:
     if r.opponent_id:
         out.append((r.opponent_id, r.opponent_type))
     return out
+
+
+def _alternatives(question: str, q: StructuredQuery, r: Resolved,
+                  coverage: Optional[dict] = None, met_but_no_maps: bool = False) -> list[str]:
+    """Questions that would have worked, for a question that did not.
+
+    Advice ("check the spelling") is the right answer to a typo and the wrong
+    answer to everything else: when the entities resolved and the data simply is
+    not in the slice that was asked for, the useful reply is a question that is.
+    """
+    left = r.names.get("subject") or r.names.get("player") or r.names.get("team")
+    right = r.names.get("opponent")
+    out: list[str] = []
+
+    if q.intent == "versus" and left and right and met_but_no_maps:
+        # The series exist even though the maps do not, and series grain counts them.
+        out.append(f"{left} series record against {right}")
+    if q.intent == "season_compare" and left:
+        out.append(f"{left} record")
+
+    # The same question, in a season that has the stat.
+    with_stat = sorted(coverage.get("seasons_with_stat") or []) if coverage else []
+    season = q.filters.season
+    if season and with_stat and season not in with_stat:
+        other = with_stat[-1]
+        swapped = (question or "").replace(str(season), str(other))
+        if swapped and swapped != question:
+            out.append(swapped)
+
+    for name in (left, right):
+        if name:
+            out.append(f"{name} record")
+
+    # Never offer the question that just failed.
+    asked = (question or "").strip().lower()
+    seen: list[str] = []
+    for candidate in out:
+        if candidate.strip().lower() != asked and candidate not in seen:
+            seen.append(candidate)
+    return seen[:4]
 
 
 def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved, rows: list[dict]) -> list[str]:
@@ -242,7 +308,7 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
     q: StructuredQuery = parsed
 
     # 2. resolve entities before anything else
-    r, pre = resolve_entities(conn, q)
+    r, pre = resolve_entities(conn, q, question)
     if r is None:
         pre.question = question
         pre.query = q.compact()
@@ -254,7 +320,13 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
     info = info or SchemaInfo.from_db(conn)
     v = validate(q, info)
     if isinstance(v, Unanswerable):
-        return _cannot(question, v, q, used)
+        # A stat that exists in other seasons is a question away from working.
+        seasons_with = sorted(info.stat_keys.get(q.metric or "", set()) or [])
+        swapped = None
+        if q.filters.season and seasons_with and q.filters.season not in seasons_with:
+            swapped = question.replace(str(q.filters.season), str(seasons_with[-1]))
+        return _cannot(question, v, q, used, pre.entities if r else None,
+                       [swapped] if swapped and swapped != question else None)
 
     # 4. compile
     c = compile_query(v, r)
@@ -305,7 +377,8 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
                 reason = f"{left} and {right} never faced each other{where} in the competitions in scope"
                 tips = ["Check the spelling, or widen the season; scope is OWCS NA + EMEA main competition."]
             u = Unanswerable(code="no_data", reason=reason, suggestions=tips)
-            a = _cannot(question, u, q, used, pre.entities)
+            a = _cannot(question, u, q, used, pre.entities,
+                        _alternatives(question, q, r, coverage, met_but_no_maps=bool(notes)))
             a.notes, a.limitations = notes, limitations
             if with_evidence and notes:
                 # they did meet: the series with no map stats are the evidence
@@ -325,7 +398,7 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
             reason=f"{name} has no maps with stats in {' or '.join(map(str, yrs))}, so there is nothing to compare",
             suggestions=["The entity may have played only series whose maps FACEIT never recorded, "
                          "or not played in those seasons at all. `ask \"<name> record\"` shows what is known."])
-        a = _cannot(question, u, q, used, pre.entities)
+        a = _cannot(question, u, q, used, pre.entities, _alternatives(question, q, r, coverage))
         a.limitations = limitations
         if debug:
             a.sql, a.params = c.sql, c.params
@@ -333,13 +406,19 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
     if not rows:
         u = Unanswerable(code="no_data", reason="the query is valid but nothing in scope matches these filters",
                          suggestions=["Loosen the season / championship / map filter, or check `status` for what has been ingested."])
-        a = _cannot(question, u, q, used, pre.entities)
+        a = _cannot(question, u, q, used, pre.entities, _alternatives(question, q, r, coverage))
         a.coverage = coverage
         a.notes = notes
         a.limitations = limitations
         if debug:
             a.sql, a.params = c.sql, c.params
         return a
+    if q.intent in ("leaderboard", "map_stats"):
+        # Expansion is then mechanical: the row names its own entity.
+        for row in rows:
+            entity = entity_of(row)
+            if entity:
+                row["entity"] = entity
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows, coverage=coverage,
                notes=notes, limitations=limitations, description=c.description, parser=used)
     sentence = render_sentence(a.query, rows, pre.entities, c.description)
@@ -404,6 +483,8 @@ def render_text(a: Answer, max_rows: int = 25, evidence_rows: int = 5) -> str:
         lines.append(f"Can't answer that ({a.code}): {a.reason}")
         for s in a.suggestions:
             lines.append(f"  - {s}")
+        for alt in a.alternatives:
+            lines.append(f"  try: {alt}")
         lines += _evidence_lines(a, evidence_rows)
         for n in a.notes:
             lines.append(f"  note: {n}")

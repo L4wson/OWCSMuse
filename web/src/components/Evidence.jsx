@@ -39,7 +39,7 @@ export default function Evidence({ evidence, busy = false, onPage = null }) {
         {description ? <p className="muted">{description}, newest first.</p> : null}
       </header>
 
-      <DataTable rows={rows} emptyText="No rows on this page." />
+      <DataTable rows={rows} columns={evidence.columns ?? []} emptyText="No rows on this page." />
 
       {totalPages > 1 ? (
         <nav className="pager" aria-label="Evidence pages">

@@ -23,8 +23,9 @@ from contextlib import asynccontextmanager, contextmanager
 from typing import Any, Iterator, Literal, Optional
 
 import psycopg
-from fastapi import Depends, FastAPI, HTTPException, Path, Query
+from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
 from . import __version__
@@ -32,10 +33,11 @@ from .config import Settings, load_settings
 from .db import connect
 from .limitations import LIMITATIONS
 from .logging import get_logger, log_event
+from .nlq.columns import describe as describe_columns
 from .nlq.evidence import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE
 from .nlq.pipeline import Answer, ask
 from .nlq.validate import SchemaInfo
-from .web import load_question, remember_question, slug_for, suggestions
+from .web import describe_parse_change, load_question, remember_question, slug_for, suggestions
 
 log = get_logger("owcsmuse.api")
 
@@ -163,7 +165,9 @@ def answer_payload(answer: Answer, slug: str) -> dict[str, Any]:
         "sentence": answer.sentence,
         "aggregate": {
             "description": answer.description,
-            "columns": list(rows[0].keys()) if rows else [],
+            # {key, label, type} per column: the schema says what a column is, so
+            # no client has to infer it from the name of a key.
+            "columns": describe_columns(rows),
             "rows": rows,
         },
         "evidence": answer.evidence,
@@ -176,6 +180,7 @@ def answer_payload(answer: Answer, slug: str) -> dict[str, Any]:
         "code": answer.code,
         "reason": answer.reason,
         "suggestions": answer.suggestions,
+        "alternatives": answer.alternatives,
         "parser": answer.parser,
     })
 
@@ -200,6 +205,17 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
     # A browser client is the point of this layer; the API is read-only and
     # carries no credentials or cookies, so an open origin policy costs nothing.
     app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["GET", "POST"], allow_headers=["*"])
+
+    @app.exception_handler(psycopg.OperationalError)
+    @app.exception_handler(psycopg.InterfaceError)
+    async def _database_down(request: Request, exc: Exception) -> JSONResponse:
+        """503, not 500: the service is up, its warehouse is not, and nothing was refused."""
+        log_event(log, logging.ERROR, "database_unavailable", path=request.url.path,
+                  error=f"{type(exc).__name__}: {str(exc)[:200]}")
+        return JSONResponse(
+            status_code=503,
+            content={"detail": f"database unavailable: {type(exc).__name__}"},
+        )
     app.state.pool = pool
     app.state.settings = settings
 
@@ -268,7 +284,13 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
             if not saved:
                 raise HTTPException(status_code=404, detail=f"no question is saved under '{slug}'")
             payload = _answer(conn, saved.question, saved.parser, page, page_size, evidence_for, True)
-        payload["shared"] = {"times_asked": saved.times_asked, "parsed_when_saved": saved.structured_query}
+        changes = describe_parse_change(saved.structured_query, payload.get("query"))
+        payload["shared"] = {
+            "times_asked": saved.times_asked,
+            "parsed_when_saved": saved.structured_query,
+            "parse_changed": bool(changes),
+            "parse_change": changes,
+        }
         return payload
 
     @app.get("/suggestions", summary="example questions with data behind them")

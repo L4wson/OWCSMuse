@@ -3,7 +3,6 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Clarify from "../src/components/Clarify.jsx";
-import { disambiguatedQuestion } from "../src/format.js";
 import { CLARIFY } from "./fixtures.js";
 
 const TWO_OF_THE_SAME = {
@@ -21,6 +20,10 @@ const TWO_OF_THE_SAME = {
         name_kind: "current_name",
         score: 1,
         matches: 4,
+        seasons: [2024],
+        first_at: "2024-05-31T00:00:00Z",
+        last_at: "2024-06-02T00:00:00Z",
+        question: "team:2ab92d33-4c33-46e1-a13f-743a95291d0e record in 2024",
       },
       {
         entity_type: "team",
@@ -30,6 +33,10 @@ const TWO_OF_THE_SAME = {
         name_kind: "current_name",
         score: 1,
         matches: 0,
+        seasons: [],
+        first_at: null,
+        last_at: null,
+        question: "team:9e21c0c1-1111-2222-3333-444455556666 record in 2024",
       },
     ],
   },
@@ -37,7 +44,7 @@ const TWO_OF_THE_SAME = {
 
 describe("clarify", () => {
   it("asks the question the API asked, and offers every candidate", () => {
-    render(<Clarify answer={CLARIFY} question="tea record" onAsk={() => {}} />);
+    render(<Clarify answer={CLARIFY} onAsk={() => {}} />);
     expect(screen.getByTestId("clarify")).toHaveTextContent("which one?");
     expect(screen.getByText("Team Peps")).toBeInTheDocument();
     expect(screen.getByText("Team Liquid")).toBeInTheDocument();
@@ -45,7 +52,7 @@ describe("clarify", () => {
   });
 
   it("shows what was typed and what each candidate is", () => {
-    render(<Clarify answer={CLARIFY} question="tea record" onAsk={() => {}} />);
+    render(<Clarify answer={CLARIFY} onAsk={() => {}} />);
     expect(screen.getByTestId("clarify")).toHaveTextContent("You typed tea");
     const peps = screen.getByRole("button", { name: /Team Peps/ });
     expect(peps).toHaveTextContent("org");
@@ -53,45 +60,46 @@ describe("clarify", () => {
   });
 
   it("separates two candidates that share a name, instead of showing two identical rows", () => {
-    render(<Clarify answer={TWO_OF_THE_SAME} question="Team Falcons record" onAsk={() => {}} />);
+    render(<Clarify answer={TWO_OF_THE_SAME} onAsk={() => {}} />);
     const [first, second] = screen.getAllByRole("button");
 
     expect(within(first).getByText("4 matches in scope")).toBeInTheDocument();
     expect(within(second).getByText("no matches in scope")).toBeInTheDocument();
     expect(first).toHaveTextContent("id 2ab92d33-4c33-46e1-a13f-743a95291d0e");
     expect(second).toHaveTextContent("id 9e21c0c1-1111-2222-3333-444455556666");
+    expect(first).toHaveTextContent("season 2024");           // one has an era, the other never played
     expect(first.textContent).not.toBe(second.textContent);
   });
 
-  it("re-asks the original question with the chosen id in place of the name", async () => {
+  it("asks the question the service shipped with the candidate, verbatim", async () => {
     const onAsk = vi.fn();
-    render(<Clarify answer={TWO_OF_THE_SAME} question="Team Falcons record in 2024" onAsk={onAsk} />);
+    render(<Clarify answer={TWO_OF_THE_SAME} onAsk={onAsk} />);
     await userEvent.click(screen.getAllByRole("button")[1]);
-    expect(onAsk).toHaveBeenCalledWith("9e21c0c1-1111-2222-3333-444455556666 record in 2024");
+    expect(onAsk).toHaveBeenCalledWith(TWO_OF_THE_SAME.candidates.subject[1].question);
   });
 
-  it("selects an org by name, and says so, because its id is not a question the parser takes", async () => {
+  it("selects an org by its id, which the service guarantees resolves", async () => {
     const onAsk = vi.fn();
-    const orgTie = {
-      ...TWO_OF_THE_SAME,
-      candidates: {
-        subject: [
-          { ...TWO_OF_THE_SAME.candidates.subject[0], entity_type: "org", entity_id: "team-falcons" },
-          TWO_OF_THE_SAME.candidates.subject[1],
-        ],
-      },
-    };
-    render(<Clarify answer={orgTie} question="Team Falcons record" onAsk={onAsk} />);
-    expect(screen.getAllByRole("button")[0]).toHaveTextContent("cannot be picked by id yet");
+    const org = CLARIFY.candidates.subject.find((c) => c.entity_type === "org");
+    expect(org.question).toMatch(/^org:/); // not a name, which is what fails on a tie
 
-    await userEvent.click(screen.getAllByRole("button")[0]);
-    expect(onAsk).toHaveBeenCalledWith("Team Falcons record");
+    render(<Clarify answer={CLARIFY} onAsk={onAsk} />);
+    await userEvent.click(screen.getByRole("button", { name: new RegExp(org.current_name) }));
+    expect(onAsk).toHaveBeenCalledWith(org.question);
   });
 
-  it("falls back to a record rather than a dead end when the name is not in the question", () => {
-    const candidate = CLARIFY.candidates.subject[1];
-    expect(disambiguatedQuestion("who had the most eliminations", null, candidate)).toBe(
-      `${candidate.entity_id} record`,
-    );
+  it("shows when each candidate was active, which is what tells two eras apart", () => {
+    render(<Clarify answer={CLARIFY} onAsk={() => {}} />);
+    for (const candidate of CLARIFY.candidates.subject) {
+      const option = screen.getByRole("button", { name: new RegExp(candidate.current_name) });
+      expect(option).toHaveTextContent(`seasons ${candidate.seasons.join(", ")}`);
+    }
+  });
+
+  it("constructs no question of its own", () => {
+    render(<Clarify answer={CLARIFY} onAsk={() => {}} />);
+    for (const [index, option] of screen.getAllByRole("button").entries()) {
+      expect(option).toHaveAttribute("data-question", CLARIFY.candidates.subject[index].question);
+    }
   });
 });

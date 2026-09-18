@@ -67,16 +67,13 @@ export default function Refusal({ answer, suggestions = [], onAsk, onPage, busy 
 /**
  * Questions worth offering after this particular failure.
  *
- * The API returns advice ("check the spelling") but not questions, so the
- * entities it did resolve are the best material: if a map record between two
- * teams has no maps, each team's own record does exist.
+ * The service knows what would have worked - it resolved the entities and it
+ * knows which seasons carry the stat - so `alternatives` comes from there. Live
+ * suggestions only fill the gap when the failure was a typo and there is nothing
+ * specific to offer.
  */
 export function nearbyQuestions(answer, suggestions = []) {
-  const out = [];
-  for (const entity of Object.values(answer?.entities ?? {})) {
-    const name = entity?.current_name;
-    if (name) out.push(`${name} record`);
-  }
+  const out = [...(answer?.alternatives ?? [])];
   for (const suggestion of suggestions) {
     if (out.length >= 4) break;
     if (suggestion?.question && !out.includes(suggestion.question)) out.push(suggestion.question);

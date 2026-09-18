@@ -18,7 +18,8 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
+from datetime import datetime
 from difflib import SequenceMatcher
 from typing import Any, Iterable, Optional
 
@@ -28,7 +29,10 @@ import psycopg
 ENTITY_ID = re.compile(
     r"^(?:(?P<kind>player|team|org):)?"
     r"(?P<id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$", re.I)
-ORG_ID = re.compile(r"^org:(?P<id>[a-z0-9-]+)$", re.I)
+# An explicit prefix means "this is an id, look it up exactly", whatever shape
+# the id has: a FACEIT GUID for a player or team, a slug for an org. Without a
+# prefix only a GUID counts, so a bare name is still matched by name.
+PREFIXED_ID = re.compile(r"^(?P<kind>player|team|org):(?P<id>[A-Za-z0-9._-]{1,64})$", re.I)
 
 _NON_ALNUM = re.compile(r"[^0-9a-z ]+")
 _SPACES = re.compile(r"\s+")
@@ -59,9 +63,18 @@ class Candidate:
     name_kind: str
     score: float
     matches: int = 0          # in-scope matches, used only to break an exact tie
+    # What tells two entities with the same name apart, for whoever has to choose.
+    seasons: list[int] = field(default_factory=list)
+    first_at: Optional[datetime] = None
+    last_at: Optional[datetime] = None
+    question: Optional[str] = None   # a question that resolves to exactly this entity
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+    def token(self) -> str:
+        """The unambiguous way to name this entity in a question."""
+        return f"{self.entity_type}:{self.entity_id}"
 
 
 def score_name(query_folded: str, name_folded: str) -> float:
@@ -105,6 +118,9 @@ def rank_candidates(
             name_kind=row.get("name_kind") or "",
             score=round(s, 3),
             matches=int(row.get("matches") or 0),
+            seasons=list(row.get("seasons") or []),
+            first_at=row.get("first_at"),
+            last_at=row.get("last_at"),
         )
         prev = best.get(key)
         # prefer higher score, then current names over historical ones
@@ -121,7 +137,8 @@ def load_names(conn: psycopg.Connection, entity_type: Optional[str] = None) -> l
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT entity_type, entity_id, name, name_kind, name_folded, current_name, matches
+            SELECT entity_type, entity_id, name, name_kind, name_folded, current_name, matches,
+                   seasons, first_at, last_at
             FROM entity_names
             WHERE %s::text IS NULL OR entity_type = %s
             """,
@@ -137,7 +154,7 @@ def resolve_id(conn: psycopg.Connection, entity_id: str, entity_type: Optional[s
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT entity_type, entity_id, current_name, name, name_kind, matches
+            SELECT entity_type, entity_id, current_name, name, name_kind, matches, seasons, first_at, last_at
             FROM entity_names
             WHERE entity_id = %s AND (%s::text IS NULL OR entity_type = %s) AND name_kind LIKE 'current%%'
             LIMIT 1
@@ -150,21 +167,23 @@ def resolve_id(conn: psycopg.Connection, entity_id: str, entity_type: Optional[s
         return []
     return [Candidate(entity_type=row["entity_type"], entity_id=row["entity_id"], current_name=row["current_name"],
                       matched_name=row["name"], name_kind="entity_id", score=1.0,
-                      matches=int(row.get("matches") or 0))]
+                      matches=int(row.get("matches") or 0), seasons=list(row.get("seasons") or []),
+                      first_at=row.get("first_at"), last_at=row.get("last_at"))]
 
 
 def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = None,
             limit: int = 5, min_score: float = 0.5) -> list[Candidate]:
     """Rank all known names for `entity_type` ('player', 'team' or None for both).
 
-    A bare FACEIT id (optionally prefixed `player:` / `team:`) resolves exactly,
-    so two entities with identical names can still be told apart.
+    A FACEIT id resolves exactly, so two entities with identical names can still
+    be told apart: bare when it is a GUID, or prefixed `player:` / `team:` /
+    `org:` for any id, which is how a clarify candidate names itself.
     """
     q = (query or "").strip()
+    m = PREFIXED_ID.match(q)
+    if m:
+        return resolve_id(conn, m.group("id").lower(), m.group("kind").lower())
     m = ENTITY_ID.match(q)
     if m:
         return resolve_id(conn, m.group("id").lower(), m.group("kind") or entity_type)
-    m = ORG_ID.match(q)
-    if m:
-        return resolve_id(conn, m.group("id").lower(), "org")
     return rank_candidates(query, load_names(conn, entity_type), limit=limit, min_score=min_score)

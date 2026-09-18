@@ -29,8 +29,15 @@ class Resolved:
     opponent_type: Optional[str] = None
     names: dict[str, str] = field(default_factory=dict)  # role -> display name
 
-    def org_key(self, entity_id: str, entity_type: Optional[str]) -> str:
-        """How an org or unmapped team id is keyed in the fact views."""
+    def org_key(self, entity_id: Optional[str], entity_type: Optional[str]) -> Optional[str]:
+        """How an org or unmapped team id is keyed in the fact views.
+
+        None when there is no entity: the old version turned a missing team into
+        the literal key "team:None", which is a filter nothing matches, so every
+        player record and K/D question quietly returned no_data.
+        """
+        if not entity_id:
+            return None
         return entity_id if entity_type == "org" else f"team:{entity_id}"
 
 
@@ -78,8 +85,9 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, "season", f.season)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         return Compiled(
-            sql=f"SELECT season, stat_key, rows_with_stat, rows_total, coverage_pct, championships_with_stat, championships_total "
-                f"FROM stat_coverage_season{where} ORDER BY season, stat_key",
+            sql="SELECT season, stat_key, stat_kind, rows_with_stat, rows_total, coverage_pct, "
+                f"championships_with_stat, championships_total FROM stat_coverage_season{where} "
+                "ORDER BY season, stat_key",
             params=params, description="stat availability per season", coverage_stat=None, sample_columns=("rows_total",),
         )
 
@@ -309,7 +317,9 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, "a.map_name", v.map_name)
         _where(clauses, params, "a.game_mode", v.mode_name)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-        sql = ("SELECT a.player_id, p.nickname, sum(a.maps) AS maps, sum(a.matches) AS matches, sum(a.maps_won) AS map_wins, "
+        # No sum(a.matches) here: the aggregate is grouped per map and mode, so a
+        # series would be counted once per map played in it.
+        sql = ("SELECT a.player_id, p.nickname, sum(a.maps) AS maps, sum(a.maps_won) AS map_wins, "
                "sum(a.maps) - sum(a.maps_won) - sum(a.maps_drawn) AS map_losses, "
                "round(100.0 * sum(a.maps_won) / nullif(sum(a.maps), 0), 1) AS map_win_pct, "
                "sum(a.sum_eliminations) AS eliminations, sum(a.sum_deaths) AS deaths, "

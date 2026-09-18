@@ -302,7 +302,8 @@ the series it had to exclude.
 ### 2024 carries 9 stat keys; 2025 and 2026 carry 47
 
 `stats_2024` - the 2024 payloads expose only Eliminations, Deaths, Assists,
-Damage Dealt, Healing Done, Damage Mitigated, K/D Ratio, Result and Role. Per-10
+Damage Dealt, Healing Done, Damage Mitigated, K/D Ratio, Result and Role (the
+last two of those are a rate and a label, so six countable stats). Per-10
 minute rates, Final Blows, Solo Kills, Objective Time and Time Played do not
 exist for that season at all, so an all-seasons leaderboard for any of them is a
 2025+ leaderboard wearing an all-time label. `stat_coverage_season` is the
@@ -554,11 +555,17 @@ curl -s localhost:8000/ask -H 'content-type: application/json' \
     "text": "sug2rfree is 22-20 in maps against zeruhh across 2024-2026.",
     "spans": [ {"start": 0, "end": 9, "kind": "player", "text": "sug2rfree", "entity_id": "..."} ]
   },
-  "aggregate": {"description": "player vs player, map grain", "columns": [...], "rows": [ ... ]},
+  "aggregate": {
+    "description": "player vs player, map grain",
+    "columns": [{"key": "map_wins", "label": "Map wins", "type": "integer"}, ...],
+    "rows": [ ... ]
+  },
   "evidence": {
     "available": true, "grain": "map", "description": "every map behind this record",
     "page": 1, "page_size": 5, "total_rows": 42, "total_pages": 9, "has_more": true,
     "expanded_for": null, "expandable_by": null,
+    "columns": [{"key": "played_at", "label": "Date", "type": "date"},
+                {"key": "score", "label": "Score", "type": "score", "pair_key": "opponent_score"}, ...],
     "rows": [ {"played_at": "2026-07-04T22:47:50Z", "competition": "S9 NA OWCS Central - Playoffs",
                "team": "SpaceStation Gaming", "opponent": "Team Liquid", "map_name": "Ilios",
                "game_mode": "Control", "score": 2, "opponent_score": 1, "result": "won",
@@ -567,14 +574,40 @@ curl -s localhost:8000/ask -H 'content-type: application/json' \
   },
   "coverage": { ... }, "limitations": [ ... ], "notes": [ ... ],
   "entities": { ... }, "query": { ... },   // the structured query it understood
-  "code": null, "reason": null, "suggestions": [], "parser": "rules"
+  "code": null, "reason": null,
+  "suggestions": [],       // advice, when advice is the answer ("check the spelling")
+  "alternatives": [],      // questions that do work, ready to run
+  "parser": "rules"
 }
 ```
 
+### Column descriptors
+
+Rows carry raw values, so anything reading them can sort, sum or plot. What each
+column *is* comes with it, from `owcsmuse/nlq/columns.py`:
+
+```jsonc
+{"key": "played_at", "label": "Date", "type": "date"}
+{"key": "score", "label": "Score", "type": "score", "pair_key": "opponent_score"}
+{"key": "coverage_pct", "label": "Coverage %", "type": "percent"}
+```
+
+`type` is the formatting contract - `date`, `score`, `percent`, `integer`,
+`decimal`, `text`, `link`, `flag`, `result`, `list` - and it is decided from the
+values as well as the name, so a Postgres `numeric` holding whole numbers is an
+`integer` column and a damage total does not render as `9730.00`. Join keys
+(`match_id`, `player_id`, `org_key`) stay in the rows and are never described as
+columns: a client needs them, a reader does not. A column that is empty at this
+grain is left out, which is how a series answer has no "Map #".
+
+A ranked row also carries `entity: {id, type, name, column}`, so expanding it is
+mechanical rather than a guess about which column holds the id.
+
 `status` is part of the body, not the HTTP code: a refusal or a clarification is
 a real answer with a reason code, so `POST /ask` returns 200 for all three and
-reserves 422 for a malformed request, 404 for an unknown slug and 503 for a
-database that cannot be reached.
+reserves 422 for a malformed request and 404 for an unknown slug. A database that
+cannot be read is **503 on every endpoint**, `/ask` included - the service is up
+and nothing was refused, and a client must be able to say so.
 
 ### Evidence rows
 
@@ -610,14 +643,61 @@ digit group in a sentence appears in the row behind it.
 Entity mentions carry character offsets and the entity id they resolved to, so a
 client can link a name without re-parsing the text.
 
+### Choosing between candidates
+
+An ambiguous name returns `status: "clarify"` with the candidates, and **each
+candidate carries a `question` that resolves to exactly that entity**:
+
+```jsonc
+{"entity_type": "org",  "entity_id": "team-peps", "current_name": "Team Peps",
+ "matches": 55, "seasons": [2024, 2025, 2026],
+ "first_at": "2024-03-08T...", "last_at": "2026-05-27T...",
+ "question": "org:team-peps record"}
+```
+
+The question is the original one with the ambiguous name replaced by the entity's
+id, so the season, map or opponent in it survives. A client must never build this
+itself by substituting a name - substituting a name is exactly what fails when
+two entities share one. The parser accepts `player:`, `team:` and `org:` prefixed
+ids anywhere a name can appear, and a bare FACEIT GUID as well.
+
+`seasons`, `first_at` and `last_at` are what tell two same-named entities apart:
+"Team Falcons, 4 matches, season 2024" against "Team Falcons, no matches".
+
+### Refusals that go somewhere
+
+`suggestions` is advice and stays advice where advice is the answer ("check the
+spelling"). `alternatives` are runnable questions, built from what the service
+already knows: the entities it resolved, and which seasons actually carry the
+stat.
+
+```
+Team Falcons and Crazy Raccoons met, but none of those series has map stats on FACEIT
+  try: Team Falcons series record against Crazy Raccoons     <- series grain counts them
+  try: Team Falcons record
+  try: Crazy Raccoons record
+
+'Final Blows' is not recorded for the 2024 season (seasons with it: 2025, 2026)
+  try: who had the most final blows in 2026
+```
+
+The question that just failed is never offered back.
+
 ### Shareable links
 
 A slug is a digest of the normalized question, so the same ask always produces
 the same link and "who had the most eliminations in 2024" and
 "WHO had the most  eliminations in 2024" share one. `saved_queries` stores the
 question, never the answer: a link re-runs against current data, which is the
-point of sharing it. The parse recorded when the link was first created is
-returned alongside, so a parser change is visible rather than silent.
+point of sharing it.
+
+`GET /query/{slug}` compares the parse saved with the link against today's and
+returns the verdict, so no client diffs two objects to find out:
+
+```jsonc
+"shared": {"times_asked": 3, "parsed_when_saved": { ... },
+           "parse_changed": true, "parse_change": ["intent: head_to_head -> versus"]}
+```
 
 ### Suggestions
 
@@ -653,10 +733,11 @@ result view:
 - **Coverage, notes and limitations** sit between the sentence and the table. A
   leaderboard that covers 2025 and 2026 but not 2024 says so above the numbers,
   not in a tooltip or a footer.
-- **The evidence table**, with columns derived from the rows the API returned, so
-  a map-grain answer shows maps and a series-grain answer shows series without
-  the client knowing which it asked for. Empty columns are dropped, a score and
-  its opposite number read as `3-1`, and every row links to its FACEIT match.
+- **The evidence table**, rendering the columns the API described - label and
+  type - so a map-grain answer shows maps and a series-grain answer shows series
+  with no client-side knowledge of either. The client holds no label table and no
+  key-name formatter; it formats by `type`, which is why a new column renders
+  correctly the day the warehouse grows one.
 - **Paging** follows `page` / `total_pages` / `has_more`, newest first.
 - **Ranked answers** expand one row at a time: the expanded row is marked in the
   ranking, the evidence header names it, and any other row can be expanded
@@ -669,11 +750,12 @@ result view:
 Built first, because they are common:
 
 - **clarify** renders the candidates as options with what separates them - kind,
-  matches in scope, and the id when two of them share a name. Picking one re-asks
-  the original question with that id in place of the name, so the season, map or
-  opponent in the question survives.
-- **cannot_answer** shows the reason plainly, the API's tips, and questions that
-  do work - built from the entities it did resolve, then from live suggestions.
+  matches in scope, the seasons they were active, and the id when two of them
+  share a name. Picking one sends the `question` the service shipped with that
+  candidate, verbatim; the client constructs nothing.
+- **cannot_answer** shows the reason plainly, the API's advice, and the API's
+  `alternatives` - questions that do work - falling back to live suggestions only
+  when the service has nothing specific to offer.
 - **cannot_answer with evidence** is the informative refusal: a map record that
   is empty because FACEIT never recorded the maps still renders the series behind
   it, flagged as having no map stats.
@@ -685,6 +767,46 @@ Built first, because they are common:
 `web/tests/` covers all of the above with payloads captured from the running
 service (`tests/fixtures.js`), so the tests exercise what the API actually
 sends. `npm test` runs them against a mocked `fetch`; nothing contacts a server.
+
+## Deploying
+
+Three moving parts, none of which share a host requirement.
+
+**The API** is a stateless uvicorn process: `python -m owcsmuse serve --host
+0.0.0.0 --port 8000`, or any ASGI runner pointed at `owcsmuse.api:app_factory`.
+It needs `DATABASE_URL`, outbound access to Postgres, and TLS in front of it. It
+also needs `FACEIT_API_KEY` set to *something* because the settings object
+requires it, though no request path calls FACEIT - answers come from the
+warehouse. Each process keeps up to four idle connections, so size
+`workers x 4` against the Supabase pooler's ceiling before scaling out. Run
+`python -m owcsmuse migrate` on deploy; it is idempotent and applies in filename
+order.
+
+**The frontend** is static: `cd web && npm ci && npm run build` produces
+`web/dist`, which any static host or CDN serves. Two requirements. It needs
+`VITE_API_BASE` at build time pointing at the API (or same-origin routing, in
+which case leave it unset), and the host must rewrite unknown paths to
+`index.html` or a shared `/q/<slug>` link 404s before the app loads. CORS on the
+API is open, so a separate origin works as-is.
+
+**Ingest is a cron, not part of the API.** A scheduled worker with
+`FACEIT_API_KEY`, `DATABASE_URL` and outbound access to FACEIT:
+
+```bash
+python -m owcsmuse backfill           # LIST + DETAIL for the championships in scope
+python -m owcsmuse crawl run          # the 2025/2026 main series, which the endpoints hide
+python -m owcsmuse refresh            # materialized views; nothing new is visible until this runs
+python -m owcsmuse check              # gate: exit 1 means do not trust what just landed
+```
+
+Every phase is resumable and idempotent, so a failed run is re-run rather than
+repaired, and the adaptive limiter keeps FACEIT requests inside the published
+allowance. Daily is ample; OWCS plays on weekends. Two things it deliberately
+does not do: it never marks a newly discovered competition as in scope - that
+stays a human decision through `classify` and `scope/decisions.json` - and it
+never merges an org identity without a reviewed entry in
+`scope/org_decisions.json`. A deploy that automates those away gets wrong answers
+that look right.
 
 ## Consistency checks
 
@@ -718,7 +840,8 @@ aggregate, a deleted player row, an unrefreshed org merge).
 
 ## CI
 
-`.github/workflows/ci.yml` runs on every push and pull request:
+`.github/workflows/ci.yml` runs on every push and pull request. The repository is
+private, so the badge above renders only for accounts with access:
 
 | job | what it runs |
 |---|---|

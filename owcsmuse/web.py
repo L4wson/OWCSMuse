@@ -83,6 +83,36 @@ def load_question(conn: psycopg.Connection, slug: str) -> Optional[SavedQuery]:
                       structured_query=row["structured_query"], times_asked=row["times_asked"])
 
 
+# A filter, an order, or the whole shape of the question: what a reader of a
+# shared link would want to be told has changed since it was made.
+_PARSE_FIELDS = ("intent", "entity", "metric", "aggregation", "sort", "limit", "min_maps")
+
+
+def describe_parse_change(before: Optional[dict], after: Optional[dict]) -> list[str]:
+    """How today's reading of a shared question differs from the one saved with it.
+
+    A shared link re-runs against current data by design, and the parser may have
+    learned something in between. Answering a different question without saying so
+    is the failure this prevents; the client should not have to diff two objects
+    to find out.
+    """
+    if not before or not after or before == after:
+        return []
+    changes: list[str] = []
+    for key in _PARSE_FIELDS:
+        old, new = before.get(key), after.get(key)
+        if old != new:
+            changes.append(f"{key.replace('_', ' ')}: {old if old is not None else 'none'} "
+                           f"-> {new if new is not None else 'none'}")
+    old_filters = before.get("filters") or {}
+    new_filters = after.get("filters") or {}
+    for key in sorted(set(old_filters) | set(new_filters)):
+        old, new = old_filters.get(key), new_filters.get(key)
+        if old != new:
+            changes.append(f"{key}: {old if old is not None else 'none'} -> {new if new is not None else 'none'}")
+    return changes
+
+
 # ---------------------------------------------------------------- suggestions
 
 @dataclass
@@ -103,11 +133,6 @@ class Suggestions:
     def as_dict(self) -> dict[str, Any]:
         return {"groups": self.groups, "suggestions": self.suggestions}
 
-
-# Stat keys that are numeric but are not a performance stat: ranking players by
-# "Result" is really counting map wins, which the record questions already
-# answer more clearly. They stay queryable; they are just not suggested.
-NOT_A_SUGGESTED_STAT = frozenset({"Result", "Team", "Nickname", "Best Of", "Score Summary"})
 
 # Questions that hold for any loaded data, so a suggestion list is never empty.
 STATIC_SUGGESTIONS: tuple[tuple[str, str], ...] = (
@@ -150,9 +175,9 @@ def suggestions(conn: psycopg.Connection, per_group: int = 4) -> Suggestions:
                  WHERE stat_kind = 'countable' GROUP BY stat_key
                  ORDER BY sum(rows_with_stat) DESC LIMIT %s
                 """,
-                (per_group + len(NOT_A_SUGGESTED_STAT),),
+                (per_group,),
             )
-            stats = [r["stat_key"] for r in cur.fetchall() if r["stat_key"] not in NOT_A_SUGGESTED_STAT]
+            stats = [r["stat_key"] for r in cur.fetchall()]
             cur.execute("SELECT DISTINCT season FROM agg_player_stats WHERE season IS NOT NULL ORDER BY season DESC")
             seasons = [r["season"] for r in cur.fetchall()]
         conn.commit()

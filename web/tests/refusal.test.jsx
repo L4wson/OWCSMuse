@@ -25,11 +25,16 @@ describe("refusal", () => {
     expect(onAsk).toHaveBeenCalledWith(options[0].textContent);
   });
 
-  it("prefers the entities it did resolve over generic examples", () => {
-    expect(nearbyQuestions(REFUSAL_WITH_EVIDENCE, SUGGESTIONS.suggestions).slice(0, 2)).toEqual([
-      "Crazy Raccoons record",
-      "Team Falcons record",
-    ]);
+  it("offers the service's own alternatives before generic examples", () => {
+    const nearby = nearbyQuestions(REFUSAL_WITH_EVIDENCE, SUGGESTIONS.suggestions);
+    expect(nearby.slice(0, REFUSAL_WITH_EVIDENCE.alternatives.length)).toEqual(REFUSAL_WITH_EVIDENCE.alternatives);
+    // the first one is the question that actually answers this pairing
+    expect(nearby[0]).toBe("Team Falcons series record against Crazy Raccoons");
+  });
+
+  it("falls back to live suggestions when the service has nothing specific", () => {
+    expect(REFUSAL.alternatives).toEqual([]); // a typo has no better question to offer
+    expect(nearbyQuestions(REFUSAL, SUGGESTIONS.suggestions)[0]).toBe(SUGGESTIONS.suggestions[0].question);
   });
 
   it("renders an informative refusal: no map record, but here are the series", () => {

@@ -72,11 +72,14 @@ describe("asking", () => {
   });
 
   it("says when a shared link is being read differently than when it was shared", async () => {
+    // The service decides this and describes it; the client does not diff parses.
     const drifted = {
       ...VERSUS,
       shared: {
         times_asked: 3,
-        parsed_when_saved: { ...VERSUS.query, intent: "head_to_head", filters: { ...VERSUS.query.filters } },
+        parsed_when_saved: { ...VERSUS.query, intent: "head_to_head" },
+        parse_changed: true,
+        parse_change: ["intent: head_to_head -> versus"],
       },
     };
     window.history.replaceState({}, "", `/q/${VERSUS.slug}`);
@@ -84,8 +87,15 @@ describe("asking", () => {
 
     const notice = await screen.findByTestId("parse-change");
     expect(notice).toHaveTextContent("read differently than when it was shared");
-    expect(notice).toHaveTextContent("head_to_head -> versus");
+    expect(notice).toHaveTextContent("intent: head_to_head -> versus");
     expect(screen.getByTestId("answer-sentence")).toBeInTheDocument(); // the answer is still shown
+  });
+
+  it("says nothing about a shared link that still reads the same way", async () => {
+    window.history.replaceState({}, "", `/q/${VERSUS.slug}`);
+    mount([[`/query/${VERSUS.slug}`, ok({ ...VERSUS, shared: { times_asked: 2, parse_changed: false, parse_change: [] } })]]);
+    await screen.findByTestId("answer");
+    expect(screen.queryByTestId("parse-change")).not.toBeInTheDocument();
   });
 
   it("pages the evidence through the API, keeping the answer on screen", async () => {
@@ -146,12 +156,12 @@ describe("asking", () => {
     await userEvent.type(await screen.findByRole("textbox"), "tea record{Enter}");
 
     const clarify = await screen.findByTestId("clarify");
+    const candidate = CLARIFY.candidates.subject.find((c) => c.current_name === "Team Liquid");
     await userEvent.click(within(clarify).getByRole("button", { name: /Team Liquid/ }));
 
+    // verbatim: the service guarantees this question resolves to that entity
     await waitFor(() =>
-      expect(
-        fetchMock.calls.some((call) => call.body?.question === `${CLARIFY.candidates.subject[1].entity_id} record`),
-      ).toBe(true),
+      expect(fetchMock.calls.some((call) => call.body?.question === candidate.question)).toBe(true),
     );
   });
 });

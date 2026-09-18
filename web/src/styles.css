@@ -404,6 +404,10 @@ table.data tbody tr:last-child td {
   color: var(--muted);
 }
 
+.candidate-active {
+  color: var(--ink);
+}
+
 .candidate-id {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.78rem;
