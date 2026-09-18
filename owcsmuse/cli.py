@@ -348,6 +348,18 @@ def _team_names(conn, team_ids: list[str]) -> list[str]:
     return [by_id.get(t, t) for t in team_ids]
 
 
+def cmd_serve(args: argparse.Namespace, settings: Settings) -> int:
+    """Run the HTTP API. Needs the optional `api` extra."""
+    try:
+        from .api import serve
+    except ImportError as exc:
+        print(f"the HTTP API needs the api extra: pip install -e \".[api]\"  ({exc})", file=sys.stderr)
+        return 2
+    print(f"serving owcsmuse on http://{args.host}:{args.port}  (schema {settings.db_schema})")
+    serve(args.host, args.port, args.reload)
+    return 0
+
+
 def cmd_limitations(args: argparse.Namespace, settings: Settings) -> int:
     """What the warehouse does not know. The same objects the ask layer surfaces."""
     if args.json:
@@ -373,11 +385,13 @@ def cmd_ask(args: argparse.Namespace, settings: Settings) -> int:
     from .nlq.pipeline import ask, render_text
 
     with connect(settings.database_url, schema=settings.db_schema) as conn:
-        answer = ask(conn, args.question, parser=args.parser, debug=args.debug)
+        answer = ask(conn, args.question, parser=args.parser, debug=args.debug,
+                     with_evidence=not args.no_evidence, evidence_for=args.evidence_for,
+                     evidence_page=args.page, evidence_page_size=args.page_size)
     if args.json:
         _print(answer.as_dict())
     else:
-        print(render_text(answer))
+        print(render_text(answer, evidence_rows=args.evidence_rows))
         if args.debug and answer.sql:
             print("\n-- sql --\n" + answer.sql + "\n-- params --\n" + json.dumps(answer.params, default=str))
     return 0 if answer.status == "ok" else 2
@@ -554,6 +568,12 @@ def build_parser() -> argparse.ArgumentParser:
     ogs.add_parser("status", help="orgs and how many team ids each covers")
     og.set_defaults(func=cmd_orgs)
 
+    sv = sub.add_parser("serve", help="run the HTTP API (POST /ask, GET /query/{slug}, GET /suggestions)")
+    sv.add_argument("--host", default="127.0.0.1")
+    sv.add_argument("--port", type=int, default=8000)
+    sv.add_argument("--reload", action="store_true", help="development autoreload")
+    sv.set_defaults(func=cmd_serve)
+
     li = sub.add_parser("limitations", help="known gaps in the data, the ones the ask layer surfaces")
     li.add_argument("--json", action="store_true")
     li.set_defaults(func=cmd_limitations)
@@ -568,6 +588,11 @@ def build_parser() -> argparse.ArgumentParser:
     ak.add_argument("--parser", choices=["rules", "llm", "auto"], default="rules",
                     help="rules: deterministic parser; llm: Claude structured-output parser; auto: llm with rules fallback")
     ak.add_argument("--json", action="store_true", help="print the full answer object as JSON")
+    ak.add_argument("--page", type=int, default=1, help="evidence page")
+    ak.add_argument("--page-size", type=int, default=25, help="evidence rows per page")
+    ak.add_argument("--evidence-for", help="expand a ranked row: a player id, org key, map or mode")
+    ak.add_argument("--evidence-rows", type=int, default=5, help="evidence rows to print")
+    ak.add_argument("--no-evidence", action="store_true", help="skip the rows behind the answer")
     ak.add_argument("--debug", action="store_true", help="include the compiled SQL and parameters")
     ak.set_defaults(func=cmd_ask)
 

@@ -15,7 +15,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.6"]
+api = ["fastapi>=0.111", "uvicorn>=0.30"]
+dev = ["pytest>=8", "ruff>=0.6", "fastapi>=0.111", "uvicorn>=0.30"]
 
 [project.scripts]
 owcsmuse = "owcsmuse.cli:main"
@@ -34,6 +35,10 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 130
 target-version = "py311"
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency markers belong in argument defaults; that is the idiom.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query", "fastapi.Path", "fastapi.Body", "fastapi.Header"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "B"]
