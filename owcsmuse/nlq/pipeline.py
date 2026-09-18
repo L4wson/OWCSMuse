@@ -14,7 +14,7 @@ from ..limitations import applicable as applicable_limitations, entity_match_fil
 from ..logging import get_logger, log_event
 from ..resolve import Candidate, resolve
 from .compile import Compiled, Resolved, compile_query
-from .evidence import DEFAULT_PAGE_SIZE, Evidence, fetch_evidence, fetch_missing_series
+from .evidence import DEFAULT_PAGE_SIZE, Evidence, fetch_evidence, fetch_missing_series, is_map_grain
 from .parser import parse_question
 from .sentence import render_sentence, render_unanswerable
 from .schema import StructuredQuery, Unanswerable
@@ -286,9 +286,11 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
     # Which documented gaps this slice lands in. A versus answer already reports
     # its missing series precisely, so the general offline note is dropped there
     # rather than said twice.
+    series_grain = (q.entity == "team" or q.intent in ("team_record", "head_to_head")) and not is_map_grain(v)
     limitations = applicable_limitations(
         conn, q.intent, q.metric, season=q.filters.season, championship_id=c.coverage_championship,
-        region=q.filters.region, entities=_entities_for_limitations(r))
+        region=q.filters.region, entities=_entities_for_limitations(r),
+        grain="series" if series_grain else "map")
     if q.intent == "versus":
         limitations = [lim for lim in limitations if lim["id"] != "offline_map_stats"]
         notes += _missing_maps_note(conn, q, r, rows)

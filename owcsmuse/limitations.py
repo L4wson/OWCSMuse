@@ -158,7 +158,8 @@ def result_only_in_slice(conn: psycopg.Connection, season: Optional[int] = None,
 def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional[str],
                season: Optional[int] = None, championship_id: Optional[str] = None,
                region: Optional[str] = None,
-               entities: Optional[list[tuple[str, Optional[str]]]] = None) -> list[dict[str, Any]]:
+               entities: Optional[list[tuple[str, Optional[str]]]] = None,
+               grain: str = "map") -> list[dict[str, Any]]:
     """The limitations that bear on one query's slice, each with a note for that slice.
 
     Takes the pieces of a query rather than the query object so the CLI, a test
@@ -172,12 +173,13 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
         if ro.get("matches"):
             n = ro["matches"]
             where = f" in {', '.join(map(str, ro.get('seasons') or []))}" if ro.get("seasons") else ""
-            grain = ("Those series carry a result but no maps, so they are absent from this map-grain answer."
-                     if intent in ("versus", "leaderboard", "map_stats", "entity_stat", "season_compare")
-                     else "Those series carry a result but no per-map stats.")
+            effect = ("Those series carry a result but no maps, so they are absent from this map-grain answer."
+                      if grain == "map" else
+                      "Those series carry a result but no per-map stats; this answer is series grain, so it "
+                      "still counts them.")
             out.append(BY_ID["offline_map_stats"].as_dict(
                 f"{n} series in this slice{where} have no map stats on FACEIT, which is what offline and LAN "
-                f"days look like here. {grain}"))
+                f"days look like here. {effect}"))
 
     if metric and 2024 in seasons and metric not in SEASON_2024_STAT_KEYS and metric in _MODERN_STAT_KEYS:
         out.append(BY_ID["stats_2024"].as_dict(

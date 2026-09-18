@@ -222,6 +222,16 @@ def compile_missing_series(v: Validated, r: Resolved, page: int, page_size: int)
 
 # ------------------------------------------------------------------ compilation
 
+# Metrics whose claim is about maps rather than series. Mirrors the aggregate
+# compiler's choice of agg_team_maps over agg_team_matches.
+_MAP_GRAIN_METRICS = frozenset({"map_wins", "map_losses", "map_win_rate", "maps"})
+
+
+def is_map_grain(v: Validated) -> bool:
+    """Whether the claim is about maps rather than series."""
+    return bool(v.map_name or v.mode_name) or (v.query.metric in _MAP_GRAIN_METRICS)
+
+
 def _subject_from(v: Validated, r: Resolved, expand: Optional[dict[str, Any]]) -> tuple[Optional[str], Optional[str]]:
     """(kind, id) of whoever the rows should be about: the ranked row when expanding, else the subject."""
     if expand and expand.get("id") and expand.get("type") in ("player", "org", "team"):
@@ -307,11 +317,9 @@ def compile_evidence(v: Validated, r: Resolved, expand: Optional[dict[str, Any]]
     if not subject_id:
         return None
 
-    if intent == "team_record":
-        map_grain = bool(v.map_name or v.mode_name) or q.metric in ("map_wins", "map_losses", "map_win_rate", "maps")
-        if map_grain:
-            sql, params = _team_maps(v, subject_id, [], [], page, page_size)
-            return EvidenceQuery(sql, params, "map", "every map behind this record", kind, subject_id)
+    # An org's series record is a series-grain claim, whether it was asked of one
+    # team or ranked across many, so its evidence is series either way.
+    if kind != "player" and (intent == "team_record" or q.entity == "team") and not is_map_grain(v):
         sql, params = _team_series(v, "org_key", subject_id, [], [], page, page_size)
         return EvidenceQuery(sql, params, "series", "every series behind this record", kind, subject_id)
 
