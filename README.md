@@ -1,10 +1,11 @@
-# OWCS Muse: ingestion layer
+# OWCS Muse
 
 [![CI](https://github.com/L4wson/OWCSMuse/actions/workflows/ci.yml/badge.svg)](https://github.com/L4wson/OWCSMuse/actions/workflows/ci.yml)
 
 Pulls Overwatch Champions Series (OWCS) match data from the FACEIT Data API v4
-into a local Postgres warehouse. No web layer, no ORM: Python 3.11+, `httpx`,
-`psycopg`, `pydantic-settings`, plain SQL migrations, `pytest`.
+into a Postgres warehouse, answers questions about it, and shows the rows behind
+every answer. No ORM: Python 3.11+, `httpx`, `psycopg`, `pydantic-settings`,
+plain SQL migrations, `pytest`, and `fastapi` for the HTTP layer.
 
 Nothing queries FACEIT at request time. A backfill runs in two resumable
 phases and every FACEIT response is stored verbatim so parsing can be redone
@@ -441,14 +442,19 @@ Ranking runs in Python over `entity_names`, so no Postgres extension is needed.
 On Supabase the materialized views live in `public` like the tables and are
 exposed by the Data API under the same grants; the RLS note above applies.
 
-## Natural-language questions (v0, CLI only)
+## Natural-language questions
 
 ```bash
 python -m owcsmuse ask "who had the most eliminations in 2024"
 python -m owcsmuse ask "KSAA average healing on control maps" --debug   # shows the compiled SQL + params
 python -m owcsmuse ask "Twisted Minds vs ENCE" --json
 python -m owcsmuse ask "what stats are available"
+python -m owcsmuse ask "Sugarfree map record against Zeruhh" --page 2 --evidence-rows 10
+python -m owcsmuse ask "who had the most eliminations" --evidence-for <player_id>
 ```
+
+Every answer opens with one deterministic sentence and carries the rows behind
+it; see [HTTP API](#http-api) for both, which the CLI and the API share.
 
 This is not text-to-SQL. `owcsmuse/nlq/` runs a fixed pipeline and no model
 ever emits SQL:
@@ -489,7 +495,10 @@ Tests: `tests/test_nlq_parser.py` holds 60+ question / expected-object pairs
 (supported, ambiguous and unanswerable) asserted on the parsed object, and
 `tests/test_nlq_compile.py` covers validation and compilation against a
 hand-built schema, all without a database or model. `tests/test_nlq_db.py`
-runs `ask()` end to end on the fixture data when a database is configured.
+runs `ask()` end to end on the fixture data when a database is configured,
+`tests/test_sentence.py` and `tests/test_evidence.py` cover the sentence
+templates and the evidence SQL offline, and `tests/test_api.py` drives the HTTP
+layer and reconciles evidence rows against the aggregates they explain.
 
 ## Versus queries
 
@@ -509,6 +518,112 @@ python -m owcsmuse ask "Twisted Minds series record against ENCE"   # series gra
 unnoticed: the answer counts them separately and says how many series and how
 many maps by series score are excluded. An empty result distinguishes "never
 met" from "met, but FACEIT recorded no maps".
+
+## HTTP API
+
+```bash
+pip install -e ".[api]"
+python -m owcsmuse serve                      # http://127.0.0.1:8000, /docs for the OpenAPI page
+python -m owcsmuse serve --host 0.0.0.0 --port 8080
+```
+
+Three endpoints, all read-only, over the same `ask()` pipeline the CLI uses - so
+there is one definition of what an answer is, and no SQL is written anywhere in
+the web layer.
+
+| endpoint | what it does |
+|---|---|
+| `POST /ask` | a question in, an answer object out |
+| `GET /query/{slug}` | the same question re-run against current data, from a shareable link |
+| `GET /suggestions` | example questions built from entities that actually have data |
+| `GET /healthz` | liveness plus a database round trip |
+| `GET /` | what the service is, and the known limitations by id |
+
+```bash
+curl -s localhost:8000/ask -H 'content-type: application/json' \
+  -d '{"question": "Sugarfree map record against Zeruhh", "page_size": 5}'
+```
+
+```jsonc
+{
+  "slug": "V5iNpKcbhata",
+  "url": "/query/V5iNpKcbhata",
+  "status": "ok",                       // ok | clarify | cannot_answer
+  "sentence": {
+    "text": "sug2rfree is 22-20 in maps against zeruhh across 2024-2026.",
+    "spans": [ {"start": 0, "end": 9, "kind": "player", "text": "sug2rfree", "entity_id": "..."} ]
+  },
+  "aggregate": {"description": "player vs player, map grain", "columns": [...], "rows": [ ... ]},
+  "evidence": {
+    "available": true, "grain": "map", "description": "every map behind this record",
+    "page": 1, "page_size": 5, "total_rows": 42, "total_pages": 9, "has_more": true,
+    "expanded_for": null, "expandable_by": null,
+    "rows": [ {"played_at": "2026-07-04T22:47:50Z", "competition": "S9 NA OWCS Central - Playoffs",
+               "team": "SpaceStation Gaming", "opponent": "Team Liquid", "map_name": "Ilios",
+               "game_mode": "Control", "score": 2, "opponent_score": 1, "result": "won",
+               "eliminations": 20, "deaths": 10, "assists": 2,
+               "match_url": "https://www.faceit.com/en/ow2/room/1-1985af81-..."} ]
+  },
+  "coverage": { ... }, "limitations": [ ... ], "notes": [ ... ],
+  "entities": { ... }, "query": { ... },   // the structured query it understood
+  "code": null, "reason": null, "suggestions": [], "parser": "rules"
+}
+```
+
+`status` is part of the body, not the HTTP code: a refusal or a clarification is
+a real answer with a reason code, so `POST /ask` returns 200 for all three and
+reserves 422 for a malformed request, 404 for an unknown slug and 503 for a
+database that cannot be reached.
+
+### Evidence rows
+
+Every answer that summarises something carries the rows that produce it, at the
+grain the claim was made at: a map record returns each map, a series record
+returns each series. They come from the same fact views as the aggregate and
+carry the same filters, so they add up to it - `tests/test_api.py` pages through
+them and checks exactly that.
+
+- Newest first, `page` / `page_size` (default 25, max 200), with `total_rows`,
+  `total_pages` and `has_more` from one query.
+- Each row carries the date, competition, both sides, map, mode, score, result,
+  the subject's stat line, and `match_url`, the FACEIT room it came from.
+- A series row carries `map_stats_recorded`, so a `result_only` series is
+  visibly a series with no maps rather than a gap.
+- A ranking is a claim about many rows, so one page of evidence can only be
+  about one of them: `expanded_for` says which (the top row by default),
+  `expandable_by` names the field to pass back, and `evidence_for` asks for
+  another. A map or mode breakdown expands the same way.
+- When a map record is empty **because the maps were never recorded**, the
+  evidence is the series themselves - the proof that the pairing happened and
+  the stats did not.
+
+### Answer sentences
+
+One deterministic sentence per intent, built from a template and the rows that
+came back (`owcsmuse/nlq/sentence.py`). No model writes it: every number is read
+out of a returned row, so the same question on the same data always produces the
+same words, and a template that lacks a value it needs degrades to a shorter
+sentence instead of inventing one. `tests/test_sentence.py` asserts that every
+digit group in a sentence appears in the row behind it.
+
+Entity mentions carry character offsets and the entity id they resolved to, so a
+client can link a name without re-parsing the text.
+
+### Shareable links
+
+A slug is a digest of the normalized question, so the same ask always produces
+the same link and "who had the most eliminations in 2024" and
+"WHO had the most  eliminations in 2024" share one. `saved_queries` stores the
+question, never the answer: a link re-runs against current data, which is the
+point of sharing it. The parse recorded when the link was first created is
+returned alongside, so a parser change is visible rather than silent.
+
+### Suggestions
+
+Built from the warehouse, not hardcoded: the stat keys, teams and players in
+`/suggestions` are the ones with the most data, so a suggested question never
+teaches a new visitor that the tool returns nothing. A test asks the first few
+and asserts none of them comes back empty.
 
 ## Consistency checks
 
@@ -560,6 +675,8 @@ OWCS_TEST_DATABASE_URL="postgresql://..." OWCS_TEST_SCHEMA=owcs_test pytest
 ruff check .                                  # the lint gate CI runs
 ```
 
+`tests/test_api.py` needs the `api` extra; without it the module skips.
+
 The database tests never touch `public`: they drop and recreate the scratch
 schema named by `OWCS_TEST_SCHEMA` (default `owcs_test`) at the start of every
 test, run the migrations into it, and drive the collector with a fake client
@@ -595,6 +712,11 @@ owcsmuse/limitations.py         known gaps, surfaced by `ask` and documented abo
 owcsmuse/aggregates.py          refresh + coverage-aware leaderboard helpers
 owcsmuse/resolve.py             entity resolver
 owcsmuse/nlq/                   question -> StructuredQuery -> validate -> compile -> answer
+owcsmuse/nlq/sentence.py        one templated sentence per intent, with entity spans
+owcsmuse/nlq/evidence.py        the rows behind an answer, paged
+owcsmuse/api.py                 FastAPI service: /ask, /query/{slug}, /suggestions
+owcsmuse/web.py                 shareable slugs and data-aware suggestions
+migrations/014_saved_queries.sql  question behind a slug (never the answer)
 scope/decisions.json            reviewed scope decisions (commit this)
 scope/org_decisions.json        reviewed org merges and rejections (commit this)
 scope/classification_report.md  generated review table
