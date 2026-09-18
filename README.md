@@ -5,7 +5,8 @@
 Pulls Overwatch Champions Series (OWCS) match data from the FACEIT Data API v4
 into a Postgres warehouse, answers questions about it, and shows the rows behind
 every answer. No ORM: Python 3.11+, `httpx`, `psycopg`, `pydantic-settings`,
-plain SQL migrations, `pytest`, and `fastapi` for the HTTP layer.
+plain SQL migrations, `pytest`, `fastapi` for the HTTP layer, and a Vite + React
+frontend in `web/`.
 
 Nothing queries FACEIT at request time. A backfill runs in two resumable
 phases and every FACEIT response is stored verbatim so parsing can be redone
@@ -625,6 +626,66 @@ Built from the warehouse, not hardcoded: the stat keys, teams and players in
 teaches a new visitor that the tool returns nothing. A test asks the first few
 and asserts none of them comes back empty.
 
+## Frontend
+
+```bash
+python -m owcsmuse serve                      # the API, on :8000
+cd web && npm install && npm run dev          # the app, on :5173, proxying to it
+npm test                                      # component tests, no server needed
+npm run build                                 # static files in web/dist
+```
+
+Vite + React, plain CSS, no UI framework and no router: two routes (`/` and
+`/q/<slug>`) are thirty lines of `history.pushState` in `src/router.js`, which is
+less code than configuring a router would be. `OWCS_API_URL` moves the dev proxy;
+`VITE_API_BASE` points a build at a deployed service. A static host must rewrite
+unknown paths to `index.html`, or a shared `/q/<slug>` link 404s before the app
+loads.
+
+The landing page is a question box and three or four examples taken live from
+`/suggestions`, so every example has data behind it. Everything else is the
+result view:
+
+- **The sentence**, large, at the top. Entity names are links, and they are found
+  by the API's character offsets - the text is sliced at `start`/`end` and never
+  searched for a name. A nickname that is also an ordinary word, or a name that
+  appears twice as two different entities, stays right.
+- **Coverage, notes and limitations** sit between the sentence and the table. A
+  leaderboard that covers 2025 and 2026 but not 2024 says so above the numbers,
+  not in a tooltip or a footer.
+- **The evidence table**, with columns derived from the rows the API returned, so
+  a map-grain answer shows maps and a series-grain answer shows series without
+  the client knowing which it asked for. Empty columns are dropped, a score and
+  its opposite number read as `3-1`, and every row links to its FACEIT match.
+- **Paging** follows `page` / `total_pages` / `has_more`, newest first.
+- **Ranked answers** expand one row at a time: the expanded row is marked in the
+  ranking, the evidence header names it, and any other row can be expanded
+  through `evidence_for`.
+- Below 720px the same table markup becomes cards, using the column label each
+  cell already carries. No second component, no horizontal scrolling on a phone.
+
+### The states that are not answers
+
+Built first, because they are common:
+
+- **clarify** renders the candidates as options with what separates them - kind,
+  matches in scope, and the id when two of them share a name. Picking one re-asks
+  the original question with that id in place of the name, so the season, map or
+  opponent in the question survives.
+- **cannot_answer** shows the reason plainly, the API's tips, and questions that
+  do work - built from the entities it did resolve, then from live suggestions.
+- **cannot_answer with evidence** is the informative refusal: a map record that
+  is empty because FACEIT never recorded the maps still renders the series behind
+  it, flagged as having no map stats.
+- **Service failures** are kept apart from refusals: 503 says the service is
+  unavailable, a failed `fetch` says it could not be reached, 404 on a shared
+  link says the link has nothing behind it. None of them look like a question
+  that was understood and declined.
+
+`web/tests/` covers all of the above with payloads captured from the running
+service (`tests/fixtures.js`), so the tests exercise what the API actually
+sends. `npm test` runs them against a mocked `fetch`; nothing contacts a server.
+
 ## Consistency checks
 
 Three bugs in this project had the same shape: a join or key mismatch that
@@ -664,6 +725,7 @@ aggregate, a deleted player row, an unrefreshed org merge).
 | `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
 | `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
 | `database tests` | `pytest` against a `postgres:16` service container, with the full integration suite |
+| `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
 | `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it |
 
 ## Tests
@@ -716,6 +778,8 @@ owcsmuse/nlq/sentence.py        one templated sentence per intent, with entity s
 owcsmuse/nlq/evidence.py        the rows behind an answer, paged
 owcsmuse/api.py                 FastAPI service: /ask, /query/{slug}, /suggestions
 owcsmuse/web.py                 shareable slugs and data-aware suggestions
+web/src/                        Vite + React app: landing, result, evidence, the three refusal states
+web/tests/                      component tests with payloads captured from the service
 migrations/014_saved_queries.sql  question behind a slug (never the answer)
 scope/decisions.json            reviewed scope decisions (commit this)
 scope/org_decisions.json        reviewed org merges and rejections (commit this)
