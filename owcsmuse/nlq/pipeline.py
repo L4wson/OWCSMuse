@@ -14,7 +14,9 @@ from ..limitations import applicable as applicable_limitations, entity_match_fil
 from ..logging import get_logger, log_event
 from ..resolve import Candidate, resolve
 from .compile import Compiled, Resolved, compile_query
+from .evidence import DEFAULT_PAGE_SIZE, Evidence, fetch_evidence, fetch_missing_series
 from .parser import parse_question
+from .sentence import render_sentence, render_unanswerable
 from .schema import StructuredQuery, Unanswerable
 from .validate import SchemaInfo, validate
 
@@ -37,6 +39,8 @@ class Answer:
     candidates: dict[str, list[dict]] = field(default_factory=dict)   # role -> candidate dicts (clarify)
     entities: dict[str, dict] = field(default_factory=dict)           # role -> resolved entity
     rows: list[dict] = field(default_factory=list)
+    sentence: Optional[dict] = None     # the one-sentence claim, from a template
+    evidence: Optional[dict] = None     # the rows that produce the aggregate
     coverage: Optional[dict] = None
     notes: list[str] = field(default_factory=list)
     limitations: list[dict] = field(default_factory=list)   # known gaps this slice lands in
@@ -49,9 +53,14 @@ class Answer:
         return asdict(self)
 
 
-def _cannot(question: str, u: Unanswerable, query: Optional[StructuredQuery] = None, parser: Optional[str] = None) -> Answer:
-    return Answer(status="cannot_answer", question=question, query=query.compact() if query else None, code=u.code,
-                  reason=u.reason, suggestions=list(u.suggestions), parser=parser)
+def _cannot(question: str, u: Unanswerable, query: Optional[StructuredQuery] = None, parser: Optional[str] = None,
+            entities: Optional[dict[str, dict]] = None) -> Answer:
+    a = Answer(status="cannot_answer", question=question, query=query.compact() if query else None, code=u.code,
+               reason=u.reason, suggestions=list(u.suggestions), parser=parser, entities=dict(entities or {}))
+    # A refusal gets a sentence too: it is what the UI shows, and its entities
+    # are marked so a name in it stays clickable.
+    a.sentence = render_unanswerable(u.reason, a.entities).as_dict()
+    return a
 
 
 def question_hint(name: str, entity_id: str) -> str:
@@ -212,7 +221,8 @@ def run_compiled(conn: psycopg.Connection, c: Compiled) -> list[dict]:
 
 
 def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Optional[SchemaInfo] = None,
-        debug: bool = False) -> Answer:
+        debug: bool = False, with_evidence: bool = True, evidence_for: Optional[str] = None,
+        evidence_page: int = 1, evidence_page_size: int = DEFAULT_PAGE_SIZE) -> Answer:
     # 1. parse
     used = "rules"
     parsed = None
@@ -293,8 +303,15 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
                 reason = f"{left} and {right} never faced each other{where} in the competitions in scope"
                 tips = ["Check the spelling, or widen the season; scope is OWCS NA + EMEA main competition."]
             u = Unanswerable(code="no_data", reason=reason, suggestions=tips)
-            a = _cannot(question, u, q, used)
-            a.entities, a.notes, a.limitations = pre.entities, notes, limitations
+            a = _cannot(question, u, q, used, pre.entities)
+            a.notes, a.limitations = notes, limitations
+            if with_evidence and notes:
+                # they did meet: the series with no map stats are the evidence
+                # for why the map record is empty
+                try:
+                    a.evidence = fetch_missing_series(conn, v, r, evidence_page, evidence_page_size).as_dict()
+                except Exception:
+                    log_event(log, logging.WARNING, "missing_series_evidence_failed", exc_info=True)
             if debug:
                 a.sql, a.params = c.sql, c.params
             return a
@@ -306,16 +323,15 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
             reason=f"{name} has no maps with stats in {' or '.join(map(str, yrs))}, so there is nothing to compare",
             suggestions=["The entity may have played only series whose maps FACEIT never recorded, "
                          "or not played in those seasons at all. `ask \"<name> record\"` shows what is known."])
-        a = _cannot(question, u, q, used)
-        a.entities, a.limitations = pre.entities, limitations
+        a = _cannot(question, u, q, used, pre.entities)
+        a.limitations = limitations
         if debug:
             a.sql, a.params = c.sql, c.params
         return a
     if not rows:
         u = Unanswerable(code="no_data", reason="the query is valid but nothing in scope matches these filters",
                          suggestions=["Loosen the season / championship / map filter, or check `status` for what has been ingested."])
-        a = _cannot(question, u, q, used)
-        a.entities = pre.entities
+        a = _cannot(question, u, q, used, pre.entities)
         a.coverage = coverage
         a.notes = notes
         a.limitations = limitations
@@ -324,6 +340,16 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         return a
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows, coverage=coverage,
                notes=notes, limitations=limitations, description=c.description, parser=used)
+    sentence = render_sentence(a.query, rows, pre.entities, c.description)
+    a.sentence = sentence.as_dict() if sentence else None
+    if with_evidence:
+        # The aggregate is the claim; these are the rows that produce it.
+        try:
+            a.evidence = fetch_evidence(conn, v, r, rows, evidence_for, evidence_page, evidence_page_size,
+                                        c.coverage_stat).as_dict()
+        except Exception:
+            log_event(log, logging.ERROR, "evidence_failed", intent=q.intent, exc_info=True)
+            a.evidence = Evidence(reason="the evidence rows could not be loaded for this answer").as_dict()
     if debug:
         a.sql, a.params = c.sql, c.params
     return a
@@ -348,12 +374,35 @@ def _fmt(v: Any) -> str:
     return str(v)
 
 
-def render_text(a: Answer, max_rows: int = 25) -> str:
+def _evidence_lines(a: Answer, evidence_rows: int) -> list[str]:
+    """The rows behind the claim, a few of them, however the answer turned out."""
+    ev = a.evidence or {}
+    lines: list[str] = []
+    if ev.get("available"):
+        expanded = ev.get("expanded_for") or {}
+        who = f" for {expanded.get('name') or expanded.get('id')}" if expanded else ""
+        lines.append(f"  evidence{who}: {ev['total_rows']} {ev['grain']} row(s), "
+                     f"page {ev['page']} of {max(ev['total_pages'], 1)} - {ev['description']}")
+        for row in ev["rows"][:evidence_rows]:
+            when = _fmt(row.get("played_at"))
+            score = f"{_fmt(row.get('score'))}-{_fmt(row.get('opponent_score'))}"
+            where = row.get("map_name") or row.get("competition") or ""
+            lines.append(f"    {when}  {(row.get('result') or row.get('winner') or ''):5}  {score:7}  "
+                         f"{where[:22]:22}  vs {(row.get('opponent') or '')[:22]}")
+        if len(ev["rows"]) > evidence_rows:
+            lines.append(f"    ... {len(ev['rows']) - evidence_rows} more on this page")
+    elif ev.get("reason"):
+        lines.append(f"  evidence: none ({ev['reason']})")
+    return lines
+
+
+def render_text(a: Answer, max_rows: int = 25, evidence_rows: int = 5) -> str:
     lines: list[str] = []
     if a.status == "cannot_answer":
         lines.append(f"Can't answer that ({a.code}): {a.reason}")
         for s in a.suggestions:
             lines.append(f"  - {s}")
+        lines += _evidence_lines(a, evidence_rows)
         for n in a.notes:
             lines.append(f"  note: {n}")
         for lim in a.limitations:
@@ -368,6 +417,8 @@ def render_text(a: Answer, max_rows: int = 25) -> str:
             lines.append(tip)
         return "\n".join(lines)
 
+    if a.sentence:
+        lines.append(a.sentence["text"])
     lines.append(f"{a.description}" + (f"  [{a.parser} parser]" if a.parser else ""))
     if a.entities:
         lines.append("  for: " + ", ".join(f"{role}={e['current_name']}" for role, e in a.entities.items()))
@@ -385,6 +436,7 @@ def render_text(a: Answer, max_rows: int = 25) -> str:
         lines.append(f"  coverage: {cov.get('stat_key')} on {cov.get('maps_with_stat')}/{cov.get('maps_total')} maps "
                      f"({_fmt(float(cov.get('coverage_pct') or 0))}%), seasons with it: {_fmt(cov.get('seasons_with_stat'))}"
                      + (f", without: {_fmt(cov.get('seasons_without_stat'))}" if cov.get("seasons_without_stat") else ""))
+    lines += _evidence_lines(a, evidence_rows)
     for n in a.notes:
         lines.append(f"  note: {n}")
     for lim in a.limitations:
