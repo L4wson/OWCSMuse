@@ -13,6 +13,8 @@ from . import __version__
 from .aggregates import MATERIALIZED_VIEWS, available_stats, refresh, stat_coverage_summary, stat_leaderboard
 from .collector import Collector
 from .config import Settings, load_settings
+from .consistency import CHECKS, render_text as render_checks, run_checks
+from .limitations import LIMITATIONS, render_text as render_limitations
 from .db import RawPayloadStore, connect, migrate
 from .discovery import (
     DEFAULT_SEARCH_NAMES,
@@ -291,6 +293,17 @@ def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
             decisions.save()
             _print({"team_id": args.team_id, "removed": removed})
             return 0
+        if args.orgs_cmd == "reject":
+            names = _team_names(conn, [args.team_id_a, args.team_id_b])
+            d = decisions.reject(args.team_id_a, args.team_id_b, args.reason, names)
+            path = decisions.save()
+            _print({"decisions_file": str(path), "rejected": d})
+            return 0
+        if args.orgs_cmd == "unreject":
+            removed = decisions.unreject(args.team_id_a, args.team_id_b)
+            decisions.save()
+            _print({"team_ids": [args.team_id_a, args.team_id_b], "removed": removed})
+            return 0
         if args.orgs_cmd == "load":
             _print(load_org_decisions(conn, decisions))
             return 0
@@ -302,12 +315,15 @@ def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
             _print({
                 "report": str(report),
                 "proposals": len(proposals),
-                "strong": sum(1 for p in proposals if p.strength == "strong"),
-                "review_required": sum(1 for p in proposals if p.strength != "strong"),
+                "strong": sum(1 for p in proposals if p.strength == "strong" and p.decision_source != "rejected"),
+                "review_required": sum(1 for p in proposals
+                                       if p.strength != "strong" and p.decision_source != "rejected"),
                 "already_decided": sum(1 for p in proposals if p.decision_source == "manual"),
+                "rejected": sum(1 for p in proposals if p.decision_source == "rejected"),
                 "pairs": [{"org": p.org_name, "names": p.names, "overlap": p.roster_overlap,
                            "shared": f"{p.shared_players}/{p.smaller_roster}", "seasons": p.seasons,
-                           "strength": p.strength, "decided": p.include, "team_ids": p.team_ids}
+                           "strength": p.strength, "decided": p.include, "decision": p.decision_source,
+                           "team_ids": p.team_ids}
                           for p in proposals],
             })
             return 0
@@ -318,9 +334,39 @@ def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
                             " LEFT JOIN team_orgs tm USING (org_id) GROUP BY o.org_id, o.name ORDER BY o.name")
                 orgs = [dict(r) for r in cur.fetchall()]
             conn.commit()
-            _print({"orgs": orgs, "unmapped_team_ids": len(unmapped_teams(conn))})
+            _print({"orgs": orgs, "unmapped_team_ids": len(unmapped_teams(conn)),
+                    "rejected_pairs": len(decisions.rejections)})
             return 0
     return 0
+
+
+def _team_names(conn, team_ids: list[str]) -> list[str]:
+    with conn.cursor() as cur:
+        cur.execute("SELECT team_id, name FROM teams WHERE team_id = ANY(%s)", (team_ids,))
+        by_id = {r["team_id"]: r["name"] for r in cur.fetchall()}
+    conn.commit()
+    return [by_id.get(t, t) for t in team_ids]
+
+
+def cmd_limitations(args: argparse.Namespace, settings: Settings) -> int:
+    """What the warehouse does not know. The same objects the ask layer surfaces."""
+    if args.json:
+        _print([{"id": lim.id, "title": lim.title, "detail": lim.detail} for lim in LIMITATIONS])
+    else:
+        print(render_limitations())
+    return 0
+
+
+def cmd_check(args: argparse.Namespace, settings: Settings) -> int:
+    """Warehouse invariants. Exit 1 on any discrepancy, so CI fails on a wrong-but-plausible answer."""
+    with connect(settings.database_url, schema=settings.db_schema) as conn:
+        results = run_checks(conn, args.only or None)
+        conn.rollback()  # read-only
+    if args.json:
+        _print({"ok": all(r.ok for r in results), "checks": [r.as_dict() for r in results]})
+    else:
+        print(render_checks(results))
+    return 0 if all(r.ok for r in results) else 1
 
 
 def cmd_ask(args: argparse.Namespace, settings: Settings) -> int:
@@ -500,9 +546,22 @@ def build_parser() -> argparse.ArgumentParser:
     de = ogs.add_parser("decide", help="map one team id to an org")
     de.add_argument("team_id"); de.add_argument("--org", required=True); de.add_argument("--org-name"); de.add_argument("--note")
     fg = ogs.add_parser("forget", help="unmap a team id"); fg.add_argument("team_id")
+    rj = ogs.add_parser("reject", help="record a reviewed rejection: these two team ids are different orgs")
+    rj.add_argument("team_id_a"); rj.add_argument("team_id_b"); rj.add_argument("--reason", required=True)
+    ur = ogs.add_parser("unreject", help="drop a recorded rejection so the pair is proposed again")
+    ur.add_argument("team_id_a"); ur.add_argument("team_id_b")
     ogs.add_parser("load", help="write decided mappings into orgs / team_orgs")
     ogs.add_parser("status", help="orgs and how many team ids each covers")
     og.set_defaults(func=cmd_orgs)
+
+    li = sub.add_parser("limitations", help="known gaps in the data, the ones the ask layer surfaces")
+    li.add_argument("--json", action="store_true")
+    li.set_defaults(func=cmd_limitations)
+
+    ch = sub.add_parser("check", help="consistency checks: reconcile every derived view against its source")
+    ch.add_argument("--only", action="append", choices=list(CHECKS), help="run only this check (repeatable)")
+    ch.add_argument("--json", action="store_true")
+    ch.set_defaults(func=cmd_check)
 
     ak = sub.add_parser("ask", help="answer a natural-language stats question (structured query, never free SQL)")
     ak.add_argument("question")

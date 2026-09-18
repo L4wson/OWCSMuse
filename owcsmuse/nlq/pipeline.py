@@ -10,12 +10,13 @@ from typing import Any, Optional
 import psycopg
 
 from ..aggregates import stat_coverage_summary
+from ..limitations import applicable as applicable_limitations, entity_match_filter
 from ..logging import get_logger, log_event
 from ..resolve import Candidate, resolve
 from .compile import Compiled, Resolved, compile_query
 from .parser import parse_question
 from .schema import StructuredQuery, Unanswerable
-from .validate import SchemaInfo, Validated, validate
+from .validate import SchemaInfo, validate
 
 log = get_logger("owcsmuse.nlq")
 
@@ -38,6 +39,7 @@ class Answer:
     rows: list[dict] = field(default_factory=list)
     coverage: Optional[dict] = None
     notes: list[str] = field(default_factory=list)
+    limitations: list[dict] = field(default_factory=list)   # known gaps this slice lands in
     description: Optional[str] = None
     sql: Optional[str] = None
     params: Optional[list] = None
@@ -140,14 +142,15 @@ def _retarget(q: StructuredQuery, r: Resolved) -> StructuredQuery:
     return q
 
 
-def _entity_match_filter(role_id: str, role_type: Optional[str]) -> tuple[str, list[Any]]:
-    """SQL that restricts `matches m` to those this entity took part in."""
-    if role_type == "player":
-        return ("EXISTS (SELECT 1 FROM match_rosters r WHERE r.match_id = m.match_id AND r.player_id = %s)", [role_id])
-    if role_type == "org":
-        return ("EXISTS (SELECT 1 FROM team_identity ti WHERE ti.org_id = %s"
-                " AND ti.team_id IN (m.faction1_team_id, m.faction2_team_id))", [role_id])
-    return ("%s IN (m.faction1_team_id, m.faction2_team_id)", [role_id])
+def _entities_for_limitations(r: Resolved) -> list[tuple[str, Optional[str]]]:
+    """The resolved entities, as (id, kind) pairs, for narrowing a limitation to this slice."""
+    out: list[tuple[str, Optional[str]]] = []
+    left = r.player_id if r.subject_type == "player" else r.team_id
+    if left:
+        out.append((left, r.subject_type))
+    if r.opponent_id:
+        out.append((r.opponent_id, r.opponent_type))
+    return out
 
 
 def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved, rows: list[dict]) -> list[str]:
@@ -161,8 +164,8 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
     left_type = r.subject_type
     if not (left_id and r.opponent_id):
         return []
-    a_sql, a_params = _entity_match_filter(left_id, left_type)
-    b_sql, b_params = _entity_match_filter(r.opponent_id, r.opponent_type)
+    a_sql, a_params = entity_match_filter(left_id, left_type)
+    b_sql, b_params = entity_match_filter(r.opponent_id, r.opponent_type)
     try:
         with conn.cursor() as cur:
             cur.execute(
@@ -270,7 +273,14 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
                 + f"; seasons with it: {', '.join(map(str, coverage.get('seasons_with_stat') or []))}. "
                 "Rankings cover only the maps that have the stat."
             )
+    # Which documented gaps this slice lands in. A versus answer already reports
+    # its missing series precisely, so the general offline note is dropped there
+    # rather than said twice.
+    limitations = applicable_limitations(
+        conn, q.intent, q.metric, season=q.filters.season, championship_id=c.coverage_championship,
+        region=q.filters.region, entities=_entities_for_limitations(r))
     if q.intent == "versus":
+        limitations = [lim for lim in limitations if lim["id"] != "offline_map_stats"]
         notes += _missing_maps_note(conn, q, r, rows)
         if rows and not (rows[0].get("maps") or 0):
             left = r.names.get("subject") or r.names.get("player") or r.names.get("team") or ""
@@ -284,7 +294,7 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
                 tips = ["Check the spelling, or widen the season; scope is OWCS NA + EMEA main competition."]
             u = Unanswerable(code="no_data", reason=reason, suggestions=tips)
             a = _cannot(question, u, q, used)
-            a.entities, a.notes = pre.entities, notes
+            a.entities, a.notes, a.limitations = pre.entities, notes, limitations
             if debug:
                 a.sql, a.params = c.sql, c.params
             return a
@@ -297,7 +307,7 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
             suggestions=["The entity may have played only series whose maps FACEIT never recorded, "
                          "or not played in those seasons at all. `ask \"<name> record\"` shows what is known."])
         a = _cannot(question, u, q, used)
-        a.entities = pre.entities
+        a.entities, a.limitations = pre.entities, limitations
         if debug:
             a.sql, a.params = c.sql, c.params
         return a
@@ -308,11 +318,12 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         a.entities = pre.entities
         a.coverage = coverage
         a.notes = notes
+        a.limitations = limitations
         if debug:
             a.sql, a.params = c.sql, c.params
         return a
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows, coverage=coverage,
-               notes=notes, description=c.description, parser=used)
+               notes=notes, limitations=limitations, description=c.description, parser=used)
     if debug:
         a.sql, a.params = c.sql, c.params
     return a
@@ -345,10 +356,12 @@ def render_text(a: Answer, max_rows: int = 25) -> str:
             lines.append(f"  - {s}")
         for n in a.notes:
             lines.append(f"  note: {n}")
+        for lim in a.limitations:
+            lines.append(f"  known limitation ({lim['id']}): {lim['note']}")
         return "\n".join(lines)
     if a.status == "clarify":
         lines.append(f"Need a clarification: {a.reason}")
-        for role, cands in a.candidates.items():
+        for cands in a.candidates.values():
             for c in cands:
                 lines.append(f"  - {c['current_name']}  [{c['entity_type']} {c['entity_id']}] matched '{c['matched_name']}' ({c['name_kind']}, score {c['score']})")
         for tip in (a.suggestions or ["Re-ask with the exact name, or with the id shown in brackets."]):
@@ -374,4 +387,6 @@ def render_text(a: Answer, max_rows: int = 25) -> str:
                      + (f", without: {_fmt(cov.get('seasons_without_stat'))}" if cov.get("seasons_without_stat") else ""))
     for n in a.notes:
         lines.append(f"  note: {n}")
+    for lim in a.limitations:
+        lines.append(f"  known limitation ({lim['id']}): {lim['note']}")
     return "\n".join(lines)
