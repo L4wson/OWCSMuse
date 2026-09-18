@@ -495,7 +495,11 @@ def render_text(a: Answer, max_rows: int = 25, evidence_rows: int = 5) -> str:
         lines.append(f"Need a clarification: {a.reason}")
         for cands in a.candidates.values():
             for c in cands:
-                lines.append(f"  - {c['current_name']}  [{c['entity_type']} {c['entity_id']}] matched '{c['matched_name']}' ({c['name_kind']}, score {c['score']})")
+                era = f", seasons {', '.join(map(str, c['seasons']))}" if c.get("seasons") else ""
+                lines.append(f"  - {c['current_name']}  [{c['entity_type']}] {c['matches']} matches{era}")
+                # the actionable part: a question that resolves to exactly this one
+                lines.append(f"      ask: {c['question']}" if c.get("question") else
+                             f"      id: {c['entity_id']}")
         for tip in (a.suggestions or ["Re-ask with the exact name, or with the id shown in brackets."]):
             lines.append(tip)
         return "\n".join(lines)
