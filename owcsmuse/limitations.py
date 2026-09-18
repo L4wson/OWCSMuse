@@ -82,7 +82,8 @@ LIMITATIONS: tuple[Limitation, ...] = (
         "map_duration",
         "Map duration is derived, and only from 2025 onward",
         "No payload carries a map duration field. It is derived from the per-player `Time Played` stat, which "
-        "2024 does not have, so 1004 of 1482 ingested maps carry a duration and every undated one is 2024.",
+        "2024 does not have. 1004 of 1482 ingested maps carry a duration: all 748 of 2025 and all 256 of 2026, "
+        "and none of 2024's 478.",
     ),
     Limitation(
         "scope_na_emea",

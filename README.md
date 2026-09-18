@@ -309,9 +309,9 @@ machine-readable form of this.
 ### Map duration is derived, and only from 2025 onward
 
 `map_duration` - no payload carries a map duration field. `map_durations`
-derives it from the per-player `Time Played` stat, which 2024 does not have, so
-1,004 of 1,482 ingested maps carry a duration and every one that does not is
-2024.
+derives it from the per-player `Time Played` stat, which 2024 does not have.
+1,004 of 1,482 ingested maps carry a duration: all 748 maps of 2025 and all 256
+of 2026, and none of 2024's 478.
 
 ### Scope is OWCS NA + EMEA main competition
 
