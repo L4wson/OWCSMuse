@@ -224,7 +224,8 @@ def test_role_reaches_the_query_layer_and_a_flex_player_counts_once_per_role(agg
     """"tank with the most kills" used to drop "tank" silently and rank everyone.
     KSAA0 is Tank for all 8 fixture maps; the unfiltered leaderboard and the
     tank leaderboard must therefore agree on his number, and a differently
-    played role must return a different leaderboard."""
+    played role must return a different leaderboard. He is searchable by his
+    FACEIT nickname "KSAA0" but displays as his in-game name "KSAA" (bug 5)."""
     from owcsmuse.nlq.pipeline import ask
 
     unfiltered = ask(agg_db, "who had the most eliminations", with_evidence=False)
@@ -233,8 +234,8 @@ def test_role_reaches_the_query_layer_and_a_flex_player_counts_once_per_role(agg
     assert {r["nickname"] for r in unfiltered.rows} != {r["nickname"] for r in tank.rows}, \
         "the role filter changed nothing: it is being silently dropped again"
 
-    ksaa_unfiltered = next(r for r in unfiltered.rows if r["nickname"] == "KSAA0")
-    ksaa_tank = next(r for r in tank.rows if r["nickname"] == "KSAA0")
+    ksaa_unfiltered = next(r for r in unfiltered.rows if r["nickname"] == "KSAA")
+    ksaa_tank = next(r for r in tank.rows if r["nickname"] == "KSAA")
     assert ksaa_tank["total"] == ksaa_unfiltered["total"] == 139   # every fixture map of his is Tank
     assert ksaa_tank["maps_with_stat"] == ksaa_unfiltered["maps_with_stat"] == 8
 
