@@ -68,7 +68,7 @@ def clamp_page(page: Optional[int], page_size: Optional[int]) -> tuple[int, int]
 
 _PLAYER_MAP_COLUMNS = """
     s.match_id, s.round_number, s.started_at AS played_at, s.season,
-    s.championship_id, c.name AS competition,
+    s.championship_id, championship_display_name(c.name) AS competition,
     s.display_name AS team, s.opponent_display_name AS opponent,
     s.map_name, s.game_mode,
     tm.score AS score, tm.opp_score AS opponent_score,
@@ -78,7 +78,7 @@ _PLAYER_MAP_COLUMNS = """
 
 _TEAM_MAP_COLUMNS = """
     s.match_id, s.round_number, s.started_at AS played_at, s.season,
-    s.championship_id, c.name AS competition,
+    s.championship_id, championship_display_name(c.name) AS competition,
     s.display_name AS team, s.opponent_display_name AS opponent,
     s.map_name, s.game_mode,
     s.score AS score, s.opp_score AS opponent_score,
@@ -87,7 +87,7 @@ _TEAM_MAP_COLUMNS = """
 
 _TEAM_SERIES_COLUMNS = """
     s.match_id, NULL::int AS round_number, s.started_at AS played_at, s.season,
-    s.championship_id, c.name AS competition,
+    s.championship_id, championship_display_name(c.name) AS competition,
     s.display_name AS team, s.opponent_display_name AS opponent,
     s.best_of, s.map_wins AS score, s.map_losses AS opponent_score,
     CASE WHEN s.won THEN 'won' ELSE 'lost' END AS result,
@@ -99,7 +99,7 @@ _TEAM_SERIES_COLUMNS = """
 _NEUTRAL_MAP_INNER = """
     SELECT DISTINCT ON (s.match_id, s.round_number)
         s.match_id, s.round_number, s.started_at AS played_at, s.season,
-        s.championship_id, c.name AS competition,
+        s.championship_id, championship_display_name(c.name) AS competition,
         s.display_name AS team, s.opponent_display_name AS opponent,
         s.map_name, s.game_mode, s.score, s.opp_score AS opponent_score,
         CASE WHEN s.drawn THEN 'draw' WHEN s.won THEN s.display_name ELSE s.opponent_display_name END AS winner

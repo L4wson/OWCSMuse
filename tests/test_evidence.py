@@ -90,6 +90,13 @@ def test_every_row_carries_a_link_to_its_source_match():
     assert "count(*) OVER () AS total_rows" in c.sql       # the page and the whole size, in one query
 
 
+def test_the_competition_column_reads_a_display_name_not_the_stored_one():
+    """championships.name stays FACEIT's own text; only what a reader sees is remapped."""
+    r = Resolved(player_id="p1", subject_type="player")
+    c = _check(compile_evidence(_v("entity_stat", metric="Eliminations"), r))
+    assert "championship_display_name(c.name) AS competition" in c.sql
+
+
 def test_a_breakdown_with_no_subject_gets_one_row_per_map_not_one_per_side():
     c = _check(compile_evidence(_v("map_stats", entity="map"), Resolved(),
                                 expand={"id": "Ilios", "type": "map", "column": "map_name"}))

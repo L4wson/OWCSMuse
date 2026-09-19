@@ -245,3 +245,18 @@ def test_role_reaches_the_query_layer_and_a_flex_player_counts_once_per_role(agg
     # a role that player never played returns no_data, not a wrong number
     off_role = ask(agg_db, "KSAA0 eliminations as support", with_evidence=False)
     assert off_role.status == "cannot_answer" and off_role.code == "no_data"
+
+
+@dbonly
+def test_owcs_competition_names_display_reordered_and_shorn_of_central(agg_db):
+    """'S9 EMEA OWCS Central - Playoffs' must read 'OWCS EMEA S9 Playoffs' - display
+    only, so the stored FACEIT name (still 'S9 EMEA...') keeps matching free text."""
+    row = agg_db.execute(
+        "select championship_display_name('S9 EMEA OWCS Central - Playoffs') d, "
+        "championship_display_name('S4 NA OWCS Central - Regular Season') r, "
+        "championship_display_name('Dreamhack Dallas') u"       # unrecognised: passes through unchanged
+    ).fetchone()
+    agg_db.commit()
+    assert row["d"] == "OWCS EMEA S9 Playoffs"
+    assert row["r"] == "OWCS NA S4 Regular Season"
+    assert row["u"] == "Dreamhack Dallas"
