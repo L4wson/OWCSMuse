@@ -45,6 +45,50 @@ def test_versus_questions_parse(question, intent, expected, metric):
         assert c["filters"].get(k) == val, f"{k}: {c['filters']}"
 
 
+# ------------------------------------------------- "record vs" across entity types
+#
+# The bug: "X record vs Y" and "series record vs Y" both collapse to metric
+# "record" via METRIC_SYNONYMS, so the head_to_head branch could not tell them
+# apart and treated every "record vs" as series-grain - which only ever
+# resolves for two teams. "zeruhh record vs spacestation-gaming" (player vs
+# org) and "zeruhh record vs sugarfree" (player vs player) both failed with
+# "head-to-head needs two resolved teams" even though player-vs-org and
+# player-vs-player versus already existed in the aggregate layer; the parser
+# just never routed to them. A bare "record" (or "wins"/"losses"/"win rate")
+# must stay map-grain `versus`; only an explicit "series"/"match" qualifier -
+# or "matches", which has no map-grain reading - is series-grain `head_to_head`.
+
+RECORD_VS_MAP_GRAIN = [
+    # player vs player, both orderings
+    "zeruhh record vs sugarfree", "sugarfree record vs zeruhh",
+    # player vs org, both orderings
+    "zeruhh record vs spacestation-gaming", "spacestation-gaming record vs zeruhh",
+    # org vs org, both orderings
+    "twisted minds record vs ence", "ence record vs twisted minds",
+    # the generic synonyms of "record" must not smuggle series grain back in either
+    "zeruhh wins vs sugarfree", "zeruhh win rate vs sugarfree", "zeruhh losses vs sugarfree",
+]
+
+
+@pytest.mark.parametrize("question", RECORD_VS_MAP_GRAIN)
+def test_bare_record_vs_stays_map_grain_for_every_entity_pairing(question):
+    r = parse_question(question)
+    assert isinstance(r, StructuredQuery), getattr(r, "reason", r)
+    assert r.intent == "versus", f"{question!r} should be map-grain versus, got {r.intent!r}"
+
+
+RECORD_VS_SERIES_GRAIN = [
+    "twisted minds series record against ence", "twisted minds match record against ence",
+    "twisted minds series win rate against ence",
+]
+
+
+@pytest.mark.parametrize("question", RECORD_VS_SERIES_GRAIN)
+def test_an_explicit_series_qualifier_still_routes_to_head_to_head(question):
+    r = parse_question(question)
+    assert isinstance(r, StructuredQuery), getattr(r, "reason", r)
+    assert r.intent == "head_to_head", f"{question!r} should be series-grain head_to_head, got {r.intent!r}"
+
 
 @pytest.mark.parametrize("question,expected", SEASON_COMPARE, ids=[q for q, _ in SEASON_COMPARE])
 def test_same_entity_two_seasons_is_a_comparison_not_a_fixture(question, expected):

@@ -136,6 +136,15 @@ CHAMPIONSHIP_TERMS = [
 VERSUS_CUES = ["map record against", "record against", "against", " vs ", " vs. ", "versus", "head to head", "h2h",
                "matchup", "when they played", "when they met"]
 MAP_RECORD_CUES = ["map record", "map wins", "map win rate", "maps against", "record against", "head to head", "h2h", "vs", "versus", "against"]
+# What actually asks for the series-grain record ("Twisted Minds series record
+# against ENCE"), as opposed to a bare "record"/"wins"/"win rate" alongside
+# "vs" - both collapse to the same METRIC_SYNONYMS entry (e.g. "series record"
+# and "record" both become metric "record"), so the distinction has to be read
+# from the raw text, not from the metric already extracted from it. "matches"
+# has no map-grain reading at all ("how many matches" can only mean series),
+# so it is series-grain on its own without needing one of these phrases too.
+SERIES_GRAIN_CUES = ["series record", "match record", "series win rate", "series wins", "match wins",
+                     "series loss", "match loss", "series matchup", "match history"]
 
 LEADERBOARD_CUES = ["most", "top", "highest", "best", "leader", "leaderboard", "who has", "who had", "who have", "who got",
                     "rank", "ranking", "lowest", "fewest", "least", "worst", "which player", "which team", "who leads", "who led",
@@ -412,8 +421,13 @@ def parse_question(question: str) -> ParseResult:
                     return StructuredQuery(intent="season_compare", entity="team", metric=metric or "map_win_rate",
                                            filters=f, aggregation=aggregation)
                 # "series record against X" is the series-grain question; everything
-                # else at this shape is a map record.
-                if metric in ("record", "win_rate", "wins", "losses", "matches"):
+                # else at this shape is a map record. "series record" and a bare
+                # "record" both collapse to the same metric via METRIC_SYNONYMS, so
+                # the distinction has to come from the raw text (SERIES_GRAIN_CUES),
+                # not from `metric` - relying on `metric` alone made every "X record
+                # vs Y" series-grain, which only ever resolves for two teams, so
+                # "zeruhh record vs sugarfree" (both players) failed outright.
+                if metric == "matches" or _has(q, SERIES_GRAIN_CUES):
                     return StructuredQuery(intent="head_to_head", entity="team", metric="record",
                                            filters=f.model_copy(update={"team": a, "opponent": b, "subject": None}))
                 return StructuredQuery(intent="versus", entity="player" if _has(q, PLAYER_CUES) else "team",
