@@ -27,32 +27,6 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
-    "46f8e560-76fe-4b5f-85e7-397957e0dc74": {
-      "org_id": "geekay-esports",
-      "org_name": "Geekay Esports",
-      "team_name": "Geekay Esports",
-      "note": "merged on name identity: names fold identically ('geekay esports')",
-      "evidence": [
-        "names fold identically ('geekay esports')",
-        "roster overlap 0%: 0 of the smaller 5-player roster shared",
-        "match windows do not overlap, 146 day gap (2025-05-11..2025-10-26 then 2026-03-22..2026-07-05)",
-        "seasons 2025, 2026; 16 + 23 matches"
-      ],
-      "decided_at": "2026-09-17T22:39:36+00:00"
-    },
-    "590b7d3b-a200-47b9-a967-f02274c1977b": {
-      "org_id": "geekay-esports",
-      "org_name": "Geekay Esports",
-      "team_name": "Geekay Esports",
-      "note": "merged on name identity: names fold identically ('geekay esports')",
-      "evidence": [
-        "names fold identically ('geekay esports')",
-        "roster overlap 0%: 0 of the smaller 5-player roster shared",
-        "match windows do not overlap, 146 day gap (2025-05-11..2025-10-26 then 2026-03-22..2026-07-05)",
-        "seasons 2025, 2026; 16 + 23 matches"
-      ],
-      "decided_at": "2026-09-17T22:39:36+00:00"
-    },
     "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e": {
       "org_id": "ntmr",
       "org_name": "NTMR",
@@ -128,32 +102,6 @@
         "roster overlap 0%: 0 of the smaller 6-player roster shared",
         "match windows do not overlap, 21 day gap (2024-03-08..2024-03-21 then 2024-04-12..2024-04-14)",
         "seasons 2024; 2 + 6 matches"
-      ],
-      "decided_at": "2026-09-17T22:39:36+00:00"
-    },
-    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf": {
-      "org_id": "spacestation-gaming",
-      "org_name": "SpaceStation Gaming",
-      "team_name": "SpaceStation Gaming",
-      "note": "merged on name identity: names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
-      "evidence": [
-        "names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
-        "roster overlap 0%: 0 of the smaller 7-player roster shared",
-        "match windows do not overlap, 278 day gap (2024-03-08..2024-04-28 then 2025-02-01..2026-07-06)",
-        "seasons 2024, 2025, 2026; 50 + 19 matches"
-      ],
-      "decided_at": "2026-09-17T22:39:36+00:00"
-    },
-    "a359db61-26e2-44e0-8961-e0b373f4db21": {
-      "org_id": "spacestation-gaming",
-      "org_name": "SpaceStation Gaming",
-      "team_name": "SpaceStation",
-      "note": "merged on name identity: names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
-      "evidence": [
-        "names differ but one name's tokens are inside the other (spacestation in gaming spacestation) - requires review",
-        "roster overlap 0%: 0 of the smaller 7-player roster shared",
-        "match windows do not overlap, 278 day gap (2024-03-08..2024-04-28 then 2025-02-01..2026-07-06)",
-        "seasons 2024, 2025, 2026; 50 + 19 matches"
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
@@ -301,6 +249,18 @@
       "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
       "decided_at": "2026-09-18T01:43:54+00:00"
     },
+    "46f8e560-76fe-4b5f-85e7-397957e0dc74|590b7d3b-a200-47b9-a967-f02274c1977b": {
+      "team_ids": [
+        "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+        "590b7d3b-a200-47b9-a967-f02274c1977b"
+      ],
+      "names": [
+        "Geekay Esports",
+        "Geekay Esports"
+      ],
+      "reason": "reviewed rejection: region-locked conflict. One 'Geekay Esports' competed only in emea (S8-S9 EMEA OWCS Central), the other only in na (S5-S6 NA OWCS Central). OWCS rosters do not cross regions; the original merge was on an identical name with 0% roster overlap, which two unrelated orgs sharing a name would also produce.",
+      "decided_at": "2026-09-19T00:49:09+00:00"
+    },
     "590b7d3b-a200-47b9-a967-f02274c1977b|cefc3f72-5641-43f4-ae4f-bb5eee3b564d": {
       "team_ids": [
         "590b7d3b-a200-47b9-a967-f02274c1977b",
@@ -312,6 +272,18 @@
       ],
       "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
       "decided_at": "2026-09-18T01:43:51+00:00"
+    },
+    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf|a359db61-26e2-44e0-8961-e0b373f4db21": {
+      "team_ids": [
+        "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
+        "a359db61-26e2-44e0-8961-e0b373f4db21"
+      ],
+      "names": [
+        "SpaceStation Gaming",
+        "SpaceStation"
+      ],
+      "reason": "reviewed rejection: region-locked conflict. 'SpaceStation Gaming' competed only in na (S4-S9 NA OWCS Central), 'SpaceStation' only in emea/international (2024 EMEA Stage 1-2, Dreamhack Dallas). OWCS rosters do not cross regions; the original merge was name-containment with 0% roster overlap, which is not evidence of identity. This wrong merge caused sug2rfree (SpaceStation Gaming NA player) to show EMEA matches in his team record.",
+      "decided_at": "2026-09-19T00:49:08+00:00"
     },
     "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e|cd157523-5c58-41bc-b62d-e1a635ea61b8": {
       "team_ids": [

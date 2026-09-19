@@ -12,7 +12,7 @@ from owcsmuse.nlq.parser import parse_question
 from owcsmuse.nlq.schema import Filters, StructuredQuery, Unanswerable
 from owcsmuse.nlq.validate import SchemaInfo, Validated, validate
 from owcsmuse.orgs import (GENERIC_TOKENS, OrgDecisions, Proposal, TeamFacts, _adjacency, _overlap,
-                           name_contains, pair_key, render_report, slugify)
+                           name_contains, pair_key, propose, region_conflict, render_report, slugify)
 
 # ------------------------------------------------------------------ parsing
 
@@ -92,10 +92,10 @@ def test_academy_guard_reports_why_it_refused():
     assert ok is False and "academy" in why and "separate team" in why
 
 
-def _facts(tid, name, players, first, last, matches=10):
+def _facts(tid, name, players, first, last, matches=10, regions=()):
     return TeamFacts(team_id=tid, name=name, players=set(players),
                      first_at=datetime(*first, tzinfo=timezone.utc), last_at=datetime(*last, tzinfo=timezone.utc),
-                     matches=matches)
+                     matches=matches, regions=set(regions))
 
 
 def test_overlap_and_adjacency_are_measured_not_guessed():
@@ -108,6 +108,44 @@ def test_overlap_and_adjacency_are_measured_not_guessed():
     # teams that coexist are not adjacent
     c = _facts("c", "Other", ["p9"], (2025, 2, 1), (2025, 9, 1))
     assert _adjacency(a, c) == (False, 0)
+
+
+# --------------------------------------------------- the bug: cross-region merges
+
+def test_region_conflict_blocks_a_merge_regardless_of_name_or_overlap():
+    """The exact shape that produced the wrong data: identical or contained
+    names, weak-to-zero roster overlap, opposite regions."""
+    na = _facts("na1", "SpaceStation Gaming", [], (2025, 2, 1), (2026, 7, 6), regions=["na"])
+    emea = _facts("emea1", "SpaceStation", [], (2024, 3, 8), (2024, 4, 28), regions=["emea", "international"])
+    assert region_conflict(na, emea) is not None
+    assert "na" in region_conflict(na, emea) and "emea" in region_conflict(na, emea)
+
+    # identical names do not override it either
+    geekay_na = _facts("g1", "Geekay Esports", [], (2025, 2, 1), (2025, 10, 26), regions=["na"])
+    geekay_emea = _facts("g2", "Geekay Esports", [], (2026, 3, 22), (2026, 7, 5), regions=["emea"])
+    assert region_conflict(geekay_na, geekay_emea) is not None
+
+
+def test_region_conflict_does_not_fire_on_international_or_missing_region_data():
+    # an international LAN alongside a team's home region is the ordinary case
+    na_plus_international = _facts("a", "Team X", [], (2024, 1, 1), (2024, 6, 1), regions=["na", "international"])
+    also_na = _facts("b", "Team X", [], (2025, 1, 1), (2025, 6, 1), regions=["na"])
+    assert region_conflict(na_plus_international, also_na) is None
+    # two teams both only ever seen at international events: nothing to conflict on
+    international_only = _facts("c", "Team Y", [], (2024, 1, 1), (2024, 6, 1), regions=["international"])
+    assert region_conflict(na_plus_international, international_only) is None
+    # no region data at all: not a basis to refuse (and not a basis to accept)
+    no_region = _facts("d", "Team Z", [], (2024, 1, 1), (2024, 6, 1))
+    assert region_conflict(na_plus_international, no_region) is None
+
+
+def test_propose_never_emits_a_cross_region_pair_even_at_strong_strength():
+    facts = {
+        "g1": _facts("g1", "Geekay Esports", ["p1"], (2025, 2, 1), (2025, 10, 26), regions=["na"]),
+        "g2": _facts("g2", "Geekay Esports", ["p2"], (2026, 3, 22), (2026, 7, 5), regions=["emea"]),
+    }
+    proposals = propose(None, facts)
+    assert proposals == []
 
 
 def test_decisions_round_trip_and_unmapped_stays_unmapped(tmp_path):

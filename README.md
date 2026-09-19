@@ -355,10 +355,10 @@ is recorded as a decision too, so a pair that was looked at and turned down
 never returns as pending review. An unmapped team id stays unmapped and keys as
 `team:<id>`, visibly itself in any grouping - there is no silent fallback.
 
-**What the evidence is actually worth.** The proposer weighs three signals:
-name identity after folding, roster overlap across the two date windows, and
-date adjacency. Reviewing the output on real data inverted the expected
-ordering:
+**What the evidence is actually worth.** The proposer weighs four signals: name
+identity after folding, roster overlap across the two date windows, date
+adjacency, and region. Reviewing the output on real data inverted the expected
+ordering, twice:
 
 - **Roster overlap is weak evidence, and sometimes points the wrong way.** In
   esports whole rosters move between organisations, so a squad that transferred
@@ -368,16 +368,28 @@ ordering:
   the data, Al qadsiah to qadsiah, shared **1 of 8** players, because the roster
   turned over at the same time. Merging on overlap would have made four wrong
   merges and missed the right one.
-- **Name identity is the reliable signal**, with two guards: generic tokens
-  (`team`, `esports`, `gaming`, ...) carry no identity, so "Team X" and "X" are
-  the same handle; and an added academy or B-team token refuses the match
-  outright, so `name_contains("Team Liquid", "Liquid Academy")` is `False` and
-  says why. Nothing here does fuzzy string similarity.
-- **Date adjacency corroborates.** Two ids whose match windows overlap may be
-  two teams that coexisted, which is reported rather than assumed.
+- **Name identity is not enough by itself, and two applied merges proved it
+  the hard way.** "SpaceStation Gaming" (NA) was merged with "SpaceStation"
+  (EMEA) on a contained-name match; "Geekay Esports" (NA) was merged with an
+  *identically named* "Geekay Esports" (EMEA). Both had 0% roster overlap.
+  Both were wrong: the two are unrelated teams that happen to share a name,
+  and the wrong merge surfaced as a real bug - an NA player's "record" query
+  pulled in a completely unrelated EMEA team's matches. Name identity, even
+  exact-fold, is corroborating evidence, not identity by itself.
+- **Region is a hard rule, not a signal.** OWCS is region-locked: a
+  competing roster plays in `na` or `emea`, never both, and does not switch
+  between them season to season. `region_conflict()` refuses any pair whose
+  match history spans disjoint regions, before name or roster evidence is even
+  considered - identical names included. `international` events (Dreamhack,
+  Midseason Championship, ...) never conflict with anything, since any region
+  can attend one alongside its home-region schedule.
+- **Date adjacency corroborates**, but only within a region. Two ids whose
+  match windows overlap may be two teams that coexisted, which is reported
+  rather than assumed.
 
-Current state: 11 orgs covering 22 team ids, 5 pairs recorded as reviewed
-rejections, 58 team ids unmapped and queryable as themselves.
+Current state: 9 orgs covering 18 team ids, 7 pairs recorded as reviewed
+rejections (2 of them region conflicts found after the fact and reversed),
+62 team ids unmapped and queryable as themselves.
 
 ## Aggregation layer
 
