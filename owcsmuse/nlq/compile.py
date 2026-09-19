@@ -306,56 +306,85 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
 
     if q.metric == "kd_ratio" or (q.metric in ("maps", "matches", "map_wins", "map_losses", "map_win_rate", "wins", "losses") and q.entity == "player"):
         clauses, params = [], []
+        alias = "fp" if f.role else "a"
         if q.intent == "entity_stat":
             if not r.player_id:
                 return Unanswerable(code="invalid_query", reason="needs a resolved player")
-            _where(clauses, params, "a.player_id", r.player_id)
-        _where(clauses, params, "a.season", f.season)
-        _where(clauses, params, "a.championship_id", champ)
-        _where(clauses, params, "a.region", f.region)
-        _where(clauses, params, "a.org_key", r.org_key(r.team_id, r.subject_type))
-        _where(clauses, params, "a.map_name", v.map_name)
-        _where(clauses, params, "a.game_mode", v.mode_name)
+            _where(clauses, params, f"{alias}.player_id", r.player_id)
+        _where(clauses, params, f"{alias}.season", f.season)
+        _where(clauses, params, f"{alias}.championship_id", champ)
+        _where(clauses, params, f"{alias}.region", f.region)
+        _where(clauses, params, f"{alias}.org_key", r.org_key(r.team_id, r.subject_type))
+        _where(clauses, params, f"{alias}.map_name", v.map_name)
+        _where(clauses, params, f"{alias}.game_mode", v.mode_name)
+        _where(clauses, params, f"{alias}.role", f.role)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-        # No sum(a.matches) here: the aggregate is grouped per map and mode, so a
-        # series would be counted once per map played in it.
-        sql = ("SELECT a.player_id, p.nickname, sum(a.maps) AS maps, sum(a.maps_won) AS map_wins, "
-               "sum(a.maps) - sum(a.maps_won) - sum(a.maps_drawn) AS map_losses, "
-               "round(100.0 * sum(a.maps_won) / nullif(sum(a.maps), 0), 1) AS map_win_pct, "
-               "sum(a.sum_eliminations) AS eliminations, sum(a.sum_deaths) AS deaths, "
-               "round(sum(a.sum_eliminations)::numeric / nullif(sum(a.sum_deaths), 0), 2) AS kd_ratio, "
-               "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-               f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, p.nickname")
+        if f.role:
+            # fact_player_maps has role but no pre-aggregated sums; the same
+            # shape, computed from the raw rows instead of agg_player_stats.
+            sql = ("SELECT fp.player_id, p.nickname, count(*) AS maps, count(*) FILTER (WHERE fp.map_won) AS map_wins, "
+                   "count(*) FILTER (WHERE NOT fp.map_won AND NOT fp.map_drawn) AS map_losses, "
+                   "round(100.0 * count(*) FILTER (WHERE fp.map_won) / nullif(count(*), 0), 1) AS map_win_pct, "
+                   "sum(fp.eliminations) AS eliminations, sum(fp.deaths) AS deaths, "
+                   "round(sum(fp.eliminations)::numeric / nullif(sum(fp.deaths), 0), 2) AS kd_ratio, "
+                   "array_agg(DISTINCT fp.season ORDER BY fp.season) AS seasons "
+                   f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id{where} GROUP BY fp.player_id, p.nickname")
+        else:
+            # No sum(a.matches) here: the aggregate is grouped per map and mode, so a
+            # series would be counted once per map played in it.
+            sql = ("SELECT a.player_id, p.nickname, sum(a.maps) AS maps, sum(a.maps_won) AS map_wins, "
+                   "sum(a.maps) - sum(a.maps_won) - sum(a.maps_drawn) AS map_losses, "
+                   "round(100.0 * sum(a.maps_won) / nullif(sum(a.maps), 0), 1) AS map_win_pct, "
+                   "sum(a.sum_eliminations) AS eliminations, sum(a.sum_deaths) AS deaths, "
+                   "round(sum(a.sum_eliminations)::numeric / nullif(sum(a.sum_deaths), 0), 2) AS kd_ratio, "
+                   "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
+                   f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, p.nickname")
         order_key = {"kd_ratio": "kd_ratio", "maps": "maps", "matches": "matches", "map_wins": "map_wins", "map_losses": "map_losses",
                      "map_win_rate": "map_win_pct", "wins": "map_wins", "losses": "map_losses"}[q.metric]
         if q.intent == "leaderboard":
-            sql += f" HAVING sum(a.maps) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC LIMIT %s"
+            sql += f" HAVING count(*) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC LIMIT %s" if f.role else \
+                   f" HAVING sum(a.maps) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC LIMIT %s"
             params += [q.min_maps, q.limit]
-        return Compiled(sql=sql, params=params, description=f"player {q.metric}", coverage_stat="Eliminations" if q.metric == "kd_ratio" else None,
+        return Compiled(sql=sql, params=params, description=f"player {q.metric}" + (f" ({f.role})" if f.role else ""),
+                        coverage_stat="Eliminations" if q.metric == "kd_ratio" else None,
                         coverage_season=f.season, coverage_championship=single_champ)
 
     if not stat:
         return Unanswerable(code="unsupported_metric", reason=f"cannot compute '{q.metric}' for {q.entity}")
 
     sliced = bool(v.map_name or v.mode_name or r.team_id or f.region)
+    has_role = f.role is not None
     order_expr = "avg_per_map" if q.aggregation == "avg_per_map" else "total"
 
     if q.intent == "entity_stat":
         if not r.player_id:
             return Unanswerable(code="invalid_query", reason="needs a resolved player")
-        if sliced:
-            clauses, params = ["a.player_id = %s"], [r.player_id]
-            _where(clauses, params, "a.season", f.season)
-            _where(clauses, params, "a.championship_id", champ)
-            _where(clauses, params, "a.region", f.region)
-            _where(clauses, params, "a.org_key", r.org_key(r.team_id, r.subject_type))
-            _where(clauses, params, "a.map_name", v.map_name)
-            _where(clauses, params, "a.game_mode", v.mode_name)
-            sql = (f"SELECT a.player_id, p.nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
-                   f"round(100.0 * sum(a.maps_with_{col}) / nullif(sum(a.maps), 0), 1) AS coverage_pct, "
-                   f"sum(a.sum_{col}) AS total, round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 2) AS avg_per_map, "
-                   "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-                   f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id WHERE {' AND '.join(clauses)} GROUP BY a.player_id, p.nickname")
+        if sliced or has_role:
+            # agg_player_stat_long and agg_player_stats carry no role column, so a
+            # role filter always reads the raw per-map rows instead. validate.py
+            # guarantees `col` is set (a typed stat) whenever role is present.
+            alias = "fp" if has_role else "a"
+            clauses, params = [f"{alias}.player_id = %s"], [r.player_id]
+            _where(clauses, params, f"{alias}.season", f.season)
+            _where(clauses, params, f"{alias}.championship_id", champ)
+            _where(clauses, params, f"{alias}.region", f.region)
+            _where(clauses, params, f"{alias}.org_key", r.org_key(r.team_id, r.subject_type))
+            _where(clauses, params, f"{alias}.map_name", v.map_name)
+            _where(clauses, params, f"{alias}.game_mode", v.mode_name)
+            _where(clauses, params, f"{alias}.role", f.role)
+            if has_role:
+                sql = (f"SELECT fp.player_id, p.nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "
+                       f"round(100.0 * count(fp.{col}) / nullif(count(*), 0), 1) AS coverage_pct, "
+                       f"sum(fp.{col}) AS total, round(sum(fp.{col}) / nullif(count(fp.{col}), 0), 2) AS avg_per_map, "
+                       "array_agg(DISTINCT fp.season ORDER BY fp.season) AS seasons "
+                       f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id "
+                       f"WHERE {' AND '.join(clauses)} GROUP BY fp.player_id, p.nickname")
+            else:
+                sql = (f"SELECT a.player_id, p.nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
+                       f"round(100.0 * sum(a.maps_with_{col}) / nullif(sum(a.maps), 0), 1) AS coverage_pct, "
+                       f"sum(a.sum_{col}) AS total, round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 2) AS avg_per_map, "
+                       "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
+                       f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id WHERE {' AND '.join(clauses)} GROUP BY a.player_id, p.nickname")
         else:
             clauses, params = ["l.player_id = %s", "l.stat_key = %s"], [r.player_id, stat]
             _where(clauses, params, "l.season", f.season)
@@ -377,7 +406,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
                         coverage_season=f.season, coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
 
     # leaderboard over a stat key
-    if not sliced and len(champ or []) <= 1:
+    if not sliced and not has_role and len(champ or []) <= 1:
         # reuse the SQL function; asc sort needs a wrapper because the function ranks descending
         if q.sort == "asc":
             sql = (f"SELECT * FROM stat_leaderboard(%s, %s, %s, %s, 10000, %s) ORDER BY {order_expr} ASC NULLS LAST LIMIT %s")
@@ -388,22 +417,50 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         return Compiled(sql=sql, params=params, description=f"{stat} leaderboard", coverage_stat=stat, coverage_season=f.season,
                         coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
 
+    if not sliced and has_role and len(champ or []) <= 1:
+        # role-only (no map/mode/team/region): still the fast SQL-function path,
+        # generic over any numeric stat key, just with p_role passed through.
+        if q.sort == "asc":
+            sql = (f"SELECT * FROM stat_leaderboard(%s, %s, %s, %s, 10000, %s, %s) ORDER BY {order_expr} ASC NULLS LAST LIMIT %s")
+            params = [stat, f.season, single_champ, q.min_maps, "avg" if q.aggregation == "avg_per_map" else "total", f.role, q.limit]
+        else:
+            sql = "SELECT * FROM stat_leaderboard(%s, %s, %s, %s, %s, %s, %s)"
+            params = [stat, f.season, single_champ, q.min_maps, q.limit, "avg" if q.aggregation == "avg_per_map" else "total", f.role]
+        return Compiled(sql=sql, params=params, description=f"{stat} leaderboard ({f.role})", coverage_stat=stat, coverage_season=f.season,
+                        coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
+
     if not col:
-        return Unanswerable(code="unsupported_metric", reason=f"'{stat}' cannot be sliced by map/mode/team/region")
+        reason = f"'{stat}' cannot be sliced by map/mode/team/region"
+        if has_role:
+            reason = f"'{stat}' cannot be filtered by role; role is only tracked for these stats: {', '.join(TYPED_STATS)}"
+        return Unanswerable(code="unsupported_metric", reason=reason)
+    # agg_player_stats has no role column, so a role filter reads the raw
+    # per-map rows instead (fact_player_maps), everything else unchanged.
+    alias = "fp" if has_role else "a"
     clauses, params = [], []
-    _where(clauses, params, "a.season", f.season)
-    _where(clauses, params, "a.championship_id", champ)
-    _where(clauses, params, "a.region", f.region)
-    _where(clauses, params, "a.org_key", r.org_key(r.team_id, r.subject_type))
-    _where(clauses, params, "a.map_name", v.map_name)
-    _where(clauses, params, "a.game_mode", v.mode_name)
+    _where(clauses, params, f"{alias}.season", f.season)
+    _where(clauses, params, f"{alias}.championship_id", champ)
+    _where(clauses, params, f"{alias}.region", f.region)
+    _where(clauses, params, f"{alias}.org_key", r.org_key(r.team_id, r.subject_type))
+    _where(clauses, params, f"{alias}.map_name", v.map_name)
+    _where(clauses, params, f"{alias}.game_mode", v.mode_name)
+    _where(clauses, params, f"{alias}.role", f.role)
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-    sql = (f"SELECT a.player_id, p.nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
-           f"round(100.0 * sum(a.maps_with_{col}) / nullif(sum(a.maps), 0), 1) AS coverage_pct, "
-           f"sum(a.sum_{col}) AS total, round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 2) AS avg_per_map, "
-           "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-           f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, p.nickname "
-           f"HAVING sum(a.maps_with_{col}) >= %s ORDER BY {order_expr} {_dir(q.sort)} NULLS LAST, maps_with_stat DESC LIMIT %s")
+    if has_role:
+        sql = (f"SELECT fp.player_id, p.nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "
+               f"round(100.0 * count(fp.{col}) / nullif(count(*), 0), 1) AS coverage_pct, "
+               f"sum(fp.{col}) AS total, round(sum(fp.{col}) / nullif(count(fp.{col}), 0), 2) AS avg_per_map, "
+               "array_agg(DISTINCT fp.season ORDER BY fp.season) AS seasons "
+               f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id{where} GROUP BY fp.player_id, p.nickname "
+               f"HAVING count(fp.{col}) >= %s ORDER BY {order_expr} {_dir(q.sort)} NULLS LAST, maps_with_stat DESC LIMIT %s")
+    else:
+        sql = (f"SELECT a.player_id, p.nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
+               f"round(100.0 * sum(a.maps_with_{col}) / nullif(sum(a.maps), 0), 1) AS coverage_pct, "
+               f"sum(a.sum_{col}) AS total, round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 2) AS avg_per_map, "
+               "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
+               f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, p.nickname "
+               f"HAVING sum(a.maps_with_{col}) >= %s ORDER BY {order_expr} {_dir(q.sort)} NULLS LAST, maps_with_stat DESC LIMIT %s")
     params += [q.min_maps, q.limit]
-    return Compiled(sql=sql, params=params, description=f"{stat} leaderboard (sliced)", coverage_stat=stat, coverage_season=f.season,
+    return Compiled(sql=sql, params=params, description=f"{stat} leaderboard (sliced)" + (f" ({f.role})" if f.role else ""),
+                    coverage_stat=stat, coverage_season=f.season,
                     coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))

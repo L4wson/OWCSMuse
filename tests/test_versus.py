@@ -45,6 +45,7 @@ def test_versus_questions_parse(question, intent, expected, metric):
         assert c["filters"].get(k) == val, f"{k}: {c['filters']}"
 
 
+
 @pytest.mark.parametrize("question,expected", SEASON_COMPARE, ids=[q for q, _ in SEASON_COMPARE])
 def test_same_entity_two_seasons_is_a_comparison_not_a_fixture(question, expected):
     r = parse_question(question)

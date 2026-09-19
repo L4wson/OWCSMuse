@@ -206,6 +206,41 @@ def test_stat_availability_sql():
     assert c.params == [] and "WHERE" not in c.sql
 
 
+# --------------------------------------------------------------------- role
+
+def test_role_alone_reuses_the_leaderboard_function_with_p_role():
+    """The bug: "tank with the most kills" used to drop "tank" silently and rank everyone."""
+    c = _sql(val("tank with the most kills"), Resolved())
+    assert "stat_leaderboard(" in c.sql
+    assert c.params == ["Eliminations", None, None, 1, 10, "total", "Tank"]
+
+
+def test_role_combined_with_a_slice_reads_fact_player_maps_not_the_aggregate():
+    # agg_player_stats has no role column; role always reads the raw per-map rows.
+    c = _sql(val("tank with the most kills on Lijiang Tower"), Resolved())
+    assert "fact_player_maps fp" in c.sql and "agg_player_stats" not in c.sql
+    assert "fp.role = %s" in c.sql and "fp.map_name = %s" in c.sql
+    assert c.params == ["Lijiang Tower", "Tank", 1, 10]
+
+
+def test_a_players_own_role_filtered_stat_also_reads_fact_player_maps():
+    c = _sql(val("KSAA eliminations as tank"), R_PLAYER)
+    assert "fact_player_maps fp" in c.sql and "fp.player_id = %s" in c.sql and "fp.role = %s" in c.sql
+    assert c.params == ["p1", "Tank"]
+
+
+def test_role_is_scoped_to_player_leaderboards_and_player_stats():
+    # role is per player per map; a team-grain question has no clean meaning for it
+    u = validate(parse("Twisted Minds record as tank"), INFO)
+    assert isinstance(u, Unanswerable) and u.code == "unsupported_question" and "Tank" in u.reason
+
+
+def test_role_requires_a_typed_stat_same_rule_as_map_and_mode():
+    q = StructuredQuery(intent="leaderboard", entity="player", metric="K/D Ratio", filters=Filters(role="Tank"))
+    u = validate(q, INFO)
+    assert isinstance(u, Unanswerable) and u.code == "unsupported_metric" and "role" in u.reason
+
+
 def test_every_param_is_bound_never_interpolated():
     for q, r in [("most eliminations on Lijiang Tower in 2024", Resolved()), ("KSAA damage dealt on Lijiang Tower", R_PLAYER),
                  ("Twisted Minds record on control", R_TEAM), ("Twisted Minds vs ENCE", R_H2H)]:

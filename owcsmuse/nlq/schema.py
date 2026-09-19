@@ -19,6 +19,11 @@ Intent = Literal[
 EntityType = Literal["player", "team", "org", "map", "mode"]
 Aggregation = Literal["total", "avg_per_map", "count", "rate"]
 Region = Literal["na", "emea", "international"]
+# FACEIT's own three values (match_players.role). Recorded per player per map,
+# not per player: a flex player who played 10 maps tank and 5 maps DPS
+# contributes to the tank leaderboard for those 10 and the DPS leaderboard for
+# those 5. Nothing here picks a "primary" role or merges the two.
+Role = Literal["Tank", "Damage", "Support"]
 
 # Derived metrics the compiler knows how to compute. Anything else must be a
 # FACEIT stat key that exists in stat_coverage (validated against the schema).
@@ -60,6 +65,7 @@ class Filters(BaseModel):
     map: Optional[str] = None
     mode: Optional[str] = None
     region: Optional[Region] = None
+    role: Optional[Role] = None         # Tank | Damage | Support, per map (see Role above)
 
     def names(self) -> list[tuple[str, str]]:
         """(role, name) pairs that need entity resolution."""

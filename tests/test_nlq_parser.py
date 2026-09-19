@@ -11,8 +11,10 @@ SUPPORTED = [
     # ---- leaderboards
     ("Who had the most eliminations in 2024?",
      {"intent": "leaderboard", "entity": "player", "metric": "Eliminations", "filters": {"season": 2024}, "sort": "desc", "limit": 10}),
+    # "healers" is a real role filter now (Support), not just a synonym for "players":
+    # a flex player's tank/DPS maps correctly drop out of this ranking.
     ("top 5 healers by healing done",
-     {"intent": "leaderboard", "entity": "player", "metric": "Healing Done", "filters": {}, "limit": 5}),
+     {"intent": "leaderboard", "entity": "player", "metric": "Healing Done", "filters": {"role": "Support"}, "limit": 5}),
     ("Which player has the highest K/D ratio?",
      {"intent": "leaderboard", "entity": "player", "metric": "kd_ratio", "filters": {}}),
     ("Who has the lowest deaths per map in 2026?",
@@ -98,6 +100,25 @@ SUPPORTED = [
      {"intent": "stat_availability", "metric": "Healing Done", "filters": {}}),
     ("what stats do you have for 2026",
      {"intent": "stat_availability", "filters": {"season": 2026}}),
+    # ---- role: the bug ("tank with the most kills" returned unfiltered DPS players)
+    ("tank with the most kills",
+     {"intent": "leaderboard", "entity": "player", "metric": "Eliminations", "filters": {"role": "Tank"}}),
+    ("tanks with the most deaths in 2024",
+     {"intent": "leaderboard", "entity": "player", "metric": "Deaths", "filters": {"season": 2024, "role": "Tank"}}),
+    ("dps with the most eliminations",
+     {"intent": "leaderboard", "entity": "player", "metric": "Eliminations", "filters": {"role": "Damage"}}),
+    ("support with the most healing done",
+     {"intent": "leaderboard", "entity": "player", "metric": "Healing Done", "filters": {"role": "Support"}}),
+    ("who had the most kills as tank",
+     {"intent": "leaderboard", "entity": "player", "metric": "Eliminations", "filters": {"role": "Tank"}}),
+    ("KSAA eliminations as tank",
+     {"intent": "entity_stat", "entity": "player", "metric": "Eliminations", "filters": {"subject": "ksaa", "role": "Tank"}}),
+    ("KSAA kills playing support",
+     {"intent": "entity_stat", "entity": "player", "metric": "Eliminations", "filters": {"subject": "ksaa", "role": "Support"}}),
+    # "damage" alone stays the metric (Damage Dealt), never the role - only the
+    # unambiguous shorthand "dps" names the role, so this must NOT carry a role filter
+    ("who had the most damage",
+     {"intent": "leaderboard", "entity": "player", "metric": "Damage Dealt", "filters": {}}),
 ]
 
 UNANSWERABLE = [

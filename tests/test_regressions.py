@@ -197,3 +197,50 @@ def test_response_headers_are_archived(agg_db):
     agg_db.commit()
     assert row["headers"]["ratelimit-remaining"] == "18"
     assert row["headers"]["ratelimit-limit"] == "20, 20;w=1"
+
+
+# ------------------------------------------------------- manual-testing batch
+
+@dbonly
+def test_a_players_own_org_never_pulls_in_an_unrelated_regions_matches(agg_db):
+    """SpaceStation Gaming (na) was merged with SpaceStation (emea, 0% roster
+    overlap) on a contained-name match; sug2rfree's record showed EMEA matches
+    he never played. region_conflict() now refuses that merge outright."""
+    from owcsmuse.orgs import TeamFacts, propose, region_conflict
+
+    na = TeamFacts(team_id="na1", name="SpaceStation Gaming", matches=50, regions={"na"})
+    emea = TeamFacts(team_id="emea1", name="SpaceStation", matches=19, regions={"emea", "international"})
+    assert region_conflict(na, emea) is not None
+    assert propose(agg_db, {"na1": na, "emea1": emea}) == []
+
+    # an identical name does not override the region rule either
+    geekay_na = TeamFacts(team_id="g1", name="Geekay Esports", matches=39, regions={"na"})
+    geekay_emea = TeamFacts(team_id="g2", name="Geekay Esports", matches=23, regions={"emea"})
+    assert propose(agg_db, {"g1": geekay_na, "g2": geekay_emea}) == []
+
+
+@dbonly
+def test_role_reaches_the_query_layer_and_a_flex_player_counts_once_per_role(agg_db):
+    """"tank with the most kills" used to drop "tank" silently and rank everyone.
+    KSAA0 is Tank for all 8 fixture maps; the unfiltered leaderboard and the
+    tank leaderboard must therefore agree on his number, and a differently
+    played role must return a different leaderboard."""
+    from owcsmuse.nlq.pipeline import ask
+
+    unfiltered = ask(agg_db, "who had the most eliminations", with_evidence=False)
+    tank = ask(agg_db, "tank with the most kills", with_evidence=False)
+    assert unfiltered.status == tank.status == "ok"
+    assert {r["nickname"] for r in unfiltered.rows} != {r["nickname"] for r in tank.rows}, \
+        "the role filter changed nothing: it is being silently dropped again"
+
+    ksaa_unfiltered = next(r for r in unfiltered.rows if r["nickname"] == "KSAA0")
+    ksaa_tank = next(r for r in tank.rows if r["nickname"] == "KSAA0")
+    assert ksaa_tank["total"] == ksaa_unfiltered["total"] == 139   # every fixture map of his is Tank
+    assert ksaa_tank["maps_with_stat"] == ksaa_unfiltered["maps_with_stat"] == 8
+
+    per_player = ask(agg_db, "KSAA0 eliminations as tank", with_evidence=False)
+    assert per_player.status == "ok" and per_player.rows[0]["total"] == 139
+
+    # a role that player never played returns no_data, not a wrong number
+    off_role = ask(agg_db, "KSAA0 eliminations as support", with_evidence=False)
+    assert off_role.status == "cannot_answer" and off_role.code == "no_data"
