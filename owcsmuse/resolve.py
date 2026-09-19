@@ -141,8 +141,26 @@ def load_names(conn: psycopg.Connection, entity_type: Optional[str] = None) -> l
                    seasons, first_at, last_at
             FROM entity_names
             WHERE %s::text IS NULL OR entity_type = %s
+
+            UNION ALL
+
+            -- Reviewed community shorthand ("SSG" -> SpaceStation Gaming) that FACEIT's own
+            -- name history does not carry: see aliases.py. `name` is the alias itself (already
+            -- folded, and fold() is idempotent) so it scores an exact match against the query
+            -- the same way any other name does; `current_name` carries the entity's real display
+            -- name for showing what the alias actually resolved to.
+            SELECT ea.entity_type, ea.entity_id, ea.alias AS name,
+                   'alias' AS name_kind, ea.alias AS name_folded, coalesce(en.current_name, ea.entity_id) AS current_name,
+                   coalesce(en.matches, 0) AS matches, en.seasons, en.first_at, en.last_at
+            FROM entity_aliases ea
+            LEFT JOIN LATERAL (
+                SELECT current_name, matches, seasons, first_at, last_at FROM entity_names n
+                 WHERE n.entity_type = ea.entity_type AND n.entity_id = ea.entity_id
+                 ORDER BY (n.name_kind LIKE 'current%%') DESC LIMIT 1
+            ) en ON true
+            WHERE %s::text IS NULL OR ea.entity_type = %s
             """,
-            (entity_type, entity_type),
+            (entity_type, entity_type, entity_type, entity_type),
         )
         rows = [dict(r) for r in cur.fetchall()]
     conn.commit()
@@ -171,13 +189,49 @@ def resolve_id(conn: psycopg.Connection, entity_id: str, entity_type: Optional[s
                       first_at=row.get("first_at"), last_at=row.get("last_at"))]
 
 
+def resolve_alias(conn: psycopg.Connection, alias: str, entity_type: Optional[str] = None) -> list[Candidate]:
+    """Exact lookup of a reviewed alias ('SSG' -> SpaceStation Gaming; see aliases.py).
+
+    A human decided this mapping deliberately, so it must win outright rather
+    than being scored against whatever else happens to fuzzy-match the same
+    letters - "tm" also starts "TML Nightmare" at score 0.9, close enough to
+    the alias's 1.0 to read as ambiguous under the ordinary scoring rules, and
+    the alias is exactly the thing that is not supposed to be ambiguous.
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT ea.entity_type, ea.entity_id, en.current_name, ea.alias AS name, en.matches, en.seasons,
+                   en.first_at, en.last_at
+            FROM entity_aliases ea
+            LEFT JOIN LATERAL (
+                SELECT current_name, matches, seasons, first_at, last_at FROM entity_names n
+                 WHERE n.entity_type = ea.entity_type AND n.entity_id = ea.entity_id
+                 ORDER BY (n.name_kind LIKE 'current%%') DESC LIMIT 1
+            ) en ON true
+            WHERE ea.alias = %s AND (%s::text IS NULL OR ea.entity_type = %s)
+            """,
+            (fold(alias), entity_type, entity_type),
+        )
+        row = cur.fetchone()
+    conn.commit()
+    if not row:
+        return []
+    return [Candidate(entity_type=row["entity_type"], entity_id=row["entity_id"],
+                      current_name=row["current_name"] or row["entity_id"], matched_name=row["name"],
+                      name_kind="alias", score=1.0, matches=int(row.get("matches") or 0),
+                      seasons=list(row.get("seasons") or []), first_at=row.get("first_at"), last_at=row.get("last_at"))]
+
+
 def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = None,
             limit: int = 5, min_score: float = 0.5) -> list[Candidate]:
     """Rank all known names for `entity_type` ('player', 'team' or None for both).
 
     A FACEIT id resolves exactly, so two entities with identical names can still
     be told apart: bare when it is a GUID, or prefixed `player:` / `team:` /
-    `org:` for any id, which is how a clarify candidate names itself.
+    `org:` for any id, which is how a clarify candidate names itself. A reviewed
+    alias resolves exactly too, and takes precedence over whatever else happens
+    to fuzzy-match the same short string.
     """
     q = (query or "").strip()
     m = PREFIXED_ID.match(q)
@@ -186,4 +240,7 @@ def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = N
     m = ENTITY_ID.match(q)
     if m:
         return resolve_id(conn, m.group("id").lower(), m.group("kind") or entity_type)
+    alias_hit = resolve_alias(conn, q, entity_type)
+    if alias_hit:
+        return alias_hit
     return rank_candidates(query, load_names(conn, entity_type), limit=limit, min_score=min_score)

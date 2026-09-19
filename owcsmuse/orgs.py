@@ -397,8 +397,15 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
         # a team id removed from the decisions file becomes unmapped again
         cur.execute("DELETE FROM team_orgs WHERE NOT (team_id = ANY(%s))", (list(decisions.data),))
         removed = cur.rowcount
+        # An org whose last team id was just unmapped (an unmerge, e.g. reversing
+        # a wrong cross-region merge) must not linger: it would then resolve as
+        # an org entity with no team_ids under it and no rows in any fact view -
+        # exactly the shape of a stale reference this project keeps finding.
+        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs)")
+        orphaned = cur.rowcount
     conn.commit()
-    out = {"orgs": len(by_org), "team_ids_mapped": written, "unknown_team_ids_skipped": skipped, "unmapped": removed}
+    out = {"orgs": len(by_org) - orphaned, "team_ids_mapped": written, "unknown_team_ids_skipped": skipped,
+          "unmapped": removed, "orphaned_orgs_removed": orphaned}
     log_event(log, logging.INFO, "org_decisions_loaded", **out)
     return out
 

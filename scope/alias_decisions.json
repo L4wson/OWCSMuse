@@ -1,0 +1,29 @@
+{
+  "note": "Reviewed community shorthand ('SSG' -> SpaceStation Gaming) that FACEIT's own name history does not cover. Keys are the folded alias. An alias absent from this file resolves however the fuzzy matcher in resolve.py already would - there is no fallback guess table. Edit by hand or with `python -m owcsmuse alias set`.",
+  "aliases": {
+    "cr": {
+      "entity_type": "team",
+      "entity_id": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7",
+      "note": "community shorthand for Crazy Raccoons; not in FACEIT's own name history",
+      "decided_at": "2026-09-19T01:28:16+00:00"
+    },
+    "ssg": {
+      "entity_type": "team",
+      "entity_id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
+      "note": "community shorthand for SpaceStation Gaming; not in FACEIT's own name history. Points at the team id, not an org: the org merge with the EMEA 'SpaceStation' team was reversed as a wrong cross-region merge, leaving this team unmapped.",
+      "decided_at": "2026-09-19T01:29:16+00:00"
+    },
+    "tl": {
+      "entity_type": "team",
+      "entity_id": "a58dedff-8045-46be-a13e-2402495b6a9d",
+      "note": "community shorthand for Team Liquid; not in FACEIT's own name history",
+      "decided_at": "2026-09-19T01:28:15+00:00"
+    },
+    "tm": {
+      "entity_type": "team",
+      "entity_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+      "note": "community shorthand for Twisted Minds; not in FACEIT's own name history",
+      "decided_at": "2026-09-19T01:28:15+00:00"
+    }
+  }
+}

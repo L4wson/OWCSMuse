@@ -28,6 +28,7 @@ from .faceit.client import FaceitClient
 from .logging import configure_logging
 from .parsers.championships import OWCS_PATTERN
 from .resolve import resolve
+from .aliases import DEFAULT_ALIAS_DECISIONS_PATH, AliasDecisions, list_aliases, load_decisions as load_alias_decisions
 from .orgs import (DEFAULT_ORG_DECISIONS_PATH, DEFAULT_ORG_REPORT_PATH, OrgDecisions,
                    load_decisions as load_org_decisions, propose as propose_orgs,
                    render_report as render_org_report, unmapped_teams)
@@ -340,6 +341,32 @@ def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
     return 0
 
 
+def cmd_alias(args: argparse.Namespace, settings: Settings) -> int:
+    decisions = AliasDecisions(args.decisions)
+    if args.alias_cmd == "set":
+        try:
+            d = decisions.set(args.alias, args.type, args.entity_id, args.note)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        path = decisions.save()
+        _print({"decisions_file": str(path), "alias": d})
+        return 0
+    if args.alias_cmd == "forget":
+        removed = decisions.unset(args.alias)
+        decisions.save()
+        _print({"alias": args.alias, "removed": removed})
+        return 0
+    with connect(settings.database_url, schema=settings.db_schema) as conn:
+        if args.alias_cmd == "load":
+            _print(load_alias_decisions(conn, decisions))
+            return 0
+        if args.alias_cmd == "status":
+            _print({"aliases": list_aliases(conn)})
+            return 0
+    return 0
+
+
 def _team_names(conn, team_ids: list[str]) -> list[str]:
     with conn.cursor() as cur:
         cur.execute("SELECT team_id, name FROM teams WHERE team_id = ANY(%s)", (team_ids,))
@@ -567,6 +594,18 @@ def build_parser() -> argparse.ArgumentParser:
     ogs.add_parser("load", help="write decided mappings into orgs / team_orgs")
     ogs.add_parser("status", help="orgs and how many team ids each covers")
     og.set_defaults(func=cmd_orgs)
+
+    al = sub.add_parser("alias", help="community shorthand ('SSG' -> SpaceStation Gaming): decide, review, apply")
+    al.add_argument("--decisions", default=str(DEFAULT_ALIAS_DECISIONS_PATH))
+    als = al.add_subparsers(dest="alias_cmd", required=True)
+    aset = als.add_parser("set", help="map an alias to an entity")
+    aset.add_argument("alias"); aset.add_argument("--type", required=True, choices=["player", "team", "org"])
+    aset.add_argument("--entity-id", required=True, help="the player/team id, or the org slug")
+    aset.add_argument("--note")
+    afg = als.add_parser("forget", help="drop an alias"); afg.add_argument("alias")
+    als.add_parser("load", help="write decided aliases into entity_aliases")
+    als.add_parser("status", help="aliases and what they currently resolve to")
+    al.set_defaults(func=cmd_alias)
 
     sv = sub.add_parser("serve", help="run the HTTP API (POST /ask, GET /query/{slug}, GET /suggestions)")
     sv.add_argument("--host", default="127.0.0.1")

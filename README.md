@@ -391,6 +391,38 @@ Current state: 9 orgs covering 18 team ids, 7 pairs recorded as reviewed
 rejections (2 of them region conflicts found after the fact and reversed),
 62 team ids unmapped and queryable as themselves.
 
+## Aliases
+
+`resolve()` already finds an abbreviation FACEIT itself recorded - if a team
+really was named "SOG" at some point, that is in `entity_names` (nickname and
+team-name history) and needs nothing further. It cannot find community
+shorthand nobody on FACEIT ever typed - "SSG" for SpaceStation Gaming, "TL"
+for Team Liquid - because there is nothing in the data to match it against;
+the fuzzy scorer in `resolve.py` picks something unrelated instead. That is
+not something to guess at: it is a human decision, routed through the same
+reviewed-decisions-file pattern as scope and org identity, never a hardcoded
+table baked into the resolver.
+
+```bash
+python -m owcsmuse alias set SSG --type org --entity-id spacestation-gaming --note "..."
+python -m owcsmuse alias set TL  --type team --entity-id a58dedff-8045-46be-a13e-2402495b6a9d --note "..."
+python -m owcsmuse alias forget SSG
+python -m owcsmuse alias load      # write scope/alias_decisions.json into entity_aliases
+python -m owcsmuse alias status
+```
+
+An alias resolves as an exact, authoritative lookup (`resolve_alias()`), ahead
+of the fuzzy scoring in `rank_candidates()` and before it ever runs - not
+folded into the same ranked pool. That distinction mattered in practice: "TM"
+scores 1.0 against the Twisted Minds alias, but "TML Nightmare" (an unrelated
+team) scores 0.9 against the bare letters "tm" by starting with them, close
+enough that the ordinary ambiguity margin would have asked which one was
+meant. A human already decided that; resolve() must not re-open it.
+
+Seeded so far: `SSG` -> SpaceStation Gaming, `TL` -> Team Liquid, `TM` ->
+Twisted Minds, `CR` -> Crazy Raccoons, each pointing at a team id rather than
+an org where the team is currently unmapped.
+
 ## Aggregation layer
 
 Read-only derived tables for a query engine, defined in
@@ -903,6 +935,7 @@ migrations/003_aggregates.sql   fact views, materialized aggregates, coverage fu
 migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus facts
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
+owcsmuse/aliases.py             community shorthand ("SSG" -> SpaceStation Gaming): decisions and lookup
 owcsmuse/crawl.py               history crawl: frontier, generations, completeness instrumentation
 owcsmuse/consistency.py         warehouse invariants behind `python -m owcsmuse check`
 owcsmuse/limitations.py         known gaps, surfaced by `ask` and documented above
@@ -918,6 +951,7 @@ web/tests/                      component tests with payloads captured from the 
 migrations/014_saved_queries.sql  question behind a slug (never the answer)
 scope/decisions.json            reviewed scope decisions (commit this)
 scope/org_decisions.json        reviewed org merges and rejections (commit this)
+scope/alias_decisions.json      reviewed community shorthand (commit this)
 scope/classification_report.md  generated review table
 scope/org_report.md             generated org proposal table
 tools/build_fixture_db.py       CI: a warehouse from the captured fixtures
