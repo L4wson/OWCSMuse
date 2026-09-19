@@ -304,7 +304,8 @@ def test_resolver_finds_players_and_teams_from_all_name_kinds(db):
     assert {"current_nickname", "game_name", "historical_nickname"} <= kinds
 
     c = resolve(db, "ksaa", "player")
-    assert c[0].entity_id == KSAA and c[0].score == 1.0 and c[0].current_name == "KSAA0"
+    # displays as his in-game name "KSAA", not his FACEIT nickname "KSAA0" (bug 5)
+    assert c[0].entity_id == KSAA and c[0].score == 1.0 and c[0].current_name == "KSAA"
     c = resolve(db, "ksaa_oldname", "player")
     assert c[0].entity_id == KSAA and c[0].name_kind == "historical_nickname"
     c = resolve(db, "TWISTED", "team")
