@@ -164,6 +164,35 @@ describe("asking", () => {
       expect(fetchMock.calls.some((call) => call.body?.question === candidate.question)).toBe(true),
     );
   });
+
+  it("never shows the id it just submitted after picking a clarify candidate", async () => {
+    mount([["/ask", ({ body }) => (body.question === "tea record" ? ok(CLARIFY) : ok(VERSUS))]]);
+    await userEvent.type(await screen.findByRole("textbox"), "tea record{Enter}");
+
+    const clarify = await screen.findByTestId("clarify");
+    const candidate = CLARIFY.candidates.subject.find((c) => c.current_name === "Team Liquid");
+    expect(candidate.question).toMatch(/^team:/); // the id-bearing question that gets submitted
+    await userEvent.click(within(clarify).getByRole("button", { name: /Team Liquid/ }));
+
+    await screen.findByTestId("answer");
+    const box = screen.getByRole("textbox");
+    expect(box.value).not.toContain("team:");
+    expect(box.value).not.toContain(candidate.entity_id);
+    // the id never appears anywhere else on the page either
+    expect(screen.queryByText(candidate.entity_id, { exact: false })).not.toBeInTheDocument();
+  });
+
+  it("never shows an id echoed back by the API as the question", async () => {
+    // whatever was actually submitted (e.g. a chained clarify re-ask), the
+    // service's own echo of it must not overwrite the search box either
+    mount([["/ask", ok({ ...VERSUS, question: "player:0a7555bc-8cd2-44bd-b1d5-df0c528dddea record" })]]);
+    await userEvent.type(await screen.findByRole("textbox"), "sugarfree record vs zeruhh{Enter}");
+
+    await screen.findByTestId("answer");
+    const box = screen.getByRole("textbox");
+    expect(box.value).toBe("sugarfree record vs zeruhh");
+    expect(box.value).not.toContain("player:");
+  });
 });
 
 describe("when the service itself is the problem", () => {

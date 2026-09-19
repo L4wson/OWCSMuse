@@ -9,6 +9,15 @@ import { ErrorState, Loading } from "./components/States.jsx";
 
 const PAGE_SIZE = 25;
 
+// A clarify pick, or a re-ask built from one, sends the API a question with a
+// player:/team:/org: id spliced into it - that is the right thing to submit
+// (it is what resolves a name that was ambiguous by name alone) and the wrong
+// thing to ever show: nobody typed it, and it means nothing to read. The
+// submitted text and the displayed text diverge exactly here, so this is the
+// one place that decides which text the search box is allowed to show.
+const ID_TOKEN = /\b(?:player|team|org):[A-Za-z0-9._-]+/;
+const displayable = (text) => (typeof text === "string" && !ID_TOKEN.test(text) ? text : undefined);
+
 export default function App() {
   const [route, navigate] = useRoute();
   const [phase, setPhase] = useState("idle"); // idle | loading | ready | error
@@ -34,12 +43,17 @@ export default function App() {
       inFlight.current = controller;
       if (!keepPhase) setPhase("loading");
       setError(null);
-      if (asked !== undefined) setQuestion(asked);
+      const shown = displayable(asked);
+      if (shown !== undefined) setQuestion(shown);
       try {
         const payload = await run(controller.signal);
         if (controller.signal.aborted) return null;
         setAnswer(payload);
-        setQuestion(payload.question ?? asked ?? "");
+        // The API echoes back exactly what was submitted, ids included, so it
+        // is not a display source either - only update the box when what came
+        // back is itself human-readable; otherwise leave whatever is showing.
+        const echoed = displayable(payload.question);
+        if (echoed !== undefined) setQuestion(echoed);
         setPhase("ready");
         return payload;
       } catch (thrown) {
