@@ -120,6 +120,18 @@ describe("a ranked answer", () => {
     expect(screen.getByTestId("evidence")).toHaveTextContent("49 maps");
   });
 
+  it("links the subject's name to asking about that entity, the same as the answer sentence", async () => {
+    const onAsk = vi.fn();
+    render(<Result answer={LEADERBOARD} {...props} onAsk={onAsk} />);
+    const subject = screen.getByTestId("evidence-subject");
+    expect(subject.tagName).toBe("BUTTON");
+    expect(subject).toHaveAttribute("data-kind", "player");
+    expect(subject).toHaveAttribute("data-entity-id", LEADERBOARD.evidence.expanded_for.id);
+
+    await userEvent.click(subject);
+    expect(onAsk).toHaveBeenCalledWith("kevsteer record");
+  });
+
   it("marks the expanded row in the ranking itself", () => {
     render(<Result answer={LEADERBOARD} {...props} onExpand={() => {}} />);
     const aggregate = within(screen.getByTestId("aggregate"));
