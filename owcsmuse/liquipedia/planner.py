@@ -23,9 +23,10 @@ from typing import Any, Iterable, Optional
 
 from .store import Store
 
-# A conservative ceiling on the length of one `conditions` value. It travels in a GET URL, and
-# percent-encoding roughly triples the brackets and colons, so this keeps a URL well under common 8 KB limits.
-MAX_CONDITION_CHARS = 1400
+# A conservative ceiling on the length of one `conditions` value. It travels in a GET URL, and percent-encoding
+# roughly doubles it (brackets, colons and slashes), so this keeps a URL around 5 KB, under the usual 8 KB limit. All 20
+# Stage 1 pages fit one batch at this size; if the server rejects a long URL (414), lower it and the plan splits.
+MAX_CONDITION_CHARS = 2400
 
 
 class ConditionError(ValueError):

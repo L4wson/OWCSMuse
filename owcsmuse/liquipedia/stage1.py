@@ -20,9 +20,12 @@ from .store import Store
 
 MAP_PATH = "scope/liquipedia_map.json"
 MATCH_ENDPOINT = "match"
-# The match record's tournament-page field, which the plan filters on. UNCONFIRMED until the verification request
-# has been read: it is a parameter of the plan precisely so that a wrong guess costs one edit, not a redesign.
-PAGE_FIELD = "parent"
+# The match record field the plan filters on: `pagename`, the page the match is on (a stage's Regular_Season subpage,
+# say), which is exactly what scope/liquipedia_map.json lists and is also the page a value must be attributed to.
+# NOT `parent`, the enclosing stage page: for the Korea record seen in the verification request, pagename was
+# .../Korea/Regular_Season and parent .../Korea. Confirmed for Korea/China rows; the first NA/EMEA rows will show
+# rows_seen per page in the coverage ledger, and a short batch is flagged by the runner.
+PAGE_FIELD = "pagename"
 
 # A one-request probe of a day we know had OWCS matches (2026-06-13, S9 regular season week 1): enough rows to show the
 # record's shape, few enough to be small.

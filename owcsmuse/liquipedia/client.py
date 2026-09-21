@@ -140,7 +140,7 @@ class LiquipediaClient:
         self.min_interval = min_interval
         # The key travels only in the Authorization header, and response headers (never request headers) are what is
         # stored. The User-Agent is set per request too, so a caller-supplied client cannot send the API a default one.
-        self.http = http or httpx.Client(timeout=30)
+        self.http = http or httpx.Client(timeout=60)   # a 500-row page is ~3 MB of JSON
         self._clock, self._sleep = clock, sleep
         self._last_sent: Optional[float] = None
         self.sent = 0                       # requests this process actually put on the wire

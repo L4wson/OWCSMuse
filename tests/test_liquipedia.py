@@ -373,3 +373,22 @@ def test_a_response_that_quotes_the_key_back_is_scrubbed_before_it_is_stored_rai
     with pytest.raises(LiquipediaHTTPError) as ei2:
         client.get("match", {"limit": 2})
     assert KEY not in str(ei2.value) and KEY not in body_of(store.rows)
+
+
+# ---------------------------------------------------------------------- the real Stage 1 plan
+
+def test_all_twenty_stage_1_pages_fit_one_request_and_are_filtered_by_the_page_the_match_is_on():
+    """Pages come from scope/liquipedia_map.json. The verification response showed pagename is the page a match sits on
+    (.../Korea/Regular_Season) and parent the enclosing stage (.../Korea), so the plan filters on pagename."""
+    import json
+    from urllib.parse import quote
+
+    from owcsmuse.liquipedia.stage1 import PAGE_FIELD, underscored
+    assert PAGE_FIELD == "pagename"
+    pages = json.load(open("scope/liquipedia_map.json", encoding="utf-8"))["pages"]
+    wants = {underscored(e["page"]): 15 for e in pages.values()}
+    assert len(wants) == 20
+    plan = plan_requests(MemoryStore(), endpoint="match", field_name=PAGE_FIELD, wants=wants, limit=500)
+    assert len(plan.batches) == 1 and plan.projected_requests == 1
+    assert len(quote(plan.batches[0].conditions, safe="")) < 5500       # the URL stays well under an 8 KB limit
+    assert plan.batches[0].conditions.count("[[pagename::") == 20

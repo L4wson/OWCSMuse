@@ -907,7 +907,7 @@ starts:
 
 | stage | what | status |
 |---|---|---|
-| 0 | client, request planner, cache, attribution | built; the one verification request was rejected (HTTP 403, key not valid), so the response shape is still unseen |
+| 0 | client, request planner, cache, attribution | done; auth confirmed and the match record's shape seen (see below) |
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | not started |
 | 3 | source-agnostic match model and cross-source identity | not started |
@@ -955,6 +955,21 @@ python -m owcsmuse liquipedia verify                 # ONE request: confirms the
   stored, raised or logged.
 - **API only.** Liquipedia's terms forbid automated access to rendered pages, so
   nothing fetches or parses HTML.
+
+### What a match record looks like (seen in the verification request)
+
+`GET /match` returns `{"result": [...]}`; there are no rate-limit headers, so the budget is our own count. A record
+is about 6 KB of JSON, with structured fields already decoded (not JSON-in-a-string):
+
+- **Where it is:** `pagename` is the page the match sits on (`.../Korea/Regular_Season`), `parent` the stage above
+  it (`.../Korea`). The plan filters on `pagename`, and a value's attribution URL is built from it.
+- **The match:** `match2id`, `match2bracketid`, `date` (UTC), `winner` (`"1"`/`"2"`), `bestof`, `type` (Online/Offline),
+  `finished`, and `match2opponents` (team `name`, `score`, `status`, `teamtemplate`, and `match2players` with page-style
+  names such as `HYEON_(Kim_Seong-hyeon)`).
+- **Maps:** `match2games[]` has `map`, `mode`, `scores`, `winner`, `opponents[]` and, in `extradata`, the hero bans
+  (`team1ban1`, `team2ban1`, `banstart`): map-level results without player stats, as Stage 2 needs.
+- **Not yet seen:** where the FACEIT match id sits. The five sample rows were Korea and China, which are not on FACEIT;
+  the first NA/EMEA rows in the Stage 1 fetch will show it (candidates: `links`, `extradata`).
 
 ### Open items for later stages
 
