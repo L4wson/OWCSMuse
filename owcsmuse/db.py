@@ -88,7 +88,7 @@ def migrate(conn: psycopg.Connection, migrations_dir: str | Path, schema: str = 
 
 
 class RawPayloadStore:
-    """Writes every FACEIT response to raw_payloads.
+    """Writes every FACEIT or Liquipedia response to raw_payloads.
 
     Use a dedicated autocommit connection so the payload is durable even if the
     processing transaction that follows it fails.
@@ -109,13 +109,14 @@ class RawPayloadStore:
         match_id: Optional[str] = None,
         championship_id: Optional[str] = None,
         headers: Optional[dict[str, str]] = None,
+        source: str = "faceit",
     ) -> int:
         with self.conn.cursor() as cur:
             cur.execute(
                 """
                 INSERT INTO raw_payloads
-                    (endpoint, params, http_status, payload, body_text, fetched_at, match_id, championship_id, headers)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    (endpoint, params, http_status, payload, body_text, fetched_at, match_id, championship_id, headers, source)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id
                 """,
                 (
@@ -128,6 +129,7 @@ class RawPayloadStore:
                     match_id,
                     championship_id,
                     Jsonb(dict(headers)) if headers else None,
+                    source,
                 ),
             )
             row = cur.fetchone()

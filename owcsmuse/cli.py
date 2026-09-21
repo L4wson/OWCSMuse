@@ -240,45 +240,63 @@ def cmd_crawl(args: argparse.Namespace, settings: Settings) -> int:
 
 
 def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
-    from .liquipedia import LiquipediaClient, compare, parse_matches
+    """Liquipedia via the LiquipediaDB API. Sends nothing unless OWCS_LIQUIPEDIA_ENABLED=1, and plans before it spends."""
+    from .liquipedia import (LiquipediaClient, LiquipediaDisabled, LiquipediaError, LiquipediaRateLimited, PgStore,
+                             requests_enabled, run_plan)
+    from .liquipedia.stage1 import MATCH_ENDPOINT, PAGE_FIELD, VERIFY_PARAMS, describe_shape, stage1_plan
 
-    lp = LiquipediaClient()
-    if args.lp_cmd == "search":
-        _print(lp.search(args.query, args.limit))
-        return 0
-    if args.lp_cmd == "check-all":
-        with open(args.map, encoding="utf-8") as f:
-            pages = json.load(f)["pages"]
-        results = []
-        with connect(settings.database_url, schema=settings.db_schema) as conn:
-            for cid, entry in pages.items():
-                try:
-                    matches = parse_matches(lp.wikitext(entry["page"]))
-                except Exception as exc:  # a missing page is a finding, not a crash
-                    results.append({"championship_id": cid, "name": entry["name"], "page": entry["page"], "error": str(exc)[:200]})
-                    continue
-                r = compare(conn, cid, entry["page"], matches, args.date_tolerance).as_dict()
-                r["name"] = entry["name"]
-                results.append(r)
-        totals = {
-            "liquipedia_matches": sum(r.get("lp_matches", 0) for r in results),
-            "db_matches": sum(r.get("db_matches", 0) for r in results),
-            "matched": sum(r.get("matched", 0) for r in results),
-            "missing_in_db": sum(len(r.get("lp_only", [])) for r in results),
-            "extra_in_db": sum(len(r.get("db_only", [])) for r in results),
-            "score_mismatches": sum(len(r.get("score_mismatches", [])) for r in results),
-        }
-        _print({"totals": totals, "per_competition": results})
-        return 0
-    text = lp.wikitext(args.page)
-    matches = parse_matches(text)
-    if args.lp_cmd == "parse":
-        _print({"page": args.page, "matches": len(matches), "sample": [m.__dict__ for m in matches[: args.limit]]})
-        return 0
-    with connect(settings.database_url, schema=settings.db_schema) as conn:
-        result = compare(conn, args.championship, args.page, matches, args.date_tolerance)
-    _print(result.as_dict())
-    return 0
+    raw_conn = connect(settings.database_url, autocommit=True, schema=settings.db_schema)
+    conn = connect(settings.database_url, schema=settings.db_schema)
+    key = settings.liquipedia_api_key.get_secret_value() if settings.liquipedia_api_key else None
+    store = PgStore(raw_conn, settings.liquipedia_wiki)
+    client = LiquipediaClient(key, store, base_url=settings.liquipedia_base_url, wiki=settings.liquipedia_wiki,
+                              hourly_budget=settings.liquipedia_hourly_budget, min_interval=settings.liquipedia_min_interval)
+    try:
+        if args.lp_cmd == "status":
+            blocked = client.blocked_until()
+            with raw_conn.cursor() as cur:
+                cur.execute("SELECT count(*) AS n FROM liquipedia_coverage")
+                covered = cur.fetchone()["n"]
+                cur.execute("SELECT count(*) AS n, min(fetched_at) AS first FROM raw_payloads WHERE source = 'liquipedia'")
+                held = cur.fetchone()
+            _print({"enabled": requests_enabled(),
+                    "key_configured": bool(key), "budget": {k: str(v) if hasattr(v, "isoformat") else v
+                                                            for k, v in client.budget_state().items()},
+                    "blocked_by_429_until": blocked.isoformat(timespec="seconds") if blocked else None,
+                    "responses_held": held["n"], "values_covered": covered})
+            return 0
+        if args.lp_cmd == "verify":
+            # One request, to confirm the key works and to see the shape of a match record. Then stop.
+            got = client.get(MATCH_ENDPOINT, dict(VERIFY_PARAMS))
+            n_bytes = len(json.dumps(got.payload, ensure_ascii=False).encode("utf-8"))
+            _print({"from_cache": got.from_cache, "requests_sent": client.sent,
+                    "shape": describe_shape(got.payload, got.status, got.headers, got.raw_id, n_bytes)})
+            return 0
+        plan = stage1_plan(conn, store, limit=args.limit or settings.liquipedia_page_limit, wiki=settings.liquipedia_wiki,
+                           budget=client.budget_state(), field_name=args.field or PAGE_FIELD, refresh=args.refresh)
+        if args.lp_cmd == "plan":
+            _print(plan.as_dict()) if args.json else print(plan.render())
+            return 0
+        # run: the plan is always shown first; nothing is sent without --execute
+        print(plan.render(), file=sys.stderr)
+        if not args.execute:
+            print("dry run: pass --execute to send these requests", file=sys.stderr)
+            return 0
+        result = run_plan(client, plan)
+        _print(result.as_dict())
+        return {"complete": 0, "budget": 0, "rate_limited": 3, "failed": 4}[result.outcome]
+    except LiquipediaDisabled as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+    except LiquipediaRateLimited as exc:
+        print(str(exc), file=sys.stderr)
+        return 3
+    except LiquipediaError as exc:
+        print(str(exc), file=sys.stderr)
+        return 4
+    finally:
+        conn.close()
+        raw_conn.close()
 
 
 def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
@@ -568,15 +586,20 @@ def build_parser() -> argparse.ArgumentParser:
     comp.add_argument("--out", default="scope/history_competitions.json")
     cr.set_defaults(func=cmd_crawl)
 
-    lq = sub.add_parser("liquipedia", help="cross-check a championship against a Liquipedia results page")
+    lq = sub.add_parser("liquipedia", help="Liquipedia (LiquipediaDB API): status, plan, run, verify - sends nothing "
+                                            "unless OWCS_LIQUIPEDIA_ENABLED=1")
     lqs = lq.add_subparsers(dest="lp_cmd", required=True)
-    s = lqs.add_parser("search"); s.add_argument("query"); s.add_argument("--limit", type=int, default=10)
-    p_ = lqs.add_parser("parse"); p_.add_argument("page"); p_.add_argument("--limit", type=int, default=5)
-    ck = lqs.add_parser("check"); ck.add_argument("page"); ck.add_argument("--championship", required=True)
-    ck.add_argument("--date-tolerance", type=int, default=1)
-    ca = lqs.add_parser("check-all", help="cross-check every competition in scope/liquipedia_map.json")
-    ca.add_argument("--map", default="scope/liquipedia_map.json")
-    ca.add_argument("--date-tolerance", type=int, default=1)
+    lqs.add_parser("status", help="budget used this hour, last 429, what is held; sends nothing")
+    lqs.add_parser("verify", help="ONE request: confirm the key works and show the shape of a match record")
+    for name, helptext in (("plan", "the Stage 1 cross-check plan and its projected request count; sends nothing"),
+                           ("run", "show the plan, then (only with --execute) carry it out")):
+        sp = lqs.add_parser(name, help=helptext)
+        sp.add_argument("--limit", type=int, help="rows per request (default: OWCS_LIQUIPEDIA_PAGE_LIMIT)")
+        sp.add_argument("--field", help="the match field holding the tournament page (default: parent, unconfirmed)")
+        sp.add_argument("--refresh", action="store_true", help="re-request values already covered")
+        sp.add_argument("--json", action="store_true")
+        if name == "run":
+            sp.add_argument("--execute", action="store_true", help="actually send the requests")
     lq.set_defaults(func=cmd_liquipedia)
 
     og = sub.add_parser("orgs", help="org-level team identity: propose, review, apply")

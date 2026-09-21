@@ -9,6 +9,7 @@ from typing import Any, Optional
 
 import psycopg
 
+from ..liquipedia.attribution import render_lines as render_attribution
 from ..aggregates import stat_coverage_summary
 from ..limitations import applicable as applicable_limitations, entity_match_filter
 from ..logging import get_logger, log_event
@@ -46,6 +47,7 @@ class Answer:
     coverage: Optional[dict] = None
     notes: list[str] = field(default_factory=list)
     limitations: list[dict] = field(default_factory=list)   # known gaps this slice lands in
+    attribution: Optional[dict] = None   # CC-BY-SA credit + page URLs, whenever any Liquipedia value fed the answer (else None)
     description: Optional[str] = None
     sql: Optional[str] = None
     params: Optional[list] = None
@@ -490,6 +492,7 @@ def render_text(a: Answer, max_rows: int = 25, evidence_rows: int = 5) -> str:
             lines.append(f"  note: {n}")
         for lim in a.limitations:
             lines.append(f"  known limitation ({lim['id']}): {lim['note']}")
+        lines += render_attribution(a.attribution)
         return "\n".join(lines)
     if a.status == "clarify":
         lines.append(f"Need a clarification: {a.reason}")
@@ -528,4 +531,5 @@ def render_text(a: Answer, max_rows: int = 25, evidence_rows: int = 5) -> str:
         lines.append(f"  note: {n}")
     for lim in a.limitations:
         lines.append(f"  known limitation ({lim['id']}): {lim['note']}")
+    lines += render_attribution(a.attribution)
     return "\n".join(lines)

@@ -173,6 +173,7 @@ def answer_payload(answer: Answer, slug: str) -> dict[str, Any]:
         "evidence": answer.evidence,
         "coverage": answer.coverage,
         "limitations": answer.limitations,
+        "attribution": answer.attribution,
         "notes": answer.notes,
         "entities": answer.entities,
         "candidates": answer.candidates,

@@ -7,44 +7,21 @@ from decimal import Decimal
 
 import pytest
 
-from owcsmuse import liquipedia as LP
 from owcsmuse.nlq.pipeline import _fmt
 from owcsmuse.nlq.schema import StructuredQuery, Unanswerable
 from owcsmuse.nlq.validate import SchemaInfo, Validated, validate
 from owcsmuse.resolve import ENTITY_ID, rank_candidates
 
 
-# --------------------------------------------------- Liquipedia throttle inverted
+# --------------------------------------------------- Liquipedia: the old client is gone
 
-def test_parse_is_the_slow_path_not_the_fast_one():
-    """We had these reversed and got rate limited. parse/ask/askargs are 1 per 30s."""
-    assert LP.interval_for("parse") == 30.0
-    assert LP.interval_for("ask") == 30.0
-    assert LP.interval_for("askargs") == 30.0
-    assert LP.interval_for("query") == 2.0
-    assert LP.interval_for("opensearch") == 2.0
-    assert LP.interval_for("parse") > LP.interval_for("query")
-    assert LP.SLOW_ACTIONS == frozenset({"parse", "ask", "askargs"})
-
-
-def test_requests_refused_unless_explicitly_enabled(monkeypatch):
-    monkeypatch.delenv(LP.ENABLE_ENV, raising=False)
-    assert LP.requests_enabled() is False
-    client = LP.LiquipediaClient(http=object())  # never reached: the guard fires first
-    with pytest.raises(LP.LiquipediaDisabled) as ei:
-        client.wikitext("Some/Page")
-    assert LP.ENABLE_ENV in str(ei.value)
-    with pytest.raises(LP.LiquipediaDisabled):
-        client.search("anything")
-    monkeypatch.setenv(LP.ENABLE_ENV, "1")
-    assert LP.requests_enabled() is True
-
-
-def test_client_only_ever_targets_the_api_endpoint():
-    src = open(LP.__file__, encoding="utf-8").read()
-    assert src.count("https://liquipedia.net") == 1 and LP.API.endswith("/api.php")
-    for bad in ("BeautifulSoup", "html.parser", "lxml"):
-        assert bad not in src
+def test_the_old_mediawiki_client_is_gone_and_the_api_client_is_the_only_one():
+    """The first client scraped `action=parse` wikitext with per-action throttles we had inverted (parse is the slow
+    one), and got rate limited. It is replaced by the LiquipediaDB API client; tests/test_liquipedia.py holds its
+    guard, budget, cache and 429 behaviour."""
+    from owcsmuse import liquipedia as LP
+    assert not hasattr(LP, "interval_for") and not hasattr(LP, "parse_matches")
+    assert LP.API_BASE == "https://api.liquipedia.net/api/v3"
 
 
 # ------------------------------------------------------------- Decimal formatting

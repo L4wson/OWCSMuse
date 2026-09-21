@@ -6,6 +6,8 @@ Every setting can be supplied as an environment variable or in a `.env` file.
 
 from __future__ import annotations
 
+from typing import Optional
+
 from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -47,6 +49,18 @@ class Settings(BaseSettings):
     rate_limit_headroom: int = 2
     # Fallback pacing when the API sends no rate-limit headers.
     default_rate_limit_per_second: float = 10.0
+
+    # Liquipedia (LiquipediaDB API v3). No request is ever made unless OWCS_LIQUIPEDIA_ENABLED is also set in the
+    # environment (see liquipedia/client.py); the key alone is not consent to spend the hourly budget.
+    liquipedia_api_key: Optional[SecretStr] = Field(
+        default=None,
+        validation_alias=AliasChoices("LIQUIPEDIA_API_KEY", "OWCS_LIQUIPEDIA_API_KEY"),
+    )
+    liquipedia_base_url: str = "https://api.liquipedia.net/api/v3"
+    liquipedia_wiki: str = "overwatch"
+    liquipedia_hourly_budget: int = Field(default=60, ge=1)   # the approved allowance: 60 requests per hour
+    liquipedia_page_limit: int = Field(default=500, ge=1, le=1000)   # rows per request
+    liquipedia_min_interval: float = Field(default=2.0, ge=0)        # seconds between requests
 
     log_level: str = "INFO"
     log_format: str = "json"  # "json" | "text"

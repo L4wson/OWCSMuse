@@ -629,6 +629,7 @@ curl -s localhost:8000/ask -H 'content-type: application/json' \
                "match_url": "https://www.faceit.com/en/ow2/room/1-1985af81-..."} ]
   },
   "coverage": { ... }, "limitations": [ ... ], "notes": [ ... ],
+  "attribution": null,     // {source, license, license_url, pages[]} whenever a Liquipedia value fed the answer
   "entities": { ... }, "query": { ... },   // the structured query it understood
   "code": null, "reason": null,
   "suggestions": [],       // advice, when advice is the answer ("check the spelling")
@@ -895,6 +896,75 @@ python -m owcsmuse check --only aggregate_sums --json
 fixture warehouse, and each one fails with the right discrepancy when its
 invariant is deliberately broken (an undated match, an edited stat under a stale
 aggregate, a deleted player row, an unrefreshed org merge).
+
+## Liquipedia integration
+
+FACEIT is complete for NA and EMEA main series but has no map stats for 76
+series, and nothing for Korea, China or the LAN events. Liquipedia, through its
+LiquipediaDB API, fills that in as results, map scores and picks/bans - never
+player stats. It is being integrated in stages, each reported before the next
+starts:
+
+| stage | what | status |
+|---|---|---|
+| 0 | client, request planner, cache, attribution | built; the one verification request was rejected (HTTP 403, key not valid), so the response shape is still unseen |
+| 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
+| 2 | enrich the 76 result-only series with map-level results, source recorded per field | not started |
+| 3 | source-agnostic match model and cross-source identity | not started |
+| 4 | LAN and international events | not started |
+| 5 | Korea and China, results only | not started |
+
+### The client (Stage 0)
+
+```bash
+python -m owcsmuse liquipedia status                 # budget used this hour, last 429, what is held; sends nothing
+python -m owcsmuse liquipedia plan                   # the Stage 1 plan and its PROJECTED REQUEST COUNT; sends nothing
+python -m owcsmuse liquipedia run                    # shows the plan, then stops: a dry run
+python -m owcsmuse liquipedia run --execute          # carries it out (needs OWCS_LIQUIPEDIA_ENABLED=1)
+python -m owcsmuse liquipedia verify                 # ONE request: confirms the key, shows a match record's shape
+```
+
+- **Key and opt-in.** `LIQUIPEDIA_API_KEY` in `.env` (see `.env.example`). Nothing is
+  ever sent unless `OWCS_LIQUIPEDIA_ENABLED=1` is also set in the process
+  environment: the key alone is not consent to spend the allowance. The key travels
+  only in the `Authorization` header and is never stored or logged.
+- **Budget: 60 requests an hour**, counted from `raw_payloads` itself (rows with
+  `source = 'liquipedia'`, failures and timeouts included, cache hits not), so
+  restarting a process cannot reset it. When it is spent a run stops as `budget`, not
+  as a failure, and rerunning later resumes where it left off.
+- **The planner** drops values already held, ORs the rest into as few conditions as a
+  URL allows, pages each batch at `OWCS_LIQUIPEDIA_PAGE_LIMIT` rows, and prints the
+  projected request count and what the remaining budget allows *before* any run.
+- **Never re-request what is held.** Every response is stored in `raw_payloads` with
+  its headers (`endpoint = 'liquipedia:<endpoint>'`), an identical request is answered
+  from there, and the `liquipedia_coverage` ledger records which pages have been
+  fetched in full so that changing the set a run wants does not repeat old requests.
+  A stored answer that carried an error is never reused as data.
+- **A 429 stops everything.** The run ends on that request with no retry and no
+  backoff, the 429 is stored with its headers, and nothing more is sent until its
+  `Retry-After` (else one hour) has passed. Any other failure also stops the run; there
+  is no automatic retry anywhere, because a retry spends budget on a request that just
+  failed.
+- **Attribution (CC-BY-SA 3.0).** Every Liquipedia-sourced value carries the URL of the
+  page it came from: `Sourced` cannot be built without one, `liquipedia_coverage` has
+  a checked `page_url` column, and an answer that used Liquipedia values carries
+  `Answer.attribution` (source, licence, the page URLs), which the CLI prints and the
+  API returns. Answers that used none carry `null`.
+- **The key is never kept.** Liquipedia's own 403 quotes the key back (`API key "..." is
+  not valid`), so anything that came off the wire is scrubbed of the key before it is
+  stored, raised or logged.
+- **API only.** Liquipedia's terms forbid automated access to rendered pages, so
+  nothing fetches or parses HTML.
+
+### Open items for later stages
+
+- **Stage 3, date-bounded team-to-org mapping.** A team id maps to an org for all time
+  today, which over-counts across an acquisition (Virtus pro's record includes the 2024
+  series of Ex Oblivione, whose roster it acquired: 5 series where 2 are its own), and
+  an org's searchable names hold only each team id's current name, so "Ex Oblivione"
+  finds nothing. Liquipedia identities need the same shape - a history table with
+  validity dates for every renameable thing, and searchable aliases - so this is fixed
+  once, there. Golden cases G11 and G13 hold it as known bugs.
 
 ## Golden answer suite
 
