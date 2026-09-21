@@ -13,9 +13,11 @@ dist/
 .venv/
 venv/
 
-# raw FACEIT payload dumps (the database is the store; never commit these)
+# raw FACEIT payload dumps (the database is the store; never commit these).
+# Exception: tests/golden/payloads are deliberate, reviewed fixtures for the golden suite.
 raw/
 payloads/
+!tests/golden/payloads/
 data/
 *.payload.json
 *.raw.json

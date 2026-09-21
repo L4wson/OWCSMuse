@@ -392,6 +392,17 @@ Current state: 9 orgs covering 18 team ids, 7 pairs recorded as reviewed
 rejections (2 of them region conflicts found after the fact and reversed),
 62 team ids unmapped and queryable as themselves.
 
+**Known gap: a team id maps to an org for all time.** A FACEIT team id can outlive
+an organisation: id `bb5dd404` was "Ex Oblivione" in 2024 and "Virtuspro" in 2025,
+because Virtus pro acquired that roster. Roster movement is not org identity (see
+above), so Ex Oblivione's 2024 series are not Virtus pro's, yet today the org's
+record includes them (5 series where 2 are Virtus pro's). Two consequences: an
+org's record over-counts across an acquisition, and an org's searchable names hold
+each team id's *current* name only, so "Ex Oblivione" finds nothing. The fix is a
+date-bounded team-to-org mapping with a name history for each side; it is
+scheduled with the source-agnostic identity work (Stage 3 of the Liquipedia
+integration). The golden suite holds both as known bugs (G11, G13).
+
 ## Aliases
 
 `resolve()` already finds an abbreviation FACEIT itself recorded - if a team
@@ -858,8 +869,9 @@ that look right.
 Four bugs in this project had the same shape: a join or key mismatch that
 returned a plausible answer instead of failing - a NULL season that
 made a coverage join false, a NULL `started_at` that hid 30 matches from every
-date-keyed view, and team aggregates still keyed on `team_id` after the resolver
-began returning org ids. None raised anything. A wrong answer that looks like a
+date-keyed view, team aggregates still keyed on `team_id` after the resolver
+began returning org ids, and two org merges that joined an NA roster to an EMEA
+one. None raised anything. A wrong answer that looks like a
 right one is the worst failure this product has.
 
 `python -m owcsmuse check` asserts the invariants against whatever is loaded,
@@ -872,6 +884,7 @@ and exits 1 with the specific discrepancy:
 | `org_key_resolution` | every team id resolves to an org key, unmapped ids are counted explicitly, and no materialized view is still carrying a superseded org key |
 | `aggregate_sums` | the aggregates' sums equal the facts' sums, per stat, per season, in both the wide and long formats |
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
+| `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 
 ```bash
 python -m owcsmuse check
@@ -883,8 +896,56 @@ fixture warehouse, and each one fails with the right discrepancy when its
 invariant is deliberately broken (an undated match, an edited stat under a stale
 aggregate, a deleted player row, an unrefreshed org merge).
 
+## Golden answer suite
+
+Unit tests check that code does what its author meant. The golden suite checks
+that an *answer* is right: real questions asked end to end through `ask()`
+against a small real warehouse, with expected values that were never produced by
+the code under test. That rule exists because a test written from output encodes
+the bug as correct - it is how the FACEIT nickname `KSAA0` got asserted where the
+in-game name `KSAA` belonged.
+
+- **The warehouse** is 20 real matches (`tests/golden/matches.json`, each with why
+  it is there) captured verbatim from `raw_payloads` by `tools/capture_golden.py`,
+  their championships' scope decisions, and the repository's own
+  `scope/org_decisions.json` and `scope/alias_decisions.json`, built by
+  `tests/golden_support.py`. It holds both NA and EMEA, both teams named Geekay
+  Esports, both SpaceStation teams, a bracket bye and a series with no map stats,
+  so each past bug has something to bite on.
+- **The expected values** come from `tests/golden/independent.py`, which reads the
+  raw payload JSON and imports nothing from `owcsmuse`, and are written by
+  `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with
+  how each was derived. Nothing in either calls `ask()`.
+- **Each case is labelled** `exact` (asserts numbers) or `invariant` (asserts a
+  property: NA only, tank-role players only, a clarify candidate answers verbatim,
+  a refusal's alternative works), and names the regression it guards.
+- **Only `confirmed` cases are asserted.** A case is proposed by the derivation and
+  becomes an assertion when a person reviews the value and flips `status`.
+  `python tools/golden_report.py` compares every case, proposed or confirmed, to the
+  live answer without asserting anything: a disagreement is either a bug in the code
+  or an error in the derivation, and the raw payload decides which.
+- **A failure means an answer changed**, and prints expected against actual, the
+  sentence that was given and how the value was derived. Fix the code if it is a bug;
+  if it is a correct improvement, change the value in `cases.json` and say why in the
+  commit.
+- **Definitions the expected values rest on**, confirmed by the project owner:
+  "kills" means FACEIT's `Eliminations`; a team's `map_wins` / `map_losses` come from
+  the series score, so a series with no map stats still counts in them (the `maps`
+  column counts only rounds that have stats); `kd_ratio` is total Eliminations over
+  total Deaths; a map is won when the round's `Winner` is the team's id; a bracket
+  bye is not a series.
+- **`known_bug`** marks a case whose expectation is right and whose answer is wrong
+  today. It shows as `xfail` with the reason, and fails the day it is fixed so the
+  marker gets removed.
+
+```bash
+OWCS_TEST_DATABASE_URL=... pytest -m golden tests/test_golden_answers.py
+OWCS_TEST_DATABASE_URL=... python tools/golden_report.py --failures
+```
+
+It runs as its own CI job, `golden answers`, on a scratch schema (`owcs_golden`).
+
 ## CI
-| `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 
 `.github/workflows/ci.yml` runs on every push and pull request. The repository is
 private, so the badge above renders only for accounts with access:
@@ -893,7 +954,8 @@ private, so the badge above renders only for accounts with access:
 |---|---|
 | `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
 | `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
-| `database tests` | `pytest` against a `postgres:16` service container, with the full integration suite |
+| `database tests` | `pytest -m "not golden"` against a `postgres:16` service container, with the full integration suite |
+| `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**) |
 | `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
 | `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it |
 
@@ -957,6 +1019,9 @@ scope/alias_decisions.json      reviewed community shorthand (commit this)
 scope/classification_report.md  generated review table
 scope/org_report.md             generated org proposal table
 tools/build_fixture_db.py       CI: a warehouse from the captured fixtures
+tools/capture_golden.py         copy the golden matches' payloads out of raw_payloads
+tools/golden_report.py          compare every golden case to the live answer (asserts nothing)
+tests/golden/                   golden matches, independent.py, derive_expected.py, cases.json, harness.py
 .github/workflows/ci.yml        lint, offline tests, database tests, consistency checks
 owcsmuse/config.py              pydantic-settings
 owcsmuse/logging.py             JSON / text structured logging

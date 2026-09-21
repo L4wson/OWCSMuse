@@ -1,0 +1,148 @@
+{
+ "detail": {
+  "best_of": 5,
+  "calculate_elo": true,
+  "chat_room_id": "match-1-9376f913-f6ef-4fa0-bc39-a58d09986807",
+  "competition_id": "f0d5002c-dc08-43ef-818b-402dac458056",
+  "competition_name": "S4 EMEA OWCS Central - Playoffs",
+  "competition_type": "championship",
+  "detailed_results": [
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 1
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   }
+  ],
+  "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-9376f913-f6ef-4fa0-bc39-a58d09986807",
+  "finished_at": 1740677731,
+  "game": "ow2",
+  "group": 2,
+  "match_id": "1-9376f913-f6ef-4fa0-bc39-a58d09986807",
+  "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+  "region": "GLOBAL",
+  "results": {
+   "score": {
+    "faction1": 1,
+    "faction2": 0
+   },
+   "winner": "faction1"
+  },
+  "round": 1,
+  "scheduled_at": 1740937800,
+  "started_at": 1740677731,
+  "status": "FINISHED",
+  "teams": {
+   "faction1": {
+    "avatar": "https://distribution.faceit-cdn.net/images/0c90e373-2ac1-432e-ae9e-0534bef51aa1.jpeg",
+    "faction_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "leader": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+    "name": "Twisted Minds",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/d85aaa51-9b1e-40ad-ba5f-df5bded78292.jpeg",
+      "game_player_id": "459589780",
+      "game_player_name": "Seicoe",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "seic0e",
+      "player_id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/dad52e39-40f6-45ee-947d-b48a61aa33c6.jpeg",
+      "game_player_id": "408221114",
+      "game_player_name": "FunnyAstro",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "FunnyAstro1",
+      "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/220e7fc5-e788-4470-9ce9-352d97236942.jpeg",
+      "game_player_id": "476327883",
+      "game_player_name": "TVNT",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "TVNT_",
+      "player_id": "b371a120-4be1-4677-aeee-81f5ebc80731"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "489480573",
+      "game_player_name": "Quartz",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "Quartz03",
+      "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "705414276",
+      "game_player_name": "irony",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "ir0ny",
+      "player_id": "95090451-b118-4d11-a693-20dafae48c01"
+     }
+    ],
+    "stats": {
+     "rating": 0,
+     "skillLevel": {
+      "average": 10,
+      "range": {
+       "max": 10,
+       "min": 10
+      }
+     },
+     "winProbability": 0
+    },
+    "substituted": false,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/fcb336a1-5e19-4140-9029-006b25723f9e.jpeg",
+      "game_player_id": "489508402",
+      "game_player_name": "Youbi",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "Youbi1",
+      "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/8393a0ec-58c1-442b-9123-2911c6f8b813.jpeg",
+      "game_player_id": "441234931",
+      "game_player_name": "Hadi",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "HadiOW2",
+      "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467"
+     }
+    ],
+    "type": "premade"
+   },
+   "faction2": {
+    "avatar": "",
+    "faction_id": "bye",
+    "leader": "",
+    "name": "bye",
+    "substituted": false,
+    "type": "bye"
+   }
+  },
+  "version": 2
+ },
+ "stats": null,
+ "stats_http_status": 404
+}

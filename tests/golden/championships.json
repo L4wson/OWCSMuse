@@ -1,0 +1,129 @@
+{
+ "championships": [
+  {
+   "championship_id": "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S9 NA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "7803fa53-82c0-409a-b8ab-7f693c57886f",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S8 EMEA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "emea",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "9d718a3c-bb20-4988-ba53-aa24eaf084d6",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S9 EMEA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "emea",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "a2b8a832-96f4-4016-ac52-a7e1d39bbc70",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S4 EMEA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "emea",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "cdef9bcb-85fc-4017-b2dc-59f8e35a1306",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S8 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "db1a7544-766d-4a46-bb69-163429310826",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S9 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "f0d5002c-dc08-43ef-818b-402dac458056",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S4 EMEA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "emea",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "f1be7b75-9e54-4d57-b524-9d32f5398682",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S5 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "f2f36b25-2979-4681-bc74-6a4d869cd1d5",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S9 EMEA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "emea",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "name": "OWCS 2024: EMEA Stage 1 - Group D",
+   "include": true,
+   "scope_region": "emea",
+   "tier": "main",
+   "season": 2024,
+   "classification_source": "manual",
+   "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)"
+  },
+  {
+   "championship_id": "f57f9c5f-7840-4a49-8c32-24682dece3fc",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "name": "OWCS 2024: EMEA Stage 1 - Main Event",
+   "include": true,
+   "scope_region": "emea",
+   "tier": "main",
+   "season": 2024,
+   "classification_source": "manual",
+   "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)"
+  }
+ ],
+ "organizers": {
+  "f0e8a591-08fd-4619-9d59-d97f0571842e": "FACEIT League - Overwatch",
+  "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce": "OWCS | Overwatch Champions Series"
+ }
+}

@@ -1,0 +1,713 @@
+{
+ "note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
+ "cases": [
+  {
+   "id": "G01",
+   "title": "sug2rfree's map record",
+   "kind": "exact",
+   "regression": "displays the in-game name, not the FACEIT nickname (KSAA0 class)",
+   "question": "sug2rfree record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "player",
+     "id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+     "name": "sugarfree"
+    },
+    "rows": [
+     {
+      "nickname": "sugarfree",
+      "maps": 21,
+      "map_wins": 14,
+      "map_losses": 7,
+      "eliminations": 421,
+      "deaths": 133
+     }
+    ]
+   },
+   "derivation": "Every round in the golden stats payloads where player 58239fd5 appears: 21 maps over 5 series; a map is won when round_stats.Winner is his team id. Name is his in-game name (game_player_name), not the FACEIT nickname sug2rfree.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G02",
+   "title": "sug2rfree shows NA only",
+   "kind": "invariant",
+   "regression": "region bug: sug2rfree's record showed EMEA matches",
+   "question": "sug2rfree record",
+   "expect": {
+    "status": "ok",
+    "evidence": {
+     "total_rows": 21,
+     "regions_only": [
+      "na"
+     ]
+    }
+   },
+   "derivation": "All 21 of his maps are in NA competitions, and the golden set includes 2 EMEA 'SpaceStation' matches (a different team) that must not appear. A wrong SpaceStation/SpaceStation Gaming merge would add them.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G03",
+   "title": "ZSS's map record",
+   "kind": "exact",
+   "regression": null,
+   "question": "ZSS record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "player",
+     "id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
+     "name": "zss"
+    },
+    "rows": [
+     {
+      "nickname": "zss",
+      "maps": 17,
+      "map_wins": 7,
+      "map_losses": 10,
+      "eliminations": 171,
+      "deaths": 103
+     }
+    ]
+   },
+   "derivation": "Same derivation: 17 maps over 5 series. FACEIT nickname is z_ow; in-game name zss.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G04",
+   "title": "ZSS shows NA only",
+   "kind": "invariant",
+   "regression": "region bug: ZSS's record showed EMEA matches",
+   "question": "ZSS record",
+   "expect": {
+    "status": "ok",
+    "evidence": {
+     "total_rows": 17,
+     "regions_only": [
+      "na"
+     ]
+    }
+   },
+   "derivation": "All maps are NA. The golden set includes both Geekay Esports teams (NA and EMEA, identical names); a wrong merge of them would pull in EMEA maps.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G05",
+   "title": "Quartz03's record answers",
+   "kind": "exact",
+   "regression": "team:None: a player's record returned no_data",
+   "question": "Quartz03 record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "player",
+     "id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+     "name": "Quartz"
+    },
+    "rows": [
+     {
+      "nickname": "Quartz",
+      "maps": 11,
+      "map_wins": 9,
+      "map_losses": 2,
+      "eliminations": 212,
+      "deaths": 69
+     }
+    ]
+   },
+   "derivation": "11 maps over 3 series, all EMEA. The bug turned a missing team into the key 'team:None' and returned no_data; the assertion is that it answers at all, and with these numbers.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G06",
+   "title": "Quartz03's K/D",
+   "kind": "exact",
+   "regression": "team:None: K/D questions returned no_data",
+   "question": "what is Quartz03's kd",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "player",
+     "id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+     "name": "Quartz"
+    },
+    "rows": [
+     {
+      "nickname": "Quartz",
+      "kd_ratio": "3.07"
+     }
+    ]
+   },
+   "derivation": "Total Eliminations 212 / total Deaths 69 = 3.07 (ratio of totals, not a mean of per-map ratios).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G07",
+   "title": "Quartz03's average damage per map",
+   "kind": "exact",
+   "regression": null,
+   "question": "average damage per map for Quartz03",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Quartz",
+      "maps_with_stat": 11,
+      "total": 118696,
+      "avg_per_map": "10790.55"
+     }
+    ]
+   },
+   "derivation": "Damage Dealt summed over his 11 maps = 118696; / maps = 10790.55.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G08",
+   "title": "Twisted Minds' record, all seasons, byes excluded",
+   "kind": "exact",
+   "regression": "bye: a bracket bye counted as a 1-0 win",
+   "question": "Twisted Minds record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+     "name": "Twisted Minds"
+    },
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "matches": 4,
+      "wins": 4,
+      "losses": 0,
+      "map_wins": 12,
+      "map_losses": 4,
+      "maps": 11
+     }
+    ]
+   },
+   "derivation": "Series where Twisted Minds is a faction and the opponent is a real team: 4 (the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted as a 5th). map_wins/losses are series scores; 'maps' counts rounds that have stats, 11; 1 of the series has no stats payload.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G09",
+   "title": "Twisted Minds 2026, with a series that has no map stats",
+   "kind": "exact",
+   "regression": "result-only series counted at series grain only",
+   "question": "Twisted Minds record in 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "matches": 2,
+      "wins": 2,
+      "losses": 0,
+      "map_wins": 6,
+      "map_losses": 2,
+      "maps": 3
+     }
+    ],
+    "limitations": [
+     "offline_map_stats",
+     "main_series_2025_2026"
+    ]
+   },
+   "derivation": "2 series in 2026, one of them (1) with no stats payload: it counts at series grain (wins and map_wins/losses from the series score) and contributes no rows to 'maps'. The answer must say so via the offline_map_stats limitation.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G10",
+   "title": "SpaceStation Gaming's record (NA only)",
+   "kind": "exact",
+   "regression": "region bug: SpaceStation Gaming merged with the EMEA SpaceStation",
+   "question": "SpaceStation Gaming record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
+     "name": "SpaceStation Gaming"
+    },
+    "rows": [
+     {
+      "team": "SpaceStation Gaming",
+      "matches": 5,
+      "wins": 4,
+      "losses": 1,
+      "map_wins": 14,
+      "map_losses": 7,
+      "maps": 21
+     }
+    ],
+    "evidence": {
+     "regions_only": [
+      "na"
+     ]
+    }
+   },
+   "derivation": "5 NA series. The golden set also holds two 2024 EMEA series of 'SpaceStation' (team a359db61), which are a different team and must not be added.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G11",
+   "title": "Twisted Minds vs Ex Oblivione, series grain",
+   "kind": "exact",
+   "regression": null,
+   "question": "Twisted Minds series record against Ex Oblivione",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 2,
+      "wins": 2,
+      "losses": 0
+     }
+    ]
+   },
+   "derivation": "2 series between the two team ids in the golden set (both 3-1 to Twisted Minds). Team id bb5dd404 was 'Ex Oblivione' in 2024 and was later acquired into Virtus pro. The name must be searchable and find those 2024 series, which are Ex Oblivione's, not Virtus pro's.",
+   "status": "confirmed",
+   "known_bug": "'Ex Oblivione' matches nothing: an org's searchable history holds each team id's current name only, not its earlier ones (team_names), so the name is unsearchable. Its search must work, but a search hit must not put its pre-rename series into Virtus pro's record: that needs date-bounded team-to-org mapping (Stage 3)"
+  },
+  {
+   "id": "G12",
+   "title": "'SSG' resolves to SpaceStation Gaming",
+   "kind": "exact",
+   "regression": "alias: SSG did not resolve to SpaceStation Gaming",
+   "question": "SSG record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
+     "name": "SpaceStation Gaming"
+    },
+    "rows": [
+     {
+      "team": "SpaceStation Gaming",
+      "matches": 5,
+      "wins": 4,
+      "losses": 1,
+      "map_wins": 14,
+      "map_losses": 7,
+      "maps": 21
+     }
+    ]
+   },
+   "derivation": "Same numbers as G10, reached through the shorthand. Expectation is the community meaning of SSG.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G13",
+   "title": "'VP' resolves to Virtus pro; its record excludes the Ex Oblivione era",
+   "kind": "exact",
+   "regression": "alias/org: VP resolves to the merged Virtus pro org",
+   "question": "VP record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "org",
+     "id": "virtus-pro",
+     "name": "Virtus pro"
+    },
+    "rows": [
+     {
+      "matches": 2,
+      "wins": 2,
+      "losses": 0,
+      "map_wins": 7,
+      "map_losses": 4
+     }
+    ]
+   },
+   "derivation": "The org Virtus pro holds two team ids, c02a9899 (2026) and bb5dd404. FACEIT named bb5dd404 'Ex Oblivione' in 2024 and 'Virtuspro' in 2025. Virtus pro acquired the Ex Oblivione roster, and roster movement is not org identity, so the 3 Ex Oblivione-era series are NOT Virtus pro's: 2 series remain, 2 won, series score 7-4.",
+   "status": "confirmed",
+   "known_bug": "team-to-org mapping is not date-bounded: bb5dd404 maps to Virtus pro for all time, so the org's record includes 3 series from its Ex Oblivione era (5 series, not 2). Fix is date-bounded team-to-org mapping (Stage 3); the alias half of this case is G26"
+  },
+  {
+   "id": "G26",
+   "title": "'VP' resolves to the Virtus pro org",
+   "kind": "invariant",
+   "regression": "alias: VP",
+   "question": "VP record",
+   "expect": {
+    "entity": {
+     "role": "subject",
+     "type": "org",
+     "id": "virtus-pro",
+     "name": "Virtus pro"
+    },
+    "status": "ok"
+   },
+   "derivation": "The alias vp -> org virtus-pro (scope/alias_decisions.json). Asserts only who the question resolved to, so the alias stays covered while G13's record is a known bug.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G14",
+   "title": "'DSG' resolves to Disguised",
+   "kind": "exact",
+   "regression": "alias: DSG",
+   "question": "DSG record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "968066cc-6255-4fcd-8d9b-bc455ca9d998",
+     "name": "Disguised"
+    },
+    "rows": [
+     {
+      "team": "Disguised",
+      "matches": 2,
+      "wins": 0,
+      "losses": 2
+     }
+    ]
+   },
+   "derivation": "Disguised: 2 series in the golden set. DSG is the community shorthand for Disguised.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G15",
+   "title": "'TL' resolves to Team Liquid",
+   "kind": "exact",
+   "regression": "alias",
+   "question": "TL record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "a58dedff-8045-46be-a13e-2402495b6a9d",
+     "name": "Team Liquid"
+    },
+    "rows": [
+     {
+      "team": "Team Liquid",
+      "matches": 3,
+      "wins": 1,
+      "losses": 2
+     }
+    ]
+   },
+   "derivation": "Team Liquid: 3 series.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G16",
+   "title": "Two teams named Geekay Esports ask, never guess",
+   "kind": "invariant",
+   "regression": "the wrong Geekay merge; clarify",
+   "question": "Geekay Esports record",
+   "expect": {
+    "status": "clarify",
+    "code": "ambiguous_entity",
+    "candidate_ids": [
+     "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+     "590b7d3b-a200-47b9-a967-f02274c1977b"
+    ]
+   },
+   "derivation": "Two unrelated teams share the name (NA and EMEA, 0% roster overlap, merge rejected in scope/org_decisions.json). The answer is a question back with exactly these two candidates.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G17",
+   "title": "Clarify candidate (NA Geekay) answered verbatim",
+   "kind": "exact",
+   "regression": "clarify: a candidate must be answerable verbatim",
+   "question": "Geekay Esports record",
+   "expect": {
+    "status": "clarify",
+    "answer_candidate": {
+     "id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+     "expect": {
+      "status": "ok",
+      "entity": {
+       "role": "subject",
+       "id": "590b7d3b-a200-47b9-a967-f02274c1977b"
+      },
+      "rows": [
+       {
+        "team": "Geekay Esports",
+        "matches": 2,
+        "wins": 2,
+        "losses": 0,
+        "map_wins": 6,
+        "map_losses": 2,
+        "maps": 8
+       }
+      ],
+      "evidence": {
+       "regions_only": [
+        "na"
+       ]
+      }
+     }
+    }
+   },
+   "derivation": "Ask the NA candidate's own question, unedited. 2 NA series (2-0).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G18",
+   "title": "Clarify candidate (EMEA Geekay) answered verbatim",
+   "kind": "exact",
+   "regression": "clarify: a candidate must be answerable verbatim",
+   "question": "Geekay Esports record",
+   "expect": {
+    "status": "clarify",
+    "answer_candidate": {
+     "id": "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+     "expect": {
+      "status": "ok",
+      "entity": {
+       "role": "subject",
+       "id": "46f8e560-76fe-4b5f-85e7-397957e0dc74"
+      },
+      "rows": [
+       {
+        "team": "Geekay Esports",
+        "matches": 3,
+        "wins": 0,
+        "losses": 3,
+        "map_wins": 5,
+        "map_losses": 10,
+        "maps": 10
+       }
+      ],
+      "evidence": {
+       "regions_only": [
+        "emea"
+       ]
+      }
+     }
+    }
+   },
+   "derivation": "The EMEA candidate: 3 series (0-3), one with no stats payload.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G19",
+   "title": "Most eliminations in 2026",
+   "kind": "exact",
+   "regression": null,
+   "question": "who had the most eliminations in 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Lethal",
+      "total": 477,
+      "maps_with_stat": 21
+     },
+     {
+      "nickname": "Hawk",
+      "total": 457,
+      "maps_with_stat": 21
+     },
+     {
+      "nickname": "sugarfree",
+      "total": 421,
+      "maps_with_stat": 21
+     }
+    ]
+   },
+   "derivation": "Eliminations summed per player over 2026 maps in the golden set (48 players); top 3 shown, totals distinct.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G20",
+   "title": "'tank with the most kills' ranks tanks only",
+   "kind": "exact",
+   "regression": "the role filter was dropped: 'tank with the most kills' ranked everyone",
+   "question": "tank with the most kills",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Hawk",
+      "total": 457,
+      "maps_with_stat": 21
+     },
+     {
+      "nickname": "Zeb",
+      "total": 316,
+      "maps_with_stat": 16
+     },
+     {
+      "nickname": "Kellan",
+      "total": 228,
+      "maps_with_stat": 12
+     }
+    ],
+    "rows_only_players": [
+     "Attack",
+     "Baz",
+     "Chasetorch",
+     "Depsi",
+     "Hadi",
+     "Hawk",
+     "Infekted",
+     "KSAA",
+     "Kellan",
+     "Mag",
+     "TVNT",
+     "Tred",
+     "Vestola",
+     "ZIYAD",
+     "Zeb",
+     "cartifan22_",
+     "cuFFa",
+     "eisgnom",
+     "sniper"
+    ],
+    "evidence": {
+     "roles_only": [
+      "Tank"
+     ]
+    }
+   },
+   "derivation": "'Kills' = FACEIT Eliminations, summed over only the maps where the player's Role was Tank (19 tank players). Every returned player must be one of the tank-role players, and every evidence row's role must be Tank.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G21",
+   "title": "Most healing in 2025",
+   "kind": "exact",
+   "regression": null,
+   "question": "who had the most healing done in 2025",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Admiral",
+      "total": 72766,
+      "maps_with_stat": 8
+     },
+     {
+      "nickname": "UltraViolet",
+      "total": 71806,
+      "maps_with_stat": 8
+     },
+     {
+      "nickname": "Rupal",
+      "total": 58018,
+      "maps_with_stat": 5
+     }
+    ]
+   },
+   "derivation": "Healing Done summed over 2025 maps (25 players with the stat).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G22",
+   "title": "Player vs player: sug2rfree against ZSS",
+   "kind": "exact",
+   "regression": "versus at map grain, player vs player",
+   "question": "sug2rfree map record against ZSS",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 3,
+      "matches": 1,
+      "map_wins": 3,
+      "map_losses": 0
+     }
+    ]
+   },
+   "derivation": "Maps where both appear on opposite teams: 3 over 1 series (SSG v LuneX).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G23",
+   "title": "Player vs org: a Geekay EMEA player against Virtus Pro",
+   "kind": "exact",
+   "regression": "versus, player vs org",
+   "question": "AlphaYi map record against Virtus Pro",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 7,
+      "matches": 1,
+      "map_wins": 3,
+      "map_losses": 4
+     }
+    ]
+   },
+   "derivation": "AlphaYi played 7 of the 7 maps of Virtus pro 4-3 Geekay; Virtus Pro is an org of two team ids, and he faced it in 1 series in the golden set.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G24",
+   "title": "A refusal that offers a question that works",
+   "kind": "invariant",
+   "regression": "a refusal with advice but no working alternative",
+   "question": "who had the most final blows in 2024",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "alternative": {
+     "question_template": "who had the most final blows in {season}",
+     "seasons_with_stat": [
+      2025,
+      2026
+     ],
+     "top1_by_season": {
+      "2025": {
+       "nickname": "Lethal",
+       "total": 72
+      },
+      "2026": {
+       "nickname": "Lethal",
+       "total": 246
+      }
+     }
+    }
+   },
+   "derivation": "Final Blows appears in the golden stats only for seasons [2025, 2026], not 2024, so 2024 cannot be answered. The refusal must offer the same question in a season that has the stat, and that question must answer with the top player derived independently for that season.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G25",
+   "title": "Twisted Minds in 2025: only a bye, so no data",
+   "kind": "invariant",
+   "regression": "bye: a 2025 bye showed as a 1-0 win",
+   "question": "Twisted Minds record in 2025",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "alternative": {
+     "question_template": "Twisted Minds record",
+     "seasons_with_stat": [
+      null
+     ],
+     "top1_by_season": {},
+     "then_rows": [
+      {
+       "team": "Twisted Minds",
+       "matches": 4,
+       "wins": 4,
+       "losses": 0,
+       "map_wins": 12,
+       "map_losses": 4,
+       "maps": 11
+      }
+     ]
+    }
+   },
+   "derivation": "The only 2025 Twisted Minds fixture is the bracket bye, which is not a series: the answer is no_data, not '1-0'. The offered alternative (the all-seasons record) must answer with G08's numbers.",
+   "status": "confirmed"
+  }
+ ]
+}
