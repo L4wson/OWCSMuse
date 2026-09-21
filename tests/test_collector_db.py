@@ -291,3 +291,49 @@ def test_status_changed_in_list_requeues_match(db):
     col.run_list()
     assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id=%s", PLAIN)["ingest_state"] == "stub"
     assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id=%s", FLIP)["ingest_state"] == "complete"
+
+
+def test_a_bracket_bye_is_skipped_at_list_and_at_detail_and_never_reaches_the_facts(db):
+    """FACEIT models an empty bracket slot as a 'bye' faction and scores the real team 1-0. It is not a series."""
+    conn, raw_conn = db
+    _seed_championship(conn)
+    sink = RawPayloadStore(raw_conn)
+    client = FakeClient(sink)
+    bye_id = "1-00000000-0000-0000-0000-00000000b7e0"
+    item = load_fixture("list_item_bo5_4rounds.json")
+    item = dict(item, match_id=bye_id, teams=dict(item["teams"]))
+    item["teams"]["faction2"] = dict(item["teams"]["faction2"], faction_id="bye", name="bye")
+    detail = load_fixture("match_detail_bo5_4rounds.json")
+    detail = dict(detail, match_id=bye_id, teams=dict(detail["teams"]))
+    detail["teams"]["faction2"] = dict(detail["teams"]["faction2"], faction_id="bye", name="bye")
+    client.list_items.append(item)
+    client.details[bye_id] = detail
+    client.stats_404.add(bye_id)  # FACEIT has no map stats for a bye: the shape that used to become 'result_only'
+    col = Collector(conn, client, _settings(), sink)
+    col.run_list()
+    assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id=%s", bye_id)["ingest_state"] == "skipped"
+    col.run_detail(refresh=True)
+    row = _one(conn, "SELECT ingest_state, ingest_error FROM matches WHERE match_id=%s", bye_id)
+    assert row["ingest_state"] == "skipped" and row["ingest_error"].startswith("bye:")
+    assert _one(conn, "SELECT count(*) AS n FROM fact_team_matches WHERE match_id=%s", bye_id)["n"] == 0
+    # the two real fixture matches are unaffected
+    assert _one(conn, "SELECT count(*) AS n FROM matches WHERE ingest_state='complete'")["n"] == 2
+
+
+def test_migration_021_reclassifies_existing_bye_rows_and_is_idempotent(db):
+    conn, _ = db
+    _seed_championship(conn)
+    with conn.cursor() as cur:
+        cur.execute("""INSERT INTO teams (team_id, name) VALUES ('bye', 'bye'), ('t1', 'Real')""")
+        cur.execute("""INSERT INTO matches (match_id, championship_id, status, ingest_state, faction1_team_id, faction2_team_id,
+                                            faction1_name, faction2_name, faction1_score, faction2_score)
+                       VALUES ('m-bye', %s, 'FINISHED', 'result_only', 't1', 'bye', 'Real', 'bye', 1, 0),
+                              ('m-real', %s, 'FINISHED', 'result_only', 't1', 't1', 'Real', 'Real', 1, 0)""", (CHAMP, CHAMP))
+    conn.commit()
+    sql = open(os.path.join(MIGRATIONS, "021_bye_is_not_a_match.sql"), encoding="utf-8").read()
+    for _ in range(2):
+        with conn.cursor() as cur:
+            cur.execute(sql)
+        conn.commit()
+    assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id='m-bye'")["ingest_state"] == "skipped"
+    assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id='m-real'")["ingest_state"] == "result_only"

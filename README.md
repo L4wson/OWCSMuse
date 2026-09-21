@@ -146,6 +146,7 @@ changed `status` (say ONGOING became FINISHED) the match is re-queued as `stub`.
 | Nicknames change | `players.player_id` is the FACEIT GUID; `players.nickname` is the latest seen; `player_nicknames` keeps every nickname with first/last seen |
 | Championship timestamps are epoch ms, match timestamps epoch s | `ts_from_epoch` handles both |
 | Listing offset is capped at 500 (600 items max, offset must be a multiple of limit) | Client stops at the cap and flags `championships.list_truncated`; a WARNING `championship_listing_truncated` is logged. Six 2024 open-qualifier Swiss events exceed 600 matches |
+| An empty bracket slot is a placeholder faction named `bye`, scored 1-0 for the real team | It is not a series. Ingest marks it `skipped` (`ingest_error` starts `bye:`) at LIST and at DETAIL, and migration 021 reclassified the 24 already stored. Left in, they gave 13 teams wins they never played and a team called "bye" 24 losses across NA and EMEA; `region_consistency` found it |
 | Rate limit headers are `ratelimit-limit: 20, 20;w=1` (IETF style) | Parsed alongside `X-RateLimit-*`; limiter paces to the advertised window and pauses at low `remaining`; 429/5xx back off exponentially with full jitter and honour `Retry-After` |
 
 Not observed but worth knowing: FACEIT's `detailed_results` can have more
@@ -291,8 +292,8 @@ ones a question lands in to its answer.
 
 `offline_map_stats` - FACEIT records a result for an offline series without
 per-map player stats, so those series land in `result_only`: the winner and
-series score are known, the maps are not. 100 of 509 finished series in scope
-are `result_only`, and they are not spread evenly - 52 of 118 series in playoff
+series score are known, the maps are not. 76 of 485 finished series in scope
+are `result_only`, and they are not spread evenly - 28 of 94 series in playoff
 and LAN competitions have no map stats against 48 of 391 elsewhere, and all 14
 Dreamhack Dallas matches are `result_only`. **Map-grain answers therefore
 under-represent exactly the matches that mattered most.** Series-grain answers
