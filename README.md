@@ -855,8 +855,8 @@ that look right.
 
 ## Consistency checks
 
-Three bugs in this project had the same shape: a join or key mismatch that
-returned a plausible, smaller answer instead of failing - a NULL season that
+Four bugs in this project had the same shape: a join or key mismatch that
+returned a plausible answer instead of failing - a NULL season that
 made a coverage join false, a NULL `started_at` that hid 30 matches from every
 date-keyed view, and team aggregates still keyed on `team_id` after the resolver
 began returning org ids. None raised anything. A wrong answer that looks like a
@@ -884,6 +884,7 @@ invariant is deliberately broken (an undated match, an edited stat under a stale
 aggregate, a deleted player row, an unrefreshed org merge).
 
 ## CI
+| `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 
 `.github/workflows/ci.yml` runs on every push and pull request. The repository is
 private, so the badge above renders only for accounts with access:

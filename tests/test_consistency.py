@@ -128,6 +128,29 @@ def test_an_org_id_that_collides_with_the_unmapped_prefix_fails(agg_db):
         agg_db.rollback()
 
 
+def test_a_team_id_in_both_regions_fails_region_consistency(agg_db):
+    """The sug2rfree bug, reproduced: one identity holding matches in na and in emea."""
+    try:
+        assert _by_name(run_checks(agg_db, ["region_consistency"]))["region_consistency"].ok
+        with agg_db.cursor() as cur:
+            cur.execute("SELECT team_id, region FROM fact_team_matches WHERE region IN ('na', 'emea') LIMIT 1")
+            row = cur.fetchone()
+            assert row, "the fixtures should carry region-locked matches"
+            other = "emea" if row["region"] == "na" else "na"
+            cur.execute("INSERT INTO championships (championship_id, name, include, scope_region, season) "
+                        "VALUES ('c-other-region', 'other region', true, %s, 2026)", (other,))
+            cur.execute("""INSERT INTO matches (match_id, championship_id, status, ingest_state, faction1_team_id,
+                                                faction2_team_id, faction1_score, faction2_score, started_at)
+                           VALUES ('m-other-region', 'c-other-region', 'FINISHED', 'result_only', %s, %s, 1, 0, now())""",
+                        (row["team_id"], row["team_id"]))
+        r = _by_name(run_checks(agg_db, ["region_consistency"]))["region_consistency"]
+        assert not r.ok
+        assert any(d["kind"] == "team_id_spans_regions" and d["key"] == row["team_id"] for d in r.discrepancies)
+        assert any(d["kind"] == "org_spans_regions" for d in r.discrepancies)
+    finally:
+        agg_db.rollback()
+
+
 def test_render_text_names_the_failing_check(agg_db):
     try:
         with agg_db.cursor() as cur:
