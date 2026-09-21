@@ -7,6 +7,12 @@
       "note": "community shorthand for Crazy Raccoons; not in FACEIT's own name history",
       "decided_at": "2026-09-19T01:28:16+00:00"
     },
+    "dsg": {
+      "entity_type": "team",
+      "entity_id": "968066cc-6255-4fcd-8d9b-bc455ca9d998",
+      "note": "community shorthand for Disguised; not in FACEIT's own name history",
+      "decided_at": "2026-09-21T19:17:28+00:00"
+    },
     "ssg": {
       "entity_type": "team",
       "entity_id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
@@ -24,6 +30,12 @@
       "entity_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
       "note": "community shorthand for Twisted Minds; not in FACEIT's own name history",
       "decided_at": "2026-09-19T01:28:15+00:00"
+    },
+    "vp": {
+      "entity_type": "org",
+      "entity_id": "virtus-pro",
+      "note": "community shorthand for Virtus pro; not in FACEIT's own name history",
+      "decided_at": "2026-09-21T19:17:27+00:00"
     }
   }
 }
