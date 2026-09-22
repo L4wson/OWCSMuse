@@ -29,3 +29,17 @@ def agg_db():
     yield conn
     conn.close()
     raw_conn.close()
+
+
+@pytest.fixture
+def lp_db():
+    """Scratch schema with one FACEIT match and its matching stored Liquipedia response (needs OWCS_TEST_DATABASE_URL)."""
+    db_url = os.environ.get("OWCS_TEST_DATABASE_URL")
+    if not db_url:
+        pytest.skip("OWCS_TEST_DATABASE_URL not set")
+    from liquipedia_support import build_liquipedia_scratch_db
+
+    conn, raw_conn = build_liquipedia_scratch_db(db_url, os.environ.get("OWCS_TEST_LP_SCHEMA", "owcs_test_lp"))
+    yield conn
+    conn.close()
+    raw_conn.close()

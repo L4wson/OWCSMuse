@@ -106,3 +106,119 @@ def query_of(req: httpx.Request) -> dict[str, str]:
 
 def body_of(x: Any) -> str:
     return json.dumps(x, default=str)
+
+
+# ---------------------------------------------------------------------- reconciliation builders
+
+from owcsmuse.liquipedia.matches import parse_row  # noqa: E402
+from owcsmuse.liquipedia.model import FaceitSide  # noqa: E402
+from owcsmuse.resolve import fold  # noqa: E402
+
+T0 = datetime(2026, 6, 13, 18, 0, tzinfo=timezone.utc)
+NA_PAGE = "Overwatch_Champions_Series/2026/NA/Stage_2/Regular_Season"
+EMEA_PAGE = "Overwatch_Champions_Series/2026/EMEA/Stage_2/Regular_Season"
+
+
+def lp_row(team1, team2, s1, s2, when=T0, *, page=NA_PAGE, faceit_id=None, bo=5, idx=1, bracket="B1", finished=True,
+           status="S", winner=None, n_games=None, opp_type="team"):
+    """A Liquipedia match record in the shape the API returns (only the fields the parser reads)."""
+    w = winner if winner is not None else (1 if (s1 or 0) > (s2 or 0) else 2 if (s2 or 0) > (s1 or 0) else 0)
+    n = n_games if n_games is not None else (s1 or 0) + (s2 or 0)
+    return {"objectname": f"1_{bracket}_{idx:04d}", "match2id": f"{bracket}_{idx:04d}", "match2bracketid": bracket,
+            "pagename": page, "parent": page.rsplit("/", 1)[0], "date": when.strftime("%Y-%m-%d %H:%M:%S"),
+            "extradata": {"timestamp": int(when.timestamp())}, "bestof": bo, "finished": 1 if finished else 0,
+            "winner": str(w), "walkover": "", "section": "Week 1",
+            "links": {"faceit": f"https://www.faceit.com/en/ow2/room/{faceit_id}"} if faceit_id else [],
+            "match2opponents": [{"name": team1, "score": s1, "status": status, "type": opp_type},
+                                {"name": team2, "score": s2, "status": status, "type": opp_type}],
+            "match2games": [{"map": f"Map{i}", "mode": "Control", "winner": "1", "scores": [1, 0]} for i in range(n)]}
+
+
+def lp(team1, team2, s1, s2, when=T0, raw_id=1, **kw):
+    return parse_row(lp_row(team1, team2, s1, s2, when, **kw), raw_id)
+
+
+def fs(match_id, name1, name2, s1, s2, when=T0 + timedelta(minutes=45), *, org1=None, org2=None, region="na", bo=5,
+       comp="c-na", state="complete", maps=None, reliable=True, winner=None):
+    """A FACEIT series. org keys default to a slug of the name, so 'SpaceStation Gaming' is 'spacestation-gaming'."""
+    slug = lambda n: fold(n).replace(" ", "-")  # noqa: E731
+    w = winner if winner is not None else (1 if s1 > s2 else 2 if s2 > s1 else 0)
+    return FaceitSide(match_id, comp, comp, region, 2026, when, bo, org1 or slug(name1), org2 or slug(name2), name1, name2,
+                      s1, s2, w, state, (s1 + s2 if state == "complete" else 0) if maps is None else maps, reliable)
+
+
+def resolver(mapping):
+    """{(lp name, region|None): org key} or {lp name: org key}; source 'decided' unless the value is ('key', 'proposed')."""
+    def resolve(name, region=None):
+        for k in ((fold(name), region), (fold(name), None)):
+            hit = mapping.get(k) or mapping.get(name)
+            if hit:
+                return hit if isinstance(hit, tuple) else (hit, "decided")
+        return None
+    return resolve
+
+
+# ---------------------------------------------------------------------- DB round-trip scratch schema
+
+import json as _json  # noqa: E402
+from owcsmuse.db import RawPayloadStore, connect, migrate  # noqa: E402
+
+MIGRATIONS = __import__("os").path.join(__import__("os").path.dirname(__file__), "..", "migrations")
+
+DB_CHAMPIONSHIP = "lp-test-champ"
+DB_TEAM1, DB_TEAM2 = "team-dallas", "team-liquid"
+DB_FACEIT_ID = "1-11111111-1111-1111-1111-111111111111"
+DB_PAGE = "Overwatch_Champions_Series/2026/NA/Stage_2/Regular_Season"
+
+
+def build_liquipedia_scratch_db(db_url: str, schema: str):
+    """Drop + recreate `schema`, migrate, and seed one FACEIT match plus one matching stored Liquipedia response.
+
+    Minimal by hand (no Collector/FakeClient): reconciliation only reads matches, match_rounds, team_identity and
+    championships, so those are inserted directly rather than replayed through ingest.
+    """
+    assert schema != "public"
+    admin = connect(db_url, autocommit=True, schema=schema)
+    admin.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
+    admin.close()
+    conn = connect(db_url, schema=schema)
+    raw_conn = connect(db_url, autocommit=True, schema=schema)
+    migrate(conn, MIGRATIONS, schema)
+    when = T0 + timedelta(minutes=45)
+    with conn.cursor() as cur:
+        cur.execute("INSERT INTO organizers (organizer_id, name) VALUES ('org-lp', 'OWCS')")
+        cur.execute(
+            """INSERT INTO championships (championship_id, organizer_id, name, include, scope_region, tier, season, classification_source)
+               VALUES (%s, 'org-lp', 'OWCS 2026 NA Stage 2', true, 'na', 'main', 2026, 'manual')""",
+            (DB_CHAMPIONSHIP,))
+        cur.execute("INSERT INTO teams (team_id, name) VALUES (%s, 'Dallas Fuel'), (%s, 'Team Liquid')",
+                    (DB_TEAM1, DB_TEAM2))
+        cur.execute(
+            """INSERT INTO matches (match_id, championship_id, best_of, status, started_at, faction1_team_id,
+                                     faction2_team_id, faction1_name, faction2_name, faction1_score, faction2_score,
+                                     winner_faction, ingest_state)
+               VALUES (%s, %s, 5, 'FINISHED', %s, %s, %s, 'Dallas Fuel', 'Team Liquid', 3, 1, 'faction1', 'complete')""",
+            (DB_FACEIT_ID, DB_CHAMPIONSHIP, when, DB_TEAM1, DB_TEAM2))
+        for i in range(4):
+            cur.execute(
+                """INSERT INTO match_rounds (match_id, round_number, map_name, team1_team_id, team1_score,
+                                              team2_team_id, team2_score, winner_team_id)
+                   VALUES (%s, %s, %s, %s, 1, %s, 0, %s)""",
+                (DB_FACEIT_ID, i + 1, f"Map{i}", DB_TEAM1, DB_TEAM2, DB_TEAM1))
+    conn.commit()
+    sink = RawPayloadStore(raw_conn)
+    row = lp_row("Dallas Fuel", "Team Liquid", 3, 1, when=T0, page=DB_PAGE, faceit_id=DB_FACEIT_ID)
+    raw_id = sink.store(endpoint="match", params={}, http_status=200, payload={"result": [row]}, body_text=None,
+                        fetched_at=when, source="liquipedia")
+    with conn.cursor() as cur:
+        cur.execute(
+            """INSERT INTO liquipedia_coverage (endpoint, field, value, page_url, rows_seen, raw_ids)
+               VALUES ('match', 'pagename', %s, %s, 1, %s)""",
+            (DB_PAGE, f"https://liquipedia.net/overwatch/{DB_PAGE}", [raw_id]))
+    conn.commit()
+    return conn, raw_conn
+
+
+def write_map_file(path, championship_id: str = DB_CHAMPIONSHIP, page: str = DB_PAGE, name: str = "OWCS 2026 NA Stage 2"):
+    path.write_text(_json.dumps({"pages": {championship_id: {"page": page, "name": name}}}), encoding="utf-8")
+    return path

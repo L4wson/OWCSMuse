@@ -43,6 +43,12 @@ class Alias:
 class AliasDecisions:
     """Reviewed alias -> entity mappings. Same shape as OrgDecisions / scope Decisions."""
 
+    # the note written at the top of the decisions file; a subclass with its own file says what that file is
+    FILE_NOTE = ("Reviewed community shorthand ('SSG' -> SpaceStation Gaming) that FACEIT's own name history "
+                 "does not cover. Keys are the folded alias. An alias absent from this file resolves however "
+                 "the fuzzy matcher in resolve.py already would - there is no fallback guess table. "
+                 "Edit by hand or with `python -m owcsmuse alias set`.")
+
     def __init__(self, path: str | Path = DEFAULT_ALIAS_DECISIONS_PATH) -> None:
         self.path = Path(path)
         self.data: dict[str, dict[str, Any]] = {}
@@ -70,10 +76,7 @@ class AliasDecisions:
     def save(self) -> Path:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         doc = {
-            "note": ("Reviewed community shorthand ('SSG' -> SpaceStation Gaming) that FACEIT's own name history "
-                     "does not cover. Keys are the folded alias. An alias absent from this file resolves however "
-                     "the fuzzy matcher in resolve.py already would - there is no fallback guess table. "
-                     "Edit by hand or with `python -m owcsmuse alias set`."),
+            "note": self.FILE_NOTE,
             "aliases": dict(sorted(self.data.items())),
         }
         self.path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

@@ -31,6 +31,10 @@ PAGE_FIELD = "pagename"
 # record's shape, few enough to be small.
 VERIFY_PARAMS = {"conditions": "[[date::>2026-06-13]] AND [[date::<2026-06-14]]", "limit": 5, "order": "date ASC"}
 
+# One request that asks for far more rows than any cap could allow, of a single small field, over every match the wiki has:
+# whatever comes back is either the cap or (if fewer) proof that the wiki has fewer than that.
+LIMIT_PROBE_PARAMS = {"conditions": "[[date::>2000-01-01]]", "query": "match2id", "limit": 5000, "order": "date ASC"}
+
 FACEIT_ID = re.compile(r"1-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
 
 

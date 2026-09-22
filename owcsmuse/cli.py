@@ -265,6 +265,18 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
                     "blocked_by_429_until": blocked.isoformat(timespec="seconds") if blocked else None,
                     "responses_held": held["n"], "values_covered": covered})
             return 0
+        if args.lp_cmd in ("reconcile", "teams", "links"):
+            return _cmd_liquipedia_reconcile(args, conn)
+        if args.lp_cmd == "probe-limit":
+            # ONE request: ask for 5000 rows of one small field and see how many come back.
+            from .liquipedia.stage1 import LIMIT_PROBE_PARAMS
+            got = client.get(MATCH_ENDPOINT, dict(LIMIT_PROBE_PARAMS))
+            n = len(got.rows)
+            _print({"from_cache": got.from_cache, "requested_limit": LIMIT_PROBE_PARAMS["limit"], "rows_returned": n,
+                    "reading": ("the API honoured the whole request: the cap is at least %d" % n)
+                    if n < LIMIT_PROBE_PARAMS["limit"] and n not in (100, 200, 250, 500, 1000, 2000)
+                    else "returned exactly a round number below the request: that number is the cap", "first_row": got.rows[:1]})
+            return 0
         if args.lp_cmd == "verify":
             # One request, to confirm the key works and to see the shape of a match record. Then stop.
             got = client.get(MATCH_ENDPOINT, dict(VERIFY_PARAMS))
@@ -297,6 +309,50 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
     finally:
         conn.close()
         raw_conn.close()
+
+
+def _cmd_liquipedia_reconcile(args: argparse.Namespace, conn) -> int:
+    """reconcile / teams / links: everything that works on what is already stored. Sends nothing, ever."""
+    from .liquipedia import pipeline, report, teams as lp_teams
+
+    if args.lp_cmd == "links":
+        d = pipeline.LinkDecisions(args.decisions)
+        rec = d.set(args.objectname, None if args.none else args.faceit_id, args.note)
+        _print({"decisions_file": str(d.save()), "objectname": args.objectname, "decision": rec})
+        return 0
+    tmap = lp_teams.TeamMap(args.team_map)
+    if args.lp_cmd == "teams" and args.teams_cmd in ("decide", "accept", "status"):
+        if args.teams_cmd == "decide":
+            etype, eid = ("org", args.org) if args.org else ("team", args.team)
+            rec = tmap.decide(args.name, etype, eid, args.note, args.region)
+            _print({"decisions_file": str(tmap.save()), "name": args.name, "decision": rec})
+            return 0
+        run = pipeline.run_reconciliation(conn, team_map_path=args.team_map, use_proposals=True)
+        if args.teams_cmd == "accept":
+            n = 0
+            for p in run.proposals:
+                if p.strength == "strong" and not p.decided and p.org_key:
+                    etype, eid = lp_teams.entity_of_org_key(p.org_key)
+                    tmap.decide(p.lp_name, etype, eid, "accepted strong proposal: " + "; ".join(p.evidence), p.region)
+                    n += 1
+            _print({"decisions_file": str(tmap.save()), "accepted": n,
+                    "still_need_review": [p.lp_name for p in run.proposals if p.strength != "strong" and not p.decided]})
+            return 0
+        _print({"names": len(run.proposals), "decided": sum(p.decided for p in run.proposals),
+                "strong_proposals": sum(p.strength == "strong" and not p.decided for p in run.proposals),
+                "need_review": [p.lp_name for p in run.proposals if p.strength != "strong" and not p.decided]})
+        return 0
+    run = pipeline.run_reconciliation(conn, team_map_path=args.team_map, decisions_path=args.decisions,
+                                      use_proposals=not args.decided_only)
+    n_pairs = sum(1 for lk in run.result.links if lk.tier == "exact")
+    Path(args.team_report).write_text(lp_teams.render_report(run.proposals, n_pairs) + "\n", encoding="utf-8")
+    out = {"team_report": args.team_report}
+    if args.lp_cmd == "reconcile":
+        out |= pipeline.store_run(conn, run)
+        Path(args.report).write_text(report.render(run) + "\n", encoding="utf-8")
+        out |= {"report": args.report, "summary": pipeline.summary(run)}
+    _print(out)
+    return 0
 
 
 def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
@@ -591,6 +647,39 @@ def build_parser() -> argparse.ArgumentParser:
     lqs = lq.add_subparsers(dest="lp_cmd", required=True)
     lqs.add_parser("status", help="budget used this hour, last 429, what is held; sends nothing")
     lqs.add_parser("verify", help="ONE request: confirm the key works and show the shape of a match record")
+    lqs.add_parser("probe-limit", help="ONE request: find the API's real rows-per-request cap")
+    rc = lqs.add_parser("reconcile", help="tie stored Liquipedia matches to FACEIT matches, in tiers, and write the report "
+                                          "(sends nothing)")
+    rc.add_argument("--decided-only", action="store_true", help="do not use unreviewed team-name proposals at all")
+    rc.add_argument("--report", default="scope/liquipedia_reconciliation.md")
+    rc.add_argument("--team-report", default="scope/liquipedia_team_report.md")
+    rc.add_argument("--team-map", default="scope/liquipedia_team_map.json")
+    rc.add_argument("--decisions", default="scope/liquipedia_link_decisions.json")
+    tm = lqs.add_parser("teams", help="Liquipedia team name -> FACEIT org: propose, decide, accept (sends nothing)")
+    tm.add_argument("--team-map", default="scope/liquipedia_team_map.json")
+    tm.add_argument("--team-report", default="scope/liquipedia_team_report.md")
+    tm.add_argument("--decisions", default="scope/liquipedia_link_decisions.json")
+    tm.add_argument("--decided-only", action="store_true")
+    tms = tm.add_subparsers(dest="teams_cmd", required=True)
+    tms.add_parser("propose", help="write the proposal report with evidence")
+    tms.add_parser("status", help="how many are decided, proposed strong, or need review")
+    tms.add_parser("accept", help="decide every strong proposal in bulk")
+    td = tms.add_parser("decide", help="decide one name")
+    td.add_argument("name")
+    g = td.add_mutually_exclusive_group(required=True)
+    g.add_argument("--org", help="the org slug")
+    g.add_argument("--team", help="an unmapped FACEIT team id")
+    td.add_argument("--region", choices=["na", "emea"], help="only for pages of this region (the same name is two teams)")
+    td.add_argument("--note")
+    lk = lqs.add_parser("links", help="decide an ambiguous match (sends nothing)")
+    lks = lk.add_subparsers(dest="links_cmd", required=True)
+    ld = lks.add_parser("decide")
+    ld.add_argument("objectname")
+    g2 = ld.add_mutually_exclusive_group(required=True)
+    g2.add_argument("--faceit-id")
+    g2.add_argument("--none", action="store_true", help="there is no FACEIT counterpart")
+    ld.add_argument("--note")
+    ld.add_argument("--decisions", default="scope/liquipedia_link_decisions.json")
     for name, helptext in (("plan", "the Stage 1 cross-check plan and its projected request count; sends nothing"),
                            ("run", "show the plan, then (only with --execute) carry it out")):
         sp = lqs.add_parser(name, help=helptext)
