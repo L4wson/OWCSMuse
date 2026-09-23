@@ -187,18 +187,18 @@
       "losses": 0,
       "map_wins": 12,
       "map_losses": 4,
-      "maps": 11
+      "maps": 16
      }
     ]
    },
-   "derivation": "Series where Twisted Minds is a faction and the opponent is a real team: 4 (the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted as a 5th). map_wins/losses are series scores; 'maps' counts rounds that have stats, 11; 1 of the series has no stats payload.",
+   "derivation": "Series where Twisted Minds is a faction and the opponent is a real team: 4 (the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted as a 5th). map_wins/losses are series scores; 'maps' counts rounds that have stats, 16 (of which 5 are 1-a823bbde's, Stage 2 map results from Liquipedia rather than a FACEIT stats payload); 1 of the series still has no FACEIT stats payload of its own.",
    "status": "confirmed"
   },
   {
    "id": "G09",
-   "title": "Twisted Minds 2026, with a series that has no map stats",
+   "title": "Twisted Minds 2026, one series enriched from Liquipedia instead of FACEIT",
    "kind": "exact",
-   "regression": "result-only series counted at series grain only",
+   "regression": "result-only series counted at series grain only; then, after Stage 2, its Liquipedia maps must count at map grain and the limitation must drop once nothing in the slice is missing them",
    "question": "Twisted Minds record in 2026",
    "expect": {
     "status": "ok",
@@ -210,15 +210,14 @@
       "losses": 0,
       "map_wins": 6,
       "map_losses": 2,
-      "maps": 3
+      "maps": 8
      }
     ],
     "limitations": [
-     "offline_map_stats",
      "main_series_2025_2026"
     ]
    },
-   "derivation": "2 series in 2026, one of them (1) with no stats payload: it counts at series grain (wins and map_wins/losses from the series score) and contributes no rows to 'maps'. The answer must say so via the offline_map_stats limitation.",
+   "derivation": "2 series in 2026, one of them (1) with no FACEIT stats payload: it still counts at series grain (wins and map_wins/losses from the series score), but as of Stage 2 it also contributes its 5 maps to 'maps' - from Liquipedia's match2games (1-a823bbde), not from a FACEIT stats payload. offline_map_stats no longer applies to this slice, because nothing in it is left without map results.",
    "status": "confirmed"
   },
   {
@@ -481,7 +480,7 @@
         "losses": 3,
         "map_wins": 5,
         "map_losses": 10,
-        "maps": 10
+        "maps": 15
        }
       ],
       "evidence": {
@@ -492,7 +491,7 @@
      }
     }
    },
-   "derivation": "The EMEA candidate: 3 series (0-3), one with no stats payload.",
+   "derivation": "The EMEA candidate: 3 series (0-3), one of them (1-a823bbde) with no FACEIT stats payload but, as of Stage 2, 5 maps from Liquipedia.",
    "status": "confirmed"
   },
   {
@@ -679,6 +678,48 @@
    "status": "confirmed"
   },
   {
+   "id": "G27",
+   "title": "Twisted Minds vs Geekay Esports (EMEA), map grain, after Stage 2 enrichment",
+   "kind": "exact",
+   "regression": "Stage 2: a result_only series' Liquipedia maps must appear at map grain once enriched",
+   "question": "Twisted Minds map record against 46f8e560-76fe-4b5f-85e7-397957e0dc74",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 8,
+      "map_wins": 6,
+      "map_losses": 2,
+      "matches": 2
+     }
+    ]
+   },
+   "derivation": "Two series between these team ids: 1-a106c5a1 (3 real FACEIT maps, all Twisted Minds) and 1-a823bbde (result_only on FACEIT, 5 maps from Liquipedia's own match2games: Geekay win Oasis and Circuit Royal, Twisted Minds win King's Row, Runasapi and Suravasa). Combined: 8 maps, 6-2 to Twisted Minds, over 2 series. Before Stage 2 this was 3-0 over 1 series' worth of maps (the second series contributed nothing to map grain).",
+   "status": "proposed"
+  },
+  {
+   "id": "G28",
+   "title": "A player on the enriched match still has no player stats from it",
+   "kind": "invariant",
+   "regression": "Stage 2: a Liquipedia-sourced map must never produce a player row",
+   "question": "SimpleOW record",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 3,
+      "map_wins": 3,
+      "map_losses": 0
+     }
+    ],
+    "evidence": {
+     "total_rows": 3
+    }
+   },
+   "derivation": "SimpleOW played on Geekay Esports (EMEA) in both 1-a106c5a1 (3 real FACEIT maps) and 1-a823bbde (the enriched result_only series, 5 of its maps now visible at team grain via G27). FACEIT's own stats payload for the enriched series carries no players at all - Liquipedia never has player stats to add - so his independently-derived record is exactly the 3 maps of 1-a106c5a1: Stage 2 must not have created a match_players row for the enriched match.",
+   "status": "proposed"
+  },
+  {
    "id": "G25",
    "title": "Twisted Minds in 2025: only a bye, so no data",
    "kind": "invariant",
@@ -701,7 +742,7 @@
        "losses": 0,
        "map_wins": 12,
        "map_losses": 4,
-       "maps": 11
+       "maps": 16
       }
      ]
     }

@@ -886,6 +886,7 @@ and exits 1 with the specific discrepancy:
 | `aggregate_sums` | the aggregates' sums equal the facts' sums, per stat, per season, in both the wide and long formats |
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
+| `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
 ```bash
 python -m owcsmuse check
@@ -909,7 +910,7 @@ starts:
 |---|---|---|
 | 0 | client, request planner, cache, attribution | done; auth confirmed and the match record's shape seen (see below) |
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
-| 2 | enrich the 76 result-only series with map-level results, source recorded per field | not started |
+| 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
 | 3 | source-agnostic match model and cross-source identity | not started |
 | 4 | LAN and international events | not started |
 | 5 | Korea and China, results only | not started |
@@ -970,6 +971,38 @@ is about 6 KB of JSON, with structured fields already decoded (not JSON-in-a-str
   (`team1ban1`, `team2ban1`, `banstart`): map-level results without player stats, as Stage 2 needs.
 - **Not yet seen:** where the FACEIT match id sits. The five sample rows were Korea and China, which are not on FACEIT;
   the first NA/EMEA rows in the Stage 1 fetch will show it (candidates: `links`, `extradata`).
+
+### Stage 2: map-level enrichment of result_only series
+
+`python -m owcsmuse liquipedia enrich [--plan]` reads what Stage 1 already linked (`liquipedia_links`, tier
+`exact`) and, for every one whose FACEIT series is `result_only`, inserts `match_rounds` rows from Liquipedia's
+`match2games` - map, mode, per-map score, winner. `--plan` classifies without writing and reports whether a gap
+would need a new request (none does here: everything is already in `raw_payloads` from Stage 1). Currently 33 of
+the 76 result_only series in scope are exact-linked and enriched this way (122 maps); the other 43 sit on a page
+Liquipedia does not cover, or Liquipedia has no matching record.
+
+Source is recorded per field, never merged silently:
+
+- `match_rounds.source` (`faceit` | `liquipedia`). A Liquipedia round is only ever inserted where FACEIT has none,
+  so there is never a same-round conflict to arbitrate - FACEIT wins for map stats by construction, since its
+  presence is exactly what skips a match here.
+- `matches.date_source` (`faceit` | `liquipedia`) and `matches.liquipedia_played_at`. On a `result_only` series
+  FACEIT's own timestamp is when the result was entered, not when it was played - Stage 1's alignment numbers put
+  some of these 70+ hours off - so Liquipedia's scheduled time wins there, read through `fact_team_maps` /
+  `fact_team_matches`'s `coalesce(liquipedia_played_at, match_time(...))`, without touching FACEIT's own
+  `started_at` / `finished_at` / `configured_at` columns.
+- Push-mode maps are normalised to the same win/loss indicator (1/0) FACEIT's own `round_stats` already uses for
+  that mode (it never carries the push distance), rather than storing Liquipedia's literal distance score
+  alongside FACEIT's indicator scores in the same integer column.
+
+Never touched: `match_players`, and therefore `fact_player_maps` and every player aggregate - Liquipedia carries
+no player stats, so none is invented. `python -m owcsmuse check` asserts this directly
+(`liquipedia_map_isolation`): no `match_players` row may join to a `source = 'liquipedia'` round.
+
+**Attribution.** `Answer.attribution` (CLI and API, see above) is populated from the FACEIT match ids an answer's
+evidence rows actually name: a match only carries a page when a Liquipedia-sourced value (a map or a date
+correction) contributed to it. An answer built entirely from FACEIT's own data carries `attribution: null`, exactly
+as before Stage 2.
 
 ### Open items for later stages
 

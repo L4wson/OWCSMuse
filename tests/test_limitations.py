@@ -90,6 +90,10 @@ def test_a_result_only_series_raises_the_offline_limitation(agg_db):
             cur.execute("SELECT match_id FROM matches WHERE ingest_state = 'complete' LIMIT 1")
             match_id = cur.fetchone()["match_id"]
             cur.execute("UPDATE matches SET ingest_state = 'result_only' WHERE match_id = %s", (match_id,))
+            # a real result_only match has no match_rounds at all; Stage 2 only fills them in from Liquipedia,
+            # so a genuinely-missing one (this simulated one included) must still have none here
+            cur.execute("DELETE FROM match_players WHERE match_id = %s", (match_id,))
+            cur.execute("DELETE FROM match_rounds WHERE match_id = %s", (match_id,))
         out = applicable(agg_db, "leaderboard", "Eliminations")
         offline = [r for r in out if r["id"] == "offline_map_stats"]
         assert offline, ids(out)

@@ -21,6 +21,8 @@ from datetime import datetime
 from typing import Any, Generic, Iterable, Optional, TypeVar
 from urllib.parse import quote
 
+import psycopg
+
 SITE = "https://liquipedia.net"
 LICENSE = "CC-BY-SA 3.0"
 LICENSE_URL = "https://creativecommons.org/licenses/by-sa/3.0/"
@@ -70,6 +72,35 @@ def attribution_block(urls: Iterable[str]) -> Optional[dict[str, Any]]:
     if not pages:
         return None
     return {"source": CREDIT, "license": LICENSE, "license_url": LICENSE_URL, "pages": pages}
+
+
+def answer_attribution(conn: psycopg.Connection, match_ids: Iterable[str]) -> Optional[dict[str, Any]]:
+    """The attribution block for an answer, from the FACEIT match ids its rows actually named.
+
+    A match only carries a page here when a value it contributed was Liquipedia's: a Stage 2 map (`match_rounds.
+    source = 'liquipedia'`) or a Stage 2 date correction (`matches.date_source = 'liquipedia'`). A match FACEIT
+    covers completely names no page, exactly like an answer that used no Liquipedia value at all.
+    """
+    ids = [m for m in dict.fromkeys(match_ids) if m]
+    if not ids:
+        return None
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT DISTINCT lm.page_url
+              FROM liquipedia_links ll
+              JOIN liquipedia_matches lm ON lm.objectname = ll.lp_objectname
+             WHERE ll.faceit_match_id = ANY(%s)
+               AND (
+                    EXISTS (SELECT 1 FROM match_rounds r WHERE r.match_id = ll.faceit_match_id AND r.source = 'liquipedia')
+                 OR EXISTS (SELECT 1 FROM matches m WHERE m.match_id = ll.faceit_match_id AND m.date_source = 'liquipedia')
+               )
+            """,
+            (ids,),
+        )
+        urls = [r["page_url"] for r in cur.fetchall()]
+    conn.commit()
+    return attribution_block(urls)
 
 
 def render_lines(block: Optional[dict[str, Any]]) -> list[str]:

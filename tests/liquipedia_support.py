@@ -120,8 +120,12 @@ EMEA_PAGE = "Overwatch_Champions_Series/2026/EMEA/Stage_2/Regular_Season"
 
 
 def lp_row(team1, team2, s1, s2, when=T0, *, page=NA_PAGE, faceit_id=None, bo=5, idx=1, bracket="B1", finished=True,
-           status="S", winner=None, n_games=None, opp_type="team"):
-    """A Liquipedia match record in the shape the API returns (only the fields the parser reads)."""
+           status="S", winner=None, n_games=None, opp_type="team", games=None):
+    """A Liquipedia match record in the shape the API returns (only the fields the parser reads).
+
+    `games`, when given, replaces the auto-generated match2games list outright: a list of
+    {"map", "mode", "winner", "scores"} dicts, exactly the sub-keys parse_row reads.
+    """
     w = winner if winner is not None else (1 if (s1 or 0) > (s2 or 0) else 2 if (s2 or 0) > (s1 or 0) else 0)
     n = n_games if n_games is not None else (s1 or 0) + (s2 or 0)
     return {"objectname": f"1_{bracket}_{idx:04d}", "match2id": f"{bracket}_{idx:04d}", "match2bracketid": bracket,
@@ -131,7 +135,8 @@ def lp_row(team1, team2, s1, s2, when=T0, *, page=NA_PAGE, faceit_id=None, bo=5,
             "links": {"faceit": f"https://www.faceit.com/en/ow2/room/{faceit_id}"} if faceit_id else [],
             "match2opponents": [{"name": team1, "score": s1, "status": status, "type": opp_type},
                                 {"name": team2, "score": s2, "status": status, "type": opp_type}],
-            "match2games": [{"map": f"Map{i}", "mode": "Control", "winner": "1", "scores": [1, 0]} for i in range(n)]}
+            "match2games": games if games is not None else
+                          [{"map": f"Map{i}", "mode": "Control", "winner": "1", "scores": [1, 0]} for i in range(n)]}
 
 
 def lp(team1, team2, s1, s2, when=T0, raw_id=1, **kw):
@@ -222,3 +227,52 @@ def build_liquipedia_scratch_db(db_url: str, schema: str):
 def write_map_file(path, championship_id: str = DB_CHAMPIONSHIP, page: str = DB_PAGE, name: str = "OWCS 2026 NA Stage 2"):
     path.write_text(_json.dumps({"pages": {championship_id: {"page": page, "name": name}}}), encoding="utf-8")
     return path
+
+
+DB_FACEIT_ID_RO = "1-22222222-2222-2222-2222-222222222222"
+GAMES_RO = [
+    {"map": "Lijiang Tower", "mode": "Control", "winner": "1", "scores": [2, 1]},
+    {"map": "Colosseo", "mode": "Push", "winner": "2", "scores": [64.2, 88.9]},   # FACEIT scores push as a 1/0 indicator
+    {"map": "Dorado", "mode": "Escort", "winner": "1", "scores": [3, 1]},
+]
+
+
+def build_result_only_scratch_db(db_url: str, schema: str):
+    """Like build_liquipedia_scratch_db, but the FACEIT match is `result_only` with zero match_rounds: exactly
+    what owcsmuse.liquipedia.enrich is for. Liquipedia's games include a Push map, to exercise the score
+    normalisation (FACEIT's own round_stats never carries the push distance, only a 1/0 win indicator)."""
+    assert schema != "public"
+    admin = connect(db_url, autocommit=True, schema=schema)
+    admin.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
+    admin.close()
+    conn = connect(db_url, schema=schema)
+    raw_conn = connect(db_url, autocommit=True, schema=schema)
+    migrate(conn, MIGRATIONS, schema)
+    when = T0 + timedelta(minutes=45)
+    with conn.cursor() as cur:
+        cur.execute("INSERT INTO organizers (organizer_id, name) VALUES ('org-lp2', 'OWCS')")
+        cur.execute(
+            """INSERT INTO championships (championship_id, organizer_id, name, include, scope_region, tier, season, classification_source)
+               VALUES (%s, 'org-lp2', 'OWCS 2026 NA Stage 2', true, 'na', 'main', 2026, 'manual')""",
+            (DB_CHAMPIONSHIP,))
+        cur.execute("INSERT INTO teams (team_id, name) VALUES (%s, 'Dallas Fuel'), (%s, 'Team Liquid')",
+                    (DB_TEAM1, DB_TEAM2))
+        cur.execute(
+            """INSERT INTO matches (match_id, championship_id, best_of, status, configured_at, faction1_team_id,
+                                     faction2_team_id, faction1_name, faction2_name, faction1_score, faction2_score,
+                                     winner_faction, ingest_state)
+               VALUES (%s, %s, 5, 'FINISHED', %s, %s, %s, 'Dallas Fuel', 'Team Liquid', 2, 1, 'faction1', 'result_only')""",
+            (DB_FACEIT_ID_RO, DB_CHAMPIONSHIP, when + timedelta(hours=90), DB_TEAM1, DB_TEAM2))
+    conn.commit()
+    sink = RawPayloadStore(raw_conn)
+    row = lp_row("Dallas Fuel", "Team Liquid", 2, 1, when=T0, page=DB_PAGE, faceit_id=DB_FACEIT_ID_RO, bo=5,
+                games=GAMES_RO)
+    raw_id = sink.store(endpoint="match", params={}, http_status=200, payload={"result": [row]}, body_text=None,
+                        fetched_at=when, source="liquipedia")
+    with conn.cursor() as cur:
+        cur.execute(
+            """INSERT INTO liquipedia_coverage (endpoint, field, value, page_url, rows_seen, raw_ids)
+               VALUES ('match', 'pagename', %s, %s, 1, %s)""",
+            (DB_PAGE, f"https://liquipedia.net/overwatch/{DB_PAGE}", [raw_id]))
+    conn.commit()
+    return conn, raw_conn

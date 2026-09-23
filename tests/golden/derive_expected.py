@@ -112,8 +112,18 @@ case("G07", "Quartz03's average damage per map", "exact", "average damage per ma
 
 # ----------------------------------------------------------------- team records
 tm = [team_id("Twisted Minds")]
-tm_all = I.team_record(S, tm)
-tm26 = I.team_record(S, tm, season=2026)
+gk_na, gk_em = team_id("Geekay Esports", "na"), team_id("Geekay Esports", "emea")
+
+# Stage 2: 1-a823bbde (Twisted Minds vs Geekay EMEA) is result_only on FACEIT but Liquipedia has its 5 maps
+# (tests/golden/liquipedia_matches.json), reconstructed independently, never from owcsmuse's enrich.py. Every
+# team_record() call touching either side of that match needs it, or its 'maps' total silently drops behind
+# what the actual system now reports.
+A823 = "1-a823bbde-de66-4928-8527-54f4e8882293"
+LP_OVERRIDES = {A823: I.liquipedia_rounds(A823, tm[0], gk_em)}
+assert [m["map"] for m in LP_OVERRIDES[A823]] == ["Oasis", "King's Row", "Runasapi", "Circuit Royal", "Suravasa"]
+
+tm_all = I.team_record(S, tm, liquipedia_overrides=LP_OVERRIDES)
+tm26 = I.team_record(S, tm, season=2026, liquipedia_overrides=LP_OVERRIDES)
 ssg_id = team_id("SpaceStation Gaming")
 ssg = I.team_record(S, [ssg_id])
 assert ssg["regions"] == ["na"]
@@ -129,15 +139,20 @@ case("G08", "Twisted Minds' record, all seasons, byes excluded", "exact", "Twist
       "rows": [team_row(tm_all, "Twisted Minds")]},
      f"Series where Twisted Minds is a faction and the opponent is a real team: {tm_all['matches']} "
      f"(the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted as a 5th). "
-     f"map_wins/losses are series scores; 'maps' counts rounds that have stats, {tm_all['maps']}; "
-     f"{tm_all['result_only_series']} of the series has no stats payload.",
+     f"map_wins/losses are series scores; 'maps' counts rounds that have stats, {tm_all['maps']} (of which 5 are "
+     f"{A823[:10]}'s, Stage 2 map results from Liquipedia rather than a FACEIT stats payload); "
+     f"{tm_all['result_only_series']} of the series still has no FACEIT stats payload of its own.",
      regression="bye: a bracket bye counted as a 1-0 win")
 
-case("G09", "Twisted Minds 2026, with a series that has no map stats", "exact", "Twisted Minds record in 2026",
-     {"status": "ok", "rows": [team_row(tm26, "Twisted Minds")], "limitations": ["offline_map_stats", "main_series_2025_2026"]},
-     f"{tm26['matches']} series in 2026, one of them ({tm26['result_only_series']}) with no stats payload: it counts at series "
-     "grain (wins and map_wins/losses from the series score) and contributes no rows to 'maps'. The answer must say so via "
-     "the offline_map_stats limitation.", regression="result-only series counted at series grain only")
+case("G09", "Twisted Minds 2026, one series enriched from Liquipedia instead of FACEIT", "exact",
+     "Twisted Minds record in 2026",
+     {"status": "ok", "rows": [team_row(tm26, "Twisted Minds")], "limitations": ["main_series_2025_2026"]},
+     f"{tm26['matches']} series in 2026, one of them ({tm26['result_only_series']}) with no FACEIT stats payload: it "
+     f"still counts at series grain (wins and map_wins/losses from the series score), but as of Stage 2 it also "
+     f"contributes its 5 maps to 'maps' - from Liquipedia's match2games ({A823[:10]}), not from a FACEIT stats "
+     "payload. offline_map_stats no longer applies to this slice, because nothing in it is left without map results.",
+     regression="result-only series counted at series grain only; then, after Stage 2, its Liquipedia maps must "
+                "count at map grain and the limitation must drop once nothing in the slice is missing them")
 
 case("G10", "SpaceStation Gaming's record (NA only)", "exact", "SpaceStation Gaming record",
      {"status": "ok", "entity": {"role": "subject", "type": "team", "id": ssg_id, "name": "SpaceStation Gaming"},
@@ -198,8 +213,8 @@ case("G15", "'TL' resolves to Team Liquid", "exact", "TL record",
      f"Team Liquid: {tl['matches']} series.", regression="alias")
 
 # ----------------------------------------------------------------- clarify
-gk_na, gk_em = team_id("Geekay Esports", "na"), team_id("Geekay Esports", "emea")
-r_na, r_em = I.team_record(S, [gk_na]), I.team_record(S, [gk_em])
+r_na = I.team_record(S, [gk_na])
+r_em = I.team_record(S, [gk_em], liquipedia_overrides=LP_OVERRIDES)
 case("G16", "Two teams named Geekay Esports ask, never guess", "invariant", "Geekay Esports record",
      {"status": "clarify", "code": "ambiguous_entity", "candidate_ids": sorted([gk_na, gk_em])},
      "Two unrelated teams share the name (NA and EMEA, 0% roster overlap, merge rejected in scope/org_decisions.json). "
@@ -215,8 +230,9 @@ case("G18", "Clarify candidate (EMEA Geekay) answered verbatim", "exact", "Geeka
      {"status": "clarify", "answer_candidate": {"id": gk_em, "expect": {
          "status": "ok", "entity": {"role": "subject", "id": gk_em},
          "rows": [team_row(r_em, "Geekay Esports")], "evidence": {"regions_only": ["emea"]}}}},
-     f"The EMEA candidate: {r_em['matches']} series ({r_em['wins']}-{r_em['losses']}), one with no stats payload.",
-     regression="clarify: a candidate must be answerable verbatim")
+     f"The EMEA candidate: {r_em['matches']} series ({r_em['wins']}-{r_em['losses']}), one of them "
+     f"({A823[:10]}) with no FACEIT stats payload but, as of Stage 2, {len(LP_OVERRIDES[A823])} maps from "
+     "Liquipedia.", regression="clarify: a candidate must be answerable verbatim")
 
 # ----------------------------------------------------------------- leaderboards
 top_elim, n_elim = I.leaderboard(S, "Eliminations", season=2026, top=3)
@@ -283,6 +299,34 @@ case("G24", "A refusal that offers a question that works", "invariant", "who had
      f"Final Blows appears in the golden stats only for seasons {fb_seasons}, not 2024, so 2024 cannot be answered. The "
      "refusal must offer the same question in a season that has the stat, and that question must answer with the "
      "top player derived independently for that season.", regression="a refusal with advice but no working alternative")
+
+# ------------------------------------------------------- Stage 2: Liquipedia map enrichment
+# LP_OVERRIDES[A823] (defined above, with tm_all/tm26/r_em) is the same independently-reconstructed 5 maps -
+# never from owcsmuse's own enrich.py.
+tm_gk_h2h = I.team_h2h_maps(S, tm, [gk_em], liquipedia_overrides=LP_OVERRIDES)
+case("G27", "Twisted Minds vs Geekay Esports (EMEA), map grain, after Stage 2 enrichment", "exact",
+     f"Twisted Minds map record against {gk_em}",
+     {"status": "ok", "rows": [{"maps": tm_gk_h2h["maps"], "map_wins": tm_gk_h2h["map_wins"],
+                                "map_losses": tm_gk_h2h["map_losses"], "matches": tm_gk_h2h["matches"]}]},
+     f"Two series between these team ids: 1-a106c5a1 (3 real FACEIT maps, all Twisted Minds) and {A823[:10]} "
+     "(result_only on FACEIT, 5 maps from Liquipedia's own match2games: Geekay win Oasis and Circuit Royal, "
+     "Twisted Minds win King's Row, Runasapi and Suravasa). Combined: "
+     f"{tm_gk_h2h['maps']} maps, {tm_gk_h2h['map_wins']}-{tm_gk_h2h['map_losses']} to Twisted Minds, over "
+     f"{tm_gk_h2h['matches']} series. Before Stage 2 this was 3-0 over 1 series' worth of maps (the second series "
+     "contributed nothing to map grain).",
+     regression="Stage 2: a result_only series' Liquipedia maps must appear at map grain once enriched")
+
+simple_ow = I.player_record(S, I.player_id_by_nickname(S, "SimpleOW"))
+case("G28", "A player on the enriched match still has no player stats from it", "invariant", "SimpleOW record",
+     {"status": "ok", "rows": [{"maps": simple_ow["maps"], "map_wins": simple_ow["map_wins"],
+                                "map_losses": simple_ow["map_losses"]}],
+      "evidence": {"total_rows": simple_ow["maps"]}},
+     f"SimpleOW played on Geekay Esports (EMEA) in both 1-a106c5a1 (3 real FACEIT maps) and {A823[:10]} (the "
+     f"enriched result_only series, {tm_gk_h2h['maps'] - simple_ow['maps']} of its maps now visible at team grain "
+     "via G27). FACEIT's own stats payload for the enriched series carries no players at all - Liquipedia never "
+     "has player stats to add - so his independently-derived record is exactly the 3 maps of 1-a106c5a1: Stage 2 "
+     "must not have created a match_players row for the enriched match.",
+     regression="Stage 2: a Liquipedia-sourced map must never produce a player row")
 
 tm25 = I.team_record(S, tm, season=2025)
 assert tm25["matches"] == 0

@@ -151,6 +151,25 @@ def test_a_team_id_in_both_regions_fails_region_consistency(agg_db):
         agg_db.rollback()
 
 
+def test_a_player_row_on_a_liquipedia_sourced_map_fails_liquipedia_map_isolation(agg_db):
+    """Stage 2 must never invent player stats: a match_players row joined to a source='liquipedia' round is
+    exactly the silent merge the source-per-field rule exists to prevent."""
+    try:
+        assert _by_name(run_checks(agg_db, ["liquipedia_map_isolation"]))["liquipedia_map_isolation"].ok
+        with agg_db.cursor() as cur:
+            cur.execute("SELECT match_id, round_number FROM match_players LIMIT 1")
+            row = cur.fetchone()
+            assert row, "the fixtures should carry at least one player-map row"
+            cur.execute("UPDATE match_rounds SET source = 'liquipedia' WHERE match_id = %s AND round_number = %s",
+                        (row["match_id"], row["round_number"]))
+        r = _by_name(run_checks(agg_db, ["liquipedia_map_isolation"]))["liquipedia_map_isolation"]
+        assert not r.ok
+        assert any(d["match_id"] == row["match_id"] and d["round_number"] == row["round_number"]
+                  for d in r.discrepancies)
+    finally:
+        agg_db.rollback()
+
+
 def test_render_text_names_the_failing_check(agg_db):
     try:
         with agg_db.cursor() as cur:

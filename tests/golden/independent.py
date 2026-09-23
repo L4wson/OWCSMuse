@@ -22,6 +22,7 @@ import json
 from collections import defaultdict
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
+from typing import Any, Optional
 
 GOLDEN = Path(__file__).parent
 
@@ -82,6 +83,57 @@ class Series:
 
 def all_series():
     return [Series(mid, raw) for mid, raw in load().items()]
+
+
+# ------------------------------------------------------------- Liquipedia (Stage 2)
+
+def load_liquipedia_matches() -> dict:
+    """faceit_match_id -> the captured Liquipedia match2 record, straight from JSON. Empty if the fixture is absent."""
+    path = GOLDEN / "liquipedia_matches.json"
+    if not path.exists():
+        return {}
+    return {m["faceit_match_id"]: m["record"] for m in json.loads(path.read_text(encoding="utf-8"))["matches"]}
+
+
+LIQUIPEDIA = load_liquipedia_matches()
+
+
+def liquipedia_rounds(match_id: str, faceit_team_for_lp_team1: str, faceit_team_for_lp_team2: str) -> list[dict]:
+    """A result_only match's maps, reconstructed from Liquipedia's own match2games only - never from owcsmuse's
+    enrichment code, which is exactly what this is meant to check independently. The caller supplies which FACEIT
+    team id is Liquipedia's team1/team2 (read off the captured FACEIT payload's own faction names), rather than
+    this module re-deriving that orientation itself."""
+    out = []
+    for g in LIQUIPEDIA[match_id]["match2games"]:
+        w = g.get("winner")
+        winner = faceit_team_for_lp_team1 if w == "1" else faceit_team_for_lp_team2 if w == "2" else None
+        out.append({"map": g.get("map"), "winner": winner})
+    return out
+
+
+def team_h2h_maps(series_list, team_ids, opponent_ids, liquipedia_overrides: Optional[dict] = None) -> dict[str, Any]:
+    """Map-grain head-to-head between two identities: every map of every qualifying series, from FACEIT's own
+    rounds when it has them, else from `liquipedia_overrides[match_id]` (see liquipedia_rounds) when given - never
+    both for the same match, matching the "FACEIT wins for map stats" rule by construction."""
+    liquipedia_overrides = liquipedia_overrides or {}
+    ids, opp = set(team_ids), set(opponent_ids)
+    matches: set = set()
+    maps: list[dict] = []
+    for s in series_list:
+        if not s.counts_as_series:
+            continue
+        for k, o in (("faction1", "faction2"), ("faction2", "faction1")):
+            if s.team[k] not in ids or s.team[o] not in opp:
+                continue
+            matches.add(s.match_id)
+            if s.rounds:
+                for r in s.rounds:
+                    maps.append({"won": r["winner"] == s.team[k], "drawn": not r["winner"]})
+            elif s.match_id in liquipedia_overrides:
+                for r in liquipedia_overrides[s.match_id]:
+                    maps.append({"won": r["winner"] == s.team[k], "drawn": r["winner"] is None})
+    return {"matches": len(matches), "maps": len(maps), "map_wins": sum(x["won"] for x in maps),
+            "map_losses": sum((not x["won"]) and (not x["drawn"]) for x in maps)}
 
 
 def num(stats, key):
@@ -181,12 +233,18 @@ def stat_seasons(series_list, key):
 
 # ----------------------------------------------------------------------- teams
 
-def team_record(series_list, team_ids, season=None, opponent_ids=None, exclude_names=()):
+def team_record(series_list, team_ids, season=None, opponent_ids=None, exclude_names=(), liquipedia_overrides=None):
     """Series record for one identity (one or more team ids: an org), at series grain.
 
     `exclude_names` drops series in which the identity's faction carried one of those names in the payload: the
     way to say "not the Ex Oblivione era of this team id" without any date logic to get wrong.
+
+    `liquipedia_overrides` (see liquipedia_rounds): a result_only series (`not s.has_maps`) still counts as
+    result_only here - FACEIT truly has no stats for it - but Stage 2 gives `maps` a per-map count for it anyway,
+    from Liquipedia's own game-by-game results, since that is what the actual system's `matches.maps_played` now
+    reflects too.
     """
+    liquipedia_overrides = liquipedia_overrides or {}
     ids = set(team_ids)
     opp = set(opponent_ids) if opponent_ids else None
     rows = []
@@ -196,10 +254,16 @@ def team_record(series_list, team_ids, season=None, opponent_ids=None, exclude_n
         for k, o in (("faction1", "faction2"), ("faction2", "faction1")):
             if s.team[k] in ids and s.name[k] not in exclude_names and (opp is None or s.team[o] in opp):
                 rows.append((s, k, o))
+
+    def n_maps(s):
+        if s.rounds:
+            return len(s.rounds)
+        return len(liquipedia_overrides.get(s.match_id, ()))
+
     return {"matches": len(rows), "wins": sum(s.winner_faction == k for s, k, _ in rows),
             "losses": sum(s.winner_faction == o for s, _, o in rows),
             "map_wins": sum(s.score[k] for s, k, _ in rows), "map_losses": sum(s.score[o] for s, _, o in rows),
-            "maps": sum(len(s.rounds) for s, _, _ in rows),
+            "maps": sum(n_maps(s) for s, _, _ in rows),
             "result_only_series": sum(not s.has_maps for s, _, _ in rows),
             "regions": sorted({s.region for s, _, _ in rows}), "match_ids": [s.match_id for s, _, _ in rows]}
 

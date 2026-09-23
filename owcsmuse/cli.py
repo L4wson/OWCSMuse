@@ -265,7 +265,7 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
                     "blocked_by_429_until": blocked.isoformat(timespec="seconds") if blocked else None,
                     "responses_held": held["n"], "values_covered": covered})
             return 0
-        if args.lp_cmd in ("reconcile", "teams", "links"):
+        if args.lp_cmd in ("reconcile", "teams", "links", "enrich"):
             return _cmd_liquipedia_reconcile(args, conn)
         if args.lp_cmd == "probe-limit":
             # ONE request: ask for 5000 rows of one small field and see how many come back.
@@ -312,9 +312,25 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
 
 
 def _cmd_liquipedia_reconcile(args: argparse.Namespace, conn) -> int:
-    """reconcile / teams / links: everything that works on what is already stored. Sends nothing, ever."""
+    """reconcile / teams / links / enrich: everything that works on what is already stored. Sends nothing, ever."""
+    from .liquipedia import enrich as lp_enrich
     from .liquipedia import pipeline, report, teams as lp_teams
 
+    if args.lp_cmd == "enrich":
+        run = pipeline.run_reconciliation(conn, team_map_path=args.team_map, decisions_path=args.decisions,
+                                          use_proposals=True)
+        if args.plan:
+            planned = lp_enrich.plan(run)
+            by_action = planned.by_action()
+            _print({"candidates": len(planned.candidates), "by_action": {k: len(v) for k, v in by_action.items()},
+                    "gap_requiring_new_request": 0})
+            return 0
+        result = lp_enrich.enrich(conn, run, args.team_map)
+        by_action = result.by_action()
+        _print({"candidates": len(result.candidates), "by_action": {k: len(v) for k, v in by_action.items()},
+                "games_added": sum(c.games for c in result.candidates),
+                "matches_with_disagreements": [c.match_id for c in result.candidates if c.disagreements]})
+        return 0
     if args.lp_cmd == "links":
         d = pipeline.LinkDecisions(args.decisions)
         rec = d.set(args.objectname, None if args.none else args.faceit_id, args.note)
@@ -655,6 +671,11 @@ def build_parser() -> argparse.ArgumentParser:
     rc.add_argument("--team-report", default="scope/liquipedia_team_report.md")
     rc.add_argument("--team-map", default="scope/liquipedia_team_map.json")
     rc.add_argument("--decisions", default="scope/liquipedia_link_decisions.json")
+    en = lqs.add_parser("enrich", help="insert Liquipedia map results for exact-linked result_only series "
+                                       "(sends nothing)")
+    en.add_argument("--team-map", default="scope/liquipedia_team_map.json")
+    en.add_argument("--decisions", default="scope/liquipedia_link_decisions.json")
+    en.add_argument("--plan", action="store_true", help="classify only; write nothing")
     tm = lqs.add_parser("teams", help="Liquipedia team name -> FACEIT org: propose, decide, accept (sends nothing)")
     tm.add_argument("--team-map", default="scope/liquipedia_team_map.json")
     tm.add_argument("--team-report", default="scope/liquipedia_team_report.md")

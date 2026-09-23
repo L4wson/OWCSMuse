@@ -21,6 +21,8 @@ from owcsmuse.collector import Collector
 from owcsmuse.config import Settings
 from owcsmuse.db import RawPayloadStore, connect, migrate
 from owcsmuse.faceit.client import FaceitNotFound, FetchResult, ListResult
+from owcsmuse.liquipedia import enrich as lp_enrich
+from owcsmuse.liquipedia import pipeline as lp_pipeline
 from owcsmuse.orgs import OrgDecisions
 from owcsmuse.orgs import load_decisions as load_org_decisions
 
@@ -96,8 +98,35 @@ def build_golden_db(db_url: str, schema: str):
 
     load_org_decisions(conn, OrgDecisions(str(ROOT / "scope" / "org_decisions.json")))
     load_alias_decisions(conn, AliasDecisions(str(ROOT / "scope" / "alias_decisions.json")))
+    load_liquipedia_enrichment(conn, raw_conn)
     refresh(conn)
     return conn, raw_conn
+
+
+def load_liquipedia_enrichment(conn, raw_conn) -> None:
+    """Stage 2: the one captured Liquipedia record (tests/golden/liquipedia_matches.json), stored and enriched
+    exactly as production does it - offline, no request, same pipeline.run_reconciliation() + enrich.enrich()."""
+    path = GOLDEN / "liquipedia_matches.json"
+    if not path.exists():
+        return
+    records = json.loads(path.read_text(encoding="utf-8"))["matches"]
+    sink = RawPayloadStore(raw_conn)
+    now = datetime.now(timezone.utc)
+    raw_id = sink.store(endpoint="match", params={}, http_status=200,
+                        payload={"result": [r["record"] for r in records]}, body_text=None, fetched_at=now,
+                        source="liquipedia")
+    pages = json.loads((GOLDEN / "liquipedia_map.json").read_text(encoding="utf-8"))["pages"]
+    with conn.cursor() as cur:
+        for page in {e["page"] for e in pages.values()}:
+            cur.execute(
+                """INSERT INTO liquipedia_coverage (endpoint, field, value, page_url, rows_seen, raw_ids)
+                   VALUES ('match', 'pagename', %s, %s, %s, %s)""",
+                (page, f"https://liquipedia.net/overwatch/{page}", len(records), [raw_id]))
+    conn.commit()
+    run = lp_pipeline.run_reconciliation(conn, team_map_path=str(GOLDEN / "liquipedia_team_map_unused.json"),
+                                         decisions_path=str(GOLDEN / "liquipedia_link_decisions_unused.json"),
+                                         map_path=str(GOLDEN / "liquipedia_map.json"))
+    lp_enrich.enrich(conn, run, str(GOLDEN / "liquipedia_team_map_unused.json"))
 
 
 def golden_schema() -> str:

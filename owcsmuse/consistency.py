@@ -94,7 +94,7 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
           FROM match_rounds r
           JOIN matches m ON m.match_id = r.match_id
           JOIN championships c ON c.championship_id = m.championship_id
-         WHERE m.ingest_state = 'complete' AND c.include"""),
+         WHERE m.ingest_state IN ('complete', 'result_only') AND c.include"""),
     ("fact_team_matches", "two rows per finished series, one per side",
      """SELECT coalesce(sum((m.faction1_team_id IS NOT NULL)::int + (m.faction2_team_id IS NOT NULL)::int), 0)
           FROM matches m
@@ -375,6 +375,36 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} org(s) or team id(s) span na and emea", counts)
 
 
+# --------------------------------------------------- 7. Liquipedia map isolation
+
+def check_liquipedia_map_isolation(conn: psycopg.Connection) -> CheckResult:
+    """No player row was ever created from a Liquipedia-sourced map.
+
+    Stage 2 enriches `result_only` series with Liquipedia's map-level results
+    (score, winner), never player stats - there are none to have. A
+    `match_players` row joined to a `source = 'liquipedia'` round would mean
+    something wrote player stats FACEIT never provided, which is exactly the
+    kind of silent merge the source-per-field rule exists to prevent.
+    """
+    discrepancies = _rows(conn, """
+        SELECT mp.match_id, mp.round_number, count(*) AS player_rows
+          FROM match_players mp
+          JOIN match_rounds r ON (r.match_id, r.round_number) = (mp.match_id, mp.round_number)
+         WHERE r.source = 'liquipedia'
+         GROUP BY mp.match_id, mp.round_number""")
+    for d in discrepancies:
+        d["kind"] = "player_row_on_liquipedia_only_map"
+    counts = {
+        "liquipedia_sourced_maps": int(_scalar(conn, "SELECT count(*) FROM match_rounds WHERE source = 'liquipedia'") or 0),
+        "liquipedia_enriched_matches": int(_scalar(conn, """
+            SELECT count(DISTINCT match_id) FROM match_rounds WHERE source = 'liquipedia'""") or 0),
+    }
+    return _result("liquipedia_map_isolation", discrepancies,
+                   f"{counts['liquipedia_sourced_maps']} Liquipedia-sourced map(s) across "
+                   f"{counts['liquipedia_enriched_matches']} match(es) carry no player rows",
+                   f"{len(discrepancies)} Liquipedia-sourced map(s) have a player row that should not exist", counts)
+
+
 CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "fact_view_reconciliation": check_fact_view_reconciliation,
     "date_visibility": check_date_visibility,
@@ -382,6 +412,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "aggregate_sums": check_aggregate_sums,
     "stat_reachability": check_stat_reachability,
     "region_consistency": check_region_consistency,
+    "liquipedia_map_isolation": check_liquipedia_map_isolation,
 }
 
 
