@@ -1,0 +1,83 @@
+{
+  "note": "Reviewed Liquipedia team name -> FACEIT org/team. Keys are the folded Liquipedia name, or 'name|na' / 'name|emea' when the same name is two teams in two regions; entity_type is 'org' (entity_id is the org slug) or 'team' (an unmapped FACEIT team id). The reconciler trusts these and only these without marking a link provisional. Edit by hand or with `python -m owcsmuse liquipedia teams decide`.",
+  "aliases": {
+    "1234": {
+      "entity_type": "team",
+      "entity_id": "75516399-4c1d-40fc-bb46-a887edadc5a2",
+      "note": "same roster as Anyone's Legend, lost org privileges and rebranded to 1234; players/roster continuity over org branding per OWCS spot ownership rules",
+      "decided_at": "2026-09-23T05:02:12+00:00"
+    },
+    "1dipvs100gorillas": {
+      "entity_type": "team",
+      "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
+      "note": "same roster as Vanir Quick",
+      "decided_at": "2026-09-23T05:02:29+00:00"
+    },
+    "anyone s legend": {
+      "entity_type": "team",
+      "entity_id": "75516399-4c1d-40fc-bb46-a887edadc5a2",
+      "note": "same roster as 1234 before losing org privileges",
+      "decided_at": "2026-09-23T05:02:26+00:00"
+    },
+    "avidity": {
+      "entity_type": "team",
+      "entity_id": "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae",
+      "note": "same roster as Extinction, different org names; roster continuity over org branding",
+      "decided_at": "2026-09-23T05:02:31+00:00"
+    },
+    "extinction": {
+      "entity_type": "team",
+      "entity_id": "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae",
+      "note": "same roster as Avidity, different org names; majority evidence (15/20), conflicting 5 votes for The Kafe's team id are an orientation/data quirk left for Stage 2",
+      "decided_at": "2026-09-23T05:02:32+00:00"
+    },
+    "lunex gaming": {
+      "entity_type": "team",
+      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
+      "note": "largely the same roster as Rad Esports and Sakura Esports (NA)",
+      "decided_at": "2026-09-23T05:02:34+00:00"
+    },
+    "ntmr": {
+      "entity_type": "org",
+      "entity_id": "ntmr",
+      "note": "org-level identity already resolved to ntmr",
+      "decided_at": "2026-09-23T05:02:38+00:00"
+    },
+    "rad esports": {
+      "entity_type": "team",
+      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
+      "note": "largely the same roster as LuneX Gaming and Sakura Esports (NA)",
+      "decided_at": "2026-09-23T05:02:35+00:00"
+    },
+    "sakura esports|na": {
+      "entity_type": "team",
+      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
+      "note": "largely the same roster as LuneX Gaming and Rad Esports; NA-only, EMEA Sakura Esports is a different team",
+      "decided_at": "2026-09-23T05:02:36+00:00"
+    },
+    "supernova american team": {
+      "entity_type": "team",
+      "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
+      "note": "small roster transition to/from Team Z",
+      "decided_at": "2026-09-23T05:02:41+00:00"
+    },
+    "team z": {
+      "entity_type": "team",
+      "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
+      "note": "small roster transition to/from Supernova",
+      "decided_at": "2026-09-23T05:02:42+00:00"
+    },
+    "timeless": {
+      "entity_type": "org",
+      "entity_id": "ntmr",
+      "note": "ntmr acquired the Timeless roster",
+      "decided_at": "2026-09-23T05:02:39+00:00"
+    },
+    "vanir quick": {
+      "entity_type": "team",
+      "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
+      "note": "same roster as 1DIPVS100GORILLAS",
+      "decided_at": "2026-09-23T05:02:28+00:00"
+    }
+  }
+}

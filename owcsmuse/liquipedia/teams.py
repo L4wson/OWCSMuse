@@ -137,15 +137,21 @@ def propose(pairs: Iterable[tuple[LPMatch, FaceitSide]], all_lp_names: Iterable[
     for name in sorted({n for n in all_lp_names if n}, key=fold):
         k = fold(name)
         d = decided.org_key(name)
-        if d or any(decided.data.get(TeamMap.key(name, r)) for r in LOCKED):
+        decided_regions = [r for r in LOCKED if decided.data.get(TeamMap.key(name, r))]
+        if d or len(decided_regions) == len(LOCKED):
             for r in (None, *LOCKED):
                 key = decided.org_key(name, r) if r else d
                 if key and (r is None or decided.data.get(TeamMap.key(name, r))):
                     out.append(TeamProposal(name, key, "strong", r, ["decided in scope/liquipedia_team_map.json"], decided=True))
             continue
-        by_region = {rb: c for (kk, rb), c in votes.items() if kk == k}
+        # one region decided, the other (or the region-agnostic case) is not: keep the decided half, still propose the rest
+        for r in decided_regions:
+            out.append(TeamProposal(name, decided.org_key(name, r), "strong", r, ["decided in scope/liquipedia_team_map.json"],
+                                    decided=True))
+        by_region = {rb: c for (kk, rb), c in votes.items() if kk == k and rb not in decided_regions}
         tops = {rb: c.most_common(1)[0][0] for rb, c in by_region.items()}
-        split = len({t for rb, t in tops.items() if rb in LOCKED}) > 1      # different orgs in different regions
+        # different orgs in different regions - or a region already decided separately, which is the same fact
+        split = bool(decided_regions) or len({t for rb, t in tops.items() if rb in LOCKED}) > 1
         groups: dict[Optional[str], Counter[str]] = {}
         if split:
             groups = {rb: c for rb, c in by_region.items()}
@@ -176,7 +182,7 @@ def propose(pairs: Iterable[tuple[LPMatch, FaceitSide]], all_lp_names: Iterable[
             if not p.conflicts and not wrong and (n >= 2 or name_equal):
                 p.strength = "strong"
             out.append(p)
-        if groups:
+        if groups or decided_regions:
             continue
         cands = faceit_names.get(k, set())
         p = TeamProposal(name, None, "none")

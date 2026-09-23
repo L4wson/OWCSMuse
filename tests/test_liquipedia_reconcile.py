@@ -303,6 +303,19 @@ def test_one_name_that_is_two_teams_in_two_regions_is_proposed_per_region():
     assert resolve("Geekay Esports", "na") == ("geekay-na", "proposed") and resolve("Geekay Esports", "emea") == ("geekay-emea", "proposed")
 
 
+def test_deciding_one_region_of_a_split_name_does_not_swallow_the_other_regions_evidence(tmp_path):
+    pairs = [_pair("Geekay Esports", "Team Liquid", "geekay-na", "tl", fid=f"N{i}", region_page=NA_PAGE, when=T0 + timedelta(days=i))
+             for i in range(2)]
+    pairs += [_pair("Geekay Esports", "Twisted Minds", "geekay-emea", "tm", fid=f"E{i}", region_page=EMEA_PAGE,
+                    when=T0 + timedelta(days=5 + i)) for i in range(2)]
+    tm = TeamMap(tmp_path / "map.json")
+    tm.decide("Geekay Esports", "team", "geekay-na-id", region="na")     # only NA decided; EMEA still has to be proposed
+    props = [p for p in propose(pairs, ["Geekay Esports"], tm, {}, {}) if p.lp_name == "Geekay Esports"]
+    by_region = {p.region: p for p in props}
+    assert by_region["na"].decided and by_region["na"].org_key == "team:geekay-na-id"
+    assert by_region["emea"].strength == "strong" and by_region["emea"].org_key == "geekay-emea" and not by_region["emea"].decided
+
+
 def test_a_decided_mapping_is_trusted_without_a_provisional_flag_and_regions_are_kept(tmp_path):
     tm = TeamMap(tmp_path / "map.json")
     tm.decide("Spacestation Gaming", "org", "spacestation-gaming")

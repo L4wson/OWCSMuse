@@ -1,6 +1,6 @@
 # Liquipedia team names -> FACEIT orgs
 
-32 Liquipedia team names, learned from 296 matches Liquipedia ties to FACEIT by match id. 0 decided, 21 proposed strong, 13 need a person.
+32 Liquipedia team names, learned from 296 matches Liquipedia ties to FACEIT by match id. 13 decided, 21 proposed strong, 0 need a person.
 
 Nothing is matched by fuzzy string similarity. Decide with:
 
@@ -33,21 +33,21 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Twisted Minds | any | team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e | 46 | stood opposite FACEIT org 'team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e' in 46 of 46 id-linked matches (FACEIT called it 'Twisted Minds'); the folded names are identical |
 | Virtus.pro | any | virtus-pro | 45 | stood opposite FACEIT org 'virtus-pro' in 45 of 45 id-linked matches (FACEIT called it 'Virtus pro', 'Virtuspro'); the folded names are identical |
 
-## Needs review (13)
+## Already decided (13)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
-| 1234 | any | team:75516399-4c1d-40fc-bb46-a887edadc5a2 | 5 | stood opposite FACEIT org 'team:75516399-4c1d-40fc-bb46-a887edadc5a2' in 5 of 5 id-linked matches (FACEIT called it '1234'); the folded names are identical; SHARED: "Anyone's Legend", '1234' all stand for FACEIT team team:75516399-4c1d-40fc-bb46-a887edadc5a2 - a rename or an acquisition; decide the name, but do not merge their histories |
-| 1DIPVS100GORILLAS | any | team:cb90edf6-60cb-4f73-8172-bf944729a114 | 4 | stood opposite FACEIT org 'team:cb90edf6-60cb-4f73-8172-bf944729a114' in 4 of 4 id-linked matches (FACEIT called it '1DIPv100GORILLA'); SHARED: '1DIPVS100GORILLAS', 'Vanir Quick' all stand for FACEIT team team:cb90edf6-60cb-4f73-8172-bf944729a114 - a rename or an acquisition; decide the name, but do not merge their histories |
-| Anyone's Legend | any | team:75516399-4c1d-40fc-bb46-a887edadc5a2 | 5 | stood opposite FACEIT org 'team:75516399-4c1d-40fc-bb46-a887edadc5a2' in 5 of 5 id-linked matches (FACEIT called it 'Anyones Legend'); SHARED: "Anyone's Legend", '1234' all stand for FACEIT team team:75516399-4c1d-40fc-bb46-a887edadc5a2 - a rename or an acquisition; decide the name, but do not merge their histories |
-| Avidity | any | team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae | 8 | stood opposite FACEIT org 'team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae' in 8 of 8 id-linked matches (FACEIT called it 'Avidity'); the folded names are identical; SHARED: 'Avidity', 'Extinction' all stand for FACEIT team team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae - a rename or an acquisition; decide the name, but do not merge their histories |
-| Extinction | any | team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae | 20 | stood opposite FACEIT org 'team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae' in 15 of 20 id-linked matches (FACEIT called it 'Extinction'); the folded names are identical; CONFLICT: also stood opposite {'team:a35f8d47-7487-4249-a3fb-94aefa2ac8d0': 5}; SHARED: 'Avidity', 'Extinction' all stand for FACEIT team team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae - a rename or an acquisition; decide the name, but do not merge their histories |
-| LuneX Gaming | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 14 | stood opposite FACEIT org 'team:0464a373-df2f-4d23-93f5-80cbaa07802f' in 14 of 14 id-linked matches (FACEIT called it 'LuneX'); SHARED: 'LuneX Gaming', 'Rad Esports', 'Sakura Esports' all stand for FACEIT team team:0464a373-df2f-4d23-93f5-80cbaa07802f - a rename or an acquisition; decide the name, but do not merge their histories |
-| NTMR | any | ntmr | 32 | stood opposite FACEIT org 'ntmr' in 32 of 32 id-linked matches (FACEIT called it 'NTMR'); the folded names are identical; SHARED: 'NTMR', 'Timeless' all stand for FACEIT team ntmr - a rename or an acquisition; decide the name, but do not merge their histories |
-| Rad Esports | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 8 | stood opposite FACEIT org 'team:0464a373-df2f-4d23-93f5-80cbaa07802f' in 8 of 8 id-linked matches (FACEIT called it 'Rad'); SHARED: 'LuneX Gaming', 'Rad Esports', 'Sakura Esports' all stand for FACEIT team team:0464a373-df2f-4d23-93f5-80cbaa07802f - a rename or an acquisition; decide the name, but do not merge their histories |
-| Sakura Esports | na | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 17 | stood opposite FACEIT org 'team:0464a373-df2f-4d23-93f5-80cbaa07802f' in 17 of 17 id-linked matches on na pages (FACEIT called it 'Rad', 'Sakura', 'Sakura Esports'); the folded names are identical; REGION SPLIT: this name is different FACEIT teams in NA and EMEA, so it is decided per region; SHARED: 'LuneX Gaming', 'Rad Esports', 'Sakura Esports' all stand for FACEIT team team:0464a373-df2f-4d23-93f5-80cbaa07802f - a rename or an acquisition; decide the name, but do not merge their histories |
-| Supernova (American team) | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 7 | stood opposite FACEIT org 'team:d20d1868-8937-4a85-8706-bf936d265392' in 7 of 7 id-linked matches (FACEIT called it 'Supernova'); SHARED: 'Supernova (American team)', 'Team Z' all stand for FACEIT team team:d20d1868-8937-4a85-8706-bf936d265392 - a rename or an acquisition; decide the name, but do not merge their histories |
-| Team Z | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 8 | stood opposite FACEIT org 'team:d20d1868-8937-4a85-8706-bf936d265392' in 8 of 8 id-linked matches (FACEIT called it 'Team Z'); the folded names are identical; SHARED: 'Supernova (American team)', 'Team Z' all stand for FACEIT team team:d20d1868-8937-4a85-8706-bf936d265392 - a rename or an acquisition; decide the name, but do not merge their histories |
-| Timeless | any | ntmr | 10 | stood opposite FACEIT org 'ntmr' in 10 of 10 id-linked matches (FACEIT called it 'Timeless'); the folded names are identical; SHARED: 'NTMR', 'Timeless' all stand for FACEIT team ntmr - a rename or an acquisition; decide the name, but do not merge their histories |
-| Vanir Quick | any | team:cb90edf6-60cb-4f73-8172-bf944729a114 | 10 | stood opposite FACEIT org 'team:cb90edf6-60cb-4f73-8172-bf944729a114' in 10 of 10 id-linked matches (FACEIT called it 'Quick Esports'); SHARED: '1DIPVS100GORILLAS', 'Vanir Quick' all stand for FACEIT team team:cb90edf6-60cb-4f73-8172-bf944729a114 - a rename or an acquisition; decide the name, but do not merge their histories |
+| 1234 | any | team:75516399-4c1d-40fc-bb46-a887edadc5a2 | 0 | decided in scope/liquipedia_team_map.json |
+| 1DIPVS100GORILLAS | any | team:cb90edf6-60cb-4f73-8172-bf944729a114 | 0 | decided in scope/liquipedia_team_map.json |
+| Anyone's Legend | any | team:75516399-4c1d-40fc-bb46-a887edadc5a2 | 0 | decided in scope/liquipedia_team_map.json |
+| Avidity | any | team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae | 0 | decided in scope/liquipedia_team_map.json |
+| Extinction | any | team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae | 0 | decided in scope/liquipedia_team_map.json |
+| LuneX Gaming | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
+| NTMR | any | ntmr | 0 | decided in scope/liquipedia_team_map.json |
+| Rad Esports | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
+| Sakura Esports | na | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
+| Supernova (American team) | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
+| Team Z | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
+| Timeless | any | ntmr | 0 | decided in scope/liquipedia_team_map.json |
+| Vanir Quick | any | team:cb90edf6-60cb-4f73-8172-bf944729a114 | 0 | decided in scope/liquipedia_team_map.json |
 

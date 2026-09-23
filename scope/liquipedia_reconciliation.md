@@ -27,18 +27,18 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S8 EMEA OWCS Central - Playoffs | 6 | 4 | 4 | 0 | 0 | 2 | 0 | 0 |
 | S8 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 0 |
 | S8 NA OWCS Central - Playoffs | 6 | 4 | 4 | 0 | 0 | 2 | 0 | 1 |
-| S8 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 1 |
+| S8 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 6 |
 | S9 EMEA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | S9 NA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
-| **total** | **300** | **308** | **296** | **0** | **0** | **4** | **12** | **13** |
+| **total** | **300** | **308** | **296** | **0** | **0** | **4** | **12** | **18** |
 
 ## Needs review: ambiguous matches (0)
 
 None.
 
-## Linked pairs where the two sources disagree (13)
+## Linked pairs where the two sources disagree (18)
 
 Either source can be wrong. `maps` tells which is more likely: FACEIT's own stats count the maps played.
 
@@ -46,10 +46,30 @@ Either source can be wrong. `maps` tells which is more likely: FACEIT's own stat
   FACEIT: 2025-10-26 19:29Z  Al qadsiah 1-4 Twisted Minds  (bo5, complete)  1-3e78e269-28b7-481c-9ccc-46c173314ab9
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/EMEA/Stage_3
   - **best_of**: Liquipedia 7, FACEIT 5 - a series won 4-x needs at least a best-of-7
+- [exact] 2026-03-21 23:05Z  Team Liquid 3-2 Extinction  (bo5)
+  FACEIT: 2026-03-22 00:18Z  Team Liquid 3-2 Extinction  (bo5, complete)  1-7a01d70f-9b52-4bc7-a010-7c15ee2fcbf3
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1/Regular_Season
+  - **teams**: Liquipedia 'Team Liquid / Extinction', FACEIT 'Team Liquid / Extinction' - the two records name different teams: the page's FACEIT id may be wrong
+- [exact] 2026-03-22 22:50Z  LuneX Gaming 3-0 Extinction  (bo5)
+  FACEIT: 2026-03-22 23:25Z  Extinction 0-3 LuneX  (bo5, complete)  1-4e12d13d-1bac-4aca-9155-15a27401eb57
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1/Regular_Season
+  - **teams**: Liquipedia 'LuneX Gaming / Extinction', FACEIT 'Extinction / LuneX' - the two records name different teams: the page's FACEIT id may be wrong
+- [exact] 2026-03-28 22:40Z  Disguised 0-3 Extinction  (bo5)
+  FACEIT: 2026-03-28 23:23Z  Extinction 3-0 Disguised  (bo5, complete)  1-c8dc6f85-9897-4dd3-bb4a-1d9783e341a6
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1/Regular_Season
+  - **teams**: Liquipedia 'Disguised / Extinction', FACEIT 'Extinction / Disguised' - the two records name different teams: the page's FACEIT id may be wrong
+- [exact] 2026-03-29 21:30Z  Spacestation Gaming 3-0 Extinction  (bo5)
+  FACEIT: 2026-03-29 21:39Z  SpaceStation Gaming 3-0 Extinction  (bo5, complete)  1-a6992792-70df-4dfd-a4da-7416628d9873
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1/Regular_Season
+  - **teams**: Liquipedia 'Spacestation Gaming / Extinction', FACEIT 'SpaceStation Gaming / Extinction' - the two records name different teams: the page's FACEIT id may be wrong
 - [exact] 2026-03-29 22:15Z  Disguised 3-0 Team Liquid  (bo5)
   FACEIT: 2026-03-29 23:26Z  Disguised 4-0 Team Liquid  (bo5, complete)  1-472cc9eb-d7a3-4811-b633-397a99d6a502
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1/Regular_Season
   - **score**: Liquipedia '3-0', FACEIT '4-0' - FACEIT has stats for 4 maps; Liquipedia lists 4 games; FACEIT's 4-0 is more wins than a best-of-5 allows
+- [exact] 2026-04-05 21:50Z  Dallas Fuel 3-0 Extinction  (bo5)
+  FACEIT: 2026-04-05 22:25Z  Dallas Fuel 3-0 Extinction  (bo5, complete)  1-f616bbb7-4e4e-411e-a212-e45339e39f26
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1/Regular_Season
+  - **teams**: Liquipedia 'Dallas Fuel / Extinction', FACEIT 'Dallas Fuel / Extinction' - the two records name different teams: the page's FACEIT id may be wrong
 - [exact] 2026-04-11 21:00Z  Dallas Fuel 3-1 Spacestation Gaming  (bo5)
   FACEIT: 2026-04-11 23:46Z  Dallas Fuel 4-1 SpaceStation Gaming  (bo5, result_only)  1-28ea62bc-16c1-4686-b41b-479d5275d151
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
