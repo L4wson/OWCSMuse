@@ -460,6 +460,17 @@ the owner with no page (Dreamhack Dallas, the relegations: `owner`). Year, regio
 and the phase from FACEIT's own suffix, cross-checked against the page's shape. A decision made against a FACEIT
 name that later changes stops applying and is reported as stale.
 
+A page path nobody has seen (`"verified": false` in `scope/competition_pages.json`) is never bulk-accepted. One request
+checks them all, projection first:
+
+```bash
+python -m owcsmuse liquipedia probe-pages              # shows the projection (1 request) and the budget; sends nothing
+python -m owcsmuse liquipedia probe-pages --execute    # sends it (needs LIQUIPEDIA_API_KEY and OWCS_LIQUIPEDIA_ENABLED=1)
+```
+
+It reports, per page, how many matches Liquipedia holds on it. Set `"verified": true` for the pages that came back, and
+`competitions accept --bases liquipedia-owner` takes them.
+
 ## Aggregation layer
 
 Read-only derived tables for a query engine, defined in
