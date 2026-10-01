@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Any, Iterable, Optional
 
 from .faceit.client import FaceitClient, FaceitClientError
-from .logging import get_logger, log_event
+from .log import get_logger, log_event
 from .parsers.championships import OWCS_PATTERN, is_owcs, parse_championship, parse_organizer
 from .scope import Decisions, classify_manifest_entries, render_report
 

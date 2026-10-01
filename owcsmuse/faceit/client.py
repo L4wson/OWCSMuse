@@ -21,7 +21,7 @@ from typing import Any, Callable, Iterator, Optional, Protocol
 import httpx
 
 from ..config import Settings
-from ..logging import get_logger, log_event
+from ..log import get_logger, log_event
 from .ratelimit import AdaptiveRateLimiter, backoff_delay, parse_rate_limit_headers
 
 log = get_logger("owcsmuse.faceit")
@@ -97,7 +97,7 @@ class FaceitClient:
         self.http = httpx.Client(
             base_url=settings.faceit_base_url.rstrip("/"),
             headers={
-                "Authorization": f"Bearer {settings.faceit_api_key.get_secret_value()}",
+                "Authorization": f"Bearer {settings.require_faceit_key()}",
                 "Accept": "application/json",
                 "User-Agent": "owcsmuse/0.1",
             },

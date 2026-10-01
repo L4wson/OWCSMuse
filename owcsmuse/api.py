@@ -32,7 +32,7 @@ from . import __version__
 from .config import Settings, load_settings
 from .db import connect
 from .limitations import LIMITATIONS
-from .logging import get_logger, log_event
+from .log import get_logger, log_event
 from .nlq.columns import describe as describe_columns
 from .nlq.evidence import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE
 from .nlq.pipeline import Answer, ask

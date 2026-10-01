@@ -13,7 +13,7 @@ from ..liquipedia.attribution import answer_attribution
 from ..liquipedia.attribution import render_lines as render_attribution
 from ..aggregates import stat_coverage_summary
 from ..limitations import applicable as applicable_limitations, entity_match_filter
-from ..logging import get_logger, log_event
+from ..log import get_logger, log_event
 from ..resolve import Candidate, resolve
 from .compile import Compiled, Resolved, compile_query
 from .evidence import (DEFAULT_PAGE_SIZE, Evidence, entity_of, fetch_evidence, fetch_missing_series,

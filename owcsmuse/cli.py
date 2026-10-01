@@ -25,7 +25,7 @@ from .discovery import (
     write_report,
 )
 from .faceit.client import FaceitClient
-from .logging import configure_logging
+from .log import configure_logging
 from .parsers.championships import OWCS_PATTERN
 from .resolve import resolve
 from .aliases import DEFAULT_ALIAS_DECISIONS_PATH, AliasDecisions, list_aliases, load_decisions as load_alias_decisions

@@ -23,10 +23,13 @@ python -m owcsmuse migrate
 ```
 
 Configuration is read from environment variables or `.env` (see `.env.example`).
-Two settings are required and have no default, so an unset value fails at
-startup instead of connecting somewhere unintended:
+`.env` is read from the repository root whatever the working directory; real
+environment variables take precedence. One setting is required everywhere and has
+no default, so an unset value fails at startup instead of connecting somewhere
+unintended; a second is required only by commands that call FACEIT:
 
-- `FACEIT_API_KEY`
+- `FACEIT_API_KEY` (ingest commands only: `discover`, `backfill`, `crawl`, ...;
+  `serve`, `ask` and the tests do not need it)
 - `DATABASE_URL` (also accepted as `OWCS_DATABASE_URL`), a Postgres URL such
   as a Supabase session-pooler string.
 
@@ -831,10 +834,9 @@ Three moving parts, none of which share a host requirement.
 
 **The API** is a stateless uvicorn process: `python -m owcsmuse serve --host
 0.0.0.0 --port 8000`, or any ASGI runner pointed at `owcsmuse.api:app_factory`.
-It needs `DATABASE_URL`, outbound access to Postgres, and TLS in front of it. It
-also needs `FACEIT_API_KEY` set to *something* because the settings object
-requires it, though no request path calls FACEIT - answers come from the
-warehouse. Each process keeps up to four idle connections, so size
+It needs `DATABASE_URL`, outbound access to Postgres, and TLS in front of it.
+It does not need `FACEIT_API_KEY`: no request path calls FACEIT, answers come
+from the warehouse. Each process keeps up to four idle connections, so size
 `workers x 4` against the Supabase pooler's ceiling before scaling out. Run
 `python -m owcsmuse migrate` on deploy; it is idempotent and applies in filename
 order.
@@ -1142,7 +1144,7 @@ tools/golden_report.py          compare every golden case to the live answer (as
 tests/golden/                   golden matches, independent.py, derive_expected.py, cases.json, harness.py
 .github/workflows/ci.yml        lint, offline tests, database tests, consistency checks
 owcsmuse/config.py              pydantic-settings
-owcsmuse/logging.py             JSON / text structured logging
+owcsmuse/log.py                 JSON / text structured logging (not logging.py: that would shadow the stdlib)
 owcsmuse/db.py                  connect, migrate, RawPayloadStore
 owcsmuse/faceit/ratelimit.py    header parsing, adaptive limiter, jittered backoff
 owcsmuse/faceit/client.py       FaceitClient: retries, raw sink, capped pagination

@@ -31,7 +31,7 @@ from typing import Any, Callable, Optional
 
 import httpx
 
-from ..logging import get_logger, log_event
+from ..log import get_logger, log_event
 from .store import Store
 
 log = get_logger("owcsmuse.liquipedia")
