@@ -1,3 +1,4 @@
+import { LINKABLE_SPAN_KINDS, entityQuestion } from "../format.js";
 import DataTable from "./DataTable.jsx";
 
 /**
@@ -7,7 +8,7 @@ import DataTable from "./DataTable.jsx";
  * is what the header says, so a reader knows whether they are looking at maps or
  * series before they read the table.
  */
-export default function Evidence({ evidence, busy = false, onPage = null }) {
+export default function Evidence({ evidence, busy = false, onPage = null, onAsk = null }) {
   if (!evidence) return null;
 
   if (!evidence.available) {
@@ -20,19 +21,38 @@ export default function Evidence({ evidence, busy = false, onPage = null }) {
 
   const { page = 1, total_pages: totalPages = 1, total_rows: totalRows = 0, rows = [], grain, description } = evidence;
   const expanded = evidence.expanded_for;
+  // The id is the right thing to ask about, never the right thing to show -
+  // same rule as the search box (App.jsx's displayable()). Only ever fall
+  // back to it when a name never arrived.
+  const label = expanded?.name ?? expanded?.id;
+  const question = expanded?.name && LINKABLE_SPAN_KINDS.has(expanded.type) ? entityQuestion(expanded.name, expanded.type) : null;
 
   return (
     <section className="evidence" data-testid="evidence" aria-busy={busy ? "true" : "false"}>
       <header className="evidence-head">
         <h2>
           {totalRows.toLocaleString("en-GB")} {grain === "series" ? "series" : "maps"}
-          {expanded?.name || expanded?.id ? (
+          {label ? (
             <>
               {" "}
               behind{" "}
-              <span className="evidence-subject" data-testid="evidence-subject">
-                {expanded.name ?? expanded.id}
-              </span>
+              {question && onAsk ? (
+                <button
+                  type="button"
+                  className={`entity entity--link entity--${expanded.type} evidence-subject`}
+                  data-testid="evidence-subject"
+                  data-kind={expanded.type}
+                  data-entity-id={expanded.id ?? ""}
+                  title={`Ask: ${question}`}
+                  onClick={() => onAsk(question)}
+                >
+                  {label}
+                </button>
+              ) : (
+                <span className="evidence-subject" data-testid="evidence-subject">
+                  {label}
+                </span>
+              )}
             </>
           ) : null}
         </h2>

@@ -1,0 +1,85 @@
+{
+ "note": "Real FACEIT matches the golden warehouse is built from. Payloads are copied verbatim from raw_payloads by tools/capture_golden.py.",
+ "matches": [
+  {
+   "match_id": "1-7553f194-b7d7-4bc9-bda4-3484592e014f",
+   "why": "2024 EMEA Main Event, Twisted Minds 3-1 Ex Oblivione: Quartz03's team, 4 maps of 5 picked"
+  },
+  {
+   "match_id": "1-76fe2bd0-4ddd-4c66-be08-0d495a2bb364",
+   "why": "2024 EMEA Main Event, the first-map-result flip: Twisted Minds v Ex Oblivione"
+  },
+  {
+   "match_id": "1-ae116779-afd3-4861-b496-4781c79a6cef",
+   "why": "S9 NA playoffs SSG 3-0 LuneX: sug2rfree's team against ZSS's team (player-vs-player, player-vs-org)"
+  },
+  {
+   "match_id": "1-2b2f7884-1ee3-4680-b9c5-288c7286920e",
+   "why": "S9 NA SSG 3-0 Dallas Fuel"
+  },
+  {
+   "match_id": "1-1985af81-96d8-49ec-b71f-ec29739ea719",
+   "why": "S9 NA playoffs SSG 3-1 Team Liquid"
+  },
+  {
+   "match_id": "1-0c28ddf5-09e3-4d63-88fc-55e0dc30dc13",
+   "why": "S9 NA playoffs SSG 2-4 Dallas Fuel: a bo7, six maps"
+  },
+  {
+   "match_id": "1-548c8861-8556-4417-b2f9-7d61517f28b0",
+   "why": "S8 NA SSG 3-2 Disguised: DSG"
+  },
+  {
+   "match_id": "1-6f8e2346-f80b-459c-a038-988ea453d5c3",
+   "why": "S8 NA LuneX 3-1 Disguised"
+  },
+  {
+   "match_id": "1-581d94d1-7ff1-4e7f-bce8-d28dd1b91055",
+   "why": "S9 NA The Kafe 0-3 LuneX"
+  },
+  {
+   "match_id": "1-d8334693-2468-4d14-916a-b612cc3a1fc6",
+   "why": "S9 NA LuneX 1-3 Team Liquid"
+  },
+  {
+   "match_id": "1-67a2e614-e51a-4c9e-9a03-176dda200912",
+   "why": "S9 NA playoffs Dallas Fuel 3-0 LuneX"
+  },
+  {
+   "match_id": "1-971df446-bfb6-4ad3-bee6-ec4b9b346977",
+   "why": "S5 NA (2025) Geekay Esports NA 3-2 Team Liquid: the NA Geekay"
+  },
+  {
+   "match_id": "1-3a6cb9f6-5b25-4f97-904d-a0b986b276b2",
+   "why": "S5 NA (2025) Geekay Esports NA 3-0 DhillDucks"
+  },
+  {
+   "match_id": "1-a106c5a1-7508-4e2d-8231-f1e331b9ff42",
+   "why": "S8 EMEA playoffs Twisted Minds 3-0 Geekay Esports EMEA: the EMEA Geekay"
+  },
+  {
+   "match_id": "1-5a5ff7bb-ef8c-4c59-ab19-a740d8dac594",
+   "why": "S9 EMEA playoffs Virtus pro 4-3 Geekay Esports EMEA: a bo7, seven maps"
+  },
+  {
+   "match_id": "1-36219ab4-6c07-4a9b-9321-89e1fd1a6d61",
+   "why": "S4 EMEA (2025) Virtuspro 3-1 GenG: Virtus pro's other team id, merged into one org"
+  },
+  {
+   "match_id": "1-d8eb72ed-46a2-4e3f-a9b7-3607c32aee05",
+   "why": "2024 EMEA Group D SpaceStation 3-0 Celtas: the EMEA SpaceStation, never the NA SpaceStation Gaming"
+  },
+  {
+   "match_id": "1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+   "why": "2024 EMEA Group D SpaceStation 3-2 Ex Oblivione"
+  },
+  {
+   "match_id": "1-a823bbde-de66-4928-8527-54f4e8882293",
+   "why": "S9 EMEA Twisted Minds 3-2 Geekay: a series with no map stats (result_only)"
+  },
+  {
+   "match_id": "1-9376f913-f6ef-4fa0-bc39-a58d09986807",
+   "why": "S4 EMEA playoffs Twisted Minds v 'bye': a bracket slot, not a series"
+  }
+ ]
+}

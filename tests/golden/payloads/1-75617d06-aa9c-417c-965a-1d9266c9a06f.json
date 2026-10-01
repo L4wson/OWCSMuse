@@ -1,0 +1,1482 @@
+{
+ "detail": {
+  "best_of": 5,
+  "calculate_elo": false,
+  "chat_room_id": "match-1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+  "competition_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+  "competition_name": "OWCS 2024: EMEA Stage 1 - Group D",
+  "competition_type": "championship",
+  "configured_at": 1710091549,
+  "detailed_results": [
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 2
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 2
+     },
+     "faction2": {
+      "score": 3
+     }
+    },
+    "winner": "faction2"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 0
+     },
+     "faction2": {
+      "score": 1
+     }
+    },
+    "winner": "faction2"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 3
+     },
+     "faction2": {
+      "score": 1
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 2
+     },
+     "faction2": {
+      "score": 1
+     }
+    },
+    "winner": "faction1"
+   }
+  ],
+  "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+  "finished_at": 1710092804,
+  "game": "ow2",
+  "group": 1,
+  "match_id": "1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+  "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+  "region": "GLOBAL",
+  "results": {
+   "score": {
+    "faction1": 3,
+    "faction2": 2
+   },
+   "winner": "faction1"
+  },
+  "round": 2,
+  "scheduled_at": 1710086400,
+  "started_at": 1710091781,
+  "status": "FINISHED",
+  "teams": {
+   "faction1": {
+    "avatar": "https://distribution.faceit-cdn.net/images/c93d20aa-1c0d-46bf-b171-b63796206620.jpeg",
+    "faction_id": "a359db61-26e2-44e0-8961-e0b373f4db21",
+    "leader": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+    "name": "SpaceStation",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "408221114",
+      "game_player_name": "FunnyAstro",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "FunnyAstro1",
+      "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "441234931",
+      "game_player_name": "Hadi",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "HadiOW2",
+      "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "447204958",
+      "game_player_name": "Backbone",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "Backboneee",
+      "player_id": "a12c7612-d162-4a26-8053-ece68c1f67f7"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "384795915",
+      "game_player_name": "Landon",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "LandonOW",
+      "player_id": "a332d27e-fe19-4077-89f8-27391a581460"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "138565873",
+      "game_player_name": "SparkR",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "SparkRow",
+      "player_id": "39042a9c-ac5f-47b4-8376-29c45676c2e9"
+     }
+    ],
+    "substituted": true,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "459589780",
+      "game_player_name": "Seicoe",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "seic0e",
+      "player_id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "851822529",
+      "game_player_name": "Suji",
+      "game_skill_level": 4,
+      "membership": "free",
+      "nickname": "Suji_",
+      "player_id": "4a2e533d-1b97-4324-8070-0ba47edd887f"
+     }
+    ],
+    "type": "premade"
+   },
+   "faction2": {
+    "avatar": "https://distribution.faceit-cdn.net/images/d9fda819-4e7b-4e26-8332-89d3cc636782.jpeg",
+    "faction_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+    "leader": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+    "name": "Ex Oblivione",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "420766079",
+      "game_player_name": "Crispy",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "zzcrispy",
+      "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "141927792",
+      "game_player_name": "Clowd",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "Clowdeyyy",
+      "player_id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/4d6300f3-b496-4036-b3b5-51df96767d00.jpeg",
+      "game_player_id": "469045322",
+      "game_player_name": "Khenail",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "Khenail",
+      "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "446362182",
+      "game_player_name": "Chasetorch",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "Chaseeeeeee_",
+      "player_id": "23c11b19-5748-4890-87da-7d41db6a46cd"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/74893a1b-552b-4305-b9f4-b91527b6e5a2.jpeg",
+      "game_player_id": "402679526",
+      "game_player_name": "sHockWave",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "sHockWaveOW",
+      "player_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1"
+     }
+    ],
+    "substituted": true,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "439072109",
+      "game_player_name": "cookie084",
+      "game_skill_level": 8,
+      "membership": "free",
+      "nickname": "cookie084",
+      "player_id": "59643d3f-fad7-4182-87be-63d2371bedae"
+     }
+    ],
+    "type": "premade"
+   }
+  },
+  "version": 2,
+  "voting": {
+   "attacking_first": {
+    "entities": [
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     }
+    ],
+    "pick": [
+     "faction1",
+     "faction1",
+     "faction1",
+     "faction1",
+     "faction2"
+    ]
+   },
+   "map": {
+    "entities": [
+     {
+      "class_name": "Ilios",
+      "game_map_id": "0x080000000000066D",
+      "guid": "0x080000000000066D",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f2d716e6-cb55-4759-b0f4-28cd8fd24323_1703103126376.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5ebad419-993f-4fda-9e78-446759a05c4d_1703102993834.jpeg",
+      "name": "Ilios"
+     },
+     {
+      "class_name": "Lijiang Tower",
+      "game_map_id": "0x0800000000000662",
+      "guid": "0x0800000000000662",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ee3fe75-971a-4d37-9448-fd78cf975bd8_1703103130214.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ffb0acdb-ce25-41d8-a589-e0a7c447b2dd_1703102999443.jpeg",
+      "name": "Lijiang Tower"
+     },
+     {
+      "class_name": "Nepal",
+      "game_map_id": "0x08000000000004B7",
+      "guid": "0x08000000000004B7",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ec4b4329-5b16-48b3-bf1d-2c8d0efbcf1a_1703103133129.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7747138d-6711-4257-99d2-739e2f205419_1703103002544.jpeg",
+      "name": "Nepal"
+     },
+     {
+      "class_name": "Samoa",
+      "game_map_id": "0x0800000000000EC0",
+      "guid": "0x0800000000000EC0",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2d8d0bb3-b098-4482-861c-0af4590c95c3_1703103149418.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/387a7de6-d8f0-4b4e-b7dd-eba9a3c06d6c_1703103013339.jpeg",
+      "name": "Samoa"
+     },
+     {
+      "class_name": "Blizzard World",
+      "game_map_id": "0x080000000000075E",
+      "guid": "0x080000000000075E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be278cb2-9c83-49d3-abfb-7c94ffcc0d1f_1703103190096.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ac7b6281-24f1-4f5f-bfbf-04a1ea2c8942_1703103059008.jpeg",
+      "name": "Blizzard World"
+     },
+     {
+      "class_name": "Hollywood",
+      "game_map_id": "0x08000000000002AF",
+      "guid": "0x08000000000002AF",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/856aa4df-a6a0-4713-9d9b-c17d5e1830e1_1703103203800.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/45e0201d-ae45-48f1-a336-74bbd8006c47_1703103065745.jpeg",
+      "name": "Hollywood"
+     },
+     {
+      "class_name": "King's Row",
+      "game_map_id": "0x08000000000000D4",
+      "guid": "0x08000000000000D4",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3071e358-5426-4a05-a928-519353b29fc4_1703103206776.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8c3011bf-be5b-4e65-99f5-28c9cb80a6f4_1703103068622.jpeg",
+      "name": "King's Row"
+     },
+     {
+      "class_name": "Midtown",
+      "game_map_id": "0x0800000000000B4C",
+      "guid": "0x0800000000000B4C",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/02b1222d-2b5e-4c7f-82e1-48bf1ef4bd8a_1703103209971.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8a66c21b-bab9-4fa0-923d-f954b5bc8d4a_1703103072451.jpeg",
+      "name": "Midtown"
+     },
+     {
+      "class_name": "Colosseo",
+      "game_map_id": "0x0800000000000B34",
+      "guid": "0x0800000000000B34",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/81178286-d627-4f34-ac4c-eca25239ab88_1703103220387.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2dcec9b5-b9d1-4647-aece-a9980cee2c4d_1703103105258.jpeg",
+      "name": "Colosseo"
+     },
+     {
+      "class_name": "Esperan\u00e7a",
+      "game_map_id": "0x0800000000000D53",
+      "guid": "0x0800000000000D53",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/32c9964e-2b63-4495-b3f2-9f947bad5e4a_1703103225824.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/57d6237f-9228-42e5-8035-07a734e2e5cc_1703103087193.jpeg",
+      "name": "Esperan\u00e7a"
+     },
+     {
+      "class_name": "New Queen Street",
+      "game_map_id": "0x0800000000000AEB",
+      "guid": "0x0800000000000AEB",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0083a86e-a5bf-472b-857a-4141790606a4_1703103228854.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/16b005d0-eef2-4af4-b689-576286a8c9fc_1703103091604.jpeg",
+      "name": "New Queen Street"
+     },
+     {
+      "class_name": "New Junk City",
+      "game_map_id": "0x0800000000000E13",
+      "guid": "0x0800000000000E13",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c13859b8-7ac1-46a3-a869-2ccafb5d3ebe_1703103182898.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/eb003902-8da9-4ed2-9b1f-975a7f797f8a_1703103050586.jpeg",
+      "name": "New Junk City"
+     },
+     {
+      "class_name": "Suravasa",
+      "game_map_id": "0x0800000000000D3E",
+      "guid": "0x0800000000000D3E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fa702302-43a4-49d5-b782-59e17d343db8_1703103186824.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f0b94a8e-bfbb-414b-b2ac-6135a2c902da_1703103053805.jpeg",
+      "name": "Suravasa"
+     },
+     {
+      "class_name": "Circuit Royal",
+      "game_map_id": "0x0800000000000827",
+      "guid": "0x0800000000000827",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be5588c6-b069-42c8-8f92-a5bf0039b367_1703103152414.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/94728215-cdfc-42c9-878b-059a136dbe34_1703103016007.jpeg",
+      "name": "Circuit Royal"
+     },
+     {
+      "class_name": "Dorado",
+      "game_map_id": "0x08000000000002C3",
+      "guid": "0x08000000000002C3",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8de33243-a6ec-44ab-b1a9-f92a3cd6154f_1703103154990.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a83c8b41-cc66-4e7a-a92a-20b14b83bb4a_1703103019601.jpeg",
+      "name": "Dorado"
+     },
+     {
+      "class_name": "Rialto",
+      "game_map_id": "0x0800000000000871",
+      "guid": "0x0800000000000871",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7153ec7e-e06a-4d9d-a840-44d0beaa145e_1703103165472.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b6b435d0-e9b9-415c-b383-64de98ee6e5b_1703103037608.jpeg",
+      "name": "Rialto"
+     },
+     {
+      "class_name": "Shambali Monastery",
+      "game_map_id": "0x0800000000000C85",
+      "guid": "0x0800000000000C85",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/93838223-c8b3-40e4-8186-90c6637e12c6_1703103174907.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ad9437ab-ef72-45ba-b217-f15a65dcb375_1703103043929.jpeg",
+      "name": "Shambali Monastery"
+     }
+    ],
+    "pick": [
+     "0x0800000000000662",
+     "0x080000000000075E",
+     "0x0800000000000D53",
+     "0x0800000000000D3E",
+     "0x0800000000000871"
+    ]
+   },
+   "voted_entity_types": [
+    "map",
+    "attacking_first"
+   ]
+  }
+ },
+ "stats": {
+  "rounds": [
+   {
+    "best_of": "4",
+    "competition_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+    "match_round": "1",
+    "played": "1",
+    "round_stats": {
+     "Map": "0x0800000000000662",
+     "OW2 Mode": "Control",
+     "Score Summary": "2 / 0",
+     "Winner": "a359db61-26e2-44e0-8961-e0b373f4db21"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "HadiOW2",
+        "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+        "player_stats": {
+         "Assists": "10",
+         "Damage Dealt": "10761",
+         "Damage Mitigated": "16006",
+         "Deaths": "2",
+         "Eliminations": "27",
+         "Healing Done": "0",
+         "K/D Ratio": "13.5",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "FunnyAstro1",
+        "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+        "player_stats": {
+         "Assists": "19",
+         "Damage Dealt": "7743",
+         "Damage Mitigated": "1233",
+         "Deaths": "3",
+         "Eliminations": "23",
+         "Healing Done": "8128",
+         "K/D Ratio": "7.67",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Backboneee",
+        "player_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "10511",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "26",
+         "Healing Done": "1923",
+         "K/D Ratio": "13",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "LandonOW",
+        "player_id": "a332d27e-fe19-4077-89f8-27391a581460",
+        "player_stats": {
+         "Assists": "22",
+         "Damage Dealt": "6566",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "22",
+         "Healing Done": "11770",
+         "K/D Ratio": "11",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "seic0e",
+        "player_id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "10748",
+         "Damage Mitigated": "0",
+         "Deaths": "1",
+         "Eliminations": "24",
+         "Healing Done": "0",
+         "K/D Ratio": "24",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "a359db61-26e2-44e0-8961-e0b373f4db21",
+      "team_stats": {
+       "Team": "SpaceStation",
+       "Team Avg Deaths": "2",
+       "Team Avg Eliminations": "24.4",
+       "Team Score": "2",
+       "Team Total Deaths": "10",
+       "Team Total Eliminations": "122",
+       "Team Win": "1"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "Clowdeyyy",
+        "player_id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "6755",
+         "Damage Mitigated": "0",
+         "Deaths": "4",
+         "Eliminations": "4",
+         "Healing Done": "0",
+         "K/D Ratio": "1",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "Khenail",
+        "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+        "player_stats": {
+         "Assists": "4",
+         "Damage Dealt": "4158",
+         "Damage Mitigated": "0",
+         "Deaths": "8",
+         "Eliminations": "2",
+         "Healing Done": "18764",
+         "K/D Ratio": "0.25",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "zzcrispy",
+        "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+        "player_stats": {
+         "Assists": "4",
+         "Damage Dealt": "5951",
+         "Damage Mitigated": "1383",
+         "Deaths": "6",
+         "Eliminations": "6",
+         "Healing Done": "6669",
+         "K/D Ratio": "1",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "sHockWaveOW",
+        "player_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "8709",
+         "Damage Mitigated": "0",
+         "Deaths": "8",
+         "Eliminations": "4",
+         "Healing Done": "2058",
+         "K/D Ratio": "0.5",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "Chaseeeeeee_",
+        "player_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "9721",
+         "Damage Mitigated": "14080",
+         "Deaths": "8",
+         "Eliminations": "7",
+         "Healing Done": "278",
+         "K/D Ratio": "0.88",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+      "team_stats": {
+       "Team": "Ex Oblivione",
+       "Team Avg Deaths": "6.8",
+       "Team Avg Eliminations": "4.6",
+       "Team Score": "0",
+       "Team Total Deaths": "34",
+       "Team Total Eliminations": "23",
+       "Team Win": "0"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "4",
+    "competition_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+    "match_round": "2",
+    "played": "2",
+    "round_stats": {
+     "Map": "0x080000000000075E",
+     "OW2 Mode": "Hybrid",
+     "Score Summary": "2 / 3",
+     "Winner": "bb5dd404-213c-430f-8d12-8687fc3ff747"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "HadiOW2",
+        "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+        "player_stats": {
+         "Assists": "9",
+         "Damage Dealt": "18576",
+         "Damage Mitigated": "29127",
+         "Deaths": "7",
+         "Eliminations": "29",
+         "Healing Done": "0",
+         "K/D Ratio": "4.14",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "FunnyAstro1",
+        "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+        "player_stats": {
+         "Assists": "23",
+         "Damage Dealt": "10919",
+         "Damage Mitigated": "3142",
+         "Deaths": "6",
+         "Eliminations": "29",
+         "Healing Done": "13184",
+         "K/D Ratio": "4.83",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Backboneee",
+        "player_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "12713",
+         "Damage Mitigated": "153",
+         "Deaths": "8",
+         "Eliminations": "21",
+         "Healing Done": "2459",
+         "K/D Ratio": "2.62",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "LandonOW",
+        "player_id": "a332d27e-fe19-4077-89f8-27391a581460",
+        "player_stats": {
+         "Assists": "20",
+         "Damage Dealt": "10325",
+         "Damage Mitigated": "0",
+         "Deaths": "9",
+         "Eliminations": "15",
+         "Healing Done": "15200",
+         "K/D Ratio": "1.67",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "seic0e",
+        "player_id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "18242",
+         "Damage Mitigated": "0",
+         "Deaths": "4",
+         "Eliminations": "31",
+         "Healing Done": "0",
+         "K/D Ratio": "7.75",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "a359db61-26e2-44e0-8961-e0b373f4db21",
+      "team_stats": {
+       "Team": "SpaceStation",
+       "Team Avg Deaths": "6.8",
+       "Team Avg Eliminations": "25",
+       "Team Score": "2",
+       "Team Total Deaths": "34",
+       "Team Total Eliminations": "125",
+       "Team Win": "0"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "Clowdeyyy",
+        "player_id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "11310",
+         "Damage Mitigated": "0",
+         "Deaths": "5",
+         "Eliminations": "23",
+         "Healing Done": "0",
+         "K/D Ratio": "4.6",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "Khenail",
+        "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+        "player_stats": {
+         "Assists": "30",
+         "Damage Dealt": "7570",
+         "Damage Mitigated": "0",
+         "Deaths": "7",
+         "Eliminations": "21",
+         "Healing Done": "29083",
+         "K/D Ratio": "3",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "zzcrispy",
+        "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+        "player_stats": {
+         "Assists": "24",
+         "Damage Dealt": "8969",
+         "Damage Mitigated": "3864",
+         "Deaths": "8",
+         "Eliminations": "19",
+         "Healing Done": "12821",
+         "K/D Ratio": "2.38",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Chaseeeeeee_",
+        "player_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+        "player_stats": {
+         "Assists": "3",
+         "Damage Dealt": "15971",
+         "Damage Mitigated": "18391",
+         "Deaths": "9",
+         "Eliminations": "24",
+         "Healing Done": "450",
+         "K/D Ratio": "2.67",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "cookie084",
+        "player_id": "59643d3f-fad7-4182-87be-63d2371bedae",
+        "player_stats": {
+         "Assists": "2",
+         "Damage Dealt": "14895",
+         "Damage Mitigated": "0",
+         "Deaths": "12",
+         "Eliminations": "22",
+         "Healing Done": "753",
+         "K/D Ratio": "1.83",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+      "team_stats": {
+       "Team": "Ex Oblivione",
+       "Team Avg Deaths": "8.2",
+       "Team Avg Eliminations": "21.8",
+       "Team Score": "3",
+       "Team Total Deaths": "41",
+       "Team Total Eliminations": "109",
+       "Team Win": "1"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "4",
+    "competition_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+    "match_round": "3",
+    "played": "3",
+    "round_stats": {
+     "Map": "0x0800000000000D53",
+     "OW2 Mode": "Push",
+     "Score Summary": "0 / 1",
+     "Winner": "bb5dd404-213c-430f-8d12-8687fc3ff747"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "HadiOW2",
+        "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "9695",
+         "Damage Mitigated": "14175",
+         "Deaths": "4",
+         "Eliminations": "6",
+         "Healing Done": "0",
+         "K/D Ratio": "1.5",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "FunnyAstro1",
+        "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+        "player_stats": {
+         "Assists": "6",
+         "Damage Dealt": "6138",
+         "Damage Mitigated": "2549",
+         "Deaths": "4",
+         "Eliminations": "6",
+         "Healing Done": "5954",
+         "K/D Ratio": "1.5",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Backboneee",
+        "player_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "7623",
+         "Damage Mitigated": "0",
+         "Deaths": "6",
+         "Eliminations": "9",
+         "Healing Done": "1497",
+         "K/D Ratio": "1.5",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "LandonOW",
+        "player_id": "a332d27e-fe19-4077-89f8-27391a581460",
+        "player_stats": {
+         "Assists": "5",
+         "Damage Dealt": "5960",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "7",
+         "Healing Done": "11001",
+         "K/D Ratio": "2.33",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "seic0e",
+        "player_id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "7448",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "10",
+         "Healing Done": "0",
+         "K/D Ratio": "3.33",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "a359db61-26e2-44e0-8961-e0b373f4db21",
+      "team_stats": {
+       "Team": "SpaceStation",
+       "Team Avg Deaths": "4",
+       "Team Avg Eliminations": "7.6",
+       "Team Score": "0",
+       "Team Total Deaths": "20",
+       "Team Total Eliminations": "38",
+       "Team Win": "0"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "Clowdeyyy",
+        "player_id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "6282",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "13",
+         "Healing Done": "0",
+         "K/D Ratio": "4.33",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "Khenail",
+        "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+        "player_stats": {
+         "Assists": "17",
+         "Damage Dealt": "3510",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "13",
+         "Healing Done": "16539",
+         "K/D Ratio": "6.5",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "zzcrispy",
+        "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+        "player_stats": {
+         "Assists": "10",
+         "Damage Dealt": "4228",
+         "Damage Mitigated": "2814",
+         "Deaths": "1",
+         "Eliminations": "10",
+         "Healing Done": "7671",
+         "K/D Ratio": "10",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Chaseeeeeee_",
+        "player_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+        "player_stats": {
+         "Assists": "2",
+         "Damage Dealt": "11390",
+         "Damage Mitigated": "10695",
+         "Deaths": "1",
+         "Eliminations": "16",
+         "Healing Done": "325",
+         "K/D Ratio": "16",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "sHockWaveOW",
+        "player_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "8827",
+         "Damage Mitigated": "0",
+         "Deaths": "6",
+         "Eliminations": "11",
+         "Healing Done": "0",
+         "K/D Ratio": "1.83",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+      "team_stats": {
+       "Team": "Ex Oblivione",
+       "Team Avg Deaths": "2.6",
+       "Team Avg Eliminations": "12.6",
+       "Team Score": "1",
+       "Team Total Deaths": "13",
+       "Team Total Eliminations": "63",
+       "Team Win": "1"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "4",
+    "competition_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+    "match_round": "4",
+    "played": "4",
+    "round_stats": {
+     "Map": "0x0800000000000D3E",
+     "OW2 Mode": "Flashpoint",
+     "Score Summary": "3 / 1",
+     "Winner": "a359db61-26e2-44e0-8961-e0b373f4db21"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "HadiOW2",
+        "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+        "player_stats": {
+         "Assists": "4",
+         "Damage Dealt": "12618",
+         "Damage Mitigated": "16688",
+         "Deaths": "1",
+         "Eliminations": "27",
+         "Healing Done": "0",
+         "K/D Ratio": "27",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "FunnyAstro1",
+        "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+        "player_stats": {
+         "Assists": "26",
+         "Damage Dealt": "7163",
+         "Damage Mitigated": "3448",
+         "Deaths": "2",
+         "Eliminations": "24",
+         "Healing Done": "9929",
+         "K/D Ratio": "12",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Backboneee",
+        "player_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "10879",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "23",
+         "Healing Done": "2435",
+         "K/D Ratio": "7.67",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "LandonOW",
+        "player_id": "a332d27e-fe19-4077-89f8-27391a581460",
+        "player_stats": {
+         "Assists": "27",
+         "Damage Dealt": "6710",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "19",
+         "Healing Done": "11765",
+         "K/D Ratio": "6.33",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "SparkRow",
+        "player_id": "39042a9c-ac5f-47b4-8376-29c45676c2e9",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "10707",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "26",
+         "Healing Done": "0",
+         "K/D Ratio": "13",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "a359db61-26e2-44e0-8961-e0b373f4db21",
+      "team_stats": {
+       "Team": "SpaceStation",
+       "Team Avg Deaths": "2.2",
+       "Team Avg Eliminations": "23.8",
+       "Team Score": "3",
+       "Team Total Deaths": "11",
+       "Team Total Eliminations": "119",
+       "Team Win": "1"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "Clowdeyyy",
+        "player_id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "7200",
+         "Damage Mitigated": "0",
+         "Deaths": "7",
+         "Eliminations": "9",
+         "Healing Done": "0",
+         "K/D Ratio": "1.29",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "Khenail",
+        "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+        "player_stats": {
+         "Assists": "8",
+         "Damage Dealt": "4616",
+         "Damage Mitigated": "0",
+         "Deaths": "7",
+         "Eliminations": "6",
+         "Healing Done": "19474",
+         "K/D Ratio": "0.86",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "zzcrispy",
+        "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+        "player_stats": {
+         "Assists": "7",
+         "Damage Dealt": "5712",
+         "Damage Mitigated": "1859",
+         "Deaths": "8",
+         "Eliminations": "7",
+         "Healing Done": "7010",
+         "K/D Ratio": "0.88",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Chaseeeeeee_",
+        "player_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+        "player_stats": {
+         "Assists": "2",
+         "Damage Dealt": "11373",
+         "Damage Mitigated": "13547",
+         "Deaths": "7",
+         "Eliminations": "8",
+         "Healing Done": "523",
+         "K/D Ratio": "1.14",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "sHockWaveOW",
+        "player_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "10354",
+         "Damage Mitigated": "0",
+         "Deaths": "9",
+         "Eliminations": "8",
+         "Healing Done": "1550",
+         "K/D Ratio": "0.89",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+      "team_stats": {
+       "Team": "Ex Oblivione",
+       "Team Avg Deaths": "7.6",
+       "Team Avg Eliminations": "7.6",
+       "Team Score": "1",
+       "Team Total Deaths": "38",
+       "Team Total Eliminations": "38",
+       "Team Win": "0"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "4",
+    "competition_id": "f34c5377-e946-4569-ac81-9a66bb4ed71a",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-75617d06-aa9c-417c-965a-1d9266c9a06f",
+    "match_round": "5",
+    "played": "5",
+    "round_stats": {
+     "Map": "0x0800000000000871",
+     "OW2 Mode": "Escort",
+     "Score Summary": "2 / 1",
+     "Winner": "a359db61-26e2-44e0-8961-e0b373f4db21"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "HadiOW2",
+        "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+        "player_stats": {
+         "Assists": "10",
+         "Damage Dealt": "12851",
+         "Damage Mitigated": "17158",
+         "Deaths": "5",
+         "Eliminations": "31",
+         "Healing Done": "0",
+         "K/D Ratio": "6.2",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "FunnyAstro1",
+        "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+        "player_stats": {
+         "Assists": "24",
+         "Damage Dealt": "7062",
+         "Damage Mitigated": "2469",
+         "Deaths": "5",
+         "Eliminations": "25",
+         "Healing Done": "7193",
+         "K/D Ratio": "5",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Backboneee",
+        "player_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "11875",
+         "Damage Mitigated": "0",
+         "Deaths": "6",
+         "Eliminations": "26",
+         "Healing Done": "2412",
+         "K/D Ratio": "4.33",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "LandonOW",
+        "player_id": "a332d27e-fe19-4077-89f8-27391a581460",
+        "player_stats": {
+         "Assists": "25",
+         "Damage Dealt": "8656",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "29",
+         "Healing Done": "11956",
+         "K/D Ratio": "9.67",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "SparkRow",
+        "player_id": "39042a9c-ac5f-47b4-8376-29c45676c2e9",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "14136",
+         "Damage Mitigated": "0",
+         "Deaths": "4",
+         "Eliminations": "27",
+         "Healing Done": "0",
+         "K/D Ratio": "6.75",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "a359db61-26e2-44e0-8961-e0b373f4db21",
+      "team_stats": {
+       "Team": "SpaceStation",
+       "Team Avg Deaths": "4.6",
+       "Team Avg Eliminations": "27.6",
+       "Team Score": "2",
+       "Team Total Deaths": "23",
+       "Team Total Eliminations": "138",
+       "Team Win": "1"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "Clowdeyyy",
+        "player_id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "8722",
+         "Damage Mitigated": "0",
+         "Deaths": "9",
+         "Eliminations": "18",
+         "Healing Done": "0",
+         "K/D Ratio": "2",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "Khenail",
+        "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+        "player_stats": {
+         "Assists": "16",
+         "Damage Dealt": "5415",
+         "Damage Mitigated": "0",
+         "Deaths": "9",
+         "Eliminations": "11",
+         "Healing Done": "19828",
+         "K/D Ratio": "1.22",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "zzcrispy",
+        "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+        "player_stats": {
+         "Assists": "12",
+         "Damage Dealt": "6421",
+         "Damage Mitigated": "2274",
+         "Deaths": "10",
+         "Eliminations": "12",
+         "Healing Done": "7278",
+         "K/D Ratio": "1.2",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Chaseeeeeee_",
+        "player_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+        "player_stats": {
+         "Assists": "2",
+         "Damage Dealt": "12472",
+         "Damage Mitigated": "12417",
+         "Deaths": "8",
+         "Eliminations": "18",
+         "Healing Done": "0",
+         "K/D Ratio": "2.25",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "sHockWaveOW",
+        "player_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+        "player_stats": {
+         "Assists": "2",
+         "Damage Dealt": "9499",
+         "Damage Mitigated": "0",
+         "Deaths": "10",
+         "Eliminations": "10",
+         "Healing Done": "1506",
+         "K/D Ratio": "1",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+      "team_stats": {
+       "Team": "Ex Oblivione",
+       "Team Avg Deaths": "9.2",
+       "Team Avg Eliminations": "13.8",
+       "Team Score": "1",
+       "Team Total Deaths": "46",
+       "Team Total Eliminations": "69",
+       "Team Win": "0"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "stats_http_status": 200
+}

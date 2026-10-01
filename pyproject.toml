@@ -26,6 +26,7 @@ include = ["owcsmuse*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = ["golden: end-to-end answers checked against independently derived values (own CI job)"]
 
 # Lint for correctness, not for style: undefined and unused names, mutable
 # defaults, except-without-type, loop-variable bugs. Line length and statement

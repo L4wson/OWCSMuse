@@ -1,0 +1,426 @@
+{
+ "note": "One real Liquipedia match2 record, copied verbatim from raw_payloads (id 4215). Used by the golden cases about Stage 2 map enrichment; never fetched by this suite.",
+ "matches": [
+  {
+   "faceit_match_id": "1-a823bbde-de66-4928-8527-54f4e8882293",
+   "why": "S9 EMEA Twisted Minds 3-2 Geekay (the existing result_only case in matches.json): the Liquipedia record that enriches it with map-level results in Stage 2",
+   "record": {
+    "vod": "https://www.youtube.com/live/d9uylXw_-dE?si=akOxWxt4xd_hVpAc&t=10546",
+    "date": "2026-06-27 19:30:00",
+    "game": "overwatch2",
+    "icon": "OWCS EMEA 2025 icon allmode.png",
+    "mode": "team",
+    "type": "Online",
+    "wiki": "overwatch",
+    "links": {
+     "faceit": "https://www.faceit.com/en/ow2/room/1-a823bbde-de66-4928-8527-54f4e8882293"
+    },
+    "patch": "",
+    "bestof": 5,
+    "pageid": 137926,
+    "parent": "Overwatch_Champions_Series/2026/EMEA/Stage_2",
+    "series": "Overwatch Champions Series",
+    "status": "",
+    "stream": {
+     "twitch": "Overwatch_Esports",
+     "youtube": "overwatchleague",
+     "twitch_en_1": "Overwatch_Esports",
+     "youtube_en_1": "overwatchleague"
+    },
+    "winner": "1",
+    "iconurl": "https://liquipedia.net/commons/images/thumb/0/0e/OWCS_EMEA_2025_icon_allmode.png/400px-OWCS_EMEA_2025_icon_allmode.png",
+    "section": "Week 3",
+    "finished": 1,
+    "icondark": "OWCS EMEA 2025 icon allmode.png",
+    "match2id": "ukenB2ndxE_0003",
+    "pagename": "Overwatch_Champions_Series/2026/EMEA/Stage_2/Regular_Season",
+    "walkover": "",
+    "dateexact": 1,
+    "extradata": {
+     "casters": {
+      "1": {
+       "flag": "united states",
+       "name": "JAKE",
+       "displayName": "JAKE"
+      },
+      "2": {
+       "flag": "united kingdom",
+       "name": "Moxi",
+       "displayName": "Moxi"
+      }
+     },
+     "timestamp": 1782588600,
+     "timezoneid": "CEST",
+     "matchsection": "Week 3",
+     "timezoneoffset": "+02:00"
+    },
+    "namespace": 0,
+    "shortname": "OWCS",
+    "objectname": "137926_ukenB2ndxE_0003",
+    "resulttype": "",
+    "tickername": "OWCS EMEA Stage 2 - Regular Season",
+    "tournament": "Overwatch Champions Series 2026 - EMEA Stage 2 - Regular Season",
+    "icondarkurl": "https://liquipedia.net/commons/images/thumb/0/0e/OWCS_EMEA_2025_icon_allmode.png/400px-OWCS_EMEA_2025_icon_allmode.png",
+    "match2games": [
+     {
+      "map": "Oasis",
+      "vod": "",
+      "date": "2026-06-27 19:30:00",
+      "game": "overwatch2",
+      "mode": "Control",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       0,
+       2
+      ],
+      "status": "",
+      "winner": "2",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Mizuki",
+       "team2ban1": "Bastion",
+       "timestamp": 1782588600
+      },
+      "opponents": [
+       {
+        "score": 0,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 1,
+      "participants": []
+     },
+     {
+      "map": "King's Row",
+      "vod": "",
+      "date": "2026-06-27 19:30:00",
+      "game": "overwatch2",
+      "mode": "Hybrid",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       4,
+       3
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "Vendetta",
+       "team2ban1": "Reinhardt",
+       "timestamp": 1782588600
+      },
+      "opponents": [
+       {
+        "score": 4,
+        "status": "S"
+       },
+       {
+        "score": 3,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 2,
+      "participants": []
+     },
+     {
+      "map": "Runasapi",
+      "vod": "",
+      "date": "2026-06-27 19:30:00",
+      "game": "overwatch2",
+      "mode": "Push",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       103.12,
+       63.62
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Sigma",
+       "team2ban1": "Kiriko",
+       "timestamp": 1782588600
+      },
+      "opponents": [
+       {
+        "score": 103.12,
+        "status": "S"
+       },
+       {
+        "score": 63.62,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 3,
+      "participants": []
+     },
+     {
+      "map": "Circuit Royal",
+      "vod": "",
+      "date": "2026-06-27 19:30:00",
+      "game": "overwatch2",
+      "mode": "Escort",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       1,
+       2
+      ],
+      "status": "",
+      "winner": "2",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Shion",
+       "team2ban1": "Jetpack Cat",
+       "timestamp": 1782588600
+      },
+      "opponents": [
+       {
+        "score": 1,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 4,
+      "participants": []
+     },
+     {
+      "map": "Suravasa",
+      "vod": "",
+      "date": "2026-06-27 19:30:00",
+      "game": "overwatch2",
+      "mode": "Flashpoint",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       3,
+       0
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "Cassidy",
+       "team2ban1": "Sigma",
+       "timestamp": 1782588600
+      },
+      "opponents": [
+       {
+        "score": 3,
+        "status": "S"
+       },
+       {
+        "score": 0,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 5,
+      "participants": []
+     }
+    ],
+    "publishertier": "owcs",
+    "liquipediatier": "2",
+    "match2bracketid": "ukenB2ndxE",
+    "match2opponents": [
+     {
+      "id": 1,
+      "icon": "Twisted Minds 2023 allmode.png",
+      "name": "Twisted Minds",
+      "type": "team",
+      "score": 3,
+      "status": "S",
+      "template": "twisted minds 2023",
+      "extradata": [],
+      "placement": 1,
+      "teamtemplate": {
+       "name": "Twisted Minds",
+       "page": "Twisted Minds",
+       "image": "Twisted Minds 2023 allmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/2/24/Twisted_Minds_2023_allmode.png/400px-Twisted_Minds_2023_allmode.png",
+       "template": "twisted minds 2023",
+       "imagedark": "Twisted Minds 2023 allmode.png",
+       "shortname": "TM",
+       "bracketname": "Twisted Minds",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/2/24/Twisted_Minds_2023_allmode.png/400px-Twisted_Minds_2023_allmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "Saudi Arabia",
+        "name": "Quartz",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Quartz"
+       },
+       {
+        "id": 2,
+        "flag": "Saudi Arabia",
+        "name": "Youbi",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Youbi"
+       },
+       {
+        "id": 3,
+        "flag": "South Korea",
+        "name": "JaeWoo",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "JaeWoo"
+       },
+       {
+        "id": 4,
+        "flag": "Saudi Arabia",
+        "name": "TVNT",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "TVNT"
+       },
+       {
+        "id": 5,
+        "flag": "Saudi Arabia",
+        "name": "KSAA",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "KSAA"
+       },
+       {
+        "id": 6,
+        "flag": "United Kingdom",
+        "name": "FunnyAstro",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "FunnyAstro"
+       },
+       {
+        "id": 7,
+        "flag": "South Korea",
+        "name": "Simple",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Simple"
+       }
+      ]
+     },
+     {
+      "id": 2,
+      "icon": "Geekay Esports 2023 allmode.png",
+      "name": "Geekay Esports",
+      "type": "team",
+      "score": 2,
+      "status": "S",
+      "template": "geekay esports 2023",
+      "extradata": [],
+      "placement": 2,
+      "teamtemplate": {
+       "name": "Geekay Esports",
+       "page": "Geekay Esports",
+       "image": "Geekay Esports 2023 allmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/f/f1/Geekay_Esports_2023_allmode.png/400px-Geekay_Esports_2023_allmode.png",
+       "template": "geekay esports 2023",
+       "imagedark": "Geekay Esports 2023 allmode.png",
+       "shortname": "GK",
+       "bracketname": "Geekay Esports",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/f/f1/Geekay_Esports_2023_allmode.png/400px-Geekay_Esports_2023_allmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "Saudi Arabia",
+        "name": "LBBD7",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "LBBD7"
+       },
+       {
+        "id": 2,
+        "flag": "South Korea",
+        "name": "AlphaYi",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "AlphaYi"
+       },
+       {
+        "id": 3,
+        "flag": "Saudi Arabia",
+        "name": "ZIYAD",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "ZIYAD"
+       },
+       {
+        "id": 4,
+        "flag": "South Korea",
+        "name": "FiNN",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "FiNN"
+       },
+       {
+        "id": 5,
+        "flag": "Denmark",
+        "name": "Kellex",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Kellex"
+       }
+      ]
+     }
+    ],
+    "match2bracketdata": {
+     "next": "ukenB2ndxE_0004",
+     "type": "matchlist",
+     "matchIndex": 3,
+     "bracketindex": 2,
+     "sectionheader": "Standings",
+     "groupRoundIndex": 3,
+     "inheritedheader": "June 27th"
+    },
+    "liquipediatiertype": ""
+   }
+  }
+ ]
+}

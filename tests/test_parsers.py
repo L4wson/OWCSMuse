@@ -231,3 +231,26 @@ def test_ts_from_epoch_seconds_and_millis():
     assert ts_from_epoch(1711303776) == datetime(2024, 3, 24, 18, 9, 36, tzinfo=timezone.utc)
     assert ts_from_epoch(1709313600000) == datetime(2024, 3, 1, 17, 20, tzinfo=timezone.utc)
     assert ts_from_epoch(None) is None and ts_from_epoch(0) is None and ts_from_epoch("x") is None
+
+
+# ------------------------------------------------------------------ bracket byes
+
+def _with_bye(item):
+    item = dict(item, teams=dict(item["teams"]))
+    item["teams"]["faction2"] = dict(item["teams"]["faction2"], faction_id="bye", name="bye")
+    return item
+
+
+def test_a_bracket_bye_is_recognised_as_not_a_series(fx):
+    """FACEIT scores the real team 1-0 against a placeholder faction called 'bye'; that is not a match."""
+    real = parse_match_stub(fx("list_item_bo5_4rounds.json"))
+    assert not real.involves_bye
+    bye = parse_match_stub(_with_bye(fx("list_item_bo5_4rounds.json")))
+    assert bye.involves_bye and bye.faction2.is_bye and not bye.faction1.is_bye
+
+
+def test_a_team_merely_named_like_bye_is_matched_on_the_whole_name(fx):
+    item = fx("list_item_bo5_4rounds.json")
+    item = dict(item, teams=dict(item["teams"]))
+    item["teams"]["faction2"] = dict(item["teams"]["faction2"], name="Byelorussia Esports")
+    assert not parse_match_stub(item).involves_bye

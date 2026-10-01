@@ -58,7 +58,36 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
       - run: pip install -e ".[dev]"
-      - run: pytest -q
+      # the golden suite has its own job below
+      - run: pytest -q -m "not golden"
+
+  golden:
+    name: golden answers
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: owcs
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      OWCS_TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/owcs
+      OWCS_GOLDEN_SCHEMA: owcs_golden
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -e ".[dev]"
+      # Twenty real matches, the repository's own identity decisions, and 25 questions whose expected
+      # answers were derived from the raw payloads. A failure means an answer changed; the message shows
+      # expected against actual.
+      - run: pytest -q -m golden tests/test_golden_answers.py
 
   frontend:
     name: frontend

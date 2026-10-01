@@ -202,19 +202,35 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
             notes.append(f"'{f.championship}' matched {len(matches)} championships; results cover all of them: "
                          + "; ".join(n for _, n in matches)[:300])
 
+    # --- role
+    # Role is recorded per player per map (match_players.role), not per player:
+    # a flex player who played tank in some maps and DPS in others belongs to
+    # both leaderboards for the maps they actually played that role. That only
+    # has a clean meaning at player + map grain, so it is scoped there rather
+    # than silently ignored or guessed at elsewhere.
+    if (f.role is not None and q.intent != "stat_availability"
+            and not (q.intent in ("leaderboard", "entity_stat") and q.entity == "player")):
+        return Unanswerable(code="unsupported_question",
+                            reason=f"a role filter ('{f.role}') is only supported for a player leaderboard or a "
+                                   "player's own stat, since role is recorded per map",
+                            suggestions=["Try e.g. `tank with the most eliminations` or `KSAA eliminations as tank`."])
+
     # --- combinations the compiler supports
     stat_key = None if q.metric in DERIVED_METRICS else q.metric
-    if q.intent in ("leaderboard", "entity_stat") and q.entity == "player" and stat_key and (map_name or mode_name or f.team or f.region):
+    if q.intent in ("leaderboard", "entity_stat") and q.entity == "player" and stat_key and (map_name or mode_name or f.team or f.region or f.role):
         if stat_key not in TYPED_STATS:
-            return Unanswerable(code="unsupported_metric",
-                                reason=f"'{stat_key}' can only be sliced by season or championship, not by map, mode, team or region "
-                                       f"(only these stats support that: {', '.join(TYPED_STATS)})")
+            reason = (f"'{stat_key}' can only be sliced by season or championship, not by map, mode, team or region "
+                      f"(only these stats support that: {', '.join(TYPED_STATS)})")
+            if f.role:
+                reason = (f"'{stat_key}' can only be filtered by role for these stats: {', '.join(TYPED_STATS)} "
+                          "(role is per map, so it needs a stat that is tracked per map)")
+            return Unanswerable(code="unsupported_metric", reason=reason)
     if q.intent == "season_compare" and f.subject_season == f.opponent_season:
         return Unanswerable(code="invalid_query", reason="both sides name the same season, so there is nothing to compare")
     if q.intent == "head_to_head" and (map_name or mode_name):
         return Unanswerable(code="unsupported_question", reason="head-to-head is tracked per series, not per map; drop the map/mode filter")
-    if q.intent == "stat_availability" and (f.map or f.mode or f.championship):
-        notes.append("stat availability is reported per season; map/mode/championship filters ignored")
+    if q.intent == "stat_availability" and (f.map or f.mode or f.championship or f.role):
+        notes.append("stat availability is reported per season; map/mode/championship/role filters ignored")
 
     # --- metric availability in the requested season slice
     if stat_key and f.season is not None and f.season not in info.stat_keys.get(stat_key, set()):

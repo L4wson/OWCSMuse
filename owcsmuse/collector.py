@@ -28,6 +28,7 @@ from .db import RawPayloadStore
 from .faceit.client import FaceitClient, FaceitClientError, FaceitNotFound, FaceitRetryExhausted
 from .logging import get_logger, log_event
 from .parsers.matches import (
+    BYE_NOTE,
     MatchRecord,
     SeriesResult,
     parse_match_detail,
@@ -239,7 +240,7 @@ class Collector:
                 %(f1_id)s, %(f2_id)s, %(f1_name)s, %(f2_name)s,
                 %(winner)s, %(winner_team)s, %(f1_score)s, %(f2_score)s, 'list',
                 %(winner)s, %(f1_score)s, %(f2_score)s,
-                %(maps_picked)s, 'stub', now()
+                %(maps_picked)s, %(ingest_state)s, now()
             )
             ON CONFLICT (match_id) DO UPDATE SET
                 championship_id  = COALESCE(EXCLUDED.championship_id, matches.championship_id),
@@ -294,6 +295,7 @@ class Collector:
                 "f2_id": rec.faction2.team_id if rec.faction2 else None,
                 "f1_name": rec.faction1.name if rec.faction1 else None,
                 "f2_name": rec.faction2.name if rec.faction2 else None,
+                "ingest_state": "skipped" if rec.involves_bye else "stub",
                 "winner": r.winner_faction,
                 "winner_team": rec.winner_team_id,
                 "f1_score": r.faction1_score,
@@ -492,7 +494,9 @@ class Collector:
                         })
                 self._upsert_players_batch(cur, list(player_batch.values()))
 
-                if rec.status == "FINISHED":
+                if rec.involves_bye:
+                    state, error = "skipped", BYE_NOTE  # never a series: no result, map or record to keep
+                elif rec.status == "FINISHED":
                     if rounds:
                         state, error = "complete", None
                     elif stats_error and "404" in stats_error:

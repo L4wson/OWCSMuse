@@ -29,11 +29,20 @@ class SeriesResult:
         return self.winner_faction is not None
 
 
+BYE_TEAM_ID = "bye"
+BYE_NOTE = "bye: a bracket slot filled by a placeholder opponent, not a played series"
+
+
 @dataclass
 class TeamRef:
     team_id: str
     name: Optional[str]
     avatar: Optional[str] = None
+
+    @property
+    def is_bye(self) -> bool:
+        """FACEIT fills an empty bracket slot with a placeholder faction whose id and name are both 'bye'."""
+        return self.team_id.lower() == BYE_TEAM_ID or (self.name or "").strip().lower() == BYE_TEAM_ID
 
 
 @dataclass
@@ -79,6 +88,11 @@ class MatchRecord:
     picks: list[MapPick] = field(default_factory=list)
     map_names: dict[str, str] = field(default_factory=dict)  # guid -> name
     detailed_results: list[dict[str, Any]] = field(default_factory=list)
+
+    @property
+    def involves_bye(self) -> bool:
+        """A bracket bye is not a played series: the placeholder "wins" 0-1, and the real team is credited a 1-0."""
+        return any(f is not None and f.is_bye for f in (self.faction1, self.faction2))
 
     @property
     def winner_team_id(self) -> Optional[str]:

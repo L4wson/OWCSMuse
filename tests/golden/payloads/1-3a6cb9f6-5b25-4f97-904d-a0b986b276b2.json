@@ -1,0 +1,3342 @@
+{
+ "detail": {
+  "best_of": 5,
+  "calculate_elo": true,
+  "chat_room_id": "match-1-3a6cb9f6-5b25-4f97-904d-a0b986b276b2",
+  "competition_id": "f1be7b75-9e54-4d57-b524-9d32f5398682",
+  "competition_name": "S5 NA OWCS Central - Regular Season",
+  "competition_type": "championship",
+  "configured_at": 1748810718,
+  "demo_url": [
+   "M6V2FK",
+   "GXTZ2F",
+   "G1X0ZE"
+  ],
+  "detailed_results": [
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 2
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 1
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 3
+     },
+     "faction2": {
+      "score": 1
+     }
+    },
+    "winner": "faction1"
+   }
+  ],
+  "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-3a6cb9f6-5b25-4f97-904d-a0b986b276b2",
+  "finished_at": 1748811464,
+  "game": "ow2",
+  "group": 1,
+  "match_id": "1-3a6cb9f6-5b25-4f97-904d-a0b986b276b2",
+  "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+  "region": "GLOBAL",
+  "results": {
+   "score": {
+    "faction1": 3,
+    "faction2": 0
+   },
+   "winner": "faction1"
+  },
+  "round": 5,
+  "started_at": 1748810738,
+  "status": "FINISHED",
+  "teams": {
+   "faction1": {
+    "avatar": "https://distribution.faceit-cdn.net/images/e146675f-058d-468a-a9be-4640caaaf09a.jpg",
+    "faction_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+    "leader": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+    "name": "Geekay Esports",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/dd256d46-b605-4990-93e6-78de48a1e77a.jpeg",
+      "game_player_id": "409005325",
+      "game_player_name": "Lethal",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "IHaveLethal",
+      "player_id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/1cba1d1b-be93-4d24-8a4b-fb88a8946f75.jpeg",
+      "game_player_id": "474352246",
+      "game_player_name": "WMaimone",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "WMaimone",
+      "player_id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "387505173",
+      "game_player_name": "cuFFa",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "cuFFah",
+      "player_id": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/99667e91-4347-4784-9dd0-cd6a4690958d.jpeg",
+      "game_player_id": "426108658",
+      "game_player_name": "Admiral",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "AdmiralRaptr",
+      "player_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/6882e73f-028b-433f-8b53-80f48707a6fa.jpeg",
+      "game_player_id": "313984445",
+      "game_player_name": "UltraViolet",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "ultraviol3t",
+      "player_id": "43d39898-d853-4e75-b249-9b41d638a2b0"
+     }
+    ],
+    "stats": {
+     "rating": 0,
+     "skillLevel": {
+      "average": 10,
+      "range": {
+       "max": 10,
+       "min": 10
+      }
+     },
+     "winProbability": 0
+    },
+    "substituted": false,
+    "type": "premade"
+   },
+   "faction2": {
+    "avatar": "https://distribution.faceit-cdn.net/images/1f52a412-5c50-467d-bdb0-e980d0f86215.jpeg",
+    "faction_id": "c6248ff8-64ff-47ad-8602-7eec0eeda9b0",
+    "leader": "bcd9737d-3295-450d-a20e-94d8815c6d2f",
+    "name": "DhillDucks",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/c540f39c-2ba7-4567-92a3-5b16111ed029.jpeg",
+      "game_player_id": "385663339",
+      "game_player_name": "rzr",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "ReyzrOW",
+      "player_id": "bcd9737d-3295-450d-a20e-94d8815c6d2f"
+     },
+     {
+      "anticheat_required": true,
+      "avatar": "https://distribution.faceit-cdn.net/images/b661c898-7108-4484-af5c-5b61e63f1efb.jpeg",
+      "game_player_id": "300970001",
+      "game_player_name": "Pdk",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "pdkk_",
+      "player_id": "53a87c13-870c-4c2f-bde1-c96a67df37c9"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/68b828a5-160f-4e96-937f-148cc5091c47.jpeg",
+      "game_player_id": "374358981",
+      "game_player_name": "Baz",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "BazOdub",
+      "player_id": "029bf891-4c0b-4153-a386-b7ff9f3ad2f8"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/4a0384b6-0447-4de9-9612-9c2770f31cee.jpeg",
+      "game_player_id": "388652474",
+      "game_player_name": "redex",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "RedexLCO",
+      "player_id": "bf69c0b9-f068-41bf-a0b9-c88aa083edbb"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://assets.faceit-cdn.net/avatars/083989e0-81a4-4f83-8dc3-e5222f0df695_1551231251409.jpg",
+      "game_player_id": "363718849",
+      "game_player_name": "FrothyFilly7",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "FrothyFilly7",
+      "player_id": "083989e0-81a4-4f83-8dc3-e5222f0df695"
+     }
+    ],
+    "stats": {
+     "rating": 0,
+     "skillLevel": {
+      "average": 10,
+      "range": {
+       "max": 10,
+       "min": 10
+      }
+     },
+     "winProbability": 0
+    },
+    "substituted": false,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "808647869",
+      "game_player_name": "v1ctory",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "victoryfps",
+      "player_id": "b6fe4cb9-95b7-439c-a94e-d97d66d3e4fd"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/e53fe756-f799-48b2-8030-8d20b0c40141.jpeg",
+      "game_player_id": "810657769",
+      "game_player_name": "Axure",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "Axur3e",
+      "player_id": "b9abed30-d5cf-4d09-a5d1-931055a70327"
+     }
+    ],
+    "type": "premade"
+   }
+  },
+  "version": 2,
+  "voting": {
+   "attacking_first": {
+    "entities": [
+     {
+      "class_name": "Faction 1",
+      "filters": {
+       "voting_tags": [
+        "faction_id"
+       ]
+      },
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "filters": {
+       "voting_tags": [
+        "faction_id"
+       ]
+      },
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     }
+    ],
+    "pick": [
+     "faction1",
+     "faction2",
+     "faction2",
+     "faction2",
+     "faction1"
+    ]
+   },
+   "heroes": {
+    "entities": [
+     {
+      "class_name": "DVa",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000007A",
+      "guid": "0x02E000000000007A",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4442f521-f08e-4ace-b88d-2a5260c66a76_1724317895065.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/02e72707-64cf-4b8b-be44-b8d394479811_1724317875644.jpeg",
+      "name": "DVa"
+     },
+     {
+      "class_name": "Junker Queen",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000236",
+      "guid": "0x02E0000000000236",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4448c2d9-3bed-4b63-8ee7-0a0423237658_1724318013394.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/bd0d7f58-776d-49e2-ada9-e01c553e3104_1724318005602.jpeg",
+      "name": "Junker Queen"
+     },
+     {
+      "class_name": "Mauga",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000030A",
+      "guid": "0x02E000000000030A",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3232b802-017c-4c63-8b32-07f124c2163c_1724318031725.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/391e4a9b-1b65-45cb-9b94-3a0265086c2b_1724318023119.jpeg",
+      "name": "Mauga"
+     },
+     {
+      "class_name": "Orisa",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000013E",
+      "guid": "0x02E000000000013E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/dc83e18c-b390-4435-afc5-37906b374f80_1724318149936.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/9bad5faf-7aee-439f-825e-26ef80e27613_1724318135908.jpeg",
+      "name": "Orisa"
+     },
+     {
+      "class_name": "Ramattra",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000028D",
+      "guid": "0x02E000000000028D",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ceb7cdab-ef87-456c-977a-644af3418135_1724318071685.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6808be28-9c62-4190-82fd-19179aa3a980_1724318065210.jpeg",
+      "name": "Ramattra"
+     },
+     {
+      "class_name": "Reinhardt",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000007",
+      "guid": "0x02E0000000000007",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c5d067fb-5b4c-47a2-a80e-0963ecb7d0ce_1724318096473.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b91e6bbf-03cd-4489-9877-82f608b22ab4_1724318085496.jpeg",
+      "name": "Reinhardt"
+     },
+     {
+      "class_name": "Roadhog",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000040",
+      "guid": "0x02E0000000000040",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2a7fbb94-ea11-4fc0-b564-a35973e97b57_1724318168858.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/421da96d-438e-4f9d-9c4d-af18afc871fa_1724318161355.jpeg",
+      "name": "Roadhog"
+     },
+     {
+      "class_name": "Sigma",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000023B",
+      "guid": "0x02E000000000023B",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/09620ce5-430e-4cf4-ad92-593fff299b1d_1724318187670.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d284cc3c-fd99-437f-b592-08838be5b64d_1724318178654.jpeg",
+      "name": "Sigma"
+     },
+     {
+      "class_name": "Winston",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000009",
+      "guid": "0x02E0000000000009",
+      "id": "99679930038874",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/13e9922c-2e2f-4f07-9a1b-90aac138c2c5_1724318199247.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/77a70f46-b4ab-4241-b410-1cf1a7b51bff_1724318194527.jpeg",
+      "name": "Winston"
+     },
+     {
+      "class_name": "Wrecking Ball",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E00000000001CA",
+      "guid": "0x02E00000000001CA",
+      "id": "99679930038875",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f27e066a-bf9c-4e2e-b347-145a4952ac8a_1724318210456.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e1dbee8d-9875-4db1-a554-61571f2fa19e_1724318206587.jpeg",
+      "name": "Wrecking Ball"
+     },
+     {
+      "class_name": "Zarya",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000068",
+      "guid": "0x02E0000000000068",
+      "id": "99679930038876",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2a9a1f74-c823-4b5f-a2d3-0dcf0a5219ae_1724318219092.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/73667bf3-f672-4a48-a8da-7638a05a8bca_1724318215700.jpeg",
+      "name": "Zarya"
+     },
+     {
+      "class_name": "Ashe",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000200",
+      "guid": "0x02E0000000000200",
+      "id": "99679930038877",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8d7331e4-eeda-4b02-9a0c-692cb4d41fac_1724318229069.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c8d5dee5-897c-4f1a-839f-d6106b6a7d06_1724318224849.jpeg",
+      "name": "Ashe"
+     },
+     {
+      "class_name": "Bastion",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000015",
+      "guid": "0x02E0000000000015",
+      "id": "99679930038878",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d726c45b-08c8-4b75-950d-1272cae9ea81_1724318241773.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2689399e-6752-4018-9f45-a3736e8bbbd4_1724318235776.jpeg",
+      "name": "Bastion"
+     },
+     {
+      "class_name": "Doomfist",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000012F",
+      "guid": "0x02E000000000012F",
+      "id": "99679930038879",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cc21e178-0049-4082-a205-d048897bbb17_1724318251368.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/47ba1336-374e-40b5-b28a-e0e2c32f190e_1724318246872.jpeg",
+      "name": "Doomfist"
+     },
+     {
+      "class_name": "Echo",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000206",
+      "guid": "0x02E0000000000206",
+      "id": "99679930038880",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/27d3163e-c665-4ee8-9ba2-4b4d926e6ca5_1724318265742.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/90257fba-8acc-4d8f-8348-0f7637123c67_1724318261603.jpeg",
+      "name": "Echo"
+     },
+     {
+      "class_name": "Genji",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000029",
+      "guid": "0x02E0000000000029",
+      "id": "99679930038881",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d69d3588-df86-44ad-b317-202f0181feed_1724318276866.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f7fb18cd-799b-40f1-ae6e-e5e03f11a660_1724318271234.jpeg",
+      "name": "Genji"
+     },
+     {
+      "class_name": "Hanzo",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000005",
+      "guid": "0x02E0000000000005",
+      "id": "99679930038882",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/42486b98-5cdf-4b8d-b0a6-bf5baa3fb99f_1724318289338.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c27514e1-ce19-4500-b823-4a38db92aed3_1724318284742.jpeg",
+      "name": "Hanzo"
+     },
+     {
+      "class_name": "Junkrat",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000065",
+      "guid": "0x02E0000000000065",
+      "id": "99679930038883",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/9d2f36c3-27ca-4d8d-975d-149de216762c_1724318300455.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/24f141cb-a51b-4c4e-aee1-36c54c2f7b47_1724318296764.jpeg",
+      "name": "Junkrat"
+     },
+     {
+      "class_name": "Cassidy",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000042",
+      "guid": "0x02E0000000000042",
+      "id": "99679930038884",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2660ec0d-9028-4385-a0a2-e5d2d124a204_1724318318233.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6d265ed7-e8d8-4d2f-b2a1-9abaa810a9d0_1724318309772.jpeg",
+      "name": "Cassidy"
+     },
+     {
+      "class_name": "Mei",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E00000000000DD",
+      "guid": "0x02E00000000000DD",
+      "id": "99679930038885",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7ad94493-d35f-4973-93fd-92a281141346_1724318333053.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fcf077c4-a016-478a-a4e8-d7424dfef193_1724318324639.jpeg",
+      "name": "Mei"
+     },
+     {
+      "class_name": "Pharah",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000008",
+      "guid": "0x02E0000000000008",
+      "id": "99679930038886",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cffe56f4-ea5f-4e24-b27c-0cac89499375_1724318351464.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b42389bf-b7cb-4aaa-90cd-ac6c9902d191_1724318356713.jpeg",
+      "name": "Pharah"
+     },
+     {
+      "class_name": "Reaper",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000002",
+      "guid": "0x02E0000000000002",
+      "id": "99679930038887",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/feae1f6d-c66b-4c61-99f7-d1ea0a303a81_1724318369170.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/281572ff-396a-4cf9-97d0-f279ee8e348d_1724318363783.jpeg",
+      "name": "Reaper"
+     },
+     {
+      "class_name": "Soldier 76",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000006E",
+      "guid": "0x02E000000000006E",
+      "id": "99679930038888",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2500b42c-e272-4da6-9a7d-4ff516b7f9f6_1724318381556.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0dbd25e2-cee4-4b0f-807c-ec7157ddfee4_1724318376539.jpeg",
+      "name": "Soldier 76"
+     },
+     {
+      "class_name": "Sombra",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000012E",
+      "guid": "0x02E000000000012E",
+      "id": "99679930038889",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d4d2112b-deaa-445b-8cb8-d69e113f8ece_1724318396328.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/53dcb056-694b-4de0-a4c7-62bd30483647_1724318388304.jpeg",
+      "name": "Sombra"
+     },
+     {
+      "class_name": "Sojourn",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E00000000001EC",
+      "guid": "0x02E00000000001EC",
+      "id": "99679930038890",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/53b29679-55ad-4acb-b065-bbc2e6d8cfdf_1724318411615.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/173aa5e4-2750-42c3-893c-3e9e18aeb9c7_1724318404540.jpeg",
+      "name": "Sojourn"
+     },
+     {
+      "class_name": "Symmetra",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000016",
+      "guid": "0x02E0000000000016",
+      "id": "99679930038891",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4dc87492-7e1c-4d68-bd30-dbf7b712e79c_1724318428941.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c4e9d275-fb39-4308-9b66-ac132f1183d7_1724318419312.jpeg",
+      "name": "Symmetra"
+     },
+     {
+      "class_name": "Torbjorn",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000006",
+      "guid": "0x02E0000000000006",
+      "id": "99679930038892",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/766dfaac-eb47-4141-8368-3581967c7510_1724318441437.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ddda9664-2b70-478f-acbe-79acd25cd440_1724318436375.jpeg",
+      "name": "Torbjorn"
+     },
+     {
+      "class_name": "Tracer",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000003",
+      "guid": "0x02E0000000000003",
+      "id": "99679930038893",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c0836865-c072-4071-b7d2-b7b4ee3476b1_1724318454195.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f4da4c0f-4c8f-435a-bbe0-440fe203e4c7_1724318448558.jpeg",
+      "name": "Tracer"
+     },
+     {
+      "class_name": "Widowmaker",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000000A",
+      "guid": "0x02E000000000000A",
+      "id": "99679930038894",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/33526f73-981d-4805-89e9-341eb9142101_1724318464638.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a6c472a4-25e3-45e5-bc20-4d9f655f0192_1724318460027.jpeg",
+      "name": "Widowmaker"
+     },
+     {
+      "class_name": "Venture",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000032B",
+      "guid": "0x02E000000000032B",
+      "id": "99679930038895",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/69479b6d-c65a-4f46-834b-0ef26b3429f5_1724318478749.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c9a2661b-4ade-40c4-b518-5fa86f803503_1724318473682.jpeg",
+      "name": "Venture"
+     },
+     {
+      "class_name": "Ana",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000013B",
+      "guid": "0x02E000000000013B",
+      "id": "99679930038896",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4730eb7b-212d-47dd-894b-2d75fe1fcb57_1724318485684.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3997ddcd-0f88-4fb8-a3c4-3be60586bfe5_1724318482368.jpeg",
+      "name": "Ana"
+     },
+     {
+      "class_name": "Baptiste",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000221",
+      "guid": "0x02E0000000000221",
+      "id": "99679930038897",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5d9fe844-590b-40dd-b45c-db3cc6c19336_1724318499974.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e8359257-8a58-4b7e-9a3c-421220771812_1724318490079.jpeg",
+      "name": "Baptiste"
+     },
+     {
+      "class_name": "Brigitte",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000195",
+      "guid": "0x02E0000000000195",
+      "id": "99679930038898",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/01e6c335-e9cc-488c-92e4-2397f9e42487_1724318510058.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6c15a438-deae-403f-b24f-493dc475aa61_1724318504870.jpeg",
+      "name": "Brigitte"
+     },
+     {
+      "class_name": "Illari",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000031C",
+      "guid": "0x02E000000000031C",
+      "id": "99679930038899",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/36a5f642-da4c-4ed7-a719-5a2ca8ec0c5c_1724318530248.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0fa90343-166b-4cda-a763-4267485bef41_1724318522371.jpeg",
+      "name": "Illari"
+     },
+     {
+      "class_name": "Kiriko",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000231",
+      "guid": "0x02E0000000000231",
+      "id": "99679930038900",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5a2d35bd-fff6-4a63-bb2b-d0e5f6f3c331_1724318558194.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8dc55e51-5f05-4d9e-96ad-19578bfd97f2_1724318548730.jpeg",
+      "name": "Kiriko"
+     },
+     {
+      "class_name": "LifeWeaver",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000291",
+      "guid": "0x02E0000000000291",
+      "id": "99679930038901",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/d2fea39f-a0bc-4e64-a7f1-a5f51e2cb15b_1724318579750.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2ab48619-3398-4c41-a47d-1b7e393f96a8_1724318573743.jpeg",
+      "name": "LifeWeaver"
+     },
+     {
+      "class_name": "Lucio",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000079",
+      "guid": "0x02E0000000000079",
+      "id": "99679930038902",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8573085c-bb20-4e89-b607-02eb20725364_1724318610844.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/191e6d3e-1575-49b3-a3fe-5a06f2b8fb59_1724318605712.jpeg",
+      "name": "Lucio"
+     },
+     {
+      "class_name": "Mercy",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000004",
+      "guid": "0x02E0000000000004",
+      "id": "99679930038903",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ffb661b-58f8-4b50-9e85-617bcdc93830_1724318623231.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ce36cb20-bd92-41ca-aa79-61acc11cf8cd_1724318618124.jpeg",
+      "name": "Mercy"
+     },
+     {
+      "class_name": "Moira",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E00000000001A2",
+      "guid": "0x02E00000000001A2",
+      "id": "99679930038904",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cefe7484-623e-4ae3-ae2c-d166884853b8_1724318637800.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c509bd4f-baa9-4609-a0b7-65cec29f83f0_1724318629760.jpeg",
+      "name": "Moira"
+     },
+     {
+      "class_name": "Zenyatta",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000020",
+      "guid": "0x02E0000000000020",
+      "id": "99679930038905",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/73921d1c-62c7-4a74-8a66-227209ae8018_1724318651690.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/610fe2c3-03f4-4295-90ee-fb76e6d1c383_1724318648056.jpeg",
+      "name": "Zenyatta"
+     },
+     {
+      "class_name": "Juno",
+      "filters": {
+       "voting_tags": [
+        "role:Support"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000365",
+      "guid": "0x02E0000000000365",
+      "id": "99679930038906",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/23ae1b85-bcb5-4891-b944-f57f5f1ee306_1724318661140.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/47087c68-5579-4af0-964e-b8bfd41dc276_1724318657265.jpeg",
+      "name": "Juno"
+     },
+     {
+      "class_name": "Hazard",
+      "filters": {
+       "voting_tags": [
+        "role:Tank"
+       ]
+      },
+      "game_heroes_id": "0x02E0000000000362",
+      "guid": "0x02E0000000000362",
+      "id": "132705676395816",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b0c2933c-e644-4a46-a6cf-f5a992ae33c6_1732201051633.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/369e409e-9e21-43f9-8700-5eb8100494a3_1732201046515.jpeg",
+      "name": "Hazard"
+     },
+     {
+      "class_name": "Freja",
+      "filters": {
+       "voting_tags": [
+        "role:Damage"
+       ]
+      },
+      "game_heroes_id": "0x02E000000000032A",
+      "guid": "0x02E000000000032A",
+      "id": "735813916679363",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b5870b2e-0ccb-42a7-bbaf-ea1009a1e640_1742378499588.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/784ecd05-927f-46e6-aca4-432185befd59_1742378487164.jpeg",
+      "name": "Freja"
+     }
+    ],
+    "pick": [
+     [
+      "0x02E000000000007A",
+      "0x02E0000000000236",
+      "0x02E000000000030A",
+      "0x02E000000000013E",
+      "0x02E000000000028D",
+      "0x02E0000000000007",
+      "0x02E0000000000040",
+      "0x02E000000000023B",
+      "0x02E0000000000009",
+      "0x02E00000000001CA",
+      "0x02E0000000000068",
+      "0x02E0000000000200",
+      "0x02E0000000000015",
+      "0x02E000000000012F",
+      "0x02E0000000000206",
+      "0x02E0000000000029",
+      "0x02E0000000000005",
+      "0x02E0000000000065",
+      "0x02E00000000000DD",
+      "0x02E0000000000008",
+      "0x02E0000000000002",
+      "0x02E000000000006E",
+      "0x02E00000000001EC",
+      "0x02E0000000000016",
+      "0x02E0000000000006",
+      "0x02E0000000000003",
+      "0x02E000000000000A",
+      "0x02E000000000032B",
+      "0x02E000000000013B",
+      "0x02E0000000000221",
+      "0x02E0000000000195",
+      "0x02E0000000000231",
+      "0x02E0000000000291",
+      "0x02E0000000000079",
+      "0x02E0000000000004",
+      "0x02E0000000000020",
+      "0x02E0000000000365",
+      "0x02E0000000000362",
+      "0x02E000000000032A",
+      "0x02E0000000000042",
+      "0x02E000000000031C"
+     ],
+     [
+      "0x02E000000000007A",
+      "0x02E0000000000236",
+      "0x02E000000000030A",
+      "0x02E000000000013E",
+      "0x02E0000000000007",
+      "0x02E0000000000040",
+      "0x02E000000000023B",
+      "0x02E0000000000009",
+      "0x02E00000000001CA",
+      "0x02E0000000000068",
+      "0x02E0000000000015",
+      "0x02E000000000012F",
+      "0x02E0000000000206",
+      "0x02E0000000000029",
+      "0x02E0000000000005",
+      "0x02E0000000000065",
+      "0x02E0000000000042",
+      "0x02E00000000000DD",
+      "0x02E0000000000008",
+      "0x02E0000000000002",
+      "0x02E000000000006E",
+      "0x02E000000000012E",
+      "0x02E00000000001EC",
+      "0x02E0000000000016",
+      "0x02E0000000000006",
+      "0x02E000000000000A",
+      "0x02E000000000032B",
+      "0x02E000000000013B",
+      "0x02E0000000000221",
+      "0x02E0000000000195",
+      "0x02E000000000031C",
+      "0x02E0000000000291",
+      "0x02E0000000000079",
+      "0x02E0000000000004",
+      "0x02E00000000001A2",
+      "0x02E0000000000020",
+      "0x02E0000000000365",
+      "0x02E0000000000362",
+      "0x02E000000000032A",
+      "0x02E0000000000200",
+      "0x02E0000000000003"
+     ],
+     [
+      "0x02E000000000007A",
+      "0x02E0000000000236",
+      "0x02E000000000030A",
+      "0x02E000000000013E",
+      "0x02E000000000028D",
+      "0x02E0000000000007",
+      "0x02E0000000000040",
+      "0x02E000000000023B",
+      "0x02E0000000000009",
+      "0x02E00000000001CA",
+      "0x02E0000000000068",
+      "0x02E0000000000200",
+      "0x02E0000000000015",
+      "0x02E000000000012F",
+      "0x02E0000000000206",
+      "0x02E0000000000029",
+      "0x02E0000000000065",
+      "0x02E0000000000042",
+      "0x02E00000000000DD",
+      "0x02E0000000000008",
+      "0x02E0000000000002",
+      "0x02E000000000006E",
+      "0x02E000000000012E",
+      "0x02E00000000001EC",
+      "0x02E0000000000016",
+      "0x02E0000000000006",
+      "0x02E0000000000003",
+      "0x02E000000000000A",
+      "0x02E000000000013B",
+      "0x02E0000000000221",
+      "0x02E0000000000195",
+      "0x02E000000000031C",
+      "0x02E0000000000231",
+      "0x02E0000000000291",
+      "0x02E0000000000004",
+      "0x02E00000000001A2",
+      "0x02E0000000000020",
+      "0x02E0000000000365",
+      "0x02E000000000032A",
+      "0x02E0000000000005",
+      "0x02E000000000032B"
+     ],
+     [
+      "0x02E000000000007A",
+      "0x02E0000000000236",
+      "0x02E000000000030A",
+      "0x02E000000000013E",
+      "0x02E000000000028D",
+      "0x02E0000000000007",
+      "0x02E0000000000040",
+      "0x02E0000000000009",
+      "0x02E00000000001CA",
+      "0x02E0000000000068",
+      "0x02E0000000000200",
+      "0x02E0000000000015",
+      "0x02E000000000012F",
+      "0x02E0000000000206",
+      "0x02E0000000000029",
+      "0x02E0000000000065",
+      "0x02E0000000000042",
+      "0x02E00000000000DD",
+      "0x02E0000000000008",
+      "0x02E0000000000002",
+      "0x02E000000000006E",
+      "0x02E000000000012E",
+      "0x02E00000000001EC",
+      "0x02E0000000000016",
+      "0x02E0000000000006",
+      "0x02E0000000000003",
+      "0x02E000000000000A",
+      "0x02E000000000032B",
+      "0x02E000000000013B",
+      "0x02E0000000000221",
+      "0x02E0000000000195",
+      "0x02E000000000031C",
+      "0x02E0000000000231",
+      "0x02E0000000000291",
+      "0x02E0000000000079",
+      "0x02E0000000000004",
+      "0x02E00000000001A2",
+      "0x02E0000000000020",
+      "0x02E0000000000365",
+      "0x02E0000000000362",
+      "0x02E000000000032A"
+     ],
+     [
+      "0x02E000000000007A",
+      "0x02E0000000000236",
+      "0x02E000000000030A",
+      "0x02E000000000028D",
+      "0x02E0000000000007",
+      "0x02E0000000000040",
+      "0x02E000000000023B",
+      "0x02E0000000000009",
+      "0x02E00000000001CA",
+      "0x02E0000000000068",
+      "0x02E0000000000200",
+      "0x02E0000000000015",
+      "0x02E000000000012F",
+      "0x02E0000000000206",
+      "0x02E0000000000029",
+      "0x02E0000000000005",
+      "0x02E0000000000065",
+      "0x02E0000000000042",
+      "0x02E00000000000DD",
+      "0x02E0000000000008",
+      "0x02E0000000000002",
+      "0x02E000000000006E",
+      "0x02E000000000012E",
+      "0x02E00000000001EC",
+      "0x02E0000000000016",
+      "0x02E0000000000006",
+      "0x02E0000000000003",
+      "0x02E000000000000A",
+      "0x02E000000000032B",
+      "0x02E000000000013B",
+      "0x02E0000000000195",
+      "0x02E000000000031C",
+      "0x02E0000000000231",
+      "0x02E0000000000291",
+      "0x02E0000000000079",
+      "0x02E0000000000004",
+      "0x02E00000000001A2",
+      "0x02E0000000000020",
+      "0x02E0000000000365",
+      "0x02E0000000000362",
+      "0x02E000000000032A"
+     ]
+    ]
+   },
+   "map": {
+    "entities": [
+     {
+      "class_name": "Antarctica",
+      "filters": {
+       "voting_tags": [
+        "cat:Control",
+        "tcat:Control"
+       ]
+      },
+      "game_map_id": "0x0800000000000CF2",
+      "guid": "0x0800000000000CF2",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0c4f7921-d0d7-432f-a177-ecd4bc69aa74_1703103118879.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cb8a60e3-bcb2-4b08-bed5-5ebcc9401aab_1703102976206.jpeg",
+      "name": "Antarctica"
+     },
+     {
+      "class_name": "Busan",
+      "filters": {
+       "voting_tags": [
+        "cat:Control",
+        "tcat:Control"
+       ]
+      },
+      "game_map_id": "0x08000000000007E2",
+      "guid": "0x08000000000007E2",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7dd13f7f-84a0-4d4f-ba7e-d5a6c737c650_1703103122177.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/60cbb1be-fcb6-452d-83ba-33d4e174a37f_1703102990425.jpeg",
+      "name": "Busan"
+     },
+     {
+      "class_name": "Ilios",
+      "filters": {
+       "voting_tags": [
+        "cat:Control",
+        "tcat:Control"
+       ]
+      },
+      "game_map_id": "0x080000000000066D",
+      "guid": "0x080000000000066D",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f2d716e6-cb55-4759-b0f4-28cd8fd24323_1703103126376.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5ebad419-993f-4fda-9e78-446759a05c4d_1703102993834.jpeg",
+      "name": "Ilios"
+     },
+     {
+      "class_name": "Lijiang Tower",
+      "filters": {
+       "voting_tags": [
+        "cat:Control",
+        "tcat:Control"
+       ]
+      },
+      "game_map_id": "0x0800000000000662",
+      "guid": "0x0800000000000662",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ee3fe75-971a-4d37-9448-fd78cf975bd8_1703103130214.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ffb0acdb-ce25-41d8-a589-e0a7c447b2dd_1703102999443.jpeg",
+      "name": "Lijiang Tower"
+     },
+     {
+      "class_name": "Nepal",
+      "filters": {
+       "voting_tags": [
+        "cat:Control",
+        "tcat:Control"
+       ]
+      },
+      "game_map_id": "0x08000000000004B7",
+      "guid": "0x08000000000004B7",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ec4b4329-5b16-48b3-bf1d-2c8d0efbcf1a_1703103133129.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7747138d-6711-4257-99d2-739e2f205419_1703103002544.jpeg",
+      "name": "Nepal"
+     },
+     {
+      "class_name": "Oasis",
+      "filters": {
+       "voting_tags": [
+        "cat:Control",
+        "tcat:Control"
+       ]
+      },
+      "game_map_id": "0x080000000000069E",
+      "guid": "0x080000000000069E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e10c604c-7466-4d04-b021-bb6032c6e698_1703103136731.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/cbf1883f-0982-4a6c-b7d3-646a16b89f98_1703103006658.jpeg",
+      "name": "Oasis"
+     },
+     {
+      "class_name": "Samoa",
+      "filters": {
+       "voting_tags": [
+        "cat:Control",
+        "tcat:Control"
+       ]
+      },
+      "game_map_id": "0x0800000000000EC0",
+      "guid": "0x0800000000000EC0",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2d8d0bb3-b098-4482-861c-0af4590c95c3_1703103149418.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/387a7de6-d8f0-4b4e-b7dd-eba9a3c06d6c_1703103013339.jpeg",
+      "name": "Samoa"
+     },
+     {
+      "class_name": "Circuit Royal",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x0800000000000827",
+      "guid": "0x0800000000000827",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be5588c6-b069-42c8-8f92-a5bf0039b367_1703103152414.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/94728215-cdfc-42c9-878b-059a136dbe34_1703103016007.jpeg",
+      "name": "Circuit Royal"
+     },
+     {
+      "class_name": "Dorado",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x08000000000002C3",
+      "guid": "0x08000000000002C3",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8de33243-a6ec-44ab-b1a9-f92a3cd6154f_1703103154990.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a83c8b41-cc66-4e7a-a92a-20b14b83bb4a_1703103019601.jpeg",
+      "name": "Dorado"
+     },
+     {
+      "class_name": "Havana",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x0800000000000A44",
+      "guid": "0x0800000000000A44",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/9eed6b86-4f59-43ee-b60b-ece620d6cac3_1703103159738.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/6a8fb4e8-23ca-4f89-814c-61fa1a502d5f_1703103022670.jpeg",
+      "name": "Havana"
+     },
+     {
+      "class_name": "Junkertown",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x0800000000000756",
+      "guid": "0x0800000000000756",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/15f9fa26-86e0-4bce-b3aa-c3335fa543d8_1703103162022.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/1e26d22b-fd39-41c6-bcd0-20888f00e3d5_1703103026382.jpeg",
+      "name": "Junkertown"
+     },
+     {
+      "class_name": "Rialto",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x0800000000000871",
+      "guid": "0x0800000000000871",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7153ec7e-e06a-4d9d-a840-44d0beaa145e_1703103165472.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b6b435d0-e9b9-415c-b383-64de98ee6e5b_1703103037608.jpeg",
+      "name": "Rialto"
+     },
+     {
+      "class_name": "Route 66",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x08000000000005BB",
+      "guid": "0x08000000000005BB",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0e56a4fc-d462-400f-ac2f-68ee6ba15895_1703103172149.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/315ff116-5b5b-4a2d-bf77-754699c35e10_1703103041185.jpeg",
+      "name": "Route 66"
+     },
+     {
+      "class_name": "Shambali Monastery",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x0800000000000C85",
+      "guid": "0x0800000000000C85",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/93838223-c8b3-40e4-8186-90c6637e12c6_1703103174907.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ad9437ab-ef72-45ba-b217-f15a65dcb375_1703103043929.jpeg",
+      "name": "Shambali Monastery"
+     },
+     {
+      "class_name": "Watchpoint Gibraltar",
+      "filters": {
+       "voting_tags": [
+        "cat:Escort",
+        "tcat:Escort"
+       ]
+      },
+      "game_map_id": "0x0800000000000184",
+      "guid": "0x0800000000000184",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f3d21e15-7224-4d0f-b13b-49635d560e85_1703103177880.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/61799228-c171-41b3-acde-3db1d313f78d_1703103046536.jpeg",
+      "name": "Watchpoint Gibraltar"
+     },
+     {
+      "class_name": "New Junk City",
+      "filters": {
+       "voting_tags": [
+        "cat:Flashpoint",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x0800000000000E13",
+      "guid": "0x0800000000000E13",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c13859b8-7ac1-46a3-a869-2ccafb5d3ebe_1703103182898.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/eb003902-8da9-4ed2-9b1f-975a7f797f8a_1703103050586.jpeg",
+      "name": "New Junk City"
+     },
+     {
+      "class_name": "Suravasa",
+      "filters": {
+       "voting_tags": [
+        "cat:Flashpoint",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x0800000000000D3E",
+      "guid": "0x0800000000000D3E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fa702302-43a4-49d5-b782-59e17d343db8_1703103186824.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f0b94a8e-bfbb-414b-b2ac-6135a2c902da_1703103053805.jpeg",
+      "name": "Suravasa"
+     },
+     {
+      "class_name": "Blizzard World",
+      "filters": {
+       "voting_tags": [
+        "cat:Hybrid",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x080000000000075E",
+      "guid": "0x080000000000075E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be278cb2-9c83-49d3-abfb-7c94ffcc0d1f_1703103190096.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ac7b6281-24f1-4f5f-bfbf-04a1ea2c8942_1703103059008.jpeg",
+      "name": "Blizzard World"
+     },
+     {
+      "class_name": "Eichenwalde",
+      "filters": {
+       "voting_tags": [
+        "cat:Hybrid",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x080000000000068D",
+      "guid": "0x080000000000068D",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a21644d1-c0b7-4a36-8bd7-fff0f0c524aa_1703103198643.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fa920bd3-0fcc-4887-b96b-0660844ce18d_1703103061885.jpeg",
+      "name": "Eichenwalde"
+     },
+     {
+      "class_name": "Hollywood",
+      "filters": {
+       "voting_tags": [
+        "cat:Hybrid",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x08000000000002AF",
+      "guid": "0x08000000000002AF",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/856aa4df-a6a0-4713-9d9b-c17d5e1830e1_1703103203800.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/45e0201d-ae45-48f1-a336-74bbd8006c47_1703103065745.jpeg",
+      "name": "Hollywood"
+     },
+     {
+      "class_name": "King's Row",
+      "filters": {
+       "voting_tags": [
+        "cat:Hybrid",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x08000000000000D4",
+      "guid": "0x08000000000000D4",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3071e358-5426-4a05-a928-519353b29fc4_1703103206776.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8c3011bf-be5b-4e65-99f5-28c9cb80a6f4_1703103068622.jpeg",
+      "name": "King's Row"
+     },
+     {
+      "class_name": "Midtown",
+      "filters": {
+       "voting_tags": [
+        "cat:Hybrid",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x0800000000000B4C",
+      "guid": "0x0800000000000B4C",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/02b1222d-2b5e-4c7f-82e1-48bf1ef4bd8a_1703103209971.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8a66c21b-bab9-4fa0-923d-f954b5bc8d4a_1703103072451.jpeg",
+      "name": "Midtown"
+     },
+     {
+      "class_name": "Numbani",
+      "filters": {
+       "voting_tags": [
+        "cat:Hybrid",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x08000000000001D4",
+      "guid": "0x08000000000001D4",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2b3cf1db-7b27-42f5-b3ae-011b4aeb612c_1703103213036.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0eb924d1-acef-44b6-ae90-5f490577dcdb_1703103076560.jpeg",
+      "name": "Numbani"
+     },
+     {
+      "class_name": "Paraiso",
+      "filters": {
+       "voting_tags": [
+        "cat:Hybrid",
+        "tcat:Hybrid/Flashpoint"
+       ]
+      },
+      "game_map_id": "0x0800000000000938",
+      "guid": "0x0800000000000938",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ba15fa87-4599-4f09-af2d-67b184068c36_1703103216858.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c4416b40-e213-49c4-83f5-1397864398eb_1703103100345.jpeg",
+      "name": "Paraiso"
+     },
+     {
+      "class_name": "Colosseo",
+      "filters": {
+       "voting_tags": [
+        "cat:Push",
+        "tcat:Push"
+       ]
+      },
+      "game_map_id": "0x0800000000000B34",
+      "guid": "0x0800000000000B34",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/81178286-d627-4f34-ac4c-eca25239ab88_1703103220387.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2dcec9b5-b9d1-4647-aece-a9980cee2c4d_1703103105258.jpeg",
+      "name": "Colosseo"
+     },
+     {
+      "class_name": "Esperan\u00e7a",
+      "filters": {
+       "voting_tags": [
+        "cat:Push",
+        "tcat:Push"
+       ]
+      },
+      "game_map_id": "0x0800000000000D53",
+      "guid": "0x0800000000000D53",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/32c9964e-2b63-4495-b3f2-9f947bad5e4a_1703103225824.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/57d6237f-9228-42e5-8035-07a734e2e5cc_1703103087193.jpeg",
+      "name": "Esperan\u00e7a"
+     },
+     {
+      "class_name": "New Queen Street",
+      "filters": {
+       "voting_tags": [
+        "cat:Push",
+        "tcat:Push"
+       ]
+      },
+      "game_map_id": "0x0800000000000AEB",
+      "guid": "0x0800000000000AEB",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0083a86e-a5bf-472b-857a-4141790606a4_1703103228854.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/16b005d0-eef2-4af4-b689-576286a8c9fc_1703103091604.jpeg",
+      "name": "New Queen Street"
+     },
+     {
+      "class_name": "Runasapi",
+      "filters": {
+       "voting_tags": [
+        "cat:Push",
+        "tcat:Push"
+       ]
+      },
+      "game_map_id": "0x0800000000000EB2",
+      "guid": "0x0800000000000EB2",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/54b46475-8461-48b9-89df-500b6c94f48a_1718791393316.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/93165788-5f0d-4ff3-af26-c958ca5ab97f_1718791383159.jpeg",
+      "name": "Runasapi"
+     },
+     {
+      "class_name": "Hanaoka",
+      "filters": {
+       "voting_tags": [
+        "cat:Clash",
+        "tcat:Clash"
+       ]
+      },
+      "game_map_id": "0x0800000000001157",
+      "guid": "0x0800000000001157",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8b73b1a9-8a01-4a12-965c-28396f466532_1723553781254.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/e2f14ae4-119d-4699-9a82-7738b363043a_1723553777055.jpeg",
+      "name": "Hanaoka"
+     },
+     {
+      "class_name": "Throne of Anubis",
+      "filters": {
+       "voting_tags": [
+        "cat:Clash",
+        "tcat:Clash"
+       ]
+      },
+      "game_map_id": "0x0800000000001160",
+      "guid": "0x0800000000001160",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/30683f16-f7b3-453b-af3a-4790fca3422b_1723553790589.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/90e2fa34-5092-4437-b1f4-53360353c3ac_1723553785523.jpeg",
+      "name": "Throne of Anubis"
+     }
+    ],
+    "pick": [
+     "0x080000000000066D",
+     "0x0800000000000827",
+     "0x0800000000000D3E",
+     "0x08000000000002AF",
+     "0x0800000000000B34"
+    ]
+   },
+   "voted_entity_types": [
+    "map",
+    "attacking_first",
+    "heroes"
+   ]
+  }
+ },
+ "stats": {
+  "rounds": [
+   {
+    "best_of": "4",
+    "competition_id": "f1be7b75-9e54-4d57-b524-9d32f5398682",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-3a6cb9f6-5b25-4f97-904d-a0b986b276b2",
+    "match_round": "1",
+    "played": "1",
+    "round_stats": {
+     "Map": "0x080000000000066D",
+     "OW2 Mode": "Control",
+     "Score Summary": "2 / 0",
+     "Winner": "590b7d3b-a200-47b9-a967-f02274c1977b"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "IHaveLethal",
+        "player_id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "3",
+         "Assists": "0",
+         "Assists/10m": "0",
+         "Damage Dealt": "5616",
+         "Damage Dealt/(Eliminations + Assists)": "312",
+         "Damage Dealt/10m": "6505.02",
+         "Damage Dealt/Eliminations": "312",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "100",
+         "Deaths": "6",
+         "Deaths/10m": "6.95",
+         "Draw Count": "0",
+         "Eliminations": "18",
+         "Eliminations/10m": "20.85",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "9",
+         "Final Blows/(Eliminations + Assists)": "0.5",
+         "Final Blows/10m": "10.42",
+         "Final Blows/Eliminations": "0.5",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "3",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "17",
+         "Objective Time/10m": "19.69",
+         "Result": "1",
+         "Role": "Damage",
+         "Solo Kills": "2",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.11",
+         "Solo Kills/10m": "2.32",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.33",
+         "Solo Kills/Eliminations Ratio": "0.11",
+         "Solo Kills/Final Blows Ratio": "0.22",
+         "Time Played": "518",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "WMaimone",
+        "player_id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "7.67",
+         "Assists": "0",
+         "Assists/10m": "0",
+         "Damage Dealt": "6033",
+         "Damage Dealt/(Eliminations + Assists)": "262.3",
+         "Damage Dealt/10m": "6988.03",
+         "Damage Dealt/Eliminations": "262.3",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "100",
+         "Deaths": "3",
+         "Deaths/10m": "3.47",
+         "Draw Count": "0",
+         "Eliminations": "23",
+         "Eliminations/10m": "26.64",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "9",
+         "Final Blows/(Eliminations + Assists)": "0.39",
+         "Final Blows/10m": "10.42",
+         "Final Blows/Eliminations": "0.39",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "7.67",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "38",
+         "Objective Time/10m": "44.02",
+         "Result": "1",
+         "Role": "Damage",
+         "Solo Kills": "1",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.04",
+         "Solo Kills/10m": "1.16",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.33",
+         "Solo Kills/Eliminations Ratio": "0.04",
+         "Solo Kills/Final Blows Ratio": "0.11",
+         "Time Played": "518",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "cuFFah",
+        "player_id": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "6",
+         "Assists": "3",
+         "Assists/10m": "3.47",
+         "Damage Dealt": "6928",
+         "Damage Dealt/(Eliminations + Assists)": "288.67",
+         "Damage Dealt/10m": "8024.71",
+         "Damage Dealt/Eliminations": "329.9",
+         "Damage Mitigated": "6571",
+         "Damage Mitigated as percent of total output": "49",
+         "Damage Mitigated/(Eliminations + Assists)": "273.79",
+         "Damage Mitigated/10m": "7611.2",
+         "Damage Mitigated/Deaths": "1642.75",
+         "Damage Mitigated/Eliminations": "312.9",
+         "Damage as percent of total output": "51",
+         "Deaths": "4",
+         "Deaths/10m": "4.63",
+         "Draw Count": "0",
+         "Eliminations": "21",
+         "Eliminations/10m": "24.32",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "9",
+         "Final Blows/(Eliminations + Assists)": "0.38",
+         "Final Blows/10m": "10.42",
+         "Final Blows/Eliminations": "0.43",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "5.25",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "33",
+         "Objective Time/10m": "38.22",
+         "Result": "1",
+         "Role": "Tank",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "518",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "AdmiralRaptr",
+        "player_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "12",
+         "Assists": "18",
+         "Assists/10m": "20.85",
+         "Damage Dealt": "4392",
+         "Damage Dealt/(Eliminations + Assists)": "122",
+         "Damage Dealt/10m": "5087.26",
+         "Damage Dealt/Eliminations": "244",
+         "Damage Mitigated": "1441",
+         "Damage Mitigated as percent of total output": "12",
+         "Damage Mitigated/(Eliminations + Assists)": "40.03",
+         "Damage Mitigated/10m": "1669.11",
+         "Damage Mitigated/Deaths": "480.33",
+         "Damage Mitigated/Eliminations": "80.06",
+         "Damage as percent of total output": "36",
+         "Deaths": "3",
+         "Deaths/10m": "3.47",
+         "Draw Count": "0",
+         "Eliminations": "18",
+         "Eliminations/10m": "20.85",
+         "Environmental Kills": "1",
+         "Environmental Kills/10m": "1.16",
+         "Final Blows": "3",
+         "Final Blows/(Eliminations + Assists)": "0.08",
+         "Final Blows/10m": "3.47",
+         "Final Blows/Eliminations": "0.17",
+         "Healing Done": "6450",
+         "Healing Done as percent of total output": "53",
+         "Healing Done/(Eliminations + Assists)": "179.17",
+         "Healing Done/10m": "7471.04",
+         "Healing Done/Deaths": "2150",
+         "Healing Done/Eliminations": "358.33",
+         "K/D Ratio": "6",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "35",
+         "Objective Time/10m": "40.54",
+         "Result": "1",
+         "Role": "Support",
+         "Solo Kills": "1",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.03",
+         "Solo Kills/10m": "1.16",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.33",
+         "Solo Kills/Eliminations Ratio": "0.06",
+         "Solo Kills/Final Blows Ratio": "0.33",
+         "Time Played": "518",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "ultraviol3t",
+        "player_id": "43d39898-d853-4e75-b249-9b41d638a2b0",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "17.5",
+         "Assists": "16",
+         "Assists/10m": "18.53",
+         "Damage Dealt": "5524",
+         "Damage Dealt/(Eliminations + Assists)": "157.83",
+         "Damage Dealt/10m": "6398.46",
+         "Damage Dealt/Eliminations": "290.74",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "47",
+         "Deaths": "2",
+         "Deaths/10m": "2.32",
+         "Draw Count": "0",
+         "Eliminations": "19",
+         "Eliminations/10m": "22.01",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "10",
+         "Final Blows/(Eliminations + Assists)": "0.29",
+         "Final Blows/10m": "11.58",
+         "Final Blows/Eliminations": "0.53",
+         "Healing Done": "6200",
+         "Healing Done as percent of total output": "53",
+         "Healing Done/(Eliminations + Assists)": "177.14",
+         "Healing Done/10m": "7181.47",
+         "Healing Done/Deaths": "3100",
+         "Healing Done/Eliminations": "326.32",
+         "K/D Ratio": "9.5",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "40",
+         "Objective Time/10m": "46.33",
+         "Result": "1",
+         "Role": "Support",
+         "Solo Kills": "2",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.06",
+         "Solo Kills/10m": "2.32",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "1",
+         "Solo Kills/Eliminations Ratio": "0.11",
+         "Solo Kills/Final Blows Ratio": "0.2",
+         "Time Played": "518",
+         "Win Count": "1"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+      "team_stats": {
+       "Average Environmental Kills": "0.2",
+       "Average Final Blows": "8",
+       "Average Multi Kills": "0",
+       "Average Objective Time": "32.6",
+       "Average Solo Kills": "1.2",
+       "Team": "Geekay Esports",
+       "Team Avg Deaths": "3.6",
+       "Team Avg Eliminations": "19.8",
+       "Team Draw Count": "0",
+       "Team Score": "2",
+       "Team Total Deaths": "18",
+       "Team Total Eliminations": "99",
+       "Team Win": "1",
+       "Team Win Count": "1",
+       "Total Team Environmental Kills": "1",
+       "Total Team Final Blows": "40",
+       "Total Team Multi Kills": "0",
+       "Total Team Objective Time": "163",
+       "Total Team Solo Kills": "6",
+       "Total Team Time Played": "2590"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "ReyzrOW",
+        "player_id": "bcd9737d-3295-450d-a20e-94d8815c6d2f",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.83",
+         "Assists": "0",
+         "Assists/10m": "0",
+         "Damage Dealt": "4992",
+         "Damage Dealt/(Eliminations + Assists)": "453.82",
+         "Damage Dealt/10m": "5782.24",
+         "Damage Dealt/Eliminations": "453.82",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "100",
+         "Deaths": "6",
+         "Deaths/10m": "6.95",
+         "Draw Count": "0",
+         "Eliminations": "11",
+         "Eliminations/10m": "12.74",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "6",
+         "Final Blows/(Eliminations + Assists)": "0.55",
+         "Final Blows/10m": "6.95",
+         "Final Blows/Eliminations": "0.55",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "1.83",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "38",
+         "Objective Time/10m": "44.02",
+         "Result": "0",
+         "Role": "Damage",
+         "Solo Kills": "2",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.18",
+         "Solo Kills/10m": "2.32",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.33",
+         "Solo Kills/Eliminations Ratio": "0.18",
+         "Solo Kills/Final Blows Ratio": "0.33",
+         "Time Played": "518",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "pdkk_",
+        "player_id": "53a87c13-870c-4c2f-bde1-c96a67df37c9",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "0.89",
+         "Assists": "0",
+         "Assists/10m": "0",
+         "Damage Dealt": "5978",
+         "Damage Dealt/(Eliminations + Assists)": "747.25",
+         "Damage Dealt/10m": "6924.32",
+         "Damage Dealt/Eliminations": "747.25",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "100",
+         "Deaths": "9",
+         "Deaths/10m": "10.42",
+         "Draw Count": "0",
+         "Eliminations": "8",
+         "Eliminations/10m": "9.27",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "5",
+         "Final Blows/(Eliminations + Assists)": "0.62",
+         "Final Blows/10m": "5.79",
+         "Final Blows/Eliminations": "0.62",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "0.89",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "13",
+         "Objective Time/10m": "15.06",
+         "Result": "0",
+         "Role": "Damage",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "518",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "BazOdub",
+        "player_id": "029bf891-4c0b-4153-a386-b7ff9f3ad2f8",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.57",
+         "Assists": "1",
+         "Assists/10m": "1.16",
+         "Damage Dealt": "7724",
+         "Damage Dealt/(Eliminations + Assists)": "702.18",
+         "Damage Dealt/10m": "8946.72",
+         "Damage Dealt/Eliminations": "772.4",
+         "Damage Mitigated": "6306",
+         "Damage Mitigated as percent of total output": "45",
+         "Damage Mitigated/(Eliminations + Assists)": "573.27",
+         "Damage Mitigated/10m": "7304.25",
+         "Damage Mitigated/Deaths": "900.86",
+         "Damage Mitigated/Eliminations": "630.6",
+         "Damage as percent of total output": "55",
+         "Deaths": "7",
+         "Deaths/10m": "8.11",
+         "Draw Count": "0",
+         "Eliminations": "10",
+         "Eliminations/10m": "11.58",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "3",
+         "Final Blows/(Eliminations + Assists)": "0.27",
+         "Final Blows/10m": "3.47",
+         "Final Blows/Eliminations": "0.3",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "1.43",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "28",
+         "Objective Time/10m": "32.43",
+         "Result": "0",
+         "Role": "Tank",
+         "Solo Kills": "1",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.09",
+         "Solo Kills/10m": "1.16",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.14",
+         "Solo Kills/Eliminations Ratio": "0.1",
+         "Solo Kills/Final Blows Ratio": "0.33",
+         "Time Played": "518",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "RedexLCO",
+        "player_id": "bf69c0b9-f068-41bf-a0b9-c88aa083edbb",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.67",
+         "Assists": "7",
+         "Assists/10m": "8.11",
+         "Damage Dealt": "4039",
+         "Damage Dealt/(Eliminations + Assists)": "269.27",
+         "Damage Dealt/10m": "4678.38",
+         "Damage Dealt/Eliminations": "504.88",
+         "Damage Mitigated": "424",
+         "Damage Mitigated as percent of total output": "5",
+         "Damage Mitigated/(Eliminations + Assists)": "28.27",
+         "Damage Mitigated/10m": "491.12",
+         "Damage Mitigated/Deaths": "47.11",
+         "Damage Mitigated/Eliminations": "53",
+         "Damage as percent of total output": "47",
+         "Deaths": "9",
+         "Deaths/10m": "10.42",
+         "Draw Count": "0",
+         "Eliminations": "8",
+         "Eliminations/10m": "9.27",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "3",
+         "Final Blows/(Eliminations + Assists)": "0.2",
+         "Final Blows/10m": "3.47",
+         "Final Blows/Eliminations": "0.38",
+         "Healing Done": "4199",
+         "Healing Done as percent of total output": "48",
+         "Healing Done/(Eliminations + Assists)": "279.93",
+         "Healing Done/10m": "4863.71",
+         "Healing Done/Deaths": "466.56",
+         "Healing Done/Eliminations": "524.88",
+         "K/D Ratio": "0.89",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "34",
+         "Objective Time/10m": "39.38",
+         "Result": "0",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "518",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "FrothyFilly7",
+        "player_id": "083989e0-81a4-4f83-8dc3-e5222f0df695",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.1",
+         "Assists": "6",
+         "Assists/10m": "6.95",
+         "Damage Dealt": "3048",
+         "Damage Dealt/(Eliminations + Assists)": "277.09",
+         "Damage Dealt/10m": "3530.5",
+         "Damage Dealt/Eliminations": "609.6",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "34",
+         "Deaths": "10",
+         "Deaths/10m": "11.58",
+         "Draw Count": "0",
+         "Eliminations": "5",
+         "Eliminations/10m": "5.79",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "1",
+         "Final Blows/(Eliminations + Assists)": "0.09",
+         "Final Blows/10m": "1.16",
+         "Final Blows/Eliminations": "0.2",
+         "Healing Done": "5791",
+         "Healing Done as percent of total output": "66",
+         "Healing Done/(Eliminations + Assists)": "526.45",
+         "Healing Done/10m": "6707.72",
+         "Healing Done/Deaths": "579.1",
+         "Healing Done/Eliminations": "1158.2",
+         "K/D Ratio": "0.5",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "4",
+         "Objective Time/10m": "4.63",
+         "Result": "0",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "518",
+         "Win Count": "0"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "c6248ff8-64ff-47ad-8602-7eec0eeda9b0",
+      "team_stats": {
+       "Average Environmental Kills": "0",
+       "Average Final Blows": "3.6",
+       "Average Multi Kills": "0",
+       "Average Objective Time": "23.4",
+       "Average Solo Kills": "0.6",
+       "Team": "DhillDucks",
+       "Team Avg Deaths": "8.2",
+       "Team Avg Eliminations": "8.4",
+       "Team Draw Count": "0",
+       "Team Score": "0",
+       "Team Total Deaths": "41",
+       "Team Total Eliminations": "42",
+       "Team Win": "0",
+       "Team Win Count": "0",
+       "Total Team Environmental Kills": "0",
+       "Total Team Final Blows": "18",
+       "Total Team Multi Kills": "0",
+       "Total Team Objective Time": "117",
+       "Total Team Solo Kills": "3",
+       "Total Team Time Played": "2590"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "4",
+    "competition_id": "f1be7b75-9e54-4d57-b524-9d32f5398682",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-3a6cb9f6-5b25-4f97-904d-a0b986b276b2",
+    "match_round": "2",
+    "played": "2",
+    "round_stats": {
+     "Map": "0x0800000000000827",
+     "OW2 Mode": "Escort",
+     "Score Summary": "1 / 0",
+     "Winner": "590b7d3b-a200-47b9-a967-f02274c1977b"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "IHaveLethal",
+        "player_id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "6",
+         "Assists": "2",
+         "Assists/10m": "3.79",
+         "Damage Dealt": "6865",
+         "Damage Dealt/(Eliminations + Assists)": "381.39",
+         "Damage Dealt/10m": "12993.69",
+         "Damage Dealt/Eliminations": "429.06",
+         "Damage Mitigated": "67",
+         "Damage Mitigated as percent of total output": "1",
+         "Damage Mitigated/(Eliminations + Assists)": "3.72",
+         "Damage Mitigated/10m": "126.81",
+         "Damage Mitigated/Deaths": "22.33",
+         "Damage Mitigated/Eliminations": "4.19",
+         "Damage as percent of total output": "99",
+         "Deaths": "3",
+         "Deaths/10m": "5.68",
+         "Draw Count": "0",
+         "Eliminations": "16",
+         "Eliminations/10m": "30.28",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "8",
+         "Final Blows/(Eliminations + Assists)": "0.44",
+         "Final Blows/10m": "15.14",
+         "Final Blows/Eliminations": "0.5",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "5.33",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "3",
+         "Objective Time/10m": "5.68",
+         "Result": "1",
+         "Role": "Damage",
+         "Solo Kills": "3",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.17",
+         "Solo Kills/10m": "5.68",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "1",
+         "Solo Kills/Eliminations Ratio": "0.19",
+         "Solo Kills/Final Blows Ratio": "0.38",
+         "Time Played": "317",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "WMaimone",
+        "player_id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "22",
+         "Assists": "3",
+         "Assists/10m": "5.68",
+         "Damage Dealt": "5008",
+         "Damage Dealt/(Eliminations + Assists)": "227.64",
+         "Damage Dealt/10m": "9478.86",
+         "Damage Dealt/Eliminations": "263.58",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "78",
+         "Deaths": "0",
+         "Deaths/10m": "0",
+         "Draw Count": "0",
+         "Eliminations": "19",
+         "Eliminations/10m": "35.96",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "11",
+         "Final Blows/(Eliminations + Assists)": "0.5",
+         "Final Blows/10m": "20.82",
+         "Final Blows/Eliminations": "0.58",
+         "Healing Done": "1392",
+         "Healing Done as percent of total output": "22",
+         "Healing Done/(Eliminations + Assists)": "63.27",
+         "Healing Done/10m": "2634.7",
+         "Healing Done/Deaths": "1392",
+         "Healing Done/Eliminations": "73.26",
+         "K/D Ratio": "19",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "13",
+         "Objective Time/10m": "24.61",
+         "Result": "1",
+         "Role": "Damage",
+         "Solo Kills": "1",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.05",
+         "Solo Kills/10m": "1.89",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "1",
+         "Solo Kills/Eliminations Ratio": "0.05",
+         "Solo Kills/Final Blows Ratio": "0.09",
+         "Time Played": "317",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "cuFFah",
+        "player_id": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "8.5",
+         "Assists": "2",
+         "Assists/10m": "3.79",
+         "Damage Dealt": "6214",
+         "Damage Dealt/(Eliminations + Assists)": "365.53",
+         "Damage Dealt/10m": "11761.51",
+         "Damage Dealt/Eliminations": "414.27",
+         "Damage Mitigated": "3409",
+         "Damage Mitigated as percent of total output": "35",
+         "Damage Mitigated/(Eliminations + Assists)": "200.53",
+         "Damage Mitigated/10m": "6452.37",
+         "Damage Mitigated/Deaths": "1704.5",
+         "Damage Mitigated/Eliminations": "227.27",
+         "Damage as percent of total output": "65",
+         "Deaths": "2",
+         "Deaths/10m": "3.79",
+         "Draw Count": "0",
+         "Eliminations": "15",
+         "Eliminations/10m": "28.39",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "5",
+         "Final Blows/(Eliminations + Assists)": "0.29",
+         "Final Blows/10m": "9.46",
+         "Final Blows/Eliminations": "0.33",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "7.5",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "39",
+         "Objective Time/10m": "73.82",
+         "Result": "1",
+         "Role": "Tank",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "317",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "AdmiralRaptr",
+        "player_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "24",
+         "Assists": "18",
+         "Assists/10m": "34.07",
+         "Damage Dealt": "1498",
+         "Damage Dealt/(Eliminations + Assists)": "62.42",
+         "Damage Dealt/10m": "2835.33",
+         "Damage Dealt/Eliminations": "249.67",
+         "Damage Mitigated": "782",
+         "Damage Mitigated as percent of total output": "10",
+         "Damage Mitigated/(Eliminations + Assists)": "32.58",
+         "Damage Mitigated/10m": "1480.13",
+         "Damage Mitigated/Deaths": "782",
+         "Damage Mitigated/Eliminations": "130.33",
+         "Damage as percent of total output": "19",
+         "Deaths": "0",
+         "Deaths/10m": "0",
+         "Draw Count": "0",
+         "Eliminations": "6",
+         "Eliminations/10m": "11.36",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "1",
+         "Final Blows/(Eliminations + Assists)": "0.04",
+         "Final Blows/10m": "1.89",
+         "Final Blows/Eliminations": "0.17",
+         "Healing Done": "5617",
+         "Healing Done as percent of total output": "71",
+         "Healing Done/(Eliminations + Assists)": "234.04",
+         "Healing Done/10m": "10631.55",
+         "Healing Done/Deaths": "5617",
+         "Healing Done/Eliminations": "936.17",
+         "K/D Ratio": "6",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "20",
+         "Objective Time/10m": "37.85",
+         "Result": "1",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "317",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "ultraviol3t",
+        "player_id": "43d39898-d853-4e75-b249-9b41d638a2b0",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "5",
+         "Assists": "5",
+         "Assists/10m": "9.46",
+         "Damage Dealt": "3198",
+         "Damage Dealt/(Eliminations + Assists)": "213.2",
+         "Damage Dealt/10m": "6053",
+         "Damage Dealt/Eliminations": "319.8",
+         "Damage Mitigated": "151",
+         "Damage Mitigated as percent of total output": "2",
+         "Damage Mitigated/(Eliminations + Assists)": "10.07",
+         "Damage Mitigated/10m": "285.8",
+         "Damage Mitigated/Deaths": "50.33",
+         "Damage Mitigated/Eliminations": "15.1",
+         "Damage as percent of total output": "49",
+         "Deaths": "3",
+         "Deaths/10m": "5.68",
+         "Draw Count": "0",
+         "Eliminations": "10",
+         "Eliminations/10m": "18.93",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "5",
+         "Final Blows/(Eliminations + Assists)": "0.33",
+         "Final Blows/10m": "9.46",
+         "Final Blows/Eliminations": "0.5",
+         "Healing Done": "3225",
+         "Healing Done as percent of total output": "49",
+         "Healing Done/(Eliminations + Assists)": "215",
+         "Healing Done/10m": "6104.1",
+         "Healing Done/Deaths": "1075",
+         "Healing Done/Eliminations": "322.5",
+         "K/D Ratio": "3.33",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "1",
+         "Objective Time/10m": "1.89",
+         "Result": "1",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "317",
+         "Win Count": "1"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+      "team_stats": {
+       "Average Environmental Kills": "0",
+       "Average Final Blows": "6",
+       "Average Multi Kills": "0",
+       "Average Objective Time": "15.2",
+       "Average Solo Kills": "0.8",
+       "Team": "Geekay Esports",
+       "Team Avg Deaths": "1.6",
+       "Team Avg Eliminations": "13.2",
+       "Team Draw Count": "0",
+       "Team Score": "1",
+       "Team Total Deaths": "8",
+       "Team Total Eliminations": "66",
+       "Team Win": "1",
+       "Team Win Count": "1",
+       "Total Team Environmental Kills": "0",
+       "Total Team Final Blows": "30",
+       "Total Team Multi Kills": "0",
+       "Total Team Objective Time": "76",
+       "Total Team Solo Kills": "4",
+       "Total Team Time Played": "1585"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "ReyzrOW",
+        "player_id": "bcd9737d-3295-450d-a20e-94d8815c6d2f",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "0.8",
+         "Assists": "0",
+         "Assists/10m": "0",
+         "Damage Dealt": "3915",
+         "Damage Dealt/(Eliminations + Assists)": "978.75",
+         "Damage Dealt/10m": "7410.09",
+         "Damage Dealt/Eliminations": "978.75",
+         "Damage Mitigated": "511",
+         "Damage Mitigated as percent of total output": "12",
+         "Damage Mitigated/(Eliminations + Assists)": "127.75",
+         "Damage Mitigated/10m": "967.19",
+         "Damage Mitigated/Deaths": "102.2",
+         "Damage Mitigated/Eliminations": "127.75",
+         "Damage as percent of total output": "88",
+         "Deaths": "5",
+         "Deaths/10m": "9.46",
+         "Draw Count": "0",
+         "Eliminations": "4",
+         "Eliminations/10m": "7.57",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "3",
+         "Final Blows/(Eliminations + Assists)": "0.75",
+         "Final Blows/10m": "5.68",
+         "Final Blows/Eliminations": "0.75",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "0.8",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "16",
+         "Objective Time/10m": "30.28",
+         "Result": "0",
+         "Role": "Damage",
+         "Solo Kills": "1",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.25",
+         "Solo Kills/10m": "1.89",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.2",
+         "Solo Kills/Eliminations Ratio": "0.25",
+         "Solo Kills/Final Blows Ratio": "0.33",
+         "Time Played": "317",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "pdkk_",
+        "player_id": "53a87c13-870c-4c2f-bde1-c96a67df37c9",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "0.8",
+         "Assists": "1",
+         "Assists/10m": "1.89",
+         "Damage Dealt": "3918",
+         "Damage Dealt/(Eliminations + Assists)": "979.5",
+         "Damage Dealt/10m": "7415.77",
+         "Damage Dealt/Eliminations": "1306",
+         "Damage Mitigated": "509",
+         "Damage Mitigated as percent of total output": "10",
+         "Damage Mitigated/(Eliminations + Assists)": "127.25",
+         "Damage Mitigated/10m": "963.41",
+         "Damage Mitigated/Deaths": "101.8",
+         "Damage Mitigated/Eliminations": "169.67",
+         "Damage as percent of total output": "80",
+         "Deaths": "5",
+         "Deaths/10m": "9.46",
+         "Draw Count": "0",
+         "Eliminations": "3",
+         "Eliminations/10m": "5.68",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "1",
+         "Final Blows/(Eliminations + Assists)": "0.25",
+         "Final Blows/10m": "1.89",
+         "Final Blows/Eliminations": "0.33",
+         "Healing Done": "480",
+         "Healing Done as percent of total output": "10",
+         "Healing Done/(Eliminations + Assists)": "120",
+         "Healing Done/10m": "908.52",
+         "Healing Done/Deaths": "96",
+         "Healing Done/Eliminations": "160",
+         "K/D Ratio": "0.6",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "30",
+         "Objective Time/10m": "56.78",
+         "Result": "0",
+         "Role": "Damage",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "317",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "BazOdub",
+        "player_id": "029bf891-4c0b-4153-a386-b7ff9f3ad2f8",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "0.5",
+         "Assists": "1",
+         "Assists/10m": "1.89",
+         "Damage Dealt": "3081",
+         "Damage Dealt/(Eliminations + Assists)": "1027",
+         "Damage Dealt/10m": "5831.55",
+         "Damage Dealt/Eliminations": "1540.5",
+         "Damage Mitigated": "6350",
+         "Damage Mitigated as percent of total output": "67",
+         "Damage Mitigated/(Eliminations + Assists)": "2116.67",
+         "Damage Mitigated/10m": "12018.93",
+         "Damage Mitigated/Deaths": "1058.33",
+         "Damage Mitigated/Eliminations": "3175",
+         "Damage as percent of total output": "33",
+         "Deaths": "6",
+         "Deaths/10m": "11.36",
+         "Draw Count": "0",
+         "Eliminations": "2",
+         "Eliminations/10m": "3.79",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "0",
+         "Final Blows/(Eliminations + Assists)": "0",
+         "Final Blows/10m": "0",
+         "Final Blows/Eliminations": "0",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "0.33",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "44",
+         "Objective Time/10m": "83.28",
+         "Result": "0",
+         "Role": "Tank",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "317",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "RedexLCO",
+        "player_id": "bf69c0b9-f068-41bf-a0b9-c88aa083edbb",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.12",
+         "Assists": "4",
+         "Assists/10m": "7.57",
+         "Damage Dealt": "2041",
+         "Damage Dealt/(Eliminations + Assists)": "226.78",
+         "Damage Dealt/10m": "3863.09",
+         "Damage Dealt/Eliminations": "408.2",
+         "Damage Mitigated": "11",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "1.22",
+         "Damage Mitigated/10m": "20.82",
+         "Damage Mitigated/Deaths": "1.38",
+         "Damage Mitigated/Eliminations": "2.2",
+         "Damage as percent of total output": "46",
+         "Deaths": "8",
+         "Deaths/10m": "15.14",
+         "Draw Count": "0",
+         "Eliminations": "5",
+         "Eliminations/10m": "9.46",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "1",
+         "Final Blows/(Eliminations + Assists)": "0.11",
+         "Final Blows/10m": "1.89",
+         "Final Blows/Eliminations": "0.2",
+         "Healing Done": "2367",
+         "Healing Done as percent of total output": "54",
+         "Healing Done/(Eliminations + Assists)": "263",
+         "Healing Done/10m": "4480.13",
+         "Healing Done/Deaths": "295.88",
+         "Healing Done/Eliminations": "473.4",
+         "K/D Ratio": "0.62",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "22",
+         "Objective Time/10m": "41.64",
+         "Result": "0",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "317",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "FrothyFilly7",
+        "player_id": "083989e0-81a4-4f83-8dc3-e5222f0df695",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.17",
+         "Assists": "2",
+         "Assists/10m": "3.79",
+         "Damage Dealt": "2532",
+         "Damage Dealt/(Eliminations + Assists)": "361.71",
+         "Damage Dealt/10m": "4792.43",
+         "Damage Dealt/Eliminations": "506.4",
+         "Damage Mitigated": "990",
+         "Damage Mitigated as percent of total output": "10",
+         "Damage Mitigated/(Eliminations + Assists)": "141.43",
+         "Damage Mitigated/10m": "1873.82",
+         "Damage Mitigated/Deaths": "165",
+         "Damage Mitigated/Eliminations": "198",
+         "Damage as percent of total output": "26",
+         "Deaths": "6",
+         "Deaths/10m": "11.36",
+         "Draw Count": "0",
+         "Eliminations": "5",
+         "Eliminations/10m": "9.46",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "3",
+         "Final Blows/(Eliminations + Assists)": "0.43",
+         "Final Blows/10m": "5.68",
+         "Final Blows/Eliminations": "0.6",
+         "Healing Done": "6064",
+         "Healing Done as percent of total output": "63",
+         "Healing Done/(Eliminations + Assists)": "866.29",
+         "Healing Done/10m": "11477.6",
+         "Healing Done/Deaths": "1010.67",
+         "Healing Done/Eliminations": "1212.8",
+         "K/D Ratio": "0.83",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "18",
+         "Objective Time/10m": "34.07",
+         "Result": "0",
+         "Role": "Support",
+         "Solo Kills": "1",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.14",
+         "Solo Kills/10m": "1.89",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.17",
+         "Solo Kills/Eliminations Ratio": "0.2",
+         "Solo Kills/Final Blows Ratio": "0.33",
+         "Time Played": "317",
+         "Win Count": "0"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "c6248ff8-64ff-47ad-8602-7eec0eeda9b0",
+      "team_stats": {
+       "Average Environmental Kills": "0",
+       "Average Final Blows": "1.6",
+       "Average Multi Kills": "0",
+       "Average Objective Time": "26",
+       "Average Solo Kills": "0.4",
+       "Team": "DhillDucks",
+       "Team Avg Deaths": "6",
+       "Team Avg Eliminations": "3.8",
+       "Team Draw Count": "0",
+       "Team Score": "0",
+       "Team Total Deaths": "30",
+       "Team Total Eliminations": "19",
+       "Team Win": "0",
+       "Team Win Count": "0",
+       "Total Team Environmental Kills": "0",
+       "Total Team Final Blows": "8",
+       "Total Team Multi Kills": "0",
+       "Total Team Objective Time": "130",
+       "Total Team Solo Kills": "2",
+       "Total Team Time Played": "1585"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "4",
+    "competition_id": "f1be7b75-9e54-4d57-b524-9d32f5398682",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-3a6cb9f6-5b25-4f97-904d-a0b986b276b2",
+    "match_round": "3",
+    "played": "3",
+    "round_stats": {
+     "Map": "0x0800000000000D3E",
+     "OW2 Mode": "Flashpoint",
+     "Score Summary": "3 / 1",
+     "Winner": "590b7d3b-a200-47b9-a967-f02274c1977b"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "IHaveLethal",
+        "player_id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "6",
+         "Assists": "4",
+         "Assists/10m": "3.61",
+         "Damage Dealt": "13269",
+         "Damage Dealt/(Eliminations + Assists)": "442.3",
+         "Damage Dealt/10m": "11972.03",
+         "Damage Dealt/Eliminations": "510.35",
+         "Damage Mitigated": "36",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "1.2",
+         "Damage Mitigated/10m": "32.48",
+         "Damage Mitigated/Deaths": "7.2",
+         "Damage Mitigated/Eliminations": "1.38",
+         "Damage as percent of total output": "100",
+         "Deaths": "5",
+         "Deaths/10m": "4.51",
+         "Draw Count": "0",
+         "Eliminations": "26",
+         "Eliminations/10m": "23.46",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "10",
+         "Final Blows/(Eliminations + Assists)": "0.33",
+         "Final Blows/10m": "9.02",
+         "Final Blows/Eliminations": "0.38",
+         "Healing Done": "0",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "0",
+         "Healing Done/10m": "0",
+         "Healing Done/Deaths": "0",
+         "Healing Done/Eliminations": "0",
+         "K/D Ratio": "5.2",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "29",
+         "Objective Time/10m": "26.17",
+         "Result": "1",
+         "Role": "Damage",
+         "Solo Kills": "1",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.03",
+         "Solo Kills/10m": "0.9",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.2",
+         "Solo Kills/Eliminations Ratio": "0.04",
+         "Solo Kills/Final Blows Ratio": "0.1",
+         "Time Played": "665",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "WMaimone",
+        "player_id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "9.67",
+         "Assists": "7",
+         "Assists/10m": "6.32",
+         "Damage Dealt": "9395",
+         "Damage Dealt/(Eliminations + Assists)": "323.97",
+         "Damage Dealt/10m": "8476.69",
+         "Damage Dealt/Eliminations": "427.05",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "91",
+         "Deaths": "3",
+         "Deaths/10m": "2.71",
+         "Draw Count": "0",
+         "Eliminations": "22",
+         "Eliminations/10m": "19.85",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "10",
+         "Final Blows/(Eliminations + Assists)": "0.34",
+         "Final Blows/10m": "9.02",
+         "Final Blows/Eliminations": "0.45",
+         "Healing Done": "895",
+         "Healing Done as percent of total output": "9",
+         "Healing Done/(Eliminations + Assists)": "30.86",
+         "Healing Done/10m": "807.52",
+         "Healing Done/Deaths": "298.33",
+         "Healing Done/Eliminations": "40.68",
+         "K/D Ratio": "7.33",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "16",
+         "Objective Time/10m": "14.44",
+         "Result": "1",
+         "Role": "Damage",
+         "Solo Kills": "2",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.07",
+         "Solo Kills/10m": "1.8",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.67",
+         "Solo Kills/Eliminations Ratio": "0.09",
+         "Solo Kills/Final Blows Ratio": "0.2",
+         "Time Played": "665",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "cuFFah",
+        "player_id": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "7.5",
+         "Assists": "4",
+         "Assists/10m": "3.61",
+         "Damage Dealt": "11438",
+         "Damage Dealt/(Eliminations + Assists)": "381.27",
+         "Damage Dealt/10m": "10320",
+         "Damage Dealt/Eliminations": "439.92",
+         "Damage Mitigated": "9264",
+         "Damage Mitigated as percent of total output": "42",
+         "Damage Mitigated/(Eliminations + Assists)": "308.8",
+         "Damage Mitigated/10m": "8358.5",
+         "Damage Mitigated/Deaths": "2316",
+         "Damage Mitigated/Eliminations": "356.31",
+         "Damage as percent of total output": "52",
+         "Deaths": "4",
+         "Deaths/10m": "3.61",
+         "Draw Count": "0",
+         "Eliminations": "26",
+         "Eliminations/10m": "23.46",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "12",
+         "Final Blows/(Eliminations + Assists)": "0.4",
+         "Final Blows/10m": "10.83",
+         "Final Blows/Eliminations": "0.46",
+         "Healing Done": "1317",
+         "Healing Done as percent of total output": "6",
+         "Healing Done/(Eliminations + Assists)": "43.9",
+         "Healing Done/10m": "1188.27",
+         "Healing Done/Deaths": "329.25",
+         "Healing Done/Eliminations": "50.65",
+         "K/D Ratio": "6.5",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "47",
+         "Objective Time/10m": "42.41",
+         "Result": "1",
+         "Role": "Tank",
+         "Solo Kills": "3",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0.1",
+         "Solo Kills/10m": "2.71",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0.75",
+         "Solo Kills/Eliminations Ratio": "0.12",
+         "Solo Kills/Final Blows Ratio": "0.25",
+         "Time Played": "665",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "AdmiralRaptr",
+        "player_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "6.4",
+         "Assists": "25",
+         "Assists/10m": "22.56",
+         "Damage Dealt": "3306",
+         "Damage Dealt/(Eliminations + Assists)": "103.31",
+         "Damage Dealt/10m": "2982.86",
+         "Damage Dealt/Eliminations": "472.29",
+         "Damage Mitigated": "2053",
+         "Damage Mitigated as percent of total output": "11",
+         "Damage Mitigated/(Eliminations + Assists)": "64.16",
+         "Damage Mitigated/10m": "1852.33",
+         "Damage Mitigated/Deaths": "410.6",
+         "Damage Mitigated/Eliminations": "293.29",
+         "Damage as percent of total output": "18",
+         "Deaths": "5",
+         "Deaths/10m": "4.51",
+         "Draw Count": "0",
+         "Eliminations": "7",
+         "Eliminations/10m": "6.32",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "1",
+         "Final Blows/(Eliminations + Assists)": "0.03",
+         "Final Blows/10m": "0.9",
+         "Final Blows/Eliminations": "0.14",
+         "Healing Done": "13040",
+         "Healing Done as percent of total output": "71",
+         "Healing Done/(Eliminations + Assists)": "407.5",
+         "Healing Done/10m": "11765.41",
+         "Healing Done/Deaths": "2608",
+         "Healing Done/Eliminations": "1862.86",
+         "K/D Ratio": "1.4",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "58",
+         "Objective Time/10m": "52.33",
+         "Result": "1",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "665",
+         "Win Count": "1"
+        }
+       },
+       {
+        "nickname": "ultraviol3t",
+        "player_id": "43d39898-d853-4e75-b249-9b41d638a2b0",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "9.25",
+         "Assists": "15",
+         "Assists/10m": "13.53",
+         "Damage Dealt": "9920",
+         "Damage Dealt/(Eliminations + Assists)": "268.11",
+         "Damage Dealt/10m": "8950.38",
+         "Damage Dealt/Eliminations": "450.91",
+         "Damage Mitigated": "466",
+         "Damage Mitigated as percent of total output": "2",
+         "Damage Mitigated/(Eliminations + Assists)": "12.59",
+         "Damage Mitigated/10m": "420.45",
+         "Damage Mitigated/Deaths": "116.5",
+         "Damage Mitigated/Eliminations": "21.18",
+         "Damage as percent of total output": "50",
+         "Deaths": "4",
+         "Deaths/10m": "3.61",
+         "Draw Count": "0",
+         "Eliminations": "22",
+         "Eliminations/10m": "19.85",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "8",
+         "Final Blows/(Eliminations + Assists)": "0.22",
+         "Final Blows/10m": "7.22",
+         "Final Blows/Eliminations": "0.36",
+         "Healing Done": "9316",
+         "Healing Done as percent of total output": "47",
+         "Healing Done/(Eliminations + Assists)": "251.78",
+         "Healing Done/10m": "8405.41",
+         "Healing Done/Deaths": "2329",
+         "Healing Done/Eliminations": "423.45",
+         "K/D Ratio": "5.5",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "22",
+         "Objective Time/10m": "19.85",
+         "Result": "1",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "665",
+         "Win Count": "1"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+      "team_stats": {
+       "Average Environmental Kills": "0",
+       "Average Final Blows": "8.2",
+       "Average Multi Kills": "0",
+       "Average Objective Time": "34.4",
+       "Average Solo Kills": "1.2",
+       "Team": "Geekay Esports",
+       "Team Avg Deaths": "4.2",
+       "Team Avg Eliminations": "20.6",
+       "Team Draw Count": "0",
+       "Team Score": "3",
+       "Team Total Deaths": "21",
+       "Team Total Eliminations": "103",
+       "Team Win": "1",
+       "Team Win Count": "1",
+       "Total Team Environmental Kills": "0",
+       "Total Team Final Blows": "41",
+       "Total Team Multi Kills": "0",
+       "Total Team Objective Time": "172",
+       "Total Team Solo Kills": "6",
+       "Total Team Time Played": "3325"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "ReyzrOW",
+        "player_id": "bcd9737d-3295-450d-a20e-94d8815c6d2f",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "2.33",
+         "Assists": "1",
+         "Assists/10m": "0.9",
+         "Damage Dealt": "6220",
+         "Damage Dealt/(Eliminations + Assists)": "444.29",
+         "Damage Dealt/10m": "5612.03",
+         "Damage Dealt/Eliminations": "478.46",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "96",
+         "Deaths": "6",
+         "Deaths/10m": "5.41",
+         "Draw Count": "0",
+         "Eliminations": "13",
+         "Eliminations/10m": "11.73",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "3",
+         "Final Blows/(Eliminations + Assists)": "0.21",
+         "Final Blows/10m": "2.71",
+         "Final Blows/Eliminations": "0.23",
+         "Healing Done": "250",
+         "Healing Done as percent of total output": "4",
+         "Healing Done/(Eliminations + Assists)": "17.86",
+         "Healing Done/10m": "225.56",
+         "Healing Done/Deaths": "41.67",
+         "Healing Done/Eliminations": "19.23",
+         "K/D Ratio": "2.17",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "26",
+         "Objective Time/10m": "23.46",
+         "Result": "0",
+         "Role": "Damage",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "665",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "pdkk_",
+        "player_id": "53a87c13-870c-4c2f-bde1-c96a67df37c9",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.09",
+         "Assists": "1",
+         "Assists/10m": "0.9",
+         "Damage Dealt": "9747",
+         "Damage Dealt/(Eliminations + Assists)": "812.25",
+         "Damage Dealt/10m": "8794.29",
+         "Damage Dealt/Eliminations": "886.09",
+         "Damage Mitigated": "162",
+         "Damage Mitigated as percent of total output": "2",
+         "Damage Mitigated/(Eliminations + Assists)": "13.5",
+         "Damage Mitigated/10m": "146.17",
+         "Damage Mitigated/Deaths": "14.73",
+         "Damage Mitigated/Eliminations": "14.73",
+         "Damage as percent of total output": "98",
+         "Deaths": "11",
+         "Deaths/10m": "9.92",
+         "Draw Count": "0",
+         "Eliminations": "11",
+         "Eliminations/10m": "9.92",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "5",
+         "Final Blows/(Eliminations + Assists)": "0.42",
+         "Final Blows/10m": "4.51",
+         "Final Blows/Eliminations": "0.45",
+         "Healing Done": "43",
+         "Healing Done as percent of total output": "0",
+         "Healing Done/(Eliminations + Assists)": "3.58",
+         "Healing Done/10m": "38.8",
+         "Healing Done/Deaths": "3.91",
+         "Healing Done/Eliminations": "3.91",
+         "K/D Ratio": "1",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "23",
+         "Objective Time/10m": "20.75",
+         "Result": "0",
+         "Role": "Damage",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "665",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "BazOdub",
+        "player_id": "029bf891-4c0b-4153-a386-b7ff9f3ad2f8",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "1.89",
+         "Assists": "6",
+         "Assists/10m": "5.41",
+         "Damage Dealt": "10181",
+         "Damage Dealt/(Eliminations + Assists)": "598.88",
+         "Damage Dealt/10m": "9185.86",
+         "Damage Dealt/Eliminations": "925.55",
+         "Damage Mitigated": "5927",
+         "Damage Mitigated as percent of total output": "36",
+         "Damage Mitigated/(Eliminations + Assists)": "348.65",
+         "Damage Mitigated/10m": "5347.67",
+         "Damage Mitigated/Deaths": "658.56",
+         "Damage Mitigated/Eliminations": "538.82",
+         "Damage as percent of total output": "62",
+         "Deaths": "9",
+         "Deaths/10m": "8.12",
+         "Draw Count": "0",
+         "Eliminations": "11",
+         "Eliminations/10m": "9.92",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "2",
+         "Final Blows/(Eliminations + Assists)": "0.12",
+         "Final Blows/10m": "1.8",
+         "Final Blows/Eliminations": "0.18",
+         "Healing Done": "300",
+         "Healing Done as percent of total output": "2",
+         "Healing Done/(Eliminations + Assists)": "17.65",
+         "Healing Done/10m": "270.68",
+         "Healing Done/Deaths": "33.33",
+         "Healing Done/Eliminations": "27.27",
+         "K/D Ratio": "1.22",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "52",
+         "Objective Time/10m": "46.92",
+         "Result": "0",
+         "Role": "Tank",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "665",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "RedexLCO",
+        "player_id": "bf69c0b9-f068-41bf-a0b9-c88aa083edbb",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "3",
+         "Assists": "8",
+         "Assists/10m": "7.22",
+         "Damage Dealt": "8212",
+         "Damage Dealt/(Eliminations + Assists)": "391.05",
+         "Damage Dealt/10m": "7409.32",
+         "Damage Dealt/Eliminations": "631.69",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "44",
+         "Deaths": "7",
+         "Deaths/10m": "6.32",
+         "Draw Count": "0",
+         "Eliminations": "13",
+         "Eliminations/10m": "11.73",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "5",
+         "Final Blows/(Eliminations + Assists)": "0.24",
+         "Final Blows/10m": "4.51",
+         "Final Blows/Eliminations": "0.38",
+         "Healing Done": "10275",
+         "Healing Done as percent of total output": "56",
+         "Healing Done/(Eliminations + Assists)": "489.29",
+         "Healing Done/10m": "9270.68",
+         "Healing Done/Deaths": "1467.86",
+         "Healing Done/Eliminations": "790.38",
+         "K/D Ratio": "1.86",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "38",
+         "Objective Time/10m": "34.29",
+         "Result": "0",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "665",
+         "Win Count": "0"
+        }
+       },
+       {
+        "nickname": "FrothyFilly7",
+        "player_id": "083989e0-81a4-4f83-8dc3-e5222f0df695",
+        "player_stats": {
+         "(Eliminations + Assists)/Deaths": "2.38",
+         "Assists": "10",
+         "Assists/10m": "9.02",
+         "Damage Dealt": "6533",
+         "Damage Dealt/(Eliminations + Assists)": "343.84",
+         "Damage Dealt/10m": "5894.44",
+         "Damage Dealt/Eliminations": "725.89",
+         "Damage Mitigated": "0",
+         "Damage Mitigated as percent of total output": "0",
+         "Damage Mitigated/(Eliminations + Assists)": "0",
+         "Damage Mitigated/10m": "0",
+         "Damage Mitigated/Deaths": "0",
+         "Damage Mitigated/Eliminations": "0",
+         "Damage as percent of total output": "45",
+         "Deaths": "8",
+         "Deaths/10m": "7.22",
+         "Draw Count": "0",
+         "Eliminations": "9",
+         "Eliminations/10m": "8.12",
+         "Environmental Kills": "0",
+         "Environmental Kills/10m": "0",
+         "Final Blows": "6",
+         "Final Blows/(Eliminations + Assists)": "0.32",
+         "Final Blows/10m": "5.41",
+         "Final Blows/Eliminations": "0.67",
+         "Healing Done": "7936",
+         "Healing Done as percent of total output": "55",
+         "Healing Done/(Eliminations + Assists)": "417.68",
+         "Healing Done/10m": "7160.3",
+         "Healing Done/Deaths": "992",
+         "Healing Done/Eliminations": "881.78",
+         "K/D Ratio": "1.12",
+         "Multi Kills": "0",
+         "Multi Kills/10m": "0",
+         "Objective Time": "6",
+         "Objective Time/10m": "5.41",
+         "Result": "0",
+         "Role": "Support",
+         "Solo Kills": "0",
+         "Solo Kills/(Eliminations + Assists) Ratio": "0",
+         "Solo Kills/10m": "0",
+         "Solo Kills/Damage Dealt Ratio": "0",
+         "Solo Kills/Deaths Ratio": "0",
+         "Solo Kills/Eliminations Ratio": "0",
+         "Solo Kills/Final Blows Ratio": "0",
+         "Time Played": "665",
+         "Win Count": "0"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "c6248ff8-64ff-47ad-8602-7eec0eeda9b0",
+      "team_stats": {
+       "Average Environmental Kills": "0",
+       "Average Final Blows": "4.2",
+       "Average Multi Kills": "0",
+       "Average Objective Time": "29",
+       "Average Solo Kills": "0",
+       "Team": "DhillDucks",
+       "Team Avg Deaths": "8.2",
+       "Team Avg Eliminations": "11.4",
+       "Team Draw Count": "0",
+       "Team Score": "1",
+       "Team Total Deaths": "41",
+       "Team Total Eliminations": "57",
+       "Team Win": "0",
+       "Team Win Count": "0",
+       "Total Team Environmental Kills": "0",
+       "Total Team Final Blows": "21",
+       "Total Team Multi Kills": "0",
+       "Total Team Objective Time": "145",
+       "Total Team Solo Kills": "0",
+       "Total Team Time Played": "3325"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "stats_http_status": 200
+}

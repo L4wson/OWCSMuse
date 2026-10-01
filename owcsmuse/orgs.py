@@ -114,6 +114,7 @@ class TeamFacts:
     last_at: Optional[datetime] = None
     seasons: set[int] = field(default_factory=set)
     matches: int = 0
+    regions: set[str] = field(default_factory=set)   # scope_region values its matches were played in
 
 
 @dataclass
@@ -153,7 +154,8 @@ def load_team_facts(conn: psycopg.Connection) -> dict[str, TeamFacts]:
             SELECT t.team_id,
                    min(coalesce(m.started_at, m.finished_at, m.configured_at)) AS first_at,
                    max(coalesce(m.started_at, m.finished_at, m.configured_at)) AS last_at,
-                   count(*) AS matches, array_agg(DISTINCT c.season) FILTER (WHERE c.season IS NOT NULL) AS seasons
+                   count(*) AS matches, array_agg(DISTINCT c.season) FILTER (WHERE c.season IS NOT NULL) AS seasons,
+                   array_agg(DISTINCT c.scope_region) FILTER (WHERE c.scope_region IS NOT NULL) AS regions
             FROM matches m
             JOIN championships c USING (championship_id)
             CROSS JOIN LATERAL (VALUES (m.faction1_team_id), (m.faction2_team_id)) AS t(team_id)
@@ -166,6 +168,7 @@ def load_team_facts(conn: psycopg.Connection) -> dict[str, TeamFacts]:
             if f:
                 f.first_at, f.last_at, f.matches = r["first_at"], r["last_at"], r["matches"]
                 f.seasons = set(r["seasons"] or [])
+                f.regions = set(r["regions"] or [])
         cur.execute(
             """
             SELECT team_id, array_agg(DISTINCT player_id) AS players
@@ -188,6 +191,32 @@ def _overlap(a: TeamFacts, b: TeamFacts) -> tuple[float, int, int]:
     return (len(shared) / smaller if smaller else 0.0), len(shared), smaller
 
 
+# OWCS is region-locked: a competing roster plays in one of 'na' or 'emea', not
+# both, and does not switch between them season to season. So when two team ids
+# each have a home region and those regions differ, they are not the same
+# continuing roster, whatever the names say. 'international' events (Dreamhack,
+# Midseason Championship, ...) are open to any region and never conflict with
+# anything: a team competing in the same region plus one international LAN is
+# the ordinary case, not a signal of two different orgs.
+#
+# This exists because it was missing: "SpaceStation Gaming" (na) was merged with
+# "SpaceStation" (emea) on a contained-name match with 0% roster overlap, and
+# "Geekay Esports" (emea) was merged with "Geekay Esports" (na) on an identical
+# name with 0% roster overlap. Both looked like strong evidence under the old
+# rules. Neither team ever played a match in the other's region.
+REGION_LOCKED = frozenset({"na", "emea"})
+
+
+def region_conflict(a: TeamFacts, b: TeamFacts) -> Optional[str]:
+    """Why two team ids cannot be the same roster, or None when regions don't rule it out."""
+    ra = a.regions & REGION_LOCKED
+    rb = b.regions & REGION_LOCKED
+    if ra and rb and not (ra & rb):
+        return (f"refused: '{a.name}' competed in {'/'.join(sorted(ra))} and '{b.name}' in {'/'.join(sorted(rb))} - "
+                f"OWCS is region-locked, so a continuing roster does not cross regions")
+    return None
+
+
 def _adjacency(a: TeamFacts, b: TeamFacts) -> tuple[bool, Optional[int]]:
     """Non-overlapping windows, and the gap in days between them."""
     if not (a.first_at and a.last_at and b.first_at and b.last_at):
@@ -207,6 +236,9 @@ def propose(conn: psycopg.Connection, facts: Optional[dict[str, TeamFacts]] = No
     for i, a_id in enumerate(ids):
         for b_id in ids[i + 1:]:
             a, b = facts[a_id], facts[b_id]
+            conflict = region_conflict(a, b)
+            if conflict:
+                continue
             name_exact = fold(a.name) == fold(b.name)
             overlap, shared, smaller = _overlap(a, b)
             adjacent, gap = _adjacency(a, b)
@@ -365,8 +397,15 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
         # a team id removed from the decisions file becomes unmapped again
         cur.execute("DELETE FROM team_orgs WHERE NOT (team_id = ANY(%s))", (list(decisions.data),))
         removed = cur.rowcount
+        # An org whose last team id was just unmapped (an unmerge, e.g. reversing
+        # a wrong cross-region merge) must not linger: it would then resolve as
+        # an org entity with no team_ids under it and no rows in any fact view -
+        # exactly the shape of a stale reference this project keeps finding.
+        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs)")
+        orphaned = cur.rowcount
     conn.commit()
-    out = {"orgs": len(by_org), "team_ids_mapped": written, "unknown_team_ids_skipped": skipped, "unmapped": removed}
+    out = {"orgs": len(by_org) - orphaned, "team_ids_mapped": written, "unknown_team_ids_skipped": skipped,
+          "unmapped": removed, "orphaned_orgs_removed": orphaned}
     log_event(log, logging.INFO, "org_decisions_loaded", **out)
     return out
 

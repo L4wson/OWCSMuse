@@ -68,7 +68,12 @@ LIMITATIONS: tuple[Limitation, ...] = (
         "scope are result_only, and they are not spread evenly - 52 of 118 series in playoff and LAN "
         "competitions have no map stats against 48 of 391 elsewhere, and all 14 Dreamhack Dallas matches are "
         "result_only. Map-grain answers therefore under-represent exactly the matches that mattered most. "
-        "Series-grain answers (`record`, `series record against`) still count them.",
+        "Series-grain answers (`record`, `series record against`) still count them. Stage 2 of the Liquipedia "
+        "integration fills in map, mode, score and winner for 33 of those series from Liquipedia's own match "
+        "records, so those 33 now appear at map grain too - still with no player stats, since Liquipedia has "
+        "none either; `agg_player_stats` and `fact_player_maps` cannot gain a row from them. The remaining "
+        "result_only series either sit on a page outside Liquipedia's covered stages or have no Liquipedia "
+        "counterpart at all, and are still absent from every map-grain answer.",
     ),
     Limitation(
         "stats_2024",
@@ -124,8 +129,15 @@ def _seasons_in_slice(season: Optional[int]) -> tuple[int, ...]:
 def result_only_in_slice(conn: psycopg.Connection, season: Optional[int] = None,
                          championship_id: Optional[str] = None,
                          entities: Optional[list[tuple[str, Optional[str]]]] = None) -> dict[str, Any]:
-    """Series in this slice whose maps FACEIT never recorded."""
-    where = ["c.include", "m.ingest_state = 'result_only'"]
+    """Series in this slice that still have no maps at all.
+
+    `result_only` means FACEIT itself has none; Stage 2 of the Liquipedia
+    integration fills a `match_rounds` row in for some of those (score, winner,
+    still no player stats), so a series that has been enriched is no longer
+    absent from a map-grain answer and must not be counted here as if it were.
+    """
+    where = ["c.include", "m.ingest_state = 'result_only'",
+             "NOT EXISTS (SELECT 1 FROM match_rounds r WHERE r.match_id = m.match_id)"]
     params: list[Any] = []
     if season:
         where.append("c.season = %s")

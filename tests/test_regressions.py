@@ -7,44 +7,21 @@ from decimal import Decimal
 
 import pytest
 
-from owcsmuse import liquipedia as LP
 from owcsmuse.nlq.pipeline import _fmt
 from owcsmuse.nlq.schema import StructuredQuery, Unanswerable
 from owcsmuse.nlq.validate import SchemaInfo, Validated, validate
 from owcsmuse.resolve import ENTITY_ID, rank_candidates
 
 
-# --------------------------------------------------- Liquipedia throttle inverted
+# --------------------------------------------------- Liquipedia: the old client is gone
 
-def test_parse_is_the_slow_path_not_the_fast_one():
-    """We had these reversed and got rate limited. parse/ask/askargs are 1 per 30s."""
-    assert LP.interval_for("parse") == 30.0
-    assert LP.interval_for("ask") == 30.0
-    assert LP.interval_for("askargs") == 30.0
-    assert LP.interval_for("query") == 2.0
-    assert LP.interval_for("opensearch") == 2.0
-    assert LP.interval_for("parse") > LP.interval_for("query")
-    assert LP.SLOW_ACTIONS == frozenset({"parse", "ask", "askargs"})
-
-
-def test_requests_refused_unless_explicitly_enabled(monkeypatch):
-    monkeypatch.delenv(LP.ENABLE_ENV, raising=False)
-    assert LP.requests_enabled() is False
-    client = LP.LiquipediaClient(http=object())  # never reached: the guard fires first
-    with pytest.raises(LP.LiquipediaDisabled) as ei:
-        client.wikitext("Some/Page")
-    assert LP.ENABLE_ENV in str(ei.value)
-    with pytest.raises(LP.LiquipediaDisabled):
-        client.search("anything")
-    monkeypatch.setenv(LP.ENABLE_ENV, "1")
-    assert LP.requests_enabled() is True
-
-
-def test_client_only_ever_targets_the_api_endpoint():
-    src = open(LP.__file__, encoding="utf-8").read()
-    assert src.count("https://liquipedia.net") == 1 and LP.API.endswith("/api.php")
-    for bad in ("BeautifulSoup", "html.parser", "lxml"):
-        assert bad not in src
+def test_the_old_mediawiki_client_is_gone_and_the_api_client_is_the_only_one():
+    """The first client scraped `action=parse` wikitext with per-action throttles we had inverted (parse is the slow
+    one), and got rate limited. It is replaced by the LiquipediaDB API client; tests/test_liquipedia.py holds its
+    guard, budget, cache and 429 behaviour."""
+    from owcsmuse import liquipedia as LP
+    assert not hasattr(LP, "interval_for") and not hasattr(LP, "parse_matches")
+    assert LP.API_BASE == "https://api.liquipedia.net/api/v3"
 
 
 # ------------------------------------------------------------- Decimal formatting
@@ -197,3 +174,66 @@ def test_response_headers_are_archived(agg_db):
     agg_db.commit()
     assert row["headers"]["ratelimit-remaining"] == "18"
     assert row["headers"]["ratelimit-limit"] == "20, 20;w=1"
+
+
+# ------------------------------------------------------- manual-testing batch
+
+@dbonly
+def test_a_players_own_org_never_pulls_in_an_unrelated_regions_matches(agg_db):
+    """SpaceStation Gaming (na) was merged with SpaceStation (emea, 0% roster
+    overlap) on a contained-name match; sug2rfree's record showed EMEA matches
+    he never played. region_conflict() now refuses that merge outright."""
+    from owcsmuse.orgs import TeamFacts, propose, region_conflict
+
+    na = TeamFacts(team_id="na1", name="SpaceStation Gaming", matches=50, regions={"na"})
+    emea = TeamFacts(team_id="emea1", name="SpaceStation", matches=19, regions={"emea", "international"})
+    assert region_conflict(na, emea) is not None
+    assert propose(agg_db, {"na1": na, "emea1": emea}) == []
+
+    # an identical name does not override the region rule either
+    geekay_na = TeamFacts(team_id="g1", name="Geekay Esports", matches=39, regions={"na"})
+    geekay_emea = TeamFacts(team_id="g2", name="Geekay Esports", matches=23, regions={"emea"})
+    assert propose(agg_db, {"g1": geekay_na, "g2": geekay_emea}) == []
+
+
+@dbonly
+def test_role_reaches_the_query_layer_and_a_flex_player_counts_once_per_role(agg_db):
+    """"tank with the most kills" used to drop "tank" silently and rank everyone.
+    KSAA0 is Tank for all 8 fixture maps; the unfiltered leaderboard and the
+    tank leaderboard must therefore agree on his number, and a differently
+    played role must return a different leaderboard. He is searchable by his
+    FACEIT nickname "KSAA0" but displays as his in-game name "KSAA" (bug 5)."""
+    from owcsmuse.nlq.pipeline import ask
+
+    unfiltered = ask(agg_db, "who had the most eliminations", with_evidence=False)
+    tank = ask(agg_db, "tank with the most kills", with_evidence=False)
+    assert unfiltered.status == tank.status == "ok"
+    assert {r["nickname"] for r in unfiltered.rows} != {r["nickname"] for r in tank.rows}, \
+        "the role filter changed nothing: it is being silently dropped again"
+
+    ksaa_unfiltered = next(r for r in unfiltered.rows if r["nickname"] == "KSAA")
+    ksaa_tank = next(r for r in tank.rows if r["nickname"] == "KSAA")
+    assert ksaa_tank["total"] == ksaa_unfiltered["total"] == 139   # every fixture map of his is Tank
+    assert ksaa_tank["maps_with_stat"] == ksaa_unfiltered["maps_with_stat"] == 8
+
+    per_player = ask(agg_db, "KSAA0 eliminations as tank", with_evidence=False)
+    assert per_player.status == "ok" and per_player.rows[0]["total"] == 139
+
+    # a role that player never played returns no_data, not a wrong number
+    off_role = ask(agg_db, "KSAA0 eliminations as support", with_evidence=False)
+    assert off_role.status == "cannot_answer" and off_role.code == "no_data"
+
+
+@dbonly
+def test_owcs_competition_names_display_reordered_and_shorn_of_central(agg_db):
+    """'S9 EMEA OWCS Central - Playoffs' must read 'OWCS EMEA S9 Playoffs' - display
+    only, so the stored FACEIT name (still 'S9 EMEA...') keeps matching free text."""
+    row = agg_db.execute(
+        "select championship_display_name('S9 EMEA OWCS Central - Playoffs') d, "
+        "championship_display_name('S4 NA OWCS Central - Regular Season') r, "
+        "championship_display_name('Dreamhack Dallas') u"       # unrecognised: passes through unchanged
+    ).fetchone()
+    agg_db.commit()
+    assert row["d"] == "OWCS EMEA S9 Playoffs"
+    assert row["r"] == "OWCS NA S4 Regular Season"
+    assert row["u"] == "Dreamhack Dallas"

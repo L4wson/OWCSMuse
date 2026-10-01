@@ -1,4 +1,4 @@
-"""History-crawl tests: history-item parsing, competition classification, gap flags, Liquipedia parsing (offline),
+"""History-crawl tests: history-item parsing, competition classification, gap flags (offline),
 plus a DB test that the first-map result from /players/{id}/history is overridden by the DETAIL phase."""
 
 from __future__ import annotations
@@ -9,7 +9,6 @@ from datetime import date, datetime, timezone
 import pytest
 
 from owcsmuse.crawl import _gap_flags
-from owcsmuse.liquipedia import parse_matches
 from owcsmuse.parsers.matches import parse_history_item, parse_match_detail, results_differ, winner_flipped
 from owcsmuse.parsers.stats import parse_match_stats
 from owcsmuse.scope import Decisions, classify_history_competition
@@ -108,43 +107,6 @@ def test_gap_flags_detect_empty_and_thin_weeks_and_round_robin_shortfall():
     assert _gap_flags([], {"name": "x"}) == ["no matches"]
     odd = _gap_flags([{"week": date(2026, 6, 15), "n": 5}], {"name": "S9 NA OWCS Central - Playoffs", "teams": 7, "matches": 5})
     assert any("odd team count" in f for f in odd)
-
-
-# ---------------------------------------------------------------- liquipedia parsing
-
-WIKITEXT = """
-{{Matchlist|id=abc|title=Week 1
-|M1={{Match
-    |date=June 13, 2026 - 18:00 {{Abbr/CEST}}
-    |opponent1={{TeamOpponent|Twisted Minds}}
-    |opponent2={{TeamOpponent|Al Qadsiah}}
-    |map1={{Map|map=Lijiang Tower|score1=2|score2=1|winner=1}}
-    |map2={{Map|map=King's Row|winner=1}}
-    |map3={{Map|map=Suravasa|winner=1}}
-}}
-|M2={{Match
-    |date=June 14, 2026
-    |opponent1={{TeamOpponent|Virtus.pro}}
-    |opponent2={{TeamOpponent|Telacy}}
-    |winner=2
-    |map1={{Map|winner=2}}
-    |map2={{Map|winner=1}}
-    |map3={{Map|winner=2}}
-}}
-|M3={{Match
-    |opponent1={{TeamOpponent|TBD}}
-    |opponent2={{TeamOpponent|ENCE}}
-}}
-}}
-"""
-
-
-def test_liquipedia_wikitext_parsing():
-    ms = parse_matches(WIKITEXT)
-    assert len(ms) == 2  # the TBD match is skipped
-    a, b = ms
-    assert (a.team1, a.team2, a.date, a.score1, a.score2, a.winner) == ("Twisted Minds", "Al Qadsiah", "2026-06-13", 3, 0, 1)
-    assert (b.team1, b.team2, b.date, b.score1, b.score2, b.winner) == ("Virtus.pro", "Telacy", "2026-06-14", 1, 2, 2)
 
 
 # ---------------------------------------------------------------- DB: the override fires for history stubs

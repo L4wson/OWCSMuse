@@ -60,7 +60,7 @@ export default function Result({ answer, suggestions, busy, onAsk, onPage, onExp
         </section>
       ) : null}
 
-      <Evidence evidence={evidence} busy={busy} onPage={onPage} />
+      <Evidence evidence={evidence} busy={busy} onPage={onPage} onAsk={onAsk} />
     </article>
   );
 }

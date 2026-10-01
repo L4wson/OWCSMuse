@@ -106,6 +106,12 @@ OUT_OF_SCOPE_TERMS: list[tuple[str, str]] = [
 
 MODES = {"control": "Control", "hybrid": "Hybrid", "escort": "Escort", "push": "Push", "flashpoint": "Flashpoint", "clash": "Clash"}
 
+# match_players.role, FACEIT's own three values. Only unambiguous shorthand is
+# matched: "damage" and "healing" are metric words (Damage Dealt, Healing Done)
+# and must not be stolen for role, so Damage/Support are recognised only by
+# their unambiguous role-specific shorthand.
+ROLES = {"tank": "Tank", "dps": "Damage", "support": "Support", "healer": "Support"}
+
 # Current OW2 competitive map pool plus retired maps that appear in 2024 data.
 MAPS = [
     "Lijiang Tower", "Ilios", "Nepal", "Oasis", "Busan", "Antarctic Peninsula", "Samoa",
@@ -130,6 +136,15 @@ CHAMPIONSHIP_TERMS = [
 VERSUS_CUES = ["map record against", "record against", "against", " vs ", " vs. ", "versus", "head to head", "h2h",
                "matchup", "when they played", "when they met"]
 MAP_RECORD_CUES = ["map record", "map wins", "map win rate", "maps against", "record against", "head to head", "h2h", "vs", "versus", "against"]
+# What actually asks for the series-grain record ("Twisted Minds series record
+# against ENCE"), as opposed to a bare "record"/"wins"/"win rate" alongside
+# "vs" - both collapse to the same METRIC_SYNONYMS entry (e.g. "series record"
+# and "record" both become metric "record"), so the distinction has to be read
+# from the raw text, not from the metric already extracted from it. "matches"
+# has no map-grain reading at all ("how many matches" can only mean series),
+# so it is series-grain on its own without needing one of these phrases too.
+SERIES_GRAIN_CUES = ["series record", "match record", "series win rate", "series wins", "match wins",
+                     "series loss", "match loss", "series matchup", "match history"]
 
 LEADERBOARD_CUES = ["most", "top", "highest", "best", "leader", "leaderboard", "who has", "who had", "who have", "who got",
                     "rank", "ranking", "lowest", "fewest", "least", "worst", "which player", "which team", "who leads", "who led",
@@ -148,12 +163,14 @@ _NUM_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "s
 
 _LEAD_STOP = {"what", "was", "is", "did", "does", "do", "has", "have", "had", "the", "how", "show", "me", "of", "for", "by", "and",
               "many", "much", "are", "were", "who", "which", "a", "an", "team", "player", "give", "tell", "about", "with", "to",
-              "whats", "in", "on", "at", "from"}
+              "whats", "in", "on", "at", "from", "as", "playing"}
 _TRAIL_STOP = {"do", "did", "does", "have", "has", "play", "played", "go", "went", "fare", "fared", "perform", "performed", "record",
-               "standings", "results", "result", "stats", "stat", "numbers", "team", "player", "in", "on", "at", "for", "the", "of"}
+               "standings", "results", "result", "stats", "stat", "numbers", "team", "player", "in", "on", "at", "for", "the", "of",
+               "as", "playing"}
 _BAD_NAME_WORDS = {"most", "top", "highest", "best", "lowest", "fewest", "least", "worst", "map", "maps", "mode", "modes",
                    "average", "total", "who", "which", "what", "there", "it", "they", "he", "she", "anyone", "someone", "everyone",
-                   "season", "overall", "leaderboard", "ranking", "rank", "many", "much"}
+                   "season", "overall", "leaderboard", "ranking", "rank", "many", "much", "tank", "tanks", "dps", "support",
+                   "supports", "healer", "healers"}
 
 
 ENTITY_TOKEN = re.compile(
@@ -229,6 +246,13 @@ def _find_mode(q: str) -> Optional[str]:
     return None
 
 
+def _find_role(q: str) -> Optional[str]:
+    for k, v in ROLES.items():
+        if re.search(r"\b" + k + r"s?\b", q):
+            return v
+    return None
+
+
 def _find_map(q: str) -> Optional[str]:
     fq = fold(q)
     for fm, name in sorted(_MAP_BY_FOLD.items(), key=lambda kv: -len(kv[0])):
@@ -280,6 +304,8 @@ def _strip_filters(q: str, keep_years: bool = False) -> str:
         q = re.sub(r"\b20[2-3]\d\b", " ", q)
     q = re.sub(r"\b(on|in|at)\s+(control|hybrid|escort|push|flashpoint|clash)(\s+maps?)?\b", " ", q)
     q = re.sub(r"\b(control|hybrid|escort|push|flashpoint|clash)(\s+maps?)?\b", " ", q)
+    q = re.sub(r"\b(?:as (?:a |an )?|playing )(tank|dps|support|healer)s?\b", " ", q)
+    q = re.sub(r"\b(tank|dps|support|healer)s?\b", " ", q)
     for term in sorted(CHAMPIONSHIP_TERMS, key=len, reverse=True):
         q = re.sub(r"\b(in|at|during|of)?\s*(the\s+)?" + re.escape(term) + r"\b", " ", q)
     for am in sorted(_MAP_BY_ASCII, key=len, reverse=True):
@@ -352,6 +378,7 @@ def parse_question(question: str) -> ParseResult:
 
     filters = Filters(
         season=_find_season(q), mode=_find_mode(q), map=_find_map(q), region=_find_region(q), championship=_find_championship(q),
+        role=_find_role(q),
     )
     metric, q_wo_metric = _find_metric(q)
     limit = _find_limit(q)
@@ -394,8 +421,13 @@ def parse_question(question: str) -> ParseResult:
                     return StructuredQuery(intent="season_compare", entity="team", metric=metric or "map_win_rate",
                                            filters=f, aggregation=aggregation)
                 # "series record against X" is the series-grain question; everything
-                # else at this shape is a map record.
-                if metric in ("record", "win_rate", "wins", "losses", "matches"):
+                # else at this shape is a map record. "series record" and a bare
+                # "record" both collapse to the same metric via METRIC_SYNONYMS, so
+                # the distinction has to come from the raw text (SERIES_GRAIN_CUES),
+                # not from `metric` - relying on `metric` alone made every "X record
+                # vs Y" series-grain, which only ever resolves for two teams, so
+                # "zeruhh record vs sugarfree" (both players) failed outright.
+                if metric == "matches" or _has(q, SERIES_GRAIN_CUES):
                     return StructuredQuery(intent="head_to_head", entity="team", metric="record",
                                            filters=f.model_copy(update={"team": a, "opponent": b, "subject": None}))
                 return StructuredQuery(intent="versus", entity="player" if _has(q, PLAYER_CUES) else "team",

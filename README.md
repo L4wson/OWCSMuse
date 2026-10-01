@@ -146,6 +146,7 @@ changed `status` (say ONGOING became FINISHED) the match is re-queued as `stub`.
 | Nicknames change | `players.player_id` is the FACEIT GUID; `players.nickname` is the latest seen; `player_nicknames` keeps every nickname with first/last seen |
 | Championship timestamps are epoch ms, match timestamps epoch s | `ts_from_epoch` handles both |
 | Listing offset is capped at 500 (600 items max, offset must be a multiple of limit) | Client stops at the cap and flags `championships.list_truncated`; a WARNING `championship_listing_truncated` is logged. Six 2024 open-qualifier Swiss events exceed 600 matches |
+| An empty bracket slot is a placeholder faction named `bye`, scored 1-0 for the real team | It is not a series. Ingest marks it `skipped` (`ingest_error` starts `bye:`) at LIST and at DETAIL, and migration 021 reclassified the 24 already stored. Left in, they gave 13 teams wins they never played and a team called "bye" 24 losses across NA and EMEA; `region_consistency` found it |
 | Rate limit headers are `ratelimit-limit: 20, 20;w=1` (IETF style) | Parsed alongside `X-RateLimit-*`; limiter paces to the advertised window and pauses at low `remaining`; 429/5xx back off exponentially with full jitter and honour `Retry-After` |
 
 Not observed but worth knowing: FACEIT's `detailed_results` can have more
@@ -291,8 +292,8 @@ ones a question lands in to its answer.
 
 `offline_map_stats` - FACEIT records a result for an offline series without
 per-map player stats, so those series land in `result_only`: the winner and
-series score are known, the maps are not. 100 of 509 finished series in scope
-are `result_only`, and they are not spread evenly - 52 of 118 series in playoff
+series score are known, the maps are not. 76 of 485 finished series in scope
+are `result_only`, and they are not spread evenly - 28 of 94 series in playoff
 and LAN competitions have no map stats against 48 of 391 elsewhere, and all 14
 Dreamhack Dallas matches are `result_only`. **Map-grain answers therefore
 under-represent exactly the matches that mattered most.** Series-grain answers
@@ -355,10 +356,10 @@ is recorded as a decision too, so a pair that was looked at and turned down
 never returns as pending review. An unmapped team id stays unmapped and keys as
 `team:<id>`, visibly itself in any grouping - there is no silent fallback.
 
-**What the evidence is actually worth.** The proposer weighs three signals:
-name identity after folding, roster overlap across the two date windows, and
-date adjacency. Reviewing the output on real data inverted the expected
-ordering:
+**What the evidence is actually worth.** The proposer weighs four signals: name
+identity after folding, roster overlap across the two date windows, date
+adjacency, and region. Reviewing the output on real data inverted the expected
+ordering, twice:
 
 - **Roster overlap is weak evidence, and sometimes points the wrong way.** In
   esports whole rosters move between organisations, so a squad that transferred
@@ -368,16 +369,71 @@ ordering:
   the data, Al qadsiah to qadsiah, shared **1 of 8** players, because the roster
   turned over at the same time. Merging on overlap would have made four wrong
   merges and missed the right one.
-- **Name identity is the reliable signal**, with two guards: generic tokens
-  (`team`, `esports`, `gaming`, ...) carry no identity, so "Team X" and "X" are
-  the same handle; and an added academy or B-team token refuses the match
-  outright, so `name_contains("Team Liquid", "Liquid Academy")` is `False` and
-  says why. Nothing here does fuzzy string similarity.
-- **Date adjacency corroborates.** Two ids whose match windows overlap may be
-  two teams that coexisted, which is reported rather than assumed.
+- **Name identity is not enough by itself, and two applied merges proved it
+  the hard way.** "SpaceStation Gaming" (NA) was merged with "SpaceStation"
+  (EMEA) on a contained-name match; "Geekay Esports" (NA) was merged with an
+  *identically named* "Geekay Esports" (EMEA). Both had 0% roster overlap.
+  Both were wrong: the two are unrelated teams that happen to share a name,
+  and the wrong merge surfaced as a real bug - an NA player's "record" query
+  pulled in a completely unrelated EMEA team's matches. Name identity, even
+  exact-fold, is corroborating evidence, not identity by itself.
+- **Region is a hard rule, not a signal.** OWCS is region-locked: a
+  competing roster plays in `na` or `emea`, never both, and does not switch
+  between them season to season. `region_conflict()` refuses any pair whose
+  match history spans disjoint regions, before name or roster evidence is even
+  considered - identical names included. `international` events (Dreamhack,
+  Midseason Championship, ...) never conflict with anything, since any region
+  can attend one alongside its home-region schedule.
+- **Date adjacency corroborates**, but only within a region. Two ids whose
+  match windows overlap may be two teams that coexisted, which is reported
+  rather than assumed.
 
-Current state: 11 orgs covering 22 team ids, 5 pairs recorded as reviewed
-rejections, 58 team ids unmapped and queryable as themselves.
+Current state: 9 orgs covering 18 team ids, 7 pairs recorded as reviewed
+rejections (2 of them region conflicts found after the fact and reversed),
+62 team ids unmapped and queryable as themselves.
+
+**Known gap: a team id maps to an org for all time.** A FACEIT team id can outlive
+an organisation: id `bb5dd404` was "Ex Oblivione" in 2024 and "Virtuspro" in 2025,
+because Virtus pro acquired that roster. Roster movement is not org identity (see
+above), so Ex Oblivione's 2024 series are not Virtus pro's, yet today the org's
+record includes them (5 series where 2 are Virtus pro's). Two consequences: an
+org's record over-counts across an acquisition, and an org's searchable names hold
+each team id's *current* name only, so "Ex Oblivione" finds nothing. The fix is a
+date-bounded team-to-org mapping with a name history for each side; it is
+scheduled with the source-agnostic identity work (Stage 3 of the Liquipedia
+integration). The golden suite holds both as known bugs (G11, G13).
+
+## Aliases
+
+`resolve()` already finds an abbreviation FACEIT itself recorded - if a team
+really was named "SOG" at some point, that is in `entity_names` (nickname and
+team-name history) and needs nothing further. It cannot find community
+shorthand nobody on FACEIT ever typed - "SSG" for SpaceStation Gaming, "TL"
+for Team Liquid - because there is nothing in the data to match it against;
+the fuzzy scorer in `resolve.py` picks something unrelated instead. That is
+not something to guess at: it is a human decision, routed through the same
+reviewed-decisions-file pattern as scope and org identity, never a hardcoded
+table baked into the resolver.
+
+```bash
+python -m owcsmuse alias set SSG --type org --entity-id spacestation-gaming --note "..."
+python -m owcsmuse alias set TL  --type team --entity-id a58dedff-8045-46be-a13e-2402495b6a9d --note "..."
+python -m owcsmuse alias forget SSG
+python -m owcsmuse alias load      # write scope/alias_decisions.json into entity_aliases
+python -m owcsmuse alias status
+```
+
+An alias resolves as an exact, authoritative lookup (`resolve_alias()`), ahead
+of the fuzzy scoring in `rank_candidates()` and before it ever runs - not
+folded into the same ranked pool. That distinction mattered in practice: "TM"
+scores 1.0 against the Twisted Minds alias, but "TML Nightmare" (an unrelated
+team) scores 0.9 against the bare letters "tm" by starting with them, close
+enough that the ordinary ambiguity margin would have asked which one was
+meant. A human already decided that; resolve() must not re-open it.
+
+Seeded so far: `SSG` -> SpaceStation Gaming, `TL` -> Team Liquid, `TM` ->
+Twisted Minds, `CR` -> Crazy Raccoons, each pointing at a team id rather than
+an org where the team is currently unmapped.
 
 ## Aggregation layer
 
@@ -573,6 +629,7 @@ curl -s localhost:8000/ask -H 'content-type: application/json' \
                "match_url": "https://www.faceit.com/en/ow2/room/1-1985af81-..."} ]
   },
   "coverage": { ... }, "limitations": [ ... ], "notes": [ ... ],
+  "attribution": null,     // {source, license, license_url, pages[]} whenever a Liquipedia value fed the answer
   "entities": { ... }, "query": { ... },   // the structured query it understood
   "code": null, "reason": null,
   "suggestions": [],       // advice, when advice is the answer ("check the spelling")
@@ -810,11 +867,12 @@ that look right.
 
 ## Consistency checks
 
-Three bugs in this project had the same shape: a join or key mismatch that
-returned a plausible, smaller answer instead of failing - a NULL season that
+Four bugs in this project had the same shape: a join or key mismatch that
+returned a plausible answer instead of failing - a NULL season that
 made a coverage join false, a NULL `started_at` that hid 30 matches from every
-date-keyed view, and team aggregates still keyed on `team_id` after the resolver
-began returning org ids. None raised anything. A wrong answer that looks like a
+date-keyed view, team aggregates still keyed on `team_id` after the resolver
+began returning org ids, and two org merges that joined an NA roster to an EMEA
+one. None raised anything. A wrong answer that looks like a
 right one is the worst failure this product has.
 
 `python -m owcsmuse check` asserts the invariants against whatever is loaded,
@@ -827,6 +885,8 @@ and exits 1 with the specific discrepancy:
 | `org_key_resolution` | every team id resolves to an org key, unmapped ids are counted explicitly, and no materialized view is still carrying a superseded org key |
 | `aggregate_sums` | the aggregates' sums equal the facts' sums, per stat, per season, in both the wide and long formats |
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
+| `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
+| `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
 ```bash
 python -m owcsmuse check
@@ -838,6 +898,171 @@ fixture warehouse, and each one fails with the right discrepancy when its
 invariant is deliberately broken (an undated match, an edited stat under a stale
 aggregate, a deleted player row, an unrefreshed org merge).
 
+## Liquipedia integration
+
+FACEIT is complete for NA and EMEA main series but has no map stats for 76
+series, and nothing for Korea, China or the LAN events. Liquipedia, through its
+LiquipediaDB API, fills that in as results, map scores and picks/bans - never
+player stats. It is being integrated in stages, each reported before the next
+starts:
+
+| stage | what | status |
+|---|---|---|
+| 0 | client, request planner, cache, attribution | done; auth confirmed and the match record's shape seen (see below) |
+| 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
+| 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
+| 3 | source-agnostic match model and cross-source identity | not started |
+| 4 | LAN and international events | not started |
+| 5 | Korea and China, results only | not started |
+
+### The client (Stage 0)
+
+```bash
+python -m owcsmuse liquipedia status                 # budget used this hour, last 429, what is held; sends nothing
+python -m owcsmuse liquipedia plan                   # the Stage 1 plan and its PROJECTED REQUEST COUNT; sends nothing
+python -m owcsmuse liquipedia run                    # shows the plan, then stops: a dry run
+python -m owcsmuse liquipedia run --execute          # carries it out (needs OWCS_LIQUIPEDIA_ENABLED=1)
+python -m owcsmuse liquipedia verify                 # ONE request: confirms the key, shows a match record's shape
+```
+
+- **Key and opt-in.** `LIQUIPEDIA_API_KEY` in `.env` (see `.env.example`). Nothing is
+  ever sent unless `OWCS_LIQUIPEDIA_ENABLED=1` is also set in the process
+  environment: the key alone is not consent to spend the allowance. The key travels
+  only in the `Authorization` header and is never stored or logged.
+- **Budget: 60 requests an hour**, counted from `raw_payloads` itself (rows with
+  `source = 'liquipedia'`, failures and timeouts included, cache hits not), so
+  restarting a process cannot reset it. When it is spent a run stops as `budget`, not
+  as a failure, and rerunning later resumes where it left off.
+- **The planner** drops values already held, ORs the rest into as few conditions as a
+  URL allows, pages each batch at `OWCS_LIQUIPEDIA_PAGE_LIMIT` rows, and prints the
+  projected request count and what the remaining budget allows *before* any run.
+- **Never re-request what is held.** Every response is stored in `raw_payloads` with
+  its headers (`endpoint = 'liquipedia:<endpoint>'`), an identical request is answered
+  from there, and the `liquipedia_coverage` ledger records which pages have been
+  fetched in full so that changing the set a run wants does not repeat old requests.
+  A stored answer that carried an error is never reused as data.
+- **A 429 stops everything.** The run ends on that request with no retry and no
+  backoff, the 429 is stored with its headers, and nothing more is sent until its
+  `Retry-After` (else one hour) has passed. Any other failure also stops the run; there
+  is no automatic retry anywhere, because a retry spends budget on a request that just
+  failed.
+- **Attribution (CC-BY-SA 3.0).** Every Liquipedia-sourced value carries the URL of the
+  page it came from: `Sourced` cannot be built without one, `liquipedia_coverage` has
+  a checked `page_url` column, and an answer that used Liquipedia values carries
+  `Answer.attribution` (source, licence, the page URLs), which the CLI prints and the
+  API returns. Answers that used none carry `null`.
+- **The key is never kept.** Liquipedia's own 403 quotes the key back (`API key "..." is
+  not valid`), so anything that came off the wire is scrubbed of the key before it is
+  stored, raised or logged.
+- **API only.** Liquipedia's terms forbid automated access to rendered pages, so
+  nothing fetches or parses HTML.
+
+### What a match record looks like (seen in the verification request)
+
+`GET /match` returns `{"result": [...]}`; there are no rate-limit headers, so the budget is our own count. A record
+is about 6 KB of JSON, with structured fields already decoded (not JSON-in-a-string):
+
+- **Where it is:** `pagename` is the page the match sits on (`.../Korea/Regular_Season`), `parent` the stage above
+  it (`.../Korea`). The plan filters on `pagename`, and a value's attribution URL is built from it.
+- **The match:** `match2id`, `match2bracketid`, `date` (UTC), `winner` (`"1"`/`"2"`), `bestof`, `type` (Online/Offline),
+  `finished`, and `match2opponents` (team `name`, `score`, `status`, `teamtemplate`, and `match2players` with page-style
+  names such as `HYEON_(Kim_Seong-hyeon)`).
+- **Maps:** `match2games[]` has `map`, `mode`, `scores`, `winner`, `opponents[]` and, in `extradata`, the hero bans
+  (`team1ban1`, `team2ban1`, `banstart`): map-level results without player stats, as Stage 2 needs.
+- **Not yet seen:** where the FACEIT match id sits. The five sample rows were Korea and China, which are not on FACEIT;
+  the first NA/EMEA rows in the Stage 1 fetch will show it (candidates: `links`, `extradata`).
+
+### Stage 2: map-level enrichment of result_only series
+
+`python -m owcsmuse liquipedia enrich [--plan]` reads what Stage 1 already linked (`liquipedia_links`, tier
+`exact`) and, for every one whose FACEIT series is `result_only`, inserts `match_rounds` rows from Liquipedia's
+`match2games` - map, mode, per-map score, winner. `--plan` classifies without writing and reports whether a gap
+would need a new request (none does here: everything is already in `raw_payloads` from Stage 1). Currently 33 of
+the 76 result_only series in scope are exact-linked and enriched this way (122 maps); the other 43 sit on a page
+Liquipedia does not cover, or Liquipedia has no matching record.
+
+Source is recorded per field, never merged silently:
+
+- `match_rounds.source` (`faceit` | `liquipedia`). A Liquipedia round is only ever inserted where FACEIT has none,
+  so there is never a same-round conflict to arbitrate - FACEIT wins for map stats by construction, since its
+  presence is exactly what skips a match here.
+- `matches.date_source` (`faceit` | `liquipedia`) and `matches.liquipedia_played_at`. On a `result_only` series
+  FACEIT's own timestamp is when the result was entered, not when it was played - Stage 1's alignment numbers put
+  some of these 70+ hours off - so Liquipedia's scheduled time wins there, read through `fact_team_maps` /
+  `fact_team_matches`'s `coalesce(liquipedia_played_at, match_time(...))`, without touching FACEIT's own
+  `started_at` / `finished_at` / `configured_at` columns.
+- Push-mode maps are normalised to the same win/loss indicator (1/0) FACEIT's own `round_stats` already uses for
+  that mode (it never carries the push distance), rather than storing Liquipedia's literal distance score
+  alongside FACEIT's indicator scores in the same integer column.
+
+Never touched: `match_players`, and therefore `fact_player_maps` and every player aggregate - Liquipedia carries
+no player stats, so none is invented. `python -m owcsmuse check` asserts this directly
+(`liquipedia_map_isolation`): no `match_players` row may join to a `source = 'liquipedia'` round.
+
+**Attribution.** `Answer.attribution` (CLI and API, see above) is populated from the FACEIT match ids an answer's
+evidence rows actually name: a match only carries a page when a Liquipedia-sourced value (a map or a date
+correction) contributed to it. An answer built entirely from FACEIT's own data carries `attribution: null`, exactly
+as before Stage 2.
+
+### Open items for later stages
+
+- **Stage 3, date-bounded team-to-org mapping.** A team id maps to an org for all time
+  today, which over-counts across an acquisition (Virtus pro's record includes the 2024
+  series of Ex Oblivione, whose roster it acquired: 5 series where 2 are its own), and
+  an org's searchable names hold only each team id's current name, so "Ex Oblivione"
+  finds nothing. Liquipedia identities need the same shape - a history table with
+  validity dates for every renameable thing, and searchable aliases - so this is fixed
+  once, there. Golden cases G11 and G13 hold it as known bugs.
+
+## Golden answer suite
+
+Unit tests check that code does what its author meant. The golden suite checks
+that an *answer* is right: real questions asked end to end through `ask()`
+against a small real warehouse, with expected values that were never produced by
+the code under test. That rule exists because a test written from output encodes
+the bug as correct - it is how the FACEIT nickname `KSAA0` got asserted where the
+in-game name `KSAA` belonged.
+
+- **The warehouse** is 20 real matches (`tests/golden/matches.json`, each with why
+  it is there) captured verbatim from `raw_payloads` by `tools/capture_golden.py`,
+  their championships' scope decisions, and the repository's own
+  `scope/org_decisions.json` and `scope/alias_decisions.json`, built by
+  `tests/golden_support.py`. It holds both NA and EMEA, both teams named Geekay
+  Esports, both SpaceStation teams, a bracket bye and a series with no map stats,
+  so each past bug has something to bite on.
+- **The expected values** come from `tests/golden/independent.py`, which reads the
+  raw payload JSON and imports nothing from `owcsmuse`, and are written by
+  `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with
+  how each was derived. Nothing in either calls `ask()`.
+- **Each case is labelled** `exact` (asserts numbers) or `invariant` (asserts a
+  property: NA only, tank-role players only, a clarify candidate answers verbatim,
+  a refusal's alternative works), and names the regression it guards.
+- **Only `confirmed` cases are asserted.** A case is proposed by the derivation and
+  becomes an assertion when a person reviews the value and flips `status`.
+  `python tools/golden_report.py` compares every case, proposed or confirmed, to the
+  live answer without asserting anything: a disagreement is either a bug in the code
+  or an error in the derivation, and the raw payload decides which.
+- **A failure means an answer changed**, and prints expected against actual, the
+  sentence that was given and how the value was derived. Fix the code if it is a bug;
+  if it is a correct improvement, change the value in `cases.json` and say why in the
+  commit.
+- **Definitions the expected values rest on**, confirmed by the project owner:
+  "kills" means FACEIT's `Eliminations`; a team's `map_wins` / `map_losses` come from
+  the series score, so a series with no map stats still counts in them (the `maps`
+  column counts only rounds that have stats); `kd_ratio` is total Eliminations over
+  total Deaths; a map is won when the round's `Winner` is the team's id; a bracket
+  bye is not a series.
+- **`known_bug`** marks a case whose expectation is right and whose answer is wrong
+  today. It shows as `xfail` with the reason, and fails the day it is fixed so the
+  marker gets removed.
+
+```bash
+OWCS_TEST_DATABASE_URL=... pytest -m golden tests/test_golden_answers.py
+OWCS_TEST_DATABASE_URL=... python tools/golden_report.py --failures
+```
+
+It runs as its own CI job, `golden answers`, on a scratch schema (`owcs_golden`).
+
 ## CI
 
 `.github/workflows/ci.yml` runs on every push and pull request. The repository is
@@ -847,7 +1072,8 @@ private, so the badge above renders only for accounts with access:
 |---|---|
 | `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
 | `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
-| `database tests` | `pytest` against a `postgres:16` service container, with the full integration suite |
+| `database tests` | `pytest -m "not golden"` against a `postgres:16` service container, with the full integration suite |
+| `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**) |
 | `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
 | `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it |
 
@@ -891,6 +1117,7 @@ migrations/003_aggregates.sql   fact views, materialized aggregates, coverage fu
 migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus facts
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
+owcsmuse/aliases.py             community shorthand ("SSG" -> SpaceStation Gaming): decisions and lookup
 owcsmuse/crawl.py               history crawl: frontier, generations, completeness instrumentation
 owcsmuse/consistency.py         warehouse invariants behind `python -m owcsmuse check`
 owcsmuse/limitations.py         known gaps, surfaced by `ask` and documented above
@@ -906,9 +1133,13 @@ web/tests/                      component tests with payloads captured from the 
 migrations/014_saved_queries.sql  question behind a slug (never the answer)
 scope/decisions.json            reviewed scope decisions (commit this)
 scope/org_decisions.json        reviewed org merges and rejections (commit this)
+scope/alias_decisions.json      reviewed community shorthand (commit this)
 scope/classification_report.md  generated review table
 scope/org_report.md             generated org proposal table
 tools/build_fixture_db.py       CI: a warehouse from the captured fixtures
+tools/capture_golden.py         copy the golden matches' payloads out of raw_payloads
+tools/golden_report.py          compare every golden case to the live answer (asserts nothing)
+tests/golden/                   golden matches, independent.py, derive_expected.py, cases.json, harness.py
 .github/workflows/ci.yml        lint, offline tests, database tests, consistency checks
 owcsmuse/config.py              pydantic-settings
 owcsmuse/logging.py             JSON / text structured logging
