@@ -156,12 +156,24 @@ def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
                 """INSERT INTO liquipedia_matches
                      (objectname, raw_id, match2id, bracket_id, pagename, page_url, region, championship_id, played_at,
                       best_of, finished, winner, walkover, team1_name, team2_name, score1, score2, status1, status2,
-                      section, faceit_match_id, n_games, placeholder)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                      section, faceit_match_id, n_games, placeholder,
+                      team1_template, team2_template, team1_page, team2_page)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (m.objectname, m.raw_id, m.match2id, m.bracket_id, m.pagename, m.page_url, m.region,
                  comp_by_page.get(m.pagename), m.played_at, m.best_of, m.finished, m.winner, m.walkover, m.team1,
                  m.team2, m.score1, m.score2, m.status1, m.status2, m.section, m.faceit_match_id, m.n_games,
-                 m.placeholder))
+                 m.placeholder, m.team1_template, m.team2_template, m.team1_page, m.team2_page))
+            # the line-ups, a parsed copy like the match itself (rebuilt from raw_payloads on every run)
+            for side, players in ((1, m.players1), (2, m.players2)):
+                seen: set[str] = set()
+                for pl in players:
+                    if pl.page in seen:
+                        continue
+                    seen.add(pl.page)
+                    cur.execute(
+                        """INSERT INTO liquipedia_match_players (lp_objectname, side, page, handle, real_name, nationality)
+                           VALUES (%s,%s,%s,%s,%s,%s)""",
+                        (m.objectname, side, pl.page, pl.handle, pl.real_name, pl.nationality))
         n = 0
         for lk in run.result.links:
             cur.execute(

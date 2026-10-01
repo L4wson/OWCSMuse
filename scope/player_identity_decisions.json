@@ -1,0 +1,5 @@
+{
+  "note": "Reviewed Liquipedia player page -> FACEIT player. entity_id null means a Liquipedia-born player with no FACEIT id (it gets id lp:player:<page>). `rejections` are page|guid pairs reviewed and turned down. Edit by hand or with `python -m owcsmuse identity decide` / `identity reject`.",
+  "decisions": {},
+  "rejections": {}
+}

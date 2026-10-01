@@ -120,7 +120,8 @@ EMEA_PAGE = "Overwatch_Champions_Series/2026/EMEA/Stage_2/Regular_Season"
 
 
 def lp_row(team1, team2, s1, s2, when=T0, *, page=NA_PAGE, faceit_id=None, bo=5, idx=1, bracket="B1", finished=True,
-           status="S", winner=None, n_games=None, opp_type="team", games=None):
+           status="S", winner=None, n_games=None, opp_type="team", games=None, players1=None, players2=None,
+           templates=None):
     """A Liquipedia match record in the shape the API returns (only the fields the parser reads).
 
     `games`, when given, replaces the auto-generated match2games list outright: a list of
@@ -133,8 +134,12 @@ def lp_row(team1, team2, s1, s2, when=T0, *, page=NA_PAGE, faceit_id=None, bo=5,
             "extradata": {"timestamp": int(when.timestamp())}, "bestof": bo, "finished": 1 if finished else 0,
             "winner": str(w), "walkover": "", "section": "Week 1",
             "links": {"faceit": f"https://www.faceit.com/en/ow2/room/{faceit_id}"} if faceit_id else [],
-            "match2opponents": [{"name": team1, "score": s1, "status": status, "type": opp_type},
-                                {"name": team2, "score": s2, "status": status, "type": opp_type}],
+            "match2opponents": [{"name": team1, "score": s1, "status": status, "type": opp_type,
+                                 "match2players": [{"name": n, "displayname": d, "flag": f} for n, d, f in (players1 or [])],
+                                 **({"teamtemplate": {"template": templates[0], "page": team1}} if templates else {})},
+                                {"name": team2, "score": s2, "status": status, "type": opp_type,
+                                 "match2players": [{"name": n, "displayname": d, "flag": f} for n, d, f in (players2 or [])],
+                                 **({"teamtemplate": {"template": templates[1], "page": team2}} if templates else {})}],
             "match2games": games if games is not None else
                           [{"map": f"Map{i}", "mode": "Control", "winner": "1", "scores": [1, 0]} for i in range(n)]}
 
@@ -176,7 +181,7 @@ DB_FACEIT_ID = "1-11111111-1111-1111-1111-111111111111"
 DB_PAGE = "Overwatch_Champions_Series/2026/NA/Stage_2/Regular_Season"
 
 
-def build_liquipedia_scratch_db(db_url: str, schema: str):
+def build_liquipedia_scratch_db(db_url: str, schema: str, *, rosters=None, lp_players=None):
     """Drop + recreate `schema`, migrate, and seed one FACEIT match plus one matching stored Liquipedia response.
 
     Minimal by hand (no Collector/FakeClient): reconciliation only reads matches, match_rounds, team_identity and
@@ -210,9 +215,19 @@ def build_liquipedia_scratch_db(db_url: str, schema: str):
                                               team2_team_id, team2_score, winner_team_id)
                    VALUES (%s, %s, %s, %s, 1, %s, 0, %s)""",
                 (DB_FACEIT_ID, i + 1, f"Map{i}", DB_TEAM1, DB_TEAM2, DB_TEAM1))
+        # rosters: {team_id: [(player_id, nickname, game_name)]}, declared on the FACEIT side of the one match
+        for team_id, players in (rosters or {}).items():
+            for pid, nick, game in players:
+                cur.execute("INSERT INTO players (player_id, nickname, game_player_name) VALUES (%s, %s, %s) "
+                            "ON CONFLICT (player_id) DO NOTHING", (pid, nick, game))
+                cur.execute("INSERT INTO match_rosters (match_id, player_id, faction, team_id, nickname_at_match, game_player_name) "
+                            "VALUES (%s, %s, %s, %s, %s, %s)",
+                            (DB_FACEIT_ID, pid, "faction1" if team_id == DB_TEAM1 else "faction2", team_id, nick, game))
     conn.commit()
     sink = RawPayloadStore(raw_conn)
-    row = lp_row("Dallas Fuel", "Team Liquid", 3, 1, when=T0, page=DB_PAGE, faceit_id=DB_FACEIT_ID)
+    p1, p2 = (lp_players or (None, None))
+    row = lp_row("Dallas Fuel", "Team Liquid", 3, 1, when=T0, page=DB_PAGE, faceit_id=DB_FACEIT_ID,
+                 players1=p1, players2=p2, templates=("dallas fuel 2026", "team liquid 2026") if lp_players else None)
     raw_id = sink.store(endpoint="match", params={}, http_status=200, payload={"result": [row]}, body_text=None,
                         fetched_at=when, source="liquipedia")
     with conn.cursor() as cur:

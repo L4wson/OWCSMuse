@@ -1056,6 +1056,39 @@ evidence rows actually name: a match only carries a page when a Liquipedia-sourc
 correction) contributed to it. An answer built entirely from FACEIT's own data carries `attribution: null`, exactly
 as before Stage 2.
 
+### Stage 3: identity without FACEIT
+
+Players are keyed by FACEIT GUID and teams map to orgs through FACEIT team ids; Korean teams and players have
+neither. An **anchor** is "this entity is known in this source by this handle": a FACEIT id is implicitly its own
+anchor, a Liquipedia player page or team name is a row in `entity_anchors` (migration `027_entity_anchors.sql`).
+One entity may carry anchors in both sources; a Liquipedia-born entity carries one and gets an id of its own
+(`lp:player:<page>`) in the same `players` table, so everything keyed on ids keeps working and it shows as itself.
+
+Liquipedia's line-ups are stored as a parsed copy (`liquipedia_match_players`: page, handle, real name,
+nationality; `liquipedia_matches` gains the team templates), and `lp_player_names` / `lp_team_names` are the
+Liquipedia-side name history - every handle and real name a page has carried, every name a template has carried,
+with first/last seen. Page-style names parse into both parts (`HYEON_(Kim_Seong-hyeon)` -> handle `HYEON`, real name
+`Kim Seong-hyeon`) and both are searchable once the page is anchored; the rename-history rule applies to
+Liquipedia-anchored entities exactly as to FACEIT ones.
+
+Anchors arrive only through review:
+
+```bash
+python -m owcsmuse identity propose          # scope/identity_report.md from the linked series; applies nothing
+python -m owcsmuse identity accept           # the strong proposals in bulk
+python -m owcsmuse identity decide <page> --player <guid>     # or --new for a Liquipedia-born player
+python -m owcsmuse identity reject <page> <guid> --reason "..."
+python -m owcsmuse identity load             # scope/player_identity_decisions.json + the team map -> entity_anchors
+python -m owcsmuse refresh --view entity_names
+```
+
+The only evidence proposed is match-level: the same handle on the same side of the same linked series (an exact or
+strong, non-provisional link), which both sources name independently. One page to one GUID is `strong`; a page
+matching several GUIDs, or a GUID matched by several pages, needs a person; a handle that matches no FACEIT name is
+listed with what FACEIT named on that side, so a reviewer can see "Sugarfree / sug2rfree" and decide - the code
+never does. Roster overlap across different series is not evidence of anything. Team-side anchors come from the
+Stage 1 team map (`scope/liquipedia_team_map.json`), already reviewed.
+
 ### Open items for later stages
 
 - **Stage 3, date-bounded team-to-org mapping.** A team id maps to an org for all time
@@ -1168,6 +1201,8 @@ migrations/002_scope.sql        scope_region / tier / season / classification co
 migrations/003_aggregates.sql   fact views, materialized aggregates, coverage functions, entity_names
 migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus facts
 migrations/026_dated_team_orgs.sql  team-to-org windows, team_identity_at(), facts and names keyed at series time
+migrations/027_entity_anchors.sql  entity_anchors, Liquipedia line-ups and name history, Liquipedia names in entity_names
+owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
 owcsmuse/aliases.py             community shorthand ("SSG" -> SpaceStation Gaming): decisions and lookup

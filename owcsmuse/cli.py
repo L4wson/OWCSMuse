@@ -30,6 +30,7 @@ from .parsers.championships import OWCS_PATTERN
 from .resolve import resolve
 from .aliases import DEFAULT_ALIAS_DECISIONS_PATH, AliasDecisions, list_aliases, load_decisions as load_alias_decisions
 from .liquipedia import competition_names as comp_names
+from .liquipedia import identity as lp_identity
 from .orgs import (DEFAULT_ORG_DECISIONS_PATH, DEFAULT_ORG_REPORT_PATH, OrgDecisions,
                    load_decisions as load_org_decisions, propose as propose_orgs,
                    render_report as render_org_report, unmapped_teams)
@@ -436,6 +437,53 @@ def cmd_competitions(args: argparse.Namespace, settings: Settings) -> int:
     return 0
 
 
+def cmd_identity(args: argparse.Namespace, settings: Settings) -> int:
+    """Cross-source player identity: propose from linked series, decide, load. `propose` and `load` need the database;
+    nothing here sends a request."""
+    from .liquipedia import pipeline as lp_pipeline
+    from .liquipedia.teams import TeamMap
+
+    decisions = lp_identity.PlayerDecisions(args.decisions)
+    team_map = TeamMap(args.team_map)
+    if args.identity_cmd == "decide":
+        decisions.set(args.page, None if args.new else args.player, args.handle or args.page.split("_(")[0].replace("_", " "),
+                      args.note, args.real_name)
+        _print({"decisions_file": str(decisions.save()), "page": args.page, "decision": decisions.data[args.page]})
+        return 0
+    if args.identity_cmd == "forget":
+        removed = decisions.unset(args.page)
+        decisions.save()
+        _print({"page": args.page, "removed": removed})
+        return 0
+    if args.identity_cmd == "reject":
+        d = decisions.reject(args.page, args.player, args.reason)
+        _print({"decisions_file": str(decisions.save()), "rejected": d})
+        return 0
+    with connect(settings.database_url, schema=settings.db_schema) as conn:
+        if args.identity_cmd == "load":
+            _print(lp_identity.load_identity(conn, decisions, team_map))
+            return 0
+        run = lp_pipeline.run_reconciliation(conn, team_map_path=args.team_map, decisions_path=args.link_decisions,
+                                             use_proposals=True)
+        proposals = decisions.apply(lp_identity.propose_players(lp_identity.sightings(conn, run, args.team_map)))
+    if args.identity_cmd == "accept":
+        n = lp_identity.accept_strong(decisions, proposals)
+        _print({"decisions_file": str(decisions.save()), "accepted": n,
+                "left_for_review": sum(1 for p in proposals if p.strength == "review" and not p.decided)})
+        return 0
+    if args.identity_cmd == "propose":
+        report = Path(args.report)
+        report.parent.mkdir(parents=True, exist_ok=True)
+        report.write_text(lp_identity.render_report(proposals, team_map), encoding="utf-8")
+    _print({"report": args.report, "pages": len(proposals),
+            "decided": sum(1 for p in proposals if p.decided),
+            "strong": sum(1 for p in proposals if p.strength == "strong" and not p.decided),
+            "review": sum(1 for p in proposals if p.strength == "review" and not p.decided),
+            "unmatched": sum(1 for p in proposals if p.strength == "unmatched" and not p.decided),
+            "team_anchors_decided": len(team_map.data)})
+    return 0
+
+
 def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
     decisions = OrgDecisions(args.decisions)
     with connect(settings.database_url, schema=settings.db_schema) as conn:
@@ -820,6 +868,27 @@ def build_parser() -> argparse.ArgumentParser:
     cpf = cps.add_parser("forget", help="drop a decision"); cpf.add_argument("championship_id")
     cps.add_parser("load", help="write decided names into competition_names (needs the database)")
     cp.set_defaults(func=cmd_competitions)
+
+    idp = sub.add_parser("identity", help="cross-source identity (Liquipedia page -> FACEIT player): propose, review, apply")
+    idp.add_argument("--decisions", default=lp_identity.DEFAULT_PLAYER_DECISIONS_PATH)
+    idp.add_argument("--team-map", default="scope/liquipedia_team_map.json")
+    idp.add_argument("--link-decisions", default="scope/liquipedia_link_decisions.json")
+    ids = idp.add_subparsers(dest="identity_cmd", required=True)
+    ipp = ids.add_parser("propose", help="write scope/identity_report.md from the linked series; applies nothing")
+    ipp.add_argument("--report", default=lp_identity.DEFAULT_REPORT_PATH)
+    ids.add_parser("status", help="how many pages are decided, strong, in review, unmatched")
+    ids.add_parser("accept", help="decide every strong proposal in bulk (one page, one GUID, same side of a linked series)")
+    idd = ids.add_parser("decide", help="decide one page")
+    idd.add_argument("page")
+    g = idd.add_mutually_exclusive_group(required=True)
+    g.add_argument("--player", help="the FACEIT player GUID this page is")
+    g.add_argument("--new", action="store_true", help="a Liquipedia-born player: no FACEIT id (gets lp:player:<page>)")
+    idd.add_argument("--handle"); idd.add_argument("--real-name"); idd.add_argument("--note")
+    idf = ids.add_parser("forget", help="drop a decision"); idf.add_argument("page")
+    idr = ids.add_parser("reject", help="record that this page is NOT this GUID")
+    idr.add_argument("page"); idr.add_argument("player"); idr.add_argument("--reason", required=True)
+    ids.add_parser("load", help="write anchors from the decisions and the team map (needs the database)")
+    idp.set_defaults(func=cmd_identity)
 
     al = sub.add_parser("alias", help="community shorthand ('SSG' -> SpaceStation Gaming): decide, review, apply")
     al.add_argument("--decisions", default=str(DEFAULT_ALIAS_DECISIONS_PATH))
