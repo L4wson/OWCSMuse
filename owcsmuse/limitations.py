@@ -115,10 +115,15 @@ def entity_match_filter(role_id: str, role_type: Optional[str]) -> tuple[str, li
     """SQL restricting `matches m` to the series one entity took part in."""
     if role_type == "player":
         return ("EXISTS (SELECT 1 FROM match_rosters r WHERE r.match_id = m.match_id AND r.player_id = %s)", [role_id])
+    at = "coalesce(m.liquipedia_played_at, match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at))"
     if role_type == "org":
-        return ("EXISTS (SELECT 1 FROM team_identity ti WHERE ti.org_id = %s"
-                " AND ti.team_id IN (m.faction1_team_id, m.faction2_team_id))", [role_id])
-    return ("%s IN (m.faction1_team_id, m.faction2_team_id)", [role_id])
+        # identity at the series' time: a team id counts for the org only inside its window
+        return (f"EXISTS (SELECT 1 FROM team_orgs w WHERE w.org_id = %s"
+                f" AND w.team_id IN (m.faction1_team_id, m.faction2_team_id)"
+                f" AND {at} >= w.valid_from AND {at} < w.valid_to)", [role_id])
+    # a team id as itself: its series outside any org window
+    return (f"%s IN (m.faction1_team_id, m.faction2_team_id) AND NOT EXISTS (SELECT 1 FROM team_orgs w"
+            f" WHERE w.team_id = %s AND {at} >= w.valid_from AND {at} < w.valid_to)", [role_id, role_id])
 
 
 def _seasons_in_slice(season: Optional[int]) -> tuple[int, ...]:

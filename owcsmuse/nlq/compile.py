@@ -296,7 +296,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
                f"sum(a.maps_with_{col}) AS player_map_rows, "
                f"round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 1) AS avg_per_player_map, "
                f"array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-               f"FROM agg_player_stats a LEFT JOIN team_identity ti ON ti.org_key = a.org_key{where} "
+               f"FROM agg_player_stats a LEFT JOIN identity_keys ti ON ti.org_key = a.org_key{where} "
                f"GROUP BY a.org_key, ti.display_name")
         if q.intent == "leaderboard":
             sql += f" HAVING sum(a.maps_with_{col}) >= %s ORDER BY {'avg_per_player_map' if q.aggregation == 'avg_per_map' else 'total'} {_dir(q.sort)} NULLS LAST LIMIT %s"

@@ -391,9 +391,25 @@ ordering, twice:
   match windows overlap may be two teams that coexisted, which is reported
   rather than assumed.
 
-Current state: 9 orgs covering 18 team ids, 7 pairs recorded as reviewed
-rejections (2 of them region conflicts found after the fact and reversed),
-62 team ids unmapped and queryable as themselves.
+**A mapping holds over a window.** A FACEIT team id belongs to an org over
+`[valid_from, valid_to)` (`orgs decide --from ... --to ...`; absent means for all
+time, which is what every decision made before windows existed still means).
+Outside its window the team id is itself: keyed `team:<id>`, displayed and
+searchable by the name it carried then, with its own record. That is how an
+acquired roster stays out of the acquiring org's history - Virtus pro took over
+the Ex Oblivione roster in 2025 and FACEIT kept the team id, so `bb5dd404` is
+Virtus pro from 2025-01-01 and Ex Oblivione before it; "Ex Oblivione record"
+answers with the 2024 series and "VP record" without them. Identity is a
+function of (team id, when): `team_identity_at()`, which every fact view joins
+at the series' own time; `team_identity` is identity now. The proposer proposes
+a window whenever a team id carried a name that is not the org's before it first
+carried the org's name (`propose_window`), and nothing is proposed from roster
+movement. A team id cannot belong to two orgs at once (a trigger refuses the
+overlap), and `check` flags a window that covers none of its team id's series.
+
+Current state: 9 orgs covering 18 team ids (one of them windowed), 7 pairs
+recorded as reviewed rejections (2 of them region conflicts found after the fact
+and reversed), 62 team ids unmapped and queryable as themselves.
 
 **Known gap: a team id maps to an org for all time.** A FACEIT team id can outlive
 an organisation: id `bb5dd404` was "Ex Oblivione" in 2024 and "Virtuspro" in 2025,
@@ -920,6 +936,7 @@ and exits 1 with the specific discrepancy:
 | `org_key_resolution` | every team id resolves to an org key, unmapped ids are counted explicitly, and no materialized view is still carrying a superseded org key |
 | `aggregate_sums` | the aggregates' sums equal the facts' sums, per stat, per season, in both the wide and long formats |
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
+| `identity_windows` | every team-to-org window covers real series of its team id, no team id is two orgs at once, and no series carries two identities for one team |
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
@@ -1150,6 +1167,7 @@ migrations/001_initial.sql      schema
 migrations/002_scope.sql        scope_region / tier / season / classification columns
 migrations/003_aggregates.sql   fact views, materialized aggregates, coverage functions, entity_names
 migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus facts
+migrations/026_dated_team_orgs.sql  team-to-org windows, team_identity_at(), facts and names keyed at series time
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
 owcsmuse/aliases.py             community shorthand ("SSG" -> SpaceStation Gaming): decisions and lookup

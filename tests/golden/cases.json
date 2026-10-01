@@ -258,7 +258,7 @@
    "id": "G11",
    "title": "Twisted Minds vs Ex Oblivione, series grain",
    "kind": "exact",
-   "regression": null,
+   "regression": "date-bounded team-to-org mapping (Stage 3): 'Ex Oblivione' is searchable as the team id's own 2024 era, and a hit on it never puts those series into Virtus pro's record",
    "question": "Twisted Minds series record against Ex Oblivione",
    "expect": {
     "status": "ok",
@@ -271,8 +271,7 @@
     ]
    },
    "derivation": "2 series between the two team ids in the golden set (both 3-1 to Twisted Minds). Team id bb5dd404 was 'Ex Oblivione' in 2024 and was later acquired into Virtus pro. The name must be searchable and find those 2024 series, which are Ex Oblivione's, not Virtus pro's.",
-   "status": "confirmed",
-   "known_bug": "'Ex Oblivione' matches nothing: an org's searchable history holds each team id's current name only, not its earlier ones (team_names), so the name is unsearchable. Its search must work, but a search hit must not put its pre-rename series into Virtus pro's record: that needs date-bounded team-to-org mapping (Stage 3)"
+   "status": "confirmed"
   },
   {
    "id": "G12",
@@ -307,7 +306,7 @@
    "id": "G13",
    "title": "'VP' resolves to Virtus pro; its record excludes the Ex Oblivione era",
    "kind": "exact",
-   "regression": "alias/org: VP resolves to the merged Virtus pro org",
+   "regression": "alias/org: VP resolves to the merged Virtus pro org; date-bounded team-to-org mapping (Stage 3): bb5dd404 is Virtus pro from 2025-01-01 only, so its Ex Oblivione era (3 series) stays out of the record",
    "question": "VP record",
    "expect": {
     "status": "ok",
@@ -328,8 +327,7 @@
     ]
    },
    "derivation": "The org Virtus pro holds two team ids, c02a9899 (2026) and bb5dd404. FACEIT named bb5dd404 'Ex Oblivione' in 2024 and 'Virtuspro' in 2025. Virtus pro acquired the Ex Oblivione roster, and roster movement is not org identity, so the 3 Ex Oblivione-era series are NOT Virtus pro's: 2 series remain, 2 won, series score 7-4.",
-   "status": "confirmed",
-   "known_bug": "team-to-org mapping is not date-bounded: bb5dd404 maps to Virtus pro for all time, so the org's record includes 3 series from its Ex Oblivione era (5 series, not 2). Fix is date-bounded team-to-org mapping (Stage 3); the alias half of this case is G26"
+   "status": "confirmed"
   },
   {
    "id": "G26",

@@ -217,13 +217,19 @@ def check_org_key_resolution(conn: psycopg.Connection) -> CheckResult:
     for r in _rows(conn, "SELECT org_id FROM orgs WHERE org_id LIKE 'team:%'"):
         discrepancies.append({"kind": "org_id_collides_with_unmapped_key_prefix", **r})
     # A materialized aggregate keeps the org_key it was built with. After a merge
-    # is decided and loaded, an unrefreshed aggregate still answers at the old
-    # identity, which reads as a complete answer for a team that no longer exists.
-    for view in ("agg_team_matches", "agg_team_maps", "agg_player_stats"):
+    # (or a window) is decided and loaded, an unrefreshed aggregate still answers
+    # at the old identity, which reads as a complete answer for a team that no
+    # longer exists. Identity is per series time, so the comparison is against
+    # the fact view the aggregate was built from: every (team_id, org_key) the
+    # aggregate carries must still occur there.
+    for view, fact in (("agg_team_matches", "fact_team_matches"), ("agg_team_maps", "fact_team_maps"),
+                       ("agg_player_stats", "fact_player_maps")):
         stale = _rows(conn, f"""
-            SELECT DISTINCT a.team_id, a.org_key AS aggregate_org_key, ti.org_key AS current_org_key
-              FROM {view} a JOIN team_identity ti ON ti.team_id = a.team_id
-             WHERE a.org_key IS DISTINCT FROM ti.org_key LIMIT 20""")
+            SELECT a.team_id, a.org_key AS aggregate_org_key,
+                   (SELECT array_agg(DISTINCT f.org_key) FROM {fact} f WHERE f.team_id = a.team_id) AS current_org_keys
+              FROM (SELECT DISTINCT team_id, org_key FROM {view}) a
+             WHERE NOT EXISTS (SELECT 1 FROM {fact} f WHERE f.team_id = a.team_id AND f.org_key = a.org_key)
+             LIMIT 20""")
         for r in stale:
             discrepancies.append({"kind": "stale_org_key_in_materialized_view", "view": view, **r,
                                   "hint": "run `python -m owcsmuse refresh` after loading org decisions"})
@@ -235,6 +241,8 @@ def check_org_key_resolution(conn: psycopg.Connection) -> CheckResult:
         "team_ids_unmapped": int(_scalar(conn, "SELECT count(*) FROM team_identity WHERE NOT mapped") or 0),
         "unmapped_team_ids_with_matches": int(_scalar(conn, """
             SELECT count(DISTINCT team_id) FROM fact_team_matches WHERE org_key LIKE 'team:%'""") or 0),
+        "bounded_windows": int(_scalar(conn, """
+            SELECT count(*) FROM team_orgs WHERE valid_from <> '-infinity' OR valid_to <> 'infinity'""") or 0),
     }
     return _result("org_key_resolution", discrepancies,
                    f"{counts['team_ids_total']} team ids all resolve: {counts['team_ids_mapped']} mapped to "
@@ -375,6 +383,53 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} org(s) or team id(s) span na and emea", counts)
 
 
+# ------------------------------------------------------------ identity windows
+
+def check_identity_windows(conn: psycopg.Connection) -> CheckResult:
+    """A team-to-org window says something about real series, and a team id is never two orgs at once.
+
+    A window that covers none of its team id's series is a decision that silently
+    does nothing - most likely a date typed wrong - and a series that falls in two
+    windows would belong to two orgs; the trigger forbids the second, this audits
+    the first and re-asserts the second against what is loaded.
+    """
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, """
+        SELECT w.team_id, w.org_id, w.valid_from::text AS valid_from, w.valid_to::text AS valid_to
+          FROM team_orgs w
+         WHERE (w.valid_from <> '-infinity' OR w.valid_to <> 'infinity')
+           AND NOT EXISTS (SELECT 1 FROM fact_team_matches f WHERE f.team_id = w.team_id
+                             AND f.started_at >= w.valid_from AND f.started_at < w.valid_to)"""):
+        discrepancies.append({"kind": "window_covers_no_series", **{k: str(v) for k, v in r.items()},
+                              "hint": "the window dates match none of this team id's series; check them in "
+                                      "scope/org_decisions.json"})
+    for r in _rows(conn, """
+        SELECT a.team_id, a.org_id AS org_a, b.org_id AS org_b
+          FROM team_orgs a JOIN team_orgs b ON b.team_id = a.team_id AND b.valid_from > a.valid_from
+         WHERE a.valid_from < b.valid_to AND b.valid_from < a.valid_to"""):
+        discrepancies.append({"kind": "overlapping_windows", **r})
+    for r in _rows(conn, """
+        SELECT team_id, count(DISTINCT org_key) AS keys FROM fact_team_matches
+         GROUP BY team_id, match_id HAVING count(DISTINCT org_key) > 1 LIMIT 5"""):
+        discrepancies.append({"kind": "one_series_two_identities", **r})
+    counts = {
+        "windows": int(_scalar(conn, "SELECT count(*) FROM team_orgs") or 0),
+        "bounded": int(_scalar(conn, "SELECT count(*) FROM team_orgs WHERE valid_from <> '-infinity' "
+                                     "OR valid_to <> 'infinity'") or 0),
+        "team_ids_with_an_era_of_their_own": int(_scalar(conn, """
+            SELECT count(DISTINCT f.team_id) FROM fact_team_matches f
+             WHERE f.org_id IS NULL AND EXISTS (SELECT 1 FROM team_orgs w WHERE w.team_id = f.team_id)""") or 0),
+        "series_in_own_eras": int(_scalar(conn, """
+            SELECT count(DISTINCT f.match_id) FROM fact_team_matches f
+             WHERE f.org_id IS NULL AND EXISTS (SELECT 1 FROM team_orgs w WHERE w.team_id = f.team_id)""") or 0),
+    }
+    return _result("identity_windows", discrepancies,
+                   f"{counts['windows']} team-to-org windows ({counts['bounded']} bounded) each cover real series; "
+                   f"{counts['team_ids_with_an_era_of_their_own']} team id(s) keep an era of their own "
+                   f"({counts['series_in_own_eras']} series)",
+                   f"{len(discrepancies)} window problem(s)", counts)
+
+
 # --------------------------------------------------- 7. Liquipedia map isolation
 
 def check_liquipedia_map_isolation(conn: psycopg.Connection) -> CheckResult:
@@ -412,6 +467,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "aggregate_sums": check_aggregate_sums,
     "stat_reachability": check_stat_reachability,
     "region_consistency": check_region_consistency,
+    "identity_windows": check_identity_windows,
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
 }
 

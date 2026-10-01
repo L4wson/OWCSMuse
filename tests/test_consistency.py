@@ -112,7 +112,7 @@ def test_an_unrefreshed_org_merge_fails_org_key_resolution(agg_db):
         r = _by_name(run_checks(agg_db, ["org_key_resolution"]))["org_key_resolution"]
         assert not r.ok
         stale = [d for d in r.discrepancies if d["kind"] == "stale_org_key_in_materialized_view"]
-        assert stale and stale[0]["current_org_key"] == "test-org"
+        assert stale and "test-org" in stale[0]["current_org_keys"]
     finally:
         agg_db.rollback()
 

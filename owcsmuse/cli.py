@@ -440,7 +440,8 @@ def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
     decisions = OrgDecisions(args.decisions)
     with connect(settings.database_url, schema=settings.db_schema) as conn:
         if args.orgs_cmd == "decide":
-            decisions.set(args.team_id, args.org, args.org_name or args.org, args.note)
+            decisions.set(args.team_id, args.org, args.org_name or args.org, args.note,
+                          valid_from=getattr(args, "valid_from", None), valid_to=getattr(args, "valid_to", None))
             path = decisions.save()
             _print({"decisions_file": str(path), "team_id": args.team_id, "decision": decisions.get(args.team_id)})
             return 0
@@ -486,8 +487,9 @@ def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
         if args.orgs_cmd == "status":
             with conn.cursor() as cur:
                 cur.execute("SELECT o.org_id, o.name, count(tm.team_id) AS team_ids,"
-                            " array_agg(tm.team_id) AS ids FROM orgs o"
-                            " LEFT JOIN team_orgs tm USING (org_id) GROUP BY o.org_id, o.name ORDER BY o.name")
+                            " array_agg(tm.team_id || CASE WHEN tm.valid_from = '-infinity' AND tm.valid_to = 'infinity'"
+                            " THEN '' ELSE ' [' || tm.valid_from::date || ', ' || tm.valid_to::date || ')' END) AS ids"
+                            " FROM orgs o LEFT JOIN team_orgs tm USING (org_id) GROUP BY o.org_id, o.name ORDER BY o.name")
                 orgs = [dict(r) for r in cur.fetchall()]
             conn.commit()
             _print({"orgs": orgs, "unmapped_team_ids": len(unmapped_teams(conn)),
@@ -789,6 +791,8 @@ def build_parser() -> argparse.ArgumentParser:
     pr.add_argument("--report", default=str(DEFAULT_ORG_REPORT_PATH))
     de = ogs.add_parser("decide", help="map one team id to an org")
     de.add_argument("team_id"); de.add_argument("--org", required=True); de.add_argument("--org-name"); de.add_argument("--note")
+    de.add_argument("--from", dest="valid_from", metavar="ISO", help="the mapping holds from this moment (absent: always)")
+    de.add_argument("--to", dest="valid_to", metavar="ISO", help="... until this moment, exclusive (absent: open)")
     fg = ogs.add_parser("forget", help="unmap a team id"); fg.add_argument("team_id")
     rj = ogs.add_parser("reject", help="record a reviewed rejection: these two team ids are different orgs")
     rj.add_argument("team_id_a"); rj.add_argument("team_id_b"); rj.add_argument("--reason", required=True)

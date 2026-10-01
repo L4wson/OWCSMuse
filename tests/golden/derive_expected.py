@@ -170,9 +170,8 @@ case("G11", "Twisted Minds vs Ex Oblivione, series grain", "exact", "Twisted Min
      f"{h2h['matches']} series between the two team ids in the golden set (both 3-1 to Twisted Minds). Team id bb5dd404 was "
      "'Ex Oblivione' in 2024 and was later acquired into Virtus pro. The name must be searchable and find those 2024 "
      "series, which are Ex Oblivione's, not Virtus pro's.",
-     known_bug="'Ex Oblivione' matches nothing: an org's searchable history holds each team id's current name only, "
-               "not its earlier ones (team_names), so the name is unsearchable. Its search must work, but a search hit must "
-               "not put its pre-rename series into Virtus pro's record: that needs date-bounded team-to-org mapping (Stage 3)")
+     regression="date-bounded team-to-org mapping (Stage 3): 'Ex Oblivione' is searchable as the team id's own 2024 era, "
+                "and a hit on it never puts those series into Virtus pro's record")
 
 # ----------------------------------------------------------------- resolution
 dsg_id = team_id("Disguised")
@@ -194,10 +193,8 @@ case("G13", "'VP' resolves to Virtus pro; its record excludes the Ex Oblivione e
      f"'Virtuspro' in 2025. Virtus pro acquired the Ex Oblivione roster, and roster movement is not org identity, so "
      f"the 3 Ex Oblivione-era series are NOT Virtus pro's: {vp['matches']} series remain, {vp['wins']} won, series score "
      f"{vp['map_wins']}-{vp['map_losses']}.",
-     regression="alias/org: VP resolves to the merged Virtus pro org",
-     known_bug="team-to-org mapping is not date-bounded: bb5dd404 maps to Virtus pro for all time, so the org's record "
-               "includes 3 series from its Ex Oblivione era (5 series, not 2). Fix is date-bounded team-to-org mapping "
-               "(Stage 3); the alias half of this case is G26")
+     regression="alias/org: VP resolves to the merged Virtus pro org; date-bounded team-to-org mapping (Stage 3): "
+                "bb5dd404 is Virtus pro from 2025-01-01 only, so its Ex Oblivione era (3 series) stays out of the record")
 
 case("G26", "'VP' resolves to the Virtus pro org", "invariant", "VP record",
      {"entity": {"role": "subject", "type": "org", "id": "virtus-pro", "name": "Virtus pro"}, "status": "ok"},
