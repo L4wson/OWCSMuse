@@ -238,6 +238,69 @@ def _adjacency(a: TeamFacts, b: TeamFacts) -> tuple[bool, Optional[int]]:
     return False, 0
 
 
+# The OWCS calendar as the committed reports show it (stage windows from the first and last series seen in each). A
+# name change whose old name's last sighting and new name's first sighting fall in different stages happened on a
+# stage boundary. Kept as data so it can be extended as stages are added.
+STAGE_CALENDAR: tuple[tuple[str, str, str], ...] = (
+    # from the first and last series seen in each stage's competitions (regular season, playoffs, relegation)
+    ("2024 Stage 1", "2024-03-08", "2024-03-24"), ("2024 Stage 2", "2024-04-12", "2024-05-05"),
+    ("2024 Dreamhack Dallas", "2024-05-31", "2024-06-02"),
+    ("2025 Stage 1", "2025-01-31", "2025-03-10"), ("2025 Stage 2", "2025-05-10", "2025-06-21"),
+    ("2025 Stage 3", "2025-09-07", "2025-10-26"),
+    ("2026 Stage 1", "2026-03-21", "2026-06-12"),      # playoffs 2026-04-11/12, then the S8 relegation into late May
+    ("2026 Stage 2", "2026-06-13", "2026-07-06"),      # began 2026-06-13
+)
+
+
+def stage_of(when: Optional[datetime]) -> Optional[str]:
+    if when is None:
+        return None
+    day = when.date().isoformat()
+    for name, lo, hi in STAGE_CALENDAR:
+        if lo <= day <= hi:
+            return name
+    return None
+
+
+def _same_handle(a: str, b: str) -> bool:
+    """A rename keeps the handle: equal after folding, equal without spaces/punctuation, or one contains the other."""
+    fa, fb = fold(a), fold(b)
+    squash = lambda x: re.sub(r"[^a-z0-9]", "", x)  # noqa: E731
+    if fa == fb or squash(fa) == squash(fb):
+        return True
+    return name_contains(a, b)[0] or name_contains(b, a)[0] or (squash(fa) and (squash(fa) in squash(fb) or squash(fb) in squash(fa)))
+
+
+def classify_name_change(old: tuple[str, datetime, datetime], new: tuple[str, datetime, datetime]) -> dict[str, Any]:
+    """What a change of name on one team id is, from two signals.
+
+    1. Handle: the new name contains or extends the old one -> a rename by the same organisation.
+    2. Stage boundary: the old name's last sighting and the new name's first sighting fall in different stages -> a
+       roster pickup by another organisation, which in OWCS lands on a stage boundary.
+    A wholly different name on a stage boundary is a pickup (a window); a kept handle is a rename (no window). When the
+    signals disagree - a wholly different name inside one stage, or ranges that overlap - it is reported for a person.
+    """
+    (o_name, o_first, o_last), (n_name, n_first, n_last) = old, new
+    handle_kept = _same_handle(o_name, n_name)
+    s_old, s_new = stage_of(o_last), stage_of(n_first)
+    overlap = n_first <= o_last
+    boundary = (s_old != s_new) and not overlap
+    if overlap:
+        verdict, why = "disagree", (f"'{n_name}' ({n_first:%Y-%m-%d}..{n_last:%Y-%m-%d}) sits inside '{o_name}''s range "
+                                    f"({o_first:%Y-%m-%d}..{o_last:%Y-%m-%d}): the id alternated between the names, which "
+                                    "neither signal explains")
+    elif handle_kept and boundary:
+        verdict, why = "rename", f"'{n_name}' keeps the handle of '{o_name}' (rename), though it first appears in a new stage ({s_old} -> {s_new}); the handle decides"
+    elif handle_kept:
+        verdict, why = "rename", f"'{n_name}' keeps the handle of '{o_name}': a rename by the same organisation"
+    elif boundary:
+        verdict, why = "pickup", f"'{n_name}' is a wholly different name first seen in {s_new or 'an unknown stage'} after '{o_name}' last played in {s_old or 'an unknown stage'}: a roster pickup"
+    else:
+        verdict, why = "disagree", f"'{n_name}' is a wholly different name but appears inside the same stage as '{o_name}' ({s_old}): not a stage-boundary pickup and not a rename"
+    return {"old": o_name, "new": n_name, "verdict": verdict, "handle_kept": handle_kept, "stage_boundary": boundary,
+            "stages": [s_old, s_new], "why": why}
+
+
 def propose_window(team: TeamFacts, org_name: str) -> Optional[dict[str, Any]]:
     """The window over which `team` should count as `org_name`, or None for all time.
 
@@ -261,10 +324,15 @@ def propose_window(team: TeamFacts, org_name: str) -> Optional[dict[str, Any]]:
     foreign_before = [n for n in history if n[1] < first_org[1] and not is_orgs(n[0])]
     if not foreign_before:
         return None
+    # the second signal: the change that brought the org's name must be a pickup, not a rename of the earlier name
+    last_before = max(foreign_before, key=lambda n: n[2])
+    change = classify_name_change(last_before, first_org)
+    if change["verdict"] == "rename":
+        return None
     names = ", ".join(sorted({n[0] for n in foreign_before}))
     return {"valid_from": first_org[1].isoformat(timespec="seconds"), "valid_to": None,
             "basis": f"carried '{names}' before first appearing as '{first_org[0]}' on {first_org[1]:%Y-%m-%d}; "
-                     f"the earlier era is proposed as the team's own, not the org's"}
+                     f"the earlier era is proposed as the team's own, not the org's ({change['verdict']}: {change['why']})"}
 
 
 def propose(conn: psycopg.Connection, facts: Optional[dict[str, TeamFacts]] = None) -> list[Proposal]:

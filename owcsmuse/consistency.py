@@ -436,6 +436,40 @@ def check_series_integrity(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} series problem(s)", counts)
 
 
+# ------------------------------------------------------------ score plausibility
+
+def check_score_plausibility(conn: psycopg.Connection) -> CheckResult:
+    """No series presents a score its best-of cannot hold, and no map is both won and drawn.
+
+    FACEIT counts a drawn map as a win for the series winner and stored Dreamhack Dallas as best-of-1; the series
+    view corrects the first from map results and derives a best-of the score fits. What reaches an answer is what
+    this asserts; the corrections themselves are counted, not failed, so a rise in them is visible.
+    """
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, """
+        SELECT series_id, score1, score2, best_of, score_source, best_of_source FROM series
+         WHERE best_of IS NOT NULL AND GREATEST(score1, score2) > (best_of + 1) / 2 LIMIT 20"""):
+        discrepancies.append({"kind": "score_impossible_for_best_of", **r})
+    for r in _rows(conn, "SELECT match_id, round_number FROM fact_team_maps WHERE won AND drawn LIMIT 10"):
+        discrepancies.append({"kind": "map_both_won_and_drawn", **r})
+    for r in _rows(conn, """
+        SELECT s.series_id FROM series s
+         WHERE s.faceit_match_id IS NOT NULL AND s.score_source = 'faceit'
+           AND EXISTS (SELECT 1 FROM match_rounds r WHERE r.match_id = s.match_id)
+           AND (SELECT count(*) FILTER (WHERE r.winner_team_id = s.side1_team_id AND NOT map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id))
+                  FROM match_rounds r WHERE r.match_id = s.match_id) > s.score1 LIMIT 10"""):
+        discrepancies.append({"kind": "map_wins_exceed_series_score", **r})
+    counts = {
+        "scores_corrected_from_maps": int(_scalar(conn, "SELECT count(*) FROM series WHERE score_source = 'maps'") or 0),
+        "best_of_derived_from_score": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'derived from score'") or 0),
+        "drawn_maps": int(_scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") / 2 if _scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") else 0),
+    }
+    return _result("score_plausibility", discrepancies,
+                   f"every series fits its best-of ({counts['scores_corrected_from_maps']} score(s) corrected from map results, "
+                   f"{counts['best_of_derived_from_score']} best-of derived from the score, {counts['drawn_maps']} drawn map(s))",
+                   f"{len(discrepancies)} implausible score(s)", counts)
+
+
 # ------------------------------------------------------------ identity windows
 
 def check_identity_windows(conn: psycopg.Connection) -> CheckResult:
@@ -522,6 +556,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "region_consistency": check_region_consistency,
     "identity_windows": check_identity_windows,
     "series_integrity": check_series_integrity,
+    "score_plausibility": check_score_plausibility,
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
 }
 

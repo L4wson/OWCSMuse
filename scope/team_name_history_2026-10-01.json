@@ -1,0 +1,251 @@
+{
+  "note": "FACEIT team ids carrying more than one name, with each name's first and last sighting (team_names) - the production query the project owner ran on 2026-10-01. Input to tools/window_review.py; dates are days (the sighting timestamps live in team_names). Team ids given as 8-character prefixes were reported that way.",
+  "histories": {
+    "0464a373-df2f-4d23-93f5-80cbaa07802f": [
+      {
+        "name": "UNC inc",
+        "first_seen": "2024-04-12",
+        "last_seen": "2024-04-21"
+      },
+      {
+        "name": "Rad",
+        "first_seen": "2025-02-01",
+        "last_seen": "2025-05-10"
+      },
+      {
+        "name": "Sakura",
+        "first_seen": "2025-05-17",
+        "last_seen": "2025-09-21"
+      },
+      {
+        "name": "Sakura Esports",
+        "first_seen": "2025-09-27",
+        "last_seen": "2025-10-25"
+      },
+      {
+        "name": "LuneX",
+        "first_seen": "2026-03-21",
+        "last_seen": "2026-07-04"
+      }
+    ],
+    "d20d1868-8937-4a85-8706-bf936d265392": [
+      {
+        "name": "team_chiime",
+        "first_seen": "2024-03-08",
+        "last_seen": "2024-03-10"
+      },
+      {
+        "name": "Dreamland",
+        "first_seen": "2024-03-17",
+        "last_seen": "2024-03-17"
+      },
+      {
+        "name": "Supernova",
+        "first_seen": "2025-05-11",
+        "last_seen": "2025-06-14"
+      },
+      {
+        "name": "Team Z",
+        "first_seen": "2025-09-07",
+        "last_seen": "2025-10-19"
+      }
+    ],
+    "03869857": [
+      {
+        "name": "ROC ESPORT",
+        "first_seen": "2024-03-08",
+        "last_seen": "2024-03-21"
+      },
+      {
+        "name": "Umbrellaacademy",
+        "first_seen": "2024-04-12",
+        "last_seen": "2024-04-12"
+      },
+      {
+        "name": "ROCstars",
+        "first_seen": "2024-04-20",
+        "last_seen": "2024-04-21"
+      }
+    ],
+    "602d3c11-ccee-404d-858e-b03267c83d47": [
+      {
+        "name": "Goud Guys",
+        "first_seen": "2025-09-07",
+        "last_seen": "2025-09-27"
+      },
+      {
+        "name": "Goud Guys ANM",
+        "first_seen": "2025-09-28",
+        "last_seen": "2025-10-12"
+      }
+    ],
+    "62f7752b-0b79-4fa8-9a23-78800e2b4539": [
+      {
+        "name": "BuboSprayCheck",
+        "first_seen": "2024-03-08",
+        "last_seen": "2024-03-21"
+      },
+      {
+        "name": "ENCE",
+        "first_seen": "2024-03-22",
+        "last_seen": "2024-06-02"
+      }
+    ],
+    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf": [
+      {
+        "name": "SpaceStation",
+        "first_seen": "2025-02-01",
+        "last_seen": "2025-09-21"
+      },
+      {
+        "name": "SpaceStation Gaming",
+        "first_seen": "2025-09-28",
+        "last_seen": "2026-07-06"
+      }
+    ],
+    "75516399-4c1d-40fc-bb46-a887edadc5a2": [
+      {
+        "name": "Anyones Legend",
+        "first_seen": "2026-03-22",
+        "last_seen": "2026-05-25"
+      },
+      {
+        "name": "1234",
+        "first_seen": "2026-05-25",
+        "last_seen": "2026-07-01"
+      }
+    ],
+    "a35f8d47-7487-4249-a3fb-94aefa2ac8d0": [
+      {
+        "name": "Extinction",
+        "first_seen": "2026-03-22",
+        "last_seen": "2026-05-29"
+      },
+      {
+        "name": "The Kafe",
+        "first_seen": "2026-06-13",
+        "last_seen": "2026-07-01"
+      }
+    ],
+    "bb5dd404-213c-430f-8d12-8687fc3ff747": [
+      {
+        "name": "Ex Oblivione",
+        "first_seen": "2024-03-08",
+        "last_seen": "2024-04-20"
+      },
+      {
+        "name": "Virtuspro",
+        "first_seen": "2025-01-31",
+        "last_seen": "2025-10-19"
+      }
+    ],
+    "bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff": [
+      {
+        "name": "GenG",
+        "first_seen": "2025-01-31",
+        "last_seen": "2025-09-27"
+      },
+      {
+        "name": "GenG Esports",
+        "first_seen": "2025-10-05",
+        "last_seen": "2025-10-25"
+      }
+    ],
+    "c5116cb3": [
+      {
+        "name": "Timeless",
+        "first_seen": "2024-03-08",
+        "last_seen": "2025-03-08"
+      },
+      {
+        "name": "NTMR",
+        "first_seen": "2025-05-10",
+        "last_seen": "2025-10-19"
+      }
+    ],
+    "c82570d6": [
+      {
+        "name": "Deimpero",
+        "first_seen": "2024-04-12",
+        "last_seen": "2024-04-29"
+      },
+      {
+        "name": "Frost Tails",
+        "first_seen": "2025-05-11",
+        "last_seen": "2025-06-15"
+      }
+    ],
+    "cb90edf6-60cb-4f73-8172-bf944729a114": [
+      {
+        "name": "Quick Esports",
+        "first_seen": "2025-05-11",
+        "last_seen": "2025-10-12"
+      },
+      {
+        "name": "1DIPv100GORILLA",
+        "first_seen": "2025-06-01",
+        "last_seen": "2025-06-15"
+      }
+    ],
+    "cefc3f72": [
+      {
+        "name": "FMCL",
+        "first_seen": "2024-04-12",
+        "last_seen": "2024-04-29"
+      },
+      {
+        "name": "NTMR",
+        "first_seen": "2025-02-01",
+        "last_seen": "2025-03-10"
+      }
+    ],
+    "ebfd8060": [
+      {
+        "name": "Quick esports",
+        "first_seen": "2024-03-08",
+        "last_seen": "2024-03-22"
+      },
+      {
+        "name": "Ataraxia",
+        "first_seen": "2024-04-12",
+        "last_seen": "2024-04-21"
+      }
+    ],
+    "f4401a61": [
+      {
+        "name": "PIP",
+        "first_seen": "2024-03-08",
+        "last_seen": "2024-04-12"
+      },
+      {
+        "name": "PxG PiP",
+        "first_seen": "2024-04-14",
+        "last_seen": "2024-04-29"
+      }
+    ],
+    "0c629c99": [
+      {
+        "name": "team_Rakattack__",
+        "first_seen": "2024-03-08",
+        "last_seen": "2024-03-10"
+      },
+      {
+        "name": "Students of the Game",
+        "first_seen": "2024-03-17",
+        "last_seen": "2024-03-17"
+      }
+    ],
+    "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae": [
+      {
+        "name": "Avidity",
+        "first_seen": "2025-02-01",
+        "last_seen": "2025-03-02"
+      },
+      {
+        "name": "Extinction",
+        "first_seen": "2025-05-11",
+        "last_seen": "2025-10-12"
+      }
+    ]
+  }
+}

@@ -197,3 +197,40 @@ def test_load_writes_windows_and_the_check_flags_a_window_that_covers_nothing(ag
             cur.execute("SELECT count(*) AS n FROM team_orgs")
             assert cur.fetchone()["n"] == 0
         agg_db.commit()
+
+
+# ------------------------------------------------------------------ the two signals on a name change
+
+from owcsmuse.orgs import classify_name_change, stage_of  # noqa: E402
+
+
+def _n(name, first, last):
+    return (name, datetime.fromisoformat(first).replace(tzinfo=timezone.utc), datetime.fromisoformat(last).replace(tzinfo=timezone.utc))
+
+
+def test_a_kept_handle_is_a_rename_even_across_a_stage_boundary():
+    for old, new in (("SpaceStation", "SpaceStation Gaming"), ("GenG", "GenG Esports"), ("Goud Guys", "Goud Guys ANM"),
+                     ("PIP", "PxG PiP"), ("Sakura", "Sakura Esports")):
+        c = classify_name_change(_n(old, "2025-02-01", "2025-09-21"), _n(new, "2025-09-28", "2026-07-06"))
+        assert c["verdict"] == "rename" and c["handle_kept"], c
+
+
+def test_a_wholly_different_name_on_a_stage_boundary_is_a_pickup():
+    c = classify_name_change(_n("Avidity", "2025-02-01", "2025-03-02"), _n("Extinction", "2025-05-11", "2025-10-12"))
+    assert c["verdict"] == "pickup" and c["stage_boundary"] and c["stages"] == ["2025 Stage 1", "2025 Stage 2"]
+    c = classify_name_change(_n("Extinction", "2026-03-22", "2026-05-29"), _n("The Kafe", "2026-06-13", "2026-07-01"))
+    assert c["verdict"] == "pickup"
+
+
+def test_the_signals_disagree_when_the_ranges_overlap_or_the_change_is_mid_stage():
+    c = classify_name_change(_n("Quick Esports", "2025-05-11", "2025-10-12"), _n("1DIPv100GORILLA", "2025-06-01", "2025-06-15"))
+    assert c["verdict"] == "disagree" and "alternated" in c["why"]
+    c = classify_name_change(_n("Anyones Legend", "2026-03-22", "2026-05-25"), _n("1234", "2026-05-25", "2026-07-01"))
+    assert c["verdict"] == "disagree"                                               # same day, same stage, different name
+    assert stage_of(_n("x", "2026-06-13", "2026-06-13")[1]) == "2026 Stage 2"
+
+
+def test_propose_window_does_not_split_a_rename():
+    from owcsmuse.orgs import propose_window
+    team = _team([("SpaceStation", 0, 200), ("SpaceStation Gaming", 240, 500)])
+    assert propose_window(team, "SpaceStation Gaming") is None

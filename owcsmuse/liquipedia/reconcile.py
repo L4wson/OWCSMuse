@@ -190,7 +190,7 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
                 link = Link(lp, AMBIGUOUS, basis=f"the page's FACEIT id disagrees with the FACEIT record on {', '.join(hard)}",
                             candidates=[{"faceit_id": fid, "disagrees_on": hard}],
                             evidence={"kind": "exact_id_disagrees", "orientation": basis}, disagreements=dis)
-                dec = (decisions or {}).get(lp.objectname)
+                dec = decisions.get(lp.objectname) or decisions.get(f"faceit:{fid}")   # a decision may name the FACEIT id
                 if dec is not None:
                     want = dec.get("faceit_match_id")
                     if want and want in by_id and want not in taken:

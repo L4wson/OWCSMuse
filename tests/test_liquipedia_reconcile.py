@@ -115,6 +115,14 @@ def test_a_wrong_faceit_id_shows_up_as_a_team_disagreement_and_never_links():
     assert lk.tier == AMBIGUOUS and lk.faceit_id is None and "teams" in lk.candidates[0]["disagrees_on"]
 
 
+def test_a_decision_may_name_the_faceit_id_instead_of_the_objectname():
+    """The report shows FACEIT ids, not objectnames; a decision keyed faceit:<id> settles the one record naming it."""
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 0, faceit_id=FID)
+    f = fs(FID, "SpaceStation Gaming", "Team Liquid", 4, 0, maps=4)
+    lk = link_of(reconcile([m], [f], MAP, decisions={f"faceit:{FID}": {"faceit_match_id": FID, "note": "a drawn map"}}), m)
+    assert (lk.tier, lk.decision, lk.faceit_id) == (AMBIGUOUS, "confirmed", FID)
+
+
 def test_a_person_can_confirm_or_reject_a_disagreeing_id():
     m = lp("Spacestation Gaming", "Team Liquid", 3, 0, faceit_id=FID)
     f = fs(FID, "SpaceStation Gaming", "Team Liquid", 4, 0, maps=4)

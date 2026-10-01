@@ -398,7 +398,16 @@ ordering, twice:
   does not, so the new name starts a new era of the same team id (a window,
   below) rather than extending the old org's history. A rename by the same org
   (Al qadsiah -> qadsiah) lands mid-stream and keeps the roster's org. The stage
-  boundary is the tell.
+  boundary is the tell - but not alone: production shows 18 team ids carrying
+  more than one name, and SpaceStation -> SpaceStation Gaming, GenG -> GenG
+  Esports, Goud Guys -> Goud Guys ANM, PIP -> PxG PiP and Sakura -> Sakura
+  Esports also land on stage boundaries and are renames. So two signals decide
+  (`classify_name_change`): a new name that **contains or extends** the old one
+  is a rename and starts no window; a **wholly different** name on a stage
+  boundary is a pickup; anything else (a different name inside one stage, or
+  two names whose date ranges overlap) is reported for a person. The review of
+  all 18 is `scope/org_window_review.md` (`python tools/window_review.py`,
+  from the captured history in `scope/team_name_history_2026-10-01.json`).
 
 **A mapping holds over a window.** A FACEIT team id belongs to an org over
 `[valid_from, valid_to)` (`orgs decide --from ... --to ...`; absent means for all
@@ -953,6 +962,7 @@ and exits 1 with the specific discrepancy:
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
 | `identity_windows` | every team-to-org window covers real series of its team id, no team id is two orgs at once, and no series carries two identities for one team |
 | `series_integrity` | a match is one series whichever source holds it; the series count reconciles against FACEIT plus the resolved Liquipedia-only records; a linked pair names the same identities on both sides |
+| `score_plausibility` | no series presents a score its best-of cannot hold, no map is both won and drawn, and map wins never exceed the presented series score |
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
@@ -1133,6 +1143,15 @@ room or the Liquipedia page, and an answer that used a Liquipedia-only series ca
   Liquipedia-born team id (`lp:team:<name>`, mapped to the org by `identity load`). An undecided team keeps the record
   out of every answer; `check` counts those (`liquipedia_unresolved_not_in_series`).
 - Map grain stays FACEIT-keyed (`match_rounds`), so a Liquipedia-only series answers at series grain only, for now.
+- **A tied map is nobody's win** (migration `030_draws.sql`). FACEIT counts a drawn map as a win for the series
+  winner (4-0 in a best-of-5 with four maps played, one of them 3-3) and stored Dreamhack Dallas as best-of-1 with
+  3-1 scores. A map is drawn when its scores are equal or no winner is recorded, a draw is excluded from map wins in
+  every fact view, and the series score a series presents is corrected from its map results when FACEIT's counted a
+  draw as a win (`score_source = 'maps'`; FACEIT's stored columns are untouched). A best-of the score cannot fit is
+  replaced by the smallest that can (`best_of_source = 'derived from score'`). `check` (`score_plausibility`)
+  asserts that nothing presents a score its best-of cannot hold, and counts the corrections so a rise is visible.
+- A link decision may be keyed `faceit:<match id>` (the report shows FACEIT ids, not objectnames); it settles the one
+  record naming that id. The two drawn-map pairs are confirmed that way in `scope/liquipedia_link_decisions.json`.
 - `check` gains `series_integrity`: no FACEIT id or Liquipedia record in two series, the series count reconciles
   against its sources, and a linked pair whose Liquipedia teams are decided names the same identities on both sides -
   a link that stops agreeing after an identity decision fails here rather than staying.
@@ -1252,6 +1271,8 @@ migrations/026_dated_team_orgs.sql  team-to-org windows, team_identity_at(), fac
 migrations/027_entity_anchors.sql  entity_anchors, Liquipedia line-ups and name history, Liquipedia names in entity_names
 migrations/028_series.sql       the source-agnostic series; team-grain facts read it
 migrations/029_anchor_windows.sql  Liquipedia names resolve at the series' time
+migrations/030_draws.sql        a tied map is nobody's win; plausible series scores with provenance
+tools/window_review.py          both name-change signals over every multi-name team id -> scope/org_window_review.md
 owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections

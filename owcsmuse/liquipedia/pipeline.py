@@ -45,8 +45,9 @@ class LinkDecisions:
     def save(self) -> Path:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         doc = {"note": ("Reviewed decisions on Liquipedia matches the reconciler could not link on its own. Keys are "
-                        "Liquipedia objectnames; faceit_match_id names the FACEIT match it is, or is null when there is "
-                        "none. Edit by hand or with `python -m owcsmuse liquipedia links decide`."),
+                        "Liquipedia objectnames, or `faceit:<match id>` for the one record that names that FACEIT id "
+                        "(an exact id whose records disagree); faceit_match_id names the FACEIT match it is, or is "
+                        "null when there is none. Edit by hand or with `python -m owcsmuse liquipedia links decide`."),
                "decisions": dict(sorted(self.data.items()))}
         self.path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         return self.path
