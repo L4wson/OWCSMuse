@@ -191,3 +191,61 @@ describe("coverage and limitations", () => {
     expect(screen.getByTestId("note")).toHaveTextContent("carry no map stats on FACEIT");
   });
 });
+
+describe("rows from one answer never survive into the next", () => {
+  // Map-grain evidence has several rows per match (one per map), so `match_id` alone is not a row identity.
+  const mapRow = (team, matchId, round) => ({
+    match_id: matchId, round_number: round, played_at: "2026-05-01T20:00:00Z", competition: "Comp",
+    team, opponent: "Opp", map_name: `Map ${round}`, game_mode: "Control", score: 1, opponent_score: 0, result: "won",
+  });
+  const evidenceOf = (rows) => ({
+    available: true, grain: "map", description: "every map", page: 1, page_size: 25, total_rows: rows.length,
+    total_pages: 1, has_more: false, rows,
+    columns: [
+      { key: "team", label: "Team", type: "text" },
+      { key: "map_name", label: "Map", type: "text" },
+    ],
+  });
+
+  it("replaces the previous answer's rows when the same component renders a different answer", () => {
+    const cjay = evidenceOf([mapRow("Dallas Fuel", "m1", 1), mapRow("Dallas Fuel", "m1", 2), mapRow("Dallas Fuel", "m1", 3), mapRow("Dallas Fuel", "m2", 1)]);
+    const sugarfree = evidenceOf([mapRow("SpaceStation Gaming", "m9", 1), mapRow("SpaceStation Gaming", "m9", 2)]);
+    const { rerender } = render(<Evidence evidence={cjay} />);
+    expect(screen.getAllByRole("row")).toHaveLength(1 + 4);
+
+    rerender(<Evidence evidence={sugarfree} />);
+    const body = screen.getAllByRole("row").slice(1);
+    expect(body).toHaveLength(2);
+    for (const row of body) {
+      expect(row).toHaveTextContent("SpaceStation Gaming");
+      expect(row).not.toHaveTextContent("Dallas Fuel");
+    }
+  });
+
+  it("gives every row a distinct key, whatever the grain", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    render(<Evidence evidence={evidenceOf([mapRow("A", "m1", 1), mapRow("A", "m1", 2)])} />);
+    const duplicateKeyWarnings = errors.mock.calls.filter((call) => String(call[0]).includes("same key"));
+    errors.mockRestore();
+    expect(duplicateKeyWarnings).toEqual([]);
+  });
+});
+
+describe("identifiers are not quantities", () => {
+  it("prints a season as 2026, and a count with its separator", async () => {
+    const { formatCell } = await import("../src/format.js");
+    expect(formatCell({ season: 2026 }, { key: "season", type: "identifier" })).toBe("2026");
+    expect(formatCell({ season: "2024" }, { key: "season", type: "identifier" })).toBe("2024");
+    expect(formatCell({ maps: 1482 }, { key: "maps", type: "integer" })).toBe("1,482");
+  });
+
+  it("renders the season column of a real answer without a separator", () => {
+    const evidence = {
+      available: true, grain: "map", page: 1, total_pages: 1, total_rows: 1, rows: [{ match_id: "m", season: 2026 }],
+      columns: [{ key: "season", label: "Season", type: "identifier" }],
+    };
+    render(<Evidence evidence={evidence} />);
+    expect(screen.getByRole("table")).toHaveTextContent("2026");
+    expect(screen.getByRole("table")).not.toHaveTextContent("2,026");
+  });
+});
