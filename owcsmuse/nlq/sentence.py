@@ -370,7 +370,37 @@ def _stat_availability(rows: list[dict], entities: dict[str, dict], query: dict)
     return b.done()
 
 
+def _day(value: Any) -> str:
+    return str(value)[:10] if value else "an unknown date"
+
+
+def _team_membership(rows: list[dict], entities: dict[str, dict], query: dict) -> Optional[Sentence]:
+    """'X last played for T on <date>, having previously played for A (from to) and B (from to).'"""
+    player, player_id, _ = _role_entity(entities, "subject", "player")
+    if not player or not rows:
+        return None
+    now = rows[0]
+    kind = "org" if now.get("org_id") else "team"
+    b = _Builder()
+    b.mark(str(player), "player", player_id)
+    b.add(" last played for ")
+    b.mark(str(now["team"]), kind, now.get("org_id") or now.get("team_id"))
+    b.add(f" on {_day(now.get('to_at'))}")
+    earlier = rows[1:]
+    if earlier:
+        b.add(", having previously played for ")
+        for i, row in enumerate(earlier[:4]):
+            if i:
+                b.add(", and " if i == len(earlier[:4]) - 1 and len(earlier) <= 4 else ", ")
+            b.mark(str(row["team"]), "org" if row.get("org_id") else "team", row.get("org_id") or row.get("team_id"))
+            b.add(f" ({_day(row.get('from_at'))} to {_day(row.get('to_at'))})")
+        if len(earlier) > 4:
+            b.add(f" and {len(earlier) - 4} more")
+    return b.done()
+
+
 _TEMPLATES = {
+    "team_membership": _team_membership,
     "versus": _versus,
     "season_compare": _season_compare,
     "head_to_head": _head_to_head,

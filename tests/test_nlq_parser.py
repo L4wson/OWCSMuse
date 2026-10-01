@@ -170,3 +170,33 @@ def test_parsed_object_is_validated_by_pydantic():
 
 def test_suite_size():
     assert len(SUPPORTED) + len(UNANSWERABLE) >= 40
+
+
+@pytest.mark.parametrize("question,name,season", [
+    ("what team is cjay on", "cjay", None),
+    ("What team is Cjay on?", "cjay", None),
+    ("which team does ksaa play on now", "ksaa", None),
+    ("who does sugarfree play for", "sugarfree", None),
+    ("who is hadi on", "hadi", None),
+    ("Sugarfree's team", "sugarfree", None),
+    ("ksaa's previous teams", "ksaa", None),
+    ("cjay team history", "cjay", None),
+    ("team history of ksaa", "ksaa", None),
+    ("what team was ksaa on in 2024", "ksaa", 2024),
+])
+def test_team_membership_phrasings(question, name, season):
+    """A player's team now and before used to land on 'which stat for cjay?'."""
+    parsed = parse_question(question)
+    assert isinstance(parsed, StructuredQuery), parsed
+    assert parsed.intent == "team_membership"
+    assert parsed.filters.subject == name
+    assert parsed.filters.season == season
+
+
+@pytest.mark.parametrize("question", [
+    "Twisted Minds record", "who had the most eliminations on team Liquid", "ksaa eliminations",
+    "which team has the best record in 2024", "Twisted Minds vs ENCE",
+])
+def test_membership_cues_do_not_swallow_other_questions(question):
+    parsed = parse_question(question)
+    assert not (isinstance(parsed, StructuredQuery) and parsed.intent == "team_membership")
