@@ -48,8 +48,10 @@ def test_the_proposal_covers_every_in_scope_competition_and_names_follow_the_pag
     assert group.proposed == "OWCS 2024 NA Stage 1 Group C" and group.basis == "liquipedia-owner"
     assert group.page == "Overwatch_Champions_Series/2024/North_America/Stage_1/Group_Stage"
     assert proposals["OWCS 2024: NA Stage 2 - Main Event"].page == "Overwatch_Champions_Series/2024/North_America/Stage_2"
-    assert not any(f for f in group.flags if "inferred" in f)                 # the NA path was supplied
-    assert any("inferred" in f for f in proposals["OWCS 2024: EMEA Stage 1 - Group A"].flags)   # the EMEA one was not seen
+    # every 2024 path is confirmed: the NA ones by the owner, the EMEA ones by the probe (scope/competition_pages.json)
+    emea = proposals["OWCS 2024: EMEA Stage 1 - Group A"]
+    assert emea.page == "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage"
+    assert not any(cn.UNSEEN in f for p in proposals.values() for f in p.flags)
 
     # no page for these: named from the owner's description of the event, and said so
     dallas = proposals["Dreamhack Dallas"]
@@ -92,23 +94,46 @@ def test_nothing_applies_until_it_is_decided(tmp_path):
 def test_owner_sourced_proposals_need_an_explicit_basis_to_be_bulk_accepted(tmp_path):
     decisions = cn.CompetitionDecisions(tmp_path / "d.json")
     proposals = decisions.apply(cn.propose(ROOT / cn.DEFAULT_MAP_PATH, ROOT / cn.DEFAULT_SCOPE_PATH))
-    # the ten EMEA paths are inferred, not seen: they are never bulk-accepted, whatever the basis
-    assert cn.accept(decisions, proposals, ("liquipedia-owner",)) == 10
+    assert cn.accept(decisions, proposals, ("liquipedia-owner",)) == 20
     assert cn.accept(decisions, proposals, ("owner",)) == 3
-    unseen = [p for p in proposals if p.status == "pending" and p.proposed and p.basis == "liquipedia-owner"]
+    assert not [p for p in proposals if p.status == "pending" and p.proposed and p.basis != "liquipedia"]
+
+
+def test_an_unseen_page_path_is_never_bulk_accepted(tmp_path):
+    """Whatever its basis: a path nobody has seen waits until scope/competition_pages.json marks it verified."""
+    extra = json.loads((ROOT / cn.DEFAULT_EXTRA_PATH).read_text())
+    for entry in extra["pages"].values():
+        if "EMEA" in entry["page"]:
+            entry["verified"] = False
+    path = tmp_path / "pages.json"
+    path.write_text(json.dumps(extra))
+    decisions = cn.CompetitionDecisions(tmp_path / "d.json")
+    proposals = decisions.apply(cn.propose(ROOT / cn.DEFAULT_MAP_PATH, ROOT / cn.DEFAULT_SCOPE_PATH, path))
+    assert cn.accept(decisions, proposals, ("liquipedia-owner",)) == 10         # the NA ones only
+    unseen = [p for p in proposals if p.status == "pending" and p.basis == "liquipedia-owner"]
     assert len(unseen) == 10 and all("EMEA" in p.faceit_name and any(cn.UNSEEN in f for f in p.flags) for p in unseen)
 
 
-def test_the_committed_decisions_are_what_the_owner_approved():
+def test_the_committed_decisions_cover_every_in_scope_competition():
     decided = cn.CompetitionDecisions(ROOT / cn.DEFAULT_DECISIONS_PATH).data
     by_basis = {b: [d for d in decided.values() if d["basis"] == b] for b in ("liquipedia", "liquipedia-owner", "owner")}
-    assert [len(v) for v in by_basis.values()] == [20, 10, 3] and len(decided) == 33
+    assert [len(v) for v in by_basis.values()] == [20, 20, 3] and len(decided) == 43
+    scope = json.loads((ROOT / cn.DEFAULT_SCOPE_PATH).read_text())["decisions"]
+    assert set(decided) == {cid for cid, d in scope.items() if d.get("include")}        # nothing missing, nothing extra
     assert all(d["display_name"].startswith(("OWCS 2025 ", "OWCS 2026 ")) for d in by_basis["liquipedia"])
     assert all(d["page"] for d in by_basis["liquipedia"] + by_basis["liquipedia-owner"])   # every page-backed name carries it
-    # the EMEA 2024 paths have not been confirmed, so none of them is decided
-    assert not [d for d in decided.values() if d["display_name"].startswith("OWCS 2024 EMEA")]
     assert {d["display_name"] for d in by_basis["owner"]} == {
         "OWCS 2024 Dreamhack Dallas", "OWCS 2026 NA Stage 2 Relegation", "OWCS 2026 EMEA Stage 2 Relegation"}
+    assert len({d["display_name"] for d in decided.values()}) == 43                     # every name is distinct
+
+
+def test_every_2024_page_path_is_recorded_as_verified_with_the_probe_result():
+    extra = json.loads((ROOT / cn.DEFAULT_EXTRA_PATH).read_text())
+    assert all(v["verified"] for v in extra["pages"].values())
+    probe = extra["probe"]
+    assert probe["requests_sent"] == 1 and probe["truncated"] is False
+    assert sum(probe["matches_per_page"].values()) == probe["rows_returned"] == 136
+    assert set(probe["matches_per_page"]) == {v["page"] for v in extra["pages"].values()}
 
 
 def test_a_decision_made_against_a_renamed_competition_stops_applying(tmp_path):

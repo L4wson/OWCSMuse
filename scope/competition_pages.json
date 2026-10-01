@@ -1,65 +1,65 @@
 {
-  "note": "Pages and names supplied by the project owner for competitions scope/liquipedia_map.json does not cover (that file drives Stage 1 requests and is left alone). 'pages' pair a FACEIT competition with its Liquipedia page; 'verified: false' marks a path inferred by analogy with a page the owner gave, not seen. 'named' have no page: the display name follows the owner's description of the event. Nothing here is applied until it is decided in scope/competition_names.json.",
+  "note": "Pages and names supplied by the project owner for competitions scope/liquipedia_map.json does not cover (that file drives Stage 1 requests and is left alone). 'pages' pair a FACEIT competition with its Liquipedia page; 'verified: true' means a Liquipedia request (see 'probe') or the owner has confirmed the page holds matches; 'verified: false' would mark a path inferred, not seen. 'named' have no page: the display name follows the owner's description of the event. Nothing here is applied until it is decided in scope/competition_names.json.",
   "pages": {
     "9c926cbf-2f1a-4cc0-bf7d-a6961539e15a": {
       "name": "OWCS 2024: EMEA Stage 1 - Group A",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "418710f7-e2c4-47a7-ada9-5d173adbfbb9": {
       "name": "OWCS 2024: EMEA Stage 1 - Group B",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "af043e0a-90f3-485e-8556-fe2ff57276b1": {
       "name": "OWCS 2024: EMEA Stage 1 - Group C",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "f34c5377-e946-4569-ac81-9a66bb4ed71a": {
       "name": "OWCS 2024: EMEA Stage 1 - Group D",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "f57f9c5f-7840-4a49-8c32-24682dece3fc": {
       "name": "OWCS 2024: EMEA Stage 1 - Main Event",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_1",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "aebe836c-5768-44fd-9e1f-f4c5e907a0fa": {
       "name": "OWCS 2024: EMEA Stage 2 - Group A",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "893a90ab-7522-47de-8124-ae6c389a4004": {
       "name": "OWCS 2024: EMEA Stage 2 - Group B",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "6d081879-ac11-4625-9b8c-07ab84f38762": {
       "name": "OWCS 2024: EMEA Stage 2 - Group C",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "b6914a12-a3be-480a-bfc2-e55841b761c4": {
       "name": "OWCS 2024: EMEA Stage 2 - Group D",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "32271a28-7b4c-465d-a928-9e84e9391495": {
       "name": "OWCS 2024: EMEA Stage 2 - Main Event",
       "page": "Overwatch_Champions_Series/2024/EMEA/Stage_2",
       "source": "owner",
-      "verified": false
+      "verified": true
     },
     "06696475-56d5-4e61-a71e-4290c3e32dcb": {
       "name": "OWCS 2024: NA Stage 1 - Group A",
@@ -138,5 +138,23 @@
       "display_name": "OWCS 2026 NA Stage 2 Relegation",
       "note": "Named by the stage it feeds into, as FACEIT does ('Relegation S9'): held after 2026 Stage 1, the bottom two Stage 1 teams against FACEIT Masters teams for a place in Stage 2. No Liquipedia page supplied."
     }
+  },
+  "probe": {
+    "command": "python -m owcsmuse liquipedia probe-pages --execute",
+    "requests_sent": 1,
+    "rows_returned": 136,
+    "truncated": false,
+    "matches_per_page": {
+      "Overwatch_Champions_Series/2024/EMEA/Stage_1": 14,
+      "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage": 20,
+      "Overwatch_Champions_Series/2024/EMEA/Stage_2": 14,
+      "Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage": 20,
+      "Overwatch_Champions_Series/2024/North_America/Stage_1": 14,
+      "Overwatch_Champions_Series/2024/North_America/Stage_1/Group_Stage": 20,
+      "Overwatch_Champions_Series/2024/North_America/Stage_2": 14,
+      "Overwatch_Champions_Series/2024/North_America/Stage_2/Group_Stage": 20
+    },
+    "result": "all 8 pages found, none missing: the 2024 EMEA path token is EMEA (the NA path is North_America)",
+    "reported_by": "project owner"
   }
 }
