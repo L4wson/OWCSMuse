@@ -46,6 +46,9 @@ def d(x):
 # Reviewed and confirmed by the project owner on 2026-09-21 (all 25 originally proposed, plus G26, which splits the
 # alias-resolution half of G13 out so it is asserted while G13's record is a known bug).
 CONFIRMED = {f"G{n:02d}" for n in range(1, 27)}
+# G29/G30 were added at the owner's request to assert that a question in the displayed OWCS name resolves; their
+# expected values are derived below from the raw payloads like every other case, and the owner can still review them.
+CONFIRMED |= {"G29", "G30"}
 
 CASES: list[dict] = []
 
@@ -337,6 +340,41 @@ case("G25", "Twisted Minds in 2025: only a bye, so no data", "invariant", "Twist
      "The only 2025 Twisted Minds fixture is the bracket bye, which is not a series: the answer is no_data, not '1-0'. "
      "The offered alternative (the all-seasons record) must answer with G08's numbers.",
      regression="bye: a 2025 bye showed as a 1-0 win")
+
+# --- the displayed OWCS name is searchable -------------------------------------------------------------------------
+# scope/liquipedia_map.json pairs FACEIT League "S9 NA OWCS Central - X" with Liquipedia's 2026/NA/Stage_2 pages, so
+# "OWCS 2026 NA Stage 2 <Regular Season|Playoffs>" is S9 NA <Regular Season|Playoffs>. SpaceStation Gaming also has
+# S8 NA (Stage 1) series in the golden set, so a question that ignored the stage - or only matched "regular season" -
+# would count them.
+def in_competition(faceit_name):
+    return [s for s in S if CHAMPS[s.champ]["name"] == faceit_name]
+
+
+ssg_s9_rs = I.team_record(in_competition("S9 NA OWCS Central - Regular Season"), [ssg_id])
+ssg_s8_rs = I.team_record(in_competition("S8 NA OWCS Central - Regular Season"), [ssg_id])
+df_id = team_id("Dallas Fuel")
+df_s9_po = I.team_record(in_competition("S9 NA OWCS Central - Playoffs"), [df_id])
+df_s9_rs = I.team_record(in_competition("S9 NA OWCS Central - Regular Season"), [df_id])
+assert (ssg_s9_rs["matches"], ssg_s8_rs["matches"], df_s9_po["matches"], df_s9_rs["matches"]) == (1, 1, 2, 1)
+
+case("G29", "A question in the displayed OWCS name resolves: Stage 2 Regular Season, not Stage 1", "exact",
+     "SpaceStation Gaming record in OWCS 2026 NA Stage 2 Regular Season",
+     {"status": "ok", "rows": [team_row(ssg_s9_rs, "SpaceStation Gaming")]},
+     f"'OWCS 2026 NA Stage 2 Regular Season' is FACEIT's 'S9 NA OWCS Central - Regular Season' (S9 = 2026 Stage 2 per "
+     f"scope/liquipedia_map.json). SpaceStation Gaming played {ssg_s9_rs['matches']} series there "
+     f"({ssg_s9_rs['wins']}-{ssg_s9_rs['losses']}, maps {ssg_s9_rs['map_wins']}-{ssg_s9_rs['map_losses']}) and "
+     f"{ssg_s8_rs['matches']} in Stage 1's regular season, which must not be counted.",
+     regression="the displayed competition name was not searchable (matching used only FACEIT's stored name), and "
+                "the parser kept only one phrase of the competition name")
+
+case("G30", "A question in the displayed OWCS name resolves: Stage 2 Playoffs, not the regular season", "exact",
+     "Dallas Fuel record in OWCS 2026 NA Stage 2 Playoffs",
+     {"status": "ok", "rows": [team_row(df_s9_po, "Dallas Fuel")]},
+     f"'OWCS 2026 NA Stage 2 Playoffs' is FACEIT's 'S9 NA OWCS Central - Playoffs'. Dallas Fuel played "
+     f"{df_s9_po['matches']} series there ({df_s9_po['wins']}-{df_s9_po['losses']}, maps "
+     f"{df_s9_po['map_wins']}-{df_s9_po['map_losses']}); its {df_s9_rs['matches']} regular-season series "
+     f"({df_s9_rs['wins']}-{df_s9_rs['losses']}) is the same stage and must not be counted.",
+     regression="the displayed competition name was not searchable")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

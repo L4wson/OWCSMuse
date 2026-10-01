@@ -15,7 +15,7 @@ from typing import Any
 
 import psycopg
 
-from .planner import Plan, plan_requests
+from .planner import Plan, or_conditions, plan_requests
 from .store import Store
 
 MAP_PATH = "scope/liquipedia_map.json"
@@ -88,3 +88,38 @@ def describe_shape(payload: Any, status: int, headers: dict[str, str], raw_id: i
         "faceit_match_ids_found": sorted(set(FACEIT_ID.findall(text))),
         "where_faceit_id_appears": sorted({k for r in rows for k, v in r.items() if FACEIT_ID.search(json.dumps(v))}),
     }
+
+
+# ------------------------------------------------------------------------------ one request: do these pages exist?
+
+PROBE_LIMIT = 500
+
+
+def page_probe_params(pages: list[str], limit: int = PROBE_LIMIT) -> dict[str, Any]:
+    """ONE request that asks, for every page in `pages` at once, for the `pagename` of the matches on it.
+
+    Only that one small field comes back, so the answer is cheap; a page with no rows is a page with no matches at
+    that name (a wrong path, or a page that holds no {{Match}} templates), and the report says which.
+    """
+    return {"conditions": or_conditions(PAGE_FIELD, [underscored(p) for p in pages]), "query": PAGE_FIELD,
+            "limit": limit, "order": "pagename ASC"}
+
+
+def project_page_probe(pages: list[str], budget: dict[str, Any], limit: int = PROBE_LIMIT) -> dict[str, Any]:
+    """What the probe will cost, before anything is sent."""
+    params = page_probe_params(pages, limit)
+    return {"requests": 1, "pages": [underscored(p) for p in pages], "condition_chars": len(params["conditions"]),
+            "rows_asked_for_at_most": limit, "budget": budget}
+
+
+def probe_pages(client, pages: list[str], limit: int = PROBE_LIMIT) -> dict[str, Any]:
+    """Send the single probe request and say, per page, how many matches Liquipedia holds on it."""
+    from collections import Counter
+
+    got = client.get(MATCH_ENDPOINT, page_probe_params(pages, limit))
+    seen = Counter(underscored(str(r.get("pagename") or "")).lower() for r in got.rows)
+    per_page = {underscored(p): seen.get(underscored(p).lower(), 0) for p in pages}
+    return {"requests_sent": client.sent, "from_cache": got.from_cache, "rows_returned": len(got.rows),
+            "truncated": len(got.rows) >= limit, "found": sorted(p for p, n in per_page.items() if n),
+            "not_found": sorted(p for p, n in per_page.items() if not n), "matches_per_page": per_page,
+            "unexpected_pages": sorted(set(seen) - {underscored(p).lower() for p in pages})}

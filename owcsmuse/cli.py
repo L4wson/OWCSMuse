@@ -284,6 +284,20 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
                     if n < LIMIT_PROBE_PARAMS["limit"] and n not in (100, 200, 250, 500, 1000, 2000)
                     else "returned exactly a round number below the request: that number is the cap", "first_row": got.rows[:1]})
             return 0
+        if args.lp_cmd == "probe-pages":
+            from .liquipedia.stage1 import probe_pages, project_page_probe
+            extra = json.loads(Path(args.extra).read_text(encoding="utf-8")).get("pages", {}) if Path(args.extra).exists() else {}
+            pages = args.pages or sorted({v["page"] for v in extra.values()})
+            if not pages:
+                print("no pages: pass some, or add them to scope/competition_pages.json", file=sys.stderr)
+                return 2
+            print(json.dumps(project_page_probe(pages, client.budget_state(), settings.liquipedia_page_limit),
+                             indent=2, default=str), file=sys.stderr)
+            if not args.execute:
+                print("dry run: this is ONE request; pass --execute to send it", file=sys.stderr)
+                return 0
+            _print(probe_pages(client, pages, settings.liquipedia_page_limit))
+            return 0
         if args.lp_cmd == "verify":
             # One request, to confirm the key works and to see the shape of a match record. Then stop.
             got = client.get(MATCH_ENDPOINT, dict(VERIFY_PARAMS))
@@ -714,6 +728,11 @@ def build_parser() -> argparse.ArgumentParser:
     lqs = lq.add_subparsers(dest="lp_cmd", required=True)
     lqs.add_parser("status", help="budget used this hour, last 429, what is held; sends nothing")
     lqs.add_parser("verify", help="ONE request: confirm the key works and show the shape of a match record")
+    pp = lqs.add_parser("probe-pages", help="ONE request: do these Liquipedia pages hold matches? (default: the pages in "
+                                           "scope/competition_pages.json). Shows the projection first; --execute sends it")
+    pp.add_argument("pages", nargs="*")
+    pp.add_argument("--extra", default="scope/competition_pages.json")
+    pp.add_argument("--execute", action="store_true")
     lqs.add_parser("probe-limit", help="ONE request: find the API's real rows-per-request cap")
     rc = lqs.add_parser("reconcile", help="tie stored Liquipedia matches to FACEIT matches, in tiers, and write the report "
                                           "(sends nothing)")

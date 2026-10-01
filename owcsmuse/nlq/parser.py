@@ -129,8 +129,8 @@ REGION_TERMS = {"north america": "na", "na": "na", "emea": "emea", "europe": "em
 
 CHAMPIONSHIP_TERMS = [
     "stage 1", "stage 2", "stage 3", "stage 4", "stage one", "stage two", "main event", "group stage", "group a", "group b",
-    "group c", "group d", "playoffs", "playoff", "dreamhack dallas", "dreamhack", "midseason championship", "midseason",
-    "world finals", "champions clash", "major",
+    "group c", "group d", "playoffs", "playoff", "regular season", "relegation", "dreamhack dallas", "dreamhack",
+    "midseason championship", "midseason", "world finals", "champions clash", "major",
 ]
 
 VERSUS_CUES = ["map record against", "record against", "against", " vs ", " vs. ", "versus", "head to head", "h2h",
@@ -272,10 +272,18 @@ def _find_region(q: str) -> Optional[str]:
 
 
 def _find_championship(q: str) -> Optional[str]:
+    """Every competition term in the question, together: "stage 2 playoffs" is one competition, not two filters.
+
+    Keeping only the longest term turned "OWCS 2026 NA Stage 2 Playoffs" into "playoffs", which matches both
+    stages' playoffs and answers for the wrong set without saying so. A term inside a longer one found is dropped
+    ("dreamhack" within "dreamhack dallas").
+    """
+    found: list[tuple[int, str]] = []
     for term in sorted(CHAMPIONSHIP_TERMS, key=len, reverse=True):
-        if re.search(r"\b" + re.escape(term) + r"\b", q):
-            return term
-    return None
+        m = re.search(r"\b" + re.escape(term) + r"\b", q)
+        if m and not any(term in kept for _, kept in found):
+            found.append((m.start(), term))
+    return " ".join(term for _, term in sorted(found)) or None
 
 
 def _find_limit(q: str) -> Optional[int]:
@@ -312,6 +320,7 @@ def _strip_filters(q: str, keep_years: bool = False) -> str:
         q = re.sub(r"\b(on|at)?\s*" + re.escape(am) + r"(?![a-z0-9])", " ", q)
     for alias in _MAP_ALIASES:
         q = re.sub(r"\b(on|at)?\s*" + re.escape(alias) + r"\b", " ", q)
+    q = re.sub(r"\bowcs\b", " ", q)   # the brand word in "OWCS 2026 NA Stage 2" names no one
     q = re.sub(r"\b(in|for)\s+(na|emea|eu|europe|north america|international)\b", " ", q)
     q = re.sub(r"\b(at least|min(?:imum)?)\s+\d{1,4}\s+maps?\b", " ", q)
     q = re.sub(r"\bthis season\b|\blast season\b|\ball time\b|\boverall\b|\bso far\b|\bever\b|\bper map\b|\bon average\b", " ", q)

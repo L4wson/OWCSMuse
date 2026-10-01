@@ -1,6 +1,94 @@
 {
   "note": "Reviewed OWCS display names for FACEIT competitions, keyed by championship id. Display-only: championships.name stays FACEIT's. Edit by hand or with `python -m owcsmuse competitions decide`. A decision made against a FACEIT name that later changes stops applying (reported as stale).",
   "decisions": {
+    "33781289-61ea-43d5-ac79-1af825dcb291": {
+      "faceit_name": "Dreamhack Dallas",
+      "display_name": "OWCS 2024 Dreamhack Dallas",
+      "basis": "owner",
+      "page": null,
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "06696475-56d5-4e61-a71e-4290c3e32dcb": {
+      "faceit_name": "OWCS 2024: NA Stage 1 - Group A",
+      "display_name": "OWCS 2024 NA Stage 1 Group A",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_1/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "7cd57eb2-001b-4865-a7cb-01c9b9749ad8": {
+      "faceit_name": "OWCS 2024: NA Stage 1 - Group B",
+      "display_name": "OWCS 2024 NA Stage 1 Group B",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_1/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "537fffb7-a63e-4fd7-8806-346f9ac290ff": {
+      "faceit_name": "OWCS 2024: NA Stage 1 - Group C",
+      "display_name": "OWCS 2024 NA Stage 1 Group C",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_1/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "af65b06e-02eb-4dab-9478-59fe1989d7de": {
+      "faceit_name": "OWCS 2024: NA Stage 1 - Group D",
+      "display_name": "OWCS 2024 NA Stage 1 Group D",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_1/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1": {
+      "faceit_name": "OWCS 2024: NA Stage 1 - Main Event",
+      "display_name": "OWCS 2024 NA Stage 1 Main Event",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_1",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "d0b3ff2e-4e80-416c-b759-e20b1403d5ef": {
+      "faceit_name": "OWCS 2024: NA Stage 2 - Group A",
+      "display_name": "OWCS 2024 NA Stage 2 Group A",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_2/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "fe42f3fe-33fb-413f-a09a-803afa033864": {
+      "faceit_name": "OWCS 2024: NA Stage 2 - Group B",
+      "display_name": "OWCS 2024 NA Stage 2 Group B",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_2/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "a5598e90-a70a-4556-9cf1-6ef306d5dfb1": {
+      "faceit_name": "OWCS 2024: NA Stage 2 - Group C",
+      "display_name": "OWCS 2024 NA Stage 2 Group C",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_2/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "69924042-c4cc-4631-b9e5-36ca9d7a8a3a": {
+      "faceit_name": "OWCS 2024: NA Stage 2 - Group D",
+      "display_name": "OWCS 2024 NA Stage 2 Group D",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_2/Group_Stage",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "72922677-c191-48fc-aaac-1db52c410a26": {
+      "faceit_name": "OWCS 2024: NA Stage 2 - Main Event",
+      "display_name": "OWCS 2024 NA Stage 2 Main Event",
+      "basis": "liquipedia-owner",
+      "page": "Overwatch_Champions_Series/2024/North_America/Stage_2",
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
     "f0d5002c-dc08-43ef-818b-402dac458056": {
       "faceit_name": "S4 EMEA OWCS Central - Playoffs",
       "display_name": "OWCS 2025 EMEA Stage 1 Playoffs",
@@ -129,6 +217,14 @@
       "note": null,
       "decided_at": "2026-10-01T19:34:18+00:00"
     },
+    "65671857-160c-43b5-af82-a4d9504f8a56": {
+      "faceit_name": "S8 EMEA OWCS Relegation S9 - Season 9",
+      "display_name": "OWCS 2026 EMEA Stage 2 Relegation",
+      "basis": "owner",
+      "page": null,
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
+    },
     "51740a2d-0e80-4faa-9b47-06085b9b4a35": {
       "faceit_name": "S8 NA OWCS Central - Playoffs",
       "display_name": "OWCS 2026 NA Stage 1 Playoffs",
@@ -160,6 +256,14 @@
       "page": "Overwatch Champions Series/2026/NA/Stage 2/Regular Season",
       "note": null,
       "decided_at": "2026-10-01T19:34:18+00:00"
+    },
+    "9a1e40aa-f622-4b57-9762-f6b05501c708": {
+      "faceit_name": "S8 NA OWCS Relegation S9 - Season 9",
+      "display_name": "OWCS 2026 NA Stage 2 Relegation",
+      "basis": "owner",
+      "page": null,
+      "note": null,
+      "decided_at": "2026-10-01T19:46:30+00:00"
     }
   }
 }

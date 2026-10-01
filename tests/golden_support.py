@@ -21,6 +21,7 @@ from owcsmuse.collector import Collector
 from owcsmuse.config import Settings
 from owcsmuse.db import RawPayloadStore, connect, migrate
 from owcsmuse.faceit.client import FaceitNotFound, FetchResult, ListResult
+from owcsmuse.liquipedia import competition_names as lp_names
 from owcsmuse.liquipedia import enrich as lp_enrich
 from owcsmuse.liquipedia import pipeline as lp_pipeline
 from owcsmuse.orgs import OrgDecisions
@@ -98,6 +99,10 @@ def build_golden_db(db_url: str, schema: str):
 
     load_org_decisions(conn, OrgDecisions(str(ROOT / "scope" / "org_decisions.json")))
     load_alias_decisions(conn, AliasDecisions(str(ROOT / "scope" / "alias_decisions.json")))
+    # the reviewed OWCS competition names, as `migrate` loads them in production
+    lp_names.load(conn, lp_names.CompetitionDecisions(ROOT / lp_names.DEFAULT_DECISIONS_PATH),
+                  lp_names.propose(ROOT / lp_names.DEFAULT_MAP_PATH, ROOT / lp_names.DEFAULT_SCOPE_PATH,
+                                   ROOT / lp_names.DEFAULT_EXTRA_PATH))
     load_liquipedia_enrichment(conn, raw_conn)
     refresh(conn)
     return conn, raw_conn

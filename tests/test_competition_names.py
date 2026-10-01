@@ -56,7 +56,8 @@ def test_the_proposal_covers_every_in_scope_competition_and_names_follow_the_pag
     assert dallas.proposed == "OWCS 2024 Dreamhack Dallas" and dallas.basis == "owner" and dallas.page is None
     for region in ("NA", "EMEA"):
         rel = proposals[f"S8 {region} OWCS Relegation S9 - Season 9"]
-        assert rel.proposed == f"OWCS 2026 {region} Stage 1 Relegation" and rel.basis == "owner"
+        # named by the stage it feeds into, as FACEIT's own "Relegation S9" does
+        assert rel.proposed == f"OWCS 2026 {region} Stage 2 Relegation" and rel.basis == "owner"
 
     by_basis = {b: [p for p in proposals.values() if p.basis == b] for b in ("liquipedia", "liquipedia-owner", "owner")}
     assert [len(v) for v in by_basis.values()] == [20, 20, 3]
@@ -91,15 +92,23 @@ def test_nothing_applies_until_it_is_decided(tmp_path):
 def test_owner_sourced_proposals_need_an_explicit_basis_to_be_bulk_accepted(tmp_path):
     decisions = cn.CompetitionDecisions(tmp_path / "d.json")
     proposals = decisions.apply(cn.propose(ROOT / cn.DEFAULT_MAP_PATH, ROOT / cn.DEFAULT_SCOPE_PATH))
-    assert cn.accept(decisions, proposals, ("liquipedia-owner",)) == 20
+    # the ten EMEA paths are inferred, not seen: they are never bulk-accepted, whatever the basis
+    assert cn.accept(decisions, proposals, ("liquipedia-owner",)) == 10
     assert cn.accept(decisions, proposals, ("owner",)) == 3
+    unseen = [p for p in proposals if p.status == "pending" and p.proposed and p.basis == "liquipedia-owner"]
+    assert len(unseen) == 10 and all("EMEA" in p.faceit_name and any(cn.UNSEEN in f for f in p.flags) for p in unseen)
 
 
-def test_the_committed_decisions_are_exactly_the_twenty_approved_2025_2026_names():
+def test_the_committed_decisions_are_what_the_owner_approved():
     decided = cn.CompetitionDecisions(ROOT / cn.DEFAULT_DECISIONS_PATH).data
-    assert len(decided) == 20 and {d["basis"] for d in decided.values()} == {"liquipedia"}
-    assert all(d["display_name"].startswith(("OWCS 2025 ", "OWCS 2026 ")) for d in decided.values())
-    assert all(d["page"] for d in decided.values())          # every applied name carries the page behind it
+    by_basis = {b: [d for d in decided.values() if d["basis"] == b] for b in ("liquipedia", "liquipedia-owner", "owner")}
+    assert [len(v) for v in by_basis.values()] == [20, 10, 3] and len(decided) == 33
+    assert all(d["display_name"].startswith(("OWCS 2025 ", "OWCS 2026 ")) for d in by_basis["liquipedia"])
+    assert all(d["page"] for d in by_basis["liquipedia"] + by_basis["liquipedia-owner"])   # every page-backed name carries it
+    # the EMEA 2024 paths have not been confirmed, so none of them is decided
+    assert not [d for d in decided.values() if d["display_name"].startswith("OWCS 2024 EMEA")]
+    assert {d["display_name"] for d in by_basis["owner"]} == {
+        "OWCS 2024 Dreamhack Dallas", "OWCS 2026 NA Stage 2 Relegation", "OWCS 2026 EMEA Stage 2 Relegation"}
 
 
 def test_a_decision_made_against_a_renamed_competition_stops_applying(tmp_path):
@@ -157,3 +166,41 @@ def test_display_only_reviewed_names_change_what_is_shown_and_never_the_stored_n
         cur.execute("SELECT championship_id, name FROM championships ORDER BY championship_id")
         assert [tuple(r.values()) for r in cur.fetchall()] == stored_before   # FACEIT's name is untouched
     agg_db.commit()
+
+
+# -------------------------------------------------------------------------- the one-request page probe
+
+def test_the_probe_is_one_request_and_says_which_pages_exist(monkeypatch):
+    import httpx
+    from liquipedia_support import Wire, make_client, query_of
+
+    from owcsmuse import liquipedia as LP
+    from owcsmuse.liquipedia.stage1 import probe_pages, project_page_probe
+
+    monkeypatch.setenv(LP.ENABLE_ENV, "1")
+    pages = ["Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage", "Overwatch_Champions_Series/2024/EMEA/Stage_1",
+             "Overwatch_Champions_Series/2024/Europe/Stage_1"]
+    rows = ([{"pagename": pages[0]}] * 7) + ([{"pagename": pages[1]}] * 3)
+    wire = Wire(lambda req: httpx.Response(200, json={"result": rows}))
+    client, store, _ = make_client(wire)
+
+    projection = project_page_probe(pages, client.budget_state())
+    assert projection["requests"] == 1 and wire.requests == []             # the projection sends nothing
+
+    report = probe_pages(client, pages)
+    assert len(wire.requests) == 1 and report["requests_sent"] == 1          # exactly one
+    q = query_of(wire.requests[0])
+    assert all(p in q["conditions"] for p in pages) and q["query"] == "pagename"
+    assert report["found"] == sorted(pages[:2]) and report["not_found"] == [pages[2]]
+    assert report["matches_per_page"][pages[0]] == 7 and report["truncated"] is False
+
+    probe_pages(client, pages)                                              # asking again is answered from the store
+    assert len(wire.requests) == 1
+
+
+def test_the_probe_command_without_execute_sends_nothing(monkeypatch, capsys):
+    """The CLI path needs a database for the stored budget, so what is asserted here is the pure part: the plan."""
+    from owcsmuse.liquipedia.stage1 import page_probe_params
+
+    params = page_probe_params(["A/B", "C D"])
+    assert params["limit"] == 500 and "[[pagename::C_D]]" in params["conditions"]

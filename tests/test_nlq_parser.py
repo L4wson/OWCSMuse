@@ -200,3 +200,21 @@ def test_team_membership_phrasings(question, name, season):
 def test_membership_cues_do_not_swallow_other_questions(question):
     parsed = parse_question(question)
     assert not (isinstance(parsed, StructuredQuery) and parsed.intent == "team_membership")
+
+
+@pytest.mark.parametrize("question,championship,season,region", [
+    ("who had the most eliminations in OWCS 2026 NA Stage 2 Playoffs", "stage 2 playoffs", 2026, "na"),
+    ("SpaceStation Gaming record in OWCS 2026 NA Stage 2 Regular Season", "stage 2 regular season", 2026, "na"),
+    ("Twisted Minds record in OWCS 2025 EMEA Stage 3 Playoffs", "stage 3 playoffs", 2025, "emea"),
+    ("most eliminations at dreamhack dallas", "dreamhack dallas", None, None),
+])
+def test_a_competition_phrase_is_kept_whole(question, championship, season, region):
+    """Keeping only the longest term turned 'Stage 2 Playoffs' into 'playoffs': both stages' playoffs, silently."""
+    parsed = parse_question(question)
+    assert isinstance(parsed, StructuredQuery), parsed
+    assert (parsed.filters.championship, parsed.filters.season, parsed.filters.region) == (championship, season, region)
+
+
+def test_the_brand_word_is_not_part_of_a_team_name():
+    parsed = parse_question("SpaceStation Gaming record in OWCS 2026 NA Stage 2 Regular Season")
+    assert parsed.filters.subject == "spacestation gaming"

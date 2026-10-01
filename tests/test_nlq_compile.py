@@ -246,3 +246,58 @@ def test_every_param_is_bound_never_interpolated():
                  ("Twisted Minds record on control", R_TEAM), ("Twisted Minds vs ENCE", R_H2H)]:
         c = _sql(val(q), r)
         assert "Lijiang" not in c.sql and "2024" not in c.sql and "t1" not in c.sql and "p1" not in c.sql
+
+
+# ------------------------------------------------- a competition answers to its FACEIT name and its displayed name
+
+def _competitions():
+    info = SchemaInfo()
+    rows = {  # id: (FACEIT's stored name, the displayed OWCS name, season, region)
+        "s8na": ("S8 NA OWCS Central - Regular Season", "OWCS 2026 NA Stage 1 Regular Season", 2026, "na"),
+        "s9na_rs": ("S9 NA OWCS Central - Regular Season", "OWCS 2026 NA Stage 2 Regular Season", 2026, "na"),
+        "s9na_po": ("S9 NA OWCS Central - Playoffs", "OWCS 2026 NA Stage 2 Playoffs", 2026, "na"),
+        "s9emea_po": ("S9 EMEA OWCS Central - Playoffs", "OWCS 2026 EMEA Stage 2 Playoffs", 2026, "emea"),
+        "s5na_po": ("S5 NA OWCS Central - Playoffs", "OWCS 2025 NA Stage 2 Playoffs", 2025, "na"),
+        "g24": ("OWCS 2024: NA Stage 1 - Group A", "OWCS 2024: NA Stage 1 - Group A", 2024, "na"),
+    }
+    for cid, (stored, shown, season, region) in rows.items():
+        info.championships[cid], info.championship_display[cid] = stored, shown
+        info.championship_season[cid], info.championship_region[cid] = season, region
+    return info
+
+
+def _ids(info, text, season=None, region=None):
+    return [cid for cid, _ in info.match_championships(text, season, region)]
+
+
+def test_the_displayed_owcs_name_is_searchable():
+    info = _competitions()
+    assert _ids(info, "stage 2 playoffs", 2026, "na") == ["s9na_po"]
+    assert _ids(info, "stage 2 regular season", 2026, "na") == ["s9na_rs"]
+    assert _ids(info, "stage 2", 2025, "na") == ["s5na_po"]
+
+
+def test_the_stored_faceit_name_stays_searchable_too():
+    info = _competitions()
+    assert _ids(info, "central playoffs", 2026, "na") == ["s9na_po"]
+    assert sorted(_ids(info, "OWCS Central", 2026, "na")) == ["s8na", "s9na_po", "s9na_rs"]
+
+
+def test_a_stage_number_is_not_read_out_of_a_year():
+    """'2' is in '2026': 'stage 2' must not match Stage 1 of 2026."""
+    info = _competitions()
+    assert "s8na" not in _ids(info, "stage 2", 2026, "na")
+    assert _ids(info, "stage 1", 2026, "na") == ["s8na"]
+
+
+def test_season_and_region_come_from_the_championship_not_its_name():
+    """FACEIT League names carry no year; the 2026 filter must still find them."""
+    info = _competitions()
+    assert _ids(info, "playoffs", 2026, "na") == ["s9na_po"]
+    assert _ids(info, "playoffs", 2026, "emea") == ["s9emea_po"]
+
+
+def test_words_cannot_be_assembled_from_two_different_names():
+    info = _competitions()
+    # 'regular season' is in the stored name of s9na_rs and 'playoffs' in the stored name of s9na_po: no one name has both
+    assert _ids(info, "regular season playoffs", 2026, "na") == []

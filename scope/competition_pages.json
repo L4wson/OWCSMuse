@@ -126,17 +126,17 @@
     "33781289-61ea-43d5-ac79-1af825dcb291": {
       "name": "Dreamhack Dallas",
       "display_name": "OWCS 2024 Dreamhack Dallas",
-      "note": "LAN event with teams from every OWCS region (EMEA, NA, Korea). No Liquipedia page supplied."
+      "note": "LAN event with teams from every OWCS region (EMEA, NA, Korea). Name confirmed by the owner. No Liquipedia page supplied."
     },
     "65671857-160c-43b5-af82-a4d9504f8a56": {
       "name": "S8 EMEA OWCS Relegation S9 - Season 9",
-      "display_name": "OWCS 2026 EMEA Stage 1 Relegation",
-      "note": "Held after 2026 Stage 1: the bottom two Stage 1 teams against FACEIT Masters teams for a place in Stage 2. No Liquipedia page supplied."
+      "display_name": "OWCS 2026 EMEA Stage 2 Relegation",
+      "note": "Named by the stage it feeds into, as FACEIT does ('Relegation S9'): held after 2026 Stage 1, the bottom two Stage 1 teams against FACEIT Masters teams for a place in Stage 2. No Liquipedia page supplied."
     },
     "9a1e40aa-f622-4b57-9762-f6b05501c708": {
       "name": "S8 NA OWCS Relegation S9 - Season 9",
-      "display_name": "OWCS 2026 NA Stage 1 Relegation",
-      "note": "Held after 2026 Stage 1: the bottom two Stage 1 teams against FACEIT Masters teams for a place in Stage 2. No Liquipedia page supplied."
+      "display_name": "OWCS 2026 NA Stage 2 Relegation",
+      "note": "Named by the stage it feeds into, as FACEIT does ('Relegation S9'): held after 2026 Stage 1, the bottom two Stage 1 teams against FACEIT Masters teams for a place in Stage 2. No Liquipedia page supplied."
     }
   }
 }

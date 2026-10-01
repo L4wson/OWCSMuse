@@ -118,6 +118,11 @@ def _propose_one(cid: str, faceit_name: str, page: Optional[str], basis: str = "
     return p
 
 
+# A page path nobody has seen. Such a proposal is never bulk-accepted: `scope/competition_pages.json` marks the path
+# `"verified": true` once a request (or the owner) has confirmed it.
+UNSEEN = "page path inferred"
+
+
 class CompetitionDecisions:
     FILE_NOTE = ("Reviewed OWCS display names for FACEIT competitions, keyed by championship id. Display-only: "
                  "championships.name stays FACEIT's. Edit by hand or with `python -m owcsmuse competitions decide`. "
@@ -183,7 +188,7 @@ def propose(map_path: str | Path = DEFAULT_MAP_PATH, scope_path: str | Path = DE
             e = extra_pages[cid]
             p = _propose_one(cid, name, e["page"], "liquipedia-owner")
             p.flags.append("page supplied by the owner, not fetched" if e.get("verified", True)
-                           else "page path inferred by analogy with the one the owner gave; not seen")
+                           else f"{UNSEEN} by analogy with the one the owner gave; not seen")
         elif cid in named:
             e = named[cid]
             p = Proposal(cid, name, legacy_display(name), proposed=e["display_name"], basis="owner")
@@ -198,10 +203,14 @@ def propose(map_path: str | Path = DEFAULT_MAP_PATH, scope_path: str | Path = DE
 
 
 def accept(decisions: CompetitionDecisions, proposals: list[Proposal], bases: tuple[str, ...] = ("liquipedia",)) -> int:
-    """Bulk-accept pending proposals of the given bases that carry no flags. Flagged ones need a person."""
+    """Bulk-accept pending proposals of the given bases that carry no contradiction and no unseen page path.
+
+    Those need a person; so does anything FACEIT and the page disagree about.
+    """
     n = 0
     for p in proposals:
-        if p.status == "pending" and p.proposed and p.basis in bases and not [f for f in p.flags if "FACEIT says" in f or "differs" in f]:
+        unresolved = [f for f in p.flags if "FACEIT says" in f or "differs" in f or UNSEEN in f]
+        if p.status == "pending" and p.proposed and p.basis in bases and not unresolved:
             decisions.set(p.championship_id, p.faceit_name, p.proposed, p.basis, p.page)
             p.status, p.decided_name = "decided", p.proposed
             n += 1
