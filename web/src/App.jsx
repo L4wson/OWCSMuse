@@ -7,7 +7,7 @@ import Result from "./components/Result.jsx";
 import Suggestions from "./components/Suggestions.jsx";
 import { ErrorState, Loading } from "./components/States.jsx";
 
-const PAGE_SIZE = 25;
+const DEFAULT_PAGE_SIZE = 25;
 
 // A clarify pick, or a re-ask built from one, sends the API a question with a
 // player:/team:/org: id spliced into it - that is the right thing to submit
@@ -25,6 +25,8 @@ export default function App() {
   const [question, setQuestion] = useState("");
   const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState(null);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  const sizeRef = useRef(DEFAULT_PAGE_SIZE); // read inside callbacks that must not re-create on a change
   const inFlight = useRef(null);
 
   // Examples come from the service so they always have data behind them.
@@ -68,7 +70,7 @@ export default function App() {
 
   const runQuestion = useCallback(
     async (text) => {
-      const payload = await load((signal) => askApi({ question: text, pageSize: PAGE_SIZE, signal }), {
+      const payload = await load((signal) => askApi({ question: text, pageSize: sizeRef.current, signal }), {
         question: text,
       });
       if (payload?.slug) navigate(`/q/${payload.slug}`);
@@ -80,14 +82,14 @@ export default function App() {
   useEffect(() => {
     if (route.name !== "query") return;
     if (answer?.slug === route.slug && phase === "ready") return;
-    load((signal) => askSlug(route.slug, { pageSize: PAGE_SIZE, signal }));
+    load((signal) => askSlug(route.slug, { pageSize: sizeRef.current, signal }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.name, route.slug]);
 
   const reload = useCallback(
-    ({ page = 1, evidenceFor = null } = {}) => {
+    ({ page = 1, evidenceFor = null, size = sizeRef.current } = {}) => {
       const slug = answer?.slug ?? (route.name === "query" ? route.slug : null);
-      const options = { page, pageSize: PAGE_SIZE, evidenceFor };
+      const options = { page, pageSize: size, evidenceFor };
       // Paging keeps the current answer on screen; only the rows change.
       return load(
         (signal) =>
@@ -102,6 +104,15 @@ export default function App() {
 
   const onPage = useCallback(
     (page) => reload({ page, evidenceFor: answer?.evidence?.expanded_for?.id ?? null }),
+    [reload, answer],
+  );
+  // A different page size restarts at page 1: "page 3 of 25" has no meaning at another size.
+  const onPageSize = useCallback(
+    (size) => {
+      sizeRef.current = size;
+      setPageSize(size);
+      return reload({ page: 1, evidenceFor: answer?.evidence?.expanded_for?.id ?? null, size });
+    },
     [reload, answer],
   );
   const onExpand = useCallback((id) => reload({ page: 1, evidenceFor: id }), [reload]);
@@ -145,6 +156,8 @@ export default function App() {
                   busy={phase === "loading"}
                   onAsk={runQuestion}
                   onPage={onPage}
+                  pageSize={pageSize}
+                  onPageSize={onPageSize}
                   onExpand={onExpand}
                 />
                 <ShareLine slug={answer.slug} />
