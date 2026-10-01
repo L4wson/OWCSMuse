@@ -57,11 +57,49 @@ def test_the_committed_virtus_pro_window_is_the_one_g11_and_g13_rest_on():
     bb = next(v for k, v in d.items() if k.startswith("bb5dd404"))
     assert bb["org_id"] == "virtus-pro" and bb["valid_from"] == "2025-01-31T19:17:07+00:00"
     assert bb["valid_from_name"] == "Virtuspro"                                  # sourced from the first sighting, not chosen
-    ext = {k[:8]: v for k, v in d.items() if v["org_id"] == "extinction"}
+    ext = {k[:8]: v for k, v in d.items() if v.get("org_id") == "extinction"}
     assert ext["2b7f8ef6"]["valid_from_name"] == "Extinction" and ext["2b7f8ef6"].get("valid_to_name") is None
     assert (ext["a35f8d47"]["valid_from_name"], ext["a35f8d47"]["valid_to_name"]) == ("Extinction", "The Kafe")
-    others = [v for k, v in d.items() if not k.startswith("bb5dd404") and v["org_id"] != "extinction"]
-    assert not any(v.get("valid_from") or v.get("valid_to") or v.get("valid_from_name") for v in others)   # the rest are unbounded
+
+
+def test_every_committed_window_is_sourced_from_a_sighting_and_named_in_the_window_verdicts():
+    """A bounded mapping is always name-sourced (or the one explicit Virtus pro timestamp, itself a sighting), and every
+    team id that carries one is covered by the owner's verdict in scope/org_window_decisions.json."""
+    d = json.load(open("scope/org_decisions.json", encoding="utf-8"))["decisions"]
+    verdicts = json.load(open("scope/org_window_decisions.json", encoding="utf-8"))["decisions"]
+    assert len(verdicts) == 18
+    for team_id, entry in d.items():
+        for w in entry.get("windows") or [entry]:
+            if w.get("valid_from") or w.get("valid_to") or w.get("valid_from_name") or w.get("valid_to_name"):
+                assert w.get("valid_from_name"), (team_id, w)               # the start is always a sighting
+                assert team_id in verdicts, team_id
+    # the three ids whose names are several organisations' eras
+    eras = {k[:8]: [(w["org_id"], w.get("valid_from_name"), w.get("valid_to_name")) for w in v["windows"]]
+            for k, v in d.items() if "windows" in v}
+    assert eras == {
+        "0464a373": [("rad", "Rad", "Sakura"), ("sakura", "Sakura", "LuneX"), ("lunex", "LuneX", None)],
+        "d20d1868": [("supernova", "Supernova", "Team Z"), ("team-z", "Team Z", None)],
+        "03869857": [("umbrellaacademy", "Umbrellaacademy", "ROCstars"), ("rocstars", "ROCstars", None)],
+    }
+    # NTMR: one org across two team ids, each only over its own NTMR era
+    ntmr = {k[:8]: v for k, v in d.items() if v.get("org_id") == "ntmr"}
+    assert {k: v["valid_from_name"] for k, v in ntmr.items()} == {"c5116cb3": "NTMR", "cefc3f72": "NTMR"}
+    # the verdict kinds the owner used
+    kinds = {v["verdict"] for v in verdicts.values()}
+    assert kinds == {"rename_only", "placeholder", "placeholder_then_pickups", "pickup", "roster_drop", "org_changes"}
+
+
+def test_a_second_era_on_one_team_id_is_a_window_and_round_trips(tmp_path):
+    d = OrgDecisions(tmp_path / "d.json")
+    d.set("t1", "rad", "Rad", valid_from_name="Rad", valid_to_name="Sakura")
+    d.add_window("t1", "sakura", "Sakura", valid_from_name="Sakura")
+    with pytest.raises(ValueError):
+        d.add_window("t1", "lunex", "LuneX")                                   # a second mapping must be windowed
+    d.save()
+    again = OrgDecisions(tmp_path / "d.json")
+    assert [m["org_id"] for m in again.mappings("t1")] == ["rad", "sakura"]
+    assert again.mappings("t1")[0]["valid_to_name"] == "Sakura" and "org_id" not in again.get("t1")
+    assert again.mappings("none") == []
 
 
 # ------------------------------------------------------------------ the warehouse
@@ -199,7 +237,7 @@ def test_load_writes_windows_and_the_check_flags_a_window_that_covers_nothing(ag
         agg_db.commit()
 
 
-# ------------------------------------------------------------------ the two signals on a name change
+# ------------------------------------------------------------------ the signals on a name change
 
 from owcsmuse.orgs import classify_name_change, stage_of  # noqa: E402
 
@@ -234,3 +272,17 @@ def test_propose_window_does_not_split_a_rename():
     from owcsmuse.orgs import propose_window
     team = _team([("SpaceStation", 0, 200), ("SpaceStation Gaming", 240, 500)])
     assert propose_window(team, "SpaceStation Gaming") is None
+
+
+def test_a_registration_placeholder_is_the_same_organisation_without_a_window():
+    """The third signal: a `team_` name, or one that lived only in a stage's opening days, replaced inside that stage."""
+    c = classify_name_change(_n("team_chiime", "2024-03-08", "2024-03-10"), _n("Dreamland", "2024-03-17", "2024-03-17"))
+    assert c["verdict"] == "placeholder" and c["placeholder"] and "team_" in c["why"]
+    c = classify_name_change(_n("BuboSprayCheck", "2024-03-08", "2024-03-21"), _n("ENCE", "2024-03-22", "2024-06-02"))
+    assert c["verdict"] == "placeholder" and "opening 14 day(s)" in c["why"]
+    # it needs the same stage: a `team_` name replaced in a later stage is still a pickup
+    c = classify_name_change(_n("team_x", "2024-03-08", "2024-03-10"), _n("Other", "2024-04-12", "2024-04-20"))
+    assert c["verdict"] == "pickup" and not c["placeholder"]
+    # and the old name must be gone early: a name that lasted the stage is not a placeholder
+    c = classify_name_change(_n("Rad", "2025-02-01", "2025-05-10"), _n("Sakura", "2025-05-17", "2025-09-21"))
+    assert c["verdict"] == "disagree" and not c["placeholder"]

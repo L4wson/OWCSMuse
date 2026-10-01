@@ -424,13 +424,28 @@ ordering, twice:
   boundary is the tell - but not alone: production shows 18 team ids carrying
   more than one name, and SpaceStation -> SpaceStation Gaming, GenG -> GenG
   Esports, Goud Guys -> Goud Guys ANM, PIP -> PxG PiP and Sakura -> Sakura
-  Esports also land on stage boundaries and are renames. So two signals decide
-  (`classify_name_change`): a new name that **contains or extends** the old one
-  is a rename and starts no window; a **wholly different** name on a stage
-  boundary is a pickup; anything else (a different name inside one stage, or
-  two names whose date ranges overlap) is reported for a person. The review of
-  all 18 is `scope/org_window_review.md` (`python tools/window_review.py`,
-  from the captured history in `scope/team_name_history_2026-10-01.json`).
+  Esports also land on stage boundaries and are renames. So three signals read
+  a change (`classify_name_change`): a new name that **contains or extends** the
+  old one is a rename and starts no window; a **wholly different** name on a
+  stage boundary is a pickup; a **registration placeholder** (a `team_<captain>`
+  name, or one that lived only in a stage's opening fortnight, replaced inside
+  that stage once the roster signed up: team_chiime -> Dreamland, BuboSprayCheck
+  -> ENCE) is the same organisation and no window; anything else (a different
+  name inside one stage, or two names whose date ranges overlap) is reported for
+  a person. The tool decides nothing. The review of all 18 is
+  `scope/org_window_review.md` (`python tools/window_review.py`, from the
+  captured history in `scope/team_name_history_2026-10-01.json`); the owner's
+  verdict on each is `scope/org_window_decisions.json`, and the report shows it
+  under the id, flagging where a signal reads the id differently (Umbrellaacademy
+  -> ROCstars fires the placeholder signal and was decided an org change; the
+  overlapping Anyones Legend / 1234 and Quick Esports / 1DIPv100GORILLA dates
+  are a FACEIT artifact over a roster drop, decided pickups). A team id whose
+  names are several organisations' eras carries one mapping per era
+  (`orgs decide --add`, stored under `windows`): 0464a373 is UNC inc (its own),
+  Rad, Sakura / Sakura Esports and LuneX; d20d1868 is team_chiime / Dreamland
+  (its own), Supernova and Team Z. NTMR is one organisation across cefc3f72
+  (2025 Stage 1) and c5116cb3 (from Stage 2), each mapped only over its own
+  NTMR era so FMCL's and Timeless's eras stay out of it.
 
 **A mapping holds over a window.** A FACEIT team id belongs to an org over
 `[valid_from, valid_to)` (`orgs decide --from ... --to ...`; absent means for all
@@ -1016,7 +1031,7 @@ starts:
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
 | 3 | source-agnostic match model and cross-source identity | not started |
-| 4 | LAN and international events | not started |
+| 4 | LAN and international events | Dreamhack Dallas 2024: page owner-confirmed (`Overwatch_Champions_Series/2024/Major`, in `scope/liquipedia_map.json`), one request planned, not yet fetched |
 | 5 | Korea and China, results only | not started |
 
 ### The client (Stage 0)
@@ -1173,9 +1188,17 @@ room or the Liquipedia page, and an answer that used a Liquipedia-only series ca
   winner (4-0 in a best-of-5 with four maps played, one of them 3-3) and stored Dreamhack Dallas as best-of-1 with
   3-1 scores. A map is drawn when its scores are equal or no winner is recorded, a draw is excluded from map wins in
   every fact view, and the series score a series presents is corrected from its map results when FACEIT's counted a
-  draw as a win (`score_source = 'maps'`; FACEIT's stored columns are untouched). A best-of the score cannot fit is
-  replaced by the smallest that can (`best_of_source = 'derived from score'`). `check` (`score_plausibility`)
-  asserts that nothing presents a score its best-of cannot hold, and counts the corrections so a rise is visible.
+  draw as a win (`score_source = 'maps'`; FACEIT's stored columns are untouched).
+- **Best-of is derived from the winning score, not read from FACEIT** (migration `032_best_of_from_wins.sql`). A
+  series with four map wins is a best-of-7 whatever FACEIT stored (Al Qadsiah 1-4 Twisted Minds, stored bo5; the
+  link is confirmed in `scope/liquipedia_link_decisions.json`), three a best-of-5, and so on; the winning score is
+  the one after the drawn-map correction, so a 4-0 with a 3-3 map derives from three actual wins and stays a bo5,
+  and a best-of is never fewer than the maps recorded. `best_of_source` is `faceit` where the stored value agrees,
+  `derived from map wins` where the score itself was corrected, `derived from score` otherwise. `check`
+  (`score_plausibility`) asserts that nothing presents a score its best-of cannot hold, counts every best-of it
+  corrects, raised and lowered separately, and lists them (`best_of_corrections`): a lowered one (stored bo5, won
+  2-x) is the kind worth a second look. Liquipedia-only series keep Liquipedia's best-of unless the score cannot
+  fit it.
 - A link decision may be keyed `faceit:<match id>` (the report shows FACEIT ids, not objectnames); it settles the one
   record naming that id. The two drawn-map pairs are confirmed that way in `scope/liquipedia_link_decisions.json`.
 - `check` gains `series_integrity`: no FACEIT id or Liquipedia record in two series, the series count reconciles
@@ -1311,7 +1334,9 @@ migrations/028_series.sql       the source-agnostic series; team-grain facts rea
 migrations/029_anchor_windows.sql  Liquipedia names resolve at the series' time
 migrations/030_draws.sql        a tied map is nobody's win; plausible series scores with provenance
 migrations/031_capabilities.sql region_sources (declared) and source_capabilities (derived): what each slice can answer
-tools/window_review.py          both name-change signals over every multi-name team id -> scope/org_window_review.md
+migrations/032_best_of_from_wins.sql  best-of derived from the winning score; corrections counted and listed
+tools/window_review.py          the three name-change signals over every multi-name team id -> scope/org_window_review.md
+scope/org_window_decisions.json the owner's verdict on each of the 18 multi-name team ids (audit record; windows apply via org_decisions.json)
 owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections

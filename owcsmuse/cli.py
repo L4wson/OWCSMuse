@@ -488,9 +488,10 @@ def cmd_orgs(args: argparse.Namespace, settings: Settings) -> int:
     decisions = OrgDecisions(args.decisions)
     with connect(settings.database_url, schema=settings.db_schema) as conn:
         if args.orgs_cmd == "decide":
-            decisions.set(args.team_id, args.org, args.org_name or args.org, args.note,
-                          valid_from=getattr(args, "valid_from", None), valid_to=getattr(args, "valid_to", None),
-                          valid_from_name=getattr(args, "valid_from_name", None), valid_to_name=getattr(args, "valid_to_name", None))
+            (decisions.add_window if getattr(args, "add", False) else decisions.set)(
+                args.team_id, args.org, args.org_name or args.org, args.note,
+                valid_from=getattr(args, "valid_from", None), valid_to=getattr(args, "valid_to", None),
+                valid_from_name=getattr(args, "valid_from_name", None), valid_to_name=getattr(args, "valid_to_name", None))
             path = decisions.save()
             _print({"decisions_file": str(path), "team_id": args.team_id, "decision": decisions.get(args.team_id)})
             return 0
@@ -845,6 +846,7 @@ def build_parser() -> argparse.ArgumentParser:
     de.add_argument("--from-name", dest="valid_from_name", metavar="NAME",
                     help="from the first sighting of this FACEIT name on the team id (resolved from team_names at load)")
     de.add_argument("--to-name", dest="valid_to_name", metavar="NAME", help="until the first sighting of this name")
+    de.add_argument("--add", action="store_true", help="add a windowed mapping to a team id that already has one (one era per org)")
     fg = ogs.add_parser("forget", help="unmap a team id"); fg.add_argument("team_id")
     rj = ogs.add_parser("reject", help="record a reviewed rejection: these two team ids are different orgs")
     rj.add_argument("team_id_a"); rj.add_argument("team_id_b"); rj.add_argument("--reason", required=True)

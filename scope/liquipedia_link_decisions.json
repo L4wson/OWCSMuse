@@ -10,6 +10,11 @@
       "faceit_match_id": "1-472cc9eb-d7a3-4811-b633-397a99d6a502",
       "note": "Confirmed: Disguised vs Team Liquid, 2026-03-29 (S8 NA regular season). FACEIT 4-0 vs Liquipedia 3-0: map 2 Blizzard World was drawn 3-3 and FACEIT counted the draw as a win for the series winner. Liquipedia's 3-0 is the true series score; FACEIT's stored score is left as is and the series view presents the map-derived score (score_source = maps).",
       "decided_at": "2026-10-01T22:42:55+00:00"
+    },
+    "faceit:1-3e78e269-28b7-481c-9ccc-46c173314ab9": {
+      "faceit_match_id": "1-3e78e269-28b7-481c-9ccc-46c173314ab9",
+      "note": "Confirmed: Al Qadsiah 1-4 Twisted Minds, 2025-10-26 (S6 EMEA Stage 3 playoffs). Liquipedia bo7 vs FACEIT bo5: a series with 4 map wins is a best-of-7 whatever FACEIT stored, so the pairing is right and FACEIT's best_of is wrong. FACEIT's stored value is left as is; the series view derives best-of from the winning score (best_of_source = derived from score).",
+      "decided_at": "2026-10-01T23:11:33+00:00"
     }
   }
 }

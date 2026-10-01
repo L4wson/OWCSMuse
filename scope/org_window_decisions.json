@@ -1,0 +1,95 @@
+{
+  "note": "The project owner's verdict on every FACEIT team id that carried more than one name (scope/team_name_history_2026-10-01.json), decided in one pass on 2026-10-01 from tools/window_review.py's report. This file is the audit record; the windows themselves are applied through scope/org_decisions.json (`orgs decide`, `--add` for a second era on one id). Verdicts: rename_only (one organisation, no window), placeholder (a FACEIT registration placeholder replaced once the roster signed up: same organisation, no window), pickup (a roster pickup on a stage boundary: one era per name), roster_drop (the organisation dropped the roster, which continued under the new name: a pickup whose overlapping sighting dates are a FACEIT artifact), org_changes (an organisation change inside a stage, decided over the signals).",
+  "decisions": {
+    "602d3c11-ccee-404d-858e-b03267c83d47": {
+      "verdict": "rename_only",
+      "note": "Goud Guys -> Goud Guys ANM: one organisation, no window.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf": {
+      "verdict": "rename_only",
+      "note": "SpaceStation -> SpaceStation Gaming: one organisation, no window.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff": {
+      "verdict": "rename_only",
+      "note": "GenG -> GenG Esports: one organisation, no window.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "f4401a61-5010-484b-8429-ad09e524b097": {
+      "verdict": "rename_only",
+      "note": "PIP -> PxG PiP: one organisation, no window.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e": {
+      "verdict": "pickup",
+      "note": "Timeless (the id's own era) then NTMR from 2025 Stage 2; NTMR is one organisation with cefc3f72's NTMR era, each team id mapped only over its own NTMR window.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "c82570d6-ded9-4678-8d32-398db37faa98": {
+      "verdict": "pickup",
+      "note": "Deimpero (the id's own era) then Frost Tails from 2025 Stage 2.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "cefc3f72-5641-43f4-ae4f-bb5eee3b564d": {
+      "verdict": "pickup",
+      "note": "FMCL (the id's own era) then NTMR from 2025 Stage 1; NTMR is one organisation with c5116cb3's NTMR era.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "ebfd8060-fcbd-467b-9701-0801b2260a9c": {
+      "verdict": "pickup",
+      "note": "Quick esports (the id's own era) then Ataraxia from 2024 Stage 2.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "0c629c99-0333-47f6-96c9-87c0617a9d21": {
+      "verdict": "placeholder",
+      "note": "team_Rakattack__ -> Students of the Game: a FACEIT registration placeholder replaced once the roster signed up (first days of 2024 Stage 1). Same organisation, no window; the id stays mapped to students-of-the-game for all time.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "62f7752b-0b79-4fa8-9a23-78800e2b4539": {
+      "verdict": "placeholder",
+      "note": "BuboSprayCheck -> ENCE: a registration placeholder replaced inside the opening days of 2024 Stage 1. Same organisation, no window.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "d20d1868-8937-4a85-8706-bf936d265392": {
+      "verdict": "placeholder_then_pickups",
+      "note": "team_chiime -> Dreamland is a registration placeholder (one era, the id's own); Supernova (2025 Stage 2) and Team Z (2025 Stage 3) are pickups, each its own org over its own window.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "75516399-4c1d-40fc-bb46-a887edadc5a2": {
+      "verdict": "roster_drop",
+      "note": "Anyones Legend dropped the roster, which continued as 1234: a pickup, windowed at the 1234 era. The overlapping dates are a FACEIT artifact, not an alias.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "cb90edf6-60cb-4f73-8172-bf944729a114": {
+      "verdict": "roster_drop",
+      "note": "Quick Esports' roster played as 1DIPv100GORILLA: a pickup, windowed at that era. The overlapping dates are a FACEIT artifact, not an alias.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "0464a373-df2f-4d23-93f5-80cbaa07802f": {
+      "verdict": "org_changes",
+      "note": "UNC inc (the id's own era); Rad from 2025 Stage 1 (pickup); Rad -> Sakura is an organisation change (windowed); Sakura Esports a rename inside the Sakura era; LuneX from 2026 Stage 1 (pickup).",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "03869857-7f73-4176-a27d-dafcc8d469ae": {
+      "verdict": "org_changes",
+      "note": "ROC ESPORT (the id's own era); Umbrellaacademy from 2024 Stage 2 (pickup); Umbrellaacademy -> ROCstars is an organisation change (windowed). The placeholder signal also fires on Umbrellaacademy (one day at the start of the stage); the owner's decision stands.",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae": {
+      "verdict": "pickup",
+      "note": "Avidity (the id's own era) then Extinction from 2025 Stage 2 (decided in the identity batch).",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "a35f8d47-7487-4249-a3fb-94aefa2ac8d0": {
+      "verdict": "pickup",
+      "note": "Extinction (windowed to the first The Kafe sighting) then The Kafe (the id's own era) (decided in the identity batch).",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    },
+    "bb5dd404-213c-430f-8d12-8687fc3ff747": {
+      "verdict": "pickup",
+      "note": "Ex Oblivione (the id's own era) then Virtus pro from 2025-01-31T19:17:07Z (decided in the identity batch).",
+      "decided_at": "2026-10-01T23:16:28+00:00"
+    }
+  }
+}

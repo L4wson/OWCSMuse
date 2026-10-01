@@ -459,14 +459,28 @@ def check_score_plausibility(conn: psycopg.Connection) -> CheckResult:
            AND (SELECT count(*) FILTER (WHERE r.winner_team_id = s.side1_team_id AND NOT map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id))
                   FROM match_rounds r WHERE r.match_id = s.match_id) > s.score1 LIMIT 10"""):
         discrepancies.append({"kind": "map_wins_exceed_series_score", **r})
+    # every FACEIT series whose presented best-of is not the stored one: the rule is general (032), so the list is
+    # the report of what it corrects; a lowered best-of (stored bo5, won 2-x) is the kind worth a second look
+    corrections = _rows(conn, """
+        SELECT s.series_id, m.best_of AS stored, s.best_of AS derived, s.score1, s.score2, s.best_of_source, s.state
+          FROM series s JOIN matches m ON m.match_id = s.faceit_match_id
+         WHERE s.best_of_source <> 'faceit' ORDER BY s.played_at LIMIT 100""")
     counts = {
         "scores_corrected_from_maps": int(_scalar(conn, "SELECT count(*) FROM series WHERE score_source = 'maps'") or 0),
         "best_of_derived_from_score": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'derived from score'") or 0),
+        "best_of_derived_from_map_wins": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'derived from map wins'") or 0),
+        "best_of_raised": sum(1 for c in corrections if c["stored"] is not None and c["derived"] > c["stored"]),
+        "best_of_lowered": sum(1 for c in corrections if c["stored"] is not None and c["derived"] < c["stored"]),
         "drawn_maps": int(_scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") / 2 if _scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") else 0),
+        "best_of_corrections": [{"series_id": c["series_id"], "stored": c["stored"], "derived": c["derived"],
+                                 "score": f"{c['score1']}-{c['score2']}", "source": c["best_of_source"], "state": c["state"]}
+                                for c in corrections],
     }
     return _result("score_plausibility", discrepancies,
                    f"every series fits its best-of ({counts['scores_corrected_from_maps']} score(s) corrected from map results, "
-                   f"{counts['best_of_derived_from_score']} best-of derived from the score, {counts['drawn_maps']} drawn map(s))",
+                   f"{counts['best_of_derived_from_score'] + counts['best_of_derived_from_map_wins']} best-of derived from the "
+                   f"winning score: {counts['best_of_raised']} raised, {counts['best_of_lowered']} lowered; "
+                   f"{counts['drawn_maps']} drawn map(s))",
                    f"{len(discrepancies)} implausible score(s)", counts)
 
 

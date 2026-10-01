@@ -37,7 +37,7 @@ import logging
 import re
 import unicodedata
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
@@ -253,12 +253,42 @@ STAGE_CALENDAR: tuple[tuple[str, str, str], ...] = (
 
 
 def stage_of(when: Optional[datetime]) -> Optional[str]:
+    b = stage_bounds(when)
+    return b[0] if b else None
+
+
+def stage_bounds(when: Optional[datetime]) -> Optional[tuple[str, str, str]]:
+    """(stage name, first day, last day) of the stage `when` falls in."""
     if when is None:
         return None
     day = when.date().isoformat()
     for name, lo, hi in STAGE_CALENDAR:
         if lo <= day <= hi:
-            return name
+            return name, lo, hi
+    return None
+
+
+# The third signal. FACEIT registers a team under a placeholder ("team_<captain>", or whatever the captain typed) and
+# the organisation's name replaces it once the roster has signed up: a placeholder lives in the opening days of a
+# stage and is gone inside the same stage. Decided by the project owner from 0c629c99, d20d1868 and 62f7752b, all in
+# the first days of 2024 Stage 1.
+PLACEHOLDER_DAYS = 14
+PLACEHOLDER_PREFIX = "team_"
+
+
+def is_registration_placeholder(old: tuple[str, datetime, datetime], new: tuple[str, datetime, datetime]) -> Optional[str]:
+    """Why `old` is a registration placeholder that `new` replaced, or None."""
+    (o_name, o_first, o_last), (n_name, n_first, _n_last) = old, new
+    b = stage_bounds(o_first)
+    if b is None or stage_bounds(n_first) != b or n_first <= o_last:
+        return None
+    name, lo, _hi = b
+    if o_name.lower().startswith(PLACEHOLDER_PREFIX):
+        return f"'{o_name}' is a FACEIT registration placeholder ('{PLACEHOLDER_PREFIX}' prefix) replaced by '{n_name}' inside {name}"
+    days = (o_last.date() - date.fromisoformat(lo)).days
+    if days < PLACEHOLDER_DAYS:
+        return (f"'{o_name}' lived only in the opening {days + 1} day(s) of {name} and '{n_name}' replaced it inside the "
+                "same stage: a registration placeholder")
     return None
 
 
@@ -277,6 +307,8 @@ def classify_name_change(old: tuple[str, datetime, datetime], new: tuple[str, da
     1. Handle: the new name contains or extends the old one -> a rename by the same organisation.
     2. Stage boundary: the old name's last sighting and the new name's first sighting fall in different stages -> a
        roster pickup by another organisation, which in OWCS lands on a stage boundary.
+    3. Registration placeholder (`is_registration_placeholder`): the old name is FACEIT's registration placeholder,
+       gone inside the opening days of the same stage -> the same organisation, no window.
     A wholly different name on a stage boundary is a pickup (a window); a kept handle is a rename (no window). When the
     signals disagree - a wholly different name inside one stage, or ranges that overlap - it is reported for a person.
     """
@@ -285,6 +317,7 @@ def classify_name_change(old: tuple[str, datetime, datetime], new: tuple[str, da
     s_old, s_new = stage_of(o_last), stage_of(n_first)
     overlap = n_first <= o_last
     boundary = (s_old != s_new) and not overlap
+    placeholder = is_registration_placeholder(old, new)
     if overlap:
         verdict, why = "disagree", (f"'{n_name}' ({n_first:%Y-%m-%d}..{n_last:%Y-%m-%d}) sits inside '{o_name}''s range "
                                     f"({o_first:%Y-%m-%d}..{o_last:%Y-%m-%d}): the id alternated between the names, which "
@@ -293,12 +326,14 @@ def classify_name_change(old: tuple[str, datetime, datetime], new: tuple[str, da
         verdict, why = "rename", f"'{n_name}' keeps the handle of '{o_name}' (rename), though it first appears in a new stage ({s_old} -> {s_new}); the handle decides"
     elif handle_kept:
         verdict, why = "rename", f"'{n_name}' keeps the handle of '{o_name}': a rename by the same organisation"
+    elif placeholder:
+        verdict, why = "placeholder", placeholder
     elif boundary:
         verdict, why = "pickup", f"'{n_name}' is a wholly different name first seen in {s_new or 'an unknown stage'} after '{o_name}' last played in {s_old or 'an unknown stage'}: a roster pickup"
     else:
         verdict, why = "disagree", f"'{n_name}' is a wholly different name but appears inside the same stage as '{o_name}' ({s_old}): not a stage-boundary pickup and not a rename"
     return {"old": o_name, "new": n_name, "verdict": verdict, "handle_kept": handle_kept, "stage_boundary": boundary,
-            "stages": [s_old, s_new], "why": why}
+            "placeholder": placeholder is not None, "stages": [s_old, s_new], "why": why}
 
 
 def propose_window(team: TeamFacts, org_name: str) -> Optional[dict[str, Any]]:
@@ -436,6 +471,38 @@ class OrgDecisions:
         self.data[team_id] = {k: v for k, v in d.items() if v is not None}
         return self.data[team_id]
 
+    def add_window(self, team_id: str, org_id: str, org_name: str, note: Optional[str] = None,
+                   team_name: Optional[str] = None, evidence: Optional[list[str]] = None,
+                   valid_from: Optional[str] = None, valid_to: Optional[str] = None,
+                   valid_from_name: Optional[str] = None, valid_to_name: Optional[str] = None) -> dict[str, Any]:
+        """Add a second (third, ...) windowed mapping to a team id that already has one.
+
+        A team id whose names are several organisations' eras carries one window per era under `windows`; each
+        window has the same fields as a plain decision. The first call on an undecided id is a plain `set`.
+        """
+        if team_id not in self.data:
+            return self.set(team_id, org_id, org_name, note, team_name, evidence, valid_from, valid_to, valid_from_name, valid_to_name)
+        if not (valid_from or valid_from_name or valid_to or valid_to_name):
+            raise ValueError("a second mapping on one team id must be windowed")
+        entry = self.data[team_id]
+        if "windows" not in entry:
+            first = {k: v for k, v in entry.items() if k != "decided_at"}
+            entry = self.data[team_id] = {"windows": [first], "decided_at": entry.get("decided_at")}
+        w = {"org_id": org_id, "org_name": org_name, "team_name": team_name, "note": note, "evidence": evidence or [],
+             "valid_from": valid_from, "valid_to": valid_to, "valid_from_name": valid_from_name, "valid_to_name": valid_to_name}
+        entry["windows"].append({k: v for k, v in w.items() if v is not None})
+        entry["decided_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        return entry
+
+    def mappings(self, team_id: str) -> list[dict[str, Any]]:
+        """Every org mapping decided for a team id: one for a plain decision, one per window otherwise."""
+        d = self.data.get(team_id)
+        if not d:
+            return []
+        if "windows" in d:
+            return [{**w, "decided_at": d.get("decided_at")} for w in d["windows"]]
+        return [d]
+
     def unset(self, team_id: str) -> bool:
         return self.data.pop(team_id, None) is not None
 
@@ -465,8 +532,10 @@ class OrgDecisions:
                 p.note = rejected.get("reason")
                 out.append(p)
                 continue
-            decided = [self.data.get(t) for t in p.team_ids]
-            if all(d and d["org_id"] == decided[0]["org_id"] for d in decided):
+            shared = set.intersection(*[{m["org_id"] for m in self.mappings(t)} for t in p.team_ids]) if p.team_ids else set()
+            if shared:
+                org = sorted(shared)[0]
+                decided = [next(m for m in self.mappings(t) if m["org_id"] == org) for t in p.team_ids]
                 p.include, p.decision_source = True, "manual"
                 p.org_id, p.org_name = decided[0]["org_id"], decided[0].get("org_name", p.org_name)
                 p.note = decided[0].get("note")
@@ -484,10 +553,11 @@ class OrgDecisions:
             "note": ("Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it "
                      "belongs to, over [valid_from, valid_to) when those are set (ISO 8601; absent = for all time). "
                      "Outside its window a team id is itself, by the name it carried then. "
+                     "A team id whose names are several organisations' eras carries one mapping per era under `windows`. "
                      "A team id absent from this file stays unmapped and is queryable as itself. "
                      "`rejections` are pairs that were reviewed and turned down; they are never proposed again. "
                      "Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`."),
-            "decisions": dict(sorted(self.data.items(), key=lambda kv: (kv[1].get("org_id", ""), kv[0]))),
+            "decisions": dict(sorted(self.data.items(), key=lambda kv: (self.mappings(kv[0])[0].get("org_id", ""), kv[0]))),
             "rejections": dict(sorted(self.rejections.items())),
         }
         self.path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -497,8 +567,9 @@ class OrgDecisions:
 def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[str, int]:
     """Write the decided mappings into orgs / team_orgs. Only decided ids are written."""
     by_org: dict[str, str] = {}
-    for d in decisions.data.values():
-        by_org[d["org_id"]] = d.get("org_name") or d["org_id"]
+    for team_id in decisions.data:
+        for d in decisions.mappings(team_id):
+            by_org[d["org_id"]] = d.get("org_name") or d["org_id"]
     with conn.cursor() as cur:
         for org_id, name in by_org.items():
             cur.execute(
@@ -525,7 +596,7 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
             row = cur.fetchone()
             return row["first_seen_at"] if row else None
 
-        for team_id, d in decisions.data.items():
+        for team_id, d in ((t, m) for t in decisions.data for m in decisions.mappings(t)):
             if team_id not in known:
                 skipped += 1
                 continue

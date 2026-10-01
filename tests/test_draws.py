@@ -44,7 +44,11 @@ def test_faceits_draw_counted_as_a_win_is_corrected_from_the_map_results(agg_db,
     after = _one(agg_db, "SELECT score1, score2, score_source, best_of, best_of_source FROM series WHERE match_id = %s", [m["match_id"]])
     assert after["score_source"] == "maps"                                         # FACEIT's draw-as-win is corrected
     assert (after["score1"], after["score2"]) == _expected_map_wins(agg_db, m)
-    assert after["best_of"] == m["best_of"] and after["best_of_source"] == "faceit"
+    # the best-of is derived from actual map wins, not from the inflated stored score: a 3-0 with a 3-3 map stays a
+    # best-of-5, never a best-of-7 (and never fewer maps than were recorded)
+    wins = max(after["score1"], after["score2"])
+    assert after["best_of"] == max(2 * wins - 1, m["maps"] + (m["maps"] % 2 == 0)) and after["best_of"] <= m["best_of"]
+    assert after["best_of"] != 2 * (wins + 1) - 1
     r = {c.name: c for c in run_checks(agg_db, ["score_plausibility"])}["score_plausibility"]
     assert r.ok and r.counts["scores_corrected_from_maps"] == 1 and r.counts["drawn_maps"] == 1
     # the series-grain record follows the corrected score; the stored FACEIT columns are untouched
@@ -69,7 +73,50 @@ def test_a_best_of_the_score_cannot_fit_is_derived_from_the_score_and_said_so(ag
     s = _one(agg_db, "SELECT best_of, best_of_source, score1, score2 FROM series WHERE match_id = %s", [m["match_id"]])
     assert s["best_of"] == 2 * max(s["score1"], s["score2"]) - 1 and s["best_of_source"] == "derived from score"
     r = {c.name: c for c in run_checks(agg_db, ["score_plausibility"])}["score_plausibility"]
-    assert r.ok and r.counts["best_of_derived_from_score"] == 1
+    assert r.ok and r.counts["best_of_derived_from_score"] == 1 and r.counts["best_of_raised"] == 1
+    assert r.counts["best_of_corrections"][0]["stored"] == 1 and r.counts["best_of_corrections"][0]["series_id"] == "faceit:" + m["match_id"]
+
+
+def test_four_map_wins_is_a_best_of_seven_whatever_faceit_stored(agg_db, complete_match):
+    """Al Qadsiah 1-4 Twisted Minds (2025-10-26): FACEIT stored bo5, Liquipedia bo7. The rule is general."""
+    m = complete_match
+    w1, w2 = _expected_map_wins(agg_db, m)
+    s1, s2 = (4, 1) if w1 >= w2 else (1, 4)                      # the side that won the recorded maps wins the series
+    with agg_db.cursor() as cur:
+        cur.execute("UPDATE matches SET best_of = 5, faction1_score = %s, faction2_score = %s WHERE match_id = %s", [s1, s2, m["match_id"]])
+    s = _one(agg_db, "SELECT best_of, best_of_source, score1, score2 FROM series WHERE match_id = %s", [m["match_id"]])
+    assert (s["best_of"], s["best_of_source"], s["score1"], s["score2"]) == (7, "derived from score", s1, s2)
+    r = {c.name: c for c in run_checks(agg_db, ["score_plausibility"])}["score_plausibility"]
+    assert r.ok and r.counts["best_of_raised"] == 1 and r.counts["best_of_lowered"] == 0
+    assert r.counts["best_of_corrections"] == [{"series_id": "faceit:" + m["match_id"], "stored": 5, "derived": 7, "score": f"{s1}-{s2}",
+                                               "source": "derived from score", "state": "complete"}]
+
+
+def test_a_stored_best_of_larger_than_the_score_needs_is_lowered_and_counted_as_such(agg_db, complete_match):
+    """FACEIT's best-of is not trusted either way; a lowered one is listed so a person can look at it."""
+    m = complete_match
+    with agg_db.cursor() as cur:
+        cur.execute("UPDATE matches SET best_of = 7 WHERE match_id = %s", [m["match_id"]])
+    s = _one(agg_db, "SELECT best_of, best_of_source, score1, score2 FROM series WHERE match_id = %s", [m["match_id"]])
+    assert s["best_of"] == max(2 * max(s["score1"], s["score2"]) - 1, m["maps"] + (m["maps"] % 2 == 0)) < 7
+    r = {c.name: c for c in run_checks(agg_db, ["score_plausibility"])}["score_plausibility"]
+    assert r.ok and r.counts["best_of_lowered"] == 1 and r.counts["best_of_raised"] == 0
+
+
+def test_a_stored_best_of_the_score_agrees_with_is_reported_as_faceits(agg_db, complete_match):
+    m = complete_match
+    s = _one(agg_db, "SELECT best_of, best_of_source, score1, score2 FROM series WHERE match_id = %s", [m["match_id"]])
+    assert s["best_of"] == m["best_of"] == 2 * max(s["score1"], s["score2"]) - 1 and s["best_of_source"] == "faceit"
+
+
+def test_an_unplayed_series_keeps_the_stored_best_of(agg_db, complete_match):
+    m = complete_match
+    with agg_db.cursor() as cur:
+        cur.execute("UPDATE matches SET faction1_score = 0, faction2_score = 0 WHERE match_id = %s", [m["match_id"]])
+        cur.execute("DELETE FROM match_rounds WHERE match_id = %s", [m["match_id"]])
+        cur.execute("DELETE FROM match_players WHERE match_id = %s", [m["match_id"]])
+    s = _one(agg_db, "SELECT best_of, best_of_source FROM series WHERE match_id = %s", [m["match_id"]])
+    assert (s["best_of"], s["best_of_source"]) == (m["best_of"], "faceit")
 
 
 def test_a_drawn_map_is_not_a_player_map_win_either(agg_db, complete_match):

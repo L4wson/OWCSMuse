@@ -20,6 +20,7 @@
     "9d718a3c-bb20-4988-ba53-aa24eaf084d6": {"name": "S9 EMEA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/EMEA/Stage 2/Regular Season"},
     "f2f36b25-2979-4681-bc74-6a4d869cd1d5": {"name": "S9 EMEA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/EMEA/Stage 2"},
     "db1a7544-766d-4a46-bb69-163429310826": {"name": "S9 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/NA/Stage 2/Regular Season"},
-    "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a": {"name": "S9 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/NA/Stage 2"}
+    "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a": {"name": "S9 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/NA/Stage 2"},
+    "33781289-61ea-43d5-ac79-1af825dcb291": {"name": "Dreamhack Dallas", "page": "Overwatch Champions Series/2024/Major", "note": "owner-confirmed page (2026-10-01), no probe sent; the 14 FACEIT series are result_only with best_of stored as 1"}
   }
 }
