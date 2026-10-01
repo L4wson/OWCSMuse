@@ -96,3 +96,24 @@ def test_an_entity_object_on_a_ranked_row_is_not_a_column():
 def test_no_rows_no_columns():
     assert describe([]) == []
     assert Column("k", "K", "text").as_dict() == {"key": "k", "label": "K", "type": "text"}
+
+
+def test_a_season_is_an_identifier_not_a_quantity():
+    """'2,026' is how a count reads; a season or a year names something and is never separated."""
+    assert type_for("season", [2026]) == "identifier"
+    assert type_for("year", [2025]) == "identifier"
+    assert type_for("first_season", [2024]) == "identifier"
+    assert type_for("last_year", [2026]) == "identifier"
+    assert by_key(MAP_ROWS)["season"]["type"] == "identifier"
+    assert by_key(SERIES_ROWS)["season"]["type"] == "identifier"
+    # a genuine quantity keeps its type, and so its separators
+    assert type_for("damage_dealt", [Decimal("9730")]) == "integer"
+    assert type_for("maps", [1482]) == "integer"
+
+
+def test_no_numeric_key_that_names_a_season_or_year_is_typed_as_a_quantity():
+    from owcsmuse.nlq.columns import TYPES
+
+    for key, kind in TYPES.items():
+        if "season" in key.split("_") or "year" in key.split("_"):
+            assert kind in ("identifier", "list"), f"{key} is typed {kind}"

@@ -30,6 +30,8 @@ export function formatCell(row, column) {
       return formatDate(value);
     case "percent":
       return `${Number.isInteger(value) ? value : Number(value).toFixed(1)}%`;
+    case "identifier":
+      return String(value); // a season or a year names something; "2,026" is a quantity's format
     case "integer":
       return typeof value === "number" ? NUMBER.format(value) : String(value);
     case "decimal":

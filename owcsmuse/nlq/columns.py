@@ -65,6 +65,10 @@ LABELS: dict[str, str] = {
     "first_match_at": "First",
     "last_match_at": "Last",
     "first_at": "First",
+    "from_at": "From",
+    "to_at": "To",
+    "as_substitute": "As substitute",
+    "status": "Status",
     "last_at": "Last",
     "nickname": "Player",
     "stat_value": "Value",
@@ -93,7 +97,8 @@ TYPES: dict[str, str] = {
     "match_url": "link",
     "map_stats_recorded": "flag",
     "round_number": "integer",
-    "season": "integer",
+    "season": "identifier",
+    "year": "identifier",
     "best_of": "integer",
     "seasons": "list",
     "stat_key": "text",
@@ -123,6 +128,9 @@ def type_for(key: str, values: list[Any]) -> str:
     """The kind of thing a column holds, from its name first and its values second."""
     if key in TYPES:
         return TYPES[key]
+    # A season or a year names something; it is not a quantity, so it is never thousand-separated.
+    if key.endswith(("_season", "_year")):
+        return "identifier"
     if key.endswith("_at"):
         return "date"
     if key.endswith("_pct") or key.endswith("_percent"):
