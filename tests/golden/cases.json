@@ -749,6 +749,52 @@
    },
    "derivation": "The only 2025 Twisted Minds fixture is the bracket bye, which is not a series: the answer is no_data, not '1-0'. The offered alternative (the all-seasons record) must answer with G08's numbers.",
    "status": "confirmed"
+  },
+  {
+   "id": "G29",
+   "title": "A question in the displayed OWCS name resolves: Stage 2 Regular Season, not Stage 1",
+   "kind": "exact",
+   "regression": "the displayed competition name was not searchable (matching used only FACEIT's stored name), and the parser kept only one phrase of the competition name",
+   "question": "SpaceStation Gaming record in OWCS 2026 NA Stage 2 Regular Season",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "SpaceStation Gaming",
+      "matches": 1,
+      "wins": 1,
+      "losses": 0,
+      "map_wins": 3,
+      "map_losses": 0,
+      "maps": 3
+     }
+    ]
+   },
+   "derivation": "'OWCS 2026 NA Stage 2 Regular Season' is FACEIT's 'S9 NA OWCS Central - Regular Season' (S9 = 2026 Stage 2 per scope/liquipedia_map.json). SpaceStation Gaming played 1 series there (1-0, maps 3-0) and 1 in Stage 1's regular season, which must not be counted.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G30",
+   "title": "A question in the displayed OWCS name resolves: Stage 2 Playoffs, not the regular season",
+   "kind": "exact",
+   "regression": "the displayed competition name was not searchable",
+   "question": "Dallas Fuel record in OWCS 2026 NA Stage 2 Playoffs",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Dallas Fuel",
+      "matches": 2,
+      "wins": 2,
+      "losses": 0,
+      "map_wins": 7,
+      "map_losses": 2,
+      "maps": 9
+     }
+    ]
+   },
+   "derivation": "'OWCS 2026 NA Stage 2 Playoffs' is FACEIT's 'S9 NA OWCS Central - Playoffs'. Dallas Fuel played 2 series there (2-0, maps 7-2); its 1 regular-season series (0-1) is the same stage and must not be counted.",
+   "status": "confirmed"
   }
  ]
 }

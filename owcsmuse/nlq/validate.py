@@ -8,6 +8,7 @@ tests, so validation itself is pure.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from difflib import get_close_matches
 from typing import Optional, Union
@@ -44,7 +45,13 @@ class SchemaInfo:
     maps: set[str] = field(default_factory=set)
     modes: set[str] = field(default_factory=set)
     seasons: set[int] = field(default_factory=set)
-    championships: dict[str, str] = field(default_factory=dict)    # id -> name (included only)
+    championships: dict[str, str] = field(default_factory=dict)    # id -> FACEIT's stored name (included only)
+    # id -> the name people see (championship_display_name). A question may use either: the stored FACEIT name is
+    # what the data says, the displayed name is what an answer calls the competition, and a name that is shown
+    # must be a name that can be searched.
+    championship_display: dict[str, str] = field(default_factory=dict)
+    championship_season: dict[str, int] = field(default_factory=dict)
+    championship_region: dict[str, str] = field(default_factory=dict)
     regions: set[str] = field(default_factory=set)
 
     @classmethod
@@ -65,11 +72,17 @@ class SchemaInfo:
                     info.seasons.add(r["season"])
                 if r["region"]:
                     info.regions.add(r["region"])
-            cur.execute("SELECT championship_id, name, season FROM championships WHERE include")
+            cur.execute("SELECT championship_id, name, championship_display_name(name) AS display_name, season, "
+                        "scope_region FROM championships WHERE include")
             for r in cur.fetchall():
-                info.championships[r["championship_id"]] = r["name"]
+                cid = r["championship_id"]
+                info.championships[cid] = r["name"]
+                info.championship_display[cid] = r["display_name"] or r["name"]
+                if r["scope_region"]:
+                    info.championship_region[cid] = r["scope_region"]
                 if r["season"] is not None:
                     info.seasons.add(r["season"])
+                    info.championship_season[cid] = r["season"]
         conn.commit()
         return info
 
@@ -92,19 +105,40 @@ class SchemaInfo:
         return None
 
     def match_championships(self, text: str, season: Optional[int] = None, region: Optional[str] = None) -> list[tuple[str, str]]:
-        """All included championships whose name contains every word of `text` (folded)."""
-        words = [w for w in fold(text).split() if w not in {"the", "in", "at", "of"}]
+        """All included championships one of whose names contains every word of `text` (folded).
+
+        A championship answers to its FACEIT name and to its displayed OWCS name; the words must all come from the
+        same one, so "stage 2 playoffs" cannot be assembled from two different names. Season and region are read
+        from the championship's own columns when known (FACEIT League names carry no year), else from its name.
+        """
+        folded = fold(text)
+        # "stage 2" is one thing: its digit must follow the word, and may not be read out of "2026".
+        stages = re.findall(r"\bstage\s*(\d+)\b", folded)
+        words = [w for w in re.sub(r"\bstage\s*\d+\b", " ", folded).split() if w not in {"the", "in", "at", "of"}]
+
+        def has_all(name: str) -> bool:
+            tokens = re.findall(r"[a-z0-9]+", name)
+            return (all(re.search(rf"\bstage {n}\b", name) for n in stages)
+                    and all(w in tokens or (len(w) >= 3 and any(t.startswith(w) for t in tokens)) for w in words))
+
         out = []
-        for cid, name in self.championships.items():
-            fn = fold(name)
-            if all(w in fn for w in words):
-                if season is not None and str(season) not in fn:
+        for cid, stored in self.championships.items():
+            shown = self.championship_display.get(cid, stored)
+            names = [fold(n) for n in dict.fromkeys((stored, shown))]
+            if not any(has_all(n) for n in names):
+                continue
+            if season is not None:
+                known = self.championship_season.get(cid)
+                if (known != season) if known is not None else not any(str(season) in n for n in names):
                     continue
-                if region == "na" and " na " not in f" {fn} ":
+            if region in ("na", "emea"):
+                known = self.championship_region.get(cid)
+                if known is not None:
+                    if known != region:
+                        continue
+                elif not any((" na " in f" {n} ") if region == "na" else ("emea" in n) for n in names):
                     continue
-                if region == "emea" and "emea" not in fn:
-                    continue
-                out.append((cid, name))
+            out.append((cid, shown))
         return sorted(out, key=lambda x: x[1])
 
 
@@ -196,7 +230,7 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
         matches = info.match_championships(f.championship, f.season, f.region)
         if not matches:
             return Unanswerable(code="no_data", reason=f"no included championship matches '{f.championship}'",
-                                suggestions=[f"championships in scope: {', '.join(sorted(set(info.championships.values())))[:400]}"])
+                                suggestions=[f"championships in scope: {', '.join(sorted(set(info.championship_display.values() or info.championships.values())))[:400]}"])
         champ_ids = [cid for cid, _ in matches]
         if len(matches) > 1:
             notes.append(f"'{f.championship}' matched {len(matches)} championships; results cover all of them: "
