@@ -73,7 +73,7 @@ Either source can be wrong. `maps` tells which is more likely: FACEIT's own stat
 - [exact] 2026-04-11 21:00Z  Dallas Fuel 3-1 Spacestation Gaming  (bo5)
   FACEIT: 2026-04-11 23:46Z  Dallas Fuel 4-1 SpaceStation Gaming  (bo5, result_only)  1-28ea62bc-16c1-4686-b41b-479d5275d151
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
-  - **score**: Liquipedia '3-1', FACEIT '4-1' - FACEIT has stats for 0 maps; Liquipedia lists 5 games; FACEIT's 4-1 is more wins than a best-of-5 allows
+  - **score**: Liquipedia '3-1', FACEIT '4-1' - FACEIT has stats for 5 maps; Liquipedia lists 5 games; FACEIT's 4-1 is more wins than a best-of-5 allows
 - [exact] 2026-06-27 17:00Z  Al Qadsiah 3-1 Telacy  (bo5)
   FACEIT: 2026-07-01 21:24Z  qadsiah 3-1 Telacy  (bo5, result_only)  1-e4092c46-924e-497d-8f7d-01fba28313d4
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_2/Regular_Season

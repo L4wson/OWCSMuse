@@ -1,6 +1,6 @@
 # Org identity proposals
 
-Generated 2026-09-19T00:50:52+00:00. 12 candidate pairs: 6 strong, 3 needing review, 9 already merged, 3 reviewed and rejected.
+Generated 2026-10-01T21:47:49+00:00. 12 candidate pairs: 6 strong, 3 needing review, 9 already merged, 3 reviewed and rejected.
 
 A pair is proposed only with evidence. Names that merely look alike are never merged: a pair whose names differ must be carried by roster overlap and is marked **review required**. Nothing merges until it is in `scope/org_decisions.json`.
 
