@@ -793,6 +793,32 @@
    },
    "derivation": "'OWCS 2026 NA Stage 2 Playoffs' is FACEIT's 'S9 NA OWCS Central - Playoffs'. Dallas Fuel played 2 series there (2-0, maps 7-2); its 1 regular-season series (0-1) is the same stage and must not be counted.",
    "status": "confirmed"
+  },
+  {
+   "id": "G31",
+   "title": "A player-stat question for a results-only region is refused for that reason, with a working alternative",
+   "kind": "invariant",
+   "regression": "Stage 3 step 4: capability, not just coverage",
+   "question": "who had the most eliminations in korea",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "results_only",
+    "rows_only_players": [],
+    "alternative": {
+     "question_template": "who had the most eliminations",
+     "seasons_with_stat": [
+      null
+     ],
+     "then_rows": [
+      {
+       "nickname": "Lethal",
+       "total": 634
+      }
+     ]
+    }
+   },
+   "derivation": "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with zero or some rows. It must offer the same question without the region, and that question must answer with the independently-derived all-seasons eliminations leader (634 eliminations).",
+   "status": "confirmed"
   }
  ]
 }

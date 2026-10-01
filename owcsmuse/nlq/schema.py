@@ -19,7 +19,7 @@ Intent = Literal[
 ]
 EntityType = Literal["player", "team", "org", "map", "mode"]
 Aggregation = Literal["total", "avg_per_map", "count", "rate"]
-Region = Literal["na", "emea", "international"]
+Region = Literal["na", "emea", "international", "korea"]
 # FACEIT's own three values (match_players.role). Recorded per player per map,
 # not per player: a flex player who played 10 maps tank and 5 maps DPS
 # contributes to the tank leaderboard for those 10 and the DPS leaderboard for
@@ -49,6 +49,7 @@ ReasonCode = Literal[
     "unknown_entity",
     "no_data",
     "invalid_query",
+    "results_only",       # the slice has results but no source records player stats there
 ]
 
 

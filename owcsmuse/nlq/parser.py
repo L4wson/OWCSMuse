@@ -78,8 +78,6 @@ UNSUPPORTED_METRIC_TERMS: list[tuple[str, str]] = [
 ]
 
 OUT_OF_SCOPE_TERMS: list[tuple[str, str]] = [
-    ("korea", "Korea / Asia is outside the NA + EMEA scope and has no usable FACEIT data"),
-    ("korean", "Korea / Asia is outside the NA + EMEA scope and has no usable FACEIT data"),
     ("asia", "Asia is outside the NA + EMEA scope"),
     ("japan", "Japan is outside the NA + EMEA scope"),
     ("china", "China is outside the NA + EMEA scope"),
@@ -125,7 +123,7 @@ _MAP_ALIASES = {"lijiang": "Lijiang Tower", "kings row": "King's Row", "gibralta
                 "bliz world": "Blizzard World", "route66": "Route 66", "shambali": "Shambali Monastery", "antarctic": "Antarctic Peninsula"}
 
 REGION_TERMS = {"north america": "na", "na": "na", "emea": "emea", "europe": "emea", "european": "emea", "eu": "emea",
-                "international": "international"}
+                "international": "international", "korea": "korea", "korean": "korea", "south korea": "korea"}
 
 CHAMPIONSHIP_TERMS = [
     "stage 1", "stage 2", "stage 3", "stage 4", "stage one", "stage two", "main event", "group stage", "group a", "group b",
@@ -321,7 +319,8 @@ def _strip_filters(q: str, keep_years: bool = False) -> str:
     for alias in _MAP_ALIASES:
         q = re.sub(r"\b(on|at)?\s*" + re.escape(alias) + r"\b", " ", q)
     q = re.sub(r"\bowcs\b", " ", q)   # the brand word in "OWCS 2026 NA Stage 2" names no one
-    q = re.sub(r"\b(in|for)\s+(na|emea|eu|europe|north america|international)\b", " ", q)
+    q = re.sub(r"\b(in|for)\s+(na|emea|eu|europe|north america|international|korea|south korea)\b", " ", q)
+    q = re.sub(r"\bkorean\b", " ", q)
     q = re.sub(r"\b(at least|min(?:imum)?)\s+\d{1,4}\s+maps?\b", " ", q)
     q = re.sub(r"\bthis season\b|\blast season\b|\ball time\b|\boverall\b|\bso far\b|\bever\b|\bper map\b|\bon average\b", " ", q)
     return re.sub(r"\s+", " ", q).strip()

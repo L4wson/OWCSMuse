@@ -222,7 +222,10 @@ and EMEA teams compete (Midseason Championship, World Finals, Champions Clash,
 the 2024 Dreamhack Dallas Major). Excluded: open qualifiers, relegation,
 Asia / Korea / Japan / Pacific / China / South America / Oceania, cancelled or
 test events. Korea has no usable FACEIT data, so nothing Asia-region is
-included even where a championship exists.
+included from FACEIT even where a championship exists. Korea is a declared
+region (`korea`, results only) so that its Liquipedia results can land under
+it; until they do, a Korean question is refused as results-only or as having
+no data, never as out of scope.
 
 Classification is explicit and reviewable, not a regex flag:
 
@@ -325,7 +328,27 @@ of 2026, and none of 2024's 478.
 `scope_na_emea` - Korea, China, Japan and the Pacific regions are not ingested,
 nor are open qualifiers, community cups or relegation brackets held outside the
 main series. Korea in particular has no usable FACEIT data at all. A leaderboard
-here ranks NA and EMEA main-competition play, not OWCS worldwide.
+here ranks NA and EMEA main-competition play, not OWCS worldwide. Korea is
+declared a results-only region (`region_sources`): when its data arrives through
+Liquipedia it will answer records, head-to-heads and placings, never a player
+stat.
+
+### A results-only slice has series results but no player stats, from any source
+
+`results_only_source` - coverage says which stat keys exist per season; it has
+no concept of a slice where no player stats exist at all. Liquipedia records
+results, map scores, picks and placings and never a player stat; a FACEIT
+`result_only` competition (Dreamhack Dallas, all 14 series) has series results
+and no per-map stats either. `source_capabilities` (migration
+`031_capabilities.sql`) derives per included championship, from provenance,
+whether any source gives it map results and whether any gives it player stats;
+`region_sources` declares the same per region (Korea: `{liquipedia}`, no
+player stats). Where a whole slice is results-only, a player-stat question is
+refused with reason code `results_only` and offered what that slice can answer
+(the series record, the question without the region) rather than answered with
+an empty or partial ranking. Where only part of a slice is, the answer names
+the part it could not rank. An included championship with no series at all is
+empty, not results-only, and stays on the no-data path.
 
 ### The 2025 and 2026 main series is reconstructed from player history
 
@@ -621,7 +644,7 @@ ever emits SQL:
    silently partial leaderboard.
 
 Every failure is a first-class answer with a reason code: `unsupported_metric`,
-`unsupported_question`, `out_of_scope`, `ambiguous_entity`, `unknown_entity`,
+`unsupported_question`, `out_of_scope`, `results_only`, `ambiguous_entity`, `unknown_entity`,
 `no_data`, `invalid_query`, each with suggestions. Exit code is 0 for an
 answer and 2 otherwise.
 
@@ -812,6 +835,9 @@ Team Falcons and Crazy Raccoons met, but none of those series has map stats on F
 
 'Final Blows' is not recorded for the 2024 season (seasons with it: 2025, 2026)
   try: who had the most final blows in 2026
+
+KOREA is a results-only region: no source records player stats there, so there is no player leaderboard to give
+  try: who had the most eliminations                       <- the same question where stats exist
 ```
 
 The question that just failed is never offered back.
@@ -1156,6 +1182,18 @@ room or the Liquipedia page, and an answer that used a Liquipedia-only series ca
   against its sources, and a linked pair whose Liquipedia teams are decided names the same identities on both sides -
   a link that stops agreeing after an identity decision fails here rather than staying.
 
+### Stage 3: capability, not just coverage
+
+A source may carry a slice without carrying what a question needs from it. `region_sources` (migration
+`031_capabilities.sql`) declares per region which sources cover it and whether any of them records player stats
+(`korea`: `{liquipedia}`, no); `source_capabilities` derives per included championship, from `series` provenance,
+whether it has series results, map results and player stats, and which sources it came from. The query layer asks
+what a question needs (`player_stats`, `maps` or `series`) and checks the slice it draws on: a results-only slice
+refuses a player-stat question with reason code `results_only` and the alternatives a results-only slice can answer;
+a mixed slice answers and names the results-only part in a note and the `results_only_source` limitation. A
+Korean team's record is answerable the moment its Liquipedia results are loaded; a Korean player leaderboard never
+is, and says so by construction rather than by returning nobody.
+
 ### Open items for later stages
 
 - **Stage 3, date-bounded team-to-org mapping.** A team id maps to an org for all time
@@ -1272,6 +1310,7 @@ migrations/027_entity_anchors.sql  entity_anchors, Liquipedia line-ups and name 
 migrations/028_series.sql       the source-agnostic series; team-grain facts read it
 migrations/029_anchor_windows.sql  Liquipedia names resolve at the series' time
 migrations/030_draws.sql        a tied map is nobody's win; plausible series scores with provenance
+migrations/031_capabilities.sql region_sources (declared) and source_capabilities (derived): what each slice can answer
 tools/window_review.py          both name-change signals over every multi-name team id -> scope/org_window_review.md
 owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
 owcsmuse/scope.py               classifier, decisions file, review report

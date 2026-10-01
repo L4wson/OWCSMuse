@@ -49,6 +49,9 @@ CONFIRMED = {f"G{n:02d}" for n in range(1, 27)}
 # G29/G30 were added at the owner's request to assert that a question in the displayed OWCS name resolves; their
 # expected values are derived below from the raw payloads like every other case, and the owner can still review them.
 CONFIRMED |= {"G29", "G30"}
+# G31 (Stage 3 step 4) asserts the capability rule: a player-stat question over a results-only slice is refused with
+# reason results_only and a working alternative, never answered with an empty or partial leaderboard.
+CONFIRMED |= {"G31"}
 
 CASES: list[dict] = []
 
@@ -372,6 +375,19 @@ case("G30", "A question in the displayed OWCS name resolves: Stage 2 Playoffs, n
      f"{df_s9_po['map_wins']}-{df_s9_po['map_losses']}); its {df_s9_rs['matches']} regular-season series "
      f"({df_s9_rs['wins']}-{df_s9_rs['losses']}) is the same stage and must not be counted.",
      regression="the displayed competition name was not searchable")
+
+top_elims = I.leaderboard(S, "Eliminations", top=1)[0][0]
+case("G31", "A player-stat question for a results-only region is refused for that reason, with a working alternative",
+     "invariant", "who had the most eliminations in korea",
+     {"status": "cannot_answer", "code": "results_only", "rows_only_players": [],
+      "alternative": {"question_template": "who had the most eliminations", "seasons_with_stat": [None],
+                      "then_rows": [{"nickname": I.display_name(S, top_elims["player_id"]), "total": top_elims["total"]}]}},
+     "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data "
+     "exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer "
+     "must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with "
+     "zero or some rows. It must offer the same question without the region, and that question must answer with the "
+     f"independently-derived all-seasons eliminations leader ({top_elims['total']} eliminations).",
+     regression="Stage 3 step 4: capability, not just coverage")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

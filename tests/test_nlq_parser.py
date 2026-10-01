@@ -35,6 +35,10 @@ SUPPORTED = [
      {"intent": "leaderboard", "entity": "player", "metric": "Eliminations", "filters": {"team": "twisted minds"}}),
     ("Top 10 by damage mitigated in NA",
      {"intent": "leaderboard", "entity": "player", "metric": "Damage Mitigated", "filters": {"region": "na"}, "limit": 10}),
+    ("who had the most eliminations in Korea",
+     {"intent": "leaderboard", "entity": "player", "metric": "Eliminations", "filters": {"region": "korea"}}),
+    ("Crazy Raccoons record in South Korea",
+     {"intent": "team_record", "entity": "team", "metric": "record", "filters": {"region": "korea", "subject": "crazy raccoons"}}),
     ("dreamhack dallas most eliminations",
      {"intent": "leaderboard", "entity": "player", "metric": "Eliminations", "filters": {"championship": "dreamhack dallas"}}),
     ("most assists on Lijiang Tower",
@@ -123,7 +127,7 @@ SUPPORTED = [
 
 UNANSWERABLE = [
     ("Who has the best hero pool?", {"unsupported_metric"}),
-    ("What's Korea's best team?", {"out_of_scope"}),
+    ("What's Korea's best team?", {"unsupported_metric"}),   # Korea is a region now, not out of scope; "best team" still needs a stat
     ("When is the next match for Twisted Minds?", {"out_of_scope"}),
     ("Who will win OWCS 2026?", {"out_of_scope"}),
     ("How much prize money did Twisted Minds earn?", {"unsupported_metric"}),

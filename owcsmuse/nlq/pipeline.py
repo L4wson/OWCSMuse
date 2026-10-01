@@ -192,6 +192,27 @@ def _entities_for_limitations(r: Resolved) -> list[tuple[str, Optional[str]]]:
     return out
 
 
+def _results_only_alternatives(question: str, q: StructuredQuery, r: Resolved) -> list[str]:
+    """What a results-only slice CAN answer: the same entities at series grain, and the question without the region."""
+    out: list[str] = []
+    left = r.names.get("subject") or r.names.get("player") or r.names.get("team")
+    right = r.names.get("opponent")
+    if left and right:
+        out.append(f"{left} series record against {right}")
+    for name in (left, right):
+        if name:
+            out.append(f"{name} record")
+    region = q.filters.region
+    if region:
+        import re as _re
+        stripped = _re.sub(r"\b(in|for)\s+(the\s+)?(korea|south korea|korean|na|emea|eu|europe|north america|international)\b",
+                           "", question or "", flags=_re.I).strip()
+        stripped = _re.sub(r"\s{2,}", " ", stripped)
+        if stripped and stripped != question:
+            out.append(stripped)
+    return [a for i, a in enumerate(out) if a not in out[:i]]
+
+
 def _alternatives(question: str, q: StructuredQuery, r: Resolved,
                   coverage: Optional[dict] = None, met_but_no_maps: bool = False) -> list[str]:
     """Questions that would have worked, for a question that did not.
@@ -434,8 +455,10 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         swapped = None
         if q.filters.season and seasons_with and q.filters.season not in seasons_with:
             swapped = question.replace(str(q.filters.season), str(seasons_with[-1]))
-        return _cannot(question, v, q, used, pre.entities if r else None,
-                       [swapped] if swapped and swapped != question else None)
+        alts = [swapped] if swapped and swapped != question else []
+        if v.code == "results_only":
+            alts += _results_only_alternatives(question, q, r)
+        return _cannot(question, v, q, used, pre.entities if r else None, alts)
 
     # 4. compile
     c = compile_query(v, r)
@@ -471,7 +494,7 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
     limitations = applicable_limitations(
         conn, q.intent, q.metric, season=q.filters.season, championship_id=c.coverage_championship,
         region=q.filters.region, entities=_entities_for_limitations(r),
-        grain="series" if series_grain else "map")
+        grain="series" if series_grain else "map", results_only_parts=v.results_only_parts)
     if q.intent == "versus":
         limitations = [lim for lim in limitations if lim["id"] != "offline_map_stats"]
         notes += _missing_maps_note(conn, q, r, rows)

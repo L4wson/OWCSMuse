@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from difflib import get_close_matches
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 import psycopg
 
@@ -53,6 +53,10 @@ class SchemaInfo:
     championship_season: dict[str, int] = field(default_factory=dict)
     championship_region: dict[str, str] = field(default_factory=dict)
     regions: set[str] = field(default_factory=set)
+    # Capability (Stage 3): per championship, whether any source gives it map results / player stats; per declared
+    # region, whether any source records player stats there at all (korea: no, by construction).
+    capabilities: dict[str, dict[str, Any]] = field(default_factory=dict)
+    region_player_stats: dict[str, bool] = field(default_factory=dict)
 
     @classmethod
     def from_db(cls, conn: psycopg.Connection) -> "SchemaInfo":
@@ -72,6 +76,13 @@ class SchemaInfo:
                     info.seasons.add(r["season"])
                 if r["region"]:
                     info.regions.add(r["region"])
+            cur.execute("SELECT championship_id, map_results, player_stats, series FROM source_capabilities")
+            for r in cur.fetchall():
+                info.capabilities[r["championship_id"]] = {"map_results": bool(r["map_results"]),
+                                                           "player_stats": bool(r["player_stats"]), "series": int(r["series"])}
+            cur.execute("SELECT region, player_stats FROM region_sources")
+            for r in cur.fetchall():
+                info.region_player_stats[r["region"]] = bool(r["player_stats"])
             cur.execute("SELECT championship_id, name, championship_display_name(name) AS display_name, season, "
                         "scope_region FROM championships WHERE include")
             for r in cur.fetchall():
@@ -149,6 +160,59 @@ class Validated:
     map_name: Optional[str] = None
     mode_name: Optional[str] = None
     notes: list[str] = field(default_factory=list)
+    results_only_parts: list[str] = field(default_factory=list)   # competitions in the slice that carry no player stats
+
+
+# ------------------------------------------------------------------ capability
+
+def needs(q: StructuredQuery, info: SchemaInfo) -> str:
+    """What a question needs from its slice: 'player_stats', 'maps' or 'series'."""
+    if q.metric and q.metric in info.stat_keys:
+        return "player_stats"
+    if q.metric == "kd_ratio" or (q.entity == "player" and q.intent in ("leaderboard", "entity_stat", "map_stats", "versus")):
+        return "player_stats"
+    if q.intent in ("versus", "map_stats", "season_compare") or (q.metric or "").startswith("map"):
+        return "maps"
+    return "series"
+
+
+def slice_championships(q: StructuredQuery, info: SchemaInfo, champ_ids: list[str]) -> list[str]:
+    """The championships a question draws on: the resolved filter, else every included one in its season/region."""
+    if champ_ids:
+        return list(champ_ids)
+    out = []
+    for cid in info.championships:
+        if q.filters.season is not None and info.championship_season.get(cid) not in (None, q.filters.season):
+            continue
+        if q.filters.region is not None and info.championship_region.get(cid) not in (None, q.filters.region):
+            continue
+        out.append(cid)
+    return out
+
+
+def capability(q: StructuredQuery, info: SchemaInfo, champ_ids: list[str]) -> tuple[str, list[str]]:
+    """('full' | 'partial' | 'none', the results-only competitions) for what this question needs.
+
+    'none' means no championship in the slice can answer it, or the region is declared results-only and holds no
+    data yet; 'partial' names the competitions that cannot, so the answer can say which part it could not rank.
+    """
+    need = needs(q, info)
+    if need == "series":
+        return "full", []
+    key = "player_stats" if need == "player_stats" else "map_results"
+    cids = slice_championships(q, info, champ_ids)
+    if not cids:
+        region = q.filters.region
+        if region and info.region_player_stats.get(region) is False and need == "player_stats":
+            return "none", [f"the {region.upper()} region"]
+        return "full", []
+    # an included championship with no series at all is empty, not results-only: leave that to the no-data path
+    lacking = [cid for cid in cids if info.capabilities.get(cid, {}).get(key) is False
+               and info.capabilities.get(cid, {}).get("series", 0) > 0]
+    if not lacking:
+        return "full", []
+    names = sorted({info.championship_display.get(cid, info.championships.get(cid, cid)) for cid in lacking})
+    return ("none" if len(lacking) == len(cids) else "partial"), names
 
 
 ValidationResult = Union[Validated, Unanswerable]
@@ -209,6 +273,13 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
 
     # --- region
     if f.region is not None and info.regions and f.region not in info.regions:
+        # a declared results-only region refuses a player-stat question for that reason, not for lack of data
+        if info.region_player_stats.get(f.region) is False and needs(q, info) == "player_stats":
+            return Unanswerable(code="results_only",
+                                reason=f"{f.region.upper()} is a results-only region: no source records player stats there, "
+                                       "so there is no player leaderboard to give",
+                                suggestions=["Records, head-to-heads and placings are answerable for a results-only region; "
+                                             "player stats exist only where FACEIT recorded them (NA and EMEA)."])
         return Unanswerable(code="no_data", reason=f"no data for region '{f.region}'; regions with data: {', '.join(sorted(info.regions))}")
 
     # --- map / mode
@@ -271,4 +342,19 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
         with_stat = ", ".join(str(s) for s in sorted(info.stat_keys.get(stat_key, set()))) or "none"
         return Unanswerable(code="no_data", reason=f"'{stat_key}' is not recorded for the {f.season} season (seasons with it: {with_stat})")
 
-    return Validated(query=q, championship_ids=champ_ids, map_name=map_name, mode_name=mode_name, notes=notes)
+    # --- capability: does any source give this slice what the question needs?
+    cap, parts = capability(q, info, champ_ids)
+    if cap == "none":
+        what = "player stats" if needs(q, info) == "player_stats" else "map results"
+        where = ", ".join(parts) if parts else "this slice"
+        return Unanswerable(code="results_only",
+                            reason=f"no source records {what} for {where}: results only, so there is nothing to rank or average",
+                            suggestions=["Records, head-to-heads and placings are answerable there; player stats exist only "
+                                         "where FACEIT recorded per-map stats."])
+    if cap == "partial":
+        notes.append("results only for " + ", ".join(parts) + ": no source records "
+                     + ("player stats" if needs(q, info) == "player_stats" else "map results")
+                     + " there, so that part is not in this answer")
+
+    return Validated(query=q, championship_ids=champ_ids, map_name=map_name, mode_name=mode_name, notes=notes,
+                     results_only_parts=parts if cap == "partial" else [])

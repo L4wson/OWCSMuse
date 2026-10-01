@@ -95,7 +95,18 @@ LIMITATIONS: tuple[Limitation, ...] = (
         "Scope is OWCS NA + EMEA main competition",
         "Korea, China, Japan and the Pacific regions are not ingested, nor are open qualifiers, community cups "
         "or the relegation brackets held outside the main series. A leaderboard here is a leaderboard of NA and "
-        "EMEA main-competition play, not of OWCS worldwide.",
+        "EMEA main-competition play, not of OWCS worldwide. Korea is declared a results-only region "
+        "(region_sources): when its data arrives through Liquipedia it will answer records, head-to-heads and "
+        "placings, never a player stat.",
+    ),
+    Limitation(
+        "results_only_source",
+        "A results-only slice has series results but no player stats, from any source",
+        "Liquipedia records results, map scores, picks and placings and never a player stat; a FACEIT result_only "
+        "competition (Dreamhack Dallas, all 14 series) has series results and no per-map stats either. Where a "
+        "whole slice is like that, a player-stat question is refused with reason code results_only rather than "
+        "answered with an empty or partial ranking; where only part of a slice is, the answer says which part "
+        "it could not rank. Records, head-to-heads and placings are answerable there.",
     ),
     Limitation(
         "main_series_2025_2026",
@@ -176,7 +187,7 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
                season: Optional[int] = None, championship_id: Optional[str] = None,
                region: Optional[str] = None,
                entities: Optional[list[tuple[str, Optional[str]]]] = None,
-               grain: str = "map") -> list[dict[str, Any]]:
+               grain: str = "map", results_only_parts: Optional[list[str]] = None) -> list[dict[str, Any]]:
     """The limitations that bear on one query's slice, each with a note for that slice.
 
     Takes the pieces of a query rather than the query object so the CLI, a test
@@ -211,6 +222,11 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
 
     if intent in ("leaderboard", "map_stats") and not region:
         out.append(BY_ID["scope_na_emea"].as_dict())
+
+    if results_only_parts:
+        out.append(BY_ID["results_only_source"].as_dict(
+            "No source records player stats for " + ", ".join(results_only_parts) + ": results only there. "
+            + ("That part is not in this answer." if grain == "map" else "Series-grain answers still count it.")))
 
     if any(s in CRAWLED_SEASONS for s in seasons):
         out.append(BY_ID["main_series_2025_2026"].as_dict(
