@@ -18,6 +18,7 @@ from ..resolve import Candidate, resolve
 from .compile import Compiled, Resolved, compile_query
 from .evidence import (DEFAULT_PAGE_SIZE, Evidence, entity_of, fetch_evidence, fetch_missing_series,
                        is_map_grain)
+from .membership import team_history
 from .parser import parse_question
 from .sentence import render_sentence, render_unanswerable
 from .schema import StructuredQuery, Unanswerable
@@ -276,6 +277,108 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
             "carry no map stats on FACEIT and are excluded from the record above."]
 
 
+def _slice_phrase(q: StructuredQuery) -> str:
+    f = q.filters
+    parts = []
+    if f.season:
+        parts.append(f"in {f.season}")
+    if f.championship:
+        parts.append(f"in {f.championship}")
+    if f.map:
+        parts.append(f"on {f.map}")
+    if f.mode:
+        parts.append(f"on {f.mode} maps")
+    if f.region:
+        parts.append(f"in {f.region.upper()}")
+    return " ".join(parts)
+
+
+def _entity_footprint(conn: psycopg.Connection, r: Resolved) -> Optional[dict]:
+    """What the resolved entity has anywhere in scope: its seasons and how much, ignoring the question's filters."""
+    if r.player_id and r.subject_type in (None, "player"):
+        sql = ("SELECT array_agg(DISTINCT season ORDER BY season) AS seasons, count(DISTINCT match_id) AS matches, "
+               "count(*) AS maps FROM fact_player_maps WHERE player_id = %s")
+        params, unit = [r.player_id], "maps with stats"
+    elif r.team_id:
+        key = r.org_key(r.team_id, r.subject_type)
+        sql = ("SELECT array_agg(DISTINCT season ORDER BY season) AS seasons, count(DISTINCT match_id) AS matches, "
+               "count(DISTINCT match_id) AS maps FROM fact_team_matches WHERE org_key = %s")
+        params, unit = [key], "series"
+    else:
+        return None
+    try:
+        with conn.cursor() as cur:
+            cur.execute(sql, params)
+            row = cur.fetchone()
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        log_event(log, logging.WARNING, "entity_footprint_failed", exc_info=True)
+        return None
+    seasons = [x for x in (row["seasons"] or []) if x is not None] if row else []
+    return {"seasons": seasons, "matches": row["matches"] if row else 0, "count": row["maps"] if row else 0, "unit": unit}
+
+
+def _empty_slice(conn: psycopg.Connection, question: str, q: StructuredQuery, r: Resolved) -> tuple[str, list[str], list[str]]:
+    """Why an entity that resolved has no rows here, and what it does have.
+
+    "The query is valid but nothing matches" is true and says nothing. When the name resolved, the useful
+    answer is what is actually the case: they have no rows in this slice, and these are the seasons they do have.
+    """
+    generic = ("the query is valid but nothing in scope matches these filters",
+               ["Loosen the season / championship / map filter, or check `status` for what has been ingested."], [])
+    name = r.names.get("subject") or r.names.get("player") or r.names.get("team")
+    foot = _entity_footprint(conn, r) if name else None
+    if not foot:
+        return generic
+    where = _slice_phrase(q)
+    seasons = foot["seasons"]
+    if not foot["count"]:
+        return (f"{name} is in the warehouse but has no {foot['unit']} in scope",
+                ["FACEIT recorded nothing for them in the OWCS NA + EMEA main competition."], [])
+    have = ", ".join(map(str, seasons))
+    if q.filters.season and q.filters.season not in seasons:
+        reason = f"{name} has no {foot['unit']} in {q.filters.season}; the seasons they do have are {have}"
+        swaps = [question.replace(str(q.filters.season), str(y)) for y in reversed(seasons)]
+    else:
+        reason = (f"{name} has no {foot['unit']} {where}; across all filters they have {foot['count']} {foot['unit']} "
+                  f"in {have}")
+        swaps = []
+    tips = [f"{name} appears in {have}. Drop or change the filter to see them."]
+    return reason, tips, [s for s in swaps if s != question][:3]
+
+
+def _membership_answer(conn: psycopg.Connection, question: str, q: StructuredQuery, r: Resolved, pre: Answer,
+                       used: str) -> Answer:
+    """Which team a player is on, and the teams before it. Stints come from declared line-ups, not map stats."""
+    name = r.names.get("subject") or ""
+    if not r.player_id:
+        u = Unanswerable(code="unsupported_question",
+                         reason=f"{name} is a team, not a player, so there is no team for them to be on",
+                         suggestions=["Ask about a player, e.g. `what team is <player> on`, or ask the team's record."])
+        return _cannot(question, u, q, used, pre.entities, [f"{name} record"])
+    rows = team_history(conn, r.player_id, q.filters.season)
+    if not rows:
+        where = f" in {q.filters.season}" if q.filters.season else ""
+        foot = _entity_footprint(conn, r) if q.filters.season else None
+        have = ", ".join(map(str, foot["seasons"])) if foot and foot["seasons"] else ""
+        reason = (f"{name} has no series{where} with a declared line-up in scope"
+                  + (f"; the seasons they do appear in are {have}" if have else ""))
+        u = Unanswerable(code="no_data", reason=reason,
+                         suggestions=["FACEIT line-ups exist only for the OWCS NA + EMEA main competition in scope."])
+        alts = [f"what team is {name} on"] if have else []
+        return _cannot(question, u, q, used, pre.entities, alts)
+    a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows,
+               description=f"{name}: team now and team history", parser=used)
+    a.notes = ["There is no roster feed: \"current\" is the team in this player's most recent series in scope "
+               f"({str(rows[0]['to_at'])[:10]}), and a team change after that is not visible here."]
+    a.limitations = applicable_limitations(conn, q.intent, None, season=q.filters.season, entities=_entities_for_limitations(r),
+                                           grain="series")
+    sentence = render_sentence(a.query, rows, pre.entities, a.description)
+    a.sentence = sentence.as_dict() if sentence else None
+    return a
+
+
 def run_compiled(conn: psycopg.Connection, c: Compiled) -> list[dict]:
     try:
         with conn.cursor() as cur:
@@ -318,6 +421,9 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         pre.parser = used
         return pre
     q = _retarget(q, r)
+
+    if q.intent == "team_membership":
+        return _membership_answer(conn, question, q, r, pre, used)
 
     # 3. validate against the live schema
     info = info or SchemaInfo.from_db(conn)
@@ -407,9 +513,11 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
             a.sql, a.params = c.sql, c.params
         return a
     if not rows:
-        u = Unanswerable(code="no_data", reason="the query is valid but nothing in scope matches these filters",
-                         suggestions=["Loosen the season / championship / map filter, or check `status` for what has been ingested."])
-        a = _cannot(question, u, q, used, pre.entities, _alternatives(question, q, r, coverage))
+        reason, tips, swaps = _empty_slice(conn, question, q, r)
+        u = Unanswerable(code="no_data", reason=reason, suggestions=tips)
+        alts = _alternatives(question, q, r, coverage)
+        alts += [x for x in swaps if x not in alts]       # the seasons they do have, after the established offer
+        a = _cannot(question, u, q, used, pre.entities, alts)
         a.coverage = coverage
         a.notes = notes
         a.limitations = limitations
