@@ -8,7 +8,9 @@ import DataTable from "./DataTable.jsx";
  * is what the header says, so a reader knows whether they are looking at maps or
  * series before they read the table.
  */
-export default function Evidence({ evidence, busy = false, onPage = null, onAsk = null }) {
+export const PAGE_SIZE_OPTIONS = [25, 50, 100];
+
+export default function Evidence({ evidence, busy = false, onPage = null, onAsk = null, pageSize = null, onPageSize = null }) {
   if (!evidence) return null;
 
   if (!evidence.available) {
@@ -61,17 +63,38 @@ export default function Evidence({ evidence, busy = false, onPage = null, onAsk 
 
       <DataTable rows={rows} columns={evidence.columns ?? []} emptyText="No rows on this page." />
 
-      {totalPages > 1 ? (
+      {totalRows > 0 && (totalPages > 1 || onPageSize) ? (
         <nav className="pager" aria-label="Evidence pages">
-          <button type="button" onClick={() => onPage?.(page - 1)} disabled={busy || page <= 1}>
-            Newer
-          </button>
-          <span data-testid="pager-state">
-            Page {page} of {totalPages}
-          </span>
-          <button type="button" onClick={() => onPage?.(page + 1)} disabled={busy || !evidence.has_more}>
-            Older
-          </button>
+          {onPageSize ? (
+            <label className="page-size">
+              Rows per page{" "}
+              <select
+                data-testid="page-size"
+                value={pageSize ?? evidence.page_size ?? PAGE_SIZE_OPTIONS[0]}
+                disabled={busy}
+                onChange={(event) => onPageSize(Number(event.target.value))}
+              >
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {totalPages > 1 ? (
+            <>
+              <button type="button" onClick={() => onPage?.(page - 1)} disabled={busy || page <= 1}>
+                Newer
+              </button>
+              <span data-testid="pager-state">
+                Page {page} of {totalPages}
+              </span>
+              <button type="button" onClick={() => onPage?.(page + 1)} disabled={busy || !evidence.has_more}>
+                Older
+              </button>
+            </>
+          ) : null}
         </nav>
       ) : null}
     </section>

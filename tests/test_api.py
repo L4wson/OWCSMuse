@@ -382,3 +382,40 @@ def test_result_is_a_label_and_cannot_be_ranked(client):
 def test_no_suggestion_offers_a_label_as_a_metric(client):
     for suggestion in client.get("/suggestions").json()["suggestions"]:
         assert "result" not in suggestion["question"].lower()
+
+
+@pytest.fixture(scope="module")
+def two_players_in_different_matches(agg_db):
+    """Two players with no match in common, so any shared evidence row is a leak."""
+    with agg_db.cursor() as cur:
+        cur.execute("""
+            SELECT p.nickname, array_agg(DISTINCT f.match_id) AS matches
+              FROM fact_player_maps f JOIN players p ON p.player_id = f.player_id
+             GROUP BY p.nickname ORDER BY p.nickname""")
+        rows = cur.fetchall()
+    agg_db.commit()
+    for a in rows:
+        for b in rows:
+            if a["nickname"] != b["nickname"] and not set(a["matches"]) & set(b["matches"]):
+                return a["nickname"], set(a["matches"]), b["nickname"], set(b["matches"])
+    pytest.skip("the fixtures have no two players who never shared a match")
+
+
+def _evidence_matches(body: dict) -> set:
+    return {row["match_id"] for row in (body["evidence"] or {}).get("rows", [])}
+
+
+def test_one_answers_evidence_never_appears_in_the_next(client, two_players_in_different_matches):
+    """Ask about one player, then another: the second answer holds only the second player's rows."""
+    first, first_matches, second, second_matches = two_players_in_different_matches
+    one = client.post("/ask", json={"question": f"{first}'s record", "page_size": 200}).json()
+    two = client.post("/ask", json={"question": f"{second}'s record", "page_size": 200}).json()
+    again = client.post("/ask", json={"question": f"{second}'s record", "page_size": 200}).json()
+
+    assert one["status"] == two["status"] == "ok"
+    assert _evidence_matches(one) and _evidence_matches(one) <= first_matches
+    assert _evidence_matches(two) and _evidence_matches(two) <= second_matches
+    assert not _evidence_matches(two) & first_matches
+    # asking again, after the other player, gives the same rows as asking cold
+    assert two["evidence"]["rows"] == again["evidence"]["rows"]
+    assert two["evidence"]["total_rows"] == again["evidence"]["total_rows"]

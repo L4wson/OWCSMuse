@@ -12,7 +12,7 @@ import Context from "./Context.jsx";
  * never recorded is refused *and* evidenced: the series happened, the maps do not
  * exist, and both halves of that are true at once.
  */
-export default function Refusal({ answer, suggestions = [], onAsk, onPage, busy }) {
+export default function Refusal({ answer, suggestions = [], onAsk, onPage, busy, pageSize, onPageSize }) {
   const alternatives = nearbyQuestions(answer, suggestions);
   const evidence = answer.evidence;
 
@@ -42,7 +42,7 @@ export default function Refusal({ answer, suggestions = [], onAsk, onPage, busy 
           <p className="muted">
             What is known, even though the answer above is not:
           </p>
-          <Evidence evidence={evidence} busy={busy} onPage={onPage} />
+          <Evidence evidence={evidence} busy={busy} onPage={onPage} pageSize={pageSize} onPageSize={onPageSize} />
         </>
       ) : null}
 

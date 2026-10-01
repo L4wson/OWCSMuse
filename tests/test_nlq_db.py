@@ -116,3 +116,84 @@ def test_out_of_scope_and_unsupported_paths_are_clean(agg_db):
 def test_no_rows_is_reported_as_no_data(agg_db):
     a = ask(agg_db, "KSAA eliminations on Suravasa in 2026")  # KSAA did not play in 2026
     assert a.status == "cannot_answer" and a.code == "no_data"
+
+
+def _player_in_one_season_only(conn):
+    """A resolvable nickname whose maps all fall in a single season, with the warehouse's other season."""
+    with conn.cursor() as cur:
+        cur.execute("""
+            SELECT p.nickname, min(f.season) AS season,
+                   (SELECT array_agg(DISTINCT season) FROM fact_player_maps) AS all_seasons
+              FROM fact_player_maps f JOIN players p ON p.player_id = f.player_id
+             GROUP BY p.nickname HAVING count(DISTINCT f.season) = 1 ORDER BY count(*) DESC LIMIT 1""")
+        row = cur.fetchone()
+    conn.commit()
+    return row
+
+
+def test_an_entity_with_no_rows_in_the_slice_is_told_what_it_does_have(agg_db):
+    """'valid but nothing matches' says nothing; the useful answer is which seasons the player does have."""
+    row = _player_in_one_season_only(agg_db)
+    others = [s for s in row["all_seasons"] if s != row["season"]]
+    if not others:
+        pytest.skip("the fixtures hold a single season")
+    empty_season = others[0]
+
+    a = ask(agg_db, f"{row['nickname']} record in {empty_season}")
+    assert a.status == "cannot_answer" and a.code == "no_data"
+    assert "valid but nothing" not in a.reason
+    assert f"no maps with stats in {empty_season}" in a.reason
+    assert str(row["season"]) in a.reason                       # names the season they do have
+    assert str(empty_season) not in a.reason.split("they do have")[-1]
+    swap = f"{row['nickname']} record in {row['season']}"
+    assert swap in a.alternatives                              # a runnable question that works, offered by name
+    again = ask(agg_db, swap)
+    assert again.status == "ok"
+
+
+
+def test_team_membership_current_team_and_history_with_date_ranges(agg_db):
+    """A transfer is two stints in date order: the newest is the current team, each with its own range."""
+    with agg_db.cursor() as cur:
+        cur.execute("""
+            SELECT r.player_id, p.nickname, array_agg(r.match_id ORDER BY m.started_at) AS matches, min(r.team_id) AS team
+              FROM match_rosters r JOIN matches m USING (match_id) JOIN players p USING (player_id)
+              JOIN championships c ON c.championship_id = m.championship_id
+             WHERE c.include AND m.status = 'FINISHED' AND m.ingest_state IN ('complete', 'result_only')
+             GROUP BY r.player_id, p.nickname HAVING count(DISTINCT m.match_id) >= 2
+             ORDER BY count(*) DESC LIMIT 1""")
+        who = cur.fetchone()
+        cur.execute("SELECT team_id FROM team_identity WHERE team_id <> %s LIMIT 1", [who["team"]])
+        other = cur.fetchone()["team_id"]
+    agg_db.commit()
+    first_match = who["matches"][0]
+
+    def set_team(team_id):
+        with agg_db.cursor() as cur:
+            cur.execute("UPDATE match_rosters SET team_id = %s WHERE match_id = %s AND player_id = %s",
+                        [team_id, first_match, who["player_id"]])
+        agg_db.commit()
+
+    from owcsmuse.nlq.membership import team_history
+
+    try:
+        set_team(other)                                   # they played their first series for someone else
+        stints = team_history(agg_db, who["player_id"])
+    finally:
+        set_team(who["team"])
+    assert [s["status"] for s in stints] == ["current", "former"]
+    now, before = stints
+    assert now["team_id"] == who["team"] and before["team_id"] == other
+    assert before["to_at"] <= now["from_at"]               # date ranges do not overlap, newest first
+    assert before["from_at"] <= before["to_at"] and now["from_at"] <= now["to_at"]
+
+    a = ask(agg_db, f"what team is {who['nickname']} on")
+    assert a.status == "ok" and a.query["intent"] == "team_membership"
+    shown = a.entities["subject"]["current_name"]              # the display name, which can differ from the nickname
+    assert a.sentence["text"].startswith(f"{shown} last played for ")
+    assert any("no roster feed" in n for n in a.notes)
+
+
+def test_team_membership_for_a_team_name_says_so(agg_db):
+    a = ask(agg_db, "what team is Twisted Minds on")
+    assert a.status == "cannot_answer" and "is a team, not a player" in a.reason

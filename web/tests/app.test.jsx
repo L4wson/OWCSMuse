@@ -117,6 +117,37 @@ describe("asking", () => {
     expect(fetchMock.calls.some((call) => call.url.includes("page=2"))).toBe(true);
   });
 
+  it("offers 25, 50 and 100 rows per page, and refetches page 1 at the chosen size", async () => {
+    window.history.replaceState({}, "", `/q/${VERSUS.slug}`);
+    const { fetchMock } = mount([[`/query/${VERSUS.slug}`, ok(VERSUS)]]);
+
+    await screen.findByTestId("evidence");
+    const select = screen.getByTestId("page-size");
+    expect([...select.options].map((option) => option.value)).toEqual(["25", "50", "100"]);
+    expect(select).toHaveValue("25");
+
+    await userEvent.selectOptions(select, "50");
+    await waitFor(() => expect(fetchMock.calls.some((call) => call.url.includes("page_size=50"))).toBe(true));
+    const refetch = fetchMock.calls.filter((call) => call.url.includes("page_size=50")).at(-1);
+    expect(refetch.url).toContain("page=1"); // a new size restarts at the newest rows
+    await waitFor(() => expect(screen.getByTestId("page-size")).toHaveValue("50"));
+    expect(screen.getByTestId("answer-sentence")).toBeInTheDocument(); // the answer stays on screen
+  });
+
+  it("keeps the chosen page size for the next question", async () => {
+    window.history.replaceState({}, "", "/");
+    const { fetchMock } = mount([["/ask", ok(VERSUS)], [`/query/${VERSUS.slug}`, ok(VERSUS)]]);
+    await userEvent.type(await screen.findByRole("textbox"), "Sugarfree map record against Zeruhh{Enter}");
+    await userEvent.selectOptions(await screen.findByTestId("page-size"), "100");
+    await waitFor(() => expect(screen.getByTestId("page-size")).toHaveValue("100"));
+
+    const box = screen.getByRole("textbox");
+    await userEvent.clear(box);
+    await userEvent.type(box, "Twisted Minds record{Enter}");
+    await waitFor(() => expect(fetchMock.calls.filter((c) => c.url.includes("/ask")).length).toBe(2));
+    expect(fetchMock.calls.filter((c) => c.url.includes("/ask")).at(-1).body.page_size).toBe(100);
+  });
+
   it("expands a different ranked row through the API", async () => {
     window.history.replaceState({}, "", `/q/${LEADERBOARD.slug}`);
     const second = LEADERBOARD.aggregate.rows[1];

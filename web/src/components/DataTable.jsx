@@ -1,5 +1,11 @@
 import { formatCell } from "../format.js";
 
+// A row's identity. `match_id` alone is not one: map-grain evidence has a row per map, so a
+// match repeats. Duplicate keys make React keep rows of the previous answer on screen, so the
+// key is every field that distinguishes a row at any grain, plus its position as the last word.
+const rowKey = (row, index) =>
+  [row.entity?.id, row.match_id, row.round_number, row.team, index].map((part) => part ?? "").join("|");
+
 /**
  * One table for every shape the API returns.
  *
@@ -40,7 +46,7 @@ export default function DataTable({
             const isExpanded = entity?.id != null && expandedId != null && String(entity.id) === String(expandedId);
             return (
               <tr
-                key={entity?.id ?? row.match_id ?? index}
+                key={rowKey(row, index)}
                 className={isExpanded ? "row row--expanded" : "row"}
                 aria-current={isExpanded ? "true" : undefined}
               >

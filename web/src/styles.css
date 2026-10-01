@@ -576,3 +576,16 @@ table.data tbody tr:last-child td {
     overflow-x: visible;
   }
 }
+
+.pager .page-size {
+  margin-right: auto;
+}
+
+.pager select {
+  font: inherit;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--ink);
+}

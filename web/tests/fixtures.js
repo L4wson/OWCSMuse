@@ -200,7 +200,7 @@ export const PAYLOADS = {
         {
           "key": "season",
           "label": "Season",
-          "type": "integer"
+          "type": "identifier"
         },
         {
           "key": "competition",
@@ -570,7 +570,7 @@ export const PAYLOADS = {
         {
           "key": "season",
           "label": "Season",
-          "type": "integer"
+          "type": "identifier"
         },
         {
           "key": "competition",
@@ -938,7 +938,7 @@ export const PAYLOADS = {
         {
           "key": "season",
           "label": "Season",
-          "type": "integer"
+          "type": "identifier"
         },
         {
           "key": "competition",
@@ -1266,7 +1266,7 @@ export const PAYLOADS = {
         {
           "key": "season",
           "label": "Season",
-          "type": "integer"
+          "type": "identifier"
         },
         {
           "key": "competition",

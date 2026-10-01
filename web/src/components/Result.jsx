@@ -6,7 +6,7 @@ import Evidence from "./Evidence.jsx";
 import Refusal from "./Refusal.jsx";
 
 /** An answer, whichever of the three kinds it turned out to be. */
-export default function Result({ answer, suggestions, busy, onAsk, onPage, onExpand }) {
+export default function Result({ answer, suggestions, busy, onAsk, onPage, onExpand, pageSize, onPageSize }) {
   if (!answer) return null;
 
   // The service decides whether a shared link now reads differently; the client
@@ -26,7 +26,7 @@ export default function Result({ answer, suggestions, busy, onAsk, onPage, onExp
     return (
       <>
         <ParseChange changes={parseChanged} />
-        <Refusal answer={answer} suggestions={suggestions} onAsk={onAsk} onPage={onPage} busy={busy} />
+        <Refusal answer={answer} suggestions={suggestions} onAsk={onAsk} onPage={onPage} busy={busy} pageSize={pageSize} onPageSize={onPageSize} />
       </>
     );
   }
@@ -60,7 +60,7 @@ export default function Result({ answer, suggestions, busy, onAsk, onPage, onExp
         </section>
       ) : null}
 
-      <Evidence evidence={evidence} busy={busy} onPage={onPage} onAsk={onAsk} />
+      <Evidence evidence={evidence} busy={busy} onPage={onPage} onAsk={onAsk} pageSize={pageSize} onPageSize={onPageSize} />
     </article>
   );
 }

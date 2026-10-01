@@ -15,6 +15,7 @@ Intent = Literal[
     "season_compare",     # one entity in one season against itself in another
     "map_stats",          # rows are maps or modes
     "stat_availability",  # which stats exist for which season
+    "team_membership",    # which team a player is on now, and the teams they have been on
 ]
 EntityType = Literal["player", "team", "org", "map", "mode"]
 Aggregation = Literal["total", "avg_per_map", "count", "rate"]

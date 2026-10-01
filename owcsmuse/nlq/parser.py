@@ -336,6 +336,27 @@ _SUBJECT_PATTERNS = [
 ]
 
 
+# "what team is X on", "who does X play for", "X's team": a player's team now, and the teams before it.
+_MEMBERSHIP = [
+    re.compile(r"^(?:what|which)\s+(?:team|org|organi[sz]ation)\s+(?:is|was|does|did)\s+(?P<n>.+?)\s+(?:currently\s+|now\s+)?(?:on|play(?:s|ed)?\s+(?:for|on|with)|belong(?:s)?\s+to)(?:\s+(?:now|currently))?$"),
+    re.compile(r"^(?:what|which)\s+(?:team|org)\s+(?:is|was)\s+(?P<n>.+?)\s+(?:currently\s+)?(?:signed\s+(?:to|with)|with)$"),
+    re.compile(r"^who\s+(?:does|did|is|was)\s+(?P<n>.+?)\s+(?:currently\s+|now\s+)?(?:play(?:s|ed|ing)?\s+(?:for|on|with)|on|signed\s+(?:to|with)|with)(?:\s+(?:now|currently))?$"),
+    re.compile(r"^(?P<n>[a-z0-9_.\-' ]+?)'s\s+(?:current\s+|previous\s+|former\s+|past\s+)?(?:team|teams|roster|org|team history)$"),
+    re.compile(r"^(?P<n>[a-z0-9_.\-' ]+?)\s+(?:team history|teams|previous teams|former teams|team)$"),
+    re.compile(r"^(?:team history|teams|previous teams|former teams|current team)\s+(?:of|for)\s+(?P<n>.+)$"),
+]
+
+
+def _find_membership_subject(q: str) -> Optional[str]:
+    for rx in _MEMBERSHIP:
+        m = rx.match(q)
+        if m:
+            name = _clean_name(m.group("n"))
+            if name:
+                return name
+    return None
+
+
 _SIDE_SEASON = re.compile(r"^\s*(?P<y>20[2-3]\d)\s+(?P<rest>.+)$|^(?P<rest2>.+?)\s+(?:in\s+)?(?P<y2>20[2-3]\d)\s*$")
 
 
@@ -385,6 +406,12 @@ def parse_question(question: str) -> ParseResult:
     min_maps = _find_min_maps(q)
     sort = "asc" if _has(q, ASC_CUES) else "desc"
     aggregation = "avg_per_map" if _has(q, AVG_CUES) else "total"
+
+    # --- which team is a player on, and which have they been on
+    team_subject = _find_membership_subject(_strip_filters(q))
+    if team_subject:
+        return StructuredQuery(intent="team_membership", entity="player", metric="team",
+                               filters=Filters(subject=team_subject, season=filters.season))
 
     # --- stat availability
     if _has(q, AVAIL_CUES) and not _has(q, ["who", "most", "top"]):
