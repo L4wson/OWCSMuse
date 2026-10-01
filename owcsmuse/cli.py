@@ -59,7 +59,13 @@ def _client(settings: Settings, raw_conn=None) -> FaceitClient:
 def cmd_migrate(args: argparse.Namespace, settings: Settings) -> int:
     with connect(settings.database_url, schema=settings.db_schema) as conn:
         applied = migrate(conn, settings.migrations_dir, settings.db_schema)
-    _print({"applied": applied})
+        # Reviewed OWCS competition names are data, not schema: keep them in step on every deploy. Only decided
+        # names are written; with no decisions file this is a no-op.
+        try:
+            names = comp_names.load(conn, comp_names.CompetitionDecisions(comp_names.DEFAULT_DECISIONS_PATH))
+        except FileNotFoundError:
+            names = "skipped: scope/ files not found from this working directory; run `competitions load`"
+    _print({"applied": applied, "competition_names": names})
     return 0
 
 
@@ -375,7 +381,7 @@ def _cmd_liquipedia_reconcile(args: argparse.Namespace, conn) -> int:
 def cmd_competitions(args: argparse.Namespace, settings: Settings) -> int:
     """OWCS display names for FACEIT competitions. Everything but `load` is offline (two committed scope files)."""
     decisions = comp_names.CompetitionDecisions(args.decisions)
-    proposals = decisions.apply(comp_names.propose(args.map, args.scope))
+    proposals = decisions.apply(comp_names.propose(args.map, args.scope, args.extra))
     by_id = {p.championship_id: p for p in proposals}
     if args.comp_cmd == "decide":
         p = by_id.get(args.championship_id)
@@ -395,7 +401,7 @@ def cmd_competitions(args: argparse.Namespace, settings: Settings) -> int:
         _print({"championship_id": args.championship_id, "removed": removed})
         return 0
     if args.comp_cmd == "accept":
-        bases = ("liquipedia", "faceit-name") if args.include_faceit_names else ("liquipedia",)
+        bases = tuple(b.strip() for b in args.bases.split(",") if b.strip())
         n = comp_names.accept(decisions, proposals, bases)
         _print({"decisions_file": str(decisions.save()), "accepted": n,
                 "left_for_review": sum(1 for p in proposals if p.status == "pending" and p.proposed)})
@@ -777,12 +783,15 @@ def build_parser() -> argparse.ArgumentParser:
     cp.add_argument("--decisions", default=comp_names.DEFAULT_DECISIONS_PATH)
     cp.add_argument("--map", default=comp_names.DEFAULT_MAP_PATH)
     cp.add_argument("--scope", default=comp_names.DEFAULT_SCOPE_PATH)
+    cp.add_argument("--extra", default=comp_names.DEFAULT_EXTRA_PATH)
     cps = cp.add_subparsers(dest="comp_cmd", required=True)
     cpp = cps.add_parser("propose", help="write the review report; applies nothing")
     cpp.add_argument("--report", default=comp_names.DEFAULT_REPORT_PATH)
     cps.add_parser("status", help="how many are decided, pending, stale")
     cpa = cps.add_parser("accept", help="bulk-accept the unflagged Liquipedia-backed proposals")
-    cpa.add_argument("--include-faceit-names", action="store_true", help="also the 2024 names parsed from FACEIT's own")
+    cpa.add_argument("--bases", default="liquipedia",
+                     help="which proposals to bulk-accept: liquipedia (the reviewed page map; default), "
+                          "liquipedia-owner (a page you supplied), owner (named from your description)")
     cpd = cps.add_parser("decide", help="decide one competition (its proposal, or --name)")
     cpd.add_argument("championship_id"); cpd.add_argument("--name"); cpd.add_argument("--note")
     cpf = cps.add_parser("forget", help="drop a decision"); cpf.add_argument("championship_id")

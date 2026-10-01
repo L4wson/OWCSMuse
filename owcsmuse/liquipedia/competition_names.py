@@ -25,10 +25,11 @@ import psycopg
 DEFAULT_DECISIONS_PATH = "scope/competition_names.json"
 DEFAULT_REPORT_PATH = "scope/competition_names_report.md"
 DEFAULT_MAP_PATH = "scope/liquipedia_map.json"
+DEFAULT_EXTRA_PATH = "scope/competition_pages.json"
 DEFAULT_SCOPE_PATH = "scope/decisions.json"
 
 _PAGE = re.compile(
-    r"^Overwatch[ _]Champions[ _]Series/(?P<year>20\d\d)/(?P<region>NA|EMEA)/Stage[ _](?P<stage>\d+)(?:/(?P<sub>.+))?$")
+    r"^Overwatch[ _]Champions[ _]Series/(?P<year>20\d\d)/(?P<region>NA|North[ _]America|EMEA)/Stage[ _](?P<stage>\d+)(?:/(?P<sub>.+))?$")
 _FACEIT_LEAGUE = re.compile(r"^S(?P<season>\d+) (?P<region>NA|EMEA) OWCS Central - (?P<phase>Regular Season|Playoffs)$")
 _FACEIT_2024 = re.compile(r"^OWCS (?P<year>20\d\d): (?P<region>NA|EMEA) Stage (?P<stage>\d+) - (?P<phase>.+)$")
 _LEGACY = re.compile(r"^(S\d+) (EMEA|NA) OWCS Central - (.+)$")
@@ -47,7 +48,8 @@ def parse_page(page: str) -> Optional[PageName]:
     m = _PAGE.match((page or "").strip())
     if not m:
         return None
-    return PageName(int(m["year"]), m["region"], int(m["stage"]), (m["sub"] or "").replace("_", " ") or None)
+    region = "NA" if m["region"].startswith("North") else m["region"]
+    return PageName(int(m["year"]), region, int(m["stage"]), (m["sub"] or "").replace("_", " ") or None)
 
 
 def owcs_name(year: int, region: str, stage: int, phase: str) -> str:
@@ -76,7 +78,7 @@ class Proposal:
         return self.decided_name if self.status == "decided" and self.decided_name else self.current_display
 
 
-def _propose_one(cid: str, faceit_name: str, page: Optional[str]) -> Proposal:
+def _propose_one(cid: str, faceit_name: str, page: Optional[str], basis: str = "liquipedia") -> Proposal:
     p = Proposal(cid, faceit_name, legacy_display(faceit_name), page=page)
     league = _FACEIT_LEAGUE.match(faceit_name)
     if page:
@@ -84,16 +86,27 @@ def _propose_one(cid: str, faceit_name: str, page: Optional[str]) -> Proposal:
         if not pn:
             p.flags.append(f"Liquipedia page '{page}' is not a stage page; no name proposed")
             return p
-        phase = league["phase"] if league else None
-        if not phase:
-            p.flags.append("FACEIT name carries no Regular Season / Playoffs suffix; phase taken from the page")
-            phase = "Regular Season" if pn.subpage == "Regular Season" else "Playoffs"
-        shape = "Regular Season" if pn.subpage == "Regular Season" else ("Playoffs" if pn.subpage is None else pn.subpage)
-        if shape != phase:
-            p.flags.append(f"FACEIT says {phase} but the page's shape says {shape}")
-        if league and league["region"] != pn.region:
-            p.flags.append(f"FACEIT region {league['region']} differs from the page's {pn.region}")
-        p.proposed, p.basis = owcs_name(pn.year, pn.region, pn.stage, phase), "liquipedia"
+        old = _FACEIT_2024.match(faceit_name)
+        if old:
+            # 2024: every group is its own FACEIT competition but they share the stage's Group_Stage page; the
+            # main event is the stage page itself.
+            phase = old["phase"]
+            shape_ok = (pn.subpage == "Group Stage") if phase.startswith("Group") else (pn.subpage is None and phase == "Main Event")
+            if not shape_ok:
+                p.flags.append(f"FACEIT says {phase} but the page's shape says {pn.subpage or 'the stage page'}")
+            if (old["region"], int(old["year"]), int(old["stage"])) != (pn.region, pn.year, pn.stage):
+                p.flags.append("FACEIT's year/region/stage differ from the page's")
+        else:
+            phase = league["phase"] if league else None
+            if not phase:
+                p.flags.append("FACEIT name carries no Regular Season / Playoffs suffix; phase taken from the page")
+                phase = "Regular Season" if pn.subpage == "Regular Season" else "Playoffs"
+            shape = "Regular Season" if pn.subpage == "Regular Season" else ("Playoffs" if pn.subpage is None else pn.subpage)
+            if shape != phase:
+                p.flags.append(f"FACEIT says {phase} but the page's shape says {shape}")
+            if league and league["region"] != pn.region:
+                p.flags.append(f"FACEIT region {league['region']} differs from the page's {pn.region}")
+        p.proposed, p.basis = owcs_name(pn.year, pn.region, pn.stage, phase), basis
         return p
     m = _FACEIT_2024.match(faceit_name)
     if m:
@@ -146,9 +159,17 @@ class CompetitionDecisions:
         return proposals
 
 
-def propose(map_path: str | Path = DEFAULT_MAP_PATH, scope_path: str | Path = DEFAULT_SCOPE_PATH) -> list[Proposal]:
-    """A proposal for every in-scope competition. Offline: reads the two committed scope files, nothing else."""
+def propose(map_path: str | Path = DEFAULT_MAP_PATH, scope_path: str | Path = DEFAULT_SCOPE_PATH,
+            extra_path: str | Path | None = DEFAULT_EXTRA_PATH) -> list[Proposal]:
+    """A proposal for every in-scope competition. Offline: reads committed scope files, nothing else.
+
+    `liquipedia` comes from the reviewed Stage 1 page map; `liquipedia-owner` from a page the owner supplied
+    (scope/competition_pages.json) and `owner` from an event described by the owner with no page. Only
+    `liquipedia` is bulk-acceptable: the others wait for an explicit decision.
+    """
     pages = json.loads(Path(map_path).read_text(encoding="utf-8"))["pages"]
+    extra = json.loads(Path(extra_path).read_text(encoding="utf-8")) if extra_path and Path(extra_path).exists() else {}
+    extra_pages, named = extra.get("pages", {}), extra.get("named", {})
     scope = json.loads(Path(scope_path).read_text(encoding="utf-8"))["decisions"]
     out = []
     for cid, d in scope.items():
@@ -156,7 +177,19 @@ def propose(map_path: str | Path = DEFAULT_MAP_PATH, scope_path: str | Path = DE
             continue
         name = d.get("name") or (pages.get(cid) or {}).get("name") or cid
         page = (pages.get(cid) or {}).get("page")
-        p = _propose_one(cid, name, page)
+        if page:
+            p = _propose_one(cid, name, page)
+        elif cid in extra_pages:
+            e = extra_pages[cid]
+            p = _propose_one(cid, name, e["page"], "liquipedia-owner")
+            p.flags.append("page supplied by the owner, not fetched" if e.get("verified", True)
+                           else "page path inferred by analogy with the one the owner gave; not seen")
+        elif cid in named:
+            e = named[cid]
+            p = Proposal(cid, name, legacy_display(name), proposed=e["display_name"], basis="owner")
+            p.flags.append(e.get("note", "named from the owner's description; no Liquipedia page"))
+        else:
+            p = _propose_one(cid, name, None)
         if p.proposed is None and page is None and _FACEIT_LEAGUE.match(name):
             p.flags.append("a FACEIT League competition with no mapped page")
         out.append(p)

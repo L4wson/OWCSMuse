@@ -438,6 +438,28 @@ Seeded so far: `SSG` -> SpaceStation Gaming, `TL` -> Team Liquid, `TM` ->
 Twisted Minds, `CR` -> Crazy Raccoons, each pointing at a team id rather than
 an org where the team is currently unmapped.
 
+## Competition names
+
+FACEIT League numbers its seasons ("S9 NA OWCS Central - Playoffs"); the competition people follow is
+"OWCS 2026 NA Stage 2 Playoffs". The mapping is display-only: `championships.name` stays FACEIT's, and only
+`championship_display_name()` reads the reviewed names in `competition_names`. A name is shown only after a person
+has decided it.
+
+```bash
+python -m owcsmuse competitions propose           # scope/competition_names_report.md; applies nothing
+python -m owcsmuse competitions accept            # bulk-accept the reviewed Liquipedia page map
+python -m owcsmuse competitions accept --bases liquipedia-owner,owner   # pages / descriptions you supplied
+python -m owcsmuse competitions decide <id> [--name "..."]              # one competition
+python -m owcsmuse competitions load              # decisions -> competition_names (`migrate` also does this)
+```
+
+Sources, in order of trust: `scope/liquipedia_map.json` (the page that covers each FACEIT League competition,
+reviewed in Stage 1: `liquipedia`), `scope/competition_pages.json` (pages supplied by the project owner for the 2024
+competitions: `liquipedia-owner`; a path marked `verified: false` was inferred, not seen) and events described by
+the owner with no page (Dreamhack Dallas, the relegations: `owner`). Year, region and stage come from the page path
+and the phase from FACEIT's own suffix, cross-checked against the page's shape. A decision made against a FACEIT
+name that later changes stops applying and is reported as stale.
+
 ## Aggregation layer
 
 Read-only derived tables for a query engine, defined in
