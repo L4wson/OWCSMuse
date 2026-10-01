@@ -43,6 +43,7 @@ def warehouse(tmp_path_factory):
     _store_more(raw, conn, [
         lp_row("Crazy Raccoon", "Team Falcons", 3, 1, when=T0 + timedelta(days=1), page=DB_PAGE, idx=2),
         lp_row("Crazy Raccoon", "Nobody Knows", 3, 0, when=T0 + timedelta(days=2), page=DB_PAGE, idx=3),
+        lp_row("Crazy Raccoon", "Future Name", 3, 0, when=T0 + timedelta(days=3), page=DB_PAGE, idx=4),   # before that name's window
     ], T0)
     with conn.cursor() as cur:
         cur.execute("INSERT INTO orgs (org_id, name) VALUES ('crazy-raccoon', 'Crazy Raccoon'), ('team-falcons', 'Team Falcons')")
@@ -52,12 +53,13 @@ def warehouse(tmp_path_factory):
     team_map.decide("Team Liquid", "team", DB_TEAM2, "test")
     team_map.decide("Crazy Raccoon", "org", "crazy-raccoon", "Korean org, Liquipedia-anchored")
     team_map.decide("Team Falcons", "org", "team-falcons", "test")
+    team_map.decide("Future Name", "org", "team-falcons", "a name that holds only from later", valid_from=(T0 + timedelta(days=30)).isoformat())
     team_map.save()
     run = pipeline.run_reconciliation(conn, team_map_path=str(team_map.path), decisions_path=str(d / "links.json"),
                                       map_path=str(map_path))
     pipeline.store_run(conn, run)
     out = ident.load_identity(conn, ident.PlayerDecisions(d / "players.json"), team_map)
-    assert out["liquipedia_born_teams_mapped"] == 2
+    assert out["liquipedia_born_teams_mapped"] == 3
     yield conn, raw, run, team_map, d, map_path
     conn.close()
     raw.close()
@@ -87,6 +89,7 @@ def test_a_liquipedia_only_record_is_a_series_only_when_both_teams_are_decided(w
     assert only["source_url"].startswith("https://liquipedia.net/") and only["played_at_source"] == "liquipedia"
     assert (only["side1_team_id"], only["side2_team_id"]) == ("lp:team:crazy raccoon", "lp:team:team falcons")
     assert "lp:1_B1_0003" not in s                                                           # 'Nobody Knows' is undecided
+    assert "lp:1_B1_0004" not in s                                                           # 'Future Name' is undecided at that time
     with conn.cursor() as cur:
         cur.execute("SELECT org_key, display_name, opponent_org_key, won, sources FROM fact_team_matches WHERE series_id = 'lp:1_B1_0002' ORDER BY faction")
         rows = [tuple(r.values()) for r in cur.fetchall()]
@@ -96,7 +99,7 @@ def test_a_liquipedia_only_record_is_a_series_only_when_both_teams_are_decided(w
     r = {c.name: c for c in run_checks(conn, ["series_integrity", "fact_view_reconciliation"])}
     assert r["series_integrity"].ok and r["fact_view_reconciliation"].ok
     assert r["series_integrity"].counts == {"series": 2, "faceit": 1, "linked_pairs": 1, "liquipedia_only": 1,
-                                            "liquipedia_unresolved_not_in_series": 1}
+                                            "liquipedia_unresolved_not_in_series": 2}
 
 
 def test_the_answer_counts_a_liquipedia_only_series_and_credits_the_page(warehouse):

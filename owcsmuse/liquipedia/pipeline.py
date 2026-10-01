@@ -87,6 +87,18 @@ def load_map(path: str = DEFAULT_MAP_PATH) -> tuple[dict[str, set[str]], dict[st
     return comps, names
 
 
+def load_team_windows(conn: psycopg.Connection):
+    """team id -> [(valid_from, valid_to, org_id)] from team_orgs, so a name decided to a team id keys like the facts."""
+    out: dict[str, list] = {}
+    with conn.cursor() as cur:
+        cur.execute("""SELECT team_id, org_id, CASE WHEN valid_from = '-infinity' THEN NULL ELSE valid_from END AS lo,
+                              CASE WHEN valid_to = 'infinity' THEN NULL ELSE valid_to END AS hi FROM team_orgs""")
+        for r in cur.fetchall():
+            out.setdefault(r["team_id"], []).append((r["lo"], r["hi"], r["org_id"]))
+    conn.commit()
+    return out
+
+
 def stored_match_rows(conn: psycopg.Connection, field_name: str = "pagename") -> tuple[list[dict[str, Any]], list[int]]:
     """Every record of the responses the coverage ledger says hold the planned pages (never the probes)."""
     with conn.cursor() as cur:
@@ -129,7 +141,7 @@ def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT
                 if f.region:
                     org_regions.setdefault(o, set()).add(f.region)
     proposals = propose(pairs, [n for lp in lps for n in (lp.team1, lp.team2)], decided, fnames, org_regions)
-    resolver = make_resolver(decided, {p.key: p for p in proposals}, use_proposals)
+    resolver = make_resolver(decided, {p.key: p for p in proposals}, use_proposals, load_team_windows(conn))
     result = reconcile(lps, faceit, resolver, comps_of_page, window, LinkDecisions(decisions_path).data)
     run = Run(result, lps, faceit, proposals, dups, raw_ids, comps_of_page, page_names, use_proposals=use_proposals)
     with conn.cursor() as cur:

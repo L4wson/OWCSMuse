@@ -415,6 +415,7 @@ def check_series_integrity(conn: psycopg.Connection) -> CheckResult:
                           CROSS JOIN LATERAL (VALUES (lm.team1_name), (lm.team2_name)) n(name)
                           JOIN entity_anchors a ON a.anchor_kind = 'team_name' AND a.anchor = fold_name(n.name)
                                                AND (a.region = '' OR a.region = coalesce(lm.region, ''))
+                                               AND lm.played_at >= a.valid_from AND lm.played_at < a.valid_to
                          WHERE lm.objectname = s.lp_objectname) x) AS lp_keys
               FROM series s WHERE s.faceit_match_id IS NOT NULL AND s.lp_objectname IS NOT NULL)
         SELECT series_id, lp_objectname, faceit_keys, lp_keys FROM sides

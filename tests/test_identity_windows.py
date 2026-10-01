@@ -55,9 +55,13 @@ def test_decisions_carry_windows_and_round_trip(tmp_path):
 def test_the_committed_virtus_pro_window_is_the_one_g11_and_g13_rest_on():
     d = json.load(open("scope/org_decisions.json", encoding="utf-8"))["decisions"]
     bb = next(v for k, v in d.items() if k.startswith("bb5dd404"))
-    assert bb["org_id"] == "virtus-pro" and bb["valid_from"].startswith("2025-01-01")
-    others = [v for k, v in d.items() if not k.startswith("bb5dd404")]
-    assert not any(v.get("valid_from") or v.get("valid_to") for v in others)   # every other decision is unbounded
+    assert bb["org_id"] == "virtus-pro" and bb["valid_from"] == "2025-01-31T19:17:07+00:00"
+    assert bb["valid_from_name"] == "Virtuspro"                                  # sourced from the first sighting, not chosen
+    ext = {k[:8]: v for k, v in d.items() if v["org_id"] == "extinction"}
+    assert ext["2b7f8ef6"]["valid_from_name"] == "Extinction" and ext["2b7f8ef6"].get("valid_to_name") is None
+    assert (ext["a35f8d47"]["valid_from_name"], ext["a35f8d47"]["valid_to_name"]) == ("Extinction", "The Kafe")
+    others = [v for k, v in d.items() if not k.startswith("bb5dd404") and v["org_id"] != "extinction"]
+    assert not any(v.get("valid_from") or v.get("valid_to") or v.get("valid_from_name") for v in others)   # the rest are unbounded
 
 
 # ------------------------------------------------------------------ the warehouse

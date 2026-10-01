@@ -104,7 +104,7 @@ def compare(lp: LPMatch, f: FaceitSide, resolve: Optional[Resolve], comps: Optio
         out.append({"field": field_, "liquipedia": lp_v, "faceit": f_v, **extra})
 
     if resolve:
-        a, b = resolve(lp.team1, lp.region), resolve(lp.team2, lp.region)
+        a, b = resolve(lp.team1, lp.region, lp.played_at), resolve(lp.team2, lp.region, lp.played_at)
         if a and b and {a[0], b[0]} != {f.org1, f.org2}:
             add("teams", f"{lp.team1} / {lp.team2}", f"{f.name1} / {f.name2}",
                 note="the two records name different teams: the page's FACEIT id may be wrong")
@@ -210,7 +210,7 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
     partial: dict[str, list[dict[str, Any]]] = {}
     unresolved: dict[str, list[str]] = {}
     for lp in idless:
-        a, b = resolve(lp.team1, lp.region), resolve(lp.team2, lp.region)
+        a, b = resolve(lp.team1, lp.region, lp.played_at), resolve(lp.team2, lp.region, lp.played_at)
         if not (a and b) or a[0] == b[0]:
             unresolved[lp.objectname] = [n for n, r in ((lp.team1, a), (lp.team2, b)) if not r]
             continue
@@ -259,7 +259,7 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
     for lp in idless:
         n = lp.objectname
         dec = decisions.get(n)
-        provisional = any((resolve(t, lp.region) or ("", ""))[1] == "proposed" for t in (lp.team1, lp.team2))
+        provisional = any((resolve(t, lp.region, lp.played_at) or ("", ""))[1] == "proposed" for t in (lp.team1, lp.team2))
         if n in unresolved:
             link = Link(lp, UNMATCHED, basis="team name not mapped: " + ", ".join(unresolved[n]),
                         evidence={"kind": "team_unmapped", "names": unresolved[n]})
@@ -274,7 +274,7 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
             link = Link(lp, STRONG, f.match_id, basis=basis, provisional=provisional,
                         evidence={"minutes_from_liquipedia": cand["minutes_from_liquipedia"]},
                         disagreements=compare(lp, f, resolve, comps_of_page.get(lp.pagename), window,
-                                              f.org1 != (resolve(lp.team1, lp.region) or ("", ""))[0], "orgs"))
+                                              f.org1 != (resolve(lp.team1, lp.region, lp.played_at) or ("", ""))[0], "orgs"))
             taken[f.match_id] = link
         elif strict[n]:
             cands = [c for _, c in strict[n]]

@@ -1,5 +1,5 @@
 {
-  "note": "Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it belongs to, over [valid_from, valid_to) when those are set (ISO 8601; absent = for all time). Outside its window a team id is itself, by the name it carried then. A team id absent from this file stays unmapped and is queryable as itself. `rejections` are pairs that were reviewed and turned down; they are never proposed again. Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`.",
+  "note": "Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it belongs to, over [valid_from, valid_to) when those are set (ISO 8601; absent = for all time), or over [valid_from_name, valid_to_name) - the first sightings of those FACEIT names on the team id, resolved from team_names at load, so the date is sourced, not chosen. Outside its window a team id is itself, by the name it carried then. A team id absent from this file stays unmapped and is queryable as itself. `rejections` are pairs that were reviewed and turned down; they are never proposed again. Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`.",
   "decisions": {
     "c6248ff8-64ff-47ad-8602-7eec0eeda9b0": {
       "org_id": "dhillducks",
@@ -26,6 +26,34 @@
         "seasons 2024, 2025, 2026; 17 + 2 matches"
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
+    },
+    "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae": {
+      "org_id": "extinction",
+      "org_name": "Extinction",
+      "team_name": "Extinction",
+      "note": "Avidity held the roster that qualified for OWCS 2025 Stage 1; Extinction picked it up in Stage 2. A roster pickup on a stage boundary, not a rebrand: Avidity's era is Avidity's, Extinction's era is Extinction's. Window from the first sighting of 'Extinction' on this team id (resolved from team_names at load). 2025 Extinction (2b7f8ef6) and 2026 Extinction (a35f8d47) are one organisation: same label, same logo. The evidence is org branding, not roster continuity - each team id is mapped only over its own Extinction era.",
+      "evidence": [
+        "decided by the project owner (Stage 3 identity batch)"
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "valid_from_name": "Extinction",
+      "valid_to_name": null,
+      "decided_at": "2026-10-01T22:00:00+00:00"
+    },
+    "a35f8d47-7487-4249-a3fb-94aefa2ac8d0": {
+      "org_id": "extinction",
+      "org_name": "Extinction",
+      "team_name": "Extinction",
+      "note": "Extinction qualified through to 2026 Stage 1 on this team id; The Kafe picked up the roster at the start of Stage 2 (2026-06-13). A roster pickup on a stage boundary, not a rebrand: Extinction's era is Extinction's, The Kafe's is The Kafe's. Window from the first sighting of 'Extinction' to the first sighting of 'The Kafe' on this team id (both resolved from team_names at load). 2025 Extinction (2b7f8ef6) and 2026 Extinction (a35f8d47) are one organisation: same label, same logo. The evidence is org branding, not roster continuity - each team id is mapped only over its own Extinction era.",
+      "evidence": [
+        "decided by the project owner (Stage 3 identity batch)"
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "valid_from_name": "Extinction",
+      "valid_to_name": "The Kafe",
+      "decided_at": "2026-10-01T22:00:00+00:00"
     },
     "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e": {
       "org_id": "ntmr",
@@ -148,11 +176,12 @@
     "bb5dd404-213c-430f-8d12-8687fc3ff747": {
       "org_id": "virtus-pro",
       "org_name": "Virtus pro",
-      "note": "reviewed merge: same org, one FACEIT name with a space and one without Window from 2025-01-01: this team id was 'Ex Oblivione' through 2024 (OWCS 2024 EMEA) and first appeared as 'Virtuspro' in January 2025 (S4 EMEA); Virtus pro acquired the roster, and roster movement is not org identity, so the 2024 series are Ex Oblivione's own. `orgs propose` reports the exact first sighting on production.",
+      "note": "Window from 2025-01-31T19:17:07Z, the first sighting of 'Virtuspro' on this team id in team_names (sourced, not chosen). In 2024 EWC sat outside the OWCS circuit, so teams qualified through FACEIT League: Ex Oblivione was the original invitee, gave its spot to Atraxia after players left for them, and Virtus pro picked up the remaining roster to chase EWC, keeping it into Stage 3. Ex Oblivione later returned with a new roster. A roster pickup, not a rebrand: the 2024 series are Ex Oblivione's own. Only one Ex Oblivione id is in scope, so no second window.",
       "evidence": [],
       "decided_at": "2026-09-18T01:43:50+00:00",
-      "valid_from": "2025-01-01T00:00:00+00:00",
-      "valid_to": null
+      "valid_from": "2025-01-31T19:17:07+00:00",
+      "valid_to": null,
+      "valid_from_name": "Virtuspro"
     },
     "c02a9899-1ab2-46fb-a87d-8e7dcecb0cba": {
       "org_id": "virtus-pro",

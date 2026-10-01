@@ -159,7 +159,7 @@ def fs(match_id, name1, name2, s1, s2, when=T0 + timedelta(minutes=45), *, org1=
 
 def resolver(mapping):
     """{(lp name, region|None): org key} or {lp name: org key}; source 'decided' unless the value is ('key', 'proposed')."""
-    def resolve(name, region=None):
+    def resolve(name, region=None, at=None):
         for k in ((fold(name), region), (fold(name), None)):
             hit = mapping.get(k) or mapping.get(name)
             if hit:

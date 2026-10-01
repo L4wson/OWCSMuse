@@ -72,8 +72,9 @@ def _names(roster_row: tuple[str, str, Optional[str]]) -> set[str]:
 
 def sightings(conn: psycopg.Connection, run, team_map_path: str) -> list[Sighting]:
     """Every (page, side, series) on an exact or strong, non-provisional link, with the FACEIT roster of that side."""
+    from .pipeline import load_team_windows
     decided = TeamMap(team_map_path)
-    resolver = make_resolver(decided, {p.key: p for p in run.proposals}, use_proposals=True)
+    resolver = make_resolver(decided, {p.key: p for p in run.proposals}, use_proposals=True, team_windows=load_team_windows(conn))
     by_id = {f.match_id: f for f in run.faceit}
     links = [lk for lk in run.result.links if lk.faceit_id and lk.tier in ("exact", "strong") and not lk.provisional]
     ids = [lk.faceit_id for lk in links]
@@ -258,13 +259,19 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
         wanted_born_teams: list[str] = []
         for key, d in team_map.data.items():
             name, _, region = key.partition("|")
-            cur.execute(
-                """INSERT INTO entity_anchors (entity_type, entity_id, source, anchor_kind, anchor, region, basis, note)
-                   VALUES (%s, %s, 'liquipedia', 'team_name', %s, %s, 'team_map', %s)
-                   ON CONFLICT DO NOTHING""",
-                (d["entity_type"], d["entity_id"], name, region or "", d.get("note")))
-            teams += 1
-            if d["entity_type"] == "org":
+            eras = d.get("eras") or [d]
+            for era in eras:
+                cur.execute(
+                    """INSERT INTO entity_anchors (entity_type, entity_id, source, anchor_kind, anchor, region, basis, note,
+                                                   valid_from, valid_to)
+                       VALUES (%s, %s, 'liquipedia', 'team_name', %s, %s, 'team_map', %s,
+                               coalesce(%s::timestamptz, '-infinity'), coalesce(%s::timestamptz, 'infinity'))
+                       ON CONFLICT DO NOTHING""",
+                    (era["entity_type"], era["entity_id"], name, region or "", d.get("note"),
+                     era.get("valid_from"), era.get("valid_to")))
+                teams += 1
+            d = {**d, **eras[0]} if len(eras) == 1 else d
+            if d.get("entity_type") == "org":
                 # the org's Liquipedia side: a Liquipedia-born team id, mapped to the org for all time, so a
                 # Liquipedia-only series of this org keys to it like any FACEIT series does
                 tid = BORN_TEAM_PREFIX + key

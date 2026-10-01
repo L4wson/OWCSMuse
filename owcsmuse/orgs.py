@@ -352,10 +352,18 @@ class OrgDecisions:
 
     def set(self, team_id: str, org_id: str, org_name: str, note: Optional[str] = None,
             team_name: Optional[str] = None, evidence: Optional[list[str]] = None,
-            valid_from: Optional[str] = None, valid_to: Optional[str] = None) -> dict[str, Any]:
-        """`valid_from` / `valid_to` (ISO 8601) bound the mapping; absent means for all time."""
+            valid_from: Optional[str] = None, valid_to: Optional[str] = None,
+            valid_from_name: Optional[str] = None, valid_to_name: Optional[str] = None) -> dict[str, Any]:
+        """`valid_from` / `valid_to` (ISO 8601) bound the mapping; absent means for all time.
+
+        `valid_from_name` / `valid_to_name` bound it by the first sighting of that FACEIT team name on this team id
+        (team_names.first_seen_at), resolved at load time - a window sourced from the data rather than chosen. An
+        explicit timestamp wins where both are given; a name that never appears on the id leaves the mapping unapplied
+        and reported, never applied for all time.
+        """
         d = {"org_id": org_id, "org_name": org_name, "team_name": team_name, "note": note,
              "evidence": evidence or [], "valid_from": valid_from, "valid_to": valid_to,
+             "valid_from_name": valid_from_name, "valid_to_name": valid_to_name,
              "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
         self.data[team_id] = {k: v for k, v in d.items() if v is not None}
         return self.data[team_id]
@@ -440,17 +448,44 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
         # removed team id takes effect and nothing stale survives. Liquipedia-born team ids belong to `identity load`.
         cur.execute("DELETE FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%'")
         written = skipped = 0
+        unresolved: list[dict[str, str]] = []
+
+        def sighting(team_id: str, name: Optional[str]) -> Optional[datetime]:
+            if not name:
+                return None
+            cur.execute("SELECT first_seen_at FROM team_names WHERE team_id = %s AND name = %s", (team_id, name))
+            row = cur.fetchone()
+            return row["first_seen_at"] if row else None
+
         for team_id, d in decisions.data.items():
             if team_id not in known:
                 skipped += 1
+                continue
+            evidence = list(d.get("evidence") or [])
+            bounds: dict[str, Any] = {}
+            ok = True
+            for side in ("valid_from", "valid_to"):
+                bounds[side] = d.get(side)
+                name = d.get(f"{side}_name")
+                if name and not bounds[side]:
+                    seen = sighting(team_id, name)
+                    if seen is None:
+                        unresolved.append({"team_id": team_id, "org_id": d["org_id"], side: name,
+                                           "reason": f"'{name}' never appears on this team id in team_names; mapping not applied"})
+                        ok = False
+                        break
+                    bounds[side] = seen
+                    evidence.append(f"{side} = {seen.isoformat(timespec='seconds')}: first sighting of '{name}' on this team id")
+                elif name and bounds[side]:
+                    evidence.append(f"{side} sourced from the first sighting of '{name}'")
+            if not ok:
                 continue
             cur.execute(
                 """
                 INSERT INTO team_orgs (team_id, org_id, source, evidence, valid_from, valid_to)
                 VALUES (%s, %s, 'manual', %s, coalesce(%s::timestamptz, '-infinity'), coalesce(%s::timestamptz, 'infinity'))
                 """,
-                (team_id, d["org_id"], psycopg.types.json.Jsonb(d.get("evidence") or []),
-                 d.get("valid_from"), d.get("valid_to")),
+                (team_id, d["org_id"], psycopg.types.json.Jsonb(evidence), bounds["valid_from"], bounds["valid_to"]),
             )
             written += 1
         # a team id removed from the decisions file becomes unmapped again
@@ -464,7 +499,7 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
         orphaned = cur.rowcount
     conn.commit()
     out = {"orgs": len(by_org) - orphaned, "team_ids_mapped": written, "unknown_team_ids_skipped": skipped,
-          "unmapped": removed, "orphaned_orgs_removed": orphaned}
+          "unmapped": removed, "orphaned_orgs_removed": orphaned, "windows_unresolved": unresolved}
     log_event(log, logging.INFO, "org_decisions_loaded", **out)
     return out
 

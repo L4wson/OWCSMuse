@@ -18,7 +18,8 @@ from .matches import LPMatch
 
 # (name, region of the page it appears on) -> (org_key, source): source 'decided' (a reviewed mapping) or 'proposed'
 # (evidence, not yet reviewed). The region matters: two unrelated teams can share a name across NA and EMEA.
-Resolve = Callable[[str, Optional[str]], Optional[tuple[str, str]]]
+# resolve(name, region=None, at=None) -> (org key, "decided" | "proposed") | None; `at` is the series' own time
+Resolve = Callable[..., Optional[tuple[str, str]]]
 
 
 @dataclass(frozen=True)
@@ -81,7 +82,7 @@ def orient(lp: LPMatch, f: FaceitSide, resolve: Optional[Resolve] = None) -> tup
     when it is not level), and last the winner. `basis` names the one that decided it.
     """
     if resolve:
-        a, b = resolve(lp.team1, lp.region), resolve(lp.team2, lp.region)
+        a, b = resolve(lp.team1, lp.region, lp.played_at), resolve(lp.team2, lp.region, lp.played_at)
         if a and b and {a[0], b[0]} == {f.org1, f.org2} and a[0] != b[0]:
             return (a[0] != f.org1), "orgs"
     n1, n2, m1, m2 = fold(lp.team1), fold(lp.team2), fold(f.name1), fold(f.name2)

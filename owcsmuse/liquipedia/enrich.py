@@ -88,8 +88,10 @@ def plan(run: Run) -> EnrichResult:
 def enrich(conn: psycopg.Connection, run: Run, team_map_path: str) -> EnrichResult:
     """Insert match_rounds for every exact-linked result_only match FACEIT has none for, and correct the played
     date for the ones that gain rows. Skips (never overwrites) any match FACEIT already has rounds for."""
+    from .pipeline import load_team_windows
     decided = TeamMap(team_map_path)
-    resolver = make_resolver(decided, {p.key: p for p in run.proposals}, use_proposals=True)
+    resolver = make_resolver(decided, {p.key: p for p in run.proposals}, use_proposals=True,
+                             team_windows=load_team_windows(conn))
     candidates = _candidates(run)
     result = EnrichResult()
     if not candidates:

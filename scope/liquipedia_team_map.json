@@ -1,5 +1,5 @@
 {
-  "note": "Reviewed Liquipedia team name -> FACEIT org/team. Keys are the folded Liquipedia name, or 'name|na' / 'name|emea' when the same name is two teams in two regions; entity_type is 'org' (entity_id is the org slug) or 'team' (an unmapped FACEIT team id). The reconciler trusts these and only these without marking a link provisional. Edit by hand or with `python -m owcsmuse liquipedia teams decide`.",
+  "note": "Reviewed Liquipedia team name -> FACEIT org/team. Keys are the folded Liquipedia name, or 'name|na' / 'name|emea' when the same name is two teams in two regions; entity_type is 'org' (entity_id is the org slug) or 'team' (an unmapped FACEIT team id). The reconciler trusts these and only these without marking a link provisional. Edit by hand or with `python -m owcsmuse liquipedia teams decide`. An entry may carry valid_from/valid_to, or `eras` (a list of {entity_type, entity_id, valid_from, valid_to}) when different team ids carried the name over time; a name resolves at the series' own time and is undecided outside every era.",
   "aliases": {
     "1234": {
       "entity_type": "team",
@@ -26,10 +26,10 @@
       "decided_at": "2026-09-23T05:02:31+00:00"
     },
     "extinction": {
-      "entity_type": "team",
-      "entity_id": "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae",
-      "note": "same roster as Avidity, different org names; majority evidence (15/20), conflicting 5 votes for The Kafe's team id are an orientation/data quirk left for Stage 2",
-      "decided_at": "2026-09-23T05:02:32+00:00"
+      "entity_type": "org",
+      "entity_id": "extinction",
+      "note": "Extinction is one organisation across two FACEIT team ids (2b7f8ef6 in 2025, a35f8d47 in 2026), each mapped to the org over its own Extinction era in scope/org_decisions.json; the Liquipedia name resolves to the org at the series' time, which keys to whichever team id carried it then. Supersedes the Stage 1 decision (team 2b7f8ef6 for all time), whose 5 conflicting votes for a35f8d47 were the 2026 era.",
+      "decided_at": "2026-10-01T22:00:00+00:00"
     },
     "lunex gaming": {
       "entity_type": "team",
@@ -66,6 +66,12 @@
       "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
       "note": "small roster transition to/from Supernova",
       "decided_at": "2026-09-23T05:02:42+00:00"
+    },
+    "the kafe": {
+      "entity_type": "team",
+      "entity_id": "a35f8d47-7487-4249-a3fb-94aefa2ac8d0",
+      "note": "The Kafe picked up the Extinction roster on team id a35f8d47 at the start of 2026 Stage 2 (2026-06-13); its era is its own (outside the org window). Stage 1 proposed this strong (5 of 5 id-linked matches); recorded with the Stage 3 identity batch.",
+      "decided_at": "2026-10-01T22:00:00+00:00"
     },
     "timeless": {
       "entity_type": "org",

@@ -23,13 +23,27 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Any, Iterable, Optional
+
 
 from ..aliases import AliasDecisions
 from ..resolve import fold
 from .matches import LPMatch
 from .model import FaceitSide, Resolve, orient
+
+TeamWindows = dict[str, list[tuple[Optional[datetime], Optional[datetime], str]]]   # team_id -> [(from, to, org_id)]
+
+
+def _covers(entry: dict[str, Any], at: Optional[datetime]) -> bool:
+    """Whether a windowed entry holds at `at`. No window, or no time to test, means yes."""
+    if at is None:
+        return True
+    lo, hi = entry.get("valid_from"), entry.get("valid_to")
+    lo = datetime.fromisoformat(lo) if isinstance(lo, str) else lo
+    hi = datetime.fromisoformat(hi) if isinstance(hi, str) else hi
+    return (lo is None or at >= lo) and (hi is None or at < hi)
 
 DEFAULT_TEAM_MAP_PATH = "scope/liquipedia_team_map.json"
 LOCKED = ("na", "emea")
@@ -53,23 +67,46 @@ class TeamMap(AliasDecisions):
     def key(name: str, region: Optional[str] = None) -> str:
         return f"{fold(name)}|{region}" if region else fold(name)
 
-    def find(self, name: str, region: Optional[str] = None) -> Optional[dict]:
-        """The decision for this name on a page of this region: a region-specific one first, then a general one."""
+    def find(self, name: str, region: Optional[str] = None, at: Optional[datetime] = None) -> Optional[dict]:
+        """The decision for this name on a page of this region, at this moment.
+
+        A region-specific entry wins over a general one. An entry may carry `valid_from` / `valid_to`, or `eras`: a
+        list of {entity_type, entity_id, valid_from, valid_to} for a name that different team ids carried over time
+        (a roster pickup on a stage boundary); the era covering `at` is the decision, and outside every era the name
+        is undecided at that time - never the nearest one.
+        """
         rb = region_bucket(region)
-        return (self.data.get(self.key(name, rb)) if rb else None) or self.data.get(self.key(name))
+        for key in ([self.key(name, rb)] if rb else []) + [self.key(name)]:
+            d = self.data.get(key)
+            if not d:
+                continue
+            if d.get("eras"):
+                era = next((e for e in d["eras"] if _covers(e, at)), None)
+                return {**{k: v for k, v in d.items() if k != "eras"}, **era} if era else None
+            return d if _covers(d, at) else None
+        return None
 
     def decide(self, name: str, entity_type: str, entity_id: str, note: Optional[str] = None,
-               region: Optional[str] = None) -> dict:
+               region: Optional[str] = None, valid_from: Optional[str] = None, valid_to: Optional[str] = None) -> dict:
         d = self.set(name, entity_type, entity_id, note)          # validates the type; stores under the plain key
+        if valid_from or valid_to:
+            d.update({"valid_from": valid_from, "valid_to": valid_to})
         if region:
             self.data[self.key(name, region)] = self.data.pop(self.key(name))
         return d
 
-    def org_key(self, name: str, region: Optional[str] = None) -> Optional[str]:
-        d = self.find(name, region)
+    def org_key(self, name: str, region: Optional[str] = None, at: Optional[datetime] = None,
+                team_windows: Optional[TeamWindows] = None) -> Optional[str]:
+        """How the fact views key this name at `at`: an org's id, or a team id's org at that time, else `team:<id>`."""
+        d = self.find(name, region, at)
         if not d:
             return None
-        return d["entity_id"] if d["entity_type"] == "org" else f"team:{d['entity_id']}"
+        if d["entity_type"] == "org":
+            return d["entity_id"]
+        for lo, hi, org in (team_windows or {}).get(d["entity_id"], []):
+            if at is not None and (lo is None or at >= lo) and (hi is None or at < hi):
+                return org
+        return f"team:{d['entity_id']}"
 
 
 def entity_of_org_key(key: str) -> tuple[str, str]:
@@ -95,10 +132,14 @@ class TeamProposal:
 
 
 def make_resolver(decided: TeamMap, proposals: Optional[dict[tuple[str, Optional[str]], TeamProposal]] = None,
-                  use_proposals: bool = True) -> Resolve:
-    """Decided mappings first; then, when allowed, strong proposals (flagged 'proposed' so links can be marked provisional)."""
-    def resolve(name: str, region: Optional[str] = None) -> Optional[tuple[str, str]]:
-        key = decided.org_key(name, region)
+                  use_proposals: bool = True, team_windows: Optional[TeamWindows] = None) -> Resolve:
+    """Decided mappings first; then, when allowed, strong proposals (flagged 'proposed' so links can be marked provisional).
+
+    `team_windows` (team id -> org windows, from team_orgs) keys a name decided to a team id the way the fact views
+    key it at the series' time: the org inside its window, the team id itself outside.
+    """
+    def resolve(name: str, region: Optional[str] = None, at: Optional[datetime] = None) -> Optional[tuple[str, str]]:
+        key = decided.org_key(name, region, at, team_windows)
         if key:
             return key, "decided"
         if use_proposals and proposals:

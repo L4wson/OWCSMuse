@@ -390,6 +390,15 @@ ordering, twice:
 - **Date adjacency corroborates**, but only within a region. Two ids whose
   match windows overlap may be two teams that coexisted, which is reported
   rather than assumed.
+- **A name change on a stage boundary is a roster pickup, not a rebrand.** In
+  OWCS a team id is issued per roster and the name on it changes when another
+  organisation picks the roster up between stages: Ex Oblivione -> Virtuspro
+  (2025 Stage 1), Avidity -> Extinction (2025 Stage 2), Extinction -> The Kafe
+  (2026 Stage 2, which began 2026-06-13). The roster continues, the organisation
+  does not, so the new name starts a new era of the same team id (a window,
+  below) rather than extending the old org's history. A rename by the same org
+  (Al qadsiah -> qadsiah) lands mid-stream and keeps the roster's org. The stage
+  boundary is the tell.
 
 **A mapping holds over a window.** A FACEIT team id belongs to an org over
 `[valid_from, valid_to)` (`orgs decide --from ... --to ...`; absent means for all
@@ -404,8 +413,14 @@ function of (team id, when): `team_identity_at()`, which every fact view joins
 at the series' own time; `team_identity` is identity now. The proposer proposes
 a window whenever a team id carried a name that is not the org's before it first
 carried the org's name (`propose_window`), and nothing is proposed from roster
-movement. A team id cannot belong to two orgs at once (a trigger refuses the
-overlap), and `check` flags a window that covers none of its team id's series.
+movement. A window is sourced, not chosen: `orgs decide --from-name "Virtuspro"`
+bounds it by the first sighting of that FACEIT name on the team id, resolved
+from `team_names` at load (a name the id never carried applies nothing and is
+reported). One org can span several team ids each bounded to its own era -
+Extinction is `2b7f8ef6` over its 2025 Extinction era and `a35f8d47` over its
+2026 one, on org branding rather than roster continuity. A team id cannot
+belong to two orgs at once (a trigger refuses the overlap), and `check` flags a
+window that covers none of its team id's series.
 
 Current state: 9 orgs covering 18 team ids (one of them windowed), 7 pairs
 recorded as reviewed rejections (2 of them region conflicts found after the fact
@@ -1090,6 +1105,13 @@ listed with what FACEIT named on that side, so a reviewer can see "Sugarfree / s
 never does. Roster overlap across different series is not evidence of anything. Team-side anchors come from the
 Stage 1 team map (`scope/liquipedia_team_map.json`), already reviewed.
 
+A Liquipedia team name resolves **at the series' own time**. An entry in the team map may carry `valid_from` /
+`valid_to`, or `eras` (a list of `{entity_type, entity_id, valid_from, valid_to}`) when different team ids carried
+the name over time; outside every era the name is undecided at that time, never the nearest one. A name decided to a
+team id keys as that id's org inside the id's window and as the id itself outside it, exactly as the fact views key
+it, so "Extinction" on a 2026 page and the FACEIT team id that was Extinction in 2026 agree without a link decision.
+Anchors carry the same windows (migration `029_anchor_windows.sql`), and `series` and `check` resolve against them.
+
 ### Stage 3: the source-agnostic series
 
 A match may come from FACEIT, from Liquipedia, or from both, and is one match either way. `series` (migration
@@ -1229,6 +1251,7 @@ migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus
 migrations/026_dated_team_orgs.sql  team-to-org windows, team_identity_at(), facts and names keyed at series time
 migrations/027_entity_anchors.sql  entity_anchors, Liquipedia line-ups and name history, Liquipedia names in entity_names
 migrations/028_series.sql       the source-agnostic series; team-grain facts read it
+migrations/029_anchor_windows.sql  Liquipedia names resolve at the series' time
 owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
