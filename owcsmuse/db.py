@@ -12,7 +12,7 @@ import psycopg
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
-from .logging import get_logger, log_event
+from .log import get_logger, log_event
 
 log = get_logger("owcsmuse.db")
 

@@ -2,26 +2,38 @@
 
 Every setting can be supplied as an environment variable or in a `.env` file.
 `FACEIT_API_KEY` is read verbatim; everything else uses the `OWCS_` prefix.
+`DATABASE_URL` is the only required setting; `FACEIT_API_KEY` is required only by ingest commands.
 """
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Optional
 
 from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+# The repository root's .env, found from this file rather than the working directory, so
+# `python -m owcsmuse ...` behaves the same wherever it is launched from. Real environment
+# variables still win over it.
+ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=ENV_FILE,
         env_file_encoding="utf-8",
         env_prefix="OWCS_",
         extra="ignore",
+        populate_by_name=True,
     )
 
-    # The FACEIT key intentionally has no prefix: the user supplies FACEIT_API_KEY.
-    faceit_api_key: SecretStr = Field(
+    # The FACEIT key intentionally has no prefix: the user supplies FACEIT_API_KEY. It is only
+    # needed by commands that call FACEIT (discover, backfill, crawl, ...), never by serving
+    # answers, so it is optional here and demanded by `require_faceit_key()` at the point of use.
+    faceit_api_key: Optional[SecretStr] = Field(
+        default=None,
         validation_alias=AliasChoices("FACEIT_API_KEY", "OWCS_FACEIT_API_KEY"),
     )
     faceit_base_url: str = "https://open.faceit.com/data/v4"
@@ -64,6 +76,14 @@ class Settings(BaseSettings):
 
     log_level: str = "INFO"
     log_format: str = "json"  # "json" | "text"
+
+    def require_faceit_key(self) -> str:
+        """The FACEIT key, or a clear failure for a command that cannot run without it."""
+        if self.faceit_api_key is None or not self.faceit_api_key.get_secret_value().strip():
+            raise RuntimeError(
+                "FACEIT_API_KEY is required for commands that call FACEIT; set it in the environment or .env"
+            )
+        return self.faceit_api_key.get_secret_value()
 
 
 def load_settings(**overrides) -> Settings:

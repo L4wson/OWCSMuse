@@ -32,7 +32,7 @@ from .collector import Collector
 from .config import Settings
 from .db import RawPayloadStore
 from .faceit.client import FaceitClient, FaceitClientError, FaceitNotFound, FaceitRetryExhausted
-from .logging import get_logger, log_event
+from .log import get_logger, log_event
 from .parsers.matches import MatchRecord, parse_history_item
 from .scope import Classification, Decisions, classify_history_competition
 

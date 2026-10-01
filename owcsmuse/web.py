@@ -15,7 +15,7 @@ from typing import Any, Optional
 
 import psycopg
 
-from .logging import get_logger, log_event
+from .log import get_logger, log_event
 
 log = get_logger("owcsmuse.web")
 

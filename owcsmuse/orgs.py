@@ -43,7 +43,7 @@ from typing import Any, Iterable, Optional
 
 import psycopg
 
-from .logging import get_logger, log_event
+from .log import get_logger, log_event
 from .resolve import fold
 
 log = get_logger("owcsmuse.orgs")

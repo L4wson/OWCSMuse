@@ -17,7 +17,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-from ..logging import get_logger, log_event
+from ..log import get_logger, log_event
 from .attribution import page_url
 from .client import (BudgetExhausted, LiquipediaClient, LiquipediaError, LiquipediaHalted, LiquipediaRateLimited)
 from .planner import Plan
