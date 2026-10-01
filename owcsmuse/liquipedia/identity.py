@@ -30,6 +30,7 @@ from .teams import TeamMap, make_resolver
 DEFAULT_PLAYER_DECISIONS_PATH = "scope/player_identity_decisions.json"
 DEFAULT_REPORT_PATH = "scope/identity_report.md"
 BORN_PREFIX = "lp:player:"
+BORN_TEAM_PREFIX = "lp:team:"
 
 STRONG, REVIEW, UNMATCHED = "strong", "review", "unmatched"
 
@@ -253,7 +254,8 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
     """Rewrite entity_anchors from the two reviewed files; create Liquipedia-born players for `null` decisions."""
     with conn.cursor() as cur:
         cur.execute("DELETE FROM entity_anchors")
-        teams = 0
+        teams = born_teams = 0
+        wanted_born_teams: list[str] = []
         for key, d in team_map.data.items():
             name, _, region = key.partition("|")
             cur.execute(
@@ -262,6 +264,24 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
                    ON CONFLICT DO NOTHING""",
                 (d["entity_type"], d["entity_id"], name, region or "", d.get("note")))
             teams += 1
+            if d["entity_type"] == "org":
+                # the org's Liquipedia side: a Liquipedia-born team id, mapped to the org for all time, so a
+                # Liquipedia-only series of this org keys to it like any FACEIT series does
+                tid = BORN_TEAM_PREFIX + key
+                wanted_born_teams.append(tid)
+                cur.execute("SELECT name FROM lp_team_names WHERE fold_name(name) = %s ORDER BY last_seen_at DESC LIMIT 1", (name,))
+                row = cur.fetchone()
+                cur.execute("""INSERT INTO teams (team_id, name) VALUES (%s, %s)
+                               ON CONFLICT (team_id) DO UPDATE SET name = EXCLUDED.name, updated_at = now()""",
+                            (tid, row["name"] if row else name))
+                cur.execute("SELECT 1 FROM orgs WHERE org_id = %s", (d["entity_id"],))
+                if cur.fetchone():
+                    cur.execute("""INSERT INTO team_orgs (team_id, org_id, source, evidence)
+                                   VALUES (%s, %s, 'manual', %s) ON CONFLICT (team_id, valid_from) DO UPDATE SET org_id = EXCLUDED.org_id""",
+                                (tid, d["entity_id"], psycopg.types.json.Jsonb(["Liquipedia team name anchored to this org (scope/liquipedia_team_map.json)"])))
+                    born_teams += 1
+        cur.execute("DELETE FROM team_orgs WHERE team_id LIKE %s AND NOT (team_id = ANY(%s))", (BORN_TEAM_PREFIX + "%", wanted_born_teams))
+        cur.execute("DELETE FROM teams WHERE team_id LIKE %s AND NOT (team_id = ANY(%s))", (BORN_TEAM_PREFIX + "%", wanted_born_teams))
         cur.execute("SELECT player_id FROM players")
         known = {r["player_id"] for r in cur.fetchall()}
         players = born = skipped = 0
@@ -290,5 +310,5 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
                     (BORN_PREFIX + "%", [BORN_PREFIX + p for p, d in decisions.data.items() if d.get("entity_id") is None]))
         ghosts = cur.rowcount
     conn.commit()
-    return {"team_anchors": teams, "player_anchors": players, "liquipedia_born_players": born,
-            "unknown_faceit_ids_skipped": skipped, "ghost_players_removed": ghosts}
+    return {"team_anchors": teams, "liquipedia_born_teams_mapped": born_teams, "player_anchors": players,
+            "liquipedia_born_players": born, "unknown_faceit_ids_skipped": skipped, "ghost_players_removed": ghosts}

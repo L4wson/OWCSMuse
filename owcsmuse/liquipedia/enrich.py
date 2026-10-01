@@ -66,7 +66,9 @@ def _candidates(run: Run) -> list[tuple[LPMatch, FaceitSide, Any]]:
     by_id = {f.match_id: f for f in run.faceit}
     out = []
     for lk in run.result.links:
-        if lk.tier == EXACT and lk.faceit_id and by_id.get(lk.faceit_id) and by_id[lk.faceit_id].state == "result_only":
+        # an exact link, or an ambiguous one a person confirmed; never a provisional or disagreeing pair
+        if ((lk.tier == EXACT or lk.decision == "confirmed") and lk.faceit_id and not lk.provisional
+                and by_id.get(lk.faceit_id) and by_id[lk.faceit_id].state == "result_only"):
             out.append((lk.lp, by_id[lk.faceit_id], lk))
     return out
 

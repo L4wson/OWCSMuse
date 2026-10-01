@@ -434,11 +434,11 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
             )
         cur.execute("SELECT team_id FROM teams")
         known = {r["team_id"] for r in cur.fetchall()}
-        cur.execute("SELECT DISTINCT team_id FROM team_orgs")
+        cur.execute("SELECT DISTINCT team_id FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%'")
         before = {r["team_id"] for r in cur.fetchall()}
-        # The file is the whole truth: rewrite the table from it, so a changed window or a removed team id
-        # takes effect and nothing stale survives.
-        cur.execute("DELETE FROM team_orgs")
+        # The file is the whole truth for FACEIT team ids: rewrite the table from it, so a changed window or a
+        # removed team id takes effect and nothing stale survives. Liquipedia-born team ids belong to `identity load`.
+        cur.execute("DELETE FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%'")
         written = skipped = 0
         for team_id, d in decisions.data.items():
             if team_id not in known:
@@ -459,7 +459,8 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
         # a wrong cross-region merge) must not linger: it would then resolve as
         # an org entity with no team_ids under it and no rows in any fact view -
         # exactly the shape of a stale reference this project keeps finding.
-        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs)")
+        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%')")
+        cur.execute("DELETE FROM team_orgs WHERE org_id NOT IN (SELECT org_id FROM orgs)")
         orphaned = cur.rowcount
     conn.commit()
     out = {"orgs": len(by_org) - orphaned, "team_ids_mapped": written, "unknown_team_ids_skipped": skipped,

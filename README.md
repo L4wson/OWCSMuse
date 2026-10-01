@@ -931,12 +931,13 @@ and exits 1 with the specific discrepancy:
 
 | check | invariant |
 |---|---|
-| `fact_view_reconciliation` | every fact view's row count equals what its source tables say it must be, at that view's grain |
+| `fact_view_reconciliation` | every fact view's row count equals what its sources say it must be, at that view's grain (`series` for the team-grain views) |
 | `date_visibility` | every in-scope match has a usable `match_time()` and appears in the date-keyed views; no fact row has a NULL date |
 | `org_key_resolution` | every team id resolves to an org key, unmapped ids are counted explicitly, and no materialized view is still carrying a superseded org key |
 | `aggregate_sums` | the aggregates' sums equal the facts' sums, per stat, per season, in both the wide and long formats |
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
 | `identity_windows` | every team-to-org window covers real series of its team id, no team id is two orgs at once, and no series carries two identities for one team |
+| `series_integrity` | a match is one series whichever source holds it; the series count reconciles against FACEIT plus the resolved Liquipedia-only records; a linked pair names the same identities on both sides |
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
@@ -1089,6 +1090,31 @@ listed with what FACEIT named on that side, so a reviewer can see "Sugarfree / s
 never does. Roster overlap across different series is not evidence of anything. Team-side anchors come from the
 Stage 1 team map (`scope/liquipedia_team_map.json`), already reviewed.
 
+### Stage 3: the source-agnostic series
+
+A match may come from FACEIT, from Liquipedia, or from both, and is one match either way. `series` (migration
+`028_series.sql`) is the one row per match that the team-grain facts (`fact_team_matches`, `fact_team_maps`) now
+read, with per-field provenance: `played_at_source`, `best_of_source`, `result_source`, `maps_source`, and
+`sources` (`{faceit}`, `{faceit, liquipedia}` or `{liquipedia}`). It is a plain view over `matches`,
+`liquipedia_matches` and the reviewed links, so it is always current. `series_id` is `faceit:<match_id>` or
+`lp:<objectname>`; `match_id` keeps the FACEIT id where there is one, so every FACEIT-keyed table still joins, and a
+Liquipedia-only series is `lp:...` throughout. Evidence rows carry `sources` and a source link that is the FACEIT
+room or the Liquipedia page, and an answer that used a Liquipedia-only series carries the page in its attribution.
+
+- A reviewed link (exact or strong, not provisional, not rejected) merges a Liquipedia record into the FACEIT series
+  it names. **An exact id whose records disagree on teams, score, winner, best-of, competition or finished state is
+  now ambiguous, never linked** - a wrong id looks exactly like that, and a wrong link silently gives one team
+  another team's result. It carries the id as its one candidate and waits for `liquipedia links decide`; a date gap
+  alone (FACEIT's `result_only` times are entry times) still annotates without downgrading.
+- A Liquipedia record linked to nothing is a series of its own only when **both** its teams resolve through a decided
+  anchor: a team anchored to a FACEIT team id plays as that id, a team anchored to an org plays as its
+  Liquipedia-born team id (`lp:team:<name>`, mapped to the org by `identity load`). An undecided team keeps the record
+  out of every answer; `check` counts those (`liquipedia_unresolved_not_in_series`).
+- Map grain stays FACEIT-keyed (`match_rounds`), so a Liquipedia-only series answers at series grain only, for now.
+- `check` gains `series_integrity`: no FACEIT id or Liquipedia record in two series, the series count reconciles
+  against its sources, and a linked pair whose Liquipedia teams are decided names the same identities on both sides -
+  a link that stops agreeing after an identity decision fails here rather than staying.
+
 ### Open items for later stages
 
 - **Stage 3, date-bounded team-to-org mapping.** A team id maps to an org for all time
@@ -1202,6 +1228,7 @@ migrations/003_aggregates.sql   fact views, materialized aggregates, coverage fu
 migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus facts
 migrations/026_dated_team_orgs.sql  team-to-org windows, team_identity_at(), facts and names keyed at series time
 migrations/027_entity_anchors.sql  entity_anchors, Liquipedia line-ups and name history, Liquipedia names in entity_names
+migrations/028_series.sql       the source-agnostic series; team-grain facts read it
 owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections

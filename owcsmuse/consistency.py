@@ -95,11 +95,8 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
           JOIN matches m ON m.match_id = r.match_id
           JOIN championships c ON c.championship_id = m.championship_id
          WHERE m.ingest_state IN ('complete', 'result_only') AND c.include"""),
-    ("fact_team_matches", "two rows per finished series, one per side",
-     """SELECT coalesce(sum((m.faction1_team_id IS NOT NULL)::int + (m.faction2_team_id IS NOT NULL)::int), 0)
-          FROM matches m
-          JOIN championships c ON c.championship_id = m.championship_id
-         WHERE m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED' AND c.include"""),
+    ("fact_team_matches", "two rows per series, one per side",
+     """SELECT coalesce(sum((side1_team_id IS NOT NULL)::int + (side2_team_id IS NOT NULL)::int), 0) FROM series"""),
     ("fact_player_versus", "one row per player per map per opposing player",
      """WITH per AS (
             SELECT match_id, round_number, team_id, count(*) AS n
@@ -383,6 +380,61 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} org(s) or team id(s) span na and emea", counts)
 
 
+# ------------------------------------------------------------- series integrity
+
+def check_series_integrity(conn: psycopg.Connection) -> CheckResult:
+    """A match is one series whichever source holds it, and a linked pair's two records name the same teams.
+
+    series_once: no FACEIT match id and no Liquipedia record appears in two series; series_reconciliation: the
+    series count equals FACEIT's in-scope finished series plus the Liquipedia-only ones both of whose teams a
+    decided anchor resolves; linked_sides_disagree: for a linked pair whose Liquipedia teams are decided, the two
+    records' sides are the same identities. A link that stopped agreeing after an identity decision fails here
+    rather than staying.
+    """
+    discrepancies: list[dict[str, Any]] = []
+    for col, kind in (("faceit_match_id", "faceit_match_in_two_series"), ("lp_objectname", "liquipedia_record_in_two_series")):
+        for r in _rows(conn, f"SELECT {col} AS id, count(*) AS n FROM series WHERE {col} IS NOT NULL GROUP BY {col} HAVING count(*) > 1 LIMIT 10"):
+            discrepancies.append({"kind": kind, **r})
+    faceit_n = int(_scalar(conn, """
+        SELECT count(*) FROM matches m JOIN championships c ON c.championship_id = m.championship_id
+         WHERE m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED' AND c.include""") or 0)
+    lp_only = int(_scalar(conn, "SELECT count(*) FROM series WHERE faceit_match_id IS NULL") or 0)
+    linked = int(_scalar(conn, "SELECT count(*) FROM series WHERE faceit_match_id IS NOT NULL AND lp_objectname IS NOT NULL") or 0)
+    total = int(_scalar(conn, "SELECT count(*) FROM series") or 0)
+    if total != faceit_n + lp_only:
+        discrepancies.append({"kind": "series_count_does_not_reconcile", "series": total, "faceit": faceit_n, "liquipedia_only": lp_only})
+    for r in _rows(conn, """
+        WITH sides AS (
+            SELECT s.series_id, s.lp_objectname,
+                   (SELECT array_agg(ti.org_key ORDER BY ti.org_key) FROM unnest(ARRAY[s.side1_team_id, s.side2_team_id]) t(id)
+                     CROSS JOIN LATERAL team_identity_at(t.id, s.played_at) ti) AS faceit_keys,
+                   (SELECT array_agg(k ORDER BY k) FROM (
+                        SELECT CASE a.entity_type WHEN 'org' THEN a.entity_id
+                                    ELSE (SELECT ti.org_key FROM team_identity_at(a.entity_id, s.played_at) ti) END AS k
+                          FROM liquipedia_matches lm
+                          CROSS JOIN LATERAL (VALUES (lm.team1_name), (lm.team2_name)) n(name)
+                          JOIN entity_anchors a ON a.anchor_kind = 'team_name' AND a.anchor = fold_name(n.name)
+                                               AND (a.region = '' OR a.region = coalesce(lm.region, ''))
+                         WHERE lm.objectname = s.lp_objectname) x) AS lp_keys
+              FROM series s WHERE s.faceit_match_id IS NOT NULL AND s.lp_objectname IS NOT NULL)
+        SELECT series_id, lp_objectname, faceit_keys, lp_keys FROM sides
+         WHERE lp_keys IS NOT NULL AND array_length(lp_keys, 1) = 2 AND faceit_keys IS DISTINCT FROM lp_keys LIMIT 10"""):
+        discrepancies.append({"kind": "linked_sides_disagree", **r,
+                              "hint": "an identity decision no longer agrees with this link: review the link "
+                                      "(liquipedia links decide) or the team mapping"})
+    unresolved = int(_scalar(conn, """
+        SELECT count(*) FROM liquipedia_matches lm JOIN championships c ON c.championship_id = lm.championship_id AND c.include
+         WHERE lm.finished AND NOT lm.placeholder
+           AND NOT EXISTS (SELECT 1 FROM liquipedia_links lk WHERE lk.lp_objectname = lm.objectname AND lk.faceit_match_id IS NOT NULL)
+           AND NOT EXISTS (SELECT 1 FROM series s WHERE s.lp_objectname = lm.objectname)""") or 0)
+    counts = {"series": total, "faceit": faceit_n, "linked_pairs": linked, "liquipedia_only": lp_only,
+              "liquipedia_unresolved_not_in_series": unresolved}
+    return _result("series_integrity", discrepancies,
+                   f"{total} series: {faceit_n} from FACEIT ({linked} also on Liquipedia), {lp_only} Liquipedia-only; "
+                   f"{unresolved} unlinked Liquipedia record(s) wait on a team decision and are in no answer",
+                   f"{len(discrepancies)} series problem(s)", counts)
+
+
 # ------------------------------------------------------------ identity windows
 
 def check_identity_windows(conn: psycopg.Connection) -> CheckResult:
@@ -468,6 +520,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "stat_reachability": check_stat_reachability,
     "region_consistency": check_region_consistency,
     "identity_windows": check_identity_windows,
+    "series_integrity": check_series_integrity,
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
 }
 

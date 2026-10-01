@@ -82,9 +82,11 @@ function Cell({ row, column }) {
   const raw = row[column.key];
 
   if (column.type === "link" && raw) {
+    // The row says where it came from: a FACEIT room, or a Liquipedia page for a series only Liquipedia holds.
+    const label = /liquipedia\.net/.test(String(raw)) ? "Liquipedia" : "FACEIT";
     return (
       <a href={raw} target="_blank" rel="noreferrer noopener" className="source-link">
-        FACEIT
+        {label}
       </a>
     );
   }

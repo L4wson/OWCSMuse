@@ -71,7 +71,7 @@ def test_load_makes_decided_names_searchable_and_a_born_player_real(warehouse):
     assert ident.accept_strong(decisions, proposals) == 3
     decisions.set("HYEON_(Kim_Seong-hyeon)", None, "HYEON", "Korean player, no FACEIT id", real_name="Kim Seong-hyeon")
     out = ident.load_identity(conn, decisions, team_map)
-    assert out == {"team_anchors": 1, "player_anchors": 4, "liquipedia_born_players": 1,
+    assert out == {"team_anchors": 1, "liquipedia_born_teams_mapped": 0, "player_anchors": 4, "liquipedia_born_players": 1,
                    "unknown_faceit_ids_skipped": 0, "ghost_players_removed": 0}
     with conn.cursor() as cur:
         cur.execute("REFRESH MATERIALIZED VIEW entity_names")

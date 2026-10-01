@@ -32,6 +32,8 @@ from .matches import LPMatch
 from .model import FaceitSide, Resolve, orient
 
 EXACT, STRONG, AMBIGUOUS, UNMATCHED = "exact", "strong", "ambiguous", "unmatched"
+# Disagreements that annotate an exact link without downgrading it.
+SOFT_DISAGREEMENTS = frozenset({"date"})
 
 
 @dataclass(frozen=True)
@@ -178,10 +180,28 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
         else:
             f = by_id[fid]
             flip, basis = orient(lp, f, resolve)
-            link = Link(lp, EXACT, fid, basis="FACEIT match id in links.faceit",
-                        evidence={"orientation": basis},
-                        disagreements=compare(lp, f, resolve, comps_of_page.get(lp.pagename), window, flip, basis))
-            taken[fid] = link
+            dis = compare(lp, f, resolve, comps_of_page.get(lp.pagename), window, flip, basis)
+            hard = sorted({d["field"] for d in dis} - SOFT_DISAGREEMENTS)
+            if hard:
+                # The id says one thing and the records another: a wrong id looks exactly like this, and a wrong link
+                # silently gives one team another team's result. Ambiguous, with the id as the one candidate, until a
+                # person confirms or rejects it. A date gap alone is expected (FACEIT's result_only times are entry
+                # times) and does not downgrade.
+                link = Link(lp, AMBIGUOUS, basis=f"the page's FACEIT id disagrees with the FACEIT record on {', '.join(hard)}",
+                            candidates=[{"faceit_id": fid, "disagrees_on": hard}],
+                            evidence={"kind": "exact_id_disagrees", "orientation": basis}, disagreements=dis)
+                dec = (decisions or {}).get(lp.objectname)
+                if dec is not None:
+                    want = dec.get("faceit_match_id")
+                    if want and want in by_id and want not in taken:
+                        link.decision, link.faceit_id = "confirmed", want
+                        taken[want] = link
+                    elif not want:
+                        link.decision = "rejected"
+            else:
+                link = Link(lp, EXACT, fid, basis="FACEIT match id in links.faceit", evidence={"orientation": basis},
+                            disagreements=dis)
+                taken[fid] = link
             result.links.append(link)
 
     # ---- tiers 2-4: records with no id, against the FACEIT matches nothing has claimed
