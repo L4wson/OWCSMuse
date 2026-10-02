@@ -475,7 +475,20 @@ ordering, twice:
   the later brand also fields a team id of its own (NTMR on two ids, Virtus pro
   and Extinction on a second id in 2026): that makes it an organisation in its
   own right, though it still does not prove the earlier brand was a different
-  one. A team id whose
+  one.
+
+  **An id can also be recycled across unrelated teams, so continuity of id is
+  not continuity of anything.** 0464a373 is four teams FACEIT reassigned one id
+  to - UNC inc (2024), Rad (2025 Stages 1-2), Sakura (2025), LuneX (2026) -
+  decided by the owner on 2026-10-02 as four entities with nothing connecting
+  them, and its Liquipedia names anchor to each era's org rather than to the id
+  (anchored to the id, "LuneX Gaming" and "Rad Esports" once answered with UNC
+  inc's 2024 record). A long gap with roster turnover flags a candidate but
+  decides nothing: every off-season is 145-290 days, and Twisted Minds kept 2 of
+  8 players from 2024 to 2025 as one organisation. A FACEIT rename can also lag
+  the real change: Sakura played the 2025 Stage 2 opener under FACEIT's stale
+  name "Rad", so its window starts at the stage boundary, not the first sighting.
+  A team id whose
   names are several organisations' eras carries one mapping per era
   (`orgs decide --add`, stored under `windows`): 0464a373 is UNC inc (its own),
   Rad, Sakura / Sakura Esports and LuneX; d20d1868 is team_chiime / Dreamland

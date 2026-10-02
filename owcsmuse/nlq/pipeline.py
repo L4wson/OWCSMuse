@@ -135,6 +135,11 @@ def resolve_entities(conn: psycopg.Connection, q: StructuredQuery,
                 return None, Answer(status="cannot_answer", question="", code="unknown_entity",
                                     reason=f"no {etype or 'player or team'} matches '{name}'",
                                     suggestions=["Check the spelling, or try the FACEIT nickname or in-game name."])
+            # two or more entities answering to the name exactly is the whole ambiguity: a fuzzy namesake ("Rad Esports"
+            # for "Geekay Esports", on the shared word) is noise next to them, not a third choice
+            exact = [c for c in cands if c.score >= 1.0]
+            if len(exact) >= 2:
+                cands = exact
             identical = sum(1 for c in cands if (c.current_name or "").lower() == (cands[0].current_name or "").lower())
             if identical > 1:
                 tip = ("These are different FACEIT entities with the same name, so no spelling tells them apart. "

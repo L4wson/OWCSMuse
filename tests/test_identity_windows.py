@@ -63,30 +63,38 @@ def test_the_committed_virtus_pro_window_is_the_one_g11_and_g13_rest_on():
 
 
 def test_every_committed_window_is_sourced_from_a_sighting_and_named_in_the_window_verdicts():
-    """A bounded mapping is always name-sourced (or the one explicit Virtus pro timestamp, itself a sighting), and every
-    team id that carries one is covered by the owner's verdict in scope/org_window_decisions.json."""
+    """Each bound of a mapping is open, a name's first sighting, or one of the owner's explicit timestamps; every team
+    id that carries a bounded mapping is covered by the owner's verdict in scope/org_window_decisions.json."""
     d = json.load(open("scope/org_decisions.json", encoding="utf-8"))["decisions"]
     verdicts = json.load(open("scope/org_window_decisions.json", encoding="utf-8"))["decisions"]
     assert len(verdicts) == 18
+    explicit = {"2025-01-31T19:17:07+00:00",       # Virtus pro: itself a sighting, kept as a timestamp
+                "2025-05-01T00:00:00+00:00"}       # Rad -> Sakura at the 2025 Stage 2 boundary: FACEIT's rename lagged a week
     for team_id, entry in d.items():
         for w in entry.get("windows") or [entry]:
-            if w.get("valid_from") or w.get("valid_to") or w.get("valid_from_name") or w.get("valid_to_name"):
-                assert w.get("valid_from_name"), (team_id, w)               # the start is always a sighting
+            for side in ("valid_from", "valid_to"):
+                assert not w.get(side) or w[side] in explicit, (team_id, side, w.get(side))
+            if any(w.get(k) for k in ("valid_from", "valid_to", "valid_from_name", "valid_to_name")):
                 assert team_id in verdicts, team_id
-    # the three ids whose names are several organisations' eras
-    eras = {k[:8]: [(w["org_id"], w.get("valid_from_name"), w.get("valid_to_name")) for w in v["windows"]]
+    # the ids whose names are several organisations' eras (owner, 2026-10-02)
+    eras = {k[:8]: [(w["org_id"], w.get("valid_from_name") or w.get("valid_from"), w.get("valid_to_name") or w.get("valid_to"))
+                    for w in v["windows"]]
             for k, v in d.items() if "windows" in v}
     assert eras == {
-        "0464a373": [("rad", "Rad", "Sakura"), ("sakura", "Sakura", "LuneX"), ("lunex", "LuneX", None)],
+        "0464a373": [("rad", "Rad", "2025-05-01T00:00:00+00:00"), ("sakura", "2025-05-01T00:00:00+00:00", "LuneX"),
+                     ("lunex", "LuneX", None)],
         "d20d1868": [("supernova", "Supernova", "Team Z"), ("team-z", "Team Z", None)],
-        "03869857": [("umbrellaacademy", "Umbrellaacademy", "ROCstars"), ("rocstars", "ROCstars", None)],
+        "03869857": [("rocstars", "Umbrellaacademy", None)],          # the one 'Umbrellaacademy' series is ROCstars'
+        "ebfd8060": [("quick-esports", None, "Ataraxia"), ("ataraxia", "Ataraxia", None)],
     }
+    # Quick Esports: one org over ebfd8060's 2024 era and all of cb90edf6
+    assert {k[:8] for k, v in d.items() if any(w.get("org_id") == "quick-esports" for w in v.get("windows") or [v])} == {"ebfd8060", "cb90edf6"}
     # NTMR: one org across two team ids, each only over its own NTMR era
     ntmr = {k[:8]: v for k, v in d.items() if v.get("org_id") == "ntmr"}
     assert {k: v["valid_from_name"] for k, v in ntmr.items()} == {"c5116cb3": "NTMR", "cefc3f72": "NTMR"}
     # the verdict kinds the owner used
     kinds = {v["verdict"] for v in verdicts.values()}
-    assert kinds == {"rename_only", "placeholder", "placeholder_then_pickups", "pickup", "roster_drop", "org_changes"}
+    assert kinds == {"rename_only", "placeholder", "placeholder_then_pickups", "pickup", "roster_drop", "org_changes", "recycled_id"}
 
 
 def test_a_second_era_on_one_team_id_is_a_window_and_round_trips(tmp_path):
