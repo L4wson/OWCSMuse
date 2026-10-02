@@ -146,10 +146,20 @@
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "vanir quick": {
-      "entity_type": "team",
-      "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
-      "note": "same roster as 1DIPVS100GORILLAS",
-      "decided_at": "2026-09-23T05:02:28+00:00"
+      "eras": [
+        {
+          "entity_type": "team",
+          "entity_id": "ebfd8060-fcbd-467b-9701-0801b2260a9c",
+          "valid_to": "2025-01-01T00:00:00+00:00"
+        },
+        {
+          "entity_type": "team",
+          "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
+          "valid_from": "2025-01-01T00:00:00+00:00"
+        }
+      ],
+      "note": "Two FACEIT team ids under one Liquipedia name: 6/6 exact-id 2024 links name ebfd8060, 13/13 2025 links name cb90edf6; Liquipedia's own templates split them (quick esports orig / 2025). No series between 2024-03-22 and 2025-05-11, so any boundary in that gap resolves identically. Replaces the dateless cb90edf6 mapping, whose basis was roster overlap. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:16:46+00:00"
     }
   }
 }

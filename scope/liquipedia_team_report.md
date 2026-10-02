@@ -1,6 +1,6 @@
 # Liquipedia team names -> FACEIT orgs
 
-78 Liquipedia team names, learned from 407 matches Liquipedia ties to FACEIT by match id. 25 decided, 50 proposed strong, 5 need a person.
+78 Liquipedia team names, learned from 413 matches Liquipedia ties to FACEIT by match id. 25 decided, 50 proposed strong, 5 need a person.
 
 Nothing is matched by fuzzy string similarity. Decide with:
 
@@ -100,5 +100,5 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | The Kafe | any | team:a35f8d47-7487-4249-a3fb-94aefa2ac8d0 | 0 | decided in scope/liquipedia_team_map.json |
 | Timeless | any | team:c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e | 0 | decided in scope/liquipedia_team_map.json |
 | Toronto Defiant | any | team:8f632648-b26f-4554-bae4-40f9aee1773b | 0 | decided in scope/liquipedia_team_map.json |
-| Vanir Quick | any | team:cb90edf6-60cb-4f73-8172-bf944729a114 | 0 | decided in scope/liquipedia_team_map.json |
+| Vanir Quick | any | team:ebfd8060-fcbd-467b-9701-0801b2260a9c | 0 | decided in scope/liquipedia_team_map.json |
 

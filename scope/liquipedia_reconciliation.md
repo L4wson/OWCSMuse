@@ -6,17 +6,17 @@ Nothing here links into an answer. Exact and strong links are proposed; ambiguou
 
 ## Timezones
 
-Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly on every row). FACEIT's times are epoch seconds, so also UTC. Across the id-linked pairs FACEIT's start minus Liquipedia's scheduled time is: median 45 min, 5th-95th percentile 24 to 105, extremes -6 to 11478; 396 of 407 inside the matching window (-60 to +360 min).
+Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly on every row). FACEIT's times are epoch seconds, so also UTC. Across the id-linked pairs FACEIT's start minus Liquipedia's scheduled time is: median 45 min, 5th-95th percentile 24 to 105, extremes -6 to 11478; 402 of 413 inside the matching window (-60 to +360 min).
 
 ## Summary by competition
 
 | competition | Liquipedia | FACEIT | exact | strong | ambiguous | Liquipedia only | FACEIT only | disagreements |
 |---|---|---|---|---|---|---|---|---|
-| Dreamhack Dallas | 15 | 14 | 0 | 0 | 14 | 1 | 14 | 0 |
-| OWCS 2024: EMEA Stage 1 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 4 | 0 |
+| Dreamhack Dallas | 15 | 14 | 0 | 0 | 14 | 1 | 0 | 0 |
+| OWCS 2024: EMEA Stage 1 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
-| OWCS 2024: EMEA Stage 1 - Group D | 20 | 6 | 17 | 0 | 3 | 0 | 1 | 1 |
-| OWCS 2024: EMEA Stage 1 - Main Event | 14 | 14 | 10 | 0 | 4 | 0 | 3 | 0 |
+| OWCS 2024: EMEA Stage 1 - Group D | 20 | 6 | 20 | 0 | 0 | 0 | 1 | 1 |
+| OWCS 2024: EMEA Stage 1 - Main Event | 14 | 14 | 13 | 0 | 1 | 0 | 0 | 0 |
 | OWCS 2024: EMEA Stage 2 - Group A | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 2 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 2 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
@@ -52,139 +52,35 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S9 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | S9 NA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
-| **total** | **451** | **473** | **407** | **11** | **25** | **8** | **50** | **11** |
+| **total** | **451** | **473** | **413** | **11** | **19** | **8** | **30** | **11** |
 
-## Needs review: ambiguous matches (20)
+2 link(s) rest on a team-name mapping nobody has reviewed yet (marked provisional below).
 
-### 2024-03-08 18:30Z  Vanir Quick 0-3 LeftRightGnight  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage
-- why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on teams
-  - candidate 1-885d9b61-87bb-4abc-8388-ec6f6cca19dc:  - disagrees_on=['teams']
-- decide: `python -m owcsmuse liquipedia links decide 127212_iGL40xdPP4_0002 --faceit-id <id>` or `--none`
+## Needs review: ambiguous matches (0)
 
-### 2024-03-10 19:00Z  EF Flexodiax 0-3 Vanir Quick  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage
-- why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on teams
-  - candidate 1-eba2680d-c444-4d68-99fa-858fef7b254c:  - disagrees_on=['teams']
-- decide: `python -m owcsmuse liquipedia links decide 127212_iGL40xdPP4_0004 --faceit-id <id>` or `--none`
-
-### 2024-03-17 16:00Z  LeftRightGnight 0-3 Vanir Quick  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage
-- why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on teams
-  - candidate 1-b83b71e5-a19b-496d-9b13-ff62cf83a025:  - disagrees_on=['teams']
-- decide: `python -m owcsmuse liquipedia links decide 127212_iGL40xdPP4_0005 --faceit-id <id>` or `--none`
-
-### 2024-03-21 16:30Z  Twisted Minds 3-0 Vanir Quick  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1
-- why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on teams
-  - candidate 1-9180da8a-080e-40bf-bd58-6213bce4b0d6:  - disagrees_on=['teams']
-- decide: `python -m owcsmuse liquipedia links decide 127216_1Sxcy6HVqj_R01-M001 --faceit-id <id>` or `--none`
-
-### 2024-03-21 17:30Z  Vanir Quick 3-0 ROC Esports  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1
-- why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on teams
-  - candidate 1-71ee0038-4fa9-465d-8742-529b259c8612:  - disagrees_on=['teams']
-- decide: `python -m owcsmuse liquipedia links decide 127216_1Sxcy6HVqj_R01-M005 --faceit-id <id>` or `--none`
-
-### 2024-03-22 17:30Z  Spacestation Gaming 3-0 Vanir Quick  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1
-- why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on teams
-  - candidate 1-40296472-ccfe-45f1-9f44-0d58a318219a:  - disagrees_on=['teams']
-- decide: `python -m owcsmuse liquipedia links decide 127216_1Sxcy6HVqj_R02-M003 --faceit-id <id>` or `--none`
-
-### 2024-05-31 20:45Z  Spacestation Gaming 3-0 NRG Shock  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-c06bfd6e-cf5d-4e36-aa19-0810aee38b36: SpaceStation 3-0 SOG - faceit_time=2024-05-31T21:55+00:00, minutes_from_liquipedia=71, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R01-M001 --faceit-id <id>` or `--none`
-
-### 2024-05-31 20:45Z  Team Falcons 3-0 ENCE  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-43d289c0-bb18-416b-b639-b7e076b41e7f: Team Falcons 3-0 ENCE - faceit_time=2024-05-31T22:43+00:00, minutes_from_liquipedia=118, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R01-M002 --faceit-id <id>` or `--none`
-
-### 2024-05-31 22:30Z  Toronto Defiant 3-0 Twisted Minds  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-d19f72eb-9c6c-4c03-9332-8b91601bb716: Toronto Defiant 3-0 Twisted Minds - faceit_time=2024-06-01T00:01+00:00, minutes_from_liquipedia=92, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R01-M004 --faceit-id <id>` or `--none`
-
-### 2024-05-31 23:00Z  Crazy Raccoon 3-0 M80  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-fb369fac-63cb-4243-98a9-bb3aceec02e7: M80 0-3 Crazy Raccoons - faceit_time=2024-06-01T00:34+00:00, minutes_from_liquipedia=95, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R01-M003 --faceit-id <id>` or `--none`
-
-### 2024-06-01 00:30Z  NRG Shock 1-3 ENCE  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-cd5e474e-a6d4-49c2-ba0e-f238abfa5986: ENCE 3-1 SOG - faceit_time=2024-06-01T02:59+00:00, minutes_from_liquipedia=150, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R01-M005 --faceit-id <id>` or `--none`
-
-### 2024-06-01 03:00Z  M80 3-0 Twisted Minds  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-e812c8d0-ceb7-42eb-9245-6f691b9c542d: M80 3-0 Twisted Minds - faceit_time=2024-06-01T03:33+00:00, minutes_from_liquipedia=34, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R01-M006 --faceit-id <id>` or `--none`
-
-### 2024-06-01 18:00Z  Spacestation Gaming 0-3 Team Falcons  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-e7bbb44a-5ebd-4a09-aad8-8273439fb572: SpaceStation 0-3 Team Falcons - faceit_time=2024-06-01T19:24+00:00, minutes_from_liquipedia=84, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R02-M001 --faceit-id <id>` or `--none`
-
-### 2024-06-01 20:00Z  Crazy Raccoon 3-0 Toronto Defiant  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-e9927ed8-0f77-46fc-bfd5-62f3706bb706: Toronto Defiant 0-3 Crazy Raccoons - faceit_time=2024-06-02T13:15+00:00, minutes_from_liquipedia=1036, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R02-M002 --faceit-id <id>` or `--none`
-
-### 2024-06-01 22:00Z  Spacestation Gaming 3-2 M80  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-74e38b28-8000-4ad9-8448-475d3f329664: SpaceStation 3-2 M80 - faceit_time=2024-06-02T13:16+00:00, minutes_from_liquipedia=916, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R02-M004 --faceit-id <id>` or `--none`
-
-### 2024-06-02 00:00Z  Toronto Defiant 1-3 ENCE  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-fe23288e-3419-4bcb-81b7-76526722d170: Toronto Defiant 1-3 ENCE - faceit_time=2024-06-02T13:16+00:00, minutes_from_liquipedia=797, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R02-M003 --faceit-id <id>` or `--none`
-
-### 2024-06-02 16:00Z  ENCE 1-3 Spacestation Gaming  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-d3d9b436-5fc2-4082-b99f-16f810fcfcd0: SpaceStation 3-1 ENCE - faceit_time=2024-06-02T17:29+00:00, minutes_from_liquipedia=89, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R03-M001 --faceit-id <id>` or `--none`
-
-### 2024-06-02 18:00Z  Team Falcons 3-2 Crazy Raccoon  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-cd3ccc44-1b18-463d-a4de-2d400ef020e9: Crazy Raccoons 2-3 Team Falcons - faceit_time=2024-06-02T19:30+00:00, minutes_from_liquipedia=91, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-  - candidate 1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b: Crazy Raccoons 4-2 Team Falcons - faceit_time=2024-06-02T23:59+00:00, minutes_from_liquipedia=359, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of', 'score']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R04-M001 --faceit-id <id>` or `--none`
-
-### 2024-06-02 20:00Z  Crazy Raccoon 3-0 Spacestation Gaming  (bo5)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-88eb587c-0af4-480a-ae5a-4cb0ee9174e8: SpaceStation 0-3 Crazy Raccoons - faceit_time=2024-06-02T22:19+00:00, minutes_from_liquipedia=140, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R04-M002 --faceit-id <id>` or `--none`
-
-### 2024-06-02 21:20Z  Team Falcons 2-4 Crazy Raccoon  (bo7)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-cd3ccc44-1b18-463d-a4de-2d400ef020e9: Crazy Raccoons 2-3 Team Falcons - faceit_time=2024-06-02T19:30+00:00, minutes_from_liquipedia=-109, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of', 'score']
-  - candidate 1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b: Crazy Raccoons 4-2 Team Falcons - faceit_time=2024-06-02T23:59+00:00, minutes_from_liquipedia=159, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
-- decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R05-M001 --faceit-id <id>` or `--none`
+None.
 
 
-## Ambiguous matches already decided (5)
+## Ambiguous matches already decided (19)
 
 - [confirmed] 2025-10-26 18:20Z  Al Qadsiah 1-4 Twisted Minds  (bo7)  -> FACEIT 1-3e78e269-28b7-481c-9ccc-46c173314ab9  (the page's FACEIT id disagrees with the FACEIT record on best_of)
 - [confirmed] 2026-03-29 22:15Z  Disguised 3-0 Team Liquid  (bo5)  -> FACEIT 1-472cc9eb-d7a3-4811-b633-397a99d6a502  (the page's FACEIT id disagrees with the FACEIT record on score)
 - [confirmed] 2026-04-11 21:00Z  Dallas Fuel 3-1 Spacestation Gaming  (bo5)  -> FACEIT 1-28ea62bc-16c1-4686-b41b-479d5275d151  (the page's FACEIT id disagrees with the FACEIT record on score)
 - [confirmed] 2024-03-24 18:30Z  ENCE 1-4 Twisted Minds  (bo7)  -> FACEIT 1-c5823143-d7e8-4efe-a957-6d54cfee1a8e  (the page's FACEIT id disagrees with the FACEIT record on score)
+- [confirmed] 2024-05-31 20:45Z  Spacestation Gaming 3-0 NRG Shock  (bo5)  -> FACEIT 1-c06bfd6e-cf5d-4e36-aa19-0810aee38b36  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-05-31 20:45Z  Team Falcons 3-0 ENCE  (bo5)  -> FACEIT 1-43d289c0-bb18-416b-b639-b7e076b41e7f  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-05-31 22:30Z  Toronto Defiant 3-0 Twisted Minds  (bo5)  -> FACEIT 1-d19f72eb-9c6c-4c03-9332-8b91601bb716  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-05-31 23:00Z  Crazy Raccoon 3-0 M80  (bo5)  -> FACEIT 1-fb369fac-63cb-4243-98a9-bb3aceec02e7  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-01 00:30Z  NRG Shock 1-3 ENCE  (bo5)  -> FACEIT 1-cd5e474e-a6d4-49c2-ba0e-f238abfa5986  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-01 03:00Z  M80 3-0 Twisted Minds  (bo5)  -> FACEIT 1-e812c8d0-ceb7-42eb-9245-6f691b9c542d  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-01 18:00Z  Spacestation Gaming 0-3 Team Falcons  (bo5)  -> FACEIT 1-e7bbb44a-5ebd-4a09-aad8-8273439fb572  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-01 20:00Z  Crazy Raccoon 3-0 Toronto Defiant  (bo5)  -> FACEIT 1-e9927ed8-0f77-46fc-bfd5-62f3706bb706  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-01 22:00Z  Spacestation Gaming 3-2 M80  (bo5)  -> FACEIT 1-74e38b28-8000-4ad9-8448-475d3f329664  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-02 00:00Z  Toronto Defiant 1-3 ENCE  (bo5)  -> FACEIT 1-fe23288e-3419-4bcb-81b7-76526722d170  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-02 16:00Z  ENCE 1-3 Spacestation Gaming  (bo5)  -> FACEIT 1-d3d9b436-5fc2-4082-b99f-16f810fcfcd0  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-02 18:00Z  Team Falcons 3-2 Crazy Raccoon  (bo5)  -> FACEIT 1-cd3ccc44-1b18-463d-a4de-2d400ef020e9  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-02 20:00Z  Crazy Raccoon 3-0 Spacestation Gaming  (bo5)  -> FACEIT 1-88eb587c-0af4-480a-ae5a-4cb0ee9174e8  (the same two teams within a day, but the records disagree)
+- [confirmed] 2024-06-02 21:20Z  Team Falcons 2-4 Crazy Raccoon  (bo7)  -> FACEIT 1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b  (the same two teams within a day, but the records disagree)
 - [confirmed] 2024-03-24 22:30Z  Toronto Defiant 4-0 Timeless  (bo7)  -> FACEIT 1-70cff415-3817-4144-9eca-e917f89cb6e7  (the same two teams within a day, but the records disagree)
 
 ## Linked pairs where the two sources disagree (15)
@@ -268,32 +164,14 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 ### Dreamhack Dallas
 
-- links: 0 exact, 0 strong, 14 ambiguous; 1 Liquipedia-only; 14 FACEIT-only
-- FACEIT matches with no Liquipedia counterpart:
-  - 2024-05-31 21:55Z  SpaceStation 3-0 SOG  (bo1, result_only)  1-c06bfd6e-cf5d-4e36-aa19-0810aee38b36
-  - 2024-05-31 22:43Z  Team Falcons 3-0 ENCE  (bo1, result_only)  1-43d289c0-bb18-416b-b639-b7e076b41e7f
-  - 2024-06-01 00:01Z  Toronto Defiant 3-0 Twisted Minds  (bo1, result_only)  1-d19f72eb-9c6c-4c03-9332-8b91601bb716
-  - 2024-06-01 00:34Z  M80 0-3 Crazy Raccoons  (bo1, result_only)  1-fb369fac-63cb-4243-98a9-bb3aceec02e7
-  - 2024-06-01 02:59Z  ENCE 3-1 SOG  (bo1, result_only)  1-cd5e474e-a6d4-49c2-ba0e-f238abfa5986
-  - 2024-06-01 03:33Z  M80 3-0 Twisted Minds  (bo1, result_only)  1-e812c8d0-ceb7-42eb-9245-6f691b9c542d
-  - 2024-06-01 19:24Z  SpaceStation 0-3 Team Falcons  (bo1, result_only)  1-e7bbb44a-5ebd-4a09-aad8-8273439fb572
-  - 2024-06-02 13:15Z  Toronto Defiant 0-3 Crazy Raccoons  (bo1, result_only)  1-e9927ed8-0f77-46fc-bfd5-62f3706bb706
-  - 2024-06-02 13:16Z  SpaceStation 3-2 M80  (bo1, result_only)  1-74e38b28-8000-4ad9-8448-475d3f329664
-  - 2024-06-02 13:16Z  Toronto Defiant 1-3 ENCE  (bo1, result_only)  1-fe23288e-3419-4bcb-81b7-76526722d170
-  - 2024-06-02 17:29Z  SpaceStation 3-1 ENCE  (bo1, result_only)  1-d3d9b436-5fc2-4082-b99f-16f810fcfcd0
-  - 2024-06-02 19:30Z  Crazy Raccoons 2-3 Team Falcons  (bo1, result_only)  1-cd3ccc44-1b18-463d-a4de-2d400ef020e9
-  - 2024-06-02 22:19Z  SpaceStation 0-3 Crazy Raccoons  (bo1, result_only)  1-88eb587c-0af4-480a-ae5a-4cb0ee9174e8
-  - 2024-06-02 23:59Z  Crazy Raccoons 4-2 Team Falcons  (bo1, result_only)  1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b
+- links: 0 exact, 0 strong, 14 ambiguous; 1 Liquipedia-only; 0 FACEIT-only
 - Liquipedia matches with no FACEIT counterpart:
   - 2024-06-01 21:30Z  Team Hydron 0-1 Team Danteh  (bo1)  (team name not mapped: Team Hydron, Team Danteh)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
 
 ### OWCS 2024: EMEA Stage 1 - Group B
 
-- links: 0 exact, 0 strong, 0 ambiguous; 0 Liquipedia-only; 4 FACEIT-only
+- links: 0 exact, 0 strong, 0 ambiguous; 0 Liquipedia-only; 1 FACEIT-only
 - FACEIT matches with no Liquipedia counterpart:
-  - 2024-03-08 19:02Z  Quick esports 0-3 LeftRightGnight  (bo5, complete)  1-885d9b61-87bb-4abc-8388-ec6f6cca19dc
-  - 2024-03-10 19:38Z  Quick esports 3-0 EF Flexodiax  (bo5, complete)  1-eba2680d-c444-4d68-99fa-858fef7b254c
-  - 2024-03-17 16:46Z  LeftRightGnight 0-3 Quick esports  (bo5, complete)  1-b83b71e5-a19b-496d-9b13-ff62cf83a025
   - 2024-03-17 17:41Z  BuboSprayCheck 3-0 Quick esports  (bo5, result_only)  1-964cbe16-4ff1-4d04-854b-9ad9235a1b4f
 
 ### OWCS 2024: EMEA Stage 1 - Group C
@@ -304,17 +182,13 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 ### OWCS 2024: EMEA Stage 1 - Group D
 
-- links: 17 exact, 0 strong, 3 ambiguous; 0 Liquipedia-only; 1 FACEIT-only
+- links: 20 exact, 0 strong, 0 ambiguous; 0 Liquipedia-only; 1 FACEIT-only
 - FACEIT matches with no Liquipedia counterpart:
   - 2024-03-18 02:01Z  SpaceStation 3-0 Ex Oblivione  (bo5, result_only)  1-3003f4e4-9805-45e7-8096-4ad0d776999b
 
 ### OWCS 2024: EMEA Stage 1 - Main Event
 
-- links: 10 exact, 0 strong, 4 ambiguous; 0 Liquipedia-only; 3 FACEIT-only
-- FACEIT matches with no Liquipedia counterpart:
-  - 2024-03-21 17:13Z  Twisted Minds 3-0 Quick esports  (bo5, complete)  1-9180da8a-080e-40bf-bd58-6213bce4b0d6
-  - 2024-03-21 18:23Z  ROC ESPORT 0-3 Quick esports  (bo5, complete)  1-71ee0038-4fa9-465d-8742-529b259c8612
-  - 2024-03-22 18:13Z  SpaceStation 3-0 Quick esports  (bo5, complete)  1-40296472-ccfe-45f1-9f44-0d58a318219a
+- links: 13 exact, 0 strong, 1 ambiguous; 0 Liquipedia-only; 0 FACEIT-only
 
 ### OWCS 2024: EMEA Stage 2 - Group A
 
