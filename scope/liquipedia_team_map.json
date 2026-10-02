@@ -2,10 +2,10 @@
   "note": "Reviewed Liquipedia team name -> FACEIT org/team. Keys are the folded Liquipedia name, or 'name|na' / 'name|emea' when the same name is two teams in two regions; entity_type is 'org' (entity_id is the org slug) or 'team' (an unmapped FACEIT team id). The reconciler trusts these and only these without marking a link provisional. Edit by hand or with `python -m owcsmuse liquipedia teams decide`.",
   "aliases": {
     "1234": {
-      "entity_type": "team",
-      "entity_id": "75516399-4c1d-40fc-bb46-a887edadc5a2",
-      "note": "same roster as Anyone's Legend, lost org privileges and rebranded to 1234; players/roster continuity over org branding per OWCS spot ownership rules",
-      "decided_at": "2026-09-23T05:02:12+00:00"
+      "entity_type": "org",
+      "entity_id": "1234",
+      "decided_at": "2026-10-02T21:19:06+00:00",
+      "note": "Search routing (owner, 2026-10-02): 1234's era of 75516399 (owner: Anyone's Legend dropped the roster, which kept the id as 1234). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
     },
     "1dipvs100gorillas": {
       "entity_type": "org",
@@ -68,10 +68,10 @@
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "nrg shock": {
-      "entity_type": "team",
-      "entity_id": "d566d889-7885-4e74-a9dc-d29c111d2c1e",
-      "note": "FACEIT 'SOG' at Dallas (team d566d889, mapped to the students-of-the-game org), not 0c629c99, the one-day registration placeholder. Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T01:29:49+00:00"
+      "entity_type": "org",
+      "entity_id": "students-of-the-game",
+      "decided_at": "2026-10-02T21:19:06+00:00",
+      "note": "Search routing (owner, 2026-10-02): FACEIT 'SOG' at Dallas (d566d889, mapped to students-of-the-game for its whole life). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
     },
     "ntmr": {
       "entity_type": "org",
@@ -128,10 +128,10 @@
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "team z": {
-      "entity_type": "team",
-      "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
-      "note": "small roster transition to/from Supernova",
-      "decided_at": "2026-09-23T05:02:42+00:00"
+      "entity_type": "org",
+      "entity_id": "team-z",
+      "decided_at": "2026-10-02T21:19:06+00:00",
+      "note": "Search routing (owner, 2026-10-02): Team Z's era of d20d1868 (a roster picked up by a different org). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
     },
     "the kafe": {
       "entity_type": "team",

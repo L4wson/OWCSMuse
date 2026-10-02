@@ -74,7 +74,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
-| 1234 | any | team:75516399-4c1d-40fc-bb46-a887edadc5a2 | 0 | decided in scope/liquipedia_team_map.json |
+| 1234 | any | 1234 | 0 | decided in scope/liquipedia_team_map.json |
 | 1DIPVS100GORILLAS | any | quick-esports | 0 | decided in scope/liquipedia_team_map.json |
 | Anyone's Legend | any | team:75516399-4c1d-40fc-bb46-a887edadc5a2 | 0 | decided in scope/liquipedia_team_map.json |
 | Avidity | any | team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae | 0 | decided in scope/liquipedia_team_map.json |
@@ -85,7 +85,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Luminosity Gaming | any | team:d4ec89d7-7d41-4c0e-9834-fbf87a199347 | 0 | decided in scope/liquipedia_team_map.json |
 | LuneX Gaming | any | lunex | 0 | decided in scope/liquipedia_team_map.json |
 | M80 | any | team:3aca5abd-ee5d-4542-92e9-392b6f5d0dbc | 0 | decided in scope/liquipedia_team_map.json |
-| NRG Shock | any | team:d566d889-7885-4e74-a9dc-d29c111d2c1e | 0 | decided in scope/liquipedia_team_map.json |
+| NRG Shock | any | students-of-the-game | 0 | decided in scope/liquipedia_team_map.json |
 | NTMR | any | ntmr | 0 | decided in scope/liquipedia_team_map.json |
 | Pirates in Pyjamas | any | team:f4401a61-5010-484b-8429-ad09e524b097 | 0 | decided in scope/liquipedia_team_map.json |
 | Rad Esports | any | rad | 0 | decided in scope/liquipedia_team_map.json |
@@ -95,7 +95,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Students of the Game | any | students-of-the-game | 0 | decided in scope/liquipedia_team_map.json |
 | Supernova (American team) | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
 | Team Falcons | any | team:2ab92d33-4c33-46e1-a13f-743a95291d0e | 0 | decided in scope/liquipedia_team_map.json |
-| Team Z | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
+| Team Z | any | team-z | 0 | decided in scope/liquipedia_team_map.json |
 | The Kafe | any | team:a35f8d47-7487-4249-a3fb-94aefa2ac8d0 | 0 | decided in scope/liquipedia_team_map.json |
 | Timeless | any | team:c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e | 0 | decided in scope/liquipedia_team_map.json |
 | Toronto Defiant | any | team:8f632648-b26f-4554-bae4-40f9aee1773b | 0 | decided in scope/liquipedia_team_map.json |

@@ -48,10 +48,14 @@ def test_the_dallas_names_and_the_2024_pages_are_decided():
     t = TeamMap("scope/liquipedia_team_map.json")
     want = {"Crazy Raccoon": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7", "ENCE": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
             "M80": "3aca5abd-ee5d-4542-92e9-392b6f5d0dbc", "Team Falcons": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
-            "Toronto Defiant": "8f632648-b26f-4554-bae4-40f9aee1773b", "NRG Shock": "d566d889-7885-4e74-a9dc-d29c111d2c1e"}
+            "Toronto Defiant": "8f632648-b26f-4554-bae4-40f9aee1773b"}
     for name, tid in want.items():
         d = t.find(name)
         assert d and (d["entity_type"], d["entity_id"]) == ("team", tid), name
+    # NRG Shock (FACEIT 'SOG', d566d889) routes to the org that id belongs to for its whole life: anchored to the bare
+    # id, "NRG Shock record" found nothing (search routing, owner 2026-10-02; lp_name_resolution guards it)
+    d = t.find("NRG Shock")
+    assert (d["entity_type"], d["entity_id"]) == ("org", "students-of-the-game")
     d = t.find("Spacestation Gaming")
     assert (d["entity_type"], d["entity_id"]) == ("org", "spacestation-gaming")
     assert t.find("Timeless")["entity_id"] == "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e"
