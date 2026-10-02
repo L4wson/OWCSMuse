@@ -14,6 +14,7 @@ asserted in CI. Adding an id to CONFIRMED is the act of confirming it.
 
 from __future__ import annotations
 
+import collections
 import json
 import sys
 from pathlib import Path
@@ -54,6 +55,8 @@ CONFIRMED |= {"G29", "G30"}
 CONFIRMED |= {"G31"}
 # G32-G34 (owner, 2026-10-02): Liquipedia-linked results - the 2024 region fix, a phantom-inflated grand final, Dallas maps
 CONFIRMED |= {"G32", "G33", "G34"}
+# G35+ (owner, 2026-10-02 bug batch): each bug's golden case
+CONFIRMED |= {"G35", "G36", "G37"}
 
 CASES: list[dict] = []
 
@@ -436,18 +439,29 @@ case("G32", "A 2024 NA series with no FACEIT id on its page is linked to Liquipe
      "America out), every 2024 NA record was rejected as cross-region and the series carried FACEIT alone.",
      regression="2024 'North_America' pages resolved to region 'other' (2026-10-02)")
 
+tor_rows = []
+for x in S:
+    if not x.counts_as_series:
+        continue
+    for k, o in (("faction1", "faction2"), ("faction2", "faction1")):
+        if x.team[k] == tor:
+            if x.match_id in I.LIQUIPEDIA:
+                (mine, theirs), _ = oriented(x.match_id, "Toronto Defiant")
+            else:
+                mine, theirs = x.score[k], x.score[o]
+            tor_rows.append((x.match_id, mine, theirs, x.winner_faction == k))
+tor_rec = {"matches": len(tor_rows), "wins": sum(w for *_, w in tor_rows), "losses": sum(not w for *_, w in tor_rows),
+           "map_wins": sum(m for _, m, _, _ in tor_rows), "map_losses": sum(t for _, _, t, _ in tor_rows)}
 case("G33", "A grand final FACEIT inflated with a phantom map presents Liquipedia's score", "exact",
      "Toronto Defiant record",
      {"status": "ok", "entity": {"role": "subject", "type": "team", "id": tor, "name": "Toronto Defiant"},
-      "rows": [{"team": "Toronto Defiant", "matches": 2, "wins": 2, "losses": 0,
-                "map_wins": na_for + gf_for, "map_losses": na_against + gf_against}],
+      "rows": [{"team": "Toronto Defiant", **tor_rec}],
       "evidence": {"by_match": {NA_FINAL: {"score": gf_for, "opponent_score": gf_against, "best_of": gf_lp["best_of"],
                                            "sources": ["faceit", "liquipedia"]}}}},
-     f"Toronto Defiant's only golden series are both against Timeless in 2024 NA Stage 1, each a linked Liquipedia record: "
-     f"{na_for}-{na_against} and the grand final {gf_for}-{gf_against} (bo{gf_lp['best_of']}). FACEIT stores the final as "
-     f"{max(faceit_gf.values())}-{min(faceit_gf.values())}: its detailed_results carries a 5th entry (Dorado, 1-0) nobody "
-     f"played. Map wins come from the series score, so the record is {na_for + gf_for}-{na_against + gf_against}, not "
-     f"{na_for + max(faceit_gf.values())}-{na_against}.",
+     f"Toronto Defiant's {tor_rec['matches']} golden series, each scored from Liquipedia where linked (the source of record) "
+     f"and from FACEIT otherwise: " + ", ".join(f"{mid[:10]} {mine}-{theirs}" for mid, mine, theirs, _ in tor_rows)
+     + f". The grand final is {gf_for}-{gf_against} (bo{gf_lp['best_of']}); FACEIT stores it as "
+     f"{max(faceit_gf.values())}-{min(faceit_gf.values())} with a 5th detailed_results entry (Dorado, 1-0) nobody played.",
      regression="FACEIT phantom map in a sweep's series score; Liquipedia is the source of record where linked (034)")
 
 fal, ence = team_id("Team Falcons"), team_id("ENCE")
@@ -468,6 +482,82 @@ case("G34", "A Dreamhack Dallas series has Liquipedia's maps, a drawn map, and L
      f"record has {len(games)} games played: " + ", ".join(f"{g['map']} ({'drawn' if g['winner'] is None else ('Falcons' if g['winner'] == fal_side else 'ENCE')})" for g in games)
      + f", scheduled {dl['played_at']:%Y-%m-%d %H:%M}Z. A drawn map is nobody's win (030).",
      regression="Dallas linked by owner decision and enriched (2026-10-02): Liquipedia maps and schedule for a result_only series")
+
+
+# ------------------------------------------------- bug batch (2026-10-02)
+from decimal import Decimal as _D  # noqa: E402
+
+kd_rows = {}
+for x in S:
+    if x.season != 2026 or not x.rounds:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            e, dth = I.num(pl["stats"], "Eliminations"), I.num(pl["stats"], "Deaths")
+            if e is None or dth is None:
+                continue
+            k = kd_rows.setdefault(pl["player_id"], [0, 0, 0])
+            k[0] += e; k[1] += dth; k[2] += 1
+ranked = sorted(((round(_D(e) / _D(dth), 2), m, pid_) for pid_, (e, dth, m) in kd_rows.items() if dth),
+                key=lambda t: (-t[0], -t[1]))
+kd_top, kd_maps, kd_pid = ranked[0]
+assert ranked[1][0] < kd_top, "a tie at the top would make the expected leader arbitrary"
+kd_shown = format(kd_top.normalize(), "f")
+case("G35", "A K/D leaderboard's sentence quotes the K/D, not the map win %", "exact", "highest kd in 2026",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, kd_pid), "kd_ratio": str(kd_top)}],
+      "sentence_contains": [f"leads K/D ratio with {kd_shown} across {kd_maps} map"]},
+     f"K/D = total Eliminations / total Deaths over each player's 2026 maps (never a sum or average of per-map ratios). "
+     f"Highest: {I.display_name(S, kd_pid)}, {kd_rows[kd_pid][0]}/{kd_rows[kd_pid][1]} = {kd_top} over {kd_maps} maps. "
+     "The sentence once printed the row's first numeric column instead (production: Attack's 77.80 map win % for a 5.00 K/D).",
+     regression="leaderboard sentence quoted map_win_pct as the K/D (2026-10-02)")
+
+
+# G36/G37: a role leaderboard ranks the players whose primary role it is (most maps that season), over their maps in it
+role_maps = collections.defaultdict(list)
+for x in S:
+    if x.season != 2024 or x.region != "na" or not x.counts_as_series:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            role, dth = pl["stats"].get("Role"), I.num(pl["stats"], "Deaths")
+            if role and role != "-":
+                role_maps[pl["player_id"]].append((role, dth))
+season_roles = collections.defaultdict(collections.Counter)      # primary role is over the whole season, all regions
+for x in S:
+    if x.season != 2024:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            if pl["stats"].get("Role"):
+                season_roles[pl["player_id"]][pl["stats"]["Role"]] += 1
+def primary(pid_):
+    c = season_roles[pid_]; top = max(c.values())
+    return {r for r, n in c.items() if n == top}
+supports = sorted(((sum(d for r, d in ms if r == "Support" and d is not None), sum(r == "Support" for r, _ in ms), pid_)
+                   for pid_, ms in role_maps.items() if "Support" in primary(pid_) and any(r == "Support" for r, _ in ms)),
+                  key=lambda t: (t[0], -t[1]))
+mer1t = next(p_ for p_ in role_maps if I.display_name(S, p_) == "MER1T")
+assert "Support" not in primary(mer1t) and any(r == "Support" for r, _ in role_maps[mer1t])
+low_d, low_maps, low_pid = supports[0]
+low_d = int(low_d)
+assert supports[1][:2] != (low_d, low_maps), "a tie at the bottom would make the expected leader arbitrary"
+case("G36", "A role leaderboard ranks only players whose role it is", "exact",
+     "which na support had the least deaths in 2024",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, low_pid), "total": low_d}],
+      "rows_only_players": sorted({I.display_name(S, p_) for _, _, p_ in supports}),
+      "sentence_contains": [f"{I.display_name(S, low_pid)} has the lowest Deaths with {low_d}"]},
+     f"Among 2024 NA players whose primary 2024 role is Support (most maps), Deaths summed over their Support maps, "
+     f"lowest first: {I.display_name(S, low_pid)}, {low_d} over {low_maps} map(s). MER1T played one golden map as Support "
+     f"({[d for r, d in role_maps[mer1t] if r == 'Support'][0]} deaths) but his 2024 role is "
+     f"{'/'.join(sorted(primary(mer1t)))}, so he is no support; a per-map filter once ranked him first.",
+     regression="role filter applied per map, so one flex map made a damage player a support (2026-10-02)")
+case("G37", "Every entity link in an ascending sentence covers its own text", "invariant",
+     "which na support had the least deaths in 2024",
+     {"status": "ok", "spans_match_text": True},
+     "The ascending verb ('has the lowest') was substituted for 'leads' after the spans were placed, shifting every later "
+     "span by 9 characters: the stat link covered 'e lowe' inside 'the lowest'. Each span's text must equal the sentence "
+     "text at its offsets.",
+     regression="span offsets shifted by a post-hoc text rewrite (2026-10-02)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

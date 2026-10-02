@@ -276,6 +276,22 @@ def _entity_stat(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     return b.done()
 
 
+# The column that holds a metric's own value. A leaderboard row carries several numbers (a K/D row also has map_win_pct,
+# a series-won row also has win_pct), so the sentence must name the metric's column, never the first one present: taking
+# the first printed Attack's 77.80 map win % as his K/D (5.00).
+METRIC_COLUMN = {"kd_ratio": "kd_ratio", "map_win_rate": "map_win_pct", "win_rate": "win_pct", "maps": "maps",
+                 "matches": "matches", "map_wins": "map_wins", "map_losses": "map_losses"}
+
+
+def value_column(query: dict, row: dict) -> Optional[str]:
+    metric = query.get("metric")
+    if metric in METRIC_COLUMN:
+        return METRIC_COLUMN[metric]
+    if metric in ("wins", "losses"):                    # series won / lost for a team; maps won / lost for a player
+        return metric if metric in row else ("map_wins" if metric == "wins" else "map_losses")
+    return "avg_per_map" if query.get("aggregation") == "avg_per_map" else "total"
+
+
 def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Optional[Sentence]:
     row = rows[0]
     metric = query.get("metric")
@@ -286,13 +302,13 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
         return None
     b = _Builder()
     b.mark(str(name), entity_type, entity_id)
-    b.add(" leads ")
+    ascending = query.get("sort") == "asc"
+    # the verb is chosen before any span is marked: rewriting " leads " afterwards shifted every later span by 9 characters,
+    # so the stat link landed on "e lowe" inside "the lowest"
+    b.add(" has the lowest " if ascending else " leads ")
     b.mark(_metric_label(metric) or str(metric), "stat", str(metric))
-    value = None
-    for key in ("total", "avg_per_map", "win_pct", "map_win_pct", "kd_ratio", "maps", "matches", "map_wins"):
-        if row.get(key) is not None:
-            value = row[key]
-            break
+    key = value_column(query, row)
+    value = row.get(key) if key else None
     if value is None:
         return None
     is_rate = query.get("aggregation") == "avg_per_map" or metric in ("win_rate", "map_win_rate")
@@ -309,10 +325,8 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     if seasons:
         b.add(f" {seasons}")
     if len(rows) > 1:
-        b.add(f", ahead of {len(rows) - 1} other{'' if len(rows) == 2 else 's'} shown")
-    if query.get("sort") == "asc":
-        # the same row, said honestly: this is the bottom of the ranking
-        b.text = b.text.replace(" leads ", " has the lowest ", 1)
+        b.add(f", out of {len(rows)} shown" if ascending else
+              f", ahead of {len(rows) - 1} other{'' if len(rows) == 2 else 's'} shown")
     return b.done()
 
 

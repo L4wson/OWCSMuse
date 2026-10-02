@@ -55,6 +55,14 @@ class Compiled:
 CompileResult = Union[Compiled, Unanswerable]
 
 
+
+def _primary_role(clauses: list, role: Optional[str]) -> None:
+    """A role leaderboard ranks the players whose role it is: a map counts only when the role is the player's primary
+    role that season (migration 036). A single player's stat "as tank" keeps every map he played as tank."""
+    if role:
+        clauses.append("EXISTS (SELECT 1 FROM player_primary_roles pr WHERE pr.player_id = fp.player_id "
+                       "AND pr.season = fp.season AND pr.role = fp.role)")
+
 def _where(clauses: list[str], params: list[Any], col: str, value: Any, op: str = "=") -> None:
     if value is None:
         return
@@ -220,11 +228,14 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         if use_maps:
             _where(clauses, params, "t.map_name", v.map_name)
             _where(clauses, params, "t.game_mode", v.mode_name)
-            select = ("t.org_key, t.display_name AS team, sum(t.maps) AS maps, sum(t.matches) AS matches, sum(t.wins) AS map_wins, "
-                      "sum(t.losses) AS map_losses, sum(t.draws) AS draws, "
-                      "round(100.0 * sum(t.wins) / nullif(sum(t.maps), 0), 1) AS map_win_pct, "
+            # from the fact view: agg_team_maps is grouped per map and mode, so summing its `matches` counts a series once
+            # per map played in it (Virtus pro: 57 "series" for 15)
+            select = ("t.org_key, t.display_name AS team, count(*) AS maps, count(DISTINCT t.match_id) AS matches, "
+                      "count(*) FILTER (WHERE t.won) AS map_wins, count(*) FILTER (WHERE NOT t.won AND NOT t.drawn) AS map_losses, "
+                      "count(*) FILTER (WHERE t.drawn) AS draws, "
+                      "round(100.0 * count(*) FILTER (WHERE t.won) / nullif(count(*), 0), 1) AS map_win_pct, "
                       "array_agg(DISTINCT t.season ORDER BY t.season) AS seasons")
-            table, order_key = "agg_team_maps", {"map_win_rate": "map_win_pct", "map_wins": "map_wins", "map_losses": "map_losses"}.get(q.metric, "maps")
+            table, order_key = "fact_team_maps", {"map_win_rate": "map_win_pct", "map_wins": "map_wins", "map_losses": "map_losses"}.get(q.metric, "maps")
         else:
             select = ("t.org_key, t.display_name AS team, sum(t.matches) AS matches, sum(t.wins) AS wins, sum(t.losses) AS losses, "
                       "sum(t.map_wins) AS map_wins, sum(t.map_losses) AS map_losses, sum(t.maps) AS maps, "
@@ -235,7 +246,8 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         sql = f"SELECT {select} FROM {table} t{where} GROUP BY t.org_key, t.display_name"
         if per_team:
-            sql += f" HAVING sum(t.matches) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, matches DESC, t.org_key LIMIT %s"
+            enough = "count(DISTINCT t.match_id)" if table == "fact_team_maps" else "sum(t.matches)"
+            sql += f" HAVING {enough} >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, matches DESC, t.org_key LIMIT %s"
             params += [q.min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"team {'leaderboard' if per_team else 'record'} ({q.metric})",
                         coverage_season=f.season, coverage_championship=single_champ)
@@ -253,9 +265,11 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
             _where(clauses, params, "map_name", v.map_name)
         if r.team_id:
             _where(clauses, params, "org_key", r.org_key(r.team_id, r.subject_type))
-            select = (f"{group}, sum(maps) AS maps, sum(matches) AS matches, sum(wins) AS wins, sum(losses) AS losses, sum(draws) AS draws, "
-                      "round(100.0 * sum(wins) / nullif(sum(maps), 0), 1) AS win_pct")
-            table, order_key = "agg_team_maps", "win_pct" if q.metric in ("map_win_rate", "win_rate") else "maps"
+            # the fact view, so a series with two maps of one mode counts once in that mode's `matches`
+            select = (f"{group}, count(*) AS maps, count(DISTINCT match_id) AS matches, count(*) FILTER (WHERE won) AS wins, "
+                      "count(*) FILTER (WHERE NOT won AND NOT drawn) AS losses, count(*) FILTER (WHERE drawn) AS draws, "
+                      "round(100.0 * count(*) FILTER (WHERE won) / nullif(count(*), 0), 1) AS win_pct")
+            table, order_key = "fact_team_maps", "win_pct" if q.metric in ("map_win_rate", "win_rate") else "maps"
         elif r.player_id:
             _where(clauses, params, "player_id", r.player_id)
             extra = ""
@@ -271,7 +285,16 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
                       "round(avg(avg_duration_seconds)) AS avg_duration_seconds")
             table, order_key = "agg_map_modes", "maps"
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-        sql = f"SELECT {select} FROM {table}{where} GROUP BY {group} HAVING sum(maps) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC, {group} LIMIT %s"
+        enough = "count(*)" if table == "fact_team_maps" else "sum(maps)"
+        if table == "agg_player_stats":
+            # agg_player_stats is grouped per map and mode too: a series counts once per {group}, from the fact view
+            sql = (f"WITH m AS (SELECT {group}, count(DISTINCT match_id) AS matches FROM fact_player_maps{where} GROUP BY {group}) "
+                   f"SELECT {select.replace('sum(matches) AS matches', 'max(m.matches) AS matches')} FROM {table} "
+                   f"JOIN m USING ({group}){where} GROUP BY {group} HAVING sum(maps) >= %s "
+                   f"ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC, {group} LIMIT %s")
+            params = params + params
+        else:
+            sql = f"SELECT {select} FROM {table}{where} GROUP BY {group} HAVING {enough} >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC, {group} LIMIT %s"
         params += [q.min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"{q.entity} breakdown ({q.metric})", coverage_stat=stat,
                         coverage_season=f.season, coverage_championship=single_champ)
@@ -318,6 +341,8 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, f"{alias}.map_name", v.map_name)
         _where(clauses, params, f"{alias}.game_mode", v.mode_name)
         _where(clauses, params, f"{alias}.role", f.role)
+        if q.intent == "leaderboard":
+            _primary_role(clauses, f.role)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         if f.role:
             # fact_player_maps has role but no pre-aggregated sums; the same
@@ -445,6 +470,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
     _where(clauses, params, f"{alias}.map_name", v.map_name)
     _where(clauses, params, f"{alias}.game_mode", v.mode_name)
     _where(clauses, params, f"{alias}.role", f.role)
+    _primary_role(clauses, f.role)
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
     if has_role:
         sql = (f"SELECT fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "

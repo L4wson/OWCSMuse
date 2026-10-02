@@ -18,15 +18,15 @@
     "rows": [
      {
       "nickname": "sugarfree",
-      "maps": 30,
-      "map_wins": 21,
+      "maps": 33,
+      "map_wins": 24,
       "map_losses": 9,
-      "eliminations": 645,
-      "deaths": 169
+      "eliminations": 697,
+      "deaths": 181
      }
     ]
    },
-   "derivation": "Every round in the golden stats payloads where player 58239fd5 appears: 30 maps over 7 series; a map is won when round_stats.Winner is his team id. Name is his in-game name (game_player_name), not the FACEIT nickname sug2rfree.",
+   "derivation": "Every round in the golden stats payloads where player 58239fd5 appears: 33 maps over 8 series; a map is won when round_stats.Winner is his team id. Name is his in-game name (game_player_name), not the FACEIT nickname sug2rfree.",
    "status": "confirmed"
   },
   {
@@ -38,13 +38,13 @@
    "expect": {
     "status": "ok",
     "evidence": {
-     "total_rows": 30,
+     "total_rows": 33,
      "regions_only": [
       "na"
      ]
     }
    },
-   "derivation": "All 30 of his maps are in NA competitions, and the golden set includes 2 EMEA 'SpaceStation' matches (a different team) that must not appear. A wrong SpaceStation/SpaceStation Gaming merge would add them.",
+   "derivation": "All 33 of his maps are in NA competitions, and the golden set includes 2 EMEA 'SpaceStation' matches (a different team) that must not appear. A wrong SpaceStation/SpaceStation Gaming merge would add them.",
    "status": "confirmed"
   },
   {
@@ -542,9 +542,9 @@
       "maps_with_stat": 16
      },
      {
-      "nickname": "Kellan",
-      "total": 228,
-      "maps_with_stat": 12
+      "nickname": "Someone",
+      "total": 242,
+      "maps_with_stat": 11
      }
     ],
     "rows_only_players": [
@@ -569,7 +569,8 @@
      "cuFFa",
      "eisgnom",
      "iCy",
-     "sniper"
+     "sniper",
+     "sugarfree"
     ],
     "evidence": {
      "roles_only": [
@@ -577,7 +578,7 @@
      ]
     }
    },
-   "derivation": "'Kills' = FACEIT Eliminations, summed over only the maps where the player's Role was Tank (22 tank players). Every returned player must be one of the tank-role players, and every evidence row's role must be Tank.",
+   "derivation": "'Kills' = FACEIT Eliminations, summed over only the maps where the player's Role was Tank (23 tank players). Every returned player must be one of the tank-role players, and every evidence row's role must be Tank.",
    "status": "confirmed"
   },
   {
@@ -816,12 +817,12 @@
      "then_rows": [
       {
        "nickname": "sugarfree",
-       "total": 645
+       "total": 697
       }
      ]
     }
    },
-   "derivation": "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with zero or some rows. It must offer the same question without the region, and that question must answer with the independently-derived all-seasons eliminations leader (645 eliminations).",
+   "derivation": "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with zero or some rows. It must offer the same question without the region, and that question must answer with the independently-derived all-seasons eliminations leader (697 eliminations).",
    "status": "confirmed"
   },
   {
@@ -866,10 +867,10 @@
     "rows": [
      {
       "team": "Toronto Defiant",
-      "matches": 2,
-      "wins": 2,
+      "matches": 3,
+      "wins": 3,
       "losses": 0,
-      "map_wins": 7,
+      "map_wins": 10,
       "map_losses": 2
      }
     ],
@@ -887,7 +888,7 @@
      }
     }
    },
-   "derivation": "Toronto Defiant's only golden series are both against Timeless in 2024 NA Stage 1, each a linked Liquipedia record: 3-2 and the grand final 4-0 (bo7). FACEIT stores the final as 5-0: its detailed_results carries a 5th entry (Dorado, 1-0) nobody played. Map wins come from the series score, so the record is 7-2, not 8-2.",
+   "derivation": "Toronto Defiant's 3 golden series, each scored from Liquipedia where linked (the source of record) and from FACEIT otherwise: 1-4b984ffd 3-2, 1-70cff415 4-0, 1-3546e79b 3-0. The grand final is 4-0 (bo7); FACEIT stores it as 5-0 with a 5th detailed_results entry (Dorado, 1-0) nobody played.",
    "status": "confirmed"
   },
   {
@@ -920,6 +921,69 @@
     }
    },
    "derivation": "FACEIT has this series result_only (no map stats, best_of stored as 1, its time the result's entry). Liquipedia's record has 4 games played: Antarctic Peninsula (Falcons), Circuit Royal (Falcons), Numbani (drawn), Suravasa (Falcons), scheduled 2024-05-31 20:45Z. A drawn map is nobody's win (030).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G35",
+   "title": "A K/D leaderboard's sentence quotes the K/D, not the map win %",
+   "kind": "exact",
+   "regression": "leaderboard sentence quoted map_win_pct as the K/D (2026-10-02)",
+   "question": "highest kd in 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "JaeWoo",
+      "kd_ratio": "7.27"
+     }
+    ],
+    "sentence_contains": [
+     "leads K/D ratio with 7.27 across 3 map"
+    ]
+   },
+   "derivation": "K/D = total Eliminations / total Deaths over each player's 2026 maps (never a sum or average of per-map ratios). Highest: JaeWoo, 80/11 = 7.27 over 3 maps. The sentence once printed the row's first numeric column instead (production: Attack's 77.80 map win % for a 5.00 K/D).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G36",
+   "title": "A role leaderboard ranks only players whose role it is",
+   "kind": "exact",
+   "regression": "role filter applied per map, so one flex map made a damage player a support (2026-10-02)",
+   "question": "which na support had the least deaths in 2024",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "FrothyFilly7",
+      "total": 19
+     }
+    ],
+    "rows_only_players": [
+     "FrothyFilly7",
+     "OPENER",
+     "Rupal",
+     "Vega",
+     "cjay",
+     "redex"
+    ],
+    "sentence_contains": [
+     "FrothyFilly7 has the lowest Deaths with 19"
+    ]
+   },
+   "derivation": "Among 2024 NA players whose primary 2024 role is Support (most maps), Deaths summed over their Support maps, lowest first: FrothyFilly7, 19 over 3 map(s). MER1T played one golden map as Support (4 deaths) but his 2024 role is Damage, so he is no support; a per-map filter once ranked him first.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G37",
+   "title": "Every entity link in an ascending sentence covers its own text",
+   "kind": "invariant",
+   "regression": "span offsets shifted by a post-hoc text rewrite (2026-10-02)",
+   "question": "which na support had the least deaths in 2024",
+   "expect": {
+    "status": "ok",
+    "spans_match_text": true
+   },
+   "derivation": "The ascending verb ('has the lowest') was substituted for 'leads' after the spans were placed, shifting every later span by 9 characters: the stat link covered 'e lowe' inside 'the lowest'. Each span's text must equal the sentence text at its offsets.",
    "status": "confirmed"
   }
  ]

@@ -171,7 +171,8 @@ def test_team_record_and_map_record():
     assert "agg_team_matches" in c.sql and c.params == ["team:t1", 2024]
     v = validate(StructuredQuery(intent="team_record", entity="team", metric="record", filters=Filters(team="tm", mode="Control")), INFO)
     c = _sql(v, R_TEAM)
-    assert "agg_team_maps" in c.sql and "game_mode = %s" in c.sql
+    # series counted once each, from the fact view: summing agg_team_maps' per-map `matches` gave Virtus pro 57 for 15
+    assert "fact_team_maps" in c.sql and "count(DISTINCT t.match_id) AS matches" in c.sql and "game_mode = %s" in c.sql
 
 
 def test_team_leaderboard_by_win_rate():
@@ -190,7 +191,8 @@ def test_head_to_head_orders_pair_and_presents_from_first_team():
 
 def test_map_stats_for_team_player_and_global():
     c = _sql(val("which map does Twisted Minds win the most"), R_TEAM)
-    assert "agg_team_maps" in c.sql and "GROUP BY map_name" in c.sql and "ORDER BY win_pct" in c.sql
+    assert "fact_team_maps" in c.sql and "count(DISTINCT match_id) AS matches" in c.sql
+    assert "GROUP BY map_name" in c.sql and "ORDER BY win_pct" in c.sql
     c = _sql(val("KSAA eliminations by map"), R_PLAYER)
     assert "agg_player_stats" in c.sql and "eliminations_total" in c.sql
     c = _sql(val("what are the most played maps in 2024"), Resolved())

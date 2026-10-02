@@ -132,8 +132,17 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str) -> None:
             _check(out, f"{p}evidence rows for {mid[:10]}", True, bool(mine), ok=bool(mine))
             for k, v in want.items():
                 got = sorted({str(r.get(k)) for r in mine}) if k != "sources" else sorted({tuple(r.get(k) or ()) for r in mine})
-                exp = [str(v)] if k != "sources" else [tuple(v)]
-                _check(out, f"{p}evidence[{mid[:10]}].{k}", exp, got)
+                wanted = [str(v)] if k != "sources" else [tuple(v)]     # never rebind `exp`: later checks read it
+                _check(out, f"{p}evidence[{mid[:10]}].{k}", wanted, got)
+    if exp.get("spans_match_text"):
+        sent = a.sentence if isinstance(a.sentence, dict) else {}
+        text = sent.get("text", "")
+        bad = [(sp.get("text"), text[sp["start"]:sp["end"]]) for sp in sent.get("spans") or []
+               if text[sp["start"]:sp["end"]] != sp.get("text")]
+        _check(out, f"{p}every entity span covers its own text", [], bad, ok=not bad and bool(sent.get("spans")))
+    for want in exp.get("sentence_contains") or []:
+        text = (a.sentence or {}).get("text", "") if isinstance(a.sentence, dict) else str(a.sentence or "")
+        _check(out, f"{p}sentence contains {want!r}", want, text, ok=want in text)
     if "limitations" in exp:
         have = [x.get("id") for x in (a.limitations or [])]
         missing = [x for x in exp["limitations"] if x not in have]

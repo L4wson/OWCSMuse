@@ -131,3 +131,20 @@ def test_a_refusal_is_a_sentence_with_its_entities_marked():
 def test_an_intent_with_no_template_returns_nothing_rather_than_guessing():
     assert render_sentence({"intent": "not_an_intent"}, [{"a": 1}]) is None
     assert render_sentence(VERSUS_Q, []) is None
+
+
+def test_a_leaderboard_sentence_quotes_the_metrics_own_column():
+    # every row also carries the columns that used to win: map_win_pct, win_pct, total. Attack's K/D (5.00) was once
+    # printed as his map win % (77.80); Dallas Fuel's series won (14) as its win % (87.5); a per-map average as the total.
+    base = {"nickname": "P", "player_id": "p1", "maps": 9, "map_win_pct": Decimal("77.8"), "win_pct": Decimal("87.5"),
+            "total": 144, "seasons": [2026]}
+    cases = [({"metric": "kd_ratio"}, {"kd_ratio": Decimal("5.00")}, "with 5 across"),
+             ({"metric": "Eliminations", "aggregation": "avg_per_map"}, {"avg_per_map": Decimal("28.8")}, "at 28.80 per map"),
+             ({"metric": "map_losses"}, {"map_losses": 3}, "with 3 across")]
+    for q, extra, want in cases:
+        s = render_sentence({"intent": "leaderboard", "entity": "player", "filters": {}, "sort": "desc", **q}, [{**base, **extra}])
+        assert want in s.text, (q, s.text)
+    team = {"team": "Dallas Fuel", "org_key": "dallas-fuel", "matches": 16, "wins": 14, "losses": 2, "maps": 61,
+            "win_pct": Decimal("87.5"), "seasons": [2026]}
+    s = render_sentence({"intent": "leaderboard", "entity": "team", "metric": "wins", "filters": {}, "sort": "desc"}, [team])
+    assert "with 14 across" in s.text, s.text

@@ -78,6 +78,17 @@
    "decision_note": "S4-S9 OWCS Central main series, both regions"
   },
   {
+   "championship_id": "d0b3ff2e-4e80-416c-b759-e20b1403d5ef",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "name": "OWCS 2024: NA Stage 2 - Group A",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2024,
+   "classification_source": "manual",
+   "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)"
+  },
+  {
    "championship_id": "db1a7544-766d-4a46-bb69-163429310826",
    "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
    "name": "S9 NA OWCS Central - Regular Season",
