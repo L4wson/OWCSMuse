@@ -9,20 +9,26 @@ from owcsmuse.orgs import OrgDecisions
 SSG_2024, SSG_NA = "a359db61-26e2-44e0-8961-e0b373f4db21", "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf"
 
 
-def test_every_strong_identity_proposal_in_the_report_is_decided_to_its_guid():
+def test_the_only_undecided_strong_proposals_are_the_four_held_for_review():
     d = PlayerDecisions("scope/player_identity_decisions.json")
     rep = open("scope/identity_report.md", encoding="utf-8").read().splitlines()
     start = next(i for i, l in enumerate(rep) if l.startswith("## Proposed - strong"))
     end = next(i for i, l in enumerate(rep) if l.startswith("## Needs a person"))
-    n = 0
+    # held for the owner (2026-10-02): strong by the name rule, but each page sits on Liquipedia's lineup in 2024 Stage 2
+    # series whose FACEIT roster on that side does not carry the proposed GUID (W1ll 6, Ailiseu 2, Aniyun 1, Niann03 1)
+    held = {"W1ll", "Ailiseu", "Aniyun", "Niann03"}
+    strong = set()
     for l in rep[start:end]:
         if l.startswith("| ") and not l.startswith("| page"):
             page, _handle, _real, _nat, guid, *_ = [c.strip() for c in l.strip().strip("|").split("|")]
-            assert d.data[page]["entity_id"] == guid.strip("`"), page
-            n += 1
-    assert n == 165
+            strong.add(page)
+            assert page not in d.data, page
+    assert strong == held
+    assert len(d.data) == 349                                  # 166 + the 183 accepted 2026-10-02
     assert d.data["Zzz"] == {**d.data["Zzz"], "entity_id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea", "display": "ZZZ", "handle": "zzz"}
-    assert "Astro_(Canadian_player)" not in d.data            # decided on production by FACEIT name (identity decide --nickname)
+    # Astro was once decided on production by FACEIT name and never recorded here; the 2026-10-02 batch decides the page to
+    # that same GUID (Astronexz), on the same side's FACEIT roster in all 30 of its linked series
+    assert d.data["Astro_(Canadian_player)"]["entity_id"] == "e78965e3-6fdc-437d-ab8f-b859e283dfdf"
 
 
 def test_spacestation_gaming_is_one_org_over_two_eras_and_the_old_rejection_is_gone():
