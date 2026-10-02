@@ -54,8 +54,6 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | **total** | **451** | **473** | **413** | **11** | **19** | **8** | **30** | **11** |
 
-2 link(s) rest on a team-name mapping nobody has reviewed yet (marked provisional below).
-
 ## Needs review: ambiguous matches (0)
 
 None.

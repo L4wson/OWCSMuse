@@ -145,6 +145,12 @@
       "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "twisted minds": {
+      "entity_type": "team",
+      "entity_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+      "note": "58/58 id-linked matches; one FACEIT team id and the same name 2024-2026. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T04:07:51+00:00"
+    },
     "vanir quick": {
       "eras": [
         {
