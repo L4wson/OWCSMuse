@@ -78,7 +78,8 @@ def render(run: Run) -> str:
         L += [f"{len(prov)} link(s) rest on a team-name mapping nobody has reviewed yet (marked provisional below).", ""]
 
     # ------------------------------------------------------------------ review
-    amb = tiers.get(AMBIGUOUS, [])
+    amb = [lk for lk in tiers.get(AMBIGUOUS, []) if not lk.decision]        # a decided one is settled, below
+    decided_amb = [lk for lk in tiers.get(AMBIGUOUS, []) if lk.decision]
     L += [f"## Needs review: ambiguous matches ({len(amb)})", ""]
     if not amb:
         L += ["None.", ""]
@@ -92,6 +93,11 @@ def render(run: Run) -> str:
             L.append(f"- {lk.evidence['suggestion']} (a suggestion only: order is not evidence)")
         L += [f"- decide: `python -m owcsmuse liquipedia links decide {lk.lp.objectname} --faceit-id <id>` "
               f"or `--none`", ""]
+    if decided_amb:
+        L += ["", f"## Ambiguous matches already decided ({len(decided_amb)})", ""]
+        for lk in decided_amb:
+            L.append(f"- [{lk.decision}] {_lp_line(lk.lp)}" + (f"  -> FACEIT {lk.faceit_id}" if lk.faceit_id else "") + f"  ({lk.basis})")
+        L.append("")
 
     dis = [lk for lk in res.links if lk.faceit_id and lk.disagreements]
     L += [f"## Linked pairs where the two sources disagree ({len(dis)})", "",

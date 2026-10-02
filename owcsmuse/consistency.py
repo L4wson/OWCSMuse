@@ -448,16 +448,25 @@ def check_score_plausibility(conn: psycopg.Connection) -> CheckResult:
     discrepancies: list[dict[str, Any]] = []
     for r in _rows(conn, """
         SELECT series_id, score1, score2, best_of, score_source, best_of_source FROM series
-         WHERE best_of IS NOT NULL AND GREATEST(score1, score2) > (best_of + 1) / 2 LIMIT 20"""):
+         WHERE best_of IS NOT NULL AND GREATEST(score1, score2) > (best_of + 1) / 2 LIMIT 20"""):   # an unknown best-of holds anything
         discrepancies.append({"kind": "score_impossible_for_best_of", **r})
     for r in _rows(conn, "SELECT match_id, round_number FROM fact_team_maps WHERE won AND drawn LIMIT 10"):
         discrepancies.append({"kind": "map_both_won_and_drawn", **r})
     for r in _rows(conn, """
-        SELECT s.series_id FROM series s
+        SELECT s.series_id, t.name AS side1_team, s.score1 AS side1_series_score,
+               (SELECT count(*) FROM match_rounds r
+                 WHERE r.match_id = s.match_id
+                   AND map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = s.side1_team_id
+                   AND NOT EXISTS (SELECT 1 FROM phantom_maps p WHERE (p.match_id, p.round_number) = (r.match_id, r.round_number))) AS side1_map_wins
+          FROM series s LEFT JOIN teams t ON t.team_id = s.side1_team_id
          WHERE s.faceit_match_id IS NOT NULL AND s.score_source = 'faceit'
            AND EXISTS (SELECT 1 FROM match_rounds r WHERE r.match_id = s.match_id)
-           AND (SELECT count(*) FILTER (WHERE r.winner_team_id = s.side1_team_id AND NOT map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id))
-                  FROM match_rounds r WHERE r.match_id = s.match_id) > s.score1 LIMIT 10"""):
+           AND (SELECT count(*) FROM match_rounds r
+                 WHERE r.match_id = s.match_id
+                   AND map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = s.side1_team_id
+                   AND NOT EXISTS (SELECT 1 FROM phantom_maps p WHERE (p.match_id, p.round_number) = (r.match_id, r.round_number))) > s.score1
+         LIMIT 10"""):
+        # read as: side 1 (named) won more maps, by the scores, than the series score credits it with
         discrepancies.append({"kind": "map_wins_exceed_series_score", **r})
     # every FACEIT series whose presented best-of is not the stored one: the rule is general (032), so the list is
     # the report of what it corrects; a lowered best-of (stored bo5, won 2-x) is the kind worth a second look
@@ -469,8 +478,12 @@ def check_score_plausibility(conn: psycopg.Connection) -> CheckResult:
         "scores_corrected_from_maps": int(_scalar(conn, "SELECT count(*) FROM series WHERE score_source = 'maps'") or 0),
         "best_of_derived_from_score": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'derived from score'") or 0),
         "best_of_derived_from_map_wins": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'derived from map wins'") or 0),
-        "best_of_raised": sum(1 for c in corrections if c["stored"] is not None and c["derived"] > c["stored"]),
-        "best_of_lowered": sum(1 for c in corrections if c["stored"] is not None and c["derived"] < c["stored"]),
+        "best_of_from_liquipedia": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'liquipedia'") or 0),
+        "best_of_unknown": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'unknown'") or 0),
+        "best_of_implausible": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'implausible'") or 0),
+        "results_from_liquipedia": int(_scalar(conn, "SELECT count(*) FROM series WHERE result_source = 'liquipedia' AND faceit_match_id IS NOT NULL") or 0),
+        "best_of_raised": sum(1 for c in corrections if c["stored"] is not None and c["derived"] is not None and c["derived"] > c["stored"]),
+        "best_of_lowered": sum(1 for c in corrections if c["stored"] is not None and c["derived"] is not None and c["derived"] < c["stored"]),
         "drawn_maps": int(_scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") / 2 if _scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") else 0),
         "best_of_corrections": [{"series_id": c["series_id"], "stored": c["stored"], "derived": c["derived"],
                                  "score": f"{c['score1']}-{c['score2']}", "source": c["best_of_source"], "state": c["state"]}
@@ -482,6 +495,60 @@ def check_score_plausibility(conn: psycopg.Connection) -> CheckResult:
                    f"winning score: {counts['best_of_raised']} raised, {counts['best_of_lowered']} lowered; "
                    f"{counts['drawn_maps']} drawn map(s))",
                    f"{len(discrepancies)} implausible score(s)", counts)
+
+
+# ------------------------------------------------------------ map winners and phantom maps
+
+def check_map_winner_consistency(conn: psycopg.Connection) -> CheckResult:
+    """The map winner is derived from the scores; winner_team_id is advisory.
+
+    1-3e78e269 map 5 is scored 0-3 for one team and credits the other as winner. The scores decide (map_winner), a
+    tied map has no winner, and the stored winner is used only when a score is missing. The contradictions are
+    listed, not failed - they are FACEIT's data - but a fact row that still follows the stored winner fails.
+    """
+    contradictions = _rows(conn, """
+        SELECT r.match_id, r.round_number, r.map_name, r.game_mode, r.team1_score, r.team2_score,
+               t1.name AS team1, t2.name AS team2, w.name AS stored_winner,
+               dw.name AS derived_winner
+          FROM match_rounds r
+          JOIN matches m ON m.match_id = r.match_id JOIN championships c ON c.championship_id = m.championship_id
+          LEFT JOIN teams t1 ON t1.team_id = r.team1_team_id LEFT JOIN teams t2 ON t2.team_id = r.team2_team_id
+          LEFT JOIN teams w ON w.team_id = r.winner_team_id
+          LEFT JOIN teams dw ON dw.team_id = map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id)
+         WHERE c.include AND r.team1_score IS NOT NULL AND r.team2_score IS NOT NULL
+           AND r.winner_team_id IS DISTINCT FROM map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id)
+         ORDER BY r.match_id, r.round_number LIMIT 100""")
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, """
+        SELECT f.match_id, f.round_number, f.team_id FROM fact_team_maps f JOIN match_rounds r ON (r.match_id, r.round_number) = (f.match_id, f.round_number)
+         WHERE f.won <> coalesce(map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = f.team_id, false)
+            OR f.drawn <> map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id) LIMIT 10"""):
+        discrepancies.append({"kind": "team_map_fact_follows_stored_winner", **r})
+    for r in _rows(conn, """
+        SELECT f.match_id, f.round_number, f.player_id FROM fact_player_maps f JOIN match_rounds r ON (r.match_id, r.round_number) = (f.match_id, f.round_number)
+         WHERE f.map_won <> coalesce(map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = f.team_id, false) LIMIT 10"""):
+        discrepancies.append({"kind": "player_map_fact_follows_stored_winner", **r})
+    counts = {"winner_contradicts_scores": len(contradictions),
+              "contradictions": [{k: v for k, v in c.items()} for c in contradictions]}
+    return _result("map_winner_consistency", discrepancies,
+                   f"every fact row follows the winner the scores give ({len(contradictions)} stored winner(s) contradict their scores and are overridden)",
+                   f"{len(discrepancies)} fact row(s) follow a stored winner the scores contradict", counts)
+
+
+def check_phantom_map_isolation(conn: psycopg.Connection) -> CheckResult:
+    """A FACEIT map row beyond Liquipedia's game count for a linked series is a phantom: in no fact view, no
+    aggregate, no series score. The player rows that rode on one are counted so a person can see them."""
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, "SELECT f.match_id, f.round_number FROM fact_team_maps f JOIN phantom_maps p ON (p.match_id, p.round_number) = (f.match_id, f.round_number) LIMIT 10"):
+        discrepancies.append({"kind": "phantom_in_team_map_fact", **r})
+    for r in _rows(conn, "SELECT f.match_id, f.round_number FROM fact_player_maps f JOIN phantom_maps p ON (p.match_id, p.round_number) = (f.match_id, f.round_number) LIMIT 10"):
+        discrepancies.append({"kind": "phantom_in_player_map_fact", **r})
+    phantoms = _rows(conn, "SELECT match_id, round_number, map_name, liquipedia_games, player_rows FROM phantom_maps ORDER BY 1, 2 LIMIT 100")
+    counts = {"phantom_maps": len(phantoms), "phantom_maps_with_player_rows": sum(1 for p in phantoms if p["player_rows"]),
+              "phantom_player_rows_excluded": sum(int(p["player_rows"]) for p in phantoms), "phantoms": phantoms}
+    return _result("phantom_map_isolation", discrepancies,
+                   f"{len(phantoms)} phantom map(s) ({counts['phantom_maps_with_player_rows']} with player rows, {counts['phantom_player_rows_excluded']} excluded) are in no fact view",
+                   f"{len(discrepancies)} fact row(s) sit on a phantom map", counts)
 
 
 # ------------------------------------------------------------ identity windows
@@ -572,6 +639,8 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "series_integrity": check_series_integrity,
     "score_plausibility": check_score_plausibility,
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
+    "map_winner_consistency": check_map_winner_consistency,
+    "phantom_map_isolation": check_phantom_map_isolation,
 }
 
 

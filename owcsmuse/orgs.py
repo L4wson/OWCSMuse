@@ -590,11 +590,27 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
         unresolved: list[dict[str, str]] = []
 
         def sighting(team_id: str, name: Optional[str]) -> Optional[datetime]:
+            """When this FACEIT name was first seen on this team id, at the series' time as the facts read it.
+
+            team_names.first_seen_at is FACEIT's timestamp, and a result_only series' FACEIT time is when the
+            result was entered - hours after Liquipedia dates the same series. A window that starts at FACEIT's
+            time of an era's first series leaves Liquipedia's record of that very series outside it, so the
+            Liquipedia side resolves to the previous era and the two sources "disagree on teams" (17 of 20
+            ambiguous links on production, 2026-10-02). The earliest time any source gives a series the team
+            played under that name is the start; it covers the series on both sides.
+            """
             if not name:
                 return None
-            cur.execute("SELECT first_seen_at FROM team_names WHERE team_id = %s AND name = %s", (team_id, name))
+            cur.execute("""
+                SELECT least(
+                    (SELECT first_seen_at FROM team_names WHERE team_id = %s AND name = %s),
+                    (SELECT min(least(coalesce(m.liquipedia_played_at, lm.played_at, 'infinity'::timestamptz),
+                                      match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at)))
+                       FROM matches m LEFT JOIN liquipedia_matches lm ON lm.faceit_match_id = m.match_id
+                      WHERE (m.faction1_team_id = %s AND m.faction1_name = %s) OR (m.faction2_team_id = %s AND m.faction2_name = %s))
+                ) AS at""", (team_id, name, team_id, name, team_id, name))
             row = cur.fetchone()
-            return row["first_seen_at"] if row else None
+            return row["at"] if row and row["at"] else None
 
         for team_id, d in ((t, m) for t in decisions.data for m in decisions.mappings(t)):
             if team_id not in known:

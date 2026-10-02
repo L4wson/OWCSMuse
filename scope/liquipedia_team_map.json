@@ -74,10 +74,10 @@
       "decided_at": "2026-10-01T22:00:00+00:00"
     },
     "timeless": {
-      "entity_type": "org",
-      "entity_id": "ntmr",
-      "note": "ntmr acquired the Timeless roster",
-      "decided_at": "2026-09-23T05:02:39+00:00"
+      "entity_type": "team",
+      "entity_id": "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+      "note": "Timeless is team id c5116cb3's own era (2024 Stage 1 to 2025 Stage 1); NTMR picked the roster up in 2025 Stage 2 and the NTMR org is mapped only from that window (scope/org_decisions.json). Was 'org ntmr' before the window decision, which made every Timeless-era link disagree on teams.",
+      "decided_at": "2026-10-02T01:04:44+00:00"
     },
     "vanir quick": {
       "entity_type": "team",

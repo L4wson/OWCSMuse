@@ -286,3 +286,36 @@ def test_a_registration_placeholder_is_the_same_organisation_without_a_window():
     # and the old name must be gone early: a name that lasted the stage is not a placeholder
     c = classify_name_change(_n("Rad", "2025-02-01", "2025-05-10"), _n("Sakura", "2025-05-17", "2025-09-21"))
     assert c["verdict"] == "disagree" and not c["placeholder"]
+
+
+@pytest.mark.skipif(not DB_URL, reason="OWCS_TEST_DATABASE_URL not set")
+def test_a_name_sourced_window_starts_at_the_series_time_as_the_facts_read_it(agg_db, tmp_path):
+    """team_names.first_seen_at is FACEIT's timestamp; a result_only series' FACEIT time is when the result was
+    entered, hours after Liquipedia dates it. The window must start at the earliest time any source gives the
+    first series under that name, or Liquipedia's record of that series resolves to the previous era (the 17
+    'disagree on teams' links on production, 2026-10-02)."""
+    from datetime import timedelta
+    with agg_db.cursor() as cur:
+        cur.execute("""SELECT m.match_id, m.faction1_team_id AS team_id, m.faction1_name AS name,
+                              match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at) AS t
+                         FROM matches m WHERE m.ingest_state = 'complete' AND m.faction1_name IS NOT NULL ORDER BY 4 LIMIT 1""")
+        m = cur.fetchone()
+        cur.execute("SELECT first_seen_at FROM team_names WHERE team_id = %s AND name = %s", (m["team_id"], m["name"]))
+        faceit_first = cur.fetchone()["first_seen_at"]
+        earlier = m["t"] - timedelta(hours=2)
+        cur.execute("UPDATE matches SET liquipedia_played_at = %s WHERE match_id = %s", (earlier, m["match_id"]))
+    agg_db.commit()
+    d = OrgDecisions(tmp_path / "d.json")
+    d.set(m["team_id"], "test-sourced", "Sourced", valid_from_name=m["name"])
+    try:
+        out = load_decisions(agg_db, d)
+        assert out["team_ids_mapped"] == 1 and out["windows_unresolved"] == []
+        with agg_db.cursor() as cur:
+            cur.execute("SELECT valid_from FROM team_orgs WHERE team_id = %s", (m["team_id"],))
+            got = cur.fetchone()["valid_from"]
+        assert got == min(earlier, faceit_first) and got <= earlier < faceit_first or got == earlier
+    finally:
+        load_decisions(agg_db, OrgDecisions(tmp_path / "empty.json"))
+        with agg_db.cursor() as cur:
+            cur.execute("UPDATE matches SET liquipedia_played_at = NULL WHERE match_id = %s", (m["match_id"],))
+        agg_db.commit()

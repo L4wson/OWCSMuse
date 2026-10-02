@@ -68,7 +68,7 @@ def warehouse(tmp_path_factory):
 def _series(conn):
     with conn.cursor() as cur:
         cur.execute("SELECT series_id, faceit_match_id, lp_objectname, sources, source_url, side1_team_id, side2_team_id, "
-                    "played_at_source, result_source, state FROM series ORDER BY series_id")
+                    "played_at_source, result_source, state, score1, score2, score_source, best_of, best_of_source FROM series ORDER BY series_id")
         return {r["series_id"]: r for r in cur.fetchall()}
 
 
@@ -77,7 +77,9 @@ def test_a_match_on_both_sources_is_one_series_carrying_both(warehouse):
     s = _series(conn)
     linked = s["faceit:" + DB_FACEIT_ID]
     assert linked["sources"] == ["faceit", "liquipedia"] and linked["lp_objectname"] == "1_B1_0001"
-    assert linked["source_url"].endswith(DB_FACEIT_ID) and linked["result_source"] == "faceit"
+    # Liquipedia is the source of record for a linked series' result and best-of (034); FACEIT only where it has nothing
+    assert linked["source_url"].endswith(DB_FACEIT_ID) and linked["result_source"] == "liquipedia"
+    assert linked["score_source"] == "liquipedia" and linked["best_of_source"] == "liquipedia" and linked["best_of"] == 5
     assert sum(1 for r in s.values() if r["faceit_match_id"] == DB_FACEIT_ID) == 1          # once
 
 
@@ -132,3 +134,42 @@ def test_a_disagreeing_faceit_id_merges_nothing(warehouse):
         with conn.cursor() as cur:
             cur.execute("UPDATE liquipedia_coverage SET raw_ids = raw_ids[1:2] WHERE value = %s", (DB_PAGE,))
         conn.commit()
+
+
+def test_liquipedia_is_the_source_of_record_for_a_linked_result_and_a_phantom_map_is_out(warehouse):
+    """FACEIT keeps a fixed number of map slots per format and logs a default win when a sweep ends early (034).
+    Here FACEIT says 4-1 over five maps; Liquipedia, linked by id, says 3-1 over four games. The series presents
+    Liquipedia's result, the fifth FACEIT map is a phantom in no fact view, and its player rows are counted, not used."""
+    conn, *_ = warehouse
+    from liquipedia_support import DB_FACEIT_ID, DB_TEAM1, DB_TEAM2
+    from owcsmuse.consistency import run_checks
+    with conn.cursor() as cur:
+        # the module's earlier tests leave two Liquipedia records claiming this id (ambiguous): a person confirms one
+        cur.execute("UPDATE liquipedia_links SET faceit_match_id = %s, decision = 'confirmed' WHERE lp_objectname = '1_B1_0001'", (DB_FACEIT_ID,))
+        cur.execute("UPDATE liquipedia_links SET decision = 'rejected' WHERE lp_objectname = '1_B1_0009'")
+        cur.execute("UPDATE matches SET faction1_score = 4 WHERE match_id = %s", (DB_FACEIT_ID,))
+        cur.execute("""INSERT INTO match_rounds (match_id, round_number, map_name, game_mode, team1_team_id, team1_score,
+                                                  team2_team_id, team2_score, winner_team_id)
+                       VALUES (%s, 5, 'Dorado', 'Escort', %s, 3, %s, 0, %s)""", (DB_FACEIT_ID, DB_TEAM1, DB_TEAM2, DB_TEAM1))
+        cur.execute("INSERT INTO players (player_id, nickname) VALUES ('p-phantom', 'ghost') ON CONFLICT DO NOTHING")
+        cur.execute("""INSERT INTO match_players (match_id, round_number, player_id, team_id, nickname_at_match, stats)
+                       VALUES (%s, 5, 'p-phantom', %s, 'ghost', '{}'::jsonb)""", (DB_FACEIT_ID, DB_TEAM1))
+    try:
+        s = _series(conn)["faceit:" + DB_FACEIT_ID]
+        assert (s["score1"], s["score2"], s["score_source"], s["result_source"], s["best_of"], s["best_of_source"]) == (3, 1, "liquipedia", "liquipedia", 5, "liquipedia")
+        with conn.cursor() as cur:
+            cur.execute("SELECT round_number, map_name, player_rows FROM phantom_maps WHERE match_id = %s", (DB_FACEIT_ID,))
+            assert [tuple(r.values()) for r in cur.fetchall()] == [(5, "Dorado", 1)]
+            cur.execute("SELECT max(round_number) AS n FROM fact_team_maps WHERE match_id = %s", (DB_FACEIT_ID,))
+            assert cur.fetchone()["n"] == 4
+            cur.execute("SELECT count(*) AS n FROM fact_player_maps WHERE match_id = %s AND round_number = 5", (DB_FACEIT_ID,))
+            assert cur.fetchone()["n"] == 0
+            cur.execute("SELECT map_wins, map_losses FROM fact_team_matches WHERE match_id = %s AND team_id = %s", (DB_FACEIT_ID, DB_TEAM1))
+            assert tuple(cur.fetchone().values()) == (3, 1)
+        r = {c.name: c for c in run_checks(conn, ["phantom_map_isolation", "score_plausibility", "series_integrity"])}
+        assert r["phantom_map_isolation"].ok and r["phantom_map_isolation"].counts["phantom_maps"] == 1
+        assert r["phantom_map_isolation"].counts["phantom_maps_with_player_rows"] == 1 and r["phantom_map_isolation"].counts["phantom_player_rows_excluded"] == 1
+        assert r["score_plausibility"].ok and r["score_plausibility"].counts["results_from_liquipedia"] == 1
+        assert r["series_integrity"].ok
+    finally:
+        conn.rollback()

@@ -1010,7 +1010,9 @@ and exits 1 with the specific discrepancy:
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
 | `identity_windows` | every team-to-org window covers real series of its team id, no team id is two orgs at once, and no series carries two identities for one team |
 | `series_integrity` | a match is one series whichever source holds it; the series count reconciles against FACEIT plus the resolved Liquipedia-only records; a linked pair names the same identities on both sides |
-| `score_plausibility` | no series presents a score its best-of cannot hold, no map is both won and drawn, and map wins never exceed the presented series score |
+| `score_plausibility` | no series presents a score its best-of cannot hold, no map is both won and drawn, and map wins never exceed the presented series score; counts the best-of corrections (raised, lowered, unknown, implausible) and the results taken from Liquipedia |
+| `map_winner_consistency` | every fact row follows the winner the map scores give; lists every `winner_team_id` that contradicts its scores (1-3e78e269 map 5) |
+| `phantom_map_isolation` | a FACEIT map row beyond Liquipedia's game count for a linked series is in no fact view; counts the player rows that rode on one |
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
@@ -1110,8 +1112,12 @@ Liquipedia does not cover, or Liquipedia has no matching record.
 Source is recorded per field, never merged silently:
 
 - `match_rounds.source` (`faceit` | `liquipedia`). A Liquipedia round is only ever inserted where FACEIT has none,
-  so there is never a same-round conflict to arbitrate - FACEIT wins for map stats by construction, since its
-  presence is exactly what skips a match here.
+  so there is never a same-round conflict to arbitrate. **The Stage 2 rule that FACEIT won for map stats by
+  construction was inverted on 2026-10-02** (migration `034_map_winner_precedence.sql`, see **Stage 3: the
+  source-agnostic series**): FACEIT fabricates map rows when a sweep closes a series early and counts drawn maps as
+  wins, so Liquipedia is now the source of record for a series' result, best-of and map count wherever a linked
+  record exists, and a FACEIT map row beyond Liquipedia's game count is a phantom in no fact view. Player stats
+  remain FACEIT-only, as before.
 - `matches.date_source` (`faceit` | `liquipedia`) and `matches.liquipedia_played_at`. On a `result_only` series
   FACEIT's own timestamp is when the result was entered, not when it was played - Stage 1's alignment numbers put
   some of these 70+ hours off - so Liquipedia's scheduled time wins there, read through `fact_team_maps` /
@@ -1196,16 +1202,32 @@ room or the Liquipedia page, and an answer that used a Liquipedia-only series ca
   3-1 scores. A map is drawn when its scores are equal or no winner is recorded, a draw is excluded from map wins in
   every fact view, and the series score a series presents is corrected from its map results when FACEIT's counted a
   draw as a win (`score_source = 'maps'`; FACEIT's stored columns are untouched).
-- **Best-of is derived from the winning score, not read from FACEIT** (migration `032_best_of_from_wins.sql`). A
-  series with four map wins is a best-of-7 whatever FACEIT stored (Al Qadsiah 1-4 Twisted Minds, stored bo5; the
-  link is confirmed in `scope/liquipedia_link_decisions.json`), three a best-of-5, and so on; the winning score is
-  the one after the drawn-map correction, so a 4-0 with a 3-3 map derives from three actual wins and stays a bo5,
-  and a best-of is never fewer than the maps recorded. `best_of_source` is `faceit` where the stored value agrees,
-  `derived from map wins` where the score itself was corrected, `derived from score` otherwise. `check`
-  (`score_plausibility`) asserts that nothing presents a score its best-of cannot hold, counts every best-of it
-  corrects, raised and lowered separately, and lists them (`best_of_corrections`): a lowered one (stored bo5, won
-  2-x) is the kind worth a second look. Liquipedia-only series keep Liquipedia's best-of unless the score cannot
-  fit it.
+- **The map winner is derived from the scores; `winner_team_id` is advisory** (migration
+  `034_map_winner_precedence.sql`). 1-3e78e269 map 5 (Suravasa, Flashpoint) is scored 0-3 for Twisted Minds and
+  credits Al qadsiah as the winner; the map was really played, so nothing looked wrong, and every map record,
+  map/mode win rate and head-to-head that read `winner_team_id` attributed it to the wrong team. `map_winner()`
+  gives the higher score's team, nobody for equal scores (a tied map has no winner), and the stored winner only
+  when a score is missing. Every fact view, `series_score` and `agg_map_modes` read it; `check`
+  (`map_winner_consistency`) lists each stored winner that contradicts its scores and fails if a fact row follows one.
+- **Liquipedia is the source of record for a linked series' result and best-of; FACEIT only where Liquipedia has
+  nothing** (034, inverting Stage 2's rule). FACEIT keeps a fixed number of map slots per format and, when a sweep
+  closes a series early, logs a default win for the winner on the next map in the rotation (the 2024 Stage 1 grand
+  finals: real 4-0s stored as 5-0 with a Dorado nobody played), and it counts a drawn map as a win. Where a linked
+  record orients to the FACEIT factions (decided anchors, then names, then an unlevel score, then the winner), the
+  series presents Liquipedia's score, winner and best-of (`result_source`, `score_source`, `best_of_source` =
+  `liquipedia`). A FACEIT map row beyond Liquipedia's game count for a linked series is a phantom (`phantom_maps`):
+  out of map records, series scores, map/mode win rates and player aggregates alike, and `check`
+  (`phantom_map_isolation`) counts the player rows that rode on one. Player stats stay FACEIT-only. The extent
+  report is `python -m owcsmuse liquipedia phantoms` (below).
+- **Best-of is derived only from real, played map wins** (034, scoping back 032's rule, which derived from any
+  score and produced best-of-9 from phantom-inflated sweeps). With phantoms excluded, a series with four map wins
+  is a best-of-7 whatever FACEIT stored (Al Qadsiah 1-4 Twisted Minds, stored bo5; the link is confirmed in
+  `scope/liquipedia_link_decisions.json`), three a best-of-5, and never fewer than the maps played; the cap is the
+  formats OWCS uses (bo1, bo3, bo5, bo7), and a derivation past bo7 is `implausible` and presented as unknown
+  rather than invented. A stored best-of of 1 is junk (Dreamhack Dallas), not a value to correct from; a stored
+  value is used only when no maps were recorded and it is a real format, else the best-of is `unknown`.
+  `best_of_source` is `liquipedia` | `faceit` | `derived from map wins` | `implausible` | `unknown`; `check`
+  (`score_plausibility`) counts each kind and lists the corrections (`best_of_corrections`).
 - A link decision may be keyed `faceit:<match id>` (the report shows FACEIT ids, not objectnames); it settles the one
   record naming that id. The two drawn-map pairs are confirmed that way in `scope/liquipedia_link_decisions.json`.
 - `check` gains `series_integrity`: no FACEIT id or Liquipedia record in two series, the series count reconciles
@@ -1375,6 +1397,7 @@ migrations/030_draws.sql        a tied map is nobody's win; plausible series sco
 migrations/031_capabilities.sql region_sources (declared) and source_capabilities (derived): what each slice can answer
 migrations/032_best_of_from_wins.sql  best-of derived from the winning score; corrections counted and listed
 migrations/033_pin_search_path.sql  every table-reading SQL function survives PostgreSQL 17's restricted search_path
+migrations/034_map_winner_precedence.sql  map winner from the scores; Liquipedia the source of record where linked; phantom maps; best-of from played wins
 tests/test_search_path.py       refreshes every matview under search_path = pg_catalog, pg_temp; every table-reading SQL function qualified or pinned
 tools/window_review.py          the three name-change signals over every multi-name team id -> scope/org_window_review.md
 scope/org_window_decisions.json the owner's verdict on each of the 18 multi-name team ids (audit record; windows apply via org_decisions.json)
