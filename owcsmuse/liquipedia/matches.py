@@ -111,6 +111,11 @@ def region_of(pagename: str) -> str:
     return "other"
 
 
+def _not_played(game: dict[str, Any]) -> bool:
+    return (game.get("status") == "notplayed" or game.get("resulttype") == "np") and not game.get("scores") \
+        and str(game.get("winner") or "") not in ("1", "2")
+
+
 def faceit_id_of(links: Any) -> Optional[str]:
     """The FACEIT match id in a record's `links`, from whatever shape it arrives in (dict of name -> URL, or a list)."""
     m = FACEIT_ID.search(json.dumps(links, ensure_ascii=False)) if links else None
@@ -142,8 +147,13 @@ def parse_row(row: dict[str, Any], raw_id: int, wiki: str = "overwatch") -> Opti
     placeholder = any((o.get("name") or "").strip().lower() in PLACEHOLDER_NAMES or (o.get("type") not in (None, "team"))
                       for o in opp)
     winner = _int(row.get("winner")) or 0
+    # a series decided early still lists its remaining map slots, marked not played (status 'notplayed', resulttype
+    # 'np', no scores, no winner): 143 of them across 81 2024 records. Counted as games they inflate n_games (which
+    # hides a FACEIT phantom beyond the real count) and would be enriched as 0-0 draws nobody played. A real draw is
+    # resulttype 'draw' with its scores, and stays.
     games = tuple(LPGame(g.get("map"), g.get("mode"), _int(g.get("winner")) or 0, tuple(g.get("scores") or ()))
-                  for g in (row.get("match2games") or []) if g.get("map") or g.get("scores"))
+                  for g in (row.get("match2games") or [])
+                  if (g.get("map") or g.get("scores")) and not _not_played(g))
     faceit = faceit_id_of(row.get("links"))
     if row.get("links") and not faceit and "faceit" in json.dumps(row["links"]).lower():
         notes.append("links mention FACEIT but hold no match id")

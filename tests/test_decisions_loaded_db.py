@@ -124,4 +124,4 @@ def test_the_check_names_the_loader_and_fails_through_check(loaded, monkeypatch)
     r = check_decisions_loaded(conn)
     conn.commit()
     assert not r.ok and r.discrepancy_count == 1
-    assert r.discrepancies[0]["hint"] == "reload: python -m owcsmuse aliases load"
+    assert r.discrepancies[0]["hint"] == "reload: python -m owcsmuse alias load"

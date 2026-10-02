@@ -1051,7 +1051,7 @@ starts:
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
 | 3 | source-agnostic match model and cross-source identity | not started |
-| 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved |
+| 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved. All 14 Dallas series are linked by owner decision (2026-10-02): 12 present Liquipedia's score and best-of (bo5/bo7, replacing FACEIT's junk bo1), the two against Twisted Minds wait on its team-map decision; Liquipedia's play times and map results wait on `liquipedia enrich` |
 | 5 | Korea and China, results only | not started |
 
 ### The client (Stage 0)
@@ -1137,6 +1137,10 @@ Source is recorded per field, never merged silently:
 - Push-mode maps are normalised to the same win/loss indicator (1/0) FACEIT's own `round_stats` already uses for
   that mode (it never carries the push distance), rather than storing Liquipedia's literal distance score
   alongside FACEIT's indicator scores in the same integer column.
+- **A map slot Liquipedia marks not played is not a game.** A series decided early still lists its remaining slots
+  (`status: notplayed`, `resulttype: np`, no scores, no winner): 143 across 81 2024 records. Until 2026-10-02 the
+  parser counted them, inflating `n_games` (which hides a FACEIT phantom beyond the real count) and readying them to
+  be enriched as 0-0 draws nobody played; none had been stored. A real draw (`resulttype: draw`, its scores) stays.
 
 Never touched: `match_players`, and therefore `fact_player_maps` and every player aggregate - Liquipedia carries
 no player stats, so none is invented. `python -m owcsmuse check` asserts this directly
@@ -1256,7 +1260,7 @@ its first and last sighting, the same shape as `player_nicknames`; the collector
 `players.display_name` is an owner's override set by `identity load` from a player identity decision's `display`
 (`identity decide <page> --player <guid> --display "ZZZ"`, or `--nickname <FACEIT name>` to find the GUID by a
 name that names exactly one player): shown everywhere, searchable by nothing new, every nickname and in-game
-name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss). Astro (FACEIT Astronexz) was listed here, but no display decision for it exists in `scope/player_identity_decisions.json` or in production (2026-10-02): it is undecided until recorded.
+name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss). Astro (FACEIT Astronexz) was listed here as decided, but no display decision for it was recorded anywhere; the page `Astro_(Canadian_player)` is decided to that GUID (2026-10-02 batch), and its display name stays undecided until recorded.
 
 **SpaceStation Gaming is one organisation** across its 2024 EMEA team (`a359db61`, OWCS 2024 EMEA Stage 1 and
 Dreamhack Dallas) and its NA partner team from 2025 (`6ddc0431`): decided by the owner on 2026-10-02, reversing

@@ -52,6 +52,19 @@ def test_the_region_comes_from_the_page_and_time_from_the_epoch():
     assert parse_row(row, 1).played_at.year == 2000
 
 
+def test_a_map_slot_marked_not_played_is_not_a_game_but_a_draw_is():
+    # ROC Esports 3-0 Sheer Cold (127212_5BUO2jH7Ds_0003): five slots, the last two not played
+    played = [{"map": m, "mode": "Control", "winner": "1", "scores": [2, 0]} for m in ("A", "B", "C")]
+    unplayed = [{"map": m, "mode": "Escort", "winner": "", "scores": [], "resulttype": "np", "status": "notplayed"}
+                for m in ("D", "E")]
+    m = parse_row(lp_row("ROC Esports", "Sheer Cold", 3, 0, games=played + unplayed), 1)
+    assert m.n_games == 3 and [g.map for g in m.games] == ["A", "B", "C"]
+    # Team Falcons 3-0 ENCE at Dallas: a 3-3 Numbani is a map played and drawn
+    draw = {"map": "Numbani", "mode": "Hybrid", "winner": "0", "scores": [3, 3], "resulttype": "draw", "status": ""}
+    m = parse_row(lp_row("Team Falcons", "ENCE", 3, 0, games=played + [draw]), 1)
+    assert m.n_games == 4 and m.games[-1].winner == 0
+
+
 def test_a_tbd_or_bye_opponent_makes_a_placeholder_not_a_match():
     assert lp("TBD", "Team Liquid", None, None).placeholder
     assert lp("Team Liquid", "BYE", 1, 0).placeholder

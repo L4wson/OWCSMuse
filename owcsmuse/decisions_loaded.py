@@ -31,7 +31,7 @@ SCOPE = ROOT / "scope"
 
 LOADERS = {
     "org_decisions.json": "python -m owcsmuse orgs load",
-    "alias_decisions.json": "python -m owcsmuse aliases load",
+    "alias_decisions.json": "python -m owcsmuse alias load",
     "liquipedia_team_map.json": "python -m owcsmuse identity load",
     "player_identity_decisions.json": "python -m owcsmuse identity load",
     "liquipedia_link_decisions.json": "python -m owcsmuse liquipedia reconcile",

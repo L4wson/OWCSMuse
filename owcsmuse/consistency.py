@@ -403,7 +403,9 @@ def check_series_integrity(conn: psycopg.Connection) -> CheckResult:
     """
     discrepancies: list[dict[str, Any]] = []
     for col, kind in (("faceit_match_id", "faceit_match_in_two_series"), ("lp_objectname", "liquipedia_record_in_two_series")):
-        for r in _rows(conn, f"SELECT {col} AS id, count(*) AS n FROM series WHERE {col} IS NOT NULL GROUP BY {col} HAVING count(*) > 1 LIMIT 10"):
+        # no LIMIT on any query that feeds discrepancies: _result caps what is shown, the count must stay exact (a LIMIT
+        # here once reported 10 linked_sides_disagree where there were 15)
+        for r in _rows(conn, f"SELECT {col} AS id, count(*) AS n FROM series WHERE {col} IS NOT NULL GROUP BY {col} HAVING count(*) > 1"):
             discrepancies.append({"kind": kind, **r})
     faceit_n = int(_scalar(conn, """
         SELECT count(*) FROM matches m JOIN championships c ON c.championship_id = m.championship_id
@@ -429,7 +431,7 @@ def check_series_integrity(conn: psycopg.Connection) -> CheckResult:
                          WHERE lm.objectname = s.lp_objectname) x) AS lp_keys
               FROM series s WHERE s.faceit_match_id IS NOT NULL AND s.lp_objectname IS NOT NULL)
         SELECT series_id, lp_objectname, faceit_keys, lp_keys FROM sides
-         WHERE lp_keys IS NOT NULL AND array_length(lp_keys, 1) = 2 AND faceit_keys IS DISTINCT FROM lp_keys LIMIT 10"""):
+         WHERE lp_keys IS NOT NULL AND array_length(lp_keys, 1) = 2 AND faceit_keys IS DISTINCT FROM lp_keys"""):
         discrepancies.append({"kind": "linked_sides_disagree", **r,
                               "hint": "an identity decision no longer agrees with this link: review the link "
                                       "(liquipedia links decide) or the team mapping"})
