@@ -221,7 +221,9 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
             if f.pair != pair:
                 continue
             if _region_conflict(lp, f):
-                result.region_rejections.append({"lp": lp.objectname, "faceit_id": f.match_id, "lp_region": lp.region,
+                # one entry per (record, FACEIT match) pair: two meetings of the same teams give two records each
+                result.region_rejections.append({"lp": lp.objectname, "lp_time": f"{lp.played_at:%Y-%m-%d %H:%M}Z",
+                                                 "faceit_id": f.match_id, "lp_region": lp.region,
                                                  "faceit_region": f.region, "teams": f"{lp.team1} / {lp.team2}"})
                 continue
             dt = _minutes(f, lp)

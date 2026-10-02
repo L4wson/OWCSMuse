@@ -40,6 +40,11 @@ def test_the_region_comes_from_the_page_and_time_from_the_epoch():
     assert region_of("Overwatch_Champions_Series/2026/EMEA/Stage_1/Regular_Season") == "emea"
     assert region_of("Overwatch_Champions_Series/2026/Asia/Stage_2/Korea/Regular_Season") == "korea"
     assert region_of("Overwatch_Champions_Series/2026/China/Stage_2") == "china"
+    # 2024 pages spell the region out; read as 'other', every 2024 NA record was rejected as cross-region
+    assert region_of("Overwatch_Champions_Series/2024/North_America/Stage_1") == "na"
+    assert region_of("Overwatch Champions Series/2024/North America/Stage 1/Group Stage") == "na"
+    assert region_of("Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage") == "emea"
+    assert region_of("Overwatch_Champions_Series/2024/Major") == "other"
     row = lp_row("A", "B", 3, 0)
     row["date"] = "2000-01-01 00:00:00"                        # the epoch is authoritative; `date` is the fallback
     assert parse_row(row, 1).played_at == T0
@@ -262,10 +267,18 @@ def test_a_candidate_in_the_other_region_is_a_mismatch_not_a_match():
     across = fs("F-emea", "SpaceStation Gaming", "Team Liquid", 3, 1, region="emea", comp="c-emea")
     res = reconcile([m], [across], MAP)
     assert link_of(res, m).tier == UNMATCHED and link_of(res, m).faceit_id is None
-    assert res.region_rejections == [{"lp": m.objectname, "faceit_id": "F-emea", "lp_region": "na", "faceit_region": "emea",
+    assert res.region_rejections == [{"lp": m.objectname, "lp_time": "2026-06-13 18:00Z", "faceit_id": "F-emea",
+                                      "lp_region": "na", "faceit_region": "emea",
                                       "teams": "Spacestation Gaming / Team Liquid"}]
     intl = fs("F-intl", "SpaceStation Gaming", "Team Liquid", 3, 1, region="international")   # any region may attend
     assert link_of(reconcile([m], [intl], MAP), m).tier == STRONG
+
+
+def test_a_2024_north_america_page_matches_faceit_na_rather_than_being_rejected():
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 1, page="Overwatch_Champions_Series/2024/North_America/Stage_1")
+    res = reconcile([m], [fs("F-na", "SpaceStation Gaming", "Team Liquid", 3, 1, region="na")], MAP)
+    assert link_of(res, m).tier == STRONG and link_of(res, m).faceit_id == "F-na"
+    assert res.region_rejections == []
 
 
 def test_two_unrelated_teams_with_one_name_are_told_apart_by_the_region_of_the_page():

@@ -99,11 +99,14 @@ class LPMatch:
 
 
 def region_of(pagename: str) -> str:
-    """The competition region a page belongs to. na/emea are region-locked; anything else is just a label."""
-    parts = [p.upper() for p in pagename.split("/")]
-    for name, label in (("NA", "na"), ("EMEA", "emea"), ("KOREA", "korea"), ("CHINA", "china"), ("JAPAN", "japan"),
-                        ("PACIFIC", "pacific")):
-        if name in parts:
+    """The competition region a page belongs to. na/emea are region-locked; anything else is just a label.
+
+    2024 pages spell North America out (`.../2024/North_America/Stage_1`); 2025 onward abbreviate it (`.../2025/NA/...`).
+    Missing the long form once made every 2024 NA record 'other' and so cross-region against FACEIT's 'na'."""
+    parts = {p.upper().replace(" ", "_") for p in pagename.split("/")}
+    for names, label in ((("NA", "NORTH_AMERICA"), "na"), (("EMEA",), "emea"), (("KOREA",), "korea"),
+                         (("CHINA",), "china"), (("JAPAN",), "japan"), (("PACIFIC",), "pacific")):
+        if parts.intersection(names):
             return label
     return "other"
 

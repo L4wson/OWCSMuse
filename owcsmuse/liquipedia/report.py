@@ -119,7 +119,8 @@ def render(run: Run) -> str:
     if res.region_rejections:
         L += [f"## Cross-region candidates rejected ({len(res.region_rejections)})", ""]
         for r in res.region_rejections:
-            L.append(f"- {r['teams']}: Liquipedia {r['lp_region']}, FACEIT {r['faceit_region']} ({r['faceit_id']})")
+            L.append(f"- {r['teams']} ({r['lp']}, {r['lp_time']}): Liquipedia {r['lp_region']}, "
+                     f"FACEIT {r['faceit_region']} ({r['faceit_id']})")
         L.append("")
     if run.duplicates.same_match or run.duplicates.same_faceit_id:
         L += ["## Duplicates", "",
