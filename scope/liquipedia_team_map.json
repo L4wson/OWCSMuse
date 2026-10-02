@@ -97,6 +97,12 @@
       "note": "Sakura (2025) on 0464a373, a recycled team id; anchored to the org. Owner decision (2026-10-02).",
       "decided_at": "2026-10-02T08:11:37+00:00"
     },
+    "shikigami": {
+      "entity_type": "team",
+      "entity_id": "ec69a520-047f-4754-b36e-b0c95e2066ff",
+      "note": "FACEIT has two Shikigami series on 2024-03-21, the dates of the two unmatched Liquipedia records (2024 NA Stage 1 main event); 9 other Liquipedia records already link to this team id by FACEIT id. One FACEIT id and name throughout; Graveyard and Solo play in every era. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T20:52:37+00:00"
+    },
     "spacestation gaming": {
       "entity_type": "org",
       "entity_id": "spacestation-gaming",

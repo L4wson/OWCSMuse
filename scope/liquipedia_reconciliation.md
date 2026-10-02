@@ -26,7 +26,7 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | OWCS 2024: NA Stage 1 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 1 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 1 - Group D | 20 | 6 | 20 | 0 | 0 | 0 | 1 | 0 |
-| OWCS 2024: NA Stage 1 - Main Event | 14 | 14 | 0 | 11 | 1 | 2 | 2 | 0 |
+| OWCS 2024: NA Stage 1 - Main Event | 14 | 14 | 0 | 13 | 1 | 0 | 0 | 0 |
 | OWCS 2024: NA Stage 2 - Group A | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 2 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 2 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
@@ -52,7 +52,7 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S9 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | S9 NA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
-| **total** | **451** | **473** | **413** | **11** | **19** | **8** | **30** | **11** |
+| **total** | **451** | **473** | **413** | **13** | **19** | **6** | **28** | **11** |
 
 ## Needs review: ambiguous matches (0)
 
@@ -245,11 +245,13 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 ### OWCS 2024: NA Stage 1 - Main Event
 
-- links: 0 exact, 11 strong, 1 ambiguous; 2 Liquipedia-only; 2 FACEIT-only
+- links: 0 exact, 13 strong, 1 ambiguous; 0 Liquipedia-only; 0 FACEIT-only
   - strong: 2024-03-21 21:00Z  Toronto Defiant 3-1 LFO  (bo5) -> 1-82515b5c-13b5-468a-8fe3-7244af1d42fd - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-21 21:00Z  Timeless 3-2 Pirates in Pyjamas  (bo5) -> 1-8241bf51-9906-4e8d-9705-23870d2d6932 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-21 21:00Z  Luminosity Gaming 3-0 Shikigami  (bo5) -> 1-3ed67b74-6ada-4f85-9244-8d7cd634e243 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-21 21:00Z  Students of the Game 0-3 M80  (bo5) -> 1-f1ba158c-daf9-4463-9a05-52f44da840e6 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-21 22:30Z  LFO 2-3 Pirates in Pyjamas  (bo5) -> 1-39d83a78-e8a4-4f20-92d2-6dc72f9979e2 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-21 22:30Z  Shikigami 0-3 Students of the Game  (bo5) -> 1-ce861626-84a0-489f-9cec-624fd732663d - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-21 23:30Z  Toronto Defiant 3-2 Timeless  (bo5) -> 1-4b984ffd-9868-45fa-92c5-c6a290bfe68a - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-22 20:00Z  Luminosity Gaming 0-3 M80  (bo5) -> 1-a52030d9-a7d4-4256-b55c-352b1c018e43 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-22 21:30Z  Luminosity Gaming 3-0 Pirates in Pyjamas  (bo5) -> 1-8629048b-1981-4175-91ea-6e9b6787aa2f - teams, region, time, best-of and series score agree; the only FACEIT match that fits
@@ -257,12 +259,6 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
   - strong: 2024-03-23 20:30Z  Toronto Defiant 3-0 M80  (bo5) -> 1-1d1c6149-1d38-4e62-9c7b-c2ac82ef8036 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-23 22:00Z  Luminosity Gaming 0-3 Timeless  (bo5) -> 1-2974d920-c4b7-42aa-8c8f-1d55f425a4b8 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-24 21:00Z  M80 1-3 Timeless  (bo5) -> 1-dd63f190-1b64-4763-915c-e54c83d6ab56 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-- FACEIT matches with no Liquipedia counterpart:
-  - 2024-03-21 21:39Z  Luminosity 3-0 Shikigami  (bo5, complete)  1-3ed67b74-6ada-4f85-9244-8d7cd634e243
-  - 2024-03-21 22:59Z  SOG 3-0 Shikigami  (bo5, complete)  1-ce861626-84a0-489f-9cec-624fd732663d
-- Liquipedia matches with no FACEIT counterpart:
-  - 2024-03-21 21:00Z  Luminosity Gaming 3-0 Shikigami  (bo5)  (team name not mapped: Shikigami)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1
-  - 2024-03-21 22:30Z  Shikigami 0-3 Students of the Game  (bo5)  (team name not mapped: Shikigami)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1
 
 ### OWCS 2024: NA Stage 2 - Group A
 
