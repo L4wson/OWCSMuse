@@ -111,6 +111,21 @@ def liquipedia_rounds(match_id: str, faceit_team_for_lp_team1: str, faceit_team_
     return out
 
 
+def liquipedia_series(match_id: str, faceit_name_of_lp_team1: str) -> dict:
+    """A linked series as Liquipedia records it, from the captured record alone: its series score and best-of, oriented
+    to the FACEIT faction the caller names for Liquipedia's team1, the games actually played (a slot marked not played
+    is no game; a drawn game is), and the scheduled time. Liquipedia is the source of record for a linked series'
+    result (migration 034), so this is what the warehouse must present - FACEIT's stored score is never consulted."""
+    from datetime import datetime, timezone
+    r = LIQUIPEDIA[match_id]
+    o = r["match2opponents"]
+    played = [g for g in r["match2games"] if g.get("map") and not (g.get("status") == "notplayed" or g.get("resulttype") == "np")]
+    return {"lp_team1": o[0]["name"], "lp_team2": o[1]["name"], "faceit_name_of_lp_team1": faceit_name_of_lp_team1,
+            "score1": int(o[0]["score"]), "score2": int(o[1]["score"]), "best_of": int(r["bestof"]),
+            "games": [{"map": g["map"], "winner": {"1": 1, "2": 2}.get(str(g.get("winner")))} for g in played],
+            "played_at": datetime.fromtimestamp(int(r["extradata"]["timestamp"]), timezone.utc)}
+
+
 def team_h2h_maps(series_list, team_ids, opponent_ids, liquipedia_overrides: Optional[dict] = None) -> dict[str, Any]:
     """Map-grain head-to-head between two identities: every map of every qualifying series, from FACEIT's own
     rounds when it has them, else from `liquipedia_overrides[match_id]` (see liquipedia_rounds) when given - never

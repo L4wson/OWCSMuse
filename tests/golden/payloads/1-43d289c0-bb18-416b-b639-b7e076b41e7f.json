@@ -1,0 +1,106 @@
+{
+ "detail": {
+  "best_of": 1,
+  "calculate_elo": false,
+  "chat_room_id": "match-1-43d289c0-bb18-416b-b639-b7e076b41e7f",
+  "competition_id": "33781289-61ea-43d5-ac79-1af825dcb291",
+  "competition_name": "Dreamhack Dallas",
+  "competition_type": "championship",
+  "detailed_results": [
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 3
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   }
+  ],
+  "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-43d289c0-bb18-416b-b639-b7e076b41e7f",
+  "finished_at": 1717195402,
+  "game": "ow2",
+  "group": 1,
+  "match_id": "1-43d289c0-bb18-416b-b639-b7e076b41e7f",
+  "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+  "region": "GLOBAL",
+  "results": {
+   "score": {
+    "faction1": 3,
+    "faction2": 0
+   },
+   "winner": "faction1"
+  },
+  "round": 1,
+  "scheduled_at": 1717178400,
+  "status": "FINISHED",
+  "teams": {
+   "faction1": {
+    "avatar": "https://distribution.faceit-cdn.net/images/224111ef-17a1-451d-a123-daf3e417e996.jpeg",
+    "faction_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
+    "leader": "ac6ed509-eabe-411f-8bc7-0a8cc702884b",
+    "name": "Team Falcons",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/21093a6f-84eb-40e9-af40-b6c23a80f59a.jpeg",
+      "game_player_id": "410235250",
+      "game_player_name": "Alin",
+      "game_skill_level": 2,
+      "membership": "ow2_league_pass",
+      "nickname": "Alin",
+      "player_id": "ac6ed509-eabe-411f-8bc7-0a8cc702884b"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/626665be-043a-4c67-a525-2702b123194c.jpeg",
+      "game_player_id": "480841730",
+      "game_player_name": "COPPETSAN",
+      "game_skill_level": 6,
+      "membership": "ow2_league_pass",
+      "nickname": "COPPET",
+      "player_id": "ac134a52-4918-42a3-8f2c-76e900c0f1b8"
+     }
+    ],
+    "substituted": false,
+    "type": "premade"
+   },
+   "faction2": {
+    "avatar": "https://distribution.faceit-cdn.net/images/50f58bc4-a855-410f-b0e2-4d0d0a6a94a5.jpeg",
+    "faction_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+    "leader": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa",
+    "name": "ENCE",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://assets.faceit-cdn.net/avatars/1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa_1555969326329.jpg",
+      "game_player_id": "347590890",
+      "game_player_name": "Crimzo",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "iCrimzo",
+      "player_id": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "415113262",
+      "game_player_name": "Vestola",
+      "game_skill_level": 9,
+      "membership": "ow2_league_pass",
+      "nickname": "vestola",
+      "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2"
+     }
+    ],
+    "substituted": false,
+    "type": "premade"
+   }
+  },
+  "version": 2
+ },
+ "stats": null,
+ "stats_http_status": 404
+}

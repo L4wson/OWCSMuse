@@ -126,6 +126,14 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str) -> None:
             _check(out, f"{p}regions of the evidence rows", sorted(ev["regions_only"]), regions)
         if "roles_only" in ev:
             _check(out, f"{p}roles of the evidence rows", sorted(ev["roles_only"]), sorted({r.get("role") for r in rows}))
+        for mid, want in (ev.get("by_match") or {}).items():
+            # the row(s) behind one named series; for a map-grain answer, every map row of it must agree
+            mine = [r for r in rows if r.get("match_id") == mid]
+            _check(out, f"{p}evidence rows for {mid[:10]}", True, bool(mine), ok=bool(mine))
+            for k, v in want.items():
+                got = sorted({str(r.get(k)) for r in mine}) if k != "sources" else sorted({tuple(r.get(k) or ()) for r in mine})
+                exp = [str(v)] if k != "sources" else [tuple(v)]
+                _check(out, f"{p}evidence[{mid[:10]}].{k}", exp, got)
     if "limitations" in exp:
         have = [x.get("id") for x in (a.limitations or [])]
         missing = [x for x in exp["limitations"] if x not in have]
