@@ -163,7 +163,10 @@ Migrations live in `migrations/` and are applied in filename order by
 Every migration runs in its own transaction with `search_path` pinned to
 `OWCS_DB_SCHEMA` (default `public`), and every connection the CLI opens pins
 the same `search_path`, so all objects are created in and read from that one
-schema explicitly. Nothing is created outside it.
+schema explicitly. Nothing is created outside it. The token `{{schema}}` in a
+migration is replaced by that schema: a `LANGUAGE sql` function body that names
+a table writes `{{schema}}.table`, because PostgreSQL 17 re-parses such bodies
+under a restricted `search_path` when it plans a materialized-view refresh.
 
 ### Supabase notes
 
@@ -174,6 +177,10 @@ schema explicitly. Nothing is created outside it.
   needed and would break `SET search_path`.
 - Objects land in `public`, next to nothing of ours; Supabase's own
   `auth`, `storage`, `realtime` and `extensions` schemas are untouched.
+- Supabase runs PostgreSQL 17; CI runs the database suites on 16 and 17 (see
+  **CI**). A `LANGUAGE sql` function that names a table must be written
+  `{{schema}}.table` or carry `SET search_path`, or every materialized-view
+  refresh fails on 17 (migration `033_pin_search_path.sql`).
 - **Row Level Security is not enabled on any of these tables.** Plain SQL
   migrations bypass the Supabase dashboard's RLS prompts. On Supabase every
   table in `public` is also exposed through the auto-generated Data API
@@ -1285,10 +1292,28 @@ private, so the badge above renders only for accounts with access:
 |---|---|
 | `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
 | `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
-| `database tests` | `pytest -m "not golden"` against a `postgres:16` service container, with the full integration suite |
-| `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**) |
+| `database tests` | `pytest -m "not golden"` against `postgres:16` **and** `postgres:17` service containers (a matrix): 17 is what Supabase runs, 16 is docker-compose and the dev default |
+| `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**), on both majors |
 | `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
-| `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it |
+| `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it, on both majors |
+
+Why both majors: migrations 026 to 031 passed every gate on 16 and failed on
+production (Supabase, PostgreSQL 17.6) at the first materialized view. PG 17
+plans `CREATE`/`REFRESH MATERIALIZED VIEW` (and `CREATE INDEX`, `VACUUM`,
+`ANALYZE`, `CLUSTER`, `REINDEX`) under `search_path = pg_catalog, pg_temp`,
+and a `LANGUAGE sql` function body is re-parsed by name at plan time, so a body
+that says `FROM teams` finds nothing there (`relation "teams" does not exist
+... SQL function "team_identity_at" during inlining`). Views are unaffected
+(they store OIDs). The remedy per function is in migration
+`033_pin_search_path.sql`: a once-per-row function names every relation and
+function `{{schema}}.`-qualified (the token `migrate` replaces with
+`OWCS_DB_SCHEMA`), which keeps it inlinable; a once-per-question set-returning
+function gets `SET search_path FROM CURRENT`, which is simpler but blocks
+inlining and re-plans on every call (tried on the per-row functions, it made
+the golden refresh 44x slower: 0.44 s to 19 s; qualified, 0.46 s).
+`tests/test_search_path.py` refreshes every materialized view under the
+restricted path, which reproduces the PG 17 condition on any major, and keeps
+every table-reading SQL function in one of the two states.
 
 ## Tests
 
@@ -1335,6 +1360,8 @@ migrations/029_anchor_windows.sql  Liquipedia names resolve at the series' time
 migrations/030_draws.sql        a tied map is nobody's win; plausible series scores with provenance
 migrations/031_capabilities.sql region_sources (declared) and source_capabilities (derived): what each slice can answer
 migrations/032_best_of_from_wins.sql  best-of derived from the winning score; corrections counted and listed
+migrations/033_pin_search_path.sql  every table-reading SQL function survives PostgreSQL 17's restricted search_path
+tests/test_search_path.py       refreshes every matview under search_path = pg_catalog, pg_temp; every table-reading SQL function qualified or pinned
 tools/window_review.py          the three name-change signals over every multi-name team id -> scope/org_window_review.md
 scope/org_window_decisions.json the owner's verdict on each of the 18 multi-name team ids (audit record; windows apply via org_decisions.json)
 owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors

@@ -44,26 +44,35 @@ CREATE TRIGGER team_orgs_no_overlap BEFORE INSERT OR UPDATE ON team_orgs
 -- the id has no window at all - then teams.name is the name, as before).
 CREATE OR REPLACE FUNCTION team_era_name(p_team_id text) RETURNS text
 LANGUAGE sql STABLE AS $$
-    SELECT tn.name FROM team_names tn
+    SELECT tn.name FROM {{schema}}.team_names tn
      WHERE tn.team_id = p_team_id
-       AND EXISTS (SELECT 1 FROM team_orgs w WHERE w.team_id = p_team_id)
-       AND NOT EXISTS (SELECT 1 FROM team_orgs w WHERE w.team_id = p_team_id
+       AND EXISTS (SELECT 1 FROM {{schema}}.team_orgs w WHERE w.team_id = p_team_id)
+       AND NOT EXISTS (SELECT 1 FROM {{schema}}.team_orgs w WHERE w.team_id = p_team_id
                          AND tn.first_seen_at >= w.valid_from AND tn.first_seen_at < w.valid_to)
      ORDER BY tn.last_seen_at DESC LIMIT 1
 $$;
 
 -- Who a team id was at a moment.
+--
+-- Every relation and function the two bodies name is written {{schema}}.name:
+-- `migrate` substitutes the schema it runs in (OWCS_DB_SCHEMA). A LANGUAGE sql
+-- body is re-parsed by name every time a query that calls it is planned, and
+-- PostgreSQL 17 plans CREATE/REFRESH MATERIALIZED VIEW under search_path =
+-- pg_catalog, pg_temp: unqualified, `teams` is not found "during inlining" and
+-- every refresh fails (production, 2026-10-01). SET search_path on the function
+-- would fix that too but blocks inlining, and these run once per fact row: it
+-- made the golden refresh 44x slower (0.44 s -> 19 s). Qualifying keeps inlining.
 CREATE OR REPLACE FUNCTION team_identity_at(p_team_id text, p_at timestamptz)
 RETURNS TABLE (team_id text, org_id text, org_key text, display_name text, team_name text, mapped boolean)
 LANGUAGE sql STABLE AS $$
     SELECT t.team_id, w.org_id,
            COALESCE(w.org_id, 'team:' || t.team_id),
-           COALESCE(o.name, CASE WHEN w.org_id IS NULL THEN team_era_name(t.team_id) END, t.name),
+           COALESCE(o.name, CASE WHEN w.org_id IS NULL THEN {{schema}}.team_era_name(t.team_id) END, t.name),
            t.name, (w.org_id IS NOT NULL)
-      FROM teams t
-      LEFT JOIN team_orgs w ON w.team_id = t.team_id AND p_at IS NOT NULL
+      FROM {{schema}}.teams t
+      LEFT JOIN {{schema}}.team_orgs w ON w.team_id = t.team_id AND p_at IS NOT NULL
                            AND p_at >= w.valid_from AND p_at < w.valid_to
-      LEFT JOIN orgs o ON o.org_id = w.org_id
+      LEFT JOIN {{schema}}.orgs o ON o.org_id = w.org_id
      WHERE t.team_id = p_team_id
 $$;
 

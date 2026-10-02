@@ -18,15 +18,16 @@
 -- Liquipedia-only series (no FACEIT record) keep Liquipedia's best-of unless
 -- the score cannot fit it, as before: that is not FACEIT's stored value.
 
+-- {{schema}}. on every relation and function: see 026 (PostgreSQL 17 plans a refresh under a restricted search_path).
 CREATE OR REPLACE FUNCTION series_score(p_match_id text, p_team1 text, p_team2 text, p_score1 integer, p_score2 integer, p_best_of integer)
 RETURNS TABLE (score1 integer, score2 integer, score_source text, best_of integer, best_of_source text)
 LANGUAGE sql STABLE AS $$
     WITH maps AS (
-        SELECT count(*) FILTER (WHERE r.winner_team_id = p_team1 AND NOT map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id)) AS w1,
-               count(*) FILTER (WHERE r.winner_team_id = p_team2 AND NOT map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id)) AS w2,
-               count(*) FILTER (WHERE map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id)) AS d,
+        SELECT count(*) FILTER (WHERE r.winner_team_id = p_team1 AND NOT {{schema}}.map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id)) AS w1,
+               count(*) FILTER (WHERE r.winner_team_id = p_team2 AND NOT {{schema}}.map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id)) AS w2,
+               count(*) FILTER (WHERE {{schema}}.map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id)) AS d,
                count(*) AS n
-          FROM match_rounds r WHERE r.match_id = p_match_id
+          FROM {{schema}}.match_rounds r WHERE r.match_id = p_match_id
     ), chosen AS (
         -- FACEIT counted a draw as a win: the stored score equals map wins plus draws for the side that "won" it
         SELECT CASE WHEN n > 0 AND d > 0 AND (p_score1, p_score2) IN ((w1 + d, w2), (w1, w2 + d)) THEN w1 ELSE p_score1 END AS s1,
