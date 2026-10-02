@@ -263,3 +263,38 @@ def test_series_integrity_counts_every_series_claimed_twice_past_ten(agg_db):
         assert kinds.count("faceit_match_in_two_series") == 12
     finally:
         agg_db.rollback()
+
+
+def test_a_liquipedia_name_resolving_to_an_era_that_holds_none_of_its_series_fails(agg_db):
+    """The LuneX Gaming leak: the name anchored to the bare team id while that era's series sit in an org window."""
+    try:
+        with agg_db.cursor() as cur:
+            cur.execute("SELECT faction1_team_id AS t FROM matches WHERE match_id = %s", (M2026,))
+            side = cur.fetchone()["t"]
+            cur.execute("""INSERT INTO entity_anchors (entity_type, entity_id, source, anchor_kind, anchor, basis)
+                           VALUES ('team', %s, 'liquipedia', 'team_name', 'aaa', 'team_map')""", (side,))
+        _copies(agg_db, 1, 1, ("Aaa", "Bbb"))
+        with agg_db.cursor() as cur:   # the copy's named side is the anchored team id
+            cur.execute("UPDATE matches SET faction1_team_id = %s WHERE match_id = %s", (side, f"{M2026}-copy0"))
+        r = _by_name(run_checks(agg_db, ["lp_name_resolution"]))["lp_name_resolution"]
+        assert r.ok, r.discrepancies                       # no window: the id's own entity holds the series
+        with agg_db.cursor() as cur:
+            cur.execute("INSERT INTO orgs (org_id, name) VALUES ('later-org', 'Later Org')")
+            cur.execute("INSERT INTO team_orgs (team_id, org_id, source) VALUES (%s, 'later-org', 'manual')", (side,))
+        r = _by_name(run_checks(agg_db, ["lp_name_resolution"]))["lp_name_resolution"]
+        assert [(d["kind"], d["anchor"], d["series_keyed_to"]) for d in r.discrepancies] == \
+            [("lp_name_resolves_to_no_series", "aaa", ["later-org"])]
+    finally:
+        agg_db.rollback()
+
+
+def test_a_liquipedia_name_pointing_at_a_missing_team_fails(agg_db):
+    """A truncated id typed into `teams decide` ('ec69a520-04') is accepted and loaded; the check names it."""
+    try:
+        with agg_db.cursor() as cur:
+            cur.execute("""INSERT INTO entity_anchors (entity_type, entity_id, source, anchor_kind, anchor, basis)
+                           VALUES ('team', 'ec69a520-04', 'liquipedia', 'team_name', 'shikigami', 'team_map')""")
+        r = _by_name(run_checks(agg_db, ["lp_name_resolution"]))["lp_name_resolution"]
+        assert [(d["kind"], d["entity_id"]) for d in r.discrepancies] == [("lp_name_points_at_missing_entity", "ec69a520-04")]
+    finally:
+        agg_db.rollback()

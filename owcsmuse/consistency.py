@@ -22,6 +22,7 @@ Exit status is 1 when any check fails.
 from __future__ import annotations
 
 import logging
+import re
 import time
 from dataclasses import asdict, dataclass, field
 from decimal import Decimal
@@ -642,6 +643,64 @@ def check_liquipedia_map_isolation(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} Liquipedia-sourced map(s) have a player row that should not exist", counts)
 
 
+# ------------------------------------------------- Liquipedia name resolution
+
+def check_lp_name_resolution(conn: psycopg.Connection) -> CheckResult:
+    """Every Liquipedia team name resolves, in search, to the entity its linked series are keyed to.
+
+    A team-map name anchored to a bare team id is searchable as that team id's own entity. When the series of that
+    name's era sit in an org window on the id, search answers with the wrong era: "LuneX Gaming" answered with UNC inc's
+    2024 record while every key was correctly split, and nothing flagged it. Per anchor era: the linked series in which
+    a side carries the name, and whether the entity the name resolves to holds any of them (a team anchor: the named
+    side's org_key is the id itself; an org anchor: a side is keyed to the org). None held fails, as does an anchor to
+    an entity that does not exist.
+    """
+    from .decisions_loaded import SCOPE
+    from .orgs import OrgDecisions
+    discrepancies: list[dict[str, Any]] = []
+    # An id that cannot exist anywhere, as opposed to one this warehouse does not hold (CI's sample holds four series):
+    # a team id that is not a FACEIT id ('ec69a520-04', a truncated paste `teams decide` accepted), or an org no org
+    # decision defines.
+    od = OrgDecisions(SCOPE / "org_decisions.json")
+    decided_orgs = {m["org_id"] for t in od.data for m in od.mappings(t)}
+    guid = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+    for r in _rows(conn, "SELECT anchor, region, entity_type, entity_id FROM entity_anchors WHERE anchor_kind = 'team_name'"):
+        if (r["entity_type"] == "team" and not guid.match(r["entity_id"])) or \
+           (r["entity_type"] == "org" and r["entity_id"] not in decided_orgs):
+            discrepancies.append({"kind": "lp_name_points_at_missing_entity", **r,
+                                  "hint": "the team map names an id or org that does not exist; correct the entry"})
+    eras = _rows(conn, """
+        WITH named AS (
+            SELECT a.anchor, a.region, a.entity_type, a.entity_id, a.valid_from, s.match_id,
+                   CASE a.entity_type WHEN 'team' THEN 'team:' || a.entity_id ELSE a.entity_id END AS resolves_to,
+                   CASE a.entity_type
+                        WHEN 'team' THEN (SELECT f.org_key FROM fact_team_matches f WHERE f.match_id = s.match_id AND f.team_id = a.entity_id)
+                        ELSE CASE WHEN EXISTS (SELECT 1 FROM fact_team_matches f WHERE f.match_id = s.match_id AND f.org_key = a.entity_id)
+                                  THEN a.entity_id END
+                   END AS named_side_key
+              FROM entity_anchors a
+              JOIN liquipedia_matches lm ON a.anchor IN (fold_name(lm.team1_name), fold_name(lm.team2_name))
+                                        AND (a.region = '' OR a.region = coalesce(lm.region, ''))
+                                        AND lm.played_at >= a.valid_from AND lm.played_at < a.valid_to
+              JOIN series s ON s.lp_objectname = lm.objectname AND s.faceit_match_id IS NOT NULL
+             WHERE a.anchor_kind = 'team_name')
+        SELECT anchor, region, entity_type, entity_id, valid_from::text AS valid_from, resolves_to,
+               count(*) AS series, count(*) FILTER (WHERE named_side_key = resolves_to) AS held,
+               array_agg(DISTINCT coalesce(named_side_key, '-')) FILTER (WHERE named_side_key IS DISTINCT FROM resolves_to) AS keyed_to
+          FROM named GROUP BY 1, 2, 3, 4, 5, 6 ORDER BY 1""")
+    for e in eras:
+        if e["held"] == 0:
+            discrepancies.append({"kind": "lp_name_resolves_to_no_series", "anchor": e["anchor"], "region": e["region"],
+                                  "resolves_to": e["resolves_to"], "series": e["series"], "series_keyed_to": e["keyed_to"],
+                                  "hint": "point the team-map entry at the org these series are keyed to"})
+    counts = {"anchor_eras_with_linked_series": len(eras),
+              "partly_held": [{"anchor": e["anchor"], "resolves_to": e["resolves_to"], "held": e["held"], "series": e["series"],
+                               "keyed_to": e["keyed_to"]} for e in eras if 0 < e["held"] < e["series"]]}
+    return _result("lp_name_resolution", discrepancies,
+                   f"all {len(eras)} Liquipedia team-name era(s) resolve to an entity holding their series",
+                   f"{len(discrepancies)} Liquipedia team name(s) resolve to the wrong entity", counts)
+
+
 # ------------------------------------------------------- decisions loaded
 
 def check_decisions_loaded(conn: psycopg.Connection) -> CheckResult:
@@ -676,6 +735,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "map_winner_consistency": check_map_winner_consistency,
     "phantom_map_isolation": check_phantom_map_isolation,
     "decisions_loaded": check_decisions_loaded,
+    "lp_name_resolution": check_lp_name_resolution,
 }
 
 
