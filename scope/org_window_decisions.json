@@ -1,5 +1,5 @@
 {
-  "note": "The project owner's verdict on every FACEIT team id that carried more than one name (scope/team_name_history_2026-10-01.json), decided in one pass on 2026-10-01 from tools/window_review.py's report. This file is the audit record; the windows themselves are applied through scope/org_decisions.json (`orgs decide`, `--add` for a second era on one id). Verdicts: rename_only (one organisation, no window), placeholder (a FACEIT registration placeholder replaced once the roster signed up: same organisation, no window), pickup (a roster pickup on a stage boundary: one era per name), roster_drop (the organisation dropped the roster, which continued under the new name: a pickup whose overlapping sighting dates are a FACEIT artifact), org_changes (an organisation change inside a stage, decided over the signals).",
+  "note": "The project owner's verdict on every FACEIT team id that carried more than one name (scope/team_name_history_2026-10-01.json), decided in one pass on 2026-10-01 from tools/window_review.py's report. This file is the audit record; the windows themselves are applied through scope/org_decisions.json (`orgs decide`, `--add` for a second era on one id). Verdicts: rename_only (one organisation, no window), placeholder (a FACEIT registration placeholder replaced once the roster signed up: same organisation, no window), pickup (a roster pickup on a stage boundary: one era per name), roster_drop (the organisation dropped the roster, which continued under the new name: a pickup whose overlapping sighting dates are a FACEIT artifact), org_changes (an organisation change inside a stage, decided over the signals). recycled_id (one team id FACEIT reassigned across unrelated teams: each era its own entity, nothing connected).",
   "decisions": {
     "602d3c11-ccee-404d-858e-b03267c83d47": {
       "verdict": "rename_only",
@@ -38,8 +38,8 @@
     },
     "ebfd8060-fcbd-467b-9701-0801b2260a9c": {
       "verdict": "pickup",
-      "note": "Quick esports (the id's own era) then Ataraxia from 2024 Stage 2.",
-      "decided_at": "2026-10-01T23:16:28+00:00"
+      "decided_at": "2026-10-02T08:11:51+00:00",
+      "note": "Quick esports (2024 Stage 1) then Ataraxia from 2024 Stage 2. The Quick era belongs to the quick-esports org, one organisation with cb90edf6's 2025 Quick Esports (owner, 2026-10-02: one org fielding different rosters is far likelier than two orgs sharing a name)."
     },
     "0c629c99-0333-47f6-96c9-87c0617a9d21": {
       "verdict": "placeholder",
@@ -63,18 +63,18 @@
     },
     "cb90edf6-60cb-4f73-8172-bf944729a114": {
       "verdict": "rename_only",
-      "note": "Quick Esports throughout, no window (owner, 2026-10-02, reversing the 2026-10-01 roster_drop verdict). Quick Esports fielded three rosters on this id: the Stage 1 roster (2025-05-11..05-25), a promoted roster that played Stage 2 as 1DIPv100GORILLA (2025-06-01..06-15) and was later dropped and relegated out of OWCS, and a different promoted roster for Stage 3 (2025-09-07..10-12). Roster change is not org change. The 2026-10-01 verdict windowed 1DIPv100GORILLA as its own org from 2025-06-01 open-ended, which also swallowed the Stage 3 series; its note misdated the change as 2026-06-01.",
+      "note": "Quick Esports throughout, no window (owner, 2026-10-02, reversing the 2026-10-01 roster_drop verdict). Quick Esports fielded three rosters on this id: the Stage 1 roster (2025-05-11..05-25), a promoted roster that played Stage 2 as 1DIPv100GORILLA (2025-06-01..06-15) and was later dropped and relegated out of OWCS, and a different promoted roster for Stage 3 (2025-09-07..10-12). Roster change is not org change. The 2026-10-01 verdict windowed 1DIPv100GORILLA as its own org from 2025-06-01 open-ended, which also swallowed the Stage 3 series; its note misdated the change as 2026-06-01. Merged into the quick-esports org with ebfd8060's 2024 Quick era (owner, 2026-10-02).",
       "decided_at": "2026-10-02T04:43:37+00:00"
     },
     "0464a373-df2f-4d23-93f5-80cbaa07802f": {
-      "verdict": "org_changes",
-      "note": "UNC inc (the id's own era); Rad from 2025 Stage 1 (pickup); Rad -> Sakura is an organisation change (windowed); Sakura Esports a rename inside the Sakura era; LuneX from 2026 Stage 1 (pickup).",
-      "decided_at": "2026-10-01T23:16:28+00:00"
+      "verdict": "recycled_id",
+      "decided_at": "2026-10-02T08:11:51+00:00",
+      "note": "Four unrelated teams on one team id that FACEIT reassigned (owner, 2026-10-02): UNC inc (2024, the id's own era), Rad (2025 Stages 1-2), Sakura / Sakura Esports (2025), LuneX (2026). None shares an identity with another; the Liquipedia names anchor to each era's org."
     },
     "03869857-7f73-4176-a27d-dafcc8d469ae": {
       "verdict": "org_changes",
-      "note": "ROC ESPORT (the id's own era); Umbrellaacademy from 2024 Stage 2 (pickup); Umbrellaacademy -> ROCstars is an organisation change (windowed). The placeholder signal also fires on Umbrellaacademy (one day at the start of the stage); the owner's decision stands. Reconfirmed by the owner (2026-10-02): the Ex Oblivione -> Virtus pro shape. ROC Esports gave up its Stage 1 invite to qualify for EWC and handed it to ROCstars, the rosters partly merging; ROC ESPORT's era is its own, ROCstars' era is ROCstars'. Open: the one 'Umbrellaacademy' series (2024-04-12, 1-8253bb71, Stage 2 Group C) - Liquipedia records it as Rocstars by its FACEIT id, same leader (TVNT) and 4 of 5 players as ROCstars' next two series; reported, not decided.",
-      "decided_at": "2026-10-01T23:16:28+00:00"
+      "decided_at": "2026-10-02T08:11:51+00:00",
+      "note": "ROC ESPORT (2024 Stage 1, the id's own era) then ROCstars from 2024-04-12 (owner, 2026-10-02): ROC Esports gave its invite to ROCstars to qualify for EWC, the Ex Oblivione -> Virtus pro shape. The one 'Umbrellaacademy' series (1-8253bb71) is ROCstars: Liquipedia records it as Twisted Minds 3-0 Rocstars by its FACEIT id, same group, leader and 4 of 5 players."
     },
     "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae": {
       "verdict": "pickup",

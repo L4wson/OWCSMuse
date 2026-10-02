@@ -12,17 +12,6 @@
       "valid_from_name": "1234",
       "decided_at": "2026-10-01T23:15:38+00:00"
     },
-    "ebfd8060-fcbd-467b-9701-0801b2260a9c": {
-      "org_id": "ataraxia",
-      "org_name": "Ataraxia",
-      "team_name": "Ataraxia",
-      "note": "Quick esports (2024 Stage 1) then Ataraxia (2024 Stage 2) on one team id. Not related to cb90edf6's 2025 'Quick Esports' by any decision. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
-      "evidence": [
-        "decided by the project owner (Stage 3 window review, 2026-10-01)"
-      ],
-      "valid_from_name": "Ataraxia",
-      "decided_at": "2026-10-01T23:15:38+00:00"
-    },
     "c6248ff8-64ff-47ad-8602-7eec0eeda9b0": {
       "org_id": "dhillducks",
       "org_name": "Dhillducks",
@@ -136,6 +125,41 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "cb90edf6-60cb-4f73-8172-bf944729a114": {
+      "org_id": "quick-esports",
+      "org_name": "Quick Esports",
+      "team_name": "Quick Esports",
+      "evidence": [
+        "decided by the project owner (2026-10-02)"
+      ],
+      "note": "Quick Esports for the id's whole life (2025), three rosters, one of them playing 2025 Stage 2 as 1DIPv100GORILLA. One organisation with ebfd8060's 2024 Quick esports era.",
+      "decided_at": "2026-10-02T08:11:37+00:00"
+    },
+    "ebfd8060-fcbd-467b-9701-0801b2260a9c": {
+      "windows": [
+        {
+          "org_id": "quick-esports",
+          "org_name": "Quick Esports",
+          "team_name": "Quick esports",
+          "evidence": [
+            "decided by the project owner (2026-10-02)"
+          ],
+          "note": "Quick Esports (2024 Stage 1). One organisation with cb90edf6's Quick Esports (2025): the owner judged one org fielding different rosters far likelier than two orgs sharing a name in different years. Ends at the first sighting of 'Ataraxia'.",
+          "valid_to_name": "Ataraxia"
+        },
+        {
+          "org_id": "ataraxia",
+          "org_name": "Ataraxia",
+          "team_name": "Ataraxia",
+          "note": "Ataraxia from 2024 Stage 2, a roster picked up by a different organisation. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "Ataraxia"
+        }
+      ],
+      "decided_at": "2026-10-02T08:11:37+00:00"
+    },
     "0464a373-df2f-4d23-93f5-80cbaa07802f": {
       "windows": [
         {
@@ -147,18 +171,18 @@
             "decided by the project owner (Stage 3 window review, 2026-10-01)"
           ],
           "valid_from_name": "Rad",
-          "valid_to_name": "Sakura"
+          "valid_to": "2025-05-01T00:00:00+00:00"
         },
         {
           "org_id": "sakura",
           "org_name": "Sakura",
           "team_name": "Sakura",
-          "note": "Rad -> Sakura on 2025-05-17 (inside 2025 Stage 2). An organisation change inside a stage, decided by the owner over the signals (a wholly different name with no stage boundary). 'Sakura Esports' (2025-09-27) is a rename inside this era.",
+          "note": "Rad -> Sakura on 2025-05-17 (inside 2025 Stage 2). An organisation change inside a stage, decided by the owner over the signals (a wholly different name with no stage boundary). 'Sakura Esports' (2025-09-27) is a rename inside this era. Starts at the 2025 Stage 2 boundary, not FACEIT's first 'Sakura' sighting (05-17): the Stage 2 opener (2025-05-10, 1-a42c1c2e) was played by Sakura's roster (CLEAR, ZZZ, cinnabar, peace, xten) under FACEIT's stale name 'Rad', and Liquipedia records it as Sakura Esports. Any boundary between 2025-03-02 and 2025-05-10 resolves the same (owner's split, 2026-10-02).",
           "evidence": [
             "decided by the project owner (Stage 3 window review, 2026-10-01)"
           ],
-          "valid_from_name": "Sakura",
-          "valid_to_name": "LuneX"
+          "valid_to_name": "LuneX",
+          "valid_from": "2025-05-01T00:00:00+00:00"
         },
         {
           "org_id": "lunex",
@@ -172,6 +196,21 @@
         }
       ],
       "decided_at": "2026-10-01T23:15:38+00:00"
+    },
+    "03869857-7f73-4176-a27d-dafcc8d469ae": {
+      "windows": [
+        {
+          "org_id": "rocstars",
+          "org_name": "ROCstars",
+          "team_name": "ROCstars",
+          "note": "ROCstars from 2024 Stage 2, starting with the 2024-04-12 series FACEIT shows as 'Umbrellaacademy' (1-8253bb71): Liquipedia records it as Twisted Minds 3-0 Rocstars by its FACEIT id, with the same group, leader (TVNT) and 4 of 5 players as ROCstars' next two series. ROC Esports gave its Stage 1 invite to ROCstars to qualify for EWC (the Ex Oblivione -> Virtus pro shape). Window from the first sighting of 'Umbrellaacademy' on this team id.",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "Umbrellaacademy"
+        }
+      ],
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "13576d6f-57ae-4b08-9755-89c14455667e": {
       "org_id": "sheer-cold",
@@ -286,32 +325,6 @@
         "seasons 2024, 2025, 2026; 40 + 16 matches"
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
-    },
-    "03869857-7f73-4176-a27d-dafcc8d469ae": {
-      "windows": [
-        {
-          "org_id": "umbrellaacademy",
-          "org_name": "Umbrellaacademy",
-          "team_name": "Umbrellaacademy",
-          "note": "ROC ESPORT (2024 Stage 1, the id's own era) then Umbrellaacademy from 2024 Stage 2. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
-          "evidence": [
-            "decided by the project owner (Stage 3 window review, 2026-10-01)"
-          ],
-          "valid_from_name": "Umbrellaacademy",
-          "valid_to_name": "ROCstars"
-        },
-        {
-          "org_id": "rocstars",
-          "org_name": "ROCstars",
-          "team_name": "ROCstars",
-          "note": "Umbrellaacademy -> ROCstars on 2024-04-20 (inside 2024 Stage 2). An organisation change inside a stage, decided by the owner over the signals (a wholly different name with no stage boundary). The placeholder signal also fires here (Umbrellaacademy was seen for one day at the start of the stage); the owner's decision stands. Whether ROCstars is the ROC ESPORT organisation is not decided: the eras stay apart.",
-          "evidence": [
-            "decided by the project owner (Stage 3 window review, 2026-10-01)"
-          ],
-          "valid_from_name": "ROCstars"
-        }
-      ],
-      "decided_at": "2026-10-01T23:15:38+00:00"
     },
     "bb5dd404-213c-430f-8d12-8687fc3ff747": {
       "org_id": "virtus-pro",

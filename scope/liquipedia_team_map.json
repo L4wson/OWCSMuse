@@ -8,10 +8,10 @@
       "decided_at": "2026-09-23T05:02:12+00:00"
     },
     "1dipvs100gorillas": {
-      "entity_type": "team",
-      "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
-      "note": "same roster as Vanir Quick",
-      "decided_at": "2026-09-23T05:02:29+00:00"
+      "entity_type": "org",
+      "entity_id": "quick-esports",
+      "note": "Quick Esports' roster in 2025 Stage 2, played as 1DIPv100GORILLA; one org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "anyone s legend": {
       "entity_type": "team",
@@ -56,10 +56,10 @@
       "decided_at": "2026-10-02T02:37:40+00:00"
     },
     "lunex gaming": {
-      "entity_type": "team",
-      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
-      "note": "largely the same roster as Rad Esports and Sakura Esports (NA)",
-      "decided_at": "2026-09-23T05:02:34+00:00"
+      "entity_type": "org",
+      "entity_id": "lunex",
+      "note": "LuneX (2026) on 0464a373, a team id FACEIT recycled across unrelated teams; anchored to the org so the name never reaches UNC inc. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "m80": {
       "entity_type": "team",
@@ -86,16 +86,16 @@
       "decided_at": "2026-10-02T02:37:38+00:00"
     },
     "rad esports": {
-      "entity_type": "team",
-      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
-      "note": "largely the same roster as LuneX Gaming and Sakura Esports (NA)",
-      "decided_at": "2026-09-23T05:02:35+00:00"
+      "entity_type": "org",
+      "entity_id": "rad",
+      "note": "Rad (2025 Stages 1-2) on 0464a373, a recycled team id; anchored to the org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "sakura esports|na": {
-      "entity_type": "team",
-      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
-      "note": "largely the same roster as LuneX Gaming and Rad Esports; NA-only, EMEA Sakura Esports is a different team",
-      "decided_at": "2026-09-23T05:02:36+00:00"
+      "entity_type": "org",
+      "entity_id": "sakura",
+      "note": "Sakura (2025) on 0464a373, a recycled team id; anchored to the org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "spacestation gaming": {
       "entity_type": "org",
@@ -152,20 +152,10 @@
       "decided_at": "2026-10-02T04:07:51+00:00"
     },
     "vanir quick": {
-      "eras": [
-        {
-          "entity_type": "team",
-          "entity_id": "ebfd8060-fcbd-467b-9701-0801b2260a9c",
-          "valid_to": "2025-01-01T00:00:00+00:00"
-        },
-        {
-          "entity_type": "team",
-          "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
-          "valid_from": "2025-01-01T00:00:00+00:00"
-        }
-      ],
-      "note": "Two FACEIT team ids under one Liquipedia name: 6/6 exact-id 2024 links name ebfd8060, 13/13 2025 links name cb90edf6; Liquipedia's own templates split them (quick esports orig / 2025). No series between 2024-03-22 and 2025-05-11, so any boundary in that gap resolves identically. Replaces the dateless cb90edf6 mapping, whose basis was roster overlap. Approved by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T03:16:46+00:00"
+      "entity_type": "org",
+      "entity_id": "quick-esports",
+      "note": "Quick Esports' Liquipedia name in 2024 and 2025 (templates quick esports orig / 2025); one org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     }
   }
 }
