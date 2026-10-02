@@ -153,9 +153,9 @@ def suggestions(conn: psycopg.Connection, per_group: int = 4) -> Suggestions:
         with conn.cursor() as cur:
             cur.execute(
                 """
-                SELECT player_display_name(p.nickname, p.game_player_name) AS nickname, sum(a.maps) AS maps
+                SELECT player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, sum(a.maps) AS maps
                   FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id
-                 GROUP BY p.nickname, p.game_player_name ORDER BY sum(a.maps) DESC LIMIT %s
+                 GROUP BY p.display_name, p.nickname, p.game_player_name ORDER BY sum(a.maps) DESC LIMIT %s
                 """,
                 (per_group,),
             )

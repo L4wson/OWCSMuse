@@ -23,6 +23,8 @@ from owcsmuse.db import RawPayloadStore, connect, migrate
 from owcsmuse.faceit.client import FaceitNotFound, FetchResult, ListResult
 from owcsmuse.liquipedia import competition_names as lp_names
 from owcsmuse.liquipedia import enrich as lp_enrich
+from owcsmuse.liquipedia import identity as lp_identity
+from owcsmuse.liquipedia.teams import TeamMap
 from owcsmuse.liquipedia import pipeline as lp_pipeline
 from owcsmuse.orgs import OrgDecisions
 from owcsmuse.orgs import load_decisions as load_org_decisions
@@ -104,6 +106,9 @@ def build_golden_db(db_url: str, schema: str):
                   lp_names.propose(ROOT / lp_names.DEFAULT_MAP_PATH, ROOT / lp_names.DEFAULT_SCOPE_PATH,
                                    ROOT / lp_names.DEFAULT_EXTRA_PATH))
     load_liquipedia_enrichment(conn, raw_conn)
+    # Stage 3: the reviewed cross-source anchors (team names from the team map, players from their decisions file)
+    lp_identity.load_identity(conn, lp_identity.PlayerDecisions(ROOT / "scope" / "player_identity_decisions.json"),
+                              TeamMap(ROOT / "scope" / "liquipedia_team_map.json"))
     refresh(conn)
     return conn, raw_conn
 

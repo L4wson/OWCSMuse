@@ -35,6 +35,31 @@ class LPGame:
 
 
 @dataclass(frozen=True)
+class LPPlayer:
+    """One name on a Liquipedia line-up. `page` is the player's page title and the anchor an identity hangs on."""
+    page: str
+    handle: str
+    real_name: Optional[str] = None
+    nationality: Optional[str] = None
+
+
+def parse_player(name: Optional[str], displayname: Optional[str], flag: Optional[str] = None) -> Optional[LPPlayer]:
+    """`name` is page-style ("HYEON_(Kim_Seong-hyeon)", "Quartz"); `displayname` is the handle shown.
+
+    The handle is the display name, else the page title before any "_(...)"; the real name is the parenthetical,
+    underscores read as spaces. Both are kept so both are searchable.
+    """
+    page = (name or "").strip()
+    if not page:
+        return None
+    base, real = page, None
+    if "_(" in page and page.endswith(")"):
+        base, real = page[:page.index("_(")], page[page.index("_(") + 2:-1].replace("_", " ").strip() or None
+    handle = (displayname or "").strip() or base.replace("_", " ").strip()
+    return LPPlayer(page=page, handle=handle, real_name=real, nationality=(flag or "").strip() or None)
+
+
+@dataclass(frozen=True)
 class LPMatch:
     objectname: str
     raw_id: int
@@ -60,6 +85,13 @@ class LPMatch:
     games: tuple[LPGame, ...] = ()
     placeholder: bool = False
     notes: tuple[str, ...] = field(default=())
+    # Stage 3: who Liquipedia says played, per side, and the team's page/template (the team-side anchors).
+    players1: tuple[LPPlayer, ...] = ()
+    players2: tuple[LPPlayer, ...] = ()
+    team1_template: Optional[str] = None
+    team2_template: Optional[str] = None
+    team1_page: Optional[str] = None
+    team2_page: Optional[str] = None
 
     @property
     def n_games(self) -> int:
@@ -112,6 +144,22 @@ def parse_row(row: dict[str, Any], raw_id: int, wiki: str = "overwatch") -> Opti
     faceit = faceit_id_of(row.get("links"))
     if row.get("links") and not faceit and "faceit" in json.dumps(row["links"]).lower():
         notes.append("links mention FACEIT but hold no match id")
+
+    def players_of(o: dict[str, Any]) -> tuple[LPPlayer, ...]:
+        out = []
+        for p in o.get("match2players") or []:
+            lp = parse_player(p.get("name"), p.get("displayname"), p.get("flag")) if isinstance(p, dict) else None
+            if lp:
+                out.append(lp)
+        return tuple(out)
+
+    def template_of(o: dict[str, Any]) -> tuple[Optional[str], Optional[str]]:
+        tt = o.get("teamtemplate") if isinstance(o.get("teamtemplate"), dict) else {}
+        return ((tt.get("template") or o.get("template") or "").strip() or None,
+                (tt.get("page") or "").strip().replace(" ", "_") or None)
+
+    t1, pg1 = template_of(o1)
+    t2, pg2 = template_of(o2)
     return LPMatch(
         objectname=row["objectname"], raw_id=raw_id, match2id=row["match2id"], bracket_id=row["match2bracketid"],
         pagename=row["pagename"], page_url=page_url(row["pagename"], wiki), parent=row.get("parent"),
@@ -121,7 +169,9 @@ def parse_row(row: dict[str, Any], raw_id: int, wiki: str = "overwatch") -> Opti
         score1=_int(o1.get("score")) if o1.get("status") in (None, "", "S") else None,
         score2=_int(o2.get("score")) if o2.get("status") in (None, "", "S") else None,
         status1=o1.get("status") or "", status2=o2.get("status") or "", section=(row.get("section") or None),
-        faceit_match_id=faceit, games=games, placeholder=placeholder, notes=tuple(notes))
+        faceit_match_id=faceit, games=games, placeholder=placeholder, notes=tuple(notes),
+        players1=players_of(o1), players2=players_of(o2), team1_template=t1, team2_template=t2,
+        team1_page=pg1, team2_page=pg2)
 
 
 @dataclass

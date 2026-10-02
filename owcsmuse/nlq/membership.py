@@ -17,13 +17,13 @@ import psycopg
 
 STINTS_SQL = """
 WITH played AS (
-    SELECT DISTINCT m.match_id, ti.org_key, ti.org_id, ti.team_id, ti.display_name,
-           COALESCE(m.liquipedia_played_at, match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at)) AS at,
-           c.season, r.is_substitute
+    SELECT DISTINCT m.match_id, ti.org_key, ti.org_id, ti.team_id, ti.display_name, x.at, c.season, r.is_substitute
       FROM match_rosters r
       JOIN matches m ON m.match_id = r.match_id
       JOIN championships c ON c.championship_id = m.championship_id
-      JOIN team_identity ti ON ti.team_id = r.team_id
+      CROSS JOIN LATERAL (SELECT COALESCE(m.liquipedia_played_at,
+                                          match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at)) AS at) x
+      JOIN LATERAL team_identity_at(r.team_id, x.at) ti ON true    -- who the team was on that day
      WHERE r.player_id = %s AND c.include
        AND m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED'
        AND (%s::int IS NULL OR c.season = %s)

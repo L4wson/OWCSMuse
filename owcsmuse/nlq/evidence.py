@@ -82,7 +82,8 @@ _TEAM_MAP_COLUMNS = """
     s.display_name AS team, s.opponent_display_name AS opponent,
     s.map_name, s.game_mode,
     s.score AS score, s.opp_score AS opponent_score,
-    CASE WHEN s.won THEN 'won' WHEN s.drawn THEN 'drawn' ELSE 'lost' END AS result
+    CASE WHEN s.won THEN 'won' WHEN s.drawn THEN 'drawn' ELSE 'lost' END AS result,
+    s.sources
 """
 
 _TEAM_SERIES_COLUMNS = """
@@ -91,7 +92,8 @@ _TEAM_SERIES_COLUMNS = """
     s.display_name AS team, s.opponent_display_name AS opponent,
     s.best_of, s.map_wins AS score, s.map_losses AS opponent_score,
     CASE WHEN s.won THEN 'won' ELSE 'lost' END AS result,
-    (s.ingest_state = 'complete') AS map_stats_recorded
+    (s.ingest_state = 'complete') AS map_stats_recorded,
+    s.sources
 """
 
 # A map row belonging to no one in particular: one row per map rather than one
@@ -112,9 +114,14 @@ _ORDER = " ORDER BY played_at DESC NULLS LAST, match_id DESC, round_number NULLS
 
 
 def _paged(select: str, from_where: str, select_params: list[Any], where_params: list[Any],
-           page: int, page_size: int) -> tuple[str, list[Any]]:
-    """One statement that returns the page and the size of the whole set."""
-    sql = (f"SELECT {select}, {MATCH_URL.format(col='s.match_id')} AS match_url, "
+           page: int, page_size: int, url: Optional[str] = None) -> tuple[str, list[Any]]:
+    """One statement that returns the page and the size of the whole set.
+
+    `url` is the column holding the row's source link; the default builds the FACEIT room URL from the match id,
+    which is right for every player-grain row. Team-grain rows come from `series` and carry `source_url`, the
+    FACEIT room or, for a Liquipedia-only series, the Liquipedia page.
+    """
+    sql = (f"SELECT {select}, {url or MATCH_URL.format(col='s.match_id')} AS match_url, "
            f"count(*) OVER () AS total_rows FROM {from_where}{_ORDER} LIMIT %s OFFSET %s")
     return sql, select_params + where_params + [page_size, (page - 1) * page_size]
 
@@ -167,7 +174,7 @@ def _team_maps(v: Validated, org_key: str, extra: list[str], extra_params: list[
     params = [org_key] + params + extra_params
     from_where = ("fact_team_maps s JOIN championships c ON c.championship_id = s.championship_id "
                   "WHERE " + " AND ".join(clauses))
-    return _paged(_TEAM_MAP_COLUMNS, from_where, [], params, page, page_size)
+    return _paged(_TEAM_MAP_COLUMNS, from_where, [], params, page, page_size, url="s.source_url")
 
 
 def _neutral_maps(v: Validated, extra: list[str], extra_params: list[Any],
@@ -185,7 +192,7 @@ def _team_series(v: Validated, column: str, value: str, extra: list[str], extra_
     params = [value] + params + extra_params
     from_where = ("fact_team_matches s JOIN championships c ON c.championship_id = s.championship_id "
                   "WHERE " + " AND ".join(clauses))
-    return _paged(_TEAM_SERIES_COLUMNS, from_where, [], params, page, page_size)
+    return _paged(_TEAM_SERIES_COLUMNS, from_where, [], params, page, page_size, url="s.source_url")
 
 
 _ON_ROSTER = ("EXISTS (SELECT 1 FROM match_rosters mr WHERE mr.match_id = s.match_id"

@@ -93,34 +93,61 @@ def test_two_records_claiming_one_faceit_id_are_both_ambiguous():
     assert [lk.tier for lk in res.links] == [AMBIGUOUS, AMBIGUOUS] and all(lk.faceit_id is None for lk in res.links)
 
 
-def test_an_exact_pair_that_disagrees_says_where_and_which_source_is_implausible():
+def test_an_exact_pair_that_disagrees_is_ambiguous_and_says_where_and_which_source_is_implausible():
+    """Stage 3: the id says one thing and the records another. A wrong id looks exactly like this and a wrong link
+    silently gives one team another team's result, so the pair is never linked on the id alone."""
     m = lp("Spacestation Gaming", "Team Liquid", 3, 0, faceit_id=FID)
     f = fs(FID, "SpaceStation Gaming", "Team Liquid", 4, 0, maps=4)            # a 4-0 in a best-of-5 cannot have happened
-    lk = link_of(reconcile([m], [f], MAP), m)
-    assert lk.tier == EXACT and [d["field"] for d in lk.disagreements] == ["score"]
+    res = reconcile([m], [f], MAP)
+    lk = link_of(res, m)
+    assert lk.tier == AMBIGUOUS and lk.faceit_id is None
+    assert lk.candidates == [{"faceit_id": FID, "disagrees_on": ["score"]}] and lk.evidence["kind"] == "exact_id_disagrees"
+    assert [d["field"] for d in lk.disagreements] == ["score"]
     note = lk.disagreements[0]["note"]
     assert "4-0 is more wins than a best-of-5 allows" in note and "FACEIT has stats for 4 maps" in note
+    assert res.faceit_unlinked == [f]                                        # the FACEIT series stays a series of its own
 
 
-def test_a_wrong_faceit_id_shows_up_as_a_team_disagreement():
+def test_a_wrong_faceit_id_shows_up_as_a_team_disagreement_and_never_links():
     m = lp("Spacestation Gaming", "Team Liquid", 3, 1, faceit_id=FID)
     f = fs(FID, "Dallas Fuel", "Team Liquid", 3, 1)                            # the id points at a different pairing
     lk = link_of(reconcile([m], [f], MAP), m)
-    assert "teams" in [d["field"] for d in lk.disagreements]
+    assert lk.tier == AMBIGUOUS and lk.faceit_id is None and "teams" in lk.candidates[0]["disagrees_on"]
+
+
+def test_a_decision_may_name_the_faceit_id_instead_of_the_objectname():
+    """The report shows FACEIT ids, not objectnames; a decision keyed faceit:<id> settles the one record naming it."""
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 0, faceit_id=FID)
+    f = fs(FID, "SpaceStation Gaming", "Team Liquid", 4, 0, maps=4)
+    lk = link_of(reconcile([m], [f], MAP, decisions={f"faceit:{FID}": {"faceit_match_id": FID, "note": "a drawn map"}}), m)
+    assert (lk.tier, lk.decision, lk.faceit_id) == (AMBIGUOUS, "confirmed", FID)
+
+
+def test_a_person_can_confirm_or_reject_a_disagreeing_id():
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 0, faceit_id=FID)
+    f = fs(FID, "SpaceStation Gaming", "Team Liquid", 4, 0, maps=4)
+    lk = link_of(reconcile([m], [f], MAP, decisions={m.objectname: {"faceit_match_id": FID}}), m)
+    assert (lk.tier, lk.decision, lk.faceit_id) == (AMBIGUOUS, "confirmed", FID)
+    lk = link_of(reconcile([m], [f], MAP, decisions={m.objectname: {"faceit_match_id": None}}), m)
+    assert (lk.tier, lk.decision, lk.faceit_id) == (AMBIGUOUS, "rejected", None)
 
 
 def test_a_result_only_series_with_no_start_time_is_flagged_when_its_time_is_days_off():
     m = lp("Spacestation Gaming", "Team Liquid", 3, 0, faceit_id=FID)
     f = fs(FID, "SpaceStation Gaming", "Team Liquid", 3, 0, when=T0 + timedelta(days=4), state="result_only", reliable=False)
-    d = link_of(reconcile([m], [f], MAP), m).disagreements
+    lk = link_of(reconcile([m], [f], MAP), m)
+    d = lk.disagreements
     assert [x["field"] for x in d] == ["date"] and "when the result was entered" in d[0]["note"]
+    assert lk.tier == EXACT and lk.faceit_id == FID                           # a date gap alone never downgrades
 
 
 def test_a_best_of_disagreement_is_reported_with_the_reason_when_the_score_settles_it():
     m = lp("Spacestation Gaming", "Team Liquid", 4, 1, faceit_id=FID, bo=7)
     f = fs(FID, "SpaceStation Gaming", "Team Liquid", 4, 1, bo=5)
-    d = link_of(reconcile([m], [f], MAP), m).disagreements
+    lk = link_of(reconcile([m], [f], MAP), m)
+    d = lk.disagreements
     assert [x["field"] for x in d] == ["best_of"] and "best-of-7" in d[0]["note"]
+    assert lk.tier == AMBIGUOUS                                               # and it is a person's call
 
 
 # ------------------------------------------------------------------------- tier 2: strong

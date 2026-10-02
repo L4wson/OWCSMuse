@@ -1,13 +1,13 @@
 # Liquipedia team names -> FACEIT orgs
 
-32 Liquipedia team names, learned from 296 matches Liquipedia ties to FACEIT by match id. 13 decided, 21 proposed strong, 0 need a person.
+40 Liquipedia team names, learned from 276 matches Liquipedia ties to FACEIT by match id. 14 decided, 20 proposed strong, 8 need a person.
 
 Nothing is matched by fuzzy string similarity. Decide with:
 
     python -m owcsmuse liquipedia teams decide "<Liquipedia name>" --org <org slug> [--region na|emea]   (or --team <FACEIT team id>)
     python -m owcsmuse liquipedia teams accept        # accept every strong proposal below, in bulk
 
-## Proposed - strong evidence (21)
+## Proposed - strong evidence (20)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -16,7 +16,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Dallas Fuel | any | team:cd157523-5c58-41bc-b62d-e1a635ea61b8 | 16 | stood opposite FACEIT org 'team:cd157523-5c58-41bc-b62d-e1a635ea61b8' in 16 of 16 id-linked matches (FACEIT called it 'Dallas Fuel'); the folded names are identical |
 | DhillDucks | any | dhillducks | 14 | stood opposite FACEIT org 'dhillducks' in 14 of 14 id-linked matches (FACEIT called it 'DhillDucks'); the folded names are identical |
 | Disguised | any | team:968066cc-6255-4fcd-8d9b-bc455ca9d998 | 10 | stood opposite FACEIT org 'team:968066cc-6255-4fcd-8d9b-bc455ca9d998' in 10 of 10 id-linked matches (FACEIT called it 'Disguised'); the folded names are identical |
-| Frost Tails eSport | any | team:c82570d6-ded9-4678-8d32-398db37faa98 | 7 | stood opposite FACEIT org 'team:c82570d6-ded9-4678-8d32-398db37faa98' in 7 of 7 id-linked matches (FACEIT called it 'Frost Tails') |
+| Frost Tails eSport | any | frost-tails | 7 | stood opposite FACEIT org 'frost-tails' in 7 of 7 id-linked matches (FACEIT called it 'Frost Tails') |
 | Geekay Esports | na | team:590b7d3b-a200-47b9-a967-f02274c1977b | 21 | stood opposite FACEIT org 'team:590b7d3b-a200-47b9-a967-f02274c1977b' in 21 of 21 id-linked matches on na pages (FACEIT called it 'Geekay Esports'); the folded names are identical; REGION SPLIT: this name is different FACEIT teams in NA and EMEA, so it is decided per region |
 | Geekay Esports | emea | team:46f8e560-76fe-4b5f-85e7-397957e0dc74 | 16 | stood opposite FACEIT org 'team:46f8e560-76fe-4b5f-85e7-397957e0dc74' in 16 of 16 id-linked matches on emea pages (FACEIT called it 'Geekay Esports'); the folded names are identical; REGION SPLIT: this name is different FACEIT teams in NA and EMEA, so it is decided per region |
 | Gen.G Esports | any | team:bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff | 26 | stood opposite FACEIT org 'team:bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff' in 26 of 26 id-linked matches (FACEIT called it 'GenG', 'GenG Esports') |
@@ -28,12 +28,24 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Team Peps | any | team-peps | 32 | stood opposite FACEIT org 'team-peps' in 32 of 32 id-linked matches (FACEIT called it 'Team Peps'); the folded names are identical |
 | Team Vision | any | vision-esports | 16 | stood opposite FACEIT org 'vision-esports' in 16 of 16 id-linked matches (FACEIT called it 'Vision Esports') |
 | Telacy | any | team:b50813d6-3c84-4d07-adf4-bc9df069e13a | 5 | stood opposite FACEIT org 'team:b50813d6-3c84-4d07-adf4-bc9df069e13a' in 5 of 5 id-linked matches (FACEIT called it 'Telacy'); the folded names are identical |
-| The Kafe | any | team:a35f8d47-7487-4249-a3fb-94aefa2ac8d0 | 5 | stood opposite FACEIT org 'team:a35f8d47-7487-4249-a3fb-94aefa2ac8d0' in 5 of 5 id-linked matches (FACEIT called it 'The Kafe'); the folded names are identical |
 | The Ultimates | any | team:3eaeefbc-6abf-4d54-aeb2-2790e3e21752 | 20 | stood opposite FACEIT org 'team:3eaeefbc-6abf-4d54-aeb2-2790e3e21752' in 20 of 20 id-linked matches (FACEIT called it 'The Ultimates'); the folded names are identical |
 | Twisted Minds | any | team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e | 46 | stood opposite FACEIT org 'team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e' in 46 of 46 id-linked matches (FACEIT called it 'Twisted Minds'); the folded names are identical |
 | Virtus.pro | any | virtus-pro | 45 | stood opposite FACEIT org 'virtus-pro' in 45 of 45 id-linked matches (FACEIT called it 'Virtus pro', 'Virtuspro'); the folded names are identical |
 
-## Already decided (13)
+## Needs review (8)
+
+| Liquipedia name | region | proposed org | matches | evidence |
+|---|---|---|---|---|
+| Crazy Raccoon | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| ENCE | any | team:62f7752b-0b79-4fa8-9a23-78800e2b4539 | 0 | no id-linked match to learn from; only the folded name equals a FACEIT team name |
+| M80 | any | team:3aca5abd-ee5d-4542-92e9-392b6f5d0dbc | 0 | no id-linked match to learn from; only the folded name equals a FACEIT team name |
+| NRG Shock | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Team Danteh | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Team Falcons | any | team:2ab92d33-4c33-46e1-a13f-743a95291d0e | 0 | no id-linked match to learn from; only the folded name equals a FACEIT team name |
+| Team Hydron | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Toronto Defiant | any | team:8f632648-b26f-4554-bae4-40f9aee1773b | 0 | no id-linked match to learn from; only the folded name equals a FACEIT team name |
+
+## Already decided (14)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -41,13 +53,14 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | 1DIPVS100GORILLAS | any | team:cb90edf6-60cb-4f73-8172-bf944729a114 | 0 | decided in scope/liquipedia_team_map.json |
 | Anyone's Legend | any | team:75516399-4c1d-40fc-bb46-a887edadc5a2 | 0 | decided in scope/liquipedia_team_map.json |
 | Avidity | any | team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae | 0 | decided in scope/liquipedia_team_map.json |
-| Extinction | any | team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae | 0 | decided in scope/liquipedia_team_map.json |
+| Extinction | any | extinction | 0 | decided in scope/liquipedia_team_map.json |
 | LuneX Gaming | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
 | NTMR | any | ntmr | 0 | decided in scope/liquipedia_team_map.json |
 | Rad Esports | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
 | Sakura Esports | na | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
 | Supernova (American team) | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
 | Team Z | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
+| The Kafe | any | team:a35f8d47-7487-4249-a3fb-94aefa2ac8d0 | 0 | decided in scope/liquipedia_team_map.json |
 | Timeless | any | ntmr | 0 | decided in scope/liquipedia_team_map.json |
 | Vanir Quick | any | team:cb90edf6-60cb-4f73-8172-bf944729a114 | 0 | decided in scope/liquipedia_team_map.json |
 

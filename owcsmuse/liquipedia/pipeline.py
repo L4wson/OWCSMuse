@@ -45,8 +45,9 @@ class LinkDecisions:
     def save(self) -> Path:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         doc = {"note": ("Reviewed decisions on Liquipedia matches the reconciler could not link on its own. Keys are "
-                        "Liquipedia objectnames; faceit_match_id names the FACEIT match it is, or is null when there is "
-                        "none. Edit by hand or with `python -m owcsmuse liquipedia links decide`."),
+                        "Liquipedia objectnames, or `faceit:<match id>` for the one record that names that FACEIT id "
+                        "(an exact id whose records disagree); faceit_match_id names the FACEIT match it is, or is "
+                        "null when there is none. Edit by hand or with `python -m owcsmuse liquipedia links decide`."),
                "decisions": dict(sorted(self.data.items()))}
         self.path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         return self.path
@@ -85,6 +86,18 @@ def load_map(path: str = DEFAULT_MAP_PATH) -> tuple[dict[str, set[str]], dict[st
         comps.setdefault(page, set()).add(cid)
         names[page] = e["name"]
     return comps, names
+
+
+def load_team_windows(conn: psycopg.Connection):
+    """team id -> [(valid_from, valid_to, org_id)] from team_orgs, so a name decided to a team id keys like the facts."""
+    out: dict[str, list] = {}
+    with conn.cursor() as cur:
+        cur.execute("""SELECT team_id, org_id, CASE WHEN valid_from = '-infinity' THEN NULL ELSE valid_from END AS lo,
+                              CASE WHEN valid_to = 'infinity' THEN NULL ELSE valid_to END AS hi FROM team_orgs""")
+        for r in cur.fetchall():
+            out.setdefault(r["team_id"], []).append((r["lo"], r["hi"], r["org_id"]))
+    conn.commit()
+    return out
 
 
 def stored_match_rows(conn: psycopg.Connection, field_name: str = "pagename") -> tuple[list[dict[str, Any]], list[int]]:
@@ -129,7 +142,7 @@ def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT
                 if f.region:
                     org_regions.setdefault(o, set()).add(f.region)
     proposals = propose(pairs, [n for lp in lps for n in (lp.team1, lp.team2)], decided, fnames, org_regions)
-    resolver = make_resolver(decided, {p.key: p for p in proposals}, use_proposals)
+    resolver = make_resolver(decided, {p.key: p for p in proposals}, use_proposals, load_team_windows(conn))
     result = reconcile(lps, faceit, resolver, comps_of_page, window, LinkDecisions(decisions_path).data)
     run = Run(result, lps, faceit, proposals, dups, raw_ids, comps_of_page, page_names, use_proposals=use_proposals)
     with conn.cursor() as cur:
@@ -156,12 +169,24 @@ def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
                 """INSERT INTO liquipedia_matches
                      (objectname, raw_id, match2id, bracket_id, pagename, page_url, region, championship_id, played_at,
                       best_of, finished, winner, walkover, team1_name, team2_name, score1, score2, status1, status2,
-                      section, faceit_match_id, n_games, placeholder)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
+                      section, faceit_match_id, n_games, placeholder,
+                      team1_template, team2_template, team1_page, team2_page)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)""",
                 (m.objectname, m.raw_id, m.match2id, m.bracket_id, m.pagename, m.page_url, m.region,
                  comp_by_page.get(m.pagename), m.played_at, m.best_of, m.finished, m.winner, m.walkover, m.team1,
                  m.team2, m.score1, m.score2, m.status1, m.status2, m.section, m.faceit_match_id, m.n_games,
-                 m.placeholder))
+                 m.placeholder, m.team1_template, m.team2_template, m.team1_page, m.team2_page))
+            # the line-ups, a parsed copy like the match itself (rebuilt from raw_payloads on every run)
+            for side, players in ((1, m.players1), (2, m.players2)):
+                seen: set[str] = set()
+                for pl in players:
+                    if pl.page in seen:
+                        continue
+                    seen.add(pl.page)
+                    cur.execute(
+                        """INSERT INTO liquipedia_match_players (lp_objectname, side, page, handle, real_name, nationality)
+                           VALUES (%s,%s,%s,%s,%s,%s)""",
+                        (m.objectname, side, pl.page, pl.handle, pl.real_name, pl.nationality))
         n = 0
         for lk in run.result.links:
             cur.execute(

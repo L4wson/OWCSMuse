@@ -37,7 +37,7 @@ import logging
 import re
 import unicodedata
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
@@ -115,6 +115,7 @@ class TeamFacts:
     seasons: set[int] = field(default_factory=set)
     matches: int = 0
     regions: set[str] = field(default_factory=set)   # scope_region values its matches were played in
+    names: list[tuple[str, datetime, datetime]] = field(default_factory=list)   # (name, first seen, last seen)
 
 
 @dataclass
@@ -137,6 +138,10 @@ class Proposal:
     include: bool = False           # only a reviewed decision sets this
     decision_source: str = "auto"   # auto | manual | rejected
     note: Optional[str] = None
+    # team_id -> {"valid_from": iso | None, "valid_to": iso | None, "basis": str}: the window the mapping should be
+    # valid over. Proposed when a team id carried a name that is not the org's before it carried the org's name
+    # (an acquired roster is not the org's history); a decision's own window replaces it in apply().
+    windows: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -179,6 +184,11 @@ def load_team_facts(conn: psycopg.Connection) -> dict[str, TeamFacts]:
             f = facts.get(r["team_id"])
             if f:
                 f.players = set(r["players"] or [])
+        cur.execute("SELECT team_id, name, first_seen_at, last_seen_at FROM team_names ORDER BY team_id, first_seen_at")
+        for r in cur.fetchall():
+            f = facts.get(r["team_id"])
+            if f:
+                f.names.append((r["name"], r["first_seen_at"], r["last_seen_at"]))
     conn.commit()
     return {k: v for k, v in facts.items() if v.matches}
 
@@ -228,6 +238,138 @@ def _adjacency(a: TeamFacts, b: TeamFacts) -> tuple[bool, Optional[int]]:
     return False, 0
 
 
+# The OWCS calendar as the committed reports show it (stage windows from the first and last series seen in each). A
+# name change whose old name's last sighting and new name's first sighting fall in different stages happened on a
+# stage boundary. Kept as data so it can be extended as stages are added.
+STAGE_CALENDAR: tuple[tuple[str, str, str], ...] = (
+    # from the first and last series seen in each stage's competitions (regular season, playoffs, relegation)
+    ("2024 Stage 1", "2024-03-08", "2024-03-24"), ("2024 Stage 2", "2024-04-12", "2024-05-05"),
+    ("2024 Dreamhack Dallas", "2024-05-31", "2024-06-02"),
+    ("2025 Stage 1", "2025-01-31", "2025-03-10"), ("2025 Stage 2", "2025-05-10", "2025-06-21"),
+    ("2025 Stage 3", "2025-09-07", "2025-10-26"),
+    ("2026 Stage 1", "2026-03-21", "2026-06-12"),      # playoffs 2026-04-11/12, then the S8 relegation into late May
+    ("2026 Stage 2", "2026-06-13", "2026-07-06"),      # began 2026-06-13
+)
+
+
+def stage_of(when: Optional[datetime]) -> Optional[str]:
+    b = stage_bounds(when)
+    return b[0] if b else None
+
+
+def stage_bounds(when: Optional[datetime]) -> Optional[tuple[str, str, str]]:
+    """(stage name, first day, last day) of the stage `when` falls in."""
+    if when is None:
+        return None
+    day = when.date().isoformat()
+    for name, lo, hi in STAGE_CALENDAR:
+        if lo <= day <= hi:
+            return name, lo, hi
+    return None
+
+
+# The third signal. FACEIT registers a team under a placeholder ("team_<captain>", or whatever the captain typed) and
+# the organisation's name replaces it once the roster has signed up: a placeholder lives in the opening days of a
+# stage and is gone inside the same stage. Decided by the project owner from 0c629c99, d20d1868 and 62f7752b, all in
+# the first days of 2024 Stage 1.
+PLACEHOLDER_DAYS = 14
+PLACEHOLDER_PREFIX = "team_"
+
+
+def is_registration_placeholder(old: tuple[str, datetime, datetime], new: tuple[str, datetime, datetime]) -> Optional[str]:
+    """Why `old` is a registration placeholder that `new` replaced, or None."""
+    (o_name, o_first, o_last), (n_name, n_first, _n_last) = old, new
+    b = stage_bounds(o_first)
+    if b is None or stage_bounds(n_first) != b or n_first <= o_last:
+        return None
+    name, lo, _hi = b
+    if o_name.lower().startswith(PLACEHOLDER_PREFIX):
+        return f"'{o_name}' is a FACEIT registration placeholder ('{PLACEHOLDER_PREFIX}' prefix) replaced by '{n_name}' inside {name}"
+    days = (o_last.date() - date.fromisoformat(lo)).days
+    if days < PLACEHOLDER_DAYS:
+        return (f"'{o_name}' lived only in the opening {days + 1} day(s) of {name} and '{n_name}' replaced it inside the "
+                "same stage: a registration placeholder")
+    return None
+
+
+def _same_handle(a: str, b: str) -> bool:
+    """A rename keeps the handle: equal after folding, equal without spaces/punctuation, or one contains the other."""
+    fa, fb = fold(a), fold(b)
+    squash = lambda x: re.sub(r"[^a-z0-9]", "", x)  # noqa: E731
+    if fa == fb or squash(fa) == squash(fb):
+        return True
+    return name_contains(a, b)[0] or name_contains(b, a)[0] or (squash(fa) and (squash(fa) in squash(fb) or squash(fb) in squash(fa)))
+
+
+def classify_name_change(old: tuple[str, datetime, datetime], new: tuple[str, datetime, datetime]) -> dict[str, Any]:
+    """What a change of name on one team id is, from two signals.
+
+    1. Handle: the new name contains or extends the old one -> a rename by the same organisation.
+    2. Stage boundary: the old name's last sighting and the new name's first sighting fall in different stages -> a
+       roster pickup by another organisation, which in OWCS lands on a stage boundary.
+    3. Registration placeholder (`is_registration_placeholder`): the old name is FACEIT's registration placeholder,
+       gone inside the opening days of the same stage -> the same organisation, no window.
+    A wholly different name on a stage boundary is a pickup (a window); a kept handle is a rename (no window). When the
+    signals disagree - a wholly different name inside one stage, or ranges that overlap - it is reported for a person.
+    """
+    (o_name, o_first, o_last), (n_name, n_first, n_last) = old, new
+    handle_kept = _same_handle(o_name, n_name)
+    s_old, s_new = stage_of(o_last), stage_of(n_first)
+    overlap = n_first <= o_last
+    boundary = (s_old != s_new) and not overlap
+    placeholder = is_registration_placeholder(old, new)
+    if overlap:
+        verdict, why = "disagree", (f"'{n_name}' ({n_first:%Y-%m-%d}..{n_last:%Y-%m-%d}) sits inside '{o_name}''s range "
+                                    f"({o_first:%Y-%m-%d}..{o_last:%Y-%m-%d}): the id alternated between the names, which "
+                                    "neither signal explains")
+    elif handle_kept and boundary:
+        verdict, why = "rename", f"'{n_name}' keeps the handle of '{o_name}' (rename), though it first appears in a new stage ({s_old} -> {s_new}); the handle decides"
+    elif handle_kept:
+        verdict, why = "rename", f"'{n_name}' keeps the handle of '{o_name}': a rename by the same organisation"
+    elif placeholder:
+        verdict, why = "placeholder", placeholder
+    elif boundary:
+        verdict, why = "pickup", f"'{n_name}' is a wholly different name first seen in {s_new or 'an unknown stage'} after '{o_name}' last played in {s_old or 'an unknown stage'}: a roster pickup"
+    else:
+        verdict, why = "disagree", f"'{n_name}' is a wholly different name but appears inside the same stage as '{o_name}' ({s_old}): not a stage-boundary pickup and not a rename"
+    return {"old": o_name, "new": n_name, "verdict": verdict, "handle_kept": handle_kept, "stage_boundary": boundary,
+            "placeholder": placeholder is not None, "stages": [s_old, s_new], "why": why}
+
+
+def propose_window(team: TeamFacts, org_name: str) -> Optional[dict[str, Any]]:
+    """The window over which `team` should count as `org_name`, or None for all time.
+
+    Name identity is the signal this project trusts. If the team id carried a name that is not the org's
+    (neither identical nor contained) BEFORE it first carried the org's name, the earlier era is someone else's -
+    a roster the org took over - and the mapping is proposed from the org name's first sighting. Nothing is proposed
+    from roster movement: a squad that transferred looks the same as a rename and is not evidence here.
+    """
+    if not team.names:
+        return None
+    history = sorted(team.names, key=lambda x: x[1])
+
+    def is_orgs(name: str) -> bool:
+        # the same handle with or without spaces ("Virtuspro" / "Virtus pro") is the org's name too
+        return (fold(name) == fold(org_name) or re.sub(r"[^a-z0-9]", "", fold(name)) == re.sub(r"[^a-z0-9]", "", fold(org_name))
+                or name_contains(name, org_name)[0])
+
+    first_org = next((n for n in history if is_orgs(n[0])), None)
+    if first_org is None:
+        return None
+    foreign_before = [n for n in history if n[1] < first_org[1] and not is_orgs(n[0])]
+    if not foreign_before:
+        return None
+    # the second signal: the change that brought the org's name must be a pickup, not a rename of the earlier name
+    last_before = max(foreign_before, key=lambda n: n[2])
+    change = classify_name_change(last_before, first_org)
+    if change["verdict"] == "rename":
+        return None
+    names = ", ".join(sorted({n[0] for n in foreign_before}))
+    return {"valid_from": first_org[1].isoformat(timespec="seconds"), "valid_to": None,
+            "basis": f"carried '{names}' before first appearing as '{first_org[0]}' on {first_org[1]:%Y-%m-%d}; "
+                     f"the earlier era is proposed as the team's own, not the org's ({change['verdict']}: {change['why']})"}
+
+
 def propose(conn: psycopg.Connection, facts: Optional[dict[str, TeamFacts]] = None) -> list[Proposal]:
     """Every candidate team-id pair with the evidence that justifies merging it."""
     facts = facts or load_team_facts(conn)
@@ -275,11 +417,17 @@ def propose(conn: psycopg.Connection, facts: Optional[dict[str, TeamFacts]] = No
             seasons = sorted(a.seasons | b.seasons)
             ev.append(f"seasons {', '.join(map(str, seasons))}; {a.matches} + {b.matches} matches")
             display = max((a, b), key=lambda t: (t.last_at or datetime.min.replace(tzinfo=timezone.utc)))
+            windows = {}
+            for t in (a, b):
+                w = propose_window(t, display.name)
+                if w:
+                    windows[t.team_id] = w
+                    ev.append(f"window for {t.team_id[:8]}: from {w['valid_from'][:10]} - {w['basis']}")
             out.append(Proposal(
                 team_ids=[a_id, b_id], names=[a.name, b.name], org_id=slugify(display.name), org_name=display.name,
                 roster_overlap=round(overlap, 4), shared_players=shared, smaller_roster=smaller,
                 name_exact=name_exact, name_contained=contained, date_adjacent=adjacent, gap_days=gap, seasons=seasons,
-                matches=a.matches + b.matches, strength=strength, evidence=ev,
+                matches=a.matches + b.matches, strength=strength, evidence=ev, windows=windows,
             ))
     out.sort(key=lambda p: (p.strength != "strong", -p.roster_overlap, p.org_name))
     log_event(log, logging.INFO, "org_proposals", proposals=len(out),
@@ -306,11 +454,54 @@ class OrgDecisions:
         return self.data.get(team_id)
 
     def set(self, team_id: str, org_id: str, org_name: str, note: Optional[str] = None,
-            team_name: Optional[str] = None, evidence: Optional[list[str]] = None) -> dict[str, Any]:
+            team_name: Optional[str] = None, evidence: Optional[list[str]] = None,
+            valid_from: Optional[str] = None, valid_to: Optional[str] = None,
+            valid_from_name: Optional[str] = None, valid_to_name: Optional[str] = None) -> dict[str, Any]:
+        """`valid_from` / `valid_to` (ISO 8601) bound the mapping; absent means for all time.
+
+        `valid_from_name` / `valid_to_name` bound it by the first sighting of that FACEIT team name on this team id
+        (team_names.first_seen_at), resolved at load time - a window sourced from the data rather than chosen. An
+        explicit timestamp wins where both are given; a name that never appears on the id leaves the mapping unapplied
+        and reported, never applied for all time.
+        """
         d = {"org_id": org_id, "org_name": org_name, "team_name": team_name, "note": note,
-             "evidence": evidence or [], "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+             "evidence": evidence or [], "valid_from": valid_from, "valid_to": valid_to,
+             "valid_from_name": valid_from_name, "valid_to_name": valid_to_name,
+             "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
         self.data[team_id] = {k: v for k, v in d.items() if v is not None}
         return self.data[team_id]
+
+    def add_window(self, team_id: str, org_id: str, org_name: str, note: Optional[str] = None,
+                   team_name: Optional[str] = None, evidence: Optional[list[str]] = None,
+                   valid_from: Optional[str] = None, valid_to: Optional[str] = None,
+                   valid_from_name: Optional[str] = None, valid_to_name: Optional[str] = None) -> dict[str, Any]:
+        """Add a second (third, ...) windowed mapping to a team id that already has one.
+
+        A team id whose names are several organisations' eras carries one window per era under `windows`; each
+        window has the same fields as a plain decision. The first call on an undecided id is a plain `set`.
+        """
+        if team_id not in self.data:
+            return self.set(team_id, org_id, org_name, note, team_name, evidence, valid_from, valid_to, valid_from_name, valid_to_name)
+        if not (valid_from or valid_from_name or valid_to or valid_to_name):
+            raise ValueError("a second mapping on one team id must be windowed")
+        entry = self.data[team_id]
+        if "windows" not in entry:
+            first = {k: v for k, v in entry.items() if k != "decided_at"}
+            entry = self.data[team_id] = {"windows": [first], "decided_at": entry.get("decided_at")}
+        w = {"org_id": org_id, "org_name": org_name, "team_name": team_name, "note": note, "evidence": evidence or [],
+             "valid_from": valid_from, "valid_to": valid_to, "valid_from_name": valid_from_name, "valid_to_name": valid_to_name}
+        entry["windows"].append({k: v for k, v in w.items() if v is not None})
+        entry["decided_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        return entry
+
+    def mappings(self, team_id: str) -> list[dict[str, Any]]:
+        """Every org mapping decided for a team id: one for a plain decision, one per window otherwise."""
+        d = self.data.get(team_id)
+        if not d:
+            return []
+        if "windows" in d:
+            return [{**w, "decided_at": d.get("decided_at")} for w in d["windows"]]
+        return [d]
 
     def unset(self, team_id: str) -> bool:
         return self.data.pop(team_id, None) is not None
@@ -341,11 +532,18 @@ class OrgDecisions:
                 p.note = rejected.get("reason")
                 out.append(p)
                 continue
-            decided = [self.data.get(t) for t in p.team_ids]
-            if all(d and d["org_id"] == decided[0]["org_id"] for d in decided):
+            shared = set.intersection(*[{m["org_id"] for m in self.mappings(t)} for t in p.team_ids]) if p.team_ids else set()
+            if shared:
+                org = sorted(shared)[0]
+                decided = [next(m for m in self.mappings(t) if m["org_id"] == org) for t in p.team_ids]
                 p.include, p.decision_source = True, "manual"
                 p.org_id, p.org_name = decided[0]["org_id"], decided[0].get("org_name", p.org_name)
                 p.note = decided[0].get("note")
+                for t, d in zip(p.team_ids, decided, strict=True):
+                    if d.get("valid_from") or d.get("valid_to"):
+                        p.windows[t] = {"valid_from": d.get("valid_from"), "valid_to": d.get("valid_to"), "basis": "decided"}
+                    else:
+                        p.windows.pop(t, None)      # decided for all time
             out.append(p)
         return out
 
@@ -353,10 +551,13 @@ class OrgDecisions:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         doc = {
             "note": ("Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it "
-                     "belongs to. A team id absent from this file stays unmapped and is queryable as itself. "
+                     "belongs to, over [valid_from, valid_to) when those are set (ISO 8601; absent = for all time). "
+                     "Outside its window a team id is itself, by the name it carried then. "
+                     "A team id whose names are several organisations' eras carries one mapping per era under `windows`. "
+                     "A team id absent from this file stays unmapped and is queryable as itself. "
                      "`rejections` are pairs that were reviewed and turned down; they are never proposed again. "
                      "Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`."),
-            "decisions": dict(sorted(self.data.items(), key=lambda kv: (kv[1].get("org_id", ""), kv[0]))),
+            "decisions": dict(sorted(self.data.items(), key=lambda kv: (self.mappings(kv[0])[0].get("org_id", ""), kv[0]))),
             "rejections": dict(sorted(self.rejections.items())),
         }
         self.path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -366,8 +567,9 @@ class OrgDecisions:
 def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[str, int]:
     """Write the decided mappings into orgs / team_orgs. Only decided ids are written."""
     by_org: dict[str, str] = {}
-    for d in decisions.data.values():
-        by_org[d["org_id"]] = d.get("org_name") or d["org_id"]
+    for team_id in decisions.data:
+        for d in decisions.mappings(team_id):
+            by_org[d["org_id"]] = d.get("org_name") or d["org_id"]
     with conn.cursor() as cur:
         for org_id, name in by_org.items():
             cur.execute(
@@ -379,33 +581,80 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
             )
         cur.execute("SELECT team_id FROM teams")
         known = {r["team_id"] for r in cur.fetchall()}
+        cur.execute("SELECT DISTINCT team_id FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%'")
+        before = {r["team_id"] for r in cur.fetchall()}
+        # The file is the whole truth for FACEIT team ids: rewrite the table from it, so a changed window or a
+        # removed team id takes effect and nothing stale survives. Liquipedia-born team ids belong to `identity load`.
+        cur.execute("DELETE FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%'")
         written = skipped = 0
-        for team_id, d in decisions.data.items():
+        unresolved: list[dict[str, str]] = []
+
+        def sighting(team_id: str, name: Optional[str]) -> Optional[datetime]:
+            """When this FACEIT name was first seen on this team id, at the series' time as the facts read it.
+
+            team_names.first_seen_at is FACEIT's timestamp, and a result_only series' FACEIT time is when the
+            result was entered - hours after Liquipedia dates the same series. A window that starts at FACEIT's
+            time of an era's first series leaves Liquipedia's record of that very series outside it, so the
+            Liquipedia side resolves to the previous era and the two sources "disagree on teams" (17 of 20
+            ambiguous links on production, 2026-10-02). The earliest time any source gives a series the team
+            played under that name is the start; it covers the series on both sides.
+            """
+            if not name:
+                return None
+            cur.execute("""
+                SELECT least(
+                    (SELECT first_seen_at FROM team_names WHERE team_id = %s AND name = %s),
+                    (SELECT min(least(coalesce(m.liquipedia_played_at, lm.played_at, 'infinity'::timestamptz),
+                                      match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at)))
+                       FROM matches m LEFT JOIN liquipedia_matches lm ON lm.faceit_match_id = m.match_id
+                      WHERE (m.faction1_team_id = %s AND m.faction1_name = %s) OR (m.faction2_team_id = %s AND m.faction2_name = %s))
+                ) AS at""", (team_id, name, team_id, name, team_id, name))
+            row = cur.fetchone()
+            return row["at"] if row and row["at"] else None
+
+        for team_id, d in ((t, m) for t in decisions.data for m in decisions.mappings(t)):
             if team_id not in known:
                 skipped += 1
                 continue
+            evidence = list(d.get("evidence") or [])
+            bounds: dict[str, Any] = {}
+            ok = True
+            for side in ("valid_from", "valid_to"):
+                bounds[side] = d.get(side)
+                name = d.get(f"{side}_name")
+                if name and not bounds[side]:
+                    seen = sighting(team_id, name)
+                    if seen is None:
+                        unresolved.append({"team_id": team_id, "org_id": d["org_id"], side: name,
+                                           "reason": f"'{name}' never appears on this team id in team_names; mapping not applied"})
+                        ok = False
+                        break
+                    bounds[side] = seen
+                    evidence.append(f"{side} = {seen.isoformat(timespec='seconds')}: first sighting of '{name}' on this team id")
+                elif name and bounds[side]:
+                    evidence.append(f"{side} sourced from the first sighting of '{name}'")
+            if not ok:
+                continue
             cur.execute(
                 """
-                INSERT INTO team_orgs (team_id, org_id, source, evidence)
-                VALUES (%s, %s, 'manual', %s)
-                ON CONFLICT (team_id) DO UPDATE SET org_id = EXCLUDED.org_id, evidence = EXCLUDED.evidence,
-                                                    source = 'manual', decided_at = now()
+                INSERT INTO team_orgs (team_id, org_id, source, evidence, valid_from, valid_to)
+                VALUES (%s, %s, 'manual', %s, coalesce(%s::timestamptz, '-infinity'), coalesce(%s::timestamptz, 'infinity'))
                 """,
-                (team_id, d["org_id"], psycopg.types.json.Jsonb(d.get("evidence") or [])),
+                (team_id, d["org_id"], psycopg.types.json.Jsonb(evidence), bounds["valid_from"], bounds["valid_to"]),
             )
             written += 1
         # a team id removed from the decisions file becomes unmapped again
-        cur.execute("DELETE FROM team_orgs WHERE NOT (team_id = ANY(%s))", (list(decisions.data),))
-        removed = cur.rowcount
+        removed = len(before - set(decisions.data))
         # An org whose last team id was just unmapped (an unmerge, e.g. reversing
         # a wrong cross-region merge) must not linger: it would then resolve as
         # an org entity with no team_ids under it and no rows in any fact view -
         # exactly the shape of a stale reference this project keeps finding.
-        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs)")
+        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%')")
+        cur.execute("DELETE FROM team_orgs WHERE org_id NOT IN (SELECT org_id FROM orgs)")
         orphaned = cur.rowcount
     conn.commit()
     out = {"orgs": len(by_org) - orphaned, "team_ids_mapped": written, "unknown_team_ids_skipped": skipped,
-          "unmapped": removed, "orphaned_orgs_removed": orphaned}
+          "unmapped": removed, "orphaned_orgs_removed": orphaned, "windows_unresolved": unresolved}
     log_event(log, logging.INFO, "org_decisions_loaded", **out)
     return out
 

@@ -249,3 +249,20 @@ describe("identifiers are not quantities", () => {
     expect(screen.getByRole("table")).not.toHaveTextContent("2,026");
   });
 });
+
+
+describe("the source link names its source", () => {
+  it("labels a FACEIT room FACEIT and a Liquipedia page Liquipedia", () => {
+    const evidence = {
+      available: true, grain: "series", page: 1, total_pages: 1, total_rows: 2,
+      rows: [
+        { match_id: "1-abc", team: "A", match_url: "https://www.faceit.com/en/ow2/room/1-abc" },
+        { match_id: "lp:1_B1_0001", team: "B", match_url: "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major" },
+      ],
+      columns: [{ key: "team", label: "Team", type: "text" }, { key: "match_url", label: "Source", type: "link" }],
+    };
+    render(<Evidence evidence={evidence} />);
+    const links = screen.getAllByRole("link");
+    expect(links.map((l) => l.textContent)).toEqual(["FACEIT", "Liquipedia"]);
+  });
+});

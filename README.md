@@ -163,7 +163,10 @@ Migrations live in `migrations/` and are applied in filename order by
 Every migration runs in its own transaction with `search_path` pinned to
 `OWCS_DB_SCHEMA` (default `public`), and every connection the CLI opens pins
 the same `search_path`, so all objects are created in and read from that one
-schema explicitly. Nothing is created outside it.
+schema explicitly. Nothing is created outside it. The token `{{schema}}` in a
+migration is replaced by that schema: a `LANGUAGE sql` function body that names
+a table writes `{{schema}}.table`, because PostgreSQL 17 re-parses such bodies
+under a restricted `search_path` when it plans a materialized-view refresh.
 
 ### Supabase notes
 
@@ -174,6 +177,20 @@ schema explicitly. Nothing is created outside it.
   needed and would break `SET search_path`.
 - Objects land in `public`, next to nothing of ours; Supabase's own
   `auth`, `storage`, `realtime` and `extensions` schemas are untouched.
+- Nothing in this project uses Supabase's Data API (PostgREST) or a Supabase
+  client library: the CLI, the API server and the collector talk to Postgres
+  over `DATABASE_URL` only, and the frontend talks to this project's own API.
+  Disabling the Data API for the project changes nothing here.
+- Supabase runs PostgreSQL 17; CI runs the database suites on 16 and 17 (see
+  **CI**).
+- Collation: Supabase and CI's `postgres:16`/`postgres:17` images are
+  `en_US.UTF-8`; a local cluster is often `C.UTF-8` (the dev one here is).
+  Mixed-case name ordering differs between the two, so a local `ORDER BY name`
+  is not production's. Leaderboards carry a deterministic last key (the
+  player, org or map) so a planner or collation difference cannot reorder
+  tied rows. A `LANGUAGE sql` function that names a table must be written
+  `{{schema}}.table` or carry `SET search_path`, or every materialized-view
+  refresh fails on 17 (migration `033_pin_search_path.sql`).
 - **Row Level Security is not enabled on any of these tables.** Plain SQL
   migrations bypass the Supabase dashboard's RLS prompts. On Supabase every
   table in `public` is also exposed through the auto-generated Data API
@@ -222,7 +239,10 @@ and EMEA teams compete (Midseason Championship, World Finals, Champions Clash,
 the 2024 Dreamhack Dallas Major). Excluded: open qualifiers, relegation,
 Asia / Korea / Japan / Pacific / China / South America / Oceania, cancelled or
 test events. Korea has no usable FACEIT data, so nothing Asia-region is
-included even where a championship exists.
+included from FACEIT even where a championship exists. Korea is a declared
+region (`korea`, results only) so that its Liquipedia results can land under
+it; until they do, a Korean question is refused as results-only or as having
+no data, never as out of scope.
 
 Classification is explicit and reviewable, not a regex flag:
 
@@ -325,7 +345,27 @@ of 2026, and none of 2024's 478.
 `scope_na_emea` - Korea, China, Japan and the Pacific regions are not ingested,
 nor are open qualifiers, community cups or relegation brackets held outside the
 main series. Korea in particular has no usable FACEIT data at all. A leaderboard
-here ranks NA and EMEA main-competition play, not OWCS worldwide.
+here ranks NA and EMEA main-competition play, not OWCS worldwide. Korea is
+declared a results-only region (`region_sources`): when its data arrives through
+Liquipedia it will answer records, head-to-heads and placings, never a player
+stat.
+
+### A results-only slice has series results but no player stats, from any source
+
+`results_only_source` - coverage says which stat keys exist per season; it has
+no concept of a slice where no player stats exist at all. Liquipedia records
+results, map scores, picks and placings and never a player stat; a FACEIT
+`result_only` competition (Dreamhack Dallas, all 14 series) has series results
+and no per-map stats either. `source_capabilities` (migration
+`031_capabilities.sql`) derives per included championship, from provenance,
+whether any source gives it map results and whether any gives it player stats;
+`region_sources` declares the same per region (Korea: `{liquipedia}`, no
+player stats). Where a whole slice is results-only, a player-stat question is
+refused with reason code `results_only` and offered what that slice can answer
+(the series record, the question without the region) rather than answered with
+an empty or partial ranking. Where only part of a slice is, the answer names
+the part it could not rank. An included championship with no series at all is
+empty, not results-only, and stays on the no-data path.
 
 ### The 2025 and 2026 main series is reconstructed from player history
 
@@ -390,10 +430,65 @@ ordering, twice:
 - **Date adjacency corroborates**, but only within a region. Two ids whose
   match windows overlap may be two teams that coexisted, which is reported
   rather than assumed.
+- **A name change on a stage boundary is a roster pickup, not a rebrand.** In
+  OWCS a team id is issued per roster and the name on it changes when another
+  organisation picks the roster up between stages: Ex Oblivione -> Virtuspro
+  (2025 Stage 1), Avidity -> Extinction (2025 Stage 2), Extinction -> The Kafe
+  (2026 Stage 2, which began 2026-06-13). The roster continues, the organisation
+  does not, so the new name starts a new era of the same team id (a window,
+  below) rather than extending the old org's history. A rename by the same org
+  (Al qadsiah -> qadsiah) lands mid-stream and keeps the roster's org. The stage
+  boundary is the tell - but not alone: production shows 18 team ids carrying
+  more than one name, and SpaceStation -> SpaceStation Gaming, GenG -> GenG
+  Esports, Goud Guys -> Goud Guys ANM, PIP -> PxG PiP and Sakura -> Sakura
+  Esports also land on stage boundaries and are renames. So three signals read
+  a change (`classify_name_change`): a new name that **contains or extends** the
+  old one is a rename and starts no window; a **wholly different** name on a
+  stage boundary is a pickup; a **registration placeholder** (a `team_<captain>`
+  name, or one that lived only in a stage's opening fortnight, replaced inside
+  that stage once the roster signed up: team_chiime -> Dreamland, BuboSprayCheck
+  -> ENCE) is the same organisation and no window; anything else (a different
+  name inside one stage, or two names whose date ranges overlap) is reported for
+  a person. The tool decides nothing. The review of all 18 is
+  `scope/org_window_review.md` (`python tools/window_review.py`, from the
+  captured history in `scope/team_name_history_2026-10-01.json`); the owner's
+  verdict on each is `scope/org_window_decisions.json`, and the report shows it
+  under the id, flagging where a signal reads the id differently (Umbrellaacademy
+  -> ROCstars fires the placeholder signal and was decided an org change; the
+  overlapping Anyones Legend / 1234 and Quick Esports / 1DIPv100GORILLA dates
+  are a FACEIT artifact over a roster drop, decided pickups). A team id whose
+  names are several organisations' eras carries one mapping per era
+  (`orgs decide --add`, stored under `windows`): 0464a373 is UNC inc (its own),
+  Rad, Sakura / Sakura Esports and LuneX; d20d1868 is team_chiime / Dreamland
+  (its own), Supernova and Team Z. NTMR is one organisation across cefc3f72
+  (2025 Stage 1) and c5116cb3 (from Stage 2), each mapped only over its own
+  NTMR era so FMCL's and Timeless's eras stay out of it.
 
-Current state: 9 orgs covering 18 team ids, 7 pairs recorded as reviewed
-rejections (2 of them region conflicts found after the fact and reversed),
-62 team ids unmapped and queryable as themselves.
+**A mapping holds over a window.** A FACEIT team id belongs to an org over
+`[valid_from, valid_to)` (`orgs decide --from ... --to ...`; absent means for all
+time, which is what every decision made before windows existed still means).
+Outside its window the team id is itself: keyed `team:<id>`, displayed and
+searchable by the name it carried then, with its own record. That is how an
+acquired roster stays out of the acquiring org's history - Virtus pro took over
+the Ex Oblivione roster in 2025 and FACEIT kept the team id, so `bb5dd404` is
+Virtus pro from 2025-01-01 and Ex Oblivione before it; "Ex Oblivione record"
+answers with the 2024 series and "VP record" without them. Identity is a
+function of (team id, when): `team_identity_at()`, which every fact view joins
+at the series' own time; `team_identity` is identity now. The proposer proposes
+a window whenever a team id carried a name that is not the org's before it first
+carried the org's name (`propose_window`), and nothing is proposed from roster
+movement. A window is sourced, not chosen: `orgs decide --from-name "Virtuspro"`
+bounds it by the first sighting of that FACEIT name on the team id, resolved
+from `team_names` at load (a name the id never carried applies nothing and is
+reported). One org can span several team ids each bounded to its own era -
+Extinction is `2b7f8ef6` over its 2025 Extinction era and `a35f8d47` over its
+2026 one, on org branding rather than roster continuity. A team id cannot
+belong to two orgs at once (a trigger refuses the overlap), and `check` flags a
+window that covers none of its team id's series.
+
+Current state: 9 orgs covering 18 team ids (one of them windowed), 7 pairs
+recorded as reviewed rejections (2 of them region conflicts found after the fact
+and reversed), 62 team ids unmapped and queryable as themselves.
 
 **Known gap: a team id maps to an org for all time.** A FACEIT team id can outlive
 an organisation: id `bb5dd404` was "Ex Oblivione" in 2024 and "Virtuspro" in 2025,
@@ -581,7 +676,7 @@ ever emits SQL:
    silently partial leaderboard.
 
 Every failure is a first-class answer with a reason code: `unsupported_metric`,
-`unsupported_question`, `out_of_scope`, `ambiguous_entity`, `unknown_entity`,
+`unsupported_question`, `out_of_scope`, `results_only`, `ambiguous_entity`, `unknown_entity`,
 `no_data`, `invalid_query`, each with suggestions. Exit code is 0 for an
 answer and 2 otherwise.
 
@@ -772,6 +867,9 @@ Team Falcons and Crazy Raccoons met, but none of those series has map stats on F
 
 'Final Blows' is not recorded for the 2024 season (seasons with it: 2025, 2026)
   try: who had the most final blows in 2026
+
+KOREA is a results-only region: no source records player stats there, so there is no player leaderboard to give
+  try: who had the most eliminations                       <- the same question where stats exist
 ```
 
 The question that just failed is never offered back.
@@ -915,11 +1013,16 @@ and exits 1 with the specific discrepancy:
 
 | check | invariant |
 |---|---|
-| `fact_view_reconciliation` | every fact view's row count equals what its source tables say it must be, at that view's grain |
+| `fact_view_reconciliation` | every fact view's row count equals what its sources say it must be, at that view's grain (`series` for the team-grain views) |
 | `date_visibility` | every in-scope match has a usable `match_time()` and appears in the date-keyed views; no fact row has a NULL date |
 | `org_key_resolution` | every team id resolves to an org key, unmapped ids are counted explicitly, and no materialized view is still carrying a superseded org key |
 | `aggregate_sums` | the aggregates' sums equal the facts' sums, per stat, per season, in both the wide and long formats |
 | `stat_reachability` | every stat `stat_coverage_season` advertises returns a leaderboard, and every non-numeric label returns none |
+| `identity_windows` | every team-to-org window covers real series of its team id, no team id is two orgs at once, and no series carries two identities for one team |
+| `series_integrity` | a match is one series whichever source holds it; the series count reconciles against FACEIT plus the resolved Liquipedia-only records; a linked pair names the same identities on both sides |
+| `score_plausibility` | no series presents a score its best-of cannot hold, no map is both won and drawn, and map wins never exceed the presented series score; counts the best-of corrections (raised, lowered, unknown, implausible) and the results taken from Liquipedia |
+| `map_winner_consistency` | every fact row follows the winner the map scores give; lists every `winner_team_id` that contradicts its scores (1-3e78e269 map 5) |
+| `phantom_map_isolation` | a FACEIT map row beyond Liquipedia's game count for a linked series is in no fact view; counts the player rows that rode on one |
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
@@ -947,7 +1050,7 @@ starts:
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
 | 3 | source-agnostic match model and cross-source identity | not started |
-| 4 | LAN and international events | not started |
+| 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved |
 | 5 | Korea and China, results only | not started |
 
 ### The client (Stage 0)
@@ -1019,8 +1122,12 @@ Liquipedia does not cover, or Liquipedia has no matching record.
 Source is recorded per field, never merged silently:
 
 - `match_rounds.source` (`faceit` | `liquipedia`). A Liquipedia round is only ever inserted where FACEIT has none,
-  so there is never a same-round conflict to arbitrate - FACEIT wins for map stats by construction, since its
-  presence is exactly what skips a match here.
+  so there is never a same-round conflict to arbitrate. **The Stage 2 rule that FACEIT won for map stats by
+  construction was inverted on 2026-10-02** (migration `034_map_winner_precedence.sql`, see **Stage 3: the
+  source-agnostic series**): FACEIT fabricates map rows when a sweep closes a series early and counts drawn maps as
+  wins, so Liquipedia is now the source of record for a series' result, best-of and map count wherever a linked
+  record exists, and a FACEIT map row beyond Liquipedia's game count is a phantom in no fact view. Player stats
+  remain FACEIT-only, as before.
 - `matches.date_source` (`faceit` | `liquipedia`) and `matches.liquipedia_played_at`. On a `result_only` series
   FACEIT's own timestamp is when the result was entered, not when it was played - Stage 1's alignment numbers put
   some of these 70+ hours off - so Liquipedia's scheduled time wins there, read through `fact_team_maps` /
@@ -1038,6 +1145,148 @@ no player stats, so none is invented. `python -m owcsmuse check` asserts this di
 evidence rows actually name: a match only carries a page when a Liquipedia-sourced value (a map or a date
 correction) contributed to it. An answer built entirely from FACEIT's own data carries `attribution: null`, exactly
 as before Stage 2.
+
+### Stage 3: identity without FACEIT
+
+Players are keyed by FACEIT GUID and teams map to orgs through FACEIT team ids; Korean teams and players have
+neither. An **anchor** is "this entity is known in this source by this handle": a FACEIT id is implicitly its own
+anchor, a Liquipedia player page or team name is a row in `entity_anchors` (migration `027_entity_anchors.sql`).
+One entity may carry anchors in both sources; a Liquipedia-born entity carries one and gets an id of its own
+(`lp:player:<page>`) in the same `players` table, so everything keyed on ids keeps working and it shows as itself.
+
+Liquipedia's line-ups are stored as a parsed copy (`liquipedia_match_players`: page, handle, real name,
+nationality; `liquipedia_matches` gains the team templates), and `lp_player_names` / `lp_team_names` are the
+Liquipedia-side name history - every handle and real name a page has carried, every name a template has carried,
+with first/last seen. Page-style names parse into both parts (`HYEON_(Kim_Seong-hyeon)` -> handle `HYEON`, real name
+`Kim Seong-hyeon`) and both are searchable once the page is anchored; the rename-history rule applies to
+Liquipedia-anchored entities exactly as to FACEIT ones.
+
+Anchors arrive only through review:
+
+```bash
+python -m owcsmuse identity propose          # scope/identity_report.md from the linked series; applies nothing
+python -m owcsmuse identity accept           # the strong proposals in bulk
+python -m owcsmuse identity decide <page> --player <guid>     # or --new for a Liquipedia-born player
+python -m owcsmuse identity reject <page> <guid> --reason "..."
+python -m owcsmuse identity load             # scope/player_identity_decisions.json + the team map -> entity_anchors
+python -m owcsmuse refresh --view entity_names
+```
+
+The only evidence proposed is match-level: the same handle on the same side of the same linked series (an exact or
+strong, non-provisional link), which both sources name independently. One page to one GUID is `strong`; a page
+matching several GUIDs, or a GUID matched by several pages, needs a person; a handle that matches no FACEIT name is
+listed with what FACEIT named on that side, so a reviewer can see "Sugarfree / sug2rfree" and decide - the code
+never does. Roster overlap across different series is not evidence of anything. Team-side anchors come from the
+Stage 1 team map (`scope/liquipedia_team_map.json`), already reviewed.
+
+A Liquipedia team name resolves **at the series' own time**. An entry in the team map may carry `valid_from` /
+`valid_to`, or `eras` (a list of `{entity_type, entity_id, valid_from, valid_to}`) when different team ids carried
+the name over time; outside every era the name is undecided at that time, never the nearest one. A name decided to a
+team id keys as that id's org inside the id's window and as the id itself outside it, exactly as the fact views key
+it, so "Extinction" on a 2026 page and the FACEIT team id that was Extinction in 2026 agree without a link decision.
+Anchors carry the same windows (migration `029_anchor_windows.sql`), and `series` and `check` resolve against them.
+
+### Stage 3: the source-agnostic series
+
+A match may come from FACEIT, from Liquipedia, or from both, and is one match either way. `series` (migration
+`028_series.sql`) is the one row per match that the team-grain facts (`fact_team_matches`, `fact_team_maps`) now
+read, with per-field provenance: `played_at_source`, `best_of_source`, `result_source`, `maps_source`, and
+`sources` (`{faceit}`, `{faceit, liquipedia}` or `{liquipedia}`). It is a plain view over `matches`,
+`liquipedia_matches` and the reviewed links, so it is always current. `series_id` is `faceit:<match_id>` or
+`lp:<objectname>`; `match_id` keeps the FACEIT id where there is one, so every FACEIT-keyed table still joins, and a
+Liquipedia-only series is `lp:...` throughout. Evidence rows carry `sources` and a source link that is the FACEIT
+room or the Liquipedia page, and an answer that used a Liquipedia-only series carries the page in its attribution.
+
+- A reviewed link (exact or strong, not provisional, not rejected) merges a Liquipedia record into the FACEIT series
+  it names. **An exact id whose records disagree on teams, score, winner, best-of, competition or finished state is
+  now ambiguous, never linked** - a wrong id looks exactly like that, and a wrong link silently gives one team
+  another team's result. It carries the id as its one candidate and waits for `liquipedia links decide`; a date gap
+  alone (FACEIT's `result_only` times are entry times) still annotates without downgrading.
+- A Liquipedia record linked to nothing is a series of its own only when **both** its teams resolve through a decided
+  anchor: a team anchored to a FACEIT team id plays as that id, a team anchored to an org plays as its
+  Liquipedia-born team id (`lp:team:<name>`, mapped to the org by `identity load`). An undecided team keeps the record
+  out of every answer; `check` counts those (`liquipedia_unresolved_not_in_series`).
+- Map grain stays FACEIT-keyed (`match_rounds`), so a Liquipedia-only series answers at series grain only, for now.
+- **A tied map is nobody's win** (migration `030_draws.sql`). FACEIT counts a drawn map as a win for the series
+  winner (4-0 in a best-of-5 with four maps played, one of them 3-3) and stored Dreamhack Dallas as best-of-1 with
+  3-1 scores. A map is drawn when its scores are equal or no winner is recorded, a draw is excluded from map wins in
+  every fact view, and the series score a series presents is corrected from its map results when FACEIT's counted a
+  draw as a win (`score_source = 'maps'`; FACEIT's stored columns are untouched).
+- **The map winner is derived from the scores; `winner_team_id` is advisory** (migration
+  `034_map_winner_precedence.sql`). 1-3e78e269 map 5 (Suravasa, Flashpoint) is scored 0-3 for Twisted Minds and
+  credits Al qadsiah as the winner; the map was really played, so nothing looked wrong, and every map record,
+  map/mode win rate and head-to-head that read `winner_team_id` attributed it to the wrong team. `map_winner()`
+  gives the higher score's team, nobody for equal scores (a tied map has no winner), and the stored winner only
+  when a score is missing. Every fact view, `series_score` and `agg_map_modes` read it; `check`
+  (`map_winner_consistency`) lists each stored winner that contradicts its scores and fails if a fact row follows one.
+- **Liquipedia is the source of record for a linked series' result and best-of; FACEIT only where Liquipedia has
+  nothing** (034, inverting Stage 2's rule). FACEIT keeps a fixed number of map slots per format and, when a sweep
+  closes a series early, logs a default win for the winner on the next map in the rotation (the 2024 Stage 1 grand
+  finals: real 4-0s stored as 5-0 with a Dorado nobody played), and it counts a drawn map as a win. Where a linked
+  record orients to the FACEIT factions (decided anchors, then names, then an unlevel score, then the winner), the
+  series presents Liquipedia's score, winner and best-of (`result_source`, `score_source`, `best_of_source` =
+  `liquipedia`). A FACEIT map row beyond Liquipedia's game count for a linked series is a phantom (`phantom_maps`):
+  out of map records, series scores, map/mode win rates and player aggregates alike, and `check`
+  (`phantom_map_isolation`) counts the player rows that rode on one. Player stats stay FACEIT-only. The extent
+  report is `python -m owcsmuse liquipedia phantoms` (below).
+- **Best-of is derived only from real, played map wins** (034, scoping back 032's rule, which derived from any
+  score and produced best-of-9 from phantom-inflated sweeps). With phantoms excluded, a series with four map wins
+  is a best-of-7 whatever FACEIT stored (Al Qadsiah 1-4 Twisted Minds, stored bo5; the link is confirmed in
+  `scope/liquipedia_link_decisions.json`), three a best-of-5, and never fewer than the maps played; the cap is the
+  formats OWCS uses (bo1, bo3, bo5, bo7), and a derivation past bo7 is `implausible` and presented as unknown
+  rather than invented. A stored best-of of 1 is junk (Dreamhack Dallas), not a value to correct from; a stored
+  value is used only when no maps were recorded and it is a real format, else the best-of is `unknown`.
+  `best_of_source` is `liquipedia` | `faceit` | `derived from map wins` | `implausible` | `unknown`; `check`
+  (`score_plausibility`) counts each kind and lists the corrections (`best_of_corrections`).
+- A link decision may be keyed `faceit:<match id>` (the report shows FACEIT ids, not objectnames); it settles the one
+  record naming that id. The two drawn-map pairs are confirmed that way in `scope/liquipedia_link_decisions.json`.
+- `check` gains `series_integrity`: no FACEIT id or Liquipedia record in two series, the series count reconciles
+  against its sources, and a linked pair whose Liquipedia teams are decided names the same identities on both sides -
+  a link that stops agreeing after an identity decision fails here rather than staying.
+
+### Stage 3: in-game name history and an owner's display name
+
+The in-game name (`players.game_player_name`) is the name answers display, and it changes: three rename gaps bit
+before migration `035_game_names_display.sql`. `player_game_names` now keeps every value a GUID has carried with
+its first and last sighting, the same shape as `player_nicknames`; the collector versions it on every change, and
+`python tools/backfill_game_names.py` fills the earlier values out of the stored `/matches/{id}` payloads
+(`raw_payloads`, no request). `entity_names` makes each historical value searchable (`historical_game_name`).
+`players.display_name` is an owner's override set by `identity load` from a player identity decision's `display`
+(`identity decide <page> --player <guid> --display "ZZZ"`, or `--nickname <FACEIT name>` to find the GUID by a
+name that names exactly one player): shown everywhere, searchable by nothing new, every nickname and in-game
+name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss) and Astro (FACEIT Astronexz).
+
+**SpaceStation Gaming is one organisation** across its 2024 EMEA team (`a359db61`, OWCS 2024 EMEA Stage 1 and
+Dreamhack Dallas) and its NA partner team from 2025 (`6ddc0431`): decided by the owner on 2026-10-02, reversing
+the 2026-09-19 unmerge. Each team id is mapped over its own era; the region check carries the org as an
+owner-decided exception (`cross_region_ok` in every window's evidence, listed under
+`decided_cross_region_orgs`), since the rule it enforces exists to catch merges nobody decided.
+
+### Stage 3: capability, not just coverage
+
+A source may carry a slice without carrying what a question needs from it. `region_sources` (migration
+`031_capabilities.sql`) declares per region which sources cover it and whether any of them records player stats
+(`korea`: `{liquipedia}`, no); `source_capabilities` derives per included championship, from `series` provenance,
+whether it has series results, map results and player stats, and which sources it came from. The query layer asks
+what a question needs (`player_stats`, `maps` or `series`) and checks the slice it draws on: a results-only slice
+refuses a player-stat question with reason code `results_only` and the alternatives a results-only slice can answer;
+a mixed slice answers and names the results-only part in a note and the `results_only_source` limitation. A
+Korean team's record is answerable the moment its Liquipedia results are loaded; a Korean player leaderboard never
+is, and says so by construction rather than by returning nobody.
+
+### Phantom maps: FACEIT map rows for maps never played
+
+FACEIT keeps a fixed number of map slots per series format and, when a sweep closes a series early, logs a default
+win for the winner on the next map in the rotation (the 2024 NA and EMEA Stage 1 grand finals: real 4-0 sweeps that
+FACEIT stores as 5-0 with a Dorado nobody played; Liquipedia records the 4-0). Map records, series scores and the
+best-of a score implies are all inflated by such a row. `python -m owcsmuse liquipedia phantoms` (sends nothing)
+writes `scope/phantom_maps.md` from stored data: every record carrying a FACEIT id where FACEIT's map count or
+series score exceeds Liquipedia's, with both values and the map Liquipedia lacks; every FACEIT map row with a
+placeholder shape (a win with no player rows while the match has them elsewhere, a score its mode cannot produce, no
+map name); and whether those cluster on sweeps and last maps as the mechanism predicts. An exact FACEIT id whose
+score a phantom inflated lands in the ambiguous tier (the records disagree on the score), so the report includes
+those rather than only confirmed links. The precedence change this implies (Liquipedia as the source of record for
+results and maps wherever a linked record exists) waits on that report.
 
 ### Open items for later stages
 
@@ -1107,10 +1356,28 @@ private, so the badge above renders only for accounts with access:
 |---|---|
 | `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
 | `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
-| `database tests` | `pytest -m "not golden"` against a `postgres:16` service container, with the full integration suite |
-| `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**) |
+| `database tests` | `pytest -m "not golden"` against `postgres:16` **and** `postgres:17` service containers (a matrix): 17 is what Supabase runs, 16 is docker-compose and the dev default |
+| `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**), on both majors |
 | `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
-| `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it |
+| `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it, on both majors |
+
+Why both majors: migrations 026 to 031 passed every gate on 16 and failed on
+production (Supabase, PostgreSQL 17.6) at the first materialized view. PG 17
+plans `CREATE`/`REFRESH MATERIALIZED VIEW` (and `CREATE INDEX`, `VACUUM`,
+`ANALYZE`, `CLUSTER`, `REINDEX`) under `search_path = pg_catalog, pg_temp`,
+and a `LANGUAGE sql` function body is re-parsed by name at plan time, so a body
+that says `FROM teams` finds nothing there (`relation "teams" does not exist
+... SQL function "team_identity_at" during inlining`). Views are unaffected
+(they store OIDs). The remedy per function is in migration
+`033_pin_search_path.sql`: a once-per-row function names every relation and
+function `{{schema}}.`-qualified (the token `migrate` replaces with
+`OWCS_DB_SCHEMA`), which keeps it inlinable; a once-per-question set-returning
+function gets `SET search_path FROM CURRENT`, which is simpler but blocks
+inlining and re-plans on every call (tried on the per-row functions, it made
+the golden refresh 44x slower: 0.44 s to 19 s; qualified, 0.46 s).
+`tests/test_search_path.py` refreshes every materialized view under the
+restricted path, which reproduces the PG 17 condition on any major, and keeps
+every table-reading SQL function in one of the two states.
 
 ## Tests
 
@@ -1150,6 +1417,22 @@ migrations/001_initial.sql      schema
 migrations/002_scope.sql        scope_region / tier / season / classification columns
 migrations/003_aggregates.sql   fact views, materialized aggregates, coverage functions, entity_names
 migrations/009_orgs.sql         orgs, team_orgs, team_identity, map-grain versus facts
+migrations/026_dated_team_orgs.sql  team-to-org windows, team_identity_at(), facts and names keyed at series time
+migrations/027_entity_anchors.sql  entity_anchors, Liquipedia line-ups and name history, Liquipedia names in entity_names
+migrations/028_series.sql       the source-agnostic series; team-grain facts read it
+migrations/029_anchor_windows.sql  Liquipedia names resolve at the series' time
+migrations/030_draws.sql        a tied map is nobody's win; plausible series scores with provenance
+migrations/031_capabilities.sql region_sources (declared) and source_capabilities (derived): what each slice can answer
+migrations/032_best_of_from_wins.sql  best-of derived from the winning score; corrections counted and listed
+migrations/033_pin_search_path.sql  every table-reading SQL function survives PostgreSQL 17's restricted search_path
+migrations/034_map_winner_precedence.sql  map winner from the scores; Liquipedia the source of record where linked; phantom maps; best-of from played wins
+migrations/035_game_names_display.sql  in-game name history (player_game_names), players.display_name, deterministic leaderboard order
+tools/backfill_game_names.py    every earlier in-game name out of the stored match payloads -> player_game_names
+tests/test_search_path.py       refreshes every matview under search_path = pg_catalog, pg_temp; every table-reading SQL function qualified or pinned
+tools/window_review.py          the three name-change signals over every multi-name team id -> scope/org_window_review.md
+scope/org_window_decisions.json the owner's verdict on each of the 18 multi-name team ids (audit record; windows apply via org_decisions.json)
+owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
+owcsmuse/liquipedia/phantoms.py  FACEIT map rows for maps never played: extent report (-> scope/phantom_maps.md)
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
 owcsmuse/aliases.py             community shorthand ("SSG" -> SpaceStation Gaming): decisions and lookup

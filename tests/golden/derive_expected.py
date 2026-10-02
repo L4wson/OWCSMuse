@@ -49,6 +49,9 @@ CONFIRMED = {f"G{n:02d}" for n in range(1, 27)}
 # G29/G30 were added at the owner's request to assert that a question in the displayed OWCS name resolves; their
 # expected values are derived below from the raw payloads like every other case, and the owner can still review them.
 CONFIRMED |= {"G29", "G30"}
+# G31 (Stage 3 step 4) asserts the capability rule: a player-stat question over a results-only slice is refused with
+# reason results_only and a working alternative, never answered with an empty or partial leaderboard.
+CONFIRMED |= {"G31"}
 
 CASES: list[dict] = []
 
@@ -128,8 +131,13 @@ assert [m["map"] for m in LP_OVERRIDES[A823]] == ["Oasis", "King's Row", "Runasa
 tm_all = I.team_record(S, tm, liquipedia_overrides=LP_OVERRIDES)
 tm26 = I.team_record(S, tm, season=2026, liquipedia_overrides=LP_OVERRIDES)
 ssg_id = team_id("SpaceStation Gaming")
-ssg = I.team_record(S, [ssg_id])
-assert ssg["regions"] == ["na"]
+ssg_2024 = team_id("SpaceStation")
+# The owner decided (2026-10-02) that the 2024 EMEA 'SpaceStation' team and the 2025+ NA 'SpaceStation Gaming' team
+# are one organisation (scope/org_decisions.json, org spacestation-gaming), reversing the 2026-09-19 unmerge: the
+# org's record is both team ids' series.
+ssg = I.team_record(S, [ssg_id, ssg_2024])
+ssg_na = I.team_record(S, [ssg_id])
+assert ssg["regions"] == ["emea", "na"] and ssg["matches"] == ssg_na["matches"] + 2
 
 
 def team_row(rec, name):
@@ -157,12 +165,14 @@ case("G09", "Twisted Minds 2026, one series enriched from Liquipedia instead of 
      regression="result-only series counted at series grain only; then, after Stage 2, its Liquipedia maps must "
                 "count at map grain and the limitation must drop once nothing in the slice is missing them")
 
-case("G10", "SpaceStation Gaming's record (NA only)", "exact", "SpaceStation Gaming record",
-     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": ssg_id, "name": "SpaceStation Gaming"},
-      "rows": [team_row(ssg, "SpaceStation Gaming")], "evidence": {"regions_only": ["na"]}},
-     f"{ssg['matches']} NA series. The golden set also holds two 2024 EMEA series of 'SpaceStation' (team "
-     f"{team_id('SpaceStation')[:8]}), which are a different team and must not be added.",
-     regression="region bug: SpaceStation Gaming merged with the EMEA SpaceStation")
+case("G10", "SpaceStation Gaming's record: one organisation, EMEA in 2024 then NA", "exact", "SpaceStation Gaming record",
+     {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "spacestation-gaming", "name": "SpaceStation Gaming"},
+      "rows": [team_row(ssg, "SpaceStation Gaming")], "evidence": {"regions_only": ["emea", "na"]}},
+     f"{ssg_na['matches']} NA series of team {ssg_id[:8]} plus the two 2024 EMEA series of 'SpaceStation' (team "
+     f"{ssg_2024[:8]}): the owner decided on 2026-10-02 that these are one organisation (SSG played EMEA in 2024 and became "
+     f"an NA partner team in 2025), each team id mapped over its own era. Until then the two were held apart as a wrong "
+     f"cross-region merge; the region check now carries this org as an owner-decided exception.",
+     regression="region bug: SpaceStation Gaming merged with the EMEA SpaceStation; reversed by the owner's 2026-10-02 decision")
 
 h2h = I.team_record(S, tm, opponent_ids=[team_id("Ex Oblivione")])
 case("G11", "Twisted Minds vs Ex Oblivione, series grain", "exact", "Twisted Minds series record against Ex Oblivione",
@@ -170,9 +180,8 @@ case("G11", "Twisted Minds vs Ex Oblivione, series grain", "exact", "Twisted Min
      f"{h2h['matches']} series between the two team ids in the golden set (both 3-1 to Twisted Minds). Team id bb5dd404 was "
      "'Ex Oblivione' in 2024 and was later acquired into Virtus pro. The name must be searchable and find those 2024 "
      "series, which are Ex Oblivione's, not Virtus pro's.",
-     known_bug="'Ex Oblivione' matches nothing: an org's searchable history holds each team id's current name only, "
-               "not its earlier ones (team_names), so the name is unsearchable. Its search must work, but a search hit must "
-               "not put its pre-rename series into Virtus pro's record: that needs date-bounded team-to-org mapping (Stage 3)")
+     regression="date-bounded team-to-org mapping (Stage 3): 'Ex Oblivione' is searchable as the team id's own 2024 era, "
+                "and a hit on it never puts those series into Virtus pro's record")
 
 # ----------------------------------------------------------------- resolution
 dsg_id = team_id("Disguised")
@@ -182,7 +191,7 @@ vp = I.team_record(S, vp_ids, exclude_names={"Ex Oblivione"})
 tl_id = team_id("Team Liquid")
 tl = I.team_record(S, [tl_id])
 case("G12", "'SSG' resolves to SpaceStation Gaming", "exact", "SSG record",
-     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": ssg_id, "name": "SpaceStation Gaming"},
+     {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "spacestation-gaming", "name": "SpaceStation Gaming"},
       "rows": [team_row(ssg, "SpaceStation Gaming")]},
      "Same numbers as G10, reached through the shorthand. Expectation is the community meaning of SSG.",
      regression="alias: SSG did not resolve to SpaceStation Gaming")
@@ -194,10 +203,8 @@ case("G13", "'VP' resolves to Virtus pro; its record excludes the Ex Oblivione e
      f"'Virtuspro' in 2025. Virtus pro acquired the Ex Oblivione roster, and roster movement is not org identity, so "
      f"the 3 Ex Oblivione-era series are NOT Virtus pro's: {vp['matches']} series remain, {vp['wins']} won, series score "
      f"{vp['map_wins']}-{vp['map_losses']}.",
-     regression="alias/org: VP resolves to the merged Virtus pro org",
-     known_bug="team-to-org mapping is not date-bounded: bb5dd404 maps to Virtus pro for all time, so the org's record "
-               "includes 3 series from its Ex Oblivione era (5 series, not 2). Fix is date-bounded team-to-org mapping "
-               "(Stage 3); the alias half of this case is G26")
+     regression="alias/org: VP resolves to the merged Virtus pro org; date-bounded team-to-org mapping (Stage 3): "
+                "bb5dd404 is Virtus pro from 2025-01-01 only, so its Ex Oblivione era (3 series) stays out of the record")
 
 case("G26", "'VP' resolves to the Virtus pro org", "invariant", "VP record",
      {"entity": {"role": "subject", "type": "org", "id": "virtus-pro", "name": "Virtus pro"}, "status": "ok"},
@@ -375,6 +382,19 @@ case("G30", "A question in the displayed OWCS name resolves: Stage 2 Playoffs, n
      f"{df_s9_po['map_wins']}-{df_s9_po['map_losses']}); its {df_s9_rs['matches']} regular-season series "
      f"({df_s9_rs['wins']}-{df_s9_rs['losses']}) is the same stage and must not be counted.",
      regression="the displayed competition name was not searchable")
+
+top_elims = I.leaderboard(S, "Eliminations", top=1)[0][0]
+case("G31", "A player-stat question for a results-only region is refused for that reason, with a working alternative",
+     "invariant", "who had the most eliminations in korea",
+     {"status": "cannot_answer", "code": "results_only", "rows_only_players": [],
+      "alternative": {"question_template": "who had the most eliminations", "seasons_with_stat": [None],
+                      "then_rows": [{"nickname": I.display_name(S, top_elims["player_id"]), "total": top_elims["total"]}]}},
+     "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data "
+     "exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer "
+     "must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with "
+     "zero or some rows. It must offer the same question without the region, and that question must answer with the "
+     f"independently-derived all-seasons eliminations leader ({top_elims['total']} eliminations).",
+     regression="Stage 3 step 4: capability, not just coverage")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

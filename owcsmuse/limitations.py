@@ -95,7 +95,18 @@ LIMITATIONS: tuple[Limitation, ...] = (
         "Scope is OWCS NA + EMEA main competition",
         "Korea, China, Japan and the Pacific regions are not ingested, nor are open qualifiers, community cups "
         "or the relegation brackets held outside the main series. A leaderboard here is a leaderboard of NA and "
-        "EMEA main-competition play, not of OWCS worldwide.",
+        "EMEA main-competition play, not of OWCS worldwide. Korea is declared a results-only region "
+        "(region_sources): when its data arrives through Liquipedia it will answer records, head-to-heads and "
+        "placings, never a player stat.",
+    ),
+    Limitation(
+        "results_only_source",
+        "A results-only slice has series results but no player stats, from any source",
+        "Liquipedia records results, map scores, picks and placings and never a player stat; a FACEIT result_only "
+        "competition (Dreamhack Dallas, all 14 series) has series results and no per-map stats either. Where a "
+        "whole slice is like that, a player-stat question is refused with reason code results_only rather than "
+        "answered with an empty or partial ranking; where only part of a slice is, the answer says which part "
+        "it could not rank. Records, head-to-heads and placings are answerable there.",
     ),
     Limitation(
         "main_series_2025_2026",
@@ -115,10 +126,15 @@ def entity_match_filter(role_id: str, role_type: Optional[str]) -> tuple[str, li
     """SQL restricting `matches m` to the series one entity took part in."""
     if role_type == "player":
         return ("EXISTS (SELECT 1 FROM match_rosters r WHERE r.match_id = m.match_id AND r.player_id = %s)", [role_id])
+    at = "coalesce(m.liquipedia_played_at, match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at))"
     if role_type == "org":
-        return ("EXISTS (SELECT 1 FROM team_identity ti WHERE ti.org_id = %s"
-                " AND ti.team_id IN (m.faction1_team_id, m.faction2_team_id))", [role_id])
-    return ("%s IN (m.faction1_team_id, m.faction2_team_id)", [role_id])
+        # identity at the series' time: a team id counts for the org only inside its window
+        return (f"EXISTS (SELECT 1 FROM team_orgs w WHERE w.org_id = %s"
+                f" AND w.team_id IN (m.faction1_team_id, m.faction2_team_id)"
+                f" AND {at} >= w.valid_from AND {at} < w.valid_to)", [role_id])
+    # a team id as itself: its series outside any org window
+    return (f"%s IN (m.faction1_team_id, m.faction2_team_id) AND NOT EXISTS (SELECT 1 FROM team_orgs w"
+            f" WHERE w.team_id = %s AND {at} >= w.valid_from AND {at} < w.valid_to)", [role_id, role_id])
 
 
 def _seasons_in_slice(season: Optional[int]) -> tuple[int, ...]:
@@ -171,7 +187,7 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
                season: Optional[int] = None, championship_id: Optional[str] = None,
                region: Optional[str] = None,
                entities: Optional[list[tuple[str, Optional[str]]]] = None,
-               grain: str = "map") -> list[dict[str, Any]]:
+               grain: str = "map", results_only_parts: Optional[list[str]] = None) -> list[dict[str, Any]]:
     """The limitations that bear on one query's slice, each with a note for that slice.
 
     Takes the pieces of a query rather than the query object so the CLI, a test
@@ -206,6 +222,11 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
 
     if intent in ("leaderboard", "map_stats") and not region:
         out.append(BY_ID["scope_na_emea"].as_dict())
+
+    if results_only_parts:
+        out.append(BY_ID["results_only_source"].as_dict(
+            "No source records player stats for " + ", ".join(results_only_parts) + ": results only there. "
+            + ("That part is not in this answer." if grain == "map" else "Series-grain answers still count it.")))
 
     if any(s in CRAWLED_SEASONS for s in seasons):
         out.append(BY_ID["main_series_2025_2026"].as_dict(

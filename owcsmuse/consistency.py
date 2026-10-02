@@ -95,11 +95,8 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
           JOIN matches m ON m.match_id = r.match_id
           JOIN championships c ON c.championship_id = m.championship_id
          WHERE m.ingest_state IN ('complete', 'result_only') AND c.include"""),
-    ("fact_team_matches", "two rows per finished series, one per side",
-     """SELECT coalesce(sum((m.faction1_team_id IS NOT NULL)::int + (m.faction2_team_id IS NOT NULL)::int), 0)
-          FROM matches m
-          JOIN championships c ON c.championship_id = m.championship_id
-         WHERE m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED' AND c.include"""),
+    ("fact_team_matches", "two rows per series, one per side",
+     """SELECT coalesce(sum((side1_team_id IS NOT NULL)::int + (side2_team_id IS NOT NULL)::int), 0) FROM series"""),
     ("fact_player_versus", "one row per player per map per opposing player",
      """WITH per AS (
             SELECT match_id, round_number, team_id, count(*) AS n
@@ -217,13 +214,19 @@ def check_org_key_resolution(conn: psycopg.Connection) -> CheckResult:
     for r in _rows(conn, "SELECT org_id FROM orgs WHERE org_id LIKE 'team:%'"):
         discrepancies.append({"kind": "org_id_collides_with_unmapped_key_prefix", **r})
     # A materialized aggregate keeps the org_key it was built with. After a merge
-    # is decided and loaded, an unrefreshed aggregate still answers at the old
-    # identity, which reads as a complete answer for a team that no longer exists.
-    for view in ("agg_team_matches", "agg_team_maps", "agg_player_stats"):
+    # (or a window) is decided and loaded, an unrefreshed aggregate still answers
+    # at the old identity, which reads as a complete answer for a team that no
+    # longer exists. Identity is per series time, so the comparison is against
+    # the fact view the aggregate was built from: every (team_id, org_key) the
+    # aggregate carries must still occur there.
+    for view, fact in (("agg_team_matches", "fact_team_matches"), ("agg_team_maps", "fact_team_maps"),
+                       ("agg_player_stats", "fact_player_maps")):
         stale = _rows(conn, f"""
-            SELECT DISTINCT a.team_id, a.org_key AS aggregate_org_key, ti.org_key AS current_org_key
-              FROM {view} a JOIN team_identity ti ON ti.team_id = a.team_id
-             WHERE a.org_key IS DISTINCT FROM ti.org_key LIMIT 20""")
+            SELECT a.team_id, a.org_key AS aggregate_org_key,
+                   (SELECT array_agg(DISTINCT f.org_key) FROM {fact} f WHERE f.team_id = a.team_id) AS current_org_keys
+              FROM (SELECT DISTINCT team_id, org_key FROM {view}) a
+             WHERE NOT EXISTS (SELECT 1 FROM {fact} f WHERE f.team_id = a.team_id AND f.org_key = a.org_key)
+             LIMIT 20""")
         for r in stale:
             discrepancies.append({"kind": "stale_org_key_in_materialized_view", "view": view, **r,
                                   "hint": "run `python -m owcsmuse refresh` after loading org decisions"})
@@ -235,6 +238,8 @@ def check_org_key_resolution(conn: psycopg.Connection) -> CheckResult:
         "team_ids_unmapped": int(_scalar(conn, "SELECT count(*) FROM team_identity WHERE NOT mapped") or 0),
         "unmapped_team_ids_with_matches": int(_scalar(conn, """
             SELECT count(DISTINCT team_id) FROM fact_team_matches WHERE org_key LIKE 'team:%'""") or 0),
+        "bounded_windows": int(_scalar(conn, """
+            SELECT count(*) FROM team_orgs WHERE valid_from <> '-infinity' OR valid_to <> 'infinity'""") or 0),
     }
     return _result("org_key_resolution", discrepancies,
                    f"{counts['team_ids_total']} team ids all resolve: {counts['team_ids_mapped']} mapped to "
@@ -350,6 +355,11 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
     team, and 13 do in the real data.
     """
     discrepancies: list[dict[str, Any]] = []
+    # an org the owner decided spans regions (SpaceStation Gaming: EMEA in 2024, an NA partner team from 2025) carries
+    # the token in every window's evidence (scope/org_decisions.json); it is reported, not failed
+    decided_cross = {r["org_id"] for r in _rows(conn, """
+        SELECT org_id FROM team_orgs GROUP BY org_id
+        HAVING bool_and(EXISTS (SELECT 1 FROM jsonb_array_elements_text(evidence) e WHERE e LIKE 'cross_region_ok%'))""")}
     for key_col, kind in (("org_key", "org_spans_regions"), ("team_id", "team_id_spans_regions")):
         for r in _rows(conn, f"""
             SELECT {key_col} AS key, array_agg(DISTINCT region ORDER BY region) AS regions,
@@ -357,6 +367,8 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
               FROM fact_team_matches
              WHERE region IN ('na', 'emea') AND {key_col} IS NOT NULL
              GROUP BY {key_col} HAVING count(DISTINCT region) > 1"""):
+            if key_col == "org_key" and r["key"] in decided_cross:
+                continue
             discrepancies.append({"kind": kind, "key": r["key"], "regions": r["regions"],
                                   "team_ids": r["team_ids"], "matches": r["matches"],
                                   "hint": "an applied org merge crosses regions: unmap it in scope/org_decisions.json "
@@ -368,11 +380,230 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
                                                  "WHERE region IN ('na', 'emea') AND org_key NOT LIKE 'team:%'") or 0),
         "team_ids_checked": int(_scalar(conn, "SELECT count(DISTINCT team_id) FROM fact_team_matches "
                                               "WHERE region IN ('na', 'emea')") or 0),
+        "decided_cross_region_orgs": sorted(decided_cross),
     }
     return _result("region_consistency", discrepancies,
                    f"none of {counts['orgs_checked']} orgs ({counts['mapped_orgs_checked']} merged) or "
                    f"{counts['team_ids_checked']} team ids has matches in both na and emea",
                    f"{len(discrepancies)} org(s) or team id(s) span na and emea", counts)
+
+
+# ------------------------------------------------------------- series integrity
+
+def check_series_integrity(conn: psycopg.Connection) -> CheckResult:
+    """A match is one series whichever source holds it, and a linked pair's two records name the same teams.
+
+    series_once: no FACEIT match id and no Liquipedia record appears in two series; series_reconciliation: the
+    series count equals FACEIT's in-scope finished series plus the Liquipedia-only ones both of whose teams a
+    decided anchor resolves; linked_sides_disagree: for a linked pair whose Liquipedia teams are decided, the two
+    records' sides are the same identities. A link that stopped agreeing after an identity decision fails here
+    rather than staying.
+    """
+    discrepancies: list[dict[str, Any]] = []
+    for col, kind in (("faceit_match_id", "faceit_match_in_two_series"), ("lp_objectname", "liquipedia_record_in_two_series")):
+        for r in _rows(conn, f"SELECT {col} AS id, count(*) AS n FROM series WHERE {col} IS NOT NULL GROUP BY {col} HAVING count(*) > 1 LIMIT 10"):
+            discrepancies.append({"kind": kind, **r})
+    faceit_n = int(_scalar(conn, """
+        SELECT count(*) FROM matches m JOIN championships c ON c.championship_id = m.championship_id
+         WHERE m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED' AND c.include""") or 0)
+    lp_only = int(_scalar(conn, "SELECT count(*) FROM series WHERE faceit_match_id IS NULL") or 0)
+    linked = int(_scalar(conn, "SELECT count(*) FROM series WHERE faceit_match_id IS NOT NULL AND lp_objectname IS NOT NULL") or 0)
+    total = int(_scalar(conn, "SELECT count(*) FROM series") or 0)
+    if total != faceit_n + lp_only:
+        discrepancies.append({"kind": "series_count_does_not_reconcile", "series": total, "faceit": faceit_n, "liquipedia_only": lp_only})
+    for r in _rows(conn, """
+        WITH sides AS (
+            SELECT s.series_id, s.lp_objectname,
+                   (SELECT array_agg(ti.org_key ORDER BY ti.org_key) FROM unnest(ARRAY[s.side1_team_id, s.side2_team_id]) t(id)
+                     CROSS JOIN LATERAL team_identity_at(t.id, s.played_at) ti) AS faceit_keys,
+                   (SELECT array_agg(k ORDER BY k) FROM (
+                        SELECT CASE a.entity_type WHEN 'org' THEN a.entity_id
+                                    ELSE (SELECT ti.org_key FROM team_identity_at(a.entity_id, s.played_at) ti) END AS k
+                          FROM liquipedia_matches lm
+                          CROSS JOIN LATERAL (VALUES (lm.team1_name), (lm.team2_name)) n(name)
+                          JOIN entity_anchors a ON a.anchor_kind = 'team_name' AND a.anchor = fold_name(n.name)
+                                               AND (a.region = '' OR a.region = coalesce(lm.region, ''))
+                                               AND lm.played_at >= a.valid_from AND lm.played_at < a.valid_to
+                         WHERE lm.objectname = s.lp_objectname) x) AS lp_keys
+              FROM series s WHERE s.faceit_match_id IS NOT NULL AND s.lp_objectname IS NOT NULL)
+        SELECT series_id, lp_objectname, faceit_keys, lp_keys FROM sides
+         WHERE lp_keys IS NOT NULL AND array_length(lp_keys, 1) = 2 AND faceit_keys IS DISTINCT FROM lp_keys LIMIT 10"""):
+        discrepancies.append({"kind": "linked_sides_disagree", **r,
+                              "hint": "an identity decision no longer agrees with this link: review the link "
+                                      "(liquipedia links decide) or the team mapping"})
+    unresolved = int(_scalar(conn, """
+        SELECT count(*) FROM liquipedia_matches lm JOIN championships c ON c.championship_id = lm.championship_id AND c.include
+         WHERE lm.finished AND NOT lm.placeholder
+           AND NOT EXISTS (SELECT 1 FROM liquipedia_links lk WHERE lk.lp_objectname = lm.objectname AND lk.faceit_match_id IS NOT NULL)
+           AND NOT EXISTS (SELECT 1 FROM series s WHERE s.lp_objectname = lm.objectname)""") or 0)
+    counts = {"series": total, "faceit": faceit_n, "linked_pairs": linked, "liquipedia_only": lp_only,
+              "liquipedia_unresolved_not_in_series": unresolved}
+    return _result("series_integrity", discrepancies,
+                   f"{total} series: {faceit_n} from FACEIT ({linked} also on Liquipedia), {lp_only} Liquipedia-only; "
+                   f"{unresolved} unlinked Liquipedia record(s) wait on a team decision and are in no answer",
+                   f"{len(discrepancies)} series problem(s)", counts)
+
+
+# ------------------------------------------------------------ score plausibility
+
+def check_score_plausibility(conn: psycopg.Connection) -> CheckResult:
+    """No series presents a score its best-of cannot hold, and no map is both won and drawn.
+
+    FACEIT counts a drawn map as a win for the series winner and stored Dreamhack Dallas as best-of-1; the series
+    view corrects the first from map results and derives a best-of the score fits. What reaches an answer is what
+    this asserts; the corrections themselves are counted, not failed, so a rise in them is visible.
+    """
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, """
+        SELECT series_id, score1, score2, best_of, score_source, best_of_source FROM series
+         WHERE best_of IS NOT NULL AND GREATEST(score1, score2) > (best_of + 1) / 2 LIMIT 20"""):   # an unknown best-of holds anything
+        discrepancies.append({"kind": "score_impossible_for_best_of", **r})
+    for r in _rows(conn, "SELECT match_id, round_number FROM fact_team_maps WHERE won AND drawn LIMIT 10"):
+        discrepancies.append({"kind": "map_both_won_and_drawn", **r})
+    for r in _rows(conn, """
+        SELECT s.series_id, t.name AS side1_team, s.score1 AS side1_series_score,
+               (SELECT count(*) FROM match_rounds r
+                 WHERE r.match_id = s.match_id
+                   AND map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = s.side1_team_id
+                   AND NOT EXISTS (SELECT 1 FROM phantom_maps p WHERE (p.match_id, p.round_number) = (r.match_id, r.round_number))) AS side1_map_wins
+          FROM series s LEFT JOIN teams t ON t.team_id = s.side1_team_id
+         WHERE s.faceit_match_id IS NOT NULL AND s.score_source = 'faceit'
+           AND EXISTS (SELECT 1 FROM match_rounds r WHERE r.match_id = s.match_id)
+           AND (SELECT count(*) FROM match_rounds r
+                 WHERE r.match_id = s.match_id
+                   AND map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = s.side1_team_id
+                   AND NOT EXISTS (SELECT 1 FROM phantom_maps p WHERE (p.match_id, p.round_number) = (r.match_id, r.round_number))) > s.score1
+         LIMIT 10"""):
+        # read as: side 1 (named) won more maps, by the scores, than the series score credits it with
+        discrepancies.append({"kind": "map_wins_exceed_series_score", **r})
+    # every FACEIT series whose presented best-of is not the stored one: the rule is general (032), so the list is
+    # the report of what it corrects; a lowered best-of (stored bo5, won 2-x) is the kind worth a second look
+    corrections = _rows(conn, """
+        SELECT s.series_id, m.best_of AS stored, s.best_of AS derived, s.score1, s.score2, s.best_of_source, s.state
+          FROM series s JOIN matches m ON m.match_id = s.faceit_match_id
+         WHERE s.best_of_source <> 'faceit' ORDER BY s.played_at LIMIT 100""")
+    counts = {
+        "scores_corrected_from_maps": int(_scalar(conn, "SELECT count(*) FROM series WHERE score_source = 'maps'") or 0),
+        "best_of_derived_from_score": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'derived from score'") or 0),
+        "best_of_derived_from_map_wins": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'derived from map wins'") or 0),
+        "best_of_from_liquipedia": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'liquipedia'") or 0),
+        "best_of_unknown": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'unknown'") or 0),
+        "best_of_implausible": int(_scalar(conn, "SELECT count(*) FROM series WHERE best_of_source = 'implausible'") or 0),
+        "results_from_liquipedia": int(_scalar(conn, "SELECT count(*) FROM series WHERE result_source = 'liquipedia' AND faceit_match_id IS NOT NULL") or 0),
+        "best_of_raised": sum(1 for c in corrections if c["stored"] is not None and c["derived"] is not None and c["derived"] > c["stored"]),
+        "best_of_lowered": sum(1 for c in corrections if c["stored"] is not None and c["derived"] is not None and c["derived"] < c["stored"]),
+        "drawn_maps": int(_scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") / 2 if _scalar(conn, "SELECT count(*) FROM fact_team_maps WHERE drawn") else 0),
+        "best_of_corrections": [{"series_id": c["series_id"], "stored": c["stored"], "derived": c["derived"],
+                                 "score": f"{c['score1']}-{c['score2']}", "source": c["best_of_source"], "state": c["state"]}
+                                for c in corrections],
+    }
+    return _result("score_plausibility", discrepancies,
+                   f"every series fits its best-of ({counts['scores_corrected_from_maps']} score(s) corrected from map results, "
+                   f"{counts['best_of_derived_from_score'] + counts['best_of_derived_from_map_wins']} best-of derived from the "
+                   f"winning score: {counts['best_of_raised']} raised, {counts['best_of_lowered']} lowered; "
+                   f"{counts['drawn_maps']} drawn map(s))",
+                   f"{len(discrepancies)} implausible score(s)", counts)
+
+
+# ------------------------------------------------------------ map winners and phantom maps
+
+def check_map_winner_consistency(conn: psycopg.Connection) -> CheckResult:
+    """The map winner is derived from the scores; winner_team_id is advisory.
+
+    1-3e78e269 map 5 is scored 0-3 for one team and credits the other as winner. The scores decide (map_winner), a
+    tied map has no winner, and the stored winner is used only when a score is missing. The contradictions are
+    listed, not failed - they are FACEIT's data - but a fact row that still follows the stored winner fails.
+    """
+    contradictions = _rows(conn, """
+        SELECT r.match_id, r.round_number, r.map_name, r.game_mode, r.team1_score, r.team2_score,
+               t1.name AS team1, t2.name AS team2, w.name AS stored_winner,
+               dw.name AS derived_winner
+          FROM match_rounds r
+          JOIN matches m ON m.match_id = r.match_id JOIN championships c ON c.championship_id = m.championship_id
+          LEFT JOIN teams t1 ON t1.team_id = r.team1_team_id LEFT JOIN teams t2 ON t2.team_id = r.team2_team_id
+          LEFT JOIN teams w ON w.team_id = r.winner_team_id
+          LEFT JOIN teams dw ON dw.team_id = map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id)
+         WHERE c.include AND r.team1_score IS NOT NULL AND r.team2_score IS NOT NULL
+           AND r.winner_team_id IS DISTINCT FROM map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id)
+         ORDER BY r.match_id, r.round_number LIMIT 100""")
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, """
+        SELECT f.match_id, f.round_number, f.team_id FROM fact_team_maps f JOIN match_rounds r ON (r.match_id, r.round_number) = (f.match_id, f.round_number)
+         WHERE f.won <> coalesce(map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = f.team_id, false)
+            OR f.drawn <> map_is_drawn(r.team1_score, r.team2_score, r.winner_team_id) LIMIT 10"""):
+        discrepancies.append({"kind": "team_map_fact_follows_stored_winner", **r})
+    for r in _rows(conn, """
+        SELECT f.match_id, f.round_number, f.player_id FROM fact_player_maps f JOIN match_rounds r ON (r.match_id, r.round_number) = (f.match_id, f.round_number)
+         WHERE f.map_won <> coalesce(map_winner(r.team1_team_id, r.team1_score, r.team2_team_id, r.team2_score, r.winner_team_id) = f.team_id, false) LIMIT 10"""):
+        discrepancies.append({"kind": "player_map_fact_follows_stored_winner", **r})
+    counts = {"winner_contradicts_scores": len(contradictions),
+              "contradictions": [{k: v for k, v in c.items()} for c in contradictions]}
+    return _result("map_winner_consistency", discrepancies,
+                   f"every fact row follows the winner the scores give ({len(contradictions)} stored winner(s) contradict their scores and are overridden)",
+                   f"{len(discrepancies)} fact row(s) follow a stored winner the scores contradict", counts)
+
+
+def check_phantom_map_isolation(conn: psycopg.Connection) -> CheckResult:
+    """A FACEIT map row beyond Liquipedia's game count for a linked series is a phantom: in no fact view, no
+    aggregate, no series score. The player rows that rode on one are counted so a person can see them."""
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, "SELECT f.match_id, f.round_number FROM fact_team_maps f JOIN phantom_maps p ON (p.match_id, p.round_number) = (f.match_id, f.round_number) LIMIT 10"):
+        discrepancies.append({"kind": "phantom_in_team_map_fact", **r})
+    for r in _rows(conn, "SELECT f.match_id, f.round_number FROM fact_player_maps f JOIN phantom_maps p ON (p.match_id, p.round_number) = (f.match_id, f.round_number) LIMIT 10"):
+        discrepancies.append({"kind": "phantom_in_player_map_fact", **r})
+    phantoms = _rows(conn, "SELECT match_id, round_number, map_name, liquipedia_games, player_rows FROM phantom_maps ORDER BY 1, 2 LIMIT 100")
+    counts = {"phantom_maps": len(phantoms), "phantom_maps_with_player_rows": sum(1 for p in phantoms if p["player_rows"]),
+              "phantom_player_rows_excluded": sum(int(p["player_rows"]) for p in phantoms), "phantoms": phantoms}
+    return _result("phantom_map_isolation", discrepancies,
+                   f"{len(phantoms)} phantom map(s) ({counts['phantom_maps_with_player_rows']} with player rows, {counts['phantom_player_rows_excluded']} excluded) are in no fact view",
+                   f"{len(discrepancies)} fact row(s) sit on a phantom map", counts)
+
+
+# ------------------------------------------------------------ identity windows
+
+def check_identity_windows(conn: psycopg.Connection) -> CheckResult:
+    """A team-to-org window says something about real series, and a team id is never two orgs at once.
+
+    A window that covers none of its team id's series is a decision that silently
+    does nothing - most likely a date typed wrong - and a series that falls in two
+    windows would belong to two orgs; the trigger forbids the second, this audits
+    the first and re-asserts the second against what is loaded.
+    """
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, """
+        SELECT w.team_id, w.org_id, w.valid_from::text AS valid_from, w.valid_to::text AS valid_to
+          FROM team_orgs w
+         WHERE (w.valid_from <> '-infinity' OR w.valid_to <> 'infinity')
+           AND NOT EXISTS (SELECT 1 FROM fact_team_matches f WHERE f.team_id = w.team_id
+                             AND f.started_at >= w.valid_from AND f.started_at < w.valid_to)"""):
+        discrepancies.append({"kind": "window_covers_no_series", **{k: str(v) for k, v in r.items()},
+                              "hint": "the window dates match none of this team id's series; check them in "
+                                      "scope/org_decisions.json"})
+    for r in _rows(conn, """
+        SELECT a.team_id, a.org_id AS org_a, b.org_id AS org_b
+          FROM team_orgs a JOIN team_orgs b ON b.team_id = a.team_id AND b.valid_from > a.valid_from
+         WHERE a.valid_from < b.valid_to AND b.valid_from < a.valid_to"""):
+        discrepancies.append({"kind": "overlapping_windows", **r})
+    for r in _rows(conn, """
+        SELECT team_id, count(DISTINCT org_key) AS keys FROM fact_team_matches
+         GROUP BY team_id, match_id HAVING count(DISTINCT org_key) > 1 LIMIT 5"""):
+        discrepancies.append({"kind": "one_series_two_identities", **r})
+    counts = {
+        "windows": int(_scalar(conn, "SELECT count(*) FROM team_orgs") or 0),
+        "bounded": int(_scalar(conn, "SELECT count(*) FROM team_orgs WHERE valid_from <> '-infinity' "
+                                     "OR valid_to <> 'infinity'") or 0),
+        "team_ids_with_an_era_of_their_own": int(_scalar(conn, """
+            SELECT count(DISTINCT f.team_id) FROM fact_team_matches f
+             WHERE f.org_id IS NULL AND EXISTS (SELECT 1 FROM team_orgs w WHERE w.team_id = f.team_id)""") or 0),
+        "series_in_own_eras": int(_scalar(conn, """
+            SELECT count(DISTINCT f.match_id) FROM fact_team_matches f
+             WHERE f.org_id IS NULL AND EXISTS (SELECT 1 FROM team_orgs w WHERE w.team_id = f.team_id)""") or 0),
+    }
+    return _result("identity_windows", discrepancies,
+                   f"{counts['windows']} team-to-org windows ({counts['bounded']} bounded) each cover real series; "
+                   f"{counts['team_ids_with_an_era_of_their_own']} team id(s) keep an era of their own "
+                   f"({counts['series_in_own_eras']} series)",
+                   f"{len(discrepancies)} window problem(s)", counts)
 
 
 # --------------------------------------------------- 7. Liquipedia map isolation
@@ -412,7 +643,12 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "aggregate_sums": check_aggregate_sums,
     "stat_reachability": check_stat_reachability,
     "region_consistency": check_region_consistency,
+    "identity_windows": check_identity_windows,
+    "series_integrity": check_series_integrity,
+    "score_plausibility": check_score_plausibility,
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
+    "map_winner_consistency": check_map_winner_consistency,
+    "phantom_map_isolation": check_phantom_map_isolation,
 }
 
 

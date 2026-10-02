@@ -27,6 +27,7 @@ MATERIALIZED_VIEWS: tuple[str, ...] = (
     "fact_player_versus",
     "agg_org_versus_maps",
     "entity_names",
+    "source_capabilities",
 )
 
 

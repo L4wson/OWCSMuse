@@ -106,7 +106,8 @@ def test_availability(agg_db):
 
 
 def test_out_of_scope_and_unsupported_paths_are_clean(agg_db):
-    for q, code in [("who has the best hero pool", "unsupported_metric"), ("best team in korea", "out_of_scope"),
+    for q, code in [("who has the best hero pool", "unsupported_metric"), ("best team in china", "out_of_scope"),
+                    ("most eliminations in korea", "results_only"),
                     ("most eliminations in 2023", "no_data"), ("most eliminations on Numbani", "no_data")]:
         a = ask(agg_db, q)
         assert a.status == "cannot_answer" and a.code == code, (q, a.code, a.reason)
@@ -197,3 +198,16 @@ def test_team_membership_current_team_and_history_with_date_ranges(agg_db):
 def test_team_membership_for_a_team_name_says_so(agg_db):
     a = ask(agg_db, "what team is Twisted Minds on")
     assert a.status == "cannot_answer" and "is a team, not a player" in a.reason
+
+
+def test_a_korean_player_stat_question_is_refused_as_results_only_with_a_working_alternative(agg_db):
+    """Korea is declared results-only before any of its data exists: the refusal says why, never 'no data',
+    and offers the same question where player stats exist. It never returns an empty or partial leaderboard."""
+    a = ask(agg_db, "who had the most eliminations in korea")
+    assert a.status == "cannot_answer" and a.code == "results_only", (a.code, a.reason)
+    assert "results-only region" in a.reason and not a.rows
+    assert "who had the most eliminations" in a.alternatives
+    b = ask(agg_db, "who had the most eliminations")
+    assert b.status == "ok" and b.rows
+    text = render_text(a)
+    assert text.startswith("Can't answer that") and "who had the most eliminations" in text

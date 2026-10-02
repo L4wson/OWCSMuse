@@ -182,17 +182,20 @@ def propose(map_path: str | Path = DEFAULT_MAP_PATH, scope_path: str | Path = DE
             continue
         name = d.get("name") or (pages.get(cid) or {}).get("name") or cid
         page = (pages.get(cid) or {}).get("page")
-        if page:
-            p = _propose_one(cid, name, page)
+        if cid in named:
+            # named by the owner: an event page (Dreamhack Dallas's 2024 Major) may sit in the fetch map for its
+            # matches, but it is not a stage page and never names the competition
+            e = named[cid]
+            p = Proposal(cid, name, legacy_display(name), proposed=e["display_name"], basis="owner")
+            p.flags.append(e.get("note", "named from the owner's description; no Liquipedia page"))
         elif cid in extra_pages:
+            # an owner-supplied page keeps its basis (liquipedia-owner) even once the fetch map carries it too
             e = extra_pages[cid]
             p = _propose_one(cid, name, e["page"], "liquipedia-owner")
             p.flags.append("page supplied by the owner, not fetched" if e.get("verified", True)
                            else f"{UNSEEN} by analogy with the one the owner gave; not seen")
-        elif cid in named:
-            e = named[cid]
-            p = Proposal(cid, name, legacy_display(name), proposed=e["display_name"], basis="owner")
-            p.flags.append(e.get("note", "named from the owner's description; no Liquipedia page"))
+        elif page:
+            p = _propose_one(cid, name, page)
         else:
             p = _propose_one(cid, name, None)
         if p.proposed is None and page is None and _FACEIT_LEAGUE.match(name):

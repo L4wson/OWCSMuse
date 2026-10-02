@@ -84,6 +84,8 @@ def answer_attribution(conn: psycopg.Connection, match_ids: Iterable[str]) -> Op
     ids = [m for m in dict.fromkeys(match_ids) if m]
     if not ids:
         return None
+    # a Liquipedia-only series (Stage 3) is keyed `lp:<objectname>` and owes its page for everything
+    lp_only = [m[3:] for m in ids if m.startswith("lp:")]
     with conn.cursor() as cur:
         cur.execute(
             """
@@ -95,8 +97,10 @@ def answer_attribution(conn: psycopg.Connection, match_ids: Iterable[str]) -> Op
                     EXISTS (SELECT 1 FROM match_rounds r WHERE r.match_id = ll.faceit_match_id AND r.source = 'liquipedia')
                  OR EXISTS (SELECT 1 FROM matches m WHERE m.match_id = ll.faceit_match_id AND m.date_source = 'liquipedia')
                )
+            UNION
+            SELECT DISTINCT lm.page_url FROM liquipedia_matches lm WHERE lm.objectname = ANY(%s)
             """,
-            (ids,),
+            (ids, lp_only),
         )
         urls = [r["page_url"] for r in cur.fetchall()]
     conn.commit()

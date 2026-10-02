@@ -47,7 +47,8 @@ def migrate(conn: psycopg.Connection, migrations_dir: str | Path, schema: str = 
     """Apply every migrations/NNN_*.sql not yet recorded, in order, inside `schema`.
 
     Each migration runs in its own transaction with `SET LOCAL search_path`
-    so its objects land in `schema` explicitly. Returns applied file names.
+    so its objects land in `schema` explicitly, and `{{schema}}` in its text is
+    replaced by that schema. Returns applied file names.
     """
     schema = _check_ident(schema)
     path = Path(migrations_dir)
@@ -71,7 +72,10 @@ def migrate(conn: psycopg.Connection, migrations_dir: str | Path, schema: str = 
     for f in files:
         if f.name in done:
             continue
-        sql = f.read_text(encoding="utf-8")
+        # `{{schema}}` in a migration is the schema it runs in: a LANGUAGE sql function body that names a table must
+        # qualify it (PostgreSQL 17 plans a materialized-view refresh under search_path = pg_catalog, pg_temp, and
+        # re-parses such bodies by name), and the schema is configuration, not something a migration may hard-code.
+        sql = f.read_text(encoding="utf-8").replace("{{schema}}", schema)
         try:
             with conn.cursor() as cur:
                 cur.execute(f"SET LOCAL search_path TO {schema}")

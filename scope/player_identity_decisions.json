@@ -1,0 +1,1334 @@
+{
+  "note": "Reviewed Liquipedia player page -> FACEIT player. entity_id null means a Liquipedia-born player with no FACEIT id (it gets id lp:player:<page>). `rejections` are page|guid pairs reviewed and turned down. Edit by hand or with `python -m owcsmuse identity decide` / `identity reject`.",
+  "decisions": {
+    "AOY": {
+      "entity_id": "a7babcdd-924d-405b-b47b-36c0d2669e5a",
+      "handle": "AOY",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'AOY' stood on the same side as FACEIT a7babcdd (AOY / AOY_) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Ade": {
+      "entity_id": "9aa12273-c1db-4df9-a952-847d4aea8801",
+      "handle": "Ade",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Ade' stood on the same side as FACEIT 9aa12273 (Ade / Ade417) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Admiral": {
+      "entity_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
+      "handle": "Admiral",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Admiral' stood on the same side as FACEIT 41c50d1a (Admiral / AdmiralRaptr) in 42 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Alba": {
+      "entity_id": "d046fee2-3480-4c15-981c-08ea0e4a99da",
+      "handle": "alba",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'alba' stood on the same side as FACEIT d046fee2 (alba / albavxz) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "AlphaYi": {
+      "entity_id": "944c0b7e-c518-43e7-bed2-4de2a1d4e336",
+      "handle": "AlphaYi",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'AlphaYi' stood on the same side as FACEIT 944c0b7e (AlphaYi / AlphaYi02) in 16 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Amdp": {
+      "entity_id": "f3083b81-66f3-4ea5-a509-f2d92f299624",
+      "handle": "amdp",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'amdp' stood on the same side as FACEIT f3083b81 (amdp) in 10 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Arise": {
+      "entity_id": "20a8d5c4-82bc-4a73-8182-d9be1c8ee413",
+      "handle": "Arise",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Arise' stood on the same side as FACEIT 20a8d5c4 (Arise / Arise_OW) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Attack": {
+      "entity_id": "232fdb58-fe04-4a4d-bae1-31671cd371b8",
+      "handle": "Attack",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Attack' stood on the same side as FACEIT 232fdb58 (Attack / Atttack) in 8 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Axure": {
+      "entity_id": "b9abed30-d5cf-4d09-a5d1-931055a70327",
+      "handle": "Axure",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Axure' stood on the same side as FACEIT b9abed30 (Axur3e / Axure) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Backbone": {
+      "entity_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+      "handle": "Backbone",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Backbone' stood on the same side as FACEIT a12c7612 (Backbone / Backboneee) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Baz": {
+      "entity_id": "029bf891-4c0b-4153-a386-b7ff9f3ad2f8",
+      "handle": "baz",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'baz' stood on the same side as FACEIT 029bf891 (Baz / BazOdub) in 13 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Bliss": {
+      "entity_id": "4a7be6fa-3e22-4584-b131-5444c608a385",
+      "handle": "Bliss",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Bliss' stood on the same side as FACEIT 4a7be6fa (Bliss / bliss05) in 18 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "CLEAR": {
+      "entity_id": "a50e5d9c-e00c-476d-86a9-04ab1403d09d",
+      "handle": "CLEAR",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'CLEAR' stood on the same side as FACEIT a50e5d9c (CLEAR / CLEAROW) in 17 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Cartifan22": {
+      "entity_id": "d1227d2c-f885-4729-b4de-77e20f08511d",
+      "handle": "cartifan22",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'cartifan22' stood on the same side as FACEIT d1227d2c (cartifan22 / cartifan22_) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Chase": {
+      "entity_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+      "handle": "Chase",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Chase' stood on the same side as FACEIT 23c11b19 (Chase / Chaseeeeeee_) in 19 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Checkmate": {
+      "entity_id": "c6839ee0-654b-4b77-90ab-11ba3b56bb49",
+      "handle": "CheckMate",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'CheckMate' stood on the same side as FACEIT c6839ee0 (CheckMate / Checkmate2) in 29 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "China_(Polish_player)": {
+      "entity_id": "fcf7a717-4ee5-4944-a10b-75d8be749ea1",
+      "handle": "China",
+      "real_name": "Polish player",
+      "note": "accepted strong proposal (owner, 2026-10-02): 'China' stood on the same side as FACEIT fcf7a717 (China / china_ow) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "ChoiSehwan": {
+      "entity_id": "bfb7d179-6904-497b-a4ac-cf158aa8b24e",
+      "handle": "ChoiSehwan",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'ChoiSehwan' stood on the same side as FACEIT bfb7d179 (ChoiSehwan) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Cinnabar": {
+      "entity_id": "e30fab51-bf10-4391-9c9b-f99276414110",
+      "handle": "cinnabar",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'cinnabar' stood on the same side as FACEIT e30fab51 (cinnabar / cinnabarr) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Cjay": {
+      "entity_id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+      "handle": "cjay",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'cjay' stood on the same side as FACEIT 2ede0b37 (cjay / cjay4) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Coluge": {
+      "entity_id": "27fd0cfe-b845-410a-a69e-797f14b4c8cd",
+      "handle": "Coluge",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Coluge' stood on the same side as FACEIT 27fd0cfe (Coluge) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Cookie084": {
+      "entity_id": "59643d3f-fad7-4182-87be-63d2371bedae",
+      "handle": "cookie084",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'cookie084' stood on the same side as FACEIT 59643d3f (cookie084) in 8 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "CrazyCat": {
+      "entity_id": "6f4ddf6b-51f4-4036-bb1e-7330102b3017",
+      "handle": "CrazyCat",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'CrazyCat' stood on the same side as FACEIT 6f4ddf6b (CrazyCat / CrazyCat191) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Crispy": {
+      "entity_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+      "handle": "crispy",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'crispy' stood on the same side as FACEIT 9da88fbd (Crispy / zzcrispy) in 35 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "CuFFa": {
+      "entity_id": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83",
+      "handle": "cuFFa",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'cuFFa' stood on the same side as FACEIT e6fc96f5 (cuFFa / cuFFah) in 29 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Danny_(American_player)": {
+      "entity_id": "16e56097-3541-4700-9115-9063bc6c3fd9",
+      "handle": "Danny",
+      "real_name": "American player",
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Danny' stood on the same side as FACEIT 16e56097 (Danny / dannyow) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Dip": {
+      "entity_id": "05e09403-6d01-4ea5-bd1e-3e9dabf8957b",
+      "handle": "Dip",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Dip' stood on the same side as FACEIT 05e09403 (Dip / Dip_impact) in 18 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Drunk": {
+      "entity_id": "c28135e8-b242-4742-a723-c312258155f3",
+      "handle": "Drunk",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Drunk' stood on the same side as FACEIT c28135e8 (Drunk / drunkow) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "EgS": {
+      "entity_id": "5bd0739c-4e52-49d2-b221-4da542bf0b5c",
+      "handle": "EgS",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'EgS' stood on the same side as FACEIT 5bd0739c (-EgS / EGS) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Eisgnom": {
+      "entity_id": "37aeeb7b-b183-4fae-b25d-d1de03a58191",
+      "handle": "eisgnom",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'eisgnom' stood on the same side as FACEIT 37aeeb7b (eisgnom / eisgnom9) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Escanor": {
+      "entity_id": "2e4db6df-0964-4e01-8b6d-20b29f8544dd",
+      "handle": "Escanor",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Escanor' stood on the same side as FACEIT 2e4db6df (escanor / escanor1161) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Evil_(French_player)": {
+      "entity_id": "9c092bbb-1d8d-4d51-a395-7ab41720965d",
+      "handle": "Evil",
+      "real_name": "French player",
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Evil' stood on the same side as FACEIT 9c092bbb (Evil / Evil8871) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Ewan": {
+      "entity_id": "fe2edff3-b816-42d4-bb7c-be6e285e77b5",
+      "handle": "Ewan",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Ewan' stood on the same side as FACEIT fe2edff3 (Ewan / Ewan1657) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "FDGod": {
+      "entity_id": "1ab8c25f-15f0-4707-acc9-4718c88157da",
+      "handle": "FDGod",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'FDGod' stood on the same side as FACEIT 1ab8c25f (FDGod / FDGod_OW) in 32 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Faith": {
+      "entity_id": "76a75eed-3164-48d6-875c-82b1195bec68",
+      "handle": "Faith",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Faith' stood on the same side as FACEIT 76a75eed (Faith / Faith33) in 10 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "False": {
+      "entity_id": "babf94ba-ab1f-45cd-ada2-10fe89b16bc0",
+      "handle": "False",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'False' stood on the same side as FACEIT babf94ba (Fal2e / False) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "FiNN": {
+      "entity_id": "fece55bf-88e9-4234-bcbb-bef43740b491",
+      "handle": "FiNN",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'FiNN' stood on the same side as FACEIT fece55bf (FiNN / SEjFiNN) in 16 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "FiXa": {
+      "entity_id": "e422414a-72ec-4e83-8264-6a54b39414b8",
+      "handle": "FiXa",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'FiXa' stood on the same side as FACEIT e422414a (FiXa / _FiXa) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Fone": {
+      "entity_id": "612cb222-3bb1-4980-bcae-cf245c7c32a7",
+      "handle": "Fone",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Fone' stood on the same side as FACEIT 612cb222 (Fone / FoneOW) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "FrothyFilly7": {
+      "entity_id": "083989e0-81a4-4f83-8dc3-e5222f0df695",
+      "handle": "FrothyFilly7",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'FrothyFilly7' stood on the same side as FACEIT 083989e0 (FrothyFilly7) in 13 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "FunnyAstro": {
+      "entity_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+      "handle": "FunnyAstro",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'FunnyAstro' stood on the same side as FACEIT 423b8943 (FunnyAstro / FunnyAstro1) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "GAP": {
+      "entity_id": "925028a0-be74-4f09-87d1-d62a6aa2bc7b",
+      "handle": "GAP",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'GAP' stood on the same side as FACEIT 925028a0 (GAP / gap_ow) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "GOGO": {
+      "entity_id": "bb203e79-b78d-4144-9e28-be9c06ab0dd6",
+      "handle": "gogo",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'gogo' stood on the same side as FACEIT bb203e79 (GOGOOGOOO / gogo) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Galaa": {
+      "entity_id": "04d8399b-8ae4-4142-92dd-512021980e5f",
+      "handle": "Galaa",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Galaa' stood on the same side as FACEIT 04d8399b (Galaa / Galaavv) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "GoldenPants": {
+      "entity_id": "0c88427e-d146-4fea-a383-431ddd8ee3e2",
+      "handle": "GoldenPants",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'GoldenPants' stood on the same side as FACEIT 0c88427e (GoldenPants / goldenpants2) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Gorilla": {
+      "entity_id": "137941ed-5fec-40e6-90d2-5b8444b032f2",
+      "handle": "Gorilla",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Gorilla' stood on the same side as FACEIT 137941ed (G0orilla / Gorilla) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Grapes": {
+      "entity_id": "7d81b5d2-eef0-4341-961f-f203d45f65df",
+      "handle": "Grapes",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Grapes' stood on the same side as FACEIT 7d81b5d2 (Grapes / GrappesOW) in 15 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Graveyard": {
+      "entity_id": "945d0963-2674-4848-963f-f5459e9e9ac7",
+      "handle": "Graveyard",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Graveyard' stood on the same side as FACEIT 945d0963 (Graveyard / GraveyardOW) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "HEESUNG": {
+      "entity_id": "eeb4e46f-723d-4a37-ae68-685c237627c8",
+      "handle": "HEESUNG",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'HEESUNG' stood on the same side as FACEIT eeb4e46f (HEESUNG / heesung) in 10 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Hadi": {
+      "entity_id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+      "handle": "Hadi",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Hadi' stood on the same side as FACEIT 5f60ca5b (Hadi / HadiOW2) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Haku_(Saudi_Arabian_player)": {
+      "entity_id": "7928a18c-bbe9-403b-936a-d5df7355b6e3",
+      "handle": "Haku",
+      "real_name": "Saudi Arabian player",
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Haku' stood on the same side as FACEIT 7928a18c (Haku / iHAKUi) in 18 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Hanbei": {
+      "entity_id": "832e46b6-d337-412b-acd7-cfc4e5bd5467",
+      "handle": "Hanbei",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Hanbei' stood on the same side as FACEIT 832e46b6 (Hanbei / Hanbei_) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Hawk": {
+      "entity_id": "a940981f-c750-40b9-bb55-bd3e8e6ef986",
+      "handle": "Hawk",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Hawk' stood on the same side as FACEIT a940981f (Hawk / TheeHawk) in 25 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Hitori": {
+      "entity_id": "60ad5972-64e6-434b-ad31-648f43d30735",
+      "handle": "Hitori",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Hitori' stood on the same side as FACEIT 60ad5972 (Hitori / Hitoriow) in 22 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "IMOH97": {
+      "entity_id": "f5ceb061-150c-44ad-b723-2bbad0fb3d93",
+      "handle": "iMOH97",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'iMOH97' stood on the same side as FACEIT f5ceb061 (iMOH97) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Icav": {
+      "entity_id": "e96d60b7-b272-4b27-95c4-95980d864a18",
+      "handle": "icav",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'icav' stood on the same side as FACEIT e96d60b7 (icav / icav1_) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Infekted": {
+      "entity_id": "3d7e3522-9ef9-4c31-abe2-e10dd1c14270",
+      "handle": "Infekted",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Infekted' stood on the same side as FACEIT 3d7e3522 (Infekted / Infektedow) in 40 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Irony": {
+      "entity_id": "95090451-b118-4d11-a693-20dafae48c01",
+      "handle": "irony",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'irony' stood on the same side as FACEIT 95090451 (ir0ny / irony) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "JUTSU": {
+      "entity_id": "c783deb8-d629-49f0-8a21-59db04e090ba",
+      "handle": "JUTSU",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'JUTSU' stood on the same side as FACEIT c783deb8 (JUTSU) in 13 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "JaeWoo": {
+      "entity_id": "34d11d57-a8f1-4f15-996d-e1776c525f93",
+      "handle": "JaeWoo",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'JaeWoo' stood on the same side as FACEIT 34d11d57 (JaeWoo / kimjaewoo1) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Johnowich": {
+      "entity_id": "e2d9ec68-0041-45e2-b354-5bad9c2e028b",
+      "handle": "Johnowich",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Johnowich' stood on the same side as FACEIT e2d9ec68 (Johnowich) in 12 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Jonte": {
+      "entity_id": "67e334a1-0d09-48ff-8879-4d099b84aa08",
+      "handle": "Jonte",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Jonte' stood on the same side as FACEIT 67e334a1 (jonte / jonte--) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Juice": {
+      "entity_id": "ae1be40f-a8f7-42c6-b568-a110bcc85ef3",
+      "handle": "juice",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'juice' stood on the same side as FACEIT ae1be40f (juice / juiiccee) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "K1ng": {
+      "entity_id": "2e4fcad5-e753-47c2-b242-ce54859ee09b",
+      "handle": "k1ng",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'k1ng' stood on the same side as FACEIT 2e4fcad5 (k1ng / k1ng_ow) in 13 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "KIVIS": {
+      "entity_id": "1ea17648-a903-4269-a4d7-aca78c3a7d56",
+      "handle": "KIVIS",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'KIVIS' stood on the same side as FACEIT 1ea17648 (KIVIS / KIVIS04) in 8 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "KNIFE": {
+      "entity_id": "bd7d5a35-03c8-45f8-8242-e3a63f5c33e7",
+      "handle": "knife",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'knife' stood on the same side as FACEIT bd7d5a35 (Knife222 / knife) in 19 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "KORZ": {
+      "entity_id": "526fd1e1-c48f-45f6-8789-813a93e61369",
+      "handle": "KORZ",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'KORZ' stood on the same side as FACEIT 526fd1e1 (KORZ / KORZ2) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "KSAA": {
+      "entity_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+      "handle": "KSAA",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'KSAA' stood on the same side as FACEIT 92695183 (KSAA / KSAA0) in 46 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Kai": {
+      "entity_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+      "handle": "Kai",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Kai' stood on the same side as FACEIT b7a281ed (Kai / yung_kai) in 30 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Karmez": {
+      "entity_id": "a66f8843-56d7-49a7-94a1-44b3593bcd0e",
+      "handle": "Karmez",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Karmez' stood on the same side as FACEIT a66f8843 (karmez / karmez7) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Kellan": {
+      "entity_id": "19298c75-9d48-4dc5-9970-75509c11246c",
+      "handle": "Kellan",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Kellan' stood on the same side as FACEIT 19298c75 (Kellan / Kellannn) in 30 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Kellex": {
+      "entity_id": "b273a710-800f-4638-9858-461d81ac55b9",
+      "handle": "Kellex",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Kellex' stood on the same side as FACEIT b273a710 (kellemanden / kellex) in 27 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Ken": {
+      "entity_id": "0c9b85a6-9818-4ab8-a19f-932ae80ec814",
+      "handle": "Ken",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Ken' stood on the same side as FACEIT 0c9b85a6 (Ken / KenSoo) in 16 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Kevster": {
+      "entity_id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+      "handle": "kevster",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'kevster' stood on the same side as FACEIT ef80a7e0 (kevsteer / kevster) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Khenail": {
+      "entity_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+      "handle": "Khenail",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Khenail' stood on the same side as FACEIT 9d58d137 (Khenail) in 36 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "KiWii": {
+      "entity_id": "31417126-50e7-486e-b00d-15e61a110ab8",
+      "handle": "KiWii",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'KiWii' stood on the same side as FACEIT 31417126 (KiWii / KiWii__) in 12 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Kio": {
+      "entity_id": "0ce0d2fa-d449-4f39-ab92-0e69f7598904",
+      "handle": "Kio",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Kio' stood on the same side as FACEIT 0ce0d2fa (Kiioo0 / Kio) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Kronik": {
+      "entity_id": "1daf63bc-70f3-479f-b030-b2699fbbe118",
+      "handle": "Kronik",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Kronik' stood on the same side as FACEIT 1daf63bc (Kronik / KronikFPS) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "KroxZ": {
+      "entity_id": "06481b72-092d-43c3-a686-13c92f03616f",
+      "handle": "KroxZ",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'KroxZ' stood on the same side as FACEIT 06481b72 (KroxZ) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "LBBD7": {
+      "entity_id": "462c6480-274d-48a6-a5cf-d29d3b2dd786",
+      "handle": "LBBD7",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'LBBD7' stood on the same side as FACEIT 462c6480 (LBBD7) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Landon": {
+      "entity_id": "a332d27e-fe19-4077-89f8-27391a581460",
+      "handle": "Landon",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Landon' stood on the same side as FACEIT a332d27e (Landon / LandonOW) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Lars": {
+      "entity_id": "2f42ce49-7f74-41ef-9867-998f0e714735",
+      "handle": "Lars",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Lars' stood on the same side as FACEIT 2f42ce49 (IaFish / Lars) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Lep": {
+      "entity_id": "f2359218-1265-472c-8fbc-9c91183766f0",
+      "handle": "Lep",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Lep' stood on the same side as FACEIT f2359218 (Lep / Leptx) in 33 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Lethal": {
+      "entity_id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+      "handle": "Lethal",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Lethal' stood on the same side as FACEIT 9adfc2f2 (IHaveLethal / Lethal) in 42 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Lukemino": {
+      "entity_id": "482cb7a6-687c-47a4-bb07-6fd02e604ed3",
+      "handle": "Lukemino",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Lukemino' stood on the same side as FACEIT 482cb7a6 (Lukemino) in 32 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Mag": {
+      "entity_id": "65d1a22d-63a6-48c6-9fc9-bf26c0209018",
+      "handle": "Mag",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Mag' stood on the same side as FACEIT 65d1a22d (MAG200 / Mag) in 17 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Majin": {
+      "entity_id": "dd6c03b0-7c8b-4004-b11d-ccb439d65cb5",
+      "handle": "Majin",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Majin' stood on the same side as FACEIT dd6c03b0 (MajinOW / Majīn) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Natsuki": {
+      "entity_id": "62c18bf3-9135-498d-afb0-35321017496b",
+      "handle": "Natsuki",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Natsuki' stood on the same side as FACEIT 62c18bf3 (Natsuki / NatsukiOW) in 12 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "NenWhy": {
+      "entity_id": "1f27cd97-1764-475c-9a30-eb95b4a8fbdf",
+      "handle": "NenWhy",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'NenWhy' stood on the same side as FACEIT 1f27cd97 (NenWhy) in 34 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Nvm": {
+      "entity_id": "3bf8f1b0-e1d7-43b9-a405-41b5fcdf685f",
+      "handle": "nvm",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'nvm' stood on the same side as FACEIT 3bf8f1b0 (nvm / nvm1_) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "One": {
+      "entity_id": "23313d5a-4db0-4e8a-890b-c04cf7ff43fe",
+      "handle": "One",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'One' stood on the same side as FACEIT 23313d5a (One / m5rbh2) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "PGE": {
+      "entity_id": "b0c2a65a-0ed7-477e-8f0f-525746469c6e",
+      "handle": "PGE",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'PGE' stood on the same side as FACEIT b0c2a65a (pge / pge4) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Painkiller": {
+      "entity_id": "23e964b7-0899-48c5-b13b-8e7c4686e817",
+      "handle": "Painkiller",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Painkiller' stood on the same side as FACEIT 23e964b7 (Painkiller / Painkilllr) in 26 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Pak": {
+      "entity_id": "a9d3c8c4-f562-4009-b4f5-ba60a0523102",
+      "handle": "PAK",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'PAK' stood on the same side as FACEIT a9d3c8c4 (PAK / Pak_Oww) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Pdk": {
+      "entity_id": "53a87c13-870c-4c2f-bde1-c96a67df37c9",
+      "handle": "pdk",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'pdk' stood on the same side as FACEIT 53a87c13 (Pdk / pdk / pdkk_) in 24 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Peace": {
+      "entity_id": "112a9fa6-cd16-4e54-9db7-6a012cc8db39",
+      "handle": "peace",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'peace' stood on the same side as FACEIT 112a9fa6 (peace / peace7k) in 20 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Pela": {
+      "entity_id": "7ec3e4c6-6af0-4d3c-b08c-3b05ec1b1271",
+      "handle": "pela",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'pela' stood on the same side as FACEIT 7ec3e4c6 (pela / pela_OW) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Prota": {
+      "entity_id": "f54df4d9-d608-405b-9396-44a4351c2dd8",
+      "handle": "Prota",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Prota' stood on the same side as FACEIT f54df4d9 (Prota / ProtaFPS) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Qlm": {
+      "entity_id": "87034ecc-df9b-4a27-90b9-0f5c68376307",
+      "handle": "Qlm",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Qlm' stood on the same side as FACEIT 87034ecc (Qlm / Qlmaz) in 11 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Quartz": {
+      "entity_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+      "handle": "Quartz",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Quartz' stood on the same side as FACEIT 9adef42b (Quartz / Quartz03) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Rajeem": {
+      "entity_id": "5d4fdbd0-8fee-4f40-93a7-09fd4c4743ff",
+      "handle": "Rajeem",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Rajeem' stood on the same side as FACEIT 5d4fdbd0 (Rajeem) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Redex": {
+      "entity_id": "bf69c0b9-f068-41bf-a0b9-c88aa083edbb",
+      "handle": "redex",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'redex' stood on the same side as FACEIT bf69c0b9 (RedexLCO / redex) in 13 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Renko": {
+      "entity_id": "e9e2c1d1-77d9-4268-b06c-6bd9e6edf1b6",
+      "handle": "Renko",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Renko' stood on the same side as FACEIT e9e2c1d1 (Renko / renko_ow) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Reyzr": {
+      "entity_id": "bcd9737d-3295-450d-a20e-94d8815c6d2f",
+      "handle": "rzr",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'rzr' stood on the same side as FACEIT bcd9737d (Reyzr / ReyzrOW / rzr) in 13 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "RhynO": {
+      "entity_id": "e2ab56e6-ca09-4d4c-8254-73a5cbe818e6",
+      "handle": "RhynO",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'RhynO' stood on the same side as FACEIT e2ab56e6 (RhynO / RhynO_OW) in 20 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Rokit": {
+      "entity_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+      "handle": "Rokit",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Rokit' stood on the same side as FACEIT 2d50f1c4 (Rokit / Rokit600) in 29 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Rupal": {
+      "entity_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+      "handle": "Rupal",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Rupal' stood on the same side as FACEIT ba42f8ef (Rupal / rupalzaman) in 29 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Ryan_(American_player)": {
+      "entity_id": "a6f8e69e-9ca1-4466-809e-ca6ab1e5879d",
+      "handle": "Ryan",
+      "real_name": "American player",
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Ryan' stood on the same side as FACEIT a6f8e69e (-Ryyan- / Ryan) in 22 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "S9mm": {
+      "entity_id": "ab75ab00-fce8-4c90-ae97-f778e33c168b",
+      "handle": "s9mm",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 's9mm' stood on the same side as FACEIT ab75ab00 (s9mm / s9mm9) in 1 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "SHockWave": {
+      "entity_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+      "handle": "sHockWave",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'sHockWave' stood on the same side as FACEIT 7e9fe5f8 (sHockWave / sHockWaveOW) in 30 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "SNOWDR0P": {
+      "entity_id": "06d6fa17-9964-4414-b8e2-e0e9507edd6c",
+      "handle": "SNOWDR0P",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'SNOWDR0P' stood on the same side as FACEIT 06d6fa17 (SNOWDR0P / snwdr0p) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Sauna": {
+      "entity_id": "32755ac6-08d4-4173-a762-1263ee33465f",
+      "handle": "Sauna",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Sauna' stood on the same side as FACEIT 32755ac6 (Sauna) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Scissors": {
+      "entity_id": "8429e08f-a227-4d3d-859c-d7246a6f1394",
+      "handle": "Ƕscissors",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Ƕscissors' stood on the same side as FACEIT 8429e08f (Scissorssz / Ƕscissors) in 22 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Scraine": {
+      "entity_id": "0d288019-386c-44aa-ba5f-72740a021669",
+      "handle": "Scraine",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Scraine' stood on the same side as FACEIT 0d288019 (Scraine / scraine) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Scuffed": {
+      "entity_id": "1d7c1096-c876-426b-a89a-8be16b8c9092",
+      "handle": "scuffed",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'scuffed' stood on the same side as FACEIT 1d7c1096 (scuffed / scuffedhaha) in 30 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Scyle": {
+      "entity_id": "ad12d7b8-4843-4a95-a468-97e28901ce2b",
+      "handle": "Scyle",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Scyle' stood on the same side as FACEIT ad12d7b8 (Scyle) in 24 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Seeker": {
+      "entity_id": "826c2bd4-cb43-4b6c-90a9-21ee53b87bf9",
+      "handle": "seeker",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'seeker' stood on the same side as FACEIT 826c2bd4 (seeker / seekerow) in 27 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Seicoe": {
+      "entity_id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+      "handle": "Seicoe",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Seicoe' stood on the same side as FACEIT 016d21e3 (Seicoe / seic0e) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "SeonJun": {
+      "entity_id": "759bcdd9-e8e1-4492-95fa-77aca4cd84af",
+      "handle": "SeonJun",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'SeonJun' stood on the same side as FACEIT 759bcdd9 (CATCATCAT23 / SeonJun) in 12 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Simple": {
+      "entity_id": "635737a5-3456-43c5-aa74-d7ccb1a30da1",
+      "handle": "Simple",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Simple' stood on the same side as FACEIT 635737a5 (Simple / SimpleOW) in 43 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "SirMajed": {
+      "entity_id": "51bd468c-463e-43c9-be25-3d23803c3ee9",
+      "handle": "SirMajed",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'SirMajed' stood on the same side as FACEIT 51bd468c (SirMajed / sirmajed9) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Skairipa": {
+      "entity_id": "5fe6035f-0dd7-4003-abd2-392aef32351f",
+      "handle": "SKAI",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'SKAI' stood on the same side as FACEIT 5fe6035f (SKAI / Skairipa00) in 29 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Skytorr": {
+      "entity_id": "41d949e5-16eb-4ee1-ba62-c8906118c616",
+      "handle": "Skytorr",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Skytorr' stood on the same side as FACEIT 41d949e5 (skytorr) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Slowdive": {
+      "entity_id": "28f62de7-cba3-4d0c-825d-8b6c00c5ae1f",
+      "handle": "slowdive",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'slowdive' stood on the same side as FACEIT 28f62de7 (slowdive / slowdive0) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Sniper": {
+      "entity_id": "b529dff3-f4c1-485d-b070-32fda58883db",
+      "handle": "sniper",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'sniper' stood on the same side as FACEIT b529dff3 (Esc_DeadShot / sniper) in 13 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "SoOn": {
+      "entity_id": "9e1d3b6a-3b87-4640-97c0-22ed3791ff9c",
+      "handle": "SoOn",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'SoOn' stood on the same side as FACEIT 9e1d3b6a (SoOn) in 17 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Solo": {
+      "entity_id": "20749c49-35ad-42c4-a0c3-79efffdc321d",
+      "handle": "Solo",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Solo' stood on the same side as FACEIT 20749c49 (Solo / owSolo) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "SoloZen": {
+      "entity_id": "e0408964-2c60-4ae9-944e-516dcfc1c2ee",
+      "handle": "SoloZen",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'SoloZen' stood on the same side as FACEIT e0408964 (SoloZen) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Squid": {
+      "entity_id": "e9a591c4-f85f-4438-a7a7-72512a6666c8",
+      "handle": "squid",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'squid' stood on the same side as FACEIT e9a591c4 (squid / squid07) in 19 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Strebor": {
+      "entity_id": "5d70bdcd-a488-4a82-bd1e-ed1b2324e6c9",
+      "handle": "Strebor",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Strebor' stood on the same side as FACEIT 5d70bdcd (Strebor / Streborman) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Sugarfree": {
+      "entity_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+      "handle": "sugarfree",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'sugarfree' stood on the same side as FACEIT 58239fd5 (sug2rfree / sugarfree) in 43 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Sxj": {
+      "entity_id": "540be610-74a4-46f4-a63c-9e0497efda00",
+      "handle": "sxj",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'sxj' stood on the same side as FACEIT 540be610 (sxj / sxj_ow) in 12 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "TOPDRAGON": {
+      "entity_id": "81835e75-67cf-426c-90b5-70e537f4d9e6",
+      "handle": "TOPDRAGON",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'TOPDRAGON' stood on the same side as FACEIT 81835e75 (TOPDRAGON / TOPDRAGONow) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "TR33": {
+      "entity_id": "88cb75a1-b0ff-49c2-8046-11e744f2f5d8",
+      "handle": "TR33",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'TR33' stood on the same side as FACEIT 88cb75a1 (TR33 / TR33ow) in 40 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "TVNT": {
+      "entity_id": "b371a120-4be1-4677-aeee-81f5ebc80731",
+      "handle": "TVNT",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'TVNT' stood on the same side as FACEIT b371a120 (TVNT / TVNT_) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Taejong": {
+      "entity_id": "cc65de21-58d0-4534-81a2-7316a15cb2dd",
+      "handle": "Taejong",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Taejong' stood on the same side as FACEIT cc65de21 (Taejong / Taejong2) in 21 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Tama": {
+      "entity_id": "f74933e7-58c9-4efe-81b5-899079a64109",
+      "handle": "Tama",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Tama' stood on the same side as FACEIT f74933e7 (Tama / tamaow) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Teksol": {
+      "entity_id": "e5581905-11cb-4c88-9b2b-3ac80fe21097",
+      "handle": "teksol",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'teksol' stood on the same side as FACEIT e5581905 (teksol) in 5 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Tred": {
+      "entity_id": "2acfb6df-f298-4b92-8ab8-2141635f28e4",
+      "handle": "Tred",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Tred' stood on the same side as FACEIT 2acfb6df (TRED / Tred) in 37 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Twilight": {
+      "entity_id": "e350f779-9212-4716-b412-159c416f7c16",
+      "handle": "Twilight",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Twilight' stood on the same side as FACEIT e350f779 (Twilight / twilight0208) in 20 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "TwolzZ": {
+      "entity_id": "243f8468-6f3a-4607-b151-53da202fdd22",
+      "handle": "TwolzZ",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'TwolzZ' stood on the same side as FACEIT 243f8468 (Twolzz) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "UltraViolet": {
+      "entity_id": "43d39898-d853-4e75-b249-9b41d638a2b0",
+      "handle": "UltraViolet",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'UltraViolet' stood on the same side as FACEIT 43d39898 (UltraViolet / ultraviol3t) in 42 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "V1ctory": {
+      "entity_id": "b6fe4cb9-95b7-439c-a94e-d97d66d3e4fd",
+      "handle": "v1ctory",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'v1ctory' stood on the same side as FACEIT b6fe4cb9 (v1ctory / victoryfps) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Vega": {
+      "entity_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+      "handle": "Vega",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Vega' stood on the same side as FACEIT 80fd30f8 (Vega / VegaOW) in 40 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Vestola": {
+      "entity_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+      "handle": "Vestola",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Vestola' stood on the same side as FACEIT 1661fa93 (Vestola / vestola) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Viol2t": {
+      "entity_id": "172bb593-d71a-437b-8433-30087bca18c8",
+      "handle": "Viol2t",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Viol2t' stood on the same side as FACEIT 172bb593 (Viol2t / Viol2tOW) in 9 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Vision": {
+      "entity_id": "975d9b4f-6989-42c7-b474-5383da9839bd",
+      "handle": "Vision",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Vision' stood on the same side as FACEIT 975d9b4f (Vision / VisionLIVE) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "WMaimone": {
+      "entity_id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
+      "handle": "WMaimone",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'WMaimone' stood on the same side as FACEIT 731b1930 (WMaimone) in 29 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "WhoRU": {
+      "entity_id": "067301e8-d757-4439-815e-e8fdf653fa43",
+      "handle": "Whoru",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Whoru' stood on the same side as FACEIT 067301e8 (Whoru / Whoru01) in 8 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Willys07": {
+      "entity_id": "39cada54-4c21-4421-8bc5-baca66c525dc",
+      "handle": "Willys07",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Willys07' stood on the same side as FACEIT 39cada54 (Willys / Willys07) in 18 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Winter_(Lucy_Falmoe)": {
+      "entity_id": "816a0c83-eb86-43eb-8fb3-698bcce7c4be",
+      "handle": "Winter",
+      "real_name": "Lucy Falmoe",
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Winter' stood on the same side as FACEIT 816a0c83 (Winter / WinterOW) in 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Wub": {
+      "entity_id": "7606247c-6884-4a74-868b-da04417a66a3",
+      "handle": "wub",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'wub' stood on the same side as FACEIT 7606247c (wub / wubxii) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Xeriongdh": {
+      "entity_id": "e01e90ce-eb0a-4a94-a797-9a1e8d5539ed",
+      "handle": "Xeriongdh",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Xeriongdh' stood on the same side as FACEIT e01e90ce (Xerion / Xerion_gdh / Xeriongdh) in 32 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Xomba": {
+      "entity_id": "f55f084e-23ae-47a4-a3ba-efbda8194bd7",
+      "handle": "xomba",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'xomba' stood on the same side as FACEIT f55f084e (xomba / xombaow) in 35 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Xten": {
+      "entity_id": "b9e58b59-2c18-41f6-9297-3f8285fecf51",
+      "handle": "xten",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'xten' stood on the same side as FACEIT b9e58b59 (xten / xtenOW) in 28 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Xzodyal": {
+      "entity_id": "9609be75-e561-493f-b1f1-000c4517555a",
+      "handle": "xzodyal",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'xzodyal' stood on the same side as FACEIT 9609be75 (xzodyal) in 26 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Yoham": {
+      "entity_id": "d615be2c-19d1-49bf-a5f3-216377efb1cf",
+      "handle": "yoham",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'yoham' stood on the same side as FACEIT d615be2c (yoham / yoham_) in 10 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Youbi": {
+      "entity_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+      "handle": "Youbi",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Youbi' stood on the same side as FACEIT 9c435ffa (Youbi / Youbi1) in 38 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "ZERO": {
+      "entity_id": "ded7b307-74ba-4e6d-829f-5d5e837dc165",
+      "handle": "ZERO",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'ZERO' stood on the same side as FACEIT ded7b307 (ZERO / ZERO_0W) in 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "ZIYAD": {
+      "entity_id": "c2c17617-77ac-4f70-8529-59a2a910cb35",
+      "handle": "ZIYAD",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'ZIYAD' stood on the same side as FACEIT c2c17617 (ZIYAD / ZIYAD-OW) in 45 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Zeb": {
+      "entity_id": "eb37ecfe-626d-4280-9d9c-316a449eddcf",
+      "handle": "Zeb",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Zeb' stood on the same side as FACEIT eb37ecfe (Zeb / Zeb_ow) in 27 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Zeruhh": {
+      "entity_id": "58faa695-b501-4642-a4d9-0e4c2ed8526d",
+      "handle": "zeruhh",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'zeruhh' stood on the same side as FACEIT 58faa695 (zeruhh) in 44 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Zorrow": {
+      "entity_id": "27150b56-fd01-4385-84ee-11798be33cfe",
+      "handle": "Zorrow",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Zorrow' stood on the same side as FACEIT 27150b56 (Zorrow / Zorrow_ow) in 22 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Zox": {
+      "entity_id": "a1fb03ff-9977-4d0b-b4bd-82fa6085f0ed",
+      "handle": "zox",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'zox' stood on the same side as FACEIT a1fb03ff (zox / zox1509 / zox_ow) in 14 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Zydra": {
+      "entity_id": "1a3153d4-825b-4c8f-bdd6-f3d6d826280c",
+      "handle": "Zydra",
+      "real_name": null,
+      "note": "accepted strong proposal (owner, 2026-10-02): 'Zydra' stood on the same side as FACEIT 1a3153d4 (Zydra / zydra_ow) in 3 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Zzz": {
+      "entity_id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
+      "handle": "zzz",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT nickname z_ow, in-game name zss; no FACEIT name on his side equalled 'zzz'. Displayed as ZZZ; zss and z_ow stay searchable.",
+      "display": "ZZZ",
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    }
+  },
+  "rejections": {}
+}

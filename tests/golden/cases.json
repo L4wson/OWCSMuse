@@ -59,11 +59,11 @@
      "role": "subject",
      "type": "player",
      "id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
-     "name": "zss"
+     "name": "ZZZ"
     },
     "rows": [
      {
-      "nickname": "zss",
+      "nickname": "ZZZ",
       "maps": 17,
       "map_wins": 7,
       "map_losses": 10,
@@ -72,7 +72,7 @@
      }
     ]
    },
-   "derivation": "Same derivation: 17 maps over 5 series. FACEIT nickname is z_ow; in-game name zss.",
+   "derivation": "Same derivation: 17 maps over 5 series. FACEIT nickname is z_ow; in-game name ZZZ.",
    "status": "confirmed"
   },
   {
@@ -222,43 +222,44 @@
   },
   {
    "id": "G10",
-   "title": "SpaceStation Gaming's record (NA only)",
+   "title": "SpaceStation Gaming's record: one organisation, EMEA in 2024 then NA",
    "kind": "exact",
-   "regression": "region bug: SpaceStation Gaming merged with the EMEA SpaceStation",
+   "regression": "region bug: SpaceStation Gaming merged with the EMEA SpaceStation; reversed by the owner's 2026-10-02 decision",
    "question": "SpaceStation Gaming record",
    "expect": {
     "status": "ok",
     "entity": {
      "role": "subject",
-     "type": "team",
-     "id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
+     "type": "org",
+     "id": "spacestation-gaming",
      "name": "SpaceStation Gaming"
     },
     "rows": [
      {
       "team": "SpaceStation Gaming",
-      "matches": 5,
-      "wins": 4,
+      "matches": 7,
+      "wins": 6,
       "losses": 1,
-      "map_wins": 14,
-      "map_losses": 7,
-      "maps": 21
+      "map_wins": 20,
+      "map_losses": 9,
+      "maps": 29
      }
     ],
     "evidence": {
      "regions_only": [
+      "emea",
       "na"
      ]
     }
    },
-   "derivation": "5 NA series. The golden set also holds two 2024 EMEA series of 'SpaceStation' (team a359db61), which are a different team and must not be added.",
+   "derivation": "5 NA series of team 6ddc0431 plus the two 2024 EMEA series of 'SpaceStation' (team a359db61): the owner decided on 2026-10-02 that these are one organisation (SSG played EMEA in 2024 and became an NA partner team in 2025), each team id mapped over its own era. Until then the two were held apart as a wrong cross-region merge; the region check now carries this org as an owner-decided exception.",
    "status": "confirmed"
   },
   {
    "id": "G11",
    "title": "Twisted Minds vs Ex Oblivione, series grain",
    "kind": "exact",
-   "regression": null,
+   "regression": "date-bounded team-to-org mapping (Stage 3): 'Ex Oblivione' is searchable as the team id's own 2024 era, and a hit on it never puts those series into Virtus pro's record",
    "question": "Twisted Minds series record against Ex Oblivione",
    "expect": {
     "status": "ok",
@@ -271,8 +272,7 @@
     ]
    },
    "derivation": "2 series between the two team ids in the golden set (both 3-1 to Twisted Minds). Team id bb5dd404 was 'Ex Oblivione' in 2024 and was later acquired into Virtus pro. The name must be searchable and find those 2024 series, which are Ex Oblivione's, not Virtus pro's.",
-   "status": "confirmed",
-   "known_bug": "'Ex Oblivione' matches nothing: an org's searchable history holds each team id's current name only, not its earlier ones (team_names), so the name is unsearchable. Its search must work, but a search hit must not put its pre-rename series into Virtus pro's record: that needs date-bounded team-to-org mapping (Stage 3)"
+   "status": "confirmed"
   },
   {
    "id": "G12",
@@ -284,19 +284,19 @@
     "status": "ok",
     "entity": {
      "role": "subject",
-     "type": "team",
-     "id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
+     "type": "org",
+     "id": "spacestation-gaming",
      "name": "SpaceStation Gaming"
     },
     "rows": [
      {
       "team": "SpaceStation Gaming",
-      "matches": 5,
-      "wins": 4,
+      "matches": 7,
+      "wins": 6,
       "losses": 1,
-      "map_wins": 14,
-      "map_losses": 7,
-      "maps": 21
+      "map_wins": 20,
+      "map_losses": 9,
+      "maps": 29
      }
     ]
    },
@@ -307,7 +307,7 @@
    "id": "G13",
    "title": "'VP' resolves to Virtus pro; its record excludes the Ex Oblivione era",
    "kind": "exact",
-   "regression": "alias/org: VP resolves to the merged Virtus pro org",
+   "regression": "alias/org: VP resolves to the merged Virtus pro org; date-bounded team-to-org mapping (Stage 3): bb5dd404 is Virtus pro from 2025-01-01 only, so its Ex Oblivione era (3 series) stays out of the record",
    "question": "VP record",
    "expect": {
     "status": "ok",
@@ -328,8 +328,7 @@
     ]
    },
    "derivation": "The org Virtus pro holds two team ids, c02a9899 (2026) and bb5dd404. FACEIT named bb5dd404 'Ex Oblivione' in 2024 and 'Virtuspro' in 2025. Virtus pro acquired the Ex Oblivione roster, and roster movement is not org identity, so the 3 Ex Oblivione-era series are NOT Virtus pro's: 2 series remain, 2 won, series score 7-4.",
-   "status": "confirmed",
-   "known_bug": "team-to-org mapping is not date-bounded: bb5dd404 maps to Virtus pro for all time, so the org's record includes 3 series from its Ex Oblivione era (5 series, not 2). Fix is date-bounded team-to-org mapping (Stage 3); the alias half of this case is G26"
+   "status": "confirmed"
   },
   {
    "id": "G26",
@@ -794,6 +793,32 @@
     ]
    },
    "derivation": "'OWCS 2026 NA Stage 2 Playoffs' is FACEIT's 'S9 NA OWCS Central - Playoffs'. Dallas Fuel played 2 series there (2-0, maps 7-2); its 1 regular-season series (0-1) is the same stage and must not be counted.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G31",
+   "title": "A player-stat question for a results-only region is refused for that reason, with a working alternative",
+   "kind": "invariant",
+   "regression": "Stage 3 step 4: capability, not just coverage",
+   "question": "who had the most eliminations in korea",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "results_only",
+    "rows_only_players": [],
+    "alternative": {
+     "question_template": "who had the most eliminations",
+     "seasons_with_stat": [
+      null
+     ],
+     "then_rows": [
+      {
+       "nickname": "Lethal",
+       "total": 634
+      }
+     ]
+    }
+   },
+   "derivation": "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with zero or some rows. It must offer the same question without the region, and that question must answer with the independently-derived all-seasons eliminations leader (634 eliminations).",
    "status": "confirmed"
   }
  ]

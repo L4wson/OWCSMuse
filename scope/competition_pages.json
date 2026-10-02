@@ -126,7 +126,10 @@
     "33781289-61ea-43d5-ac79-1af825dcb291": {
       "name": "Dreamhack Dallas",
       "display_name": "OWCS 2024 Dreamhack Dallas",
-      "note": "LAN event with teams from every OWCS region (EMEA, NA, Korea). Name confirmed by the owner. No Liquipedia page supplied."
+      "page": "Overwatch_Champions_Series/2024/Major",
+      "source": "owner",
+      "verified": true,
+      "note": "LAN event with teams from every OWCS region (EMEA, NA, Korea). Name confirmed by the owner. Page confirmed by the owner on 2026-10-01 (https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major), no probe sent; it is not a stage page, so the display name stays the owner's. The fetch is driven by scope/liquipedia_map.json, which carries the same page."
     },
     "65671857-160c-43b5-af82-a4d9504f8a56": {
       "name": "S8 EMEA OWCS Relegation S9 - Season 9",

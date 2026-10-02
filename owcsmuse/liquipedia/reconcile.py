@@ -32,6 +32,8 @@ from .matches import LPMatch
 from .model import FaceitSide, Resolve, orient
 
 EXACT, STRONG, AMBIGUOUS, UNMATCHED = "exact", "strong", "ambiguous", "unmatched"
+# Disagreements that annotate an exact link without downgrading it.
+SOFT_DISAGREEMENTS = frozenset({"date"})
 
 
 @dataclass(frozen=True)
@@ -102,7 +104,7 @@ def compare(lp: LPMatch, f: FaceitSide, resolve: Optional[Resolve], comps: Optio
         out.append({"field": field_, "liquipedia": lp_v, "faceit": f_v, **extra})
 
     if resolve:
-        a, b = resolve(lp.team1, lp.region), resolve(lp.team2, lp.region)
+        a, b = resolve(lp.team1, lp.region, lp.played_at), resolve(lp.team2, lp.region, lp.played_at)
         if a and b and {a[0], b[0]} != {f.org1, f.org2}:
             add("teams", f"{lp.team1} / {lp.team2}", f"{f.name1} / {f.name2}",
                 note="the two records name different teams: the page's FACEIT id may be wrong")
@@ -178,10 +180,28 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
         else:
             f = by_id[fid]
             flip, basis = orient(lp, f, resolve)
-            link = Link(lp, EXACT, fid, basis="FACEIT match id in links.faceit",
-                        evidence={"orientation": basis},
-                        disagreements=compare(lp, f, resolve, comps_of_page.get(lp.pagename), window, flip, basis))
-            taken[fid] = link
+            dis = compare(lp, f, resolve, comps_of_page.get(lp.pagename), window, flip, basis)
+            hard = sorted({d["field"] for d in dis} - SOFT_DISAGREEMENTS)
+            if hard:
+                # The id says one thing and the records another: a wrong id looks exactly like this, and a wrong link
+                # silently gives one team another team's result. Ambiguous, with the id as the one candidate, until a
+                # person confirms or rejects it. A date gap alone is expected (FACEIT's result_only times are entry
+                # times) and does not downgrade.
+                link = Link(lp, AMBIGUOUS, basis=f"the page's FACEIT id disagrees with the FACEIT record on {', '.join(hard)}",
+                            candidates=[{"faceit_id": fid, "disagrees_on": hard}],
+                            evidence={"kind": "exact_id_disagrees", "orientation": basis}, disagreements=dis)
+                dec = decisions.get(lp.objectname) or decisions.get(f"faceit:{fid}")   # a decision may name the FACEIT id
+                if dec is not None:
+                    want = dec.get("faceit_match_id")
+                    if want and want in by_id and want not in taken:
+                        link.decision, link.faceit_id = "confirmed", want
+                        taken[want] = link
+                    elif not want:
+                        link.decision = "rejected"
+            else:
+                link = Link(lp, EXACT, fid, basis="FACEIT match id in links.faceit", evidence={"orientation": basis},
+                            disagreements=dis)
+                taken[fid] = link
             result.links.append(link)
 
     # ---- tiers 2-4: records with no id, against the FACEIT matches nothing has claimed
@@ -190,7 +210,7 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
     partial: dict[str, list[dict[str, Any]]] = {}
     unresolved: dict[str, list[str]] = {}
     for lp in idless:
-        a, b = resolve(lp.team1, lp.region), resolve(lp.team2, lp.region)
+        a, b = resolve(lp.team1, lp.region, lp.played_at), resolve(lp.team2, lp.region, lp.played_at)
         if not (a and b) or a[0] == b[0]:
             unresolved[lp.objectname] = [n for n, r in ((lp.team1, a), (lp.team2, b)) if not r]
             continue
@@ -239,7 +259,7 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
     for lp in idless:
         n = lp.objectname
         dec = decisions.get(n)
-        provisional = any((resolve(t, lp.region) or ("", ""))[1] == "proposed" for t in (lp.team1, lp.team2))
+        provisional = any((resolve(t, lp.region, lp.played_at) or ("", ""))[1] == "proposed" for t in (lp.team1, lp.team2))
         if n in unresolved:
             link = Link(lp, UNMATCHED, basis="team name not mapped: " + ", ".join(unresolved[n]),
                         evidence={"kind": "team_unmapped", "names": unresolved[n]})
@@ -254,7 +274,7 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
             link = Link(lp, STRONG, f.match_id, basis=basis, provisional=provisional,
                         evidence={"minutes_from_liquipedia": cand["minutes_from_liquipedia"]},
                         disagreements=compare(lp, f, resolve, comps_of_page.get(lp.pagename), window,
-                                              f.org1 != (resolve(lp.team1, lp.region) or ("", ""))[0], "orgs"))
+                                              f.org1 != (resolve(lp.team1, lp.region, lp.played_at) or ("", ""))[0], "orgs"))
             taken[f.match_id] = link
         elif strict[n]:
             cands = [c for _, c in strict[n]]

@@ -235,7 +235,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         sql = f"SELECT {select} FROM {table} t{where} GROUP BY t.org_key, t.display_name"
         if per_team:
-            sql += f" HAVING sum(t.matches) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, matches DESC LIMIT %s"
+            sql += f" HAVING sum(t.matches) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, matches DESC, t.org_key LIMIT %s"
             params += [q.min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"team {'leaderboard' if per_team else 'record'} ({q.metric})",
                         coverage_season=f.season, coverage_championship=single_champ)
@@ -271,7 +271,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
                       "round(avg(avg_duration_seconds)) AS avg_duration_seconds")
             table, order_key = "agg_map_modes", "maps"
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-        sql = f"SELECT {select} FROM {table}{where} GROUP BY {group} HAVING sum(maps) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC LIMIT %s"
+        sql = f"SELECT {select} FROM {table}{where} GROUP BY {group} HAVING sum(maps) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC, {group} LIMIT %s"
         params += [q.min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"{q.entity} breakdown ({q.metric})", coverage_stat=stat,
                         coverage_season=f.season, coverage_championship=single_champ)
@@ -296,10 +296,10 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
                f"sum(a.maps_with_{col}) AS player_map_rows, "
                f"round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 1) AS avg_per_player_map, "
                f"array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-               f"FROM agg_player_stats a LEFT JOIN team_identity ti ON ti.org_key = a.org_key{where} "
+               f"FROM agg_player_stats a LEFT JOIN identity_keys ti ON ti.org_key = a.org_key{where} "
                f"GROUP BY a.org_key, ti.display_name")
         if q.intent == "leaderboard":
-            sql += f" HAVING sum(a.maps_with_{col}) >= %s ORDER BY {'avg_per_player_map' if q.aggregation == 'avg_per_map' else 'total'} {_dir(q.sort)} NULLS LAST LIMIT %s"
+            sql += f" HAVING sum(a.maps_with_{col}) >= %s ORDER BY {'avg_per_player_map' if q.aggregation == 'avg_per_map' else 'total'} {_dir(q.sort)} NULLS LAST, a.org_key LIMIT %s"
             params += [q.min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"team {stat}", coverage_stat=stat, coverage_season=f.season,
                         coverage_championship=single_champ, sample_columns=("player_map_rows",))
@@ -322,23 +322,23 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         if f.role:
             # fact_player_maps has role but no pre-aggregated sums; the same
             # shape, computed from the raw rows instead of agg_player_stats.
-            sql = ("SELECT fp.player_id, player_display_name(p.nickname, p.game_player_name) AS nickname, count(*) AS maps, count(*) FILTER (WHERE fp.map_won) AS map_wins, "
+            sql = ("SELECT fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, count(*) AS maps, count(*) FILTER (WHERE fp.map_won) AS map_wins, "
                    "count(*) FILTER (WHERE NOT fp.map_won AND NOT fp.map_drawn) AS map_losses, "
                    "round(100.0 * count(*) FILTER (WHERE fp.map_won) / nullif(count(*), 0), 1) AS map_win_pct, "
                    "sum(fp.eliminations) AS eliminations, sum(fp.deaths) AS deaths, "
                    "round(sum(fp.eliminations)::numeric / nullif(sum(fp.deaths), 0), 2) AS kd_ratio, "
                    "array_agg(DISTINCT fp.season ORDER BY fp.season) AS seasons "
-                   f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id{where} GROUP BY fp.player_id, player_display_name(p.nickname, p.game_player_name)")
+                   f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id{where} GROUP BY fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name)")
         else:
             # No sum(a.matches) here: the aggregate is grouped per map and mode, so a
             # series would be counted once per map played in it.
-            sql = ("SELECT a.player_id, player_display_name(p.nickname, p.game_player_name) AS nickname, sum(a.maps) AS maps, sum(a.maps_won) AS map_wins, "
+            sql = ("SELECT a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, sum(a.maps) AS maps, sum(a.maps_won) AS map_wins, "
                    "sum(a.maps) - sum(a.maps_won) - sum(a.maps_drawn) AS map_losses, "
                    "round(100.0 * sum(a.maps_won) / nullif(sum(a.maps), 0), 1) AS map_win_pct, "
                    "sum(a.sum_eliminations) AS eliminations, sum(a.sum_deaths) AS deaths, "
                    "round(sum(a.sum_eliminations)::numeric / nullif(sum(a.sum_deaths), 0), 2) AS kd_ratio, "
                    "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-                   f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, player_display_name(p.nickname, p.game_player_name)")
+                   f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name)")
         order_key = {"kd_ratio": "kd_ratio", "maps": "maps", "matches": "matches", "map_wins": "map_wins", "map_losses": "map_losses",
                      "map_win_rate": "map_win_pct", "wins": "map_wins", "losses": "map_losses"}[q.metric]
         if q.intent == "leaderboard":
@@ -373,18 +373,18 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
             _where(clauses, params, f"{alias}.game_mode", v.mode_name)
             _where(clauses, params, f"{alias}.role", f.role)
             if has_role:
-                sql = (f"SELECT fp.player_id, player_display_name(p.nickname, p.game_player_name) AS nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "
+                sql = (f"SELECT fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "
                        f"round(100.0 * count(fp.{col}) / nullif(count(*), 0), 1) AS coverage_pct, "
                        f"sum(fp.{col}) AS total, round(sum(fp.{col}) / nullif(count(fp.{col}), 0), 2) AS avg_per_map, "
                        "array_agg(DISTINCT fp.season ORDER BY fp.season) AS seasons "
                        f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id "
-                       f"WHERE {' AND '.join(clauses)} GROUP BY fp.player_id, player_display_name(p.nickname, p.game_player_name)")
+                       f"WHERE {' AND '.join(clauses)} GROUP BY fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name)")
             else:
-                sql = (f"SELECT a.player_id, player_display_name(p.nickname, p.game_player_name) AS nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
+                sql = (f"SELECT a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
                        f"round(100.0 * sum(a.maps_with_{col}) / nullif(sum(a.maps), 0), 1) AS coverage_pct, "
                        f"sum(a.sum_{col}) AS total, round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 2) AS avg_per_map, "
                        "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-                       f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id WHERE {' AND '.join(clauses)} GROUP BY a.player_id, player_display_name(p.nickname, p.game_player_name)")
+                       f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id WHERE {' AND '.join(clauses)} GROUP BY a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name)")
         else:
             clauses, params = ["l.player_id = %s", "l.stat_key = %s"], [r.player_id, stat]
             _where(clauses, params, "l.season", f.season)
@@ -394,13 +394,13 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
             _where(s_clauses, s_params, "s.championship_id", champ)
             sql = ("WITH played AS (SELECT s.player_id, sum(s.maps) AS maps_played FROM agg_player_stats s WHERE "
                    + " AND ".join(s_clauses) + " GROUP BY s.player_id) "
-                   "SELECT l.player_id, player_display_name(p.nickname, p.game_player_name) AS nickname, sum(l.maps_with_stat) AS maps_with_stat, max(played.maps_played) AS maps_played, "
+                   "SELECT l.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, sum(l.maps_with_stat) AS maps_with_stat, max(played.maps_played) AS maps_played, "
                    "round(100.0 * sum(l.maps_with_stat) / nullif(max(played.maps_played), 0), 1) AS coverage_pct, "
                    "sum(l.total) AS total, round(sum(l.total) / nullif(sum(l.maps_with_stat), 0), 2) AS avg_per_map, "
                    "min(l.min_per_map) AS min_per_map, max(l.max_per_map) AS max_per_map, "
                    "array_agg(DISTINCT l.season ORDER BY l.season) AS seasons "
                    "FROM agg_player_stat_long l JOIN players p ON p.player_id = l.player_id "
-                   "LEFT JOIN played ON played.player_id = l.player_id WHERE " + " AND ".join(clauses) + " GROUP BY l.player_id, player_display_name(p.nickname, p.game_player_name)")
+                   "LEFT JOIN played ON played.player_id = l.player_id WHERE " + " AND ".join(clauses) + " GROUP BY l.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name)")
             params = s_params + params  # the CTE's placeholders come first in the statement
         return Compiled(sql=sql, params=params, description=f"{stat} for one player", coverage_stat=stat,
                         coverage_season=f.season, coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
@@ -447,18 +447,18 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
     _where(clauses, params, f"{alias}.role", f.role)
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
     if has_role:
-        sql = (f"SELECT fp.player_id, player_display_name(p.nickname, p.game_player_name) AS nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "
+        sql = (f"SELECT fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "
                f"round(100.0 * count(fp.{col}) / nullif(count(*), 0), 1) AS coverage_pct, "
                f"sum(fp.{col}) AS total, round(sum(fp.{col}) / nullif(count(fp.{col}), 0), 2) AS avg_per_map, "
                "array_agg(DISTINCT fp.season ORDER BY fp.season) AS seasons "
-               f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id{where} GROUP BY fp.player_id, player_display_name(p.nickname, p.game_player_name) "
+               f"FROM fact_player_maps fp JOIN players p ON p.player_id = fp.player_id{where} GROUP BY fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) "
                f"HAVING count(fp.{col}) >= %s ORDER BY {order_expr} {_dir(q.sort)} NULLS LAST, maps_with_stat DESC LIMIT %s")
     else:
-        sql = (f"SELECT a.player_id, player_display_name(p.nickname, p.game_player_name) AS nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
+        sql = (f"SELECT a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, sum(a.maps_with_{col}) AS maps_with_stat, sum(a.maps) AS maps_played, "
                f"round(100.0 * sum(a.maps_with_{col}) / nullif(sum(a.maps), 0), 1) AS coverage_pct, "
                f"sum(a.sum_{col}) AS total, round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 2) AS avg_per_map, "
                "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
-               f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, player_display_name(p.nickname, p.game_player_name) "
+               f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) "
                f"HAVING sum(a.maps_with_{col}) >= %s ORDER BY {order_expr} {_dir(q.sort)} NULLS LAST, maps_with_stat DESC LIMIT %s")
     params += [q.min_maps, q.limit]
     return Compiled(sql=sql, params=params, description=f"{stat} leaderboard (sliced)" + (f" ({f.role})" if f.role else ""),

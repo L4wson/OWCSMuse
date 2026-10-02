@@ -36,11 +36,15 @@ jobs:
       - run: pytest -q
 
   integration:
-    name: database tests
+    name: database tests (postgres ${{ matrix.postgres }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres: [16, 17]   # 17 is what Supabase runs; 16 is docker-compose and the dev default
     services:
       postgres:
-        image: postgres:16
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs
@@ -62,11 +66,15 @@ jobs:
       - run: pytest -q -m "not golden"
 
   golden:
-    name: golden answers
+    name: golden answers (postgres ${{ matrix.postgres }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres: [16, 17]   # 17 is what Supabase runs; 16 is docker-compose and the dev default
     services:
       postgres:
-        image: postgres:16
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs
@@ -108,11 +116,15 @@ jobs:
       - run: npm run build
 
   consistency:
-    name: consistency checks
+    name: consistency checks (postgres ${{ matrix.postgres }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres: [16, 17]   # 17 is what Supabase runs; 16 is docker-compose and the dev default
     services:
       postgres:
-        image: postgres:16
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs

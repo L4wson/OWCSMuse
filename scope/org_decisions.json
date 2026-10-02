@@ -1,6 +1,39 @@
 {
-  "note": "Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it belongs to. A team id absent from this file stays unmapped and is queryable as itself. `rejections` are pairs that were reviewed and turned down; they are never proposed again. Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`.",
+  "note": "Reviewed org identity. Keys under `decisions` are FACEIT team ids; each maps to the org it belongs to, over [valid_from, valid_to) when those are set (ISO 8601; absent = for all time). Outside its window a team id is itself, by the name it carried then. A team id whose names are several organisations' eras carries one mapping per era under `windows`. A team id absent from this file stays unmapped and is queryable as itself. `rejections` are pairs that were reviewed and turned down; they are never proposed again. Edit by hand or with `python -m owcsmuse orgs decide` / `orgs reject`.",
   "decisions": {
+    "75516399-4c1d-40fc-bb46-a887edadc5a2": {
+      "org_id": "1234",
+      "org_name": "1234",
+      "team_name": "1234",
+      "note": "Anyones Legend dropped the roster on 2026-05-25; it continued as '1234'. A roster drop: the organisation dropped the roster, which continued under the new name on the same team id. The overlapping sighting dates are a FACEIT artifact, not an alias. Window from the first sighting of the new name; open-ended, so later sightings of the old name on this id fall in this era (to be confirmed per match on production).",
+      "evidence": [
+        "decided by the project owner (Stage 3 window review, 2026-10-01)"
+      ],
+      "valid_from_name": "1234",
+      "decided_at": "2026-10-01T23:15:38+00:00"
+    },
+    "cb90edf6-60cb-4f73-8172-bf944729a114": {
+      "org_id": "1dipv100gorilla",
+      "org_name": "1DIPv100GORILLA",
+      "team_name": "1DIPv100GORILLA",
+      "note": "Quick Esports' roster played as '1DIPv100GORILLA' from 2026-06-01. A roster drop: the organisation dropped the roster, which continued under the new name on the same team id. The overlapping sighting dates are a FACEIT artifact, not an alias. Window from the first sighting of the new name; open-ended, so later sightings of the old name on this id fall in this era (to be confirmed per match on production).",
+      "evidence": [
+        "decided by the project owner (Stage 3 window review, 2026-10-01)"
+      ],
+      "valid_from_name": "1DIPv100GORILLA",
+      "decided_at": "2026-10-01T23:15:38+00:00"
+    },
+    "ebfd8060-fcbd-467b-9701-0801b2260a9c": {
+      "org_id": "ataraxia",
+      "org_name": "Ataraxia",
+      "team_name": "Ataraxia",
+      "note": "Quick esports (2024 Stage 1) then Ataraxia (2024 Stage 2) on one team id. Not related to cb90edf6's 2025 'Quick Esports' by any decision. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+      "evidence": [
+        "decided by the project owner (Stage 3 window review, 2026-10-01)"
+      ],
+      "valid_from_name": "Ataraxia",
+      "decided_at": "2026-10-01T23:15:38+00:00"
+    },
     "c6248ff8-64ff-47ad-8602-7eec0eeda9b0": {
       "org_id": "dhillducks",
       "org_name": "Dhillducks",
@@ -27,31 +60,66 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae": {
+      "org_id": "extinction",
+      "org_name": "Extinction",
+      "team_name": "Extinction",
+      "note": "Avidity held the roster that qualified for OWCS 2025 Stage 1; Extinction picked it up in Stage 2. A roster pickup on a stage boundary, not a rebrand: Avidity's era is Avidity's, Extinction's era is Extinction's. Window from the first sighting of 'Extinction' on this team id (resolved from team_names at load). 2025 Extinction (2b7f8ef6) and 2026 Extinction (a35f8d47) are one organisation: same label, same logo. The evidence is org branding, not roster continuity - each team id is mapped only over its own Extinction era.",
+      "evidence": [
+        "decided by the project owner (Stage 3 identity batch)"
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "valid_from_name": "Extinction",
+      "valid_to_name": null,
+      "decided_at": "2026-10-01T22:00:00+00:00"
+    },
+    "a35f8d47-7487-4249-a3fb-94aefa2ac8d0": {
+      "org_id": "extinction",
+      "org_name": "Extinction",
+      "team_name": "Extinction",
+      "note": "Extinction qualified through to 2026 Stage 1 on this team id; The Kafe picked up the roster at the start of Stage 2 (2026-06-13). A roster pickup on a stage boundary, not a rebrand: Extinction's era is Extinction's, The Kafe's is The Kafe's. Window from the first sighting of 'Extinction' to the first sighting of 'The Kafe' on this team id (both resolved from team_names at load). 2025 Extinction (2b7f8ef6) and 2026 Extinction (a35f8d47) are one organisation: same label, same logo. The evidence is org branding, not roster continuity - each team id is mapped only over its own Extinction era.",
+      "evidence": [
+        "decided by the project owner (Stage 3 identity batch)"
+      ],
+      "valid_from": null,
+      "valid_to": null,
+      "valid_from_name": "Extinction",
+      "valid_to_name": "The Kafe",
+      "decided_at": "2026-10-01T22:00:00+00:00"
+    },
+    "c82570d6-ded9-4678-8d32-398db37faa98": {
+      "org_id": "frost-tails",
+      "org_name": "Frost Tails",
+      "team_name": "Frost Tails",
+      "note": "Deimpero (2024 Stage 2) then Frost Tails (2025 Stage 2) on one team id. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+      "evidence": [
+        "decided by the project owner (Stage 3 window review, 2026-10-01)"
+      ],
+      "valid_from_name": "Frost Tails",
+      "decided_at": "2026-10-01T23:15:38+00:00"
+    },
     "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e": {
       "org_id": "ntmr",
       "org_name": "NTMR",
       "team_name": "NTMR",
-      "note": "merged on name identity: names fold identically ('ntmr')",
+      "note": "NTMR picked up the roster this team id carried as 'Timeless'; the two NTMR eras (cefc3f72 in 2025 Stage 1, c5116cb3 from 2025 Stage 2) are ONE organisation across both team ids, each mapped only over its own NTMR era so 'Timeless' stays its own. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
       "evidence": [
-        "names fold identically ('ntmr')",
-        "roster overlap 15%: 2 of the smaller 13-player roster shared",
-        "match windows overlap, so these may be two teams that coexisted",
-        "seasons 2024, 2025; 45 + 20 matches"
+        "decided by the project owner (Stage 3 window review, 2026-10-01)"
       ],
-      "decided_at": "2026-09-17T22:39:36+00:00"
+      "valid_from_name": "NTMR",
+      "decided_at": "2026-10-01T23:15:38+00:00"
     },
     "cefc3f72-5641-43f4-ae4f-bb5eee3b564d": {
       "org_id": "ntmr",
       "org_name": "NTMR",
       "team_name": "NTMR",
-      "note": "merged on name identity: names fold identically ('ntmr')",
+      "note": "NTMR picked up the roster this team id carried as 'FMCL'; the two NTMR eras (cefc3f72 in 2025 Stage 1, c5116cb3 from 2025 Stage 2) are ONE organisation across both team ids, each mapped only over its own NTMR era so 'FMCL' stays its own. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
       "evidence": [
-        "names fold identically ('ntmr')",
-        "roster overlap 15%: 2 of the smaller 13-player roster shared",
-        "match windows overlap, so these may be two teams that coexisted",
-        "seasons 2024, 2025; 45 + 20 matches"
+        "decided by the project owner (Stage 3 window review, 2026-10-01)"
       ],
-      "decided_at": "2026-09-17T22:39:36+00:00"
+      "valid_from_name": "NTMR",
+      "decided_at": "2026-10-01T23:15:38+00:00"
     },
     "10fdda79-bf26-4b61-8823-48d9d531c027": {
       "org_id": "qadsiah",
@@ -79,6 +147,43 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "0464a373-df2f-4d23-93f5-80cbaa07802f": {
+      "windows": [
+        {
+          "org_id": "rad",
+          "org_name": "Rad",
+          "team_name": "Rad",
+          "note": "UNC inc (2024 Stage 2, the id's own era) then Rad from 2025 Stage 1. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "Rad",
+          "valid_to_name": "Sakura"
+        },
+        {
+          "org_id": "sakura",
+          "org_name": "Sakura",
+          "team_name": "Sakura",
+          "note": "Rad -> Sakura on 2025-05-17 (inside 2025 Stage 2). An organisation change inside a stage, decided by the owner over the signals (a wholly different name with no stage boundary). 'Sakura Esports' (2025-09-27) is a rename inside this era.",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "Sakura",
+          "valid_to_name": "LuneX"
+        },
+        {
+          "org_id": "lunex",
+          "org_name": "LuneX",
+          "team_name": "LuneX",
+          "note": "Sakura Esports (2025 Stage 3) then LuneX from 2026 Stage 1. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "LuneX"
+        }
+      ],
+      "decided_at": "2026-10-01T23:15:38+00:00"
+    },
     "13576d6f-57ae-4b08-9755-89c14455667e": {
       "org_id": "sheer-cold",
       "org_name": "Sheer Cold",
@@ -105,6 +210,28 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf": {
+      "org_id": "spacestation-gaming",
+      "org_name": "SpaceStation Gaming",
+      "team_name": "SpaceStation Gaming",
+      "note": "SpaceStation Gaming's NA partner team from 2025 Stage 1: 'SpaceStation' (first name on the id, 2025-02-01) renamed 'SpaceStation Gaming' 2025-09-28, a rename only, so the id's whole life is this org and the mapping is for all time; the 2024 EMEA team is a359db61.",
+      "evidence": [
+        "decided by the project owner (2026-10-02)",
+        "cross_region_ok: SpaceStation Gaming played EMEA in 2024 and became an NA partner team in 2025; one organisation across the two team ids, each over its own era. The 2026-09-19 rejection (region-locked, 0% roster overlap) is reversed by the owner: org branding, not roster continuity, is the identity here."
+      ],
+      "decided_at": "2026-10-02T01:33:45+00:00"
+    },
+    "a359db61-26e2-44e0-8961-e0b373f4db21": {
+      "org_id": "spacestation-gaming",
+      "org_name": "SpaceStation Gaming",
+      "team_name": "SpaceStation",
+      "note": "SpaceStation Gaming's 2024 EMEA team (OWCS 2024 EMEA Stage 1 and Dreamhack Dallas). The id carried no other name; mapped for all of its life, which ends in 2024.",
+      "evidence": [
+        "decided by the project owner (2026-10-02)",
+        "cross_region_ok: SpaceStation Gaming played EMEA in 2024 and became an NA partner team in 2025; one organisation across the two team ids, each over its own era. The 2026-09-19 rejection (region-locked, 0% roster overlap) is reversed by the owner: org branding, not roster continuity, is the identity here."
+      ],
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
     "0c629c99-0333-47f6-96c9-87c0617a9d21": {
       "org_id": "students-of-the-game",
       "org_name": "Students of the Game",
@@ -118,6 +245,32 @@
       "note": "reviewed merge: same org, 100% roster overlap across a 3 day gap in 2024; SOG is the abbreviation the org played under later that season",
       "evidence": [],
       "decided_at": "2026-09-18T01:43:49+00:00"
+    },
+    "d20d1868-8937-4a85-8706-bf936d265392": {
+      "windows": [
+        {
+          "org_id": "supernova",
+          "org_name": "Supernova",
+          "team_name": "Supernova",
+          "note": "team_chiime / Dreamland (2024 Stage 1: a registration placeholder and the name that replaced it, one era, the id's own) then Supernova from 2025 Stage 2. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "Supernova",
+          "valid_to_name": "Team Z"
+        },
+        {
+          "org_id": "team-z",
+          "org_name": "Team Z",
+          "team_name": "Team Z",
+          "note": "Supernova (2025 Stage 2) then Team Z from 2025 Stage 3. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "Team Z"
+        }
+      ],
+      "decided_at": "2026-10-01T23:15:38+00:00"
     },
     "9870dc60-9607-4fde-8e81-c729349f4087": {
       "org_id": "team-peps",
@@ -145,12 +298,41 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "03869857-7f73-4176-a27d-dafcc8d469ae": {
+      "windows": [
+        {
+          "org_id": "umbrellaacademy",
+          "org_name": "Umbrellaacademy",
+          "team_name": "Umbrellaacademy",
+          "note": "ROC ESPORT (2024 Stage 1, the id's own era) then Umbrellaacademy from 2024 Stage 2. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "Umbrellaacademy",
+          "valid_to_name": "ROCstars"
+        },
+        {
+          "org_id": "rocstars",
+          "org_name": "ROCstars",
+          "team_name": "ROCstars",
+          "note": "Umbrellaacademy -> ROCstars on 2024-04-20 (inside 2024 Stage 2). An organisation change inside a stage, decided by the owner over the signals (a wholly different name with no stage boundary). The placeholder signal also fires here (Umbrellaacademy was seen for one day at the start of the stage); the owner's decision stands. Whether ROCstars is the ROC ESPORT organisation is not decided: the eras stay apart.",
+          "evidence": [
+            "decided by the project owner (Stage 3 window review, 2026-10-01)"
+          ],
+          "valid_from_name": "ROCstars"
+        }
+      ],
+      "decided_at": "2026-10-01T23:15:38+00:00"
+    },
     "bb5dd404-213c-430f-8d12-8687fc3ff747": {
       "org_id": "virtus-pro",
       "org_name": "Virtus pro",
-      "note": "reviewed merge: same org, one FACEIT name with a space and one without",
+      "note": "Window from 2025-01-31T19:17:07Z, the first sighting of 'Virtuspro' on this team id in team_names (sourced, not chosen). In 2024 EWC sat outside the OWCS circuit, so teams qualified through FACEIT League: Ex Oblivione was the original invitee, gave its spot to Atraxia after players left for them, and Virtus pro picked up the remaining roster to chase EWC, keeping it into Stage 3. Ex Oblivione later returned with a new roster. A roster pickup, not a rebrand: the 2024 series are Ex Oblivione's own. Only one Ex Oblivione id is in scope, so no second window.",
       "evidence": [],
-      "decided_at": "2026-09-18T01:43:50+00:00"
+      "decided_at": "2026-09-18T01:43:50+00:00",
+      "valid_from": "2025-01-31T19:17:07+00:00",
+      "valid_to": null,
+      "valid_from_name": "Virtuspro"
     },
     "c02a9899-1ab2-46fb-a87d-8e7dcecb0cba": {
       "org_id": "virtus-pro",
@@ -272,18 +454,6 @@
       ],
       "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
       "decided_at": "2026-09-18T01:43:51+00:00"
-    },
-    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf|a359db61-26e2-44e0-8961-e0b373f4db21": {
-      "team_ids": [
-        "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
-        "a359db61-26e2-44e0-8961-e0b373f4db21"
-      ],
-      "names": [
-        "SpaceStation Gaming",
-        "SpaceStation"
-      ],
-      "reason": "reviewed rejection: region-locked conflict. 'SpaceStation Gaming' competed only in na (S4-S9 NA OWCS Central), 'SpaceStation' only in emea/international (2024 EMEA Stage 1-2, Dreamhack Dallas). OWCS rosters do not cross regions; the original merge was name-containment with 0% roster overlap, which is not evidence of identity. This wrong merge caused sug2rfree (SpaceStation Gaming NA player) to show EMEA matches in his team record.",
-      "decided_at": "2026-09-19T00:49:08+00:00"
     },
     "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e|cd157523-5c58-41bc-b62d-e1a635ea61b8": {
       "team_ids": [
