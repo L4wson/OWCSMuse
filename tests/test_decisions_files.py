@@ -24,11 +24,13 @@ def test_the_only_undecided_strong_proposals_are_the_four_held_for_review():
             strong.add(page)
             assert page not in d.data, page
     assert strong == held
-    assert len(d.data) == 349                                  # 166 + the 183 accepted 2026-10-02
+    assert len(d.data) == 363                                  # 166 + 183 strong + 14 unmatched decided by the owner, 2026-10-02
+    assert "Shaq" not in d.data and "Massivepoop" not in d.data    # left undecided by the owner
+    assert not [p for p, v in d.data.items() if (v.get("real_name") or "").lower().endswith("player")]   # disambiguators
     assert d.data["Zzz"] == {**d.data["Zzz"], "entity_id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea", "display": "ZZZ", "handle": "zzz"}
-    # Astro was once decided on production by FACEIT name and never recorded here; the 2026-10-02 batch decides the page to
-    # that same GUID (Astronexz), on the same side's FACEIT roster in all 30 of its linked series
+    # Astro = Astronexz, displayed as Astro: the owner's decision, committed after PR #6 merged and restored 2026-10-02
     assert d.data["Astro_(Canadian_player)"]["entity_id"] == "e78965e3-6fdc-437d-ab8f-b859e283dfdf"
+    assert d.data["Astro_(Canadian_player)"]["display"] == "Astro"           # restored from 363a35e, never merged
 
 
 def test_spacestation_gaming_is_one_org_over_two_eras_and_the_old_rejection_is_gone():

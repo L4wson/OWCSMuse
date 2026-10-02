@@ -65,6 +65,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Adios": {
+      "entity_id": "06bbbf2e-7b16-4b8d-9ff8-60f7b90a4eed",
+      "handle": "adios",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT adiossssssss, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "Admiral": {
       "entity_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
       "handle": "Admiral",
@@ -132,10 +140,10 @@
     "Astro_(Canadian_player)": {
       "entity_id": "e78965e3-6fdc-437d-ab8f-b859e283dfdf",
       "handle": "Astro",
-      "real_name": "Canadian player",
-      "note": "accepted strong proposal: 'Astro' stood on the same side as FACEIT e78965e3 (Astronexz) in 3 linked series",
-      "display": null,
-      "decided_at": "2026-10-02T03:46:48+00:00"
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT Astronexz, same player",
+      "display": "Astro",
+      "decided_at": "2026-10-02T01:42:21+00:00"
     },
     "Attack": {
       "entity_id": "232fdb58-fe04-4a4d-bae1-31671cd371b8",
@@ -176,6 +184,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Backbone' stood on the same side as FACEIT a12c7612 (Backbone / Backboneee) in 9 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Bagel": {
+      "entity_id": "7a7d4cf7-38a4-41cf-ab37-fbd5422f59b4",
+      "handle": "Bagel",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT ALargeBagel, on the same side's roster in all 3 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
     },
     "BallerSteve": {
       "entity_id": "859b1444-8791-4aef-9d22-25ad4a6ff606",
@@ -257,6 +273,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Bya": {
+      "entity_id": "1a85c584-7864-4ee1-8667-d8a57cbe8d17",
+      "handle": "Bya",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT Byaaa, on the same side's roster in all 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "CLEAR": {
       "entity_id": "a50e5d9c-e00c-476d-86a9-04ab1403d09d",
       "handle": "CLEAR",
@@ -316,7 +340,7 @@
     "China_(Polish_player)": {
       "entity_id": "fcf7a717-4ee5-4944-a10b-75d8be749ea1",
       "handle": "China",
-      "real_name": "Polish player",
+      "real_name": null,
       "note": "accepted strong proposal (owner, 2026-10-02): 'China' stood on the same side as FACEIT fcf7a717 (China / china_ow) in 7 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
@@ -452,7 +476,7 @@
     "Danny_(American_player)": {
       "entity_id": "16e56097-3541-4700-9115-9063bc6c3fd9",
       "handle": "Danny",
-      "real_name": "American player",
+      "real_name": null,
       "note": "accepted strong proposal (owner, 2026-10-02): 'Danny' stood on the same side as FACEIT 16e56097 (Danny / dannyow) in 5 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
@@ -561,6 +585,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Dynamic": {
+      "entity_id": "d4986e85-e387-4171-b704-cb40e5f861a3",
+      "handle": "Dynamic",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT Dynamicmufa, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "Dynasty": {
       "entity_id": "6ab4a616-d2ca-44c8-9937-e5b97adfd20a",
       "handle": "Dynasty",
@@ -617,10 +649,18 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Eve": {
+      "entity_id": "02f074b3-79fe-44ac-a539-d6093bda7651",
+      "handle": "SONNETiCA",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT SONNETiCAow, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "Evil_(French_player)": {
       "entity_id": "9c092bbb-1d8d-4d51-a395-7ab41720965d",
       "handle": "Evil",
-      "real_name": "French player",
+      "real_name": null,
       "note": "accepted strong proposal (owner, 2026-10-02): 'Evil' stood on the same side as FACEIT 9c092bbb (Evil / Evil8871) in 7 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
@@ -720,6 +760,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Fone' stood on the same side as FACEIT 612cb222 (Fone / FoneOW) in 6 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Foreshadow": {
+      "entity_id": "772f03e6-fa50-4639-b223-ff19daf1b769",
+      "handle": "Foreshadow",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT owForeshadow, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
     },
     "FrothyFilly7": {
       "entity_id": "083989e0-81a4-4f83-8dc3-e5222f0df695",
@@ -849,6 +897,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "H9mpe": {
+      "entity_id": "5e9f5899-8ebb-419b-9feb-60f45b4e7e91",
+      "handle": "h9mpe",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT h9mpinator, on the same side's roster in all 8 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "HEESUNG": {
       "entity_id": "eeb4e46f-723d-4a37-ae68-685c237627c8",
       "handle": "HEESUNG",
@@ -868,7 +924,7 @@
     "Haku_(Saudi_Arabian_player)": {
       "entity_id": "7928a18c-bbe9-403b-936a-d5df7355b6e3",
       "handle": "Haku",
-      "real_name": "Saudi Arabian player",
+      "real_name": null,
       "note": "accepted strong proposal (owner, 2026-10-02): 'Haku' stood on the same side as FACEIT 7928a18c (Haku / iHAKUi) in 18 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
@@ -900,7 +956,7 @@
     "Haven_(American_player)": {
       "entity_id": "e7aad827-0344-4945-8a26-50703eda4c74",
       "handle": "Haven",
-      "real_name": "American player",
+      "real_name": null,
       "note": "accepted strong proposal: 'Haven' stood on the same side as FACEIT e7aad827 (Haven / Haventhedude) in 5 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
@@ -912,6 +968,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Hawk' stood on the same side as FACEIT a940981f (Hawk / TheeHawk) in 25 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Heavenly": {
+      "entity_id": "0280d6ab-db07-466b-be82-b2147468230b",
+      "handle": "Heavenly",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT HeavenlyOkk, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
     },
     "Helmerdrake": {
       "entity_id": "413efb56-fc30-451f-8c58-ed48b65cb393",
@@ -945,6 +1009,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "HoJin": {
+      "entity_id": "7b0c7c37-06af-402a-81a7-b20a261b72ae",
+      "handle": "HoJin",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT hojinfps, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "HowsYourDay": {
       "entity_id": "4742daa3-62a6-4a90-9a31-638d37e1cc52",
       "handle": "HowsYourDay",
@@ -964,7 +1036,7 @@
     "Hybrid_(British_player)": {
       "entity_id": "76216b21-cee5-4652-9053-78a4d8d660cf",
       "handle": "Hybrid",
-      "real_name": "British player",
+      "real_name": null,
       "note": "accepted strong proposal: 'Hybrid' stood on the same side as FACEIT 76216b21 (Hybrid / HybridOW) in 6 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
@@ -1033,6 +1105,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Isack": {
+      "entity_id": "a78ebb0b-5dc8-4d71-b32d-a8d8121ab5d9",
+      "handle": "Isack",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT IsakTriesIt, on the same side's roster in all 8 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "Iszhtar": {
       "entity_id": "76a5a4f3-d139-42af-9f02-a422bd9a2c45",
       "handle": "Iszhtar",
@@ -1060,7 +1140,7 @@
     "Jack_(British_player)": {
       "entity_id": "10271a28-71d5-4d0b-aea1-0ebf59978c6b",
       "handle": "Jack",
-      "real_name": "British player",
+      "real_name": null,
       "note": "accepted strong proposal: 'Jack' stood on the same side as FACEIT 10271a28 (Jack / Spracko) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
@@ -1545,6 +1625,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Meman": {
+      "entity_id": "59b9c5bf-ba6e-4c3c-b418-16107c2aec15",
+      "handle": "Meman",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT Just_Meman, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "MirroR": {
       "entity_id": "c027aadb-ccee-4e0a-88e8-af0e451886e9",
       "handle": "MirroR",
@@ -1873,6 +1961,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "R3flect": {
+      "entity_id": "9cf62866-4cf4-4b14-ae80-830ea1e5ccae",
+      "handle": "R3flect",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT R3flect7, on the same side's roster in all 6 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "Raajaro": {
       "entity_id": "b1fc31bb-4f73-4f50-9440-41b1ebad535d",
       "handle": "Raajaro",
@@ -1932,7 +2028,7 @@
     "Reverse_(American_player)": {
       "entity_id": "55a757c4-841d-4edf-aa88-17b5ad3c32d0",
       "handle": "reverse",
-      "real_name": "American player",
+      "real_name": null,
       "note": "accepted strong proposal: 'reverse' stood on the same side as FACEIT 55a757c4 (reverse / reverse094-) in 5 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
@@ -1969,6 +2065,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Roho": {
+      "entity_id": "52571b21-aacf-4a7a-b26c-560702201195",
+      "handle": "loljkhaha",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT roho123, on the same side's roster in all 7 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
+    },
     "Rokit": {
       "entity_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
       "handle": "Rokit",
@@ -1996,7 +2100,7 @@
     "Ryan_(American_player)": {
       "entity_id": "a6f8e69e-9ca1-4466-809e-ca6ab1e5879d",
       "handle": "Ryan",
-      "real_name": "American player",
+      "real_name": null,
       "note": "accepted strong proposal (owner, 2026-10-02): 'Ryan' stood on the same side as FACEIT a6f8e69e (-Ryyan- / Ryan) in 22 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
@@ -2524,7 +2628,7 @@
     "Unread_(American_player)": {
       "entity_id": "fb1f9484-a84f-4205-8159-c742b4c21f7a",
       "handle": "Unread",
-      "real_name": "American player",
+      "real_name": null,
       "note": "accepted strong proposal: 'Unread' stood on the same side as FACEIT fb1f9484 (Unread / Unreadow) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
@@ -2712,6 +2816,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Zeb' stood on the same side as FACEIT eb37ecfe (Zeb / Zeb_ow) in 27 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Zelos": {
+      "entity_id": "18f62f7a-a4c1-49bb-b01c-66d6df5dbec5",
+      "handle": "Zelos",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-02): FACEIT ZelosFPS, on the same side's roster in all 2 linked series",
+      "display": null,
+      "decided_at": "2026-10-02T04:24:29+00:00"
     },
     "Zerggy": {
       "entity_id": "7c248289-1789-4e12-901e-d075b1e0914e",

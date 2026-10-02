@@ -1,6 +1,6 @@
 # Cross-source identity: Liquipedia pages -> FACEIT players
 
-369 Liquipedia player pages seen on linked series: 349 decided, 4 proposed strong, 1 need a person, 15 matched no FACEIT name. Team names: 25 decided in scope/liquipedia_team_map.json (they become team anchors on load).
+369 Liquipedia player pages seen on linked series: 363 decided, 4 proposed strong, 1 need a person, 1 matched no FACEIT name. Team names: 26 decided in scope/liquipedia_team_map.json (they become team anchors on load).
 
 Evidence is match-level only: the same handle on the same side of the same linked series. Nothing is applied until decided (`identity accept`, `identity decide <page> --player <guid>` or `--new`) and loaded (`identity load`).
 
@@ -19,27 +19,13 @@ Evidence is match-level only: the same handle on the same side of the same linke
 |---|---|---|---|---|---|---|
 | Shaq | Shaq |  | United States | `650277c6-4225-40e1-9030-2838a98da30a`, `c5b8eea3-d4ec-4182-bed7-464e8aa2283e` | 7 | the handle matched several FACEIT players: 650277c6 (Shaq / ShaqinOff) in 2; c5b8eea3 (g2ldfish / goldfish) in 5 |
 
-## No FACEIT name matched (15)
+## No FACEIT name matched (1)
 
 | page | handle | real name | nationality | FACEIT | series | evidence |
 |---|---|---|---|---|---|---|
-| Adios | adios |  | United States |  | 2 | no FACEIT name on the same side of 2 linked series equals 'adios'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
-| Bagel | Bagel |  | Canada |  | 3 | no FACEIT name on the same side of 3 linked series equals 'Bagel'; FACEIT named: ALargeBagel, BazOdub, Emmeryn, FrothyFilly7, LeeBakes, RedexLCO, ReyzrOW, SolvedMender |
-| Bya | Bya |  | Germany |  | 6 | no FACEIT name on the same side of 6 linked series equals 'Bya'; FACEIT named: Byaaa, abheekq, ailiseu-, eisgnom9, kaiBa_ow, owPsych0, xLorenn |
-| Dynamic | Dynamic |  | Pakistan |  | 2 | no FACEIT name on the same side of 2 linked series equals 'Dynamic'; FACEIT named: Dynamicmufa, FadeddFps, Hkeybroke, Just_Meman, Melophobiah, PutterOW, Thunder_ow, waveGod1 |
-| Foreshadow | Foreshadow |  | South Korea |  | 2 | no FACEIT name on the same side of 2 linked series equals 'Foreshadow'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
-| H9mpe | h9mpe |  | Sweden |  | 8 | no FACEIT name on the same side of 8 linked series equals 'h9mpe'; FACEIT named: Abbs_, IsakTriesIt, KayZzeeR, KenSoo, Necr0s, Y19251658, chazmball, h9mpinator, kaya1ow |
-| Heavenly | Heavenly |  | United States |  | 2 | no FACEIT name on the same side of 2 linked series equals 'Heavenly'; FACEIT named: Dirtgaming, Fl4k-Drift, HeavenlyOkk, K0RTAL, Schwartzyz, kyidk1, niamnoitsab, salamiboi200 |
-| HoJin | HoJin |  | South Korea |  | 2 | no FACEIT name on the same side of 2 linked series equals 'HoJin'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
-| Isack | Isack |  | Norway |  | 8 | no FACEIT name on the same side of 8 linked series equals 'Isack'; FACEIT named: Abbs_, IsakTriesIt, KayZzeeR, KenSoo, Necr0s, Y19251658, chazmball, h9mpinator, kaya1ow |
-| Roho | loljkhaha |  | Saudi Arabia |  | 7 | no FACEIT name on the same side of 7 linked series equals 'loljkhaha'; FACEIT named: AOY_, Checkmate2, IZaYaKI222, Lotsha, Scyle, TVNT_, gucci444, roho123 |
 | Massivepoop | massivepoop |  | United States |  | 2 | no FACEIT name on the same side of 2 linked series equals 'massivepoop'; FACEIT named: Lampent_, LavaOW, OmgMaverick, Shocker_ow, TwoFishHere, amadien, karmez7, zhulanders |
-| Meman | Meman |  | United States |  | 2 | no FACEIT name on the same side of 2 linked series equals 'Meman'; FACEIT named: Dynamicmufa, FadeddFps, Hkeybroke, Just_Meman, Melophobiah, PutterOW, Thunder_ow, waveGod1 |
-| R3flect | R3flect |  | Norway |  | 6 | no FACEIT name on the same side of 6 linked series equals 'R3flect'; FACEIT named: Hitoriow, Pak_Oww, R3flect7, Raajaro, Tekun0, Zorrow_ow, sobek188 |
-| Eve | SONNETiCA |  | United States |  | 2 | no FACEIT name on the same side of 2 linked series equals 'SONNETiCA'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
-| Zelos | Zelos |  | Canada |  | 2 | no FACEIT name on the same side of 2 linked series equals 'Zelos'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
 
-## Already decided (349)
+## Already decided (363)
 
 | page | handle | real name | nationality | FACEIT | series | evidence |
 |---|---|---|---|---|---|---|
@@ -59,7 +45,7 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Ariel2 | ariel2 |  | Israel | 3c07c474-37ab-43dd-8d8d-e4ccb6de31ed | 9 | 'ariel2' stood on the same side as FACEIT 3c07c474 (ariel2 / arieltwo) in 9 linked series |
 | Arise | Arise |  | South Korea | 20a8d5c4-82bc-4a73-8182-d9be1c8ee413 | 7 | 'Arise' stood on the same side as FACEIT 20a8d5c4 (Arise / Arise_OW) in 7 linked series |
 | Aspect | Aspect |  | Canada | 51bde807-1c27-452b-8ce7-6bc04d90a879 | 2 | 'Aspect' stood on the same side as FACEIT 51bde807 (aspect / aspect_ow) in 2 linked series |
-| Astro_(Canadian_player) | Astro | Canadian player | Canada | e78965e3-6fdc-437d-ab8f-b859e283dfdf | 30 | 'Astro' stood on the same side as FACEIT e78965e3 (Astronexz) in 3 linked series |
+| Astro_(Canadian_player) | Astro |  | Canada | e78965e3-6fdc-437d-ab8f-b859e283dfdf | 30 | 'Astro' stood on the same side as FACEIT e78965e3 (Astronexz) in 3 linked series |
 | Attack | Attack |  | South Korea | 232fdb58-fe04-4a4d-bae1-31671cd371b8 | 8 | 'Attack' stood on the same side as FACEIT 232fdb58 (Attack / Atttack) in 8 linked series |
 | Avo | Avo |  | France | d2ac3c5b-2027-4204-b4c9-98aeb126d1a8 | 5 | 'Avo' stood on the same side as FACEIT d2ac3c5b (Avo / Avoria_) in 5 linked series |
 | Axure | Axure |  | Canada | b9abed30-d5cf-4d09-a5d1-931055a70327 | 10 | 'Axure' stood on the same side as FACEIT b9abed30 (Axur3e / Axure) in 10 linked series |
@@ -81,7 +67,7 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Chazm | chazm |  | United Kingdom | 0bcc2a42-ed64-4a35-ae31-e376cc2ba987 | 8 | 'chazm' stood on the same side as FACEIT 0bcc2a42 (chazm / chazmball) in 8 linked series |
 | Checkmate | CheckMate |  | South Korea | c6839ee0-654b-4b77-90ab-11ba3b56bb49 | 34 | 'CheckMate' stood on the same side as FACEIT c6839ee0 (CheckMate / Checkmate2) in 34 linked series |
 | Chime | chime |  | United States | 04a592e5-c661-415a-a1aa-064be1cad203 | 3 | 'chime' stood on the same side as FACEIT 04a592e5 (chiime / chime) in 3 linked series |
-| China_(Polish_player) | China | Polish player | Poland | fcf7a717-4ee5-4944-a10b-75d8be749ea1 | 12 | 'China' stood on the same side as FACEIT fcf7a717 (China / china_ow) in 12 linked series |
+| China_(Polish_player) | China |  | Poland | fcf7a717-4ee5-4944-a10b-75d8be749ea1 | 12 | 'China' stood on the same side as FACEIT fcf7a717 (China / china_ow) in 12 linked series |
 | ChoiSehwan | ChoiSehwan |  | South Korea | bfb7d179-6904-497b-a4ac-cf158aa8b24e | 9 | 'ChoiSehwan' stood on the same side as FACEIT bfb7d179 (ChoiSehwan) in 9 linked series |
 | Chopper | Chopper |  | United States | 3607f331-5426-45d9-91a0-7fdb42243262 | 20 | 'Chopper' stood on the same side as FACEIT 3607f331 (Chopper / chcpper) in 20 linked series |
 | Cinnabar | cinnabar |  | United States | e30fab51-bf10-4391-9c9b-f99276414110 | 19 | 'cinnabar' stood on the same side as FACEIT e30fab51 (cinnabar / cinnabarr / v2lv2t / velvet) in 19 linked series |
@@ -118,7 +104,7 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Erikek | Erikek |  | Spain | 6f61666c-4afd-48f8-8e29-0d762151b2fe | 5 | 'Erikek' stood on the same side as FACEIT 6f61666c (Erikek) in 5 linked series |
 | Escanor | Escanor |  | Saudi Arabia | 2e4db6df-0964-4e01-8b6d-20b29f8544dd | 6 | 'Escanor' stood on the same side as FACEIT 2e4db6df (escanor / escanor1161) in 6 linked series |
 | Eskay | eskay |  | United States | e2260096-b1cb-496a-8d68-97ebd3063b4a | 2 | 'eskay' stood on the same side as FACEIT e2260096 (Eskay / EskayOW) in 2 linked series |
-| Evil_(French_player) | Evil | French player | France | 9c092bbb-1d8d-4d51-a395-7ab41720965d | 7 | 'Evil' stood on the same side as FACEIT 9c092bbb (Evil / Evil8871) in 7 linked series |
+| Evil_(French_player) | Evil |  | France | 9c092bbb-1d8d-4d51-a395-7ab41720965d | 7 | 'Evil' stood on the same side as FACEIT 9c092bbb (Evil / Evil8871) in 7 linked series |
 | Ewan | Ewan |  | United States | fe2edff3-b816-42d4-bb7c-be6e285e77b5 | 7 | 'Ewan' stood on the same side as FACEIT fe2edff3 (Ewan / Ewan1657) in 7 linked series |
 | Faded | Faded |  | Canada | ba4e3eeb-7423-4a3c-a29c-6020cdd48859 | 2 | 'Faded' stood on the same side as FACEIT ba4e3eeb (Faded / FadeddFps) in 2 linked series |
 | Faith | Faith |  | South Korea | 76a75eed-3164-48d6-875c-82b1195bec68 | 10 | 'Faith' stood on the same side as FACEIT 76a75eed (Faith / Faith33) in 10 linked series |
@@ -148,10 +134,10 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Graveyard | Graveyard |  | Canada | 945d0963-2674-4848-963f-f5459e9e9ac7 | 9 | 'Graveyard' stood on the same side as FACEIT 945d0963 (Graveyard / GraveyardOW) in 9 linked series |
 | Gucci | gucci |  | Finland | c149fea3-60f7-4982-ba2a-6ab81aeb2523 | 3 | 'gucci' stood on the same side as FACEIT c149fea3 (gucci / gucci444) in 3 linked series |
 | Hadi | Hadi |  | Germany | 5f60ca5b-92be-4673-b2c6-06623b111467 | 21 | 'Hadi' stood on the same side as FACEIT 5f60ca5b (Hadi / HadiOW2) in 21 linked series |
-| Haku_(Saudi_Arabian_player) | Haku | Saudi Arabian player | Saudi Arabia | 7928a18c-bbe9-403b-936a-d5df7355b6e3 | 18 | 'Haku' stood on the same side as FACEIT 7928a18c (Haku / iHAKUi) in 18 linked series |
+| Haku_(Saudi_Arabian_player) | Haku |  | Saudi Arabia | 7928a18c-bbe9-403b-936a-d5df7355b6e3 | 18 | 'Haku' stood on the same side as FACEIT 7928a18c (Haku / iHAKUi) in 18 linked series |
 | Halo | Halo |  | United States | 119975fb-935d-4e3b-9d7e-b3115a835202 | 2 | 'Halo' stood on the same side as FACEIT 119975fb (Halo / HelloImHalo) in 2 linked series |
 | Hanbei | Hanbei |  | United States | 832e46b6-d337-412b-acd7-cfc4e5bd5467 | 11 | 'Hanbei' stood on the same side as FACEIT 832e46b6 (Hanbei / Hanbei_) in 11 linked series |
-| Haven_(American_player) | Haven | American player | United States | e7aad827-0344-4945-8a26-50703eda4c74 | 5 | 'Haven' stood on the same side as FACEIT e7aad827 (Haven / Haventhedude) in 5 linked series |
+| Haven_(American_player) | Haven |  | United States | e7aad827-0344-4945-8a26-50703eda4c74 | 5 | 'Haven' stood on the same side as FACEIT e7aad827 (Haven / Haventhedude) in 5 linked series |
 | Hawk | Hawk |  | United States | a940981f-c750-40b9-bb55-bd3e8e6ef986 | 39 | 'Hawk' stood on the same side as FACEIT a940981f (Hawk / TheeHawk) in 39 linked series |
 | HEESUNG | HEESUNG |  | South Korea | eeb4e46f-723d-4a37-ae68-685c237627c8 | 10 | 'HEESUNG' stood on the same side as FACEIT eeb4e46f (HEESUNG / heesung) in 10 linked series |
 | Helmerdrake | Helmerdrake |  | Sweden | 413efb56-fc30-451f-8c58-ed48b65cb393 | 2 | 'Helmerdrake' stood on the same side as FACEIT 413efb56 (Helmerdrake) in 2 linked series |
@@ -160,7 +146,7 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Hkeybroke | Hkeybroke |  | United States | f0456730-675e-4dd6-885b-6fac5e8431de | 5 | 'Hkeybroke' stood on the same side as FACEIT f0456730 (Hkeybroke / hkey) in 5 linked series |
 | HowsYourDay | HowsYourDay |  | United States | 4742daa3-62a6-4a90-9a31-638d37e1cc52 | 2 | 'HowsYourDay' stood on the same side as FACEIT 4742daa3 (HowsYourDay / HowsYourDay0) in 2 linked series |
 | Hutch | Hutch |  | United States | 2f517ce0-3954-478f-818c-69d7fbdb3eb0 | 3 | 'Hutch' stood on the same side as FACEIT 2f517ce0 (Hutch / Hutch_ow) in 3 linked series |
-| Hybrid_(British_player) | Hybrid | British player | United Kingdom | 76216b21-cee5-4652-9053-78a4d8d660cf | 6 | 'Hybrid' stood on the same side as FACEIT 76216b21 (Hybrid / HybridOW) in 6 linked series |
+| Hybrid_(British_player) | Hybrid |  | United Kingdom | 76216b21-cee5-4652-9053-78a4d8d660cf | 6 | 'Hybrid' stood on the same side as FACEIT 76216b21 (Hybrid / HybridOW) in 6 linked series |
 | Hydron | Hydron |  | United States | 544bb0ed-7b05-4e0a-842d-e54ebaf31460 | 7 | 'Hydron' stood on the same side as FACEIT 544bb0ed (Hydron / Hydron7) in 7 linked series |
 | Icav | icav |  | Poland | e96d60b7-b272-4b27-95c4-95980d864a18 | 6 | 'icav' stood on the same side as FACEIT e96d60b7 (icav / icav1_) in 5 linked series |
 | ICy | iCy |  | Canada | dfce13a7-df35-49a7-bb21-d626092da5c0 | 10 | 'iCy' stood on the same side as FACEIT dfce13a7 (FrozenWings / iCy) in 10 linked series |
@@ -171,7 +157,7 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Irony | irony |  | South Korea | 95090451-b118-4d11-a693-20dafae48c01 | 9 | 'irony' stood on the same side as FACEIT 95090451 (ir0ny / irony) in 9 linked series |
 | Iszhtar | Iszhtar |  | Peru | 76a5a4f3-d139-42af-9f02-a422bd9a2c45 | 2 | 'Iszhtar' stood on the same side as FACEIT 76a5a4f3 (Iszhtar / UberEats) in 2 linked series |
 | Izayaki | Izayaki |  | South Korea | 90fe2fed-f96c-4ded-8a2f-d16cd5cdc89d | 4 | 'Izayaki' stood on the same side as FACEIT 90fe2fed (IZaYaKI / IZaYaKI222) in 4 linked series |
-| Jack_(British_player) | Jack | British player | United Kingdom | 10271a28-71d5-4d0b-aea1-0ebf59978c6b | 2 | 'Jack' stood on the same side as FACEIT 10271a28 (Jack / Spracko) in 2 linked series |
+| Jack_(British_player) | Jack |  | United Kingdom | 10271a28-71d5-4d0b-aea1-0ebf59978c6b | 2 | 'Jack' stood on the same side as FACEIT 10271a28 (Jack / Spracko) in 2 linked series |
 | Jacob | Jacob |  | United States | 683fd553-2850-41c9-bed0-4a7815eda629 | 10 | 'Jacob' stood on the same side as FACEIT 683fd553 (Jacob / jacob5511) in 10 linked series |
 | JaeWoo | JaeWoo |  | South Korea | 34d11d57-a8f1-4f15-996d-e1776c525f93 | 45 | 'JaeWoo' stood on the same side as FACEIT 34d11d57 (JaeWoo / kimjaewoo1) in 45 linked series |
 | Jazza | Jazza |  | United States | 210dcce0-f5fc-49bf-8b31-98dac578e6d7 | 2 | 'Jazza' stood on the same side as FACEIT 210dcce0 (JAZZA / jazza_fps) in 2 linked series |
@@ -283,14 +269,14 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Redex | redex |  | Canada | bf69c0b9-f068-41bf-a0b9-c88aa083edbb | 17 | 'redex' stood on the same side as FACEIT bf69c0b9 (RedexLCO / redex) in 17 linked series |
 | Reisu | Reisu |  | United Kingdom | 0a5047e1-29b6-42f7-8391-bd263c0b2fe1 | 4 | 'Reisu' stood on the same side as FACEIT 0a5047e1 (Reisu / ReisuOW) in 4 linked series |
 | Renko | Renko |  | United States | e9e2c1d1-77d9-4268-b06c-6bd9e6edf1b6 | 13 | 'Renko' stood on the same side as FACEIT e9e2c1d1 (Renko / renko_ow) in 13 linked series |
-| Reverse_(American_player) | reverse | American player | United States | 55a757c4-841d-4edf-aa88-17b5ad3c32d0 | 5 | 'reverse' stood on the same side as FACEIT 55a757c4 (reverse / reverse094-) in 5 linked series |
+| Reverse_(American_player) | reverse |  | United States | 55a757c4-841d-4edf-aa88-17b5ad3c32d0 | 5 | 'reverse' stood on the same side as FACEIT 55a757c4 (reverse / reverse094-) in 5 linked series |
 | RhynO | RhynO |  | United States | e2ab56e6-ca09-4d4c-8254-73a5cbe818e6 | 20 | 'RhynO' stood on the same side as FACEIT e2ab56e6 (RhynO / RhynO_OW) in 20 linked series |
 | Ridder | ridder |  | Netherlands | 9a38701e-687a-43a3-a0b1-4052f48a4060 | 2 | 'ridder' stood on the same side as FACEIT 9a38701e (Ridder_ / Skye) in 2 linked series |
 | RodFD | RodFD |  | Portugal | 9d969193-90a3-4f2b-94d4-17f025f14501 | 4 | 'RodFD' stood on the same side as FACEIT 9d969193 (Rodfd / Rodfd_ow) in 4 linked series |
 | Rokit | Rokit |  | United States | 2d50f1c4-8643-426c-9d5c-6f73a06e4bdc | 49 | 'Rokit' stood on the same side as FACEIT 2d50f1c4 (Rokit / Rokit600) in 49 linked series |
 | Romani | Romani |  | United States | 89b3f44f-dc33-4fde-b15a-416a6c21bac6 | 2 | 'Romani' stood on the same side as FACEIT 89b3f44f (Romani / RomaniOW) in 2 linked series |
 | Rupal | Rupal |  | United States | ba42f8ef-51a8-486b-a1e8-46954a4859ea | 42 | 'Rupal' stood on the same side as FACEIT ba42f8ef (Rupal / rupalzaman) in 42 linked series |
-| Ryan_(American_player) | Ryan | American player | United States | a6f8e69e-9ca1-4466-809e-ca6ab1e5879d | 31 | 'Ryan' stood on the same side as FACEIT a6f8e69e (-Ryyan- / Ryan) in 31 linked series |
+| Ryan_(American_player) | Ryan |  | United States | a6f8e69e-9ca1-4466-809e-ca6ab1e5879d | 31 | 'Ryan' stood on the same side as FACEIT a6f8e69e (-Ryyan- / Ryan) in 31 linked series |
 | Rymazing | Rymazing |  | United States | 0c36778a-32dd-4498-b7ef-389bd37033c7 | 2 | 'Rymazing' stood on the same side as FACEIT 0c36778a (Rymazing) in 2 linked series |
 | Reyzr | rzr |  | Canada | bcd9737d-3295-450d-a20e-94d8815c6d2f | 17 | 'rzr' stood on the same side as FACEIT bcd9737d (Reyzr / ReyzrOW / rzr) in 17 linked series |
 | S9mm | s9mm |  | United States | ab75ab00-fce8-4c90-ae97-f778e33c168b | 7 | 's9mm' stood on the same side as FACEIT ab75ab00 (s9mm / s9mm9) in 1 linked series |
@@ -357,7 +343,7 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | TwolzZ | TwolzZ |  | Netherlands | 243f8468-6f3a-4607-b151-53da202fdd22 | 17 | 'TwolzZ' stood on the same side as FACEIT 243f8468 (Twolzz) in 17 linked series |
 | Happy | ugvuycfgb6 |  | South Korea | 6831b4c5-962a-44b8-9b1b-00d60bc58314 | 6 | 'ugvuycfgb6' stood on the same side as FACEIT 6831b4c5 (owhappy / ugvuycfgb6) in 6 linked series |
 | UltraViolet | UltraViolet |  | United States | 43d39898-d853-4e75-b249-9b41d638a2b0 | 60 | 'UltraViolet' stood on the same side as FACEIT 43d39898 (UltraViolet / ultraviol3t) in 60 linked series |
-| Unread_(American_player) | Unread | American player | United States | fb1f9484-a84f-4205-8159-c742b4c21f7a | 2 | 'Unread' stood on the same side as FACEIT fb1f9484 (Unread / Unreadow) in 2 linked series |
+| Unread_(American_player) | Unread |  | United States | fb1f9484-a84f-4205-8159-c742b4c21f7a | 2 | 'Unread' stood on the same side as FACEIT fb1f9484 (Unread / Unreadow) in 2 linked series |
 | Unto | unto |  | Finland | c7a821fd-9e93-402f-85e4-ad2cc23ee9af | 2 | 'unto' stood on the same side as FACEIT c7a821fd (unto / untovainen) in 2 linked series |
 | V1ctory | v1ctory |  | Canada | b6fe4cb9-95b7-439c-a94e-d97d66d3e4fd | 7 | 'v1ctory' stood on the same side as FACEIT b6fe4cb9 (v1ctory / victoryfps) in 7 linked series |
 | Vega | Vega |  | United States | 80fd30f8-18d4-4aa9-a94b-644f155a50e4 | 56 | 'Vega' stood on the same side as FACEIT 80fd30f8 (Vega / VegaOW) in 53 linked series |
@@ -391,5 +377,19 @@ Evidence is match-level only: the same handle on the same side of the same linke
 | Zox | zox |  | Saudi Arabia | a1fb03ff-9977-4d0b-b4bd-82fa6085f0ed | 15 | 'zox' stood on the same side as FACEIT a1fb03ff (zox / zox1509 / zox_ow) in 14 linked series |
 | Zydra | Zydra |  | Austria | 1a3153d4-825b-4c8f-bdd6-f3d6d826280c | 7 | 'Zydra' stood on the same side as FACEIT 1a3153d4 (Zydra / zydra_ow) in 7 linked series |
 | Zzz | zzz |  | United States | 0a7555bc-8cd2-44bd-b1d5-df0c528dddea | 42 | 'zzz' stood on the same side as FACEIT 0a7555bc (z_ow / zman) in 3 linked series |
-| Danny_(American_player) | Danny | American player | United States | 16e56097-3541-4700-9115-9063bc6c3fd9 | 17 | the handle matched several FACEIT players: 16e56097 (Danny / dannyow) in 7; b41cf21b (DDD77 / Danny) in 4 |
+| Danny_(American_player) | Danny |  | United States | 16e56097-3541-4700-9115-9063bc6c3fd9 | 17 | the handle matched several FACEIT players: 16e56097 (Danny / dannyow) in 7; b41cf21b (DDD77 / Danny) in 4 |
+| Adios | adios |  | United States | 06bbbf2e-7b16-4b8d-9ff8-60f7b90a4eed | 2 | no FACEIT name on the same side of 2 linked series equals 'adios'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
+| Bagel | Bagel |  | Canada | 7a7d4cf7-38a4-41cf-ab37-fbd5422f59b4 | 3 | no FACEIT name on the same side of 3 linked series equals 'Bagel'; FACEIT named: ALargeBagel, BazOdub, Emmeryn, FrothyFilly7, LeeBakes, RedexLCO, ReyzrOW, SolvedMender |
+| Bya | Bya |  | Germany | 1a85c584-7864-4ee1-8667-d8a57cbe8d17 | 6 | no FACEIT name on the same side of 6 linked series equals 'Bya'; FACEIT named: Byaaa, abheekq, ailiseu-, eisgnom9, kaiBa_ow, owPsych0, xLorenn |
+| Dynamic | Dynamic |  | Pakistan | d4986e85-e387-4171-b704-cb40e5f861a3 | 2 | no FACEIT name on the same side of 2 linked series equals 'Dynamic'; FACEIT named: Dynamicmufa, FadeddFps, Hkeybroke, Just_Meman, Melophobiah, PutterOW, Thunder_ow, waveGod1 |
+| Foreshadow | Foreshadow |  | South Korea | 772f03e6-fa50-4639-b223-ff19daf1b769 | 2 | no FACEIT name on the same side of 2 linked series equals 'Foreshadow'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
+| H9mpe | h9mpe |  | Sweden | 5e9f5899-8ebb-419b-9feb-60f45b4e7e91 | 8 | no FACEIT name on the same side of 8 linked series equals 'h9mpe'; FACEIT named: Abbs_, IsakTriesIt, KayZzeeR, KenSoo, Necr0s, Y19251658, chazmball, h9mpinator, kaya1ow |
+| Heavenly | Heavenly |  | United States | 0280d6ab-db07-466b-be82-b2147468230b | 2 | no FACEIT name on the same side of 2 linked series equals 'Heavenly'; FACEIT named: Dirtgaming, Fl4k-Drift, HeavenlyOkk, K0RTAL, Schwartzyz, kyidk1, niamnoitsab, salamiboi200 |
+| HoJin | HoJin |  | South Korea | 7b0c7c37-06af-402a-81a7-b20a261b72ae | 2 | no FACEIT name on the same side of 2 linked series equals 'HoJin'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
+| Isack | Isack |  | Norway | a78ebb0b-5dc8-4d71-b32d-a8d8121ab5d9 | 8 | no FACEIT name on the same side of 8 linked series equals 'Isack'; FACEIT named: Abbs_, IsakTriesIt, KayZzeeR, KenSoo, Necr0s, Y19251658, chazmball, h9mpinator, kaya1ow |
+| Roho | loljkhaha |  | Saudi Arabia | 52571b21-aacf-4a7a-b26c-560702201195 | 7 | no FACEIT name on the same side of 7 linked series equals 'loljkhaha'; FACEIT named: AOY_, Checkmate2, IZaYaKI222, Lotsha, Scyle, TVNT_, gucci444, roho123 |
+| Meman | Meman |  | United States | 59b9c5bf-ba6e-4c3c-b418-16107c2aec15 | 2 | no FACEIT name on the same side of 2 linked series equals 'Meman'; FACEIT named: Dynamicmufa, FadeddFps, Hkeybroke, Just_Meman, Melophobiah, PutterOW, Thunder_ow, waveGod1 |
+| R3flect | R3flect |  | Norway | 9cf62866-4cf4-4b14-ae80-830ea1e5ccae | 6 | no FACEIT name on the same side of 6 linked series equals 'R3flect'; FACEIT named: Hitoriow, Pak_Oww, R3flect7, Raajaro, Tekun0, Zorrow_ow, sobek188 |
+| Eve | SONNETiCA |  | United States | 02f074b3-79fe-44ac-a539-d6093bda7651 | 2 | no FACEIT name on the same side of 2 linked series equals 'SONNETiCA'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
+| Zelos | Zelos |  | Canada | 18f62f7a-a4c1-49bb-b01c-66d6df5dbec5 | 2 | no FACEIT name on the same side of 2 linked series equals 'Zelos'; FACEIT named: HowsYourDay0, Passenger-Wy, SONNETiCAow, ZelosFPS, adiossssssss, hojinfps, owForeshadow |
 

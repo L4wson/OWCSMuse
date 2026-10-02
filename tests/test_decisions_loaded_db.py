@@ -125,3 +125,21 @@ def test_the_check_names_the_loader_and_fails_through_check(loaded, monkeypatch)
     conn.commit()
     assert not r.ok and r.discrepancy_count == 1
     assert r.discrepancies[0]["hint"] == "reload: python -m owcsmuse alias load"
+
+
+def test_a_display_name_decided_but_not_loaded_fails(loaded):
+    # Astro's display was decided and never applied: the file names it, players.display_name does not carry it
+    conn, scope, ids = loaded
+    pd = identity.PlayerDecisions(scope / "player_identity_decisions.json")
+    pd.set("Some_Page", ids["p1"], "Some", "test", display="Shown")
+    pd.save()
+    found, _ = _found(conn, scope)
+    assert found == {("decided_not_loaded", "scope/player_identity_decisions.json", json.dumps(["display_name", ids["p1"]]))}
+
+
+def test_a_display_name_loaded_without_a_decision_fails(loaded):
+    # the other direction: set on production by hand, absent from the file, so the next load would silently wipe it
+    conn, scope, ids = loaded
+    _sql(conn, "UPDATE players SET display_name = 'Hand Set' WHERE player_id = %s", (ids["p1"],))
+    found, _ = _found(conn, scope)
+    assert found == {("loaded_not_decided", "scope/player_identity_decisions.json", json.dumps(["display_name", ids["p1"]]))}
