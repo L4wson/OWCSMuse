@@ -1081,9 +1081,9 @@ starts:
 | stage | what | status |
 |---|---|---|
 | 0 | client, request planner, cache, attribution | done; auth confirmed and the match record's shape seen (see below) |
-| 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
+| 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2024-2026 main series and Dallas | done: `liquipedia reconcile` ties every stored record to FACEIT in tiers (413 exact, 13 strong, 19 ambiguous all decided by the owner, 6 unmatched; `scope/liquipedia_reconciliation.md`) |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
-| 3 | source-agnostic match model and cross-source identity | not started |
+| 3 | source-agnostic match model and cross-source identity | done (closed 2026-10-02): see **Stage 3: closing summary** below |
 | 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved. All 14 Dallas series are linked by owner decision (2026-10-02) and present Liquipedia's score, best-of (bo5/bo7, replacing FACEIT's junk bo1), play time and map results (53 maps) |
 | 5 | Korea and China, results only | not started |
 
@@ -1345,15 +1345,54 @@ score a phantom inflated lands in the ambiguous tier (the records disagree on th
 those rather than only confirmed links. The precedence change this implies (Liquipedia as the source of record for
 results and maps wherever a linked record exists) waits on that report.
 
-### Open items for later stages
+### Stage 3: closing summary (2026-10-02)
 
-- **Stage 3, date-bounded team-to-org mapping.** A team id maps to an org for all time
-  today, which over-counts across an acquisition (Virtus pro's record includes the 2024
-  series of Ex Oblivione, whose roster it acquired: 5 series where 2 are its own), and
-  an org's searchable names hold only each team id's current name, so "Ex Oblivione"
-  finds nothing. Liquipedia identities need the same shape - a history table with
-  validity dates for every renameable thing, and searchable aliases - so this is fixed
-  once, there. Golden cases G11 and G13 hold it as known bugs.
+**What it established.** A match is one series whichever source holds it (`series`, migration 028), with
+per-field provenance; Liquipedia is the source of record for a linked series' result, best-of and map count, and
+FACEIT the only source of player stats (034). Players, teams and orgs carry identity across sources through reviewed
+anchors (`entity_anchors`): 363 player identities, 27 Liquipedia team names, and team-to-org windows dated per era
+(026, 029). Every reviewed decision in `scope/` is provably loaded (`decisions_loaded`), every check counts its
+failures exactly (no LIMIT feeds a count), and every Liquipedia team name resolves to the entity that holds its series
+(`lp_name_resolution`). The 2024 season, Dreamhack Dallas included, is linked to Liquipedia; Dallas carries
+Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked results (G32-G34).
+
+**Conventions it produced.** Each was learned from a wrong answer this project actually gave:
+
+- **A FACEIT team id follows the roster, not the organisation.** Its `leader` is always a rostered player and its
+  avatar follows the brand; neither tells "the org got a new roster" from "the roster moved to a new org". Only the
+  owner's knowledge decides a window. The one helpful signal: the later brand fielding a team id of its own.
+- **Team ids get recycled.** One id can carry unrelated teams years apart (0464a373: UNC inc, Rad, Sakura, LuneX), so
+  continuity of id is not continuity of anything. A long gap with roster turnover flags a candidate, never decides one.
+- **Roster overlap is not identity, and roster change is not org change.** Whole rosters move between orgs, and one
+  org fields different rosters (Quick Esports: three rosters on one id, plus a 2024 id).
+- **FACEIT renames lag.** A name change usually lands days after the real change (Sakura played the 2025 Stage 2
+  opener as "Rad"); a stage boundary, Liquipedia's name and who played outrank FACEIT's first sighting of a name.
+- **Liquipedia's team pages follow the brand, not ownership** (1DIPVS100GORILLAS had its own page; same org).
+- **FACEIT fabricates results, not map rows.** A sweep's extra map lives only in `/matches` `detailed_results`
+  (5-0 for a 4-0); a drawn map is counted as a win. Liquipedia lists unplayed map slots as `notplayed`, never games.
+- **A decision recorded is not a decision applied.** 166 identities and 11 team names sat unloaded for a session, and
+  one decision was stranded on a branch committed after its PR merged.
+- **A name must route to the entity that holds its series.** A Liquipedia name anchored to a bare team id answered with
+  the wrong era's record while every record key was correct.
+
+**Left open**, in the order to pick them up:
+
+1. **Attribution of a Liquipedia result.** `answer_attribution` credits Liquipedia only for its map rows and play times;
+   a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and 4-1) carries no CC-BY-SA attribution.
+2. **The "Team" parser bug.** "Team Z record" searches for "z" and "Team Falcons" for "falcons": the parser takes
+   "Team" as a keyword. Every team name starting with "Team" is at risk (G34 asks by id to step around it).
+3. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
+   Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
+4. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
+   matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
+   The FACEIT side needs a crawl, not Liquipedia requests.
+5. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
+6. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+   it after the fact, the command should refuse it.
+7. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
+8. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
+9. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
+10. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Golden answer suite
 
@@ -1364,13 +1403,17 @@ the code under test. That rule exists because a test written from output encodes
 the bug as correct - it is how the FACEIT nickname `KSAA0` got asserted where the
 in-game name `KSAA` belonged.
 
-- **The warehouse** is 20 real matches (`tests/golden/matches.json`, each with why
-  it is there) captured verbatim from `raw_payloads` by `tools/capture_golden.py`,
+- **The warehouse** is 23 real matches (`tests/golden/matches.json`, each with why
+  it is there) and 4 captured Liquipedia records (`tests/golden/liquipedia_matches.json`), reconciled with the
+  repository's own team map and link decisions as production does captured verbatim from `raw_payloads` by `tools/capture_golden.py`,
   their championships' scope decisions, and the repository's own
   `scope/org_decisions.json` and `scope/alias_decisions.json`, built by
   `tests/golden_support.py`. It holds both NA and EMEA, both teams named Geekay
   Esports, both SpaceStation teams, a bracket bye and a series with no map stats,
-  so each past bug has something to bite on.
+  so each past bug has something to bite on. G32-G34 cover Liquipedia-linked results: a 2024 NA series linked
+  only through the region fix (G32), the NA grand final presenting Liquipedia's 4-0 over FACEIT's phantom 5-0 (G33),
+  and a Dreamhack Dallas series with Liquipedia's maps, a drawn map and its schedule (G34); an evidence `by_match`
+  expectation pins one series' row (score, best-of, sources, played_at).
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with
