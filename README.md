@@ -318,10 +318,12 @@ per-map player stats, so those series land in `result_only`: the winner and
 series score are known, the maps are not. 76 of 485 finished series in scope
 are `result_only`, and they are not spread evenly - 28 of 94 series in playoff
 and LAN competitions have no map stats against 48 of 391 elsewhere, and all 14
-Dreamhack Dallas matches are `result_only`. **Map-grain answers therefore
-under-represent exactly the matches that mattered most.** Series-grain answers
-(`record`, `series record against`) still count them, and a versus answer names
-the series it had to exclude.
+Dreamhack Dallas matches are `result_only`. Liquipedia's map results (map, mode, per-map score, winner, never player
+stats) now fill 48 of the 76, all 14 Dallas series among them (2026-10-02, each map checked against the raw
+Liquipedia record), with Liquipedia's scheduled time in place of FACEIT's result-entry time. **Map-grain player
+answers still under-represent exactly the matches that mattered most**, and the 28 `result_only` series Liquipedia has
+not linked have no map results at all. Series-grain answers (`record`, `series record against`) count every one, and a
+versus answer names the series it had to exclude.
 
 ### 2024 carries 9 stat keys; 2025 and 2026 carry 47
 
@@ -1051,7 +1053,7 @@ starts:
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
 | 3 | source-agnostic match model and cross-source identity | not started |
-| 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved. All 14 Dallas series are linked by owner decision (2026-10-02): 12 present Liquipedia's score and best-of (bo5/bo7, replacing FACEIT's junk bo1), the two against Twisted Minds wait on its team-map decision; Liquipedia's play times and map results wait on `liquipedia enrich` |
+| 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved. All 14 Dallas series are linked by owner decision (2026-10-02) and present Liquipedia's score, best-of (bo5/bo7, replacing FACEIT's junk bo1), play time and map results (53 maps) |
 | 5 | Korea and China, results only | not started |
 
 ### The client (Stage 0)
@@ -1137,6 +1139,8 @@ Source is recorded per field, never merged silently:
 - Push-mode maps are normalised to the same win/loss indicator (1/0) FACEIT's own `round_stats` already uses for
   that mode (it never carries the push distance), rather than storing Liquipedia's literal distance score
   alongside FACEIT's indicator scores in the same integer column.
+- **A parenthetical ending in "player" is a disambiguator, not a real name.** `Haven_(American_player)` is the handle
+  Haven; read as a real name, "American player" resolved to five players. `Goose_(Matthew_Gisi)` keeps its real name.
 - **A map slot Liquipedia marks not played is not a game.** A series decided early still lists its remaining slots
   (`status: notplayed`, `resulttype: np`, no scores, no winner): 143 across 81 2024 records. Until 2026-10-02 the
   parser counted them, inflating `n_games` (which hides a FACEIT phantom beyond the real count) and readying them to
@@ -1260,7 +1264,10 @@ its first and last sighting, the same shape as `player_nicknames`; the collector
 `players.display_name` is an owner's override set by `identity load` from a player identity decision's `display`
 (`identity decide <page> --player <guid> --display "ZZZ"`, or `--nickname <FACEIT name>` to find the GUID by a
 name that names exactly one player): shown everywhere, searchable by nothing new, every nickname and in-game
-name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss). Astro (FACEIT Astronexz) was listed here as decided, but no display decision for it was recorded anywhere; the page `Astro_(Canadian_player)` is decided to that GUID (2026-10-02 batch), and its display name stays undecided until recorded.
+name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss) and Astro (FACEIT Astronexz). Astro's decision was
+committed to `stage3-identity` three minutes after PR #6 merged (363a35e) and so never reached main; restored from that
+commit on 2026-10-02. `decisions_loaded` compares the files on main with production in both directions, display names
+included, but a decision stranded on an unmerged branch is in neither and no file-to-table comparison can see it.
 
 **SpaceStation Gaming is one organisation** across its 2024 EMEA team (`a359db61`, OWCS 2024 EMEA Stage 1 and
 Dreamhack Dallas) and its NA partner team from 2025 (`6ddc0431`): decided by the owner on 2026-10-02, reversing

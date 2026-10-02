@@ -47,7 +47,9 @@ def parse_player(name: Optional[str], displayname: Optional[str], flag: Optional
     """`name` is page-style ("HYEON_(Kim_Seong-hyeon)", "Quartz"); `displayname` is the handle shown.
 
     The handle is the display name, else the page title before any "_(...)"; the real name is the parenthetical,
-    underscores read as spaces. Both are kept so both are searchable.
+    underscores read as spaces. Both are kept so both are searchable. A parenthetical ending in "player" is
+    Liquipedia's disambiguator between two players of one handle ("Haven_(American_player)"), not a name: read as one,
+    "American player" resolved to five players.
     """
     page = (name or "").strip()
     if not page:
@@ -55,6 +57,8 @@ def parse_player(name: Optional[str], displayname: Optional[str], flag: Optional
     base, real = page, None
     if "_(" in page and page.endswith(")"):
         base, real = page[:page.index("_(")], page[page.index("_(") + 2:-1].replace("_", " ").strip() or None
+        if real and real.lower().split()[-1] == "player":
+            real = None
     handle = (displayname or "").strip() or base.replace("_", " ").strip()
     return LPPlayer(page=page, handle=handle, real_name=real, nationality=(flag or "").strip() or None)
 

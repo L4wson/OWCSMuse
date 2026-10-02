@@ -52,6 +52,18 @@ def test_the_region_comes_from_the_page_and_time_from_the_epoch():
     assert parse_row(row, 1).played_at.year == 2000
 
 
+def test_a_disambiguator_is_not_a_real_name_but_a_real_name_is():
+    from owcsmuse.liquipedia.matches import parse_player
+    for page, handle in (("Haven_(American_player)", "Haven"), ("Haku_(Saudi_Arabian_player)", "Haku"),
+                         ("Astro_(Canadian_player)", "Astro")):
+        p = parse_player(page, None)
+        assert (p.handle, p.real_name) == (handle, None), page
+    p = parse_player("Goose_(Matthew_Gisi)", None)
+    assert (p.handle, p.real_name) == ("Goose", "Matthew Gisi")
+    p = parse_player("HYEON_(Kim_Seong-hyeon)", "HYEON")
+    assert (p.handle, p.real_name) == ("HYEON", "Kim Seong-hyeon")
+
+
 def test_a_map_slot_marked_not_played_is_not_a_game_but_a_draw_is():
     # ROC Esports 3-0 Sheer Cold (127212_5BUO2jH7Ds_0003): five slots, the last two not played
     played = [{"map": m, "mode": "Control", "winner": "1", "scores": [2, 0]} for m in ("A", "B", "C")]
