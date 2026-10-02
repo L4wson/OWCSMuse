@@ -80,6 +80,18 @@
   {
    "match_id": "1-9376f913-f6ef-4fa0-bc39-a58d09986807",
    "why": "S4 EMEA playoffs Twisted Minds v 'bye': a bracket slot, not a series"
+  },
+  {
+   "match_id": "1-4b984ffd-9868-45fa-92c5-c6a290bfe68a",
+   "why": "2024 NA Stage 1 Main Event, Toronto Defiant 3-2 Timeless: a Liquipedia record with no FACEIT id, linked (strong) only because 2024 'North_America' pages resolve to na (the 2026-10-02 region fix) and both names are decided in the team map"
+  },
+  {
+   "match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+   "why": "2024 NA Stage 1 grand final, Toronto Defiant 4-0 Timeless: FACEIT stores 5-0 (a phantom Dorado entry in detailed_results); the owner-confirmed Liquipedia link presents 4-0, best-of 7"
+  },
+  {
+   "match_id": "1-43d289c0-bb18-416b-b639-b7e076b41e7f",
+   "why": "Dreamhack Dallas, Team Falcons 3-0 ENCE: result_only on FACEIT (best_of stored as 1, entry-time timestamp); linked by owner decision and enriched with Liquipedia's 4 maps, one of them a 3-3 Numbani draw, and Liquipedia's 20:45 play time"
   }
  ]
 }

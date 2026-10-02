@@ -9,7 +9,11 @@ view). Ranking is done in Python so no database extension is required:
     query is a prefix       0.90
     query is contained      0.80   (handles "ksaa" vs "KSAA0")
     name is contained       0.70   (query has extra words)
-    difflib similarity      ratio * 0.75, kept when >= min_score
+    difflib similarity      ratio * 0.75, kept when >= min_score (MIN_SCORE, 0.60)
+
+The floor was 0.50 until 2026-10-02, when "geekay esports" scored 0.54 against "rad esports" on the shared word alone.
+Measured on production's names, 0.60 removed every fuzzy extra offered for a team name typed correctly (47 -> 0; 236 ->
+12 for players) and kept every typo recovery (158/159 team typos, 419/420 player typos); 0.65 lost 15 recoveries.
 
 `rank_candidates()` is pure and unit-tested; `resolve()` adds the query.
 """
@@ -24,6 +28,8 @@ from difflib import SequenceMatcher
 from typing import Any, Iterable, Optional
 
 import psycopg
+
+MIN_SCORE = 0.6   # fuzzy floor: see the module docstring
 
 # A FACEIT player/team id, so an ambiguous name can be disambiguated by id.
 ENTITY_ID = re.compile(
@@ -99,7 +105,7 @@ def rank_candidates(
     query: str,
     names: Iterable[dict[str, Any]],
     limit: int = 5,
-    min_score: float = 0.5,
+    min_score: float = MIN_SCORE,
 ) -> list[Candidate]:
     """names: rows with entity_type, entity_id, name, name_kind, current_name (name_folded optional)."""
     q = fold(query)
@@ -224,7 +230,7 @@ def resolve_alias(conn: psycopg.Connection, alias: str, entity_type: Optional[st
 
 
 def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = None,
-            limit: int = 5, min_score: float = 0.5) -> list[Candidate]:
+            limit: int = 5, min_score: float = MIN_SCORE) -> list[Candidate]:
     """Rank all known names for `entity_type` ('player', 'team' or None for both).
 
     A FACEIT id resolves exactly, so two entities with identical names can still

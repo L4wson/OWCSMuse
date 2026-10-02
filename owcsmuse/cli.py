@@ -27,7 +27,7 @@ from .discovery import (
 from .faceit.client import FaceitClient
 from .log import configure_logging
 from .parsers.championships import OWCS_PATTERN
-from .resolve import resolve
+from .resolve import MIN_SCORE, resolve
 from .aliases import DEFAULT_ALIAS_DECISIONS_PATH, AliasDecisions, list_aliases, load_decisions as load_alias_decisions
 from .liquipedia import competition_names as comp_names
 from .liquipedia import identity as lp_identity
@@ -191,7 +191,7 @@ def cmd_stats(args: argparse.Namespace, settings: Settings) -> int:
 
 def cmd_resolve(args: argparse.Namespace, settings: Settings) -> int:
     with connect(settings.database_url, schema=settings.db_schema) as conn:
-        cands = resolve(conn, args.query, args.type, args.limit, args.min_score)
+        cands = resolve(conn, args.query, args.type, args.limit, args.min_score if args.min_score is not None else MIN_SCORE)
     _print([c.as_dict() for c in cands])
     return 0
 
@@ -778,7 +778,7 @@ def build_parser() -> argparse.ArgumentParser:
     rs.add_argument("query")
     rs.add_argument("--type", choices=["player", "team"])
     rs.add_argument("--limit", type=int, default=5)
-    rs.add_argument("--min-score", type=float, default=0.5)
+    rs.add_argument("--min-score", type=float, default=None)
     rs.set_defaults(func=cmd_resolve)
 
     cr = sub.add_parser("crawl", help="history-crawl LIST phase for competitions hidden from the championship endpoints")

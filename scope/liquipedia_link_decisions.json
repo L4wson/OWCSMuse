@@ -1,20 +1,100 @@
 {
   "note": "Reviewed decisions on Liquipedia matches the reconciler could not link on its own. Keys are Liquipedia objectnames, or `faceit:<match id>` for the one record that names that FACEIT id (an exact id whose records disagree); faceit_match_id names the FACEIT match it is, or is null when there is none. Edit by hand or with `python -m owcsmuse liquipedia links decide`.",
   "decisions": {
+    "127124_zooRkLJB0v_R01-M001": {
+      "faceit_match_id": "1-c06bfd6e-cf5d-4e36-aa19-0810aee38b36",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:33+00:00"
+    },
+    "127124_zooRkLJB0v_R01-M002": {
+      "faceit_match_id": "1-43d289c0-bb18-416b-b639-b7e076b41e7f",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:36+00:00"
+    },
+    "127124_zooRkLJB0v_R01-M003": {
+      "faceit_match_id": "1-fb369fac-63cb-4243-98a9-bb3aceec02e7",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:38+00:00"
+    },
+    "127124_zooRkLJB0v_R01-M004": {
+      "faceit_match_id": "1-d19f72eb-9c6c-4c03-9332-8b91601bb716",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:40+00:00"
+    },
+    "127124_zooRkLJB0v_R01-M005": {
+      "faceit_match_id": "1-cd5e474e-a6d4-49c2-ba0e-f238abfa5986",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:42+00:00"
+    },
+    "127124_zooRkLJB0v_R01-M006": {
+      "faceit_match_id": "1-e812c8d0-ceb7-42eb-9245-6f691b9c542d",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:44+00:00"
+    },
+    "127124_zooRkLJB0v_R02-M001": {
+      "faceit_match_id": "1-e7bbb44a-5ebd-4a09-aad8-8273439fb572",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:46+00:00"
+    },
+    "127124_zooRkLJB0v_R02-M002": {
+      "faceit_match_id": "1-e9927ed8-0f77-46fc-bfd5-62f3706bb706",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:48+00:00"
+    },
+    "127124_zooRkLJB0v_R02-M003": {
+      "faceit_match_id": "1-fe23288e-3419-4bcb-81b7-76526722d170",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:50+00:00"
+    },
+    "127124_zooRkLJB0v_R02-M004": {
+      "faceit_match_id": "1-74e38b28-8000-4ad9-8448-475d3f329664",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:52+00:00"
+    },
+    "127124_zooRkLJB0v_R03-M001": {
+      "faceit_match_id": "1-d3d9b436-5fc2-4082-b99f-16f810fcfcd0",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:54+00:00"
+    },
+    "127124_zooRkLJB0v_R04-M001": {
+      "faceit_match_id": "1-cd3ccc44-1b18-463d-a4de-2d400ef020e9",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:56+00:00"
+    },
+    "127124_zooRkLJB0v_R04-M002": {
+      "faceit_match_id": "1-88eb587c-0af4-480a-ae5a-4cb0ee9174e8",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:22:58+00:00"
+    },
+    "127124_zooRkLJB0v_R05-M001": {
+      "faceit_match_id": "1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b",
+      "note": "Dreamhack Dallas 2024: one-to-one by teams and series score (Liquipedia's score equals its own map-winner count and matches FACEIT's stored series score); FACEIT's time is result entry and its best_of 1 is junk (README). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T03:23:00+00:00"
+    },
+    "127200_p9x4ti8iHl_R05-M001": {
+      "faceit_match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+      "note": "Confirmed: Toronto Defiant 4-0 Timeless, OWCS 2024 NA Stage 1 grand final (bo7). FACEIT stores 5-0: its /matches detailed_results carries a 5th entry (Dorado, the next pick, 1-0) that was never played; /stats and match_rounds hold the 4 real maps, matching Liquipedia map for map. Liquipedia's 4-0 is the series score. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:44+00:00"
+    },
+    "127216_1Sxcy6HVqj_R05-M001": {
+      "faceit_match_id": "1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+      "note": "Confirmed: Twisted Minds 4-1 ENCE, OWCS 2024 EMEA Stage 1 grand final (bo7). FACEIT stores 5-1: its /matches detailed_results carries a 6th entry (Ilios, the next pick, 0-0) that was never played; /stats and match_rounds hold the 5 real maps, matching Liquipedia map for map. Liquipedia's 4-1 is the series score. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:45+00:00"
+    },
     "faceit:1-28ea62bc-16c1-4686-b41b-479d5275d151": {
       "faceit_match_id": "1-28ea62bc-16c1-4686-b41b-479d5275d151",
       "note": "Confirmed: Dallas Fuel vs Spacestation Gaming, 2026-04-11 (S8 NA playoffs). FACEIT 4-1 vs Liquipedia 3-1: map 2 Numbani was drawn 3-3 (winner NULL in the Stage 2 enrichment) and FACEIT counted it as a win. Liquipedia's 3-1 is the true series score; FACEIT's stored score is left as is and the series view presents the map-derived score (score_source = maps).",
-      "decided_at": "2026-10-01T22:42:55+00:00"
-    },
-    "faceit:1-472cc9eb-d7a3-4811-b633-397a99d6a502": {
-      "faceit_match_id": "1-472cc9eb-d7a3-4811-b633-397a99d6a502",
-      "note": "Confirmed: Disguised vs Team Liquid, 2026-03-29 (S8 NA regular season). FACEIT 4-0 vs Liquipedia 3-0: map 2 Blizzard World was drawn 3-3 and FACEIT counted the draw as a win for the series winner. Liquipedia's 3-0 is the true series score; FACEIT's stored score is left as is and the series view presents the map-derived score (score_source = maps).",
       "decided_at": "2026-10-01T22:42:55+00:00"
     },
     "faceit:1-3e78e269-28b7-481c-9ccc-46c173314ab9": {
       "faceit_match_id": "1-3e78e269-28b7-481c-9ccc-46c173314ab9",
       "note": "Confirmed: Al Qadsiah 1-4 Twisted Minds, 2025-10-26 (S6 EMEA Stage 3 playoffs). Liquipedia bo7 vs FACEIT bo5: a series with 4 map wins is a best-of-7 whatever FACEIT stored, so the pairing is right and FACEIT's best_of is wrong. FACEIT's stored value is left as is; the series view derives best-of from the winning score (best_of_source = derived from score).",
       "decided_at": "2026-10-01T23:11:33+00:00"
+    },
+    "faceit:1-472cc9eb-d7a3-4811-b633-397a99d6a502": {
+      "faceit_match_id": "1-472cc9eb-d7a3-4811-b633-397a99d6a502",
+      "note": "Confirmed: Disguised vs Team Liquid, 2026-03-29 (S8 NA regular season). FACEIT 4-0 vs Liquipedia 3-0: map 2 Blizzard World was drawn 3-3 and FACEIT counted the draw as a win for the series winner. Liquipedia's 3-0 is the true series score; FACEIT's stored score is left as is and the series view presents the map-derived score (score_source = maps).",
+      "decided_at": "2026-10-01T22:42:55+00:00"
     }
   }
 }

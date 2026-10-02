@@ -1,0 +1,1405 @@
+{
+ "detail": {
+  "best_of": 7,
+  "calculate_elo": false,
+  "chat_room_id": "match-1-70cff415-3817-4144-9eca-e917f89cb6e7",
+  "competition_id": "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1",
+  "competition_name": "OWCS 2024: NA Stage 1 - Main Event",
+  "competition_type": "championship",
+  "configured_at": 1711324335,
+  "detailed_results": [
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 2
+     },
+     "faction2": {
+      "score": 1
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 3
+     },
+     "faction2": {
+      "score": 1
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 1
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 3
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 1
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   }
+  ],
+  "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-70cff415-3817-4144-9eca-e917f89cb6e7",
+  "finished_at": 1711324385,
+  "game": "ow2",
+  "group": 3,
+  "match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+  "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+  "region": "GLOBAL",
+  "results": {
+   "score": {
+    "faction1": 5,
+    "faction2": 0
+   },
+   "winner": "faction1"
+  },
+  "round": 1,
+  "scheduled_at": 1711319700,
+  "started_at": 1711323610,
+  "status": "FINISHED",
+  "teams": {
+   "faction1": {
+    "avatar": "https://distribution.faceit-cdn.net/images/9e2b99c5-17ad-4b88-81ba-a8f2e9270aa0.jpeg",
+    "faction_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+    "leader": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+    "name": "Toronto Defiant",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "345265072",
+      "game_player_name": "Rupal",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "rupalzaman",
+      "player_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "806988051",
+      "game_player_name": "Vega",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "VegaOW",
+      "player_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "703657004",
+      "game_player_name": "Someone",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "SomeoneHam",
+      "player_id": "4ab4cc54-197d-4095-ab31-9456f02f0eaf"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "43252756",
+      "game_player_name": "MER1T",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "realMer1t",
+      "player_id": "0bbd8bc1-3c85-464b-8133-64ea55125f98"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://assets.faceit-cdn.net/avatars/58239fd5-cf2f-4894-a2ec-30fd026c262a_1557014539862.jpg",
+      "game_player_id": "351397614",
+      "game_player_name": "sugarfree",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "sug2rfree",
+      "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a"
+     }
+    ],
+    "substituted": false,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/2ac07529-bc50-4098-91da-67ecf32ad2e6.jpeg",
+      "game_player_id": "810303261",
+      "game_player_name": "akaLovell",
+      "game_skill_level": 2,
+      "membership": "free",
+      "nickname": "fpsLovell",
+      "player_id": "98bb70af-74f8-4294-bae3-4ad825e707d7"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "361518330",
+      "game_player_name": "Danny",
+      "game_skill_level": 2,
+      "membership": "free",
+      "nickname": "Danny_OW",
+      "player_id": "2d211a8f-8b67-456b-b776-cebbff6a644a"
+     }
+    ],
+    "type": "premade"
+   },
+   "faction2": {
+    "avatar": "",
+    "faction_id": "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+    "leader": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+    "name": "Timeless",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "360320931",
+      "game_player_name": "Rokit",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "Rokit600",
+      "player_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/48d3187d-c2bf-468c-961c-d4edaf13fae0.jpeg",
+      "game_player_id": "42172505",
+      "game_player_name": "OPENER",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "OPENER43",
+      "player_id": "e3e7dbf6-6968-4cd9-be0d-09a2c529650e"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/8478990b-0ff1-46db-bf40-28ae0d2f3d7b.jpeg",
+      "game_player_id": "376165434",
+      "game_player_name": "cjay",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "cjay4",
+      "player_id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/e21008b4-5f11-4f56-ae4f-50c2c5a86a3a.jpeg",
+      "game_player_id": "90610836",
+      "game_player_name": "Chopper",
+      "game_skill_level": 8,
+      "membership": "free",
+      "nickname": "chcpper",
+      "player_id": "3607f331-5426-45d9-91a0-7fdb42243262"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "309352558",
+      "game_player_name": "iCy",
+      "game_skill_level": 8,
+      "membership": "free",
+      "nickname": "FrozenWings",
+      "player_id": "dfce13a7-df35-49a7-bb21-d626092da5c0"
+     }
+    ],
+    "substituted": false,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/5d496f18-fd71-40dc-9a9f-9f3ad9ed5c05.jpeg",
+      "game_player_id": "389577919",
+      "game_player_name": "RAIKKER",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "JulianBubble",
+      "player_id": "5e9557ef-b5be-4ebd-a42a-c27c1c009c65"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/7b20ba04-0c13-416b-9679-43a370f8df4c.jpeg",
+      "game_player_id": "709701741",
+      "game_player_name": "SeonJun",
+      "game_skill_level": 9,
+      "membership": "free",
+      "nickname": "CATCATCAT23",
+      "player_id": "759bcdd9-e8e1-4492-95fa-77aca4cd84af"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "350638442",
+      "game_player_name": "Tensa",
+      "game_skill_level": 8,
+      "membership": "free",
+      "nickname": "TensaTheSage",
+      "player_id": "ce432d61-ef69-4f66-ab83-1e2950bba6c3"
+     }
+    ],
+    "type": "premade"
+   }
+  },
+  "version": 2,
+  "voting": {
+   "attacking_first": {
+    "entities": [
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     },
+     {
+      "class_name": "Faction 1",
+      "game_attacking_first_id": "faction1",
+      "guid": "faction1",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction 1"
+     },
+     {
+      "class_name": "Faction2",
+      "game_attacking_first_id": "faction2",
+      "guid": "faction2",
+      "image_lg": "",
+      "image_sm": "",
+      "name": "Faction2"
+     }
+    ],
+    "pick": [
+     "faction2",
+     "faction1",
+     "faction2",
+     "faction2",
+     "faction2",
+     "faction2",
+     "faction2"
+    ]
+   },
+   "map": {
+    "entities": [
+     {
+      "class_name": "Ilios",
+      "game_map_id": "0x080000000000066D",
+      "guid": "0x080000000000066D",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f2d716e6-cb55-4759-b0f4-28cd8fd24323_1703103126376.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5ebad419-993f-4fda-9e78-446759a05c4d_1703102993834.jpeg",
+      "name": "Ilios"
+     },
+     {
+      "class_name": "Lijiang Tower",
+      "game_map_id": "0x0800000000000662",
+      "guid": "0x0800000000000662",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ee3fe75-971a-4d37-9448-fd78cf975bd8_1703103130214.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ffb0acdb-ce25-41d8-a589-e0a7c447b2dd_1703102999443.jpeg",
+      "name": "Lijiang Tower"
+     },
+     {
+      "class_name": "Nepal",
+      "game_map_id": "0x08000000000004B7",
+      "guid": "0x08000000000004B7",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ec4b4329-5b16-48b3-bf1d-2c8d0efbcf1a_1703103133129.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7747138d-6711-4257-99d2-739e2f205419_1703103002544.jpeg",
+      "name": "Nepal"
+     },
+     {
+      "class_name": "Samoa",
+      "game_map_id": "0x0800000000000EC0",
+      "guid": "0x0800000000000EC0",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2d8d0bb3-b098-4482-861c-0af4590c95c3_1703103149418.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/387a7de6-d8f0-4b4e-b7dd-eba9a3c06d6c_1703103013339.jpeg",
+      "name": "Samoa"
+     },
+     {
+      "class_name": "Blizzard World",
+      "game_map_id": "0x080000000000075E",
+      "guid": "0x080000000000075E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be278cb2-9c83-49d3-abfb-7c94ffcc0d1f_1703103190096.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ac7b6281-24f1-4f5f-bfbf-04a1ea2c8942_1703103059008.jpeg",
+      "name": "Blizzard World"
+     },
+     {
+      "class_name": "Hollywood",
+      "game_map_id": "0x08000000000002AF",
+      "guid": "0x08000000000002AF",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/856aa4df-a6a0-4713-9d9b-c17d5e1830e1_1703103203800.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/45e0201d-ae45-48f1-a336-74bbd8006c47_1703103065745.jpeg",
+      "name": "Hollywood"
+     },
+     {
+      "class_name": "King's Row",
+      "game_map_id": "0x08000000000000D4",
+      "guid": "0x08000000000000D4",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/3071e358-5426-4a05-a928-519353b29fc4_1703103206776.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8c3011bf-be5b-4e65-99f5-28c9cb80a6f4_1703103068622.jpeg",
+      "name": "King's Row"
+     },
+     {
+      "class_name": "Midtown",
+      "game_map_id": "0x0800000000000B4C",
+      "guid": "0x0800000000000B4C",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/02b1222d-2b5e-4c7f-82e1-48bf1ef4bd8a_1703103209971.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8a66c21b-bab9-4fa0-923d-f954b5bc8d4a_1703103072451.jpeg",
+      "name": "Midtown"
+     },
+     {
+      "class_name": "Colosseo",
+      "game_map_id": "0x0800000000000B34",
+      "guid": "0x0800000000000B34",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/81178286-d627-4f34-ac4c-eca25239ab88_1703103220387.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2dcec9b5-b9d1-4647-aece-a9980cee2c4d_1703103105258.jpeg",
+      "name": "Colosseo"
+     },
+     {
+      "class_name": "Esperan\u00e7a",
+      "game_map_id": "0x0800000000000D53",
+      "guid": "0x0800000000000D53",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/32c9964e-2b63-4495-b3f2-9f947bad5e4a_1703103225824.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/57d6237f-9228-42e5-8035-07a734e2e5cc_1703103087193.jpeg",
+      "name": "Esperan\u00e7a"
+     },
+     {
+      "class_name": "New Queen Street",
+      "game_map_id": "0x0800000000000AEB",
+      "guid": "0x0800000000000AEB",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/0083a86e-a5bf-472b-857a-4141790606a4_1703103228854.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/16b005d0-eef2-4af4-b689-576286a8c9fc_1703103091604.jpeg",
+      "name": "New Queen Street"
+     },
+     {
+      "class_name": "New Junk City",
+      "game_map_id": "0x0800000000000E13",
+      "guid": "0x0800000000000E13",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/c13859b8-7ac1-46a3-a869-2ccafb5d3ebe_1703103182898.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/eb003902-8da9-4ed2-9b1f-975a7f797f8a_1703103050586.jpeg",
+      "name": "New Junk City"
+     },
+     {
+      "class_name": "Suravasa",
+      "game_map_id": "0x0800000000000D3E",
+      "guid": "0x0800000000000D3E",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/fa702302-43a4-49d5-b782-59e17d343db8_1703103186824.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f0b94a8e-bfbb-414b-b2ac-6135a2c902da_1703103053805.jpeg",
+      "name": "Suravasa"
+     },
+     {
+      "class_name": "Circuit Royal",
+      "game_map_id": "0x0800000000000827",
+      "guid": "0x0800000000000827",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be5588c6-b069-42c8-8f92-a5bf0039b367_1703103152414.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/94728215-cdfc-42c9-878b-059a136dbe34_1703103016007.jpeg",
+      "name": "Circuit Royal"
+     },
+     {
+      "class_name": "Dorado",
+      "game_map_id": "0x08000000000002C3",
+      "guid": "0x08000000000002C3",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8de33243-a6ec-44ab-b1a9-f92a3cd6154f_1703103154990.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a83c8b41-cc66-4e7a-a92a-20b14b83bb4a_1703103019601.jpeg",
+      "name": "Dorado"
+     },
+     {
+      "class_name": "Rialto",
+      "game_map_id": "0x0800000000000871",
+      "guid": "0x0800000000000871",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7153ec7e-e06a-4d9d-a840-44d0beaa145e_1703103165472.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b6b435d0-e9b9-415c-b383-64de98ee6e5b_1703103037608.jpeg",
+      "name": "Rialto"
+     },
+     {
+      "class_name": "Shambali Monastery",
+      "game_map_id": "0x0800000000000C85",
+      "guid": "0x0800000000000C85",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/93838223-c8b3-40e4-8186-90c6637e12c6_1703103174907.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ad9437ab-ef72-45ba-b217-f15a65dcb375_1703103043929.jpeg",
+      "name": "Shambali Monastery"
+     },
+     {
+      "class_name": "Ilios",
+      "game_map_id": "0x080000000000066D",
+      "guid": "0x080000000000066D",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/f2d716e6-cb55-4759-b0f4-28cd8fd24323_1703103126376.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/5ebad419-993f-4fda-9e78-446759a05c4d_1703102993834.jpeg",
+      "name": "Ilios"
+     },
+     {
+      "class_name": "Lijiang Tower",
+      "game_map_id": "0x0800000000000662",
+      "guid": "0x0800000000000662",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/4ee3fe75-971a-4d37-9448-fd78cf975bd8_1703103130214.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ffb0acdb-ce25-41d8-a589-e0a7c447b2dd_1703102999443.jpeg",
+      "name": "Lijiang Tower"
+     },
+     {
+      "class_name": "Nepal",
+      "game_map_id": "0x08000000000004B7",
+      "guid": "0x08000000000004B7",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ec4b4329-5b16-48b3-bf1d-2c8d0efbcf1a_1703103133129.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7747138d-6711-4257-99d2-739e2f205419_1703103002544.jpeg",
+      "name": "Nepal"
+     },
+     {
+      "class_name": "Samoa",
+      "game_map_id": "0x0800000000000EC0",
+      "guid": "0x0800000000000EC0",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/2d8d0bb3-b098-4482-861c-0af4590c95c3_1703103149418.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/387a7de6-d8f0-4b4e-b7dd-eba9a3c06d6c_1703103013339.jpeg",
+      "name": "Samoa"
+     },
+     {
+      "class_name": "Circuit Royal",
+      "game_map_id": "0x0800000000000827",
+      "guid": "0x0800000000000827",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/be5588c6-b069-42c8-8f92-a5bf0039b367_1703103152414.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/94728215-cdfc-42c9-878b-059a136dbe34_1703103016007.jpeg",
+      "name": "Circuit Royal"
+     },
+     {
+      "class_name": "Dorado",
+      "game_map_id": "0x08000000000002C3",
+      "guid": "0x08000000000002C3",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/8de33243-a6ec-44ab-b1a9-f92a3cd6154f_1703103154990.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/a83c8b41-cc66-4e7a-a92a-20b14b83bb4a_1703103019601.jpeg",
+      "name": "Dorado"
+     },
+     {
+      "class_name": "Rialto",
+      "game_map_id": "0x0800000000000871",
+      "guid": "0x0800000000000871",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/7153ec7e-e06a-4d9d-a840-44d0beaa145e_1703103165472.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/b6b435d0-e9b9-415c-b383-64de98ee6e5b_1703103037608.jpeg",
+      "name": "Rialto"
+     },
+     {
+      "class_name": "Shambali Monastery",
+      "game_map_id": "0x0800000000000C85",
+      "guid": "0x0800000000000C85",
+      "image_lg": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/93838223-c8b3-40e4-8186-90c6637e12c6_1703103174907.jpeg",
+      "image_sm": "https://assets.faceit-cdn.net/third_party/games/8b5e34c5-2591-427b-916e-5b93a7ab4564/assets/votables/ad9437ab-ef72-45ba-b217-f15a65dcb375_1703103043929.jpeg",
+      "name": "Shambali Monastery"
+     }
+    ],
+    "pick": [
+     "0x08000000000004B7",
+     "0x08000000000002AF",
+     "0x0800000000000D53",
+     "0x0800000000000E13",
+     "0x08000000000002C3",
+     "0x0800000000000EC0",
+     "0x0800000000000871"
+    ]
+   },
+   "voted_entity_types": [
+    "map",
+    "attacking_first"
+   ]
+  }
+ },
+ "stats": {
+  "rounds": [
+   {
+    "best_of": "6",
+    "competition_id": "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+    "match_round": "1",
+    "played": "1",
+    "round_stats": {
+     "Map": "0x08000000000004B7",
+     "OW2 Mode": "Control",
+     "Score Summary": "2 / 1",
+     "Winner": "8f632648-b26f-4554-bae4-40f9aee1773b"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "VegaOW",
+        "player_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+        "player_stats": {
+         "Assists": "19",
+         "Damage Dealt": "4548",
+         "Damage Mitigated": "1389",
+         "Deaths": "2",
+         "Eliminations": "20",
+         "Healing Done": "8026",
+         "K/D Ratio": "10",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "SomeoneHam",
+        "player_id": "4ab4cc54-197d-4095-ab31-9456f02f0eaf",
+        "player_stats": {
+         "Assists": "8",
+         "Damage Dealt": "11179",
+         "Damage Mitigated": "10151",
+         "Deaths": "2",
+         "Eliminations": "25",
+         "Healing Done": "165",
+         "K/D Ratio": "12.5",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "realMer1t",
+        "player_id": "0bbd8bc1-3c85-464b-8133-64ea55125f98",
+        "player_stats": {
+         "Assists": "3",
+         "Damage Dealt": "11795",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "26",
+         "Healing Done": "0",
+         "K/D Ratio": "8.67",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "rupalzaman",
+        "player_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+        "player_stats": {
+         "Assists": "24",
+         "Damage Dealt": "3615",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "17",
+         "Healing Done": "14247",
+         "K/D Ratio": "8.5",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "sug2rfree",
+        "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "8416",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "28",
+         "Healing Done": "0",
+         "K/D Ratio": "9.33",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "team_stats": {
+       "Team": "Toronto Defiant",
+       "Team Avg Deaths": "2.4",
+       "Team Avg Eliminations": "23.2",
+       "Team Score": "2",
+       "Team Total Deaths": "12",
+       "Team Total Eliminations": "116",
+       "Team Win": "1"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "OPENER43",
+        "player_id": "e3e7dbf6-6968-4cd9-be0d-09a2c529650e",
+        "player_stats": {
+         "Assists": "6",
+         "Damage Dealt": "3891",
+         "Damage Mitigated": "715",
+         "Deaths": "9",
+         "Eliminations": "4",
+         "Healing Done": "7161",
+         "K/D Ratio": "0.44",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "cjay4",
+        "player_id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+        "player_stats": {
+         "Assists": "10",
+         "Damage Dealt": "4801",
+         "Damage Mitigated": "0",
+         "Deaths": "8",
+         "Eliminations": "4",
+         "Healing Done": "12121",
+         "K/D Ratio": "0.5",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "chcpper",
+        "player_id": "3607f331-5426-45d9-91a0-7fdb42243262",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "8573",
+         "Damage Mitigated": "31",
+         "Deaths": "8",
+         "Eliminations": "6",
+         "Healing Done": "0",
+         "K/D Ratio": "0.75",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "Rokit600",
+        "player_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "7125",
+         "Damage Mitigated": "0",
+         "Deaths": "7",
+         "Eliminations": "8",
+         "Healing Done": "0",
+         "K/D Ratio": "1.14",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "FrozenWings",
+        "player_id": "dfce13a7-df35-49a7-bb21-d626092da5c0",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "10688",
+         "Damage Mitigated": "12547",
+         "Deaths": "7",
+         "Eliminations": "6",
+         "Healing Done": "450",
+         "K/D Ratio": "0.86",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+      "team_stats": {
+       "Team": "Timeless",
+       "Team Avg Deaths": "7.8",
+       "Team Avg Eliminations": "5.6",
+       "Team Score": "1",
+       "Team Total Deaths": "39",
+       "Team Total Eliminations": "28",
+       "Team Win": "0"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "6",
+    "competition_id": "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+    "match_round": "2",
+    "played": "2",
+    "round_stats": {
+     "Map": "0x08000000000002AF",
+     "OW2 Mode": "Hybrid",
+     "Score Summary": "3 / 1",
+     "Winner": "8f632648-b26f-4554-bae4-40f9aee1773b"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "VegaOW",
+        "player_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+        "player_stats": {
+         "Assists": "23",
+         "Damage Dealt": "5050",
+         "Damage Mitigated": "1029",
+         "Deaths": "6",
+         "Eliminations": "16",
+         "Healing Done": "9798",
+         "K/D Ratio": "2.67",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "SomeoneHam",
+        "player_id": "4ab4cc54-197d-4095-ab31-9456f02f0eaf",
+        "player_stats": {
+         "Assists": "7",
+         "Damage Dealt": "13682",
+         "Damage Mitigated": "19773",
+         "Deaths": "2",
+         "Eliminations": "33",
+         "Healing Done": "0",
+         "K/D Ratio": "16.5",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "realMer1t",
+        "player_id": "0bbd8bc1-3c85-464b-8133-64ea55125f98",
+        "player_stats": {
+         "Assists": "3",
+         "Damage Dealt": "14075",
+         "Damage Mitigated": "392",
+         "Deaths": "8",
+         "Eliminations": "29",
+         "Healing Done": "0",
+         "K/D Ratio": "3.62",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "rupalzaman",
+        "player_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+        "player_stats": {
+         "Assists": "22",
+         "Damage Dealt": "4200",
+         "Damage Mitigated": "9",
+         "Deaths": "8",
+         "Eliminations": "12",
+         "Healing Done": "13649",
+         "K/D Ratio": "1.5",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "sug2rfree",
+        "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "11985",
+         "Damage Mitigated": "0",
+         "Deaths": "4",
+         "Eliminations": "33",
+         "Healing Done": "0",
+         "K/D Ratio": "8.25",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "team_stats": {
+       "Team": "Toronto Defiant",
+       "Team Avg Deaths": "5.6",
+       "Team Avg Eliminations": "24.6",
+       "Team Score": "3",
+       "Team Total Deaths": "28",
+       "Team Total Eliminations": "123",
+       "Team Win": "1"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "OPENER43",
+        "player_id": "e3e7dbf6-6968-4cd9-be0d-09a2c529650e",
+        "player_stats": {
+         "Assists": "10",
+         "Damage Dealt": "4672",
+         "Damage Mitigated": "2149",
+         "Deaths": "10",
+         "Eliminations": "10",
+         "Healing Done": "9222",
+         "K/D Ratio": "1",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "cjay4",
+        "player_id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+        "player_stats": {
+         "Assists": "16",
+         "Damage Dealt": "5276",
+         "Damage Mitigated": "0",
+         "Deaths": "7",
+         "Eliminations": "10",
+         "Healing Done": "11967",
+         "K/D Ratio": "1.43",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Rokit600",
+        "player_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "9075",
+         "Damage Mitigated": "0",
+         "Deaths": "8",
+         "Eliminations": "22",
+         "Healing Done": "0",
+         "K/D Ratio": "2.75",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "JulianBubble",
+        "player_id": "5e9557ef-b5be-4ebd-a42a-c27c1c009c65",
+        "player_stats": {
+         "Assists": "2",
+         "Damage Dealt": "10122",
+         "Damage Mitigated": "18018",
+         "Deaths": "10",
+         "Eliminations": "15",
+         "Healing Done": "0",
+         "K/D Ratio": "1.5",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "CATCATCAT23",
+        "player_id": "759bcdd9-e8e1-4492-95fa-77aca4cd84af",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "13593",
+         "Damage Mitigated": "0",
+         "Deaths": "9",
+         "Eliminations": "14",
+         "Healing Done": "0",
+         "K/D Ratio": "1.56",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+      "team_stats": {
+       "Team": "Timeless",
+       "Team Avg Deaths": "8.8",
+       "Team Avg Eliminations": "14.2",
+       "Team Score": "1",
+       "Team Total Deaths": "44",
+       "Team Total Eliminations": "71",
+       "Team Win": "0"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "6",
+    "competition_id": "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+    "match_round": "3",
+    "played": "3",
+    "round_stats": {
+     "Map": "0x0800000000000D53",
+     "OW2 Mode": "Push",
+     "Score Summary": "1 / 0",
+     "Winner": "8f632648-b26f-4554-bae4-40f9aee1773b"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "VegaOW",
+        "player_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+        "player_stats": {
+         "Assists": "13",
+         "Damage Dealt": "3368",
+         "Damage Mitigated": "1185",
+         "Deaths": "6",
+         "Eliminations": "15",
+         "Healing Done": "4848",
+         "K/D Ratio": "2.5",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "SomeoneHam",
+        "player_id": "4ab4cc54-197d-4095-ab31-9456f02f0eaf",
+        "player_stats": {
+         "Assists": "7",
+         "Damage Dealt": "7356",
+         "Damage Mitigated": "8842",
+         "Deaths": "4",
+         "Eliminations": "21",
+         "Healing Done": "88",
+         "K/D Ratio": "5.25",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "realMer1t",
+        "player_id": "0bbd8bc1-3c85-464b-8133-64ea55125f98",
+        "player_stats": {
+         "Assists": "6",
+         "Damage Dealt": "11092",
+         "Damage Mitigated": "0",
+         "Deaths": "5",
+         "Eliminations": "23",
+         "Healing Done": "0",
+         "K/D Ratio": "4.6",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "rupalzaman",
+        "player_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+        "player_stats": {
+         "Assists": "19",
+         "Damage Dealt": "3545",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "18",
+         "Healing Done": "10610",
+         "K/D Ratio": "9",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "sug2rfree",
+        "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "8355",
+         "Damage Mitigated": "0",
+         "Deaths": "3",
+         "Eliminations": "29",
+         "Healing Done": "0",
+         "K/D Ratio": "9.67",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "team_stats": {
+       "Team": "Toronto Defiant",
+       "Team Avg Deaths": "4",
+       "Team Avg Eliminations": "21.2",
+       "Team Score": "1",
+       "Team Total Deaths": "20",
+       "Team Total Eliminations": "106",
+       "Team Win": "1"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "OPENER43",
+        "player_id": "e3e7dbf6-6968-4cd9-be0d-09a2c529650e",
+        "player_stats": {
+         "Assists": "11",
+         "Damage Dealt": "3471",
+         "Damage Mitigated": "1372",
+         "Deaths": "6",
+         "Eliminations": "10",
+         "Healing Done": "6456",
+         "K/D Ratio": "1.67",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "cjay4",
+        "player_id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+        "player_stats": {
+         "Assists": "13",
+         "Damage Dealt": "3502",
+         "Damage Mitigated": "0",
+         "Deaths": "5",
+         "Eliminations": "9",
+         "Healing Done": "12368",
+         "K/D Ratio": "1.8",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Rokit600",
+        "player_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "8242",
+         "Damage Mitigated": "0",
+         "Deaths": "4",
+         "Eliminations": "16",
+         "Healing Done": "0",
+         "K/D Ratio": "4",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "JulianBubble",
+        "player_id": "5e9557ef-b5be-4ebd-a42a-c27c1c009c65",
+        "player_stats": {
+         "Assists": "7",
+         "Damage Dealt": "6490",
+         "Damage Mitigated": "6901",
+         "Deaths": "7",
+         "Eliminations": "10",
+         "Healing Done": "0",
+         "K/D Ratio": "1.43",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "chcpper",
+        "player_id": "3607f331-5426-45d9-91a0-7fdb42243262",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "6864",
+         "Damage Mitigated": "586",
+         "Deaths": "10",
+         "Eliminations": "6",
+         "Healing Done": "0",
+         "K/D Ratio": "0.6",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+      "team_stats": {
+       "Team": "Timeless",
+       "Team Avg Deaths": "6.4",
+       "Team Avg Eliminations": "10.2",
+       "Team Score": "0",
+       "Team Total Deaths": "32",
+       "Team Total Eliminations": "51",
+       "Team Win": "0"
+      }
+     }
+    ]
+   },
+   {
+    "best_of": "6",
+    "competition_id": "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1",
+    "game_id": "ow2",
+    "game_mode": "5v5",
+    "match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+    "match_round": "4",
+    "played": "4",
+    "round_stats": {
+     "Map": "0x0800000000000E13",
+     "OW2 Mode": "Flashpoint",
+     "Score Summary": "3 / 0",
+     "Winner": "8f632648-b26f-4554-bae4-40f9aee1773b"
+    },
+    "teams": [
+     {
+      "players": [
+       {
+        "nickname": "VegaOW",
+        "player_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+        "player_stats": {
+         "Assists": "22",
+         "Damage Dealt": "3767",
+         "Damage Mitigated": "1293",
+         "Deaths": "1",
+         "Eliminations": "21",
+         "Healing Done": "4382",
+         "K/D Ratio": "21",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "SomeoneHam",
+        "player_id": "4ab4cc54-197d-4095-ab31-9456f02f0eaf",
+        "player_stats": {
+         "Assists": "4",
+         "Damage Dealt": "7307",
+         "Damage Mitigated": "10674",
+         "Deaths": "2",
+         "Eliminations": "21",
+         "Healing Done": "139",
+         "K/D Ratio": "10.5",
+         "Result": "1",
+         "Role": "Tank"
+        }
+       },
+       {
+        "nickname": "realMer1t",
+        "player_id": "0bbd8bc1-3c85-464b-8133-64ea55125f98",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "8852",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "28",
+         "Healing Done": "0",
+         "K/D Ratio": "14",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "rupalzaman",
+        "player_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+        "player_stats": {
+         "Assists": "21",
+         "Damage Dealt": "3318",
+         "Damage Mitigated": "0",
+         "Deaths": "2",
+         "Eliminations": "17",
+         "Healing Done": "7257",
+         "K/D Ratio": "8.5",
+         "Result": "1",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "sug2rfree",
+        "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "7106",
+         "Damage Mitigated": "0",
+         "Deaths": "0",
+         "Eliminations": "26",
+         "Healing Done": "0",
+         "K/D Ratio": "26",
+         "Result": "1",
+         "Role": "Damage"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "team_stats": {
+       "Team": "Toronto Defiant",
+       "Team Avg Deaths": "1.4",
+       "Team Avg Eliminations": "22.6",
+       "Team Score": "3",
+       "Team Total Deaths": "7",
+       "Team Total Eliminations": "113",
+       "Team Win": "1"
+      }
+     },
+     {
+      "players": [
+       {
+        "nickname": "OPENER43",
+        "player_id": "e3e7dbf6-6968-4cd9-be0d-09a2c529650e",
+        "player_stats": {
+         "Assists": "2",
+         "Damage Dealt": "2264",
+         "Damage Mitigated": "1155",
+         "Deaths": "8",
+         "Eliminations": "1",
+         "Healing Done": "4943",
+         "K/D Ratio": "0.12",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "cjay4",
+        "player_id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+        "player_stats": {
+         "Assists": "4",
+         "Damage Dealt": "3407",
+         "Damage Mitigated": "0",
+         "Deaths": "6",
+         "Eliminations": "5",
+         "Healing Done": "7945",
+         "K/D Ratio": "0.83",
+         "Result": "0",
+         "Role": "Support"
+        }
+       },
+       {
+        "nickname": "Rokit600",
+        "player_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+        "player_stats": {
+         "Assists": "0",
+         "Damage Dealt": "4277",
+         "Damage Mitigated": "0",
+         "Deaths": "9",
+         "Eliminations": "3",
+         "Healing Done": "0",
+         "K/D Ratio": "0.33",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "chcpper",
+        "player_id": "3607f331-5426-45d9-91a0-7fdb42243262",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "5116",
+         "Damage Mitigated": "0",
+         "Deaths": "8",
+         "Eliminations": "4",
+         "Healing Done": "0",
+         "K/D Ratio": "0.5",
+         "Result": "0",
+         "Role": "Damage"
+        }
+       },
+       {
+        "nickname": "FrozenWings",
+        "player_id": "dfce13a7-df35-49a7-bb21-d626092da5c0",
+        "player_stats": {
+         "Assists": "1",
+         "Damage Dealt": "5341",
+         "Damage Mitigated": "9265",
+         "Deaths": "8",
+         "Eliminations": "2",
+         "Healing Done": "54",
+         "K/D Ratio": "0.25",
+         "Result": "0",
+         "Role": "Tank"
+        }
+       }
+      ],
+      "premade": true,
+      "team_id": "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+      "team_stats": {
+       "Team": "Timeless",
+       "Team Avg Deaths": "7.8",
+       "Team Avg Eliminations": "3",
+       "Team Score": "0",
+       "Team Total Deaths": "39",
+       "Team Total Eliminations": "15",
+       "Team Win": "0"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "stats_http_status": 200
+}

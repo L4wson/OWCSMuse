@@ -114,8 +114,8 @@ def build_golden_db(db_url: str, schema: str):
 
 
 def load_liquipedia_enrichment(conn, raw_conn) -> None:
-    """Stage 2: the one captured Liquipedia record (tests/golden/liquipedia_matches.json), stored and enriched
-    exactly as production does it - offline, no request, same pipeline.run_reconciliation() + enrich.enrich()."""
+    """The captured Liquipedia records (tests/golden/liquipedia_matches.json), reconciled, stored and enriched exactly
+    as production does it - offline, no request, same run_reconciliation() + store_run() + enrich.enrich()."""
     path = GOLDEN / "liquipedia_matches.json"
     if not path.exists():
         return
@@ -133,10 +133,13 @@ def load_liquipedia_enrichment(conn, raw_conn) -> None:
                    VALUES ('match', 'pagename', %s, %s, %s, %s)""",
                 (page, f"https://liquipedia.net/overwatch/{page}", len(records), [raw_id]))
     conn.commit()
-    run = lp_pipeline.run_reconciliation(conn, team_map_path=str(GOLDEN / "liquipedia_team_map_unused.json"),
-                                         decisions_path=str(GOLDEN / "liquipedia_link_decisions_unused.json"),
+    # the repository's own reviewed team map and link decisions, as production reconciles: the 2024 NA records carry no
+    # FACEIT id and link only through decided team names; the grand final and the Dallas series through link decisions
+    run = lp_pipeline.run_reconciliation(conn, team_map_path=str(ROOT / "scope" / "liquipedia_team_map.json"),
+                                         decisions_path=str(ROOT / "scope" / "liquipedia_link_decisions.json"),
                                          map_path=str(GOLDEN / "liquipedia_map.json"))
-    lp_enrich.enrich(conn, run, str(GOLDEN / "liquipedia_team_map_unused.json"))
+    lp_pipeline.store_run(conn, run)
+    lp_enrich.enrich(conn, run, str(ROOT / "scope" / "liquipedia_team_map.json"))
 
 
 def golden_schema() -> str:

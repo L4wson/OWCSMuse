@@ -2,16 +2,16 @@
   "note": "Reviewed Liquipedia team name -> FACEIT org/team. Keys are the folded Liquipedia name, or 'name|na' / 'name|emea' when the same name is two teams in two regions; entity_type is 'org' (entity_id is the org slug) or 'team' (an unmapped FACEIT team id). The reconciler trusts these and only these without marking a link provisional. Edit by hand or with `python -m owcsmuse liquipedia teams decide`.",
   "aliases": {
     "1234": {
-      "entity_type": "team",
-      "entity_id": "75516399-4c1d-40fc-bb46-a887edadc5a2",
-      "note": "same roster as Anyone's Legend, lost org privileges and rebranded to 1234; players/roster continuity over org branding per OWCS spot ownership rules",
-      "decided_at": "2026-09-23T05:02:12+00:00"
+      "entity_type": "org",
+      "entity_id": "1234",
+      "decided_at": "2026-10-02T21:19:06+00:00",
+      "note": "Search routing (owner, 2026-10-02): 1234's era of 75516399 (owner: Anyone's Legend dropped the roster, which kept the id as 1234). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
     },
     "1dipvs100gorillas": {
-      "entity_type": "team",
-      "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
-      "note": "same roster as Vanir Quick",
-      "decided_at": "2026-09-23T05:02:29+00:00"
+      "entity_type": "org",
+      "entity_id": "quick-esports",
+      "note": "Quick Esports' roster in 2025 Stage 2, played as 1DIPv100GORILLA; one org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "anyone s legend": {
       "entity_type": "team",
@@ -43,11 +43,23 @@
       "note": "Extinction is one organisation across two FACEIT team ids (2b7f8ef6 in 2025, a35f8d47 in 2026), each mapped to the org over its own Extinction era in scope/org_decisions.json; the Liquipedia name resolves to the org at the series' time, which keys to whichever team id carried it then. Supersedes the Stage 1 decision (team 2b7f8ef6 for all time), whose 5 conflicting votes for a35f8d47 were the 2026 era.",
       "decided_at": "2026-10-01T22:00:00+00:00"
     },
-    "lunex gaming": {
+    "lfo": {
       "entity_type": "team",
-      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
-      "note": "largely the same roster as Rad Esports and Sakura Esports (NA)",
-      "decided_at": "2026-09-23T05:02:34+00:00"
+      "entity_id": "a24592c1-8b7f-414b-a751-0e43b6da1522",
+      "note": "3/3 id-linked matches; one FACEIT name (LFO) over the id's whole life, 2024-03-08..03-21, 2024 NA Stage 1 only. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:36+00:00"
+    },
+    "luminosity gaming": {
+      "entity_type": "team",
+      "entity_id": "d4ec89d7-7d41-4c0e-9834-fbf87a199347",
+      "note": "7/7 id-linked matches; FACEIT 'Luminosity', one name, 2024 NA Stages 1-2. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:40+00:00"
+    },
+    "lunex gaming": {
+      "entity_type": "org",
+      "entity_id": "lunex",
+      "note": "LuneX (2026) on 0464a373, a team id FACEIT recycled across unrelated teams; anchored to the org so the name never reaches UNC inc. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "m80": {
       "entity_type": "team",
@@ -56,10 +68,10 @@
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "nrg shock": {
-      "entity_type": "team",
-      "entity_id": "d566d889-7885-4e74-a9dc-d29c111d2c1e",
-      "note": "FACEIT 'SOG' at Dallas (team d566d889, mapped to the students-of-the-game org), not 0c629c99, the one-day registration placeholder. Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T01:29:49+00:00"
+      "entity_type": "org",
+      "entity_id": "students-of-the-game",
+      "decided_at": "2026-10-02T21:19:06+00:00",
+      "note": "Search routing (owner, 2026-10-02): FACEIT 'SOG' at Dallas (d566d889, mapped to students-of-the-game for its whole life). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
     },
     "ntmr": {
       "entity_type": "org",
@@ -67,23 +79,41 @@
       "note": "org-level identity already resolved to ntmr",
       "decided_at": "2026-09-23T05:02:38+00:00"
     },
-    "rad esports": {
+    "pirates in pyjamas": {
       "entity_type": "team",
-      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
-      "note": "largely the same roster as LuneX Gaming and Sakura Esports (NA)",
-      "decided_at": "2026-09-23T05:02:35+00:00"
+      "entity_id": "f4401a61-5010-484b-8429-ad09e524b097",
+      "note": "8/8 id-linked matches across 2024 NA Stages 1-2; FACEIT PIP -> PxG PiP on 2024-04-14 is a rename on one id (the new name extends the old). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:38+00:00"
+    },
+    "rad esports": {
+      "entity_type": "org",
+      "entity_id": "rad",
+      "note": "Rad (2025 Stages 1-2) on 0464a373, a recycled team id; anchored to the org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     },
     "sakura esports|na": {
+      "entity_type": "org",
+      "entity_id": "sakura",
+      "note": "Sakura (2025) on 0464a373, a recycled team id; anchored to the org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
+    },
+    "shikigami": {
       "entity_type": "team",
-      "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
-      "note": "largely the same roster as LuneX Gaming and Rad Esports; NA-only, EMEA Sakura Esports is a different team",
-      "decided_at": "2026-09-23T05:02:36+00:00"
+      "entity_id": "ec69a520-047f-4754-b36e-b0c95e2066ff",
+      "note": "FACEIT has two Shikigami series on 2024-03-21, the dates of the two unmatched Liquipedia records (2024 NA Stage 1 main event); 9 other Liquipedia records already link to this team id by FACEIT id. One FACEIT id and name throughout; Graveyard and Solo play in every era. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T20:52:37+00:00"
     },
     "spacestation gaming": {
       "entity_type": "org",
       "entity_id": "spacestation-gaming",
       "note": "One organisation across the 2024 EMEA team (a359db61, Dreamhack Dallas) and the 2025+ NA team (6ddc0431): scope/org_decisions.json maps each id over its own era, so the org key is the same on both sides at any time. Decided by the owner (2026-10-02).",
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "students of the game": {
+      "entity_type": "org",
+      "entity_id": "students-of-the-game",
+      "note": "9/9 id-linked matches across 0c629c99 (team_Rakattack__, 2024 NA Stage 1 Group D) and d566d889 ('SOG', Stage 1 Main Event on; also Dallas as 'NRG Shock'). Org-level because no single team id covers 2024 NA Stage 1. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:42+00:00"
     },
     "supernova american team": {
       "entity_type": "team",
@@ -98,10 +128,10 @@
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "team z": {
-      "entity_type": "team",
-      "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
-      "note": "small roster transition to/from Supernova",
-      "decided_at": "2026-09-23T05:02:42+00:00"
+      "entity_type": "org",
+      "entity_id": "team-z",
+      "decided_at": "2026-10-02T21:19:06+00:00",
+      "note": "Search routing (owner, 2026-10-02): Team Z's era of d20d1868 (a roster picked up by a different org). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
     },
     "the kafe": {
       "entity_type": "team",
@@ -121,11 +151,17 @@
       "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
-    "vanir quick": {
+    "twisted minds": {
       "entity_type": "team",
-      "entity_id": "cb90edf6-60cb-4f73-8172-bf944729a114",
-      "note": "same roster as 1DIPVS100GORILLAS",
-      "decided_at": "2026-09-23T05:02:28+00:00"
+      "entity_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+      "note": "58/58 id-linked matches; one FACEIT team id and the same name 2024-2026. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T04:07:51+00:00"
+    },
+    "vanir quick": {
+      "entity_type": "org",
+      "entity_id": "quick-esports",
+      "note": "Quick Esports' Liquipedia name in 2024 and 2025 (templates quick esports orig / 2025); one org. Owner decision (2026-10-02).",
+      "decided_at": "2026-10-02T08:11:37+00:00"
     }
   }
 }

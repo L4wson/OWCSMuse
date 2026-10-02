@@ -52,6 +52,8 @@ CONFIRMED |= {"G29", "G30"}
 # G31 (Stage 3 step 4) asserts the capability rule: a player-stat question over a results-only slice is refused with
 # reason results_only and a working alternative, never answered with an empty or partial leaderboard.
 CONFIRMED |= {"G31"}
+# G32-G34 (owner, 2026-10-02): Liquipedia-linked results - the 2024 region fix, a phantom-inflated grand final, Dallas maps
+CONFIRMED |= {"G32", "G33", "G34"}
 
 CASES: list[dict] = []
 
@@ -395,6 +397,77 @@ case("G31", "A player-stat question for a results-only region is refused for tha
      "zero or some rows. It must offer the same question without the region, and that question must answer with the "
      f"independently-derived all-seasons eliminations leader ({top_elims['total']} eliminations).",
      regression="Stage 3 step 4: capability, not just coverage")
+
+
+# ------------------------------------------------- Liquipedia-linked results (Stage 3)
+# Each value is read off the captured Liquipedia record (independent.liquipedia_series), the source of record for a
+# linked series' result; the FACEIT payload is used only to name which faction is Liquipedia's team 1.
+NA_SERIES, NA_FINAL, DALLAS = ("1-4b984ffd-9868-45fa-92c5-c6a290bfe68a", "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+                               "1-43d289c0-bb18-416b-b639-b7e076b41e7f")
+by_id = {x.match_id: x for x in S}
+tor = team_id("Toronto Defiant")
+
+
+def oriented(mid, subject_name):
+    """(subject's score, opponent's score, best-of) from Liquipedia, the subject named as FACEIT names it."""
+    x = by_id[mid]
+    lp = I.liquipedia_series(mid, x.name["faction1"])
+    t1_is_subject = I_fold(lp["lp_team1"]) == I_fold(subject_name)
+    return (lp["score1"], lp["score2"]) if t1_is_subject else (lp["score2"], lp["score1"]), lp
+
+
+def I_fold(s):
+    return "".join(ch for ch in s.lower() if ch.isalnum())
+
+
+(na_for, na_against), na_lp = oriented(NA_SERIES, "Toronto Defiant")
+(gf_for, gf_against), gf_lp = oriented(NA_FINAL, "Toronto Defiant")
+faceit_gf = by_id[NA_FINAL].score
+assert (na_for, na_against, na_lp["best_of"], gf_for, gf_against, gf_lp["best_of"]) == (3, 2, 5, 4, 0, 7)
+assert sorted(faceit_gf.values()) == [0, 5]                     # what the answer must NOT present
+
+case("G32", "A 2024 NA series with no FACEIT id on its page is linked to Liquipedia", "exact",
+     "Toronto Defiant series record against Timeless",
+     {"status": "ok", "evidence": {"by_match": {NA_SERIES: {"score": na_for, "opponent_score": na_against,
+                                                            "best_of": na_lp["best_of"], "sources": ["faceit", "liquipedia"]}}}},
+     f"Liquipedia's {na_lp['lp_team1']} {na_lp['score1']}-{na_lp['score2']} {na_lp['lp_team2']} (bo{na_lp['best_of']}) on "
+     "'Overwatch_Champions_Series/2024/North_America/Stage_1' names no FACEIT id; it links (strong) only because the page "
+     "resolves to region na and both team names are decided. Read as region 'other' (the 2024 page path spells North "
+     "America out), every 2024 NA record was rejected as cross-region and the series carried FACEIT alone.",
+     regression="2024 'North_America' pages resolved to region 'other' (2026-10-02)")
+
+case("G33", "A grand final FACEIT inflated with a phantom map presents Liquipedia's score", "exact",
+     "Toronto Defiant record",
+     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": tor, "name": "Toronto Defiant"},
+      "rows": [{"team": "Toronto Defiant", "matches": 2, "wins": 2, "losses": 0,
+                "map_wins": na_for + gf_for, "map_losses": na_against + gf_against}],
+      "evidence": {"by_match": {NA_FINAL: {"score": gf_for, "opponent_score": gf_against, "best_of": gf_lp["best_of"],
+                                           "sources": ["faceit", "liquipedia"]}}}},
+     f"Toronto Defiant's only golden series are both against Timeless in 2024 NA Stage 1, each a linked Liquipedia record: "
+     f"{na_for}-{na_against} and the grand final {gf_for}-{gf_against} (bo{gf_lp['best_of']}). FACEIT stores the final as "
+     f"{max(faceit_gf.values())}-{min(faceit_gf.values())}: its detailed_results carries a 5th entry (Dorado, 1-0) nobody "
+     f"played. Map wins come from the series score, so the record is {na_for + gf_for}-{na_against + gf_against}, not "
+     f"{na_for + max(faceit_gf.values())}-{na_against}.",
+     regression="FACEIT phantom map in a sweep's series score; Liquipedia is the source of record where linked (034)")
+
+fal, ence = team_id("Team Falcons"), team_id("ENCE")
+x = by_id[DALLAS]
+fal_is_lp1 = I_fold(I.liquipedia_series(DALLAS, x.name["faction1"])["lp_team1"]) == I_fold("Team Falcons")
+dl = I.liquipedia_series(DALLAS, x.name["faction1"])
+fal_side = 1 if fal_is_lp1 else 2
+games = dl["games"]
+assert x.state if hasattr(x, "state") else True
+case("G34", "A Dreamhack Dallas series has Liquipedia's maps, a drawn map, and Liquipedia's play time", "exact",
+     f"team:{fal} map record against {ence}",          # by id: the parser reads "Team Falcons" as "falcons" (open item)
+     {"status": "ok", "rows": [{"maps": len(games), "matches": 1,
+                                "map_wins": sum(g["winner"] == fal_side for g in games),
+                                "map_losses": sum(g["winner"] not in (None, fal_side) for g in games),
+                                "draws": sum(g["winner"] is None for g in games)}],
+      "evidence": {"by_match": {DALLAS: {"sources": ["faceit", "liquipedia"], "played_at": str(dl["played_at"])}}}},
+     f"FACEIT has this series result_only (no map stats, best_of stored as 1, its time the result's entry). Liquipedia's "
+     f"record has {len(games)} games played: " + ", ".join(f"{g['map']} ({'drawn' if g['winner'] is None else ('Falcons' if g['winner'] == fal_side else 'ENCE')})" for g in games)
+     + f", scheduled {dl['played_at']:%Y-%m-%d %H:%M}Z. A drawn map is nobody's win (030).",
+     regression="Dallas linked by owner decision and enriched (2026-10-02): Liquipedia maps and schedule for a result_only series")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

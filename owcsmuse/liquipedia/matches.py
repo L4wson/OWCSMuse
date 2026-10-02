@@ -47,7 +47,9 @@ def parse_player(name: Optional[str], displayname: Optional[str], flag: Optional
     """`name` is page-style ("HYEON_(Kim_Seong-hyeon)", "Quartz"); `displayname` is the handle shown.
 
     The handle is the display name, else the page title before any "_(...)"; the real name is the parenthetical,
-    underscores read as spaces. Both are kept so both are searchable.
+    underscores read as spaces. Both are kept so both are searchable. A parenthetical ending in "player" is
+    Liquipedia's disambiguator between two players of one handle ("Haven_(American_player)"), not a name: read as one,
+    "American player" resolved to five players.
     """
     page = (name or "").strip()
     if not page:
@@ -55,6 +57,8 @@ def parse_player(name: Optional[str], displayname: Optional[str], flag: Optional
     base, real = page, None
     if "_(" in page and page.endswith(")"):
         base, real = page[:page.index("_(")], page[page.index("_(") + 2:-1].replace("_", " ").strip() or None
+        if real and real.lower().split()[-1] == "player":
+            real = None
     handle = (displayname or "").strip() or base.replace("_", " ").strip()
     return LPPlayer(page=page, handle=handle, real_name=real, nationality=(flag or "").strip() or None)
 
@@ -99,13 +103,21 @@ class LPMatch:
 
 
 def region_of(pagename: str) -> str:
-    """The competition region a page belongs to. na/emea are region-locked; anything else is just a label."""
-    parts = [p.upper() for p in pagename.split("/")]
-    for name, label in (("NA", "na"), ("EMEA", "emea"), ("KOREA", "korea"), ("CHINA", "china"), ("JAPAN", "japan"),
-                        ("PACIFIC", "pacific")):
-        if name in parts:
+    """The competition region a page belongs to. na/emea are region-locked; anything else is just a label.
+
+    2024 pages spell North America out (`.../2024/North_America/Stage_1`); 2025 onward abbreviate it (`.../2025/NA/...`).
+    Missing the long form once made every 2024 NA record 'other' and so cross-region against FACEIT's 'na'."""
+    parts = {p.upper().replace(" ", "_") for p in pagename.split("/")}
+    for names, label in ((("NA", "NORTH_AMERICA"), "na"), (("EMEA",), "emea"), (("KOREA",), "korea"),
+                         (("CHINA",), "china"), (("JAPAN",), "japan"), (("PACIFIC",), "pacific")):
+        if parts.intersection(names):
             return label
     return "other"
+
+
+def _not_played(game: dict[str, Any]) -> bool:
+    return (game.get("status") == "notplayed" or game.get("resulttype") == "np") and not game.get("scores") \
+        and str(game.get("winner") or "") not in ("1", "2")
 
 
 def faceit_id_of(links: Any) -> Optional[str]:
@@ -139,8 +151,13 @@ def parse_row(row: dict[str, Any], raw_id: int, wiki: str = "overwatch") -> Opti
     placeholder = any((o.get("name") or "").strip().lower() in PLACEHOLDER_NAMES or (o.get("type") not in (None, "team"))
                       for o in opp)
     winner = _int(row.get("winner")) or 0
+    # a series decided early still lists its remaining map slots, marked not played (status 'notplayed', resulttype
+    # 'np', no scores, no winner): 143 of them across 81 2024 records. Counted as games they inflate n_games (which
+    # hides a FACEIT phantom beyond the real count) and would be enriched as 0-0 draws nobody played. A real draw is
+    # resulttype 'draw' with its scores, and stays.
     games = tuple(LPGame(g.get("map"), g.get("mode"), _int(g.get("winner")) or 0, tuple(g.get("scores") or ()))
-                  for g in (row.get("match2games") or []) if g.get("map") or g.get("scores"))
+                  for g in (row.get("match2games") or [])
+                  if (g.get("map") or g.get("scores")) and not _not_played(g))
     faceit = faceit_id_of(row.get("links"))
     if row.get("links") and not faceit and "faceit" in json.dumps(row["links"]).lower():
         notes.append("links mention FACEIT but hold no match id")

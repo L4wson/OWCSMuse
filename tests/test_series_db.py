@@ -65,6 +65,20 @@ def warehouse(tmp_path_factory):
     raw.close()
 
 
+def test_loading_identity_twice_is_idempotent(warehouse):
+    # the second load once raised: its upsert onto an existing born team's window tripped team_orgs' overlap trigger
+    conn, _, _, team_map, d, _ = warehouse
+    def born_windows():
+        with conn.cursor() as cur:
+            cur.execute("SELECT team_id, org_id, valid_from::text, valid_to::text FROM team_orgs WHERE team_id LIKE 'lp:team:%' ORDER BY team_id")
+            rows = [tuple(r.values()) for r in cur.fetchall()]
+        conn.commit()
+        return rows
+    before = born_windows()
+    assert ident.load_identity(conn, ident.PlayerDecisions(d / "players.json"), team_map)["liquipedia_born_teams_mapped"] == 3
+    assert born_windows() == before and len(before) == 3
+
+
 def _series(conn):
     with conn.cursor() as cur:
         cur.execute("SELECT series_id, faceit_match_id, lp_objectname, sources, source_url, side1_team_id, side2_team_id, "

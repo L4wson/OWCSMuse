@@ -40,11 +40,41 @@ def test_the_region_comes_from_the_page_and_time_from_the_epoch():
     assert region_of("Overwatch_Champions_Series/2026/EMEA/Stage_1/Regular_Season") == "emea"
     assert region_of("Overwatch_Champions_Series/2026/Asia/Stage_2/Korea/Regular_Season") == "korea"
     assert region_of("Overwatch_Champions_Series/2026/China/Stage_2") == "china"
+    # 2024 pages spell the region out; read as 'other', every 2024 NA record was rejected as cross-region
+    assert region_of("Overwatch_Champions_Series/2024/North_America/Stage_1") == "na"
+    assert region_of("Overwatch Champions Series/2024/North America/Stage 1/Group Stage") == "na"
+    assert region_of("Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage") == "emea"
+    assert region_of("Overwatch_Champions_Series/2024/Major") == "other"
     row = lp_row("A", "B", 3, 0)
     row["date"] = "2000-01-01 00:00:00"                        # the epoch is authoritative; `date` is the fallback
     assert parse_row(row, 1).played_at == T0
     del row["extradata"]
     assert parse_row(row, 1).played_at.year == 2000
+
+
+def test_a_disambiguator_is_not_a_real_name_but_a_real_name_is():
+    from owcsmuse.liquipedia.matches import parse_player
+    for page, handle in (("Haven_(American_player)", "Haven"), ("Haku_(Saudi_Arabian_player)", "Haku"),
+                         ("Astro_(Canadian_player)", "Astro")):
+        p = parse_player(page, None)
+        assert (p.handle, p.real_name) == (handle, None), page
+    p = parse_player("Goose_(Matthew_Gisi)", None)
+    assert (p.handle, p.real_name) == ("Goose", "Matthew Gisi")
+    p = parse_player("HYEON_(Kim_Seong-hyeon)", "HYEON")
+    assert (p.handle, p.real_name) == ("HYEON", "Kim Seong-hyeon")
+
+
+def test_a_map_slot_marked_not_played_is_not_a_game_but_a_draw_is():
+    # ROC Esports 3-0 Sheer Cold (127212_5BUO2jH7Ds_0003): five slots, the last two not played
+    played = [{"map": m, "mode": "Control", "winner": "1", "scores": [2, 0]} for m in ("A", "B", "C")]
+    unplayed = [{"map": m, "mode": "Escort", "winner": "", "scores": [], "resulttype": "np", "status": "notplayed"}
+                for m in ("D", "E")]
+    m = parse_row(lp_row("ROC Esports", "Sheer Cold", 3, 0, games=played + unplayed), 1)
+    assert m.n_games == 3 and [g.map for g in m.games] == ["A", "B", "C"]
+    # Team Falcons 3-0 ENCE at Dallas: a 3-3 Numbani is a map played and drawn
+    draw = {"map": "Numbani", "mode": "Hybrid", "winner": "0", "scores": [3, 3], "resulttype": "draw", "status": ""}
+    m = parse_row(lp_row("Team Falcons", "ENCE", 3, 0, games=played + [draw]), 1)
+    assert m.n_games == 4 and m.games[-1].winner == 0
 
 
 def test_a_tbd_or_bye_opponent_makes_a_placeholder_not_a_match():
@@ -262,10 +292,18 @@ def test_a_candidate_in_the_other_region_is_a_mismatch_not_a_match():
     across = fs("F-emea", "SpaceStation Gaming", "Team Liquid", 3, 1, region="emea", comp="c-emea")
     res = reconcile([m], [across], MAP)
     assert link_of(res, m).tier == UNMATCHED and link_of(res, m).faceit_id is None
-    assert res.region_rejections == [{"lp": m.objectname, "faceit_id": "F-emea", "lp_region": "na", "faceit_region": "emea",
+    assert res.region_rejections == [{"lp": m.objectname, "lp_time": "2026-06-13 18:00Z", "faceit_id": "F-emea",
+                                      "lp_region": "na", "faceit_region": "emea",
                                       "teams": "Spacestation Gaming / Team Liquid"}]
     intl = fs("F-intl", "SpaceStation Gaming", "Team Liquid", 3, 1, region="international")   # any region may attend
     assert link_of(reconcile([m], [intl], MAP), m).tier == STRONG
+
+
+def test_a_2024_north_america_page_matches_faceit_na_rather_than_being_rejected():
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 1, page="Overwatch_Champions_Series/2024/North_America/Stage_1")
+    res = reconcile([m], [fs("F-na", "SpaceStation Gaming", "Team Liquid", 3, 1, region="na")], MAP)
+    assert link_of(res, m).tier == STRONG and link_of(res, m).faceit_id == "F-na"
+    assert res.region_rejections == []
 
 
 def test_two_unrelated_teams_with_one_name_are_told_apart_by_the_region_of_the_page():

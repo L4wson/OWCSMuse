@@ -18,15 +18,15 @@
     "rows": [
      {
       "nickname": "sugarfree",
-      "maps": 21,
-      "map_wins": 14,
-      "map_losses": 7,
-      "eliminations": 421,
-      "deaths": 133
+      "maps": 30,
+      "map_wins": 21,
+      "map_losses": 9,
+      "eliminations": 645,
+      "deaths": 169
      }
     ]
    },
-   "derivation": "Every round in the golden stats payloads where player 58239fd5 appears: 21 maps over 5 series; a map is won when round_stats.Winner is his team id. Name is his in-game name (game_player_name), not the FACEIT nickname sug2rfree.",
+   "derivation": "Every round in the golden stats payloads where player 58239fd5 appears: 30 maps over 7 series; a map is won when round_stats.Winner is his team id. Name is his in-game name (game_player_name), not the FACEIT nickname sug2rfree.",
    "status": "confirmed"
   },
   {
@@ -38,13 +38,13 @@
    "expect": {
     "status": "ok",
     "evidence": {
-     "total_rows": 21,
+     "total_rows": 30,
      "regions_only": [
       "na"
      ]
     }
    },
-   "derivation": "All 21 of his maps are in NA competitions, and the golden set includes 2 EMEA 'SpaceStation' matches (a different team) that must not appear. A wrong SpaceStation/SpaceStation Gaming merge would add them.",
+   "derivation": "All 30 of his maps are in NA competitions, and the golden set includes 2 EMEA 'SpaceStation' matches (a different team) that must not appear. A wrong SpaceStation/SpaceStation Gaming merge would add them.",
    "status": "confirmed"
   },
   {
@@ -555,9 +555,11 @@
      "Hadi",
      "Hawk",
      "Infekted",
+     "JulianBubble",
      "KSAA",
      "Kellan",
      "Mag",
+     "Someone",
      "TVNT",
      "Tred",
      "Vestola",
@@ -566,6 +568,7 @@
      "cartifan22_",
      "cuFFa",
      "eisgnom",
+     "iCy",
      "sniper"
     ],
     "evidence": {
@@ -574,7 +577,7 @@
      ]
     }
    },
-   "derivation": "'Kills' = FACEIT Eliminations, summed over only the maps where the player's Role was Tank (19 tank players). Every returned player must be one of the tank-role players, and every evidence row's role must be Tank.",
+   "derivation": "'Kills' = FACEIT Eliminations, summed over only the maps where the player's Role was Tank (22 tank players). Every returned player must be one of the tank-role players, and every evidence row's role must be Tank.",
    "status": "confirmed"
   },
   {
@@ -812,13 +815,111 @@
      ],
      "then_rows": [
       {
-       "nickname": "Lethal",
-       "total": 634
+       "nickname": "sugarfree",
+       "total": 645
       }
      ]
     }
    },
-   "derivation": "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with zero or some rows. It must offer the same question without the region, and that question must answer with the independently-derived all-seasons eliminations leader (634 eliminations).",
+   "derivation": "Korea is declared a results-only region (region_sources: Liquipedia only, no player stats) before any of its data exists, and no golden series is in that region. A player leaderboard there has nothing to rank, so the answer must be a refusal with reason code results_only - not no_data, not out_of_scope, and never a leaderboard with zero or some rows. It must offer the same question without the region, and that question must answer with the independently-derived all-seasons eliminations leader (645 eliminations).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G32",
+   "title": "A 2024 NA series with no FACEIT id on its page is linked to Liquipedia",
+   "kind": "exact",
+   "regression": "2024 'North_America' pages resolved to region 'other' (2026-10-02)",
+   "question": "Toronto Defiant series record against Timeless",
+   "expect": {
+    "status": "ok",
+    "evidence": {
+     "by_match": {
+      "1-4b984ffd-9868-45fa-92c5-c6a290bfe68a": {
+       "score": 3,
+       "opponent_score": 2,
+       "best_of": 5,
+       "sources": [
+        "faceit",
+        "liquipedia"
+       ]
+      }
+     }
+    }
+   },
+   "derivation": "Liquipedia's Toronto Defiant 3-2 Timeless (bo5) on 'Overwatch_Champions_Series/2024/North_America/Stage_1' names no FACEIT id; it links (strong) only because the page resolves to region na and both team names are decided. Read as region 'other' (the 2024 page path spells North America out), every 2024 NA record was rejected as cross-region and the series carried FACEIT alone.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G33",
+   "title": "A grand final FACEIT inflated with a phantom map presents Liquipedia's score",
+   "kind": "exact",
+   "regression": "FACEIT phantom map in a sweep's series score; Liquipedia is the source of record where linked (034)",
+   "question": "Toronto Defiant record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+     "name": "Toronto Defiant"
+    },
+    "rows": [
+     {
+      "team": "Toronto Defiant",
+      "matches": 2,
+      "wins": 2,
+      "losses": 0,
+      "map_wins": 7,
+      "map_losses": 2
+     }
+    ],
+    "evidence": {
+     "by_match": {
+      "1-70cff415-3817-4144-9eca-e917f89cb6e7": {
+       "score": 4,
+       "opponent_score": 0,
+       "best_of": 7,
+       "sources": [
+        "faceit",
+        "liquipedia"
+       ]
+      }
+     }
+    }
+   },
+   "derivation": "Toronto Defiant's only golden series are both against Timeless in 2024 NA Stage 1, each a linked Liquipedia record: 3-2 and the grand final 4-0 (bo7). FACEIT stores the final as 5-0: its detailed_results carries a 5th entry (Dorado, 1-0) nobody played. Map wins come from the series score, so the record is 7-2, not 8-2.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G34",
+   "title": "A Dreamhack Dallas series has Liquipedia's maps, a drawn map, and Liquipedia's play time",
+   "kind": "exact",
+   "regression": "Dallas linked by owner decision and enriched (2026-10-02): Liquipedia maps and schedule for a result_only series",
+   "question": "team:2ab92d33-4c33-46e1-a13f-743a95291d0e map record against 62f7752b-0b79-4fa8-9a23-78800e2b4539",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 4,
+      "matches": 1,
+      "map_wins": 3,
+      "map_losses": 0,
+      "draws": 1
+     }
+    ],
+    "evidence": {
+     "by_match": {
+      "1-43d289c0-bb18-416b-b639-b7e076b41e7f": {
+       "sources": [
+        "faceit",
+        "liquipedia"
+       ],
+       "played_at": "2024-05-31 20:45:00+00:00"
+      }
+     }
+    }
+   },
+   "derivation": "FACEIT has this series result_only (no map stats, best_of stored as 1, its time the result's entry). Liquipedia's record has 4 games played: Antarctic Peninsula (Falcons), Circuit Royal (Falcons), Numbani (drawn), Suravasa (Falcons), scheduled 2024-05-31 20:45Z. A drawn map is nobody's win (030).",
    "status": "confirmed"
   }
  ]
