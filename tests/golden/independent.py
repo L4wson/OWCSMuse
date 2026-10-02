@@ -143,8 +143,21 @@ def num(stats, key):
     return Decimal(str(v))
 
 
+def owner_display_names():
+    """player GUID -> display name the owner decided (scope/player_identity_decisions.json, `display`)."""
+    path = GOLDEN.parent.parent / "scope" / "player_identity_decisions.json"
+    if not path.exists():
+        return {}
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    return {d["entity_id"]: d["display"] for d in doc.get("decisions", {}).values() if d.get("entity_id") and d.get("display")}
+
+
 def display_name(series_list, player_id):
-    """The in-game name (game_player_name) when the roster has one, else the FACEIT nickname - as the README states."""
+    """The owner's display name when decided, else the in-game name (game_player_name) when the roster has one, else
+    the FACEIT nickname - as the README states."""
+    decided = owner_display_names().get(player_id)
+    if decided:
+        return decided
     for s in series_list:
         p = s.roster.get(player_id)
         if p:

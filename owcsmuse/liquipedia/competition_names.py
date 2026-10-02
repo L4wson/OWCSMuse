@@ -188,13 +188,14 @@ def propose(map_path: str | Path = DEFAULT_MAP_PATH, scope_path: str | Path = DE
             e = named[cid]
             p = Proposal(cid, name, legacy_display(name), proposed=e["display_name"], basis="owner")
             p.flags.append(e.get("note", "named from the owner's description; no Liquipedia page"))
-        elif page:
-            p = _propose_one(cid, name, page)
         elif cid in extra_pages:
+            # an owner-supplied page keeps its basis (liquipedia-owner) even once the fetch map carries it too
             e = extra_pages[cid]
             p = _propose_one(cid, name, e["page"], "liquipedia-owner")
             p.flags.append("page supplied by the owner, not fetched" if e.get("verified", True)
                            else f"{UNSEEN} by analogy with the one the owner gave; not seen")
+        elif page:
+            p = _propose_one(cid, name, page)
         else:
             p = _propose_one(cid, name, None)
         if p.proposed is None and page is None and _FACEIT_LEAGUE.match(name):

@@ -355,6 +355,11 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
     team, and 13 do in the real data.
     """
     discrepancies: list[dict[str, Any]] = []
+    # an org the owner decided spans regions (SpaceStation Gaming: EMEA in 2024, an NA partner team from 2025) carries
+    # the token in every window's evidence (scope/org_decisions.json); it is reported, not failed
+    decided_cross = {r["org_id"] for r in _rows(conn, """
+        SELECT org_id FROM team_orgs GROUP BY org_id
+        HAVING bool_and(EXISTS (SELECT 1 FROM jsonb_array_elements_text(evidence) e WHERE e LIKE 'cross_region_ok%'))""")}
     for key_col, kind in (("org_key", "org_spans_regions"), ("team_id", "team_id_spans_regions")):
         for r in _rows(conn, f"""
             SELECT {key_col} AS key, array_agg(DISTINCT region ORDER BY region) AS regions,
@@ -362,6 +367,8 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
               FROM fact_team_matches
              WHERE region IN ('na', 'emea') AND {key_col} IS NOT NULL
              GROUP BY {key_col} HAVING count(DISTINCT region) > 1"""):
+            if key_col == "org_key" and r["key"] in decided_cross:
+                continue
             discrepancies.append({"kind": kind, "key": r["key"], "regions": r["regions"],
                                   "team_ids": r["team_ids"], "matches": r["matches"],
                                   "hint": "an applied org merge crosses regions: unmap it in scope/org_decisions.json "
@@ -373,6 +380,7 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
                                                  "WHERE region IN ('na', 'emea') AND org_key NOT LIKE 'team:%'") or 0),
         "team_ids_checked": int(_scalar(conn, "SELECT count(DISTINCT team_id) FROM fact_team_matches "
                                               "WHERE region IN ('na', 'emea')") or 0),
+        "decided_cross_region_orgs": sorted(decided_cross),
     }
     return _result("region_consistency", discrepancies,
                    f"none of {counts['orgs_checked']} orgs ({counts['mapped_orgs_checked']} merged) or "

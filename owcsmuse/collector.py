@@ -40,6 +40,16 @@ from .parsers.stats import RoundRecord, parse_match_stats
 
 log = get_logger("owcsmuse.collector")
 
+# The in-game name is the one answers display, and it changes: every value is kept with its sightings
+# (player_game_names, migration 035), the same way player_nicknames keeps every FACEIT nickname.
+GAME_NAME_UPSERT = """
+    INSERT INTO player_game_names (player_id, game_player_name, first_seen_at, last_seen_at)
+    VALUES (%(id)s, %(name)s, %(seen)s, %(seen)s)
+    ON CONFLICT (player_id, game_player_name) DO UPDATE SET
+        first_seen_at = LEAST(player_game_names.first_seen_at, EXCLUDED.first_seen_at),
+        last_seen_at  = GREATEST(player_game_names.last_seen_at, EXCLUDED.last_seen_at)
+"""
+
 RESUMABLE_STATES = ("stub", "detail_fetched")
 
 
@@ -821,6 +831,9 @@ class Collector:
                 """,
                 nick_rows,
             )
+        game_rows = [{"id": r["id"], "name": r["gpname"], "seen": r["seen"]} for r in rows if r.get("gpname")]
+        if game_rows:
+            cur.executemany(GAME_NAME_UPSERT, game_rows)
 
     @staticmethod
     def _upsert_player(
@@ -863,3 +876,5 @@ class Collector:
                 """,
                 {"id": player_id, "nick": nickname, "seen": seen_at},
             )
+        if game_player_name:
+            cur.execute(GAME_NAME_UPSERT, {"id": player_id, "name": game_player_name, "seen": seen_at})

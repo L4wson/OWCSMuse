@@ -1,5 +1,5 @@
 {
-  "note": "Reviewed Liquipedia team name -> FACEIT org/team. Keys are the folded Liquipedia name, or 'name|na' / 'name|emea' when the same name is two teams in two regions; entity_type is 'org' (entity_id is the org slug) or 'team' (an unmapped FACEIT team id). The reconciler trusts these and only these without marking a link provisional. Edit by hand or with `python -m owcsmuse liquipedia teams decide`. An entry may carry valid_from/valid_to, or `eras` (a list of {entity_type, entity_id, valid_from, valid_to}) when different team ids carried the name over time; a name resolves at the series' own time and is undecided outside every era.",
+  "note": "Reviewed Liquipedia team name -> FACEIT org/team. Keys are the folded Liquipedia name, or 'name|na' / 'name|emea' when the same name is two teams in two regions; entity_type is 'org' (entity_id is the org slug) or 'team' (an unmapped FACEIT team id). The reconciler trusts these and only these without marking a link provisional. Edit by hand or with `python -m owcsmuse liquipedia teams decide`.",
   "aliases": {
     "1234": {
       "entity_type": "team",
@@ -25,6 +25,18 @@
       "note": "same roster as Extinction, different org names; roster continuity over org branding",
       "decided_at": "2026-09-23T05:02:31+00:00"
     },
+    "crazy raccoon": {
+      "entity_type": "team",
+      "entity_id": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7",
+      "note": "FACEIT 'Crazy Raccoons'. Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "ence": {
+      "entity_type": "team",
+      "entity_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
+      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
     "extinction": {
       "entity_type": "org",
       "entity_id": "extinction",
@@ -36,6 +48,18 @@
       "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
       "note": "largely the same roster as Rad Esports and Sakura Esports (NA)",
       "decided_at": "2026-09-23T05:02:34+00:00"
+    },
+    "m80": {
+      "entity_type": "team",
+      "entity_id": "3aca5abd-ee5d-4542-92e9-392b6f5d0dbc",
+      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "nrg shock": {
+      "entity_type": "team",
+      "entity_id": "d566d889-7885-4e74-a9dc-d29c111d2c1e",
+      "note": "FACEIT 'SOG' at Dallas (team d566d889, mapped to the students-of-the-game org), not 0c629c99, the one-day registration placeholder. Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "ntmr": {
       "entity_type": "org",
@@ -55,11 +79,23 @@
       "note": "largely the same roster as LuneX Gaming and Rad Esports; NA-only, EMEA Sakura Esports is a different team",
       "decided_at": "2026-09-23T05:02:36+00:00"
     },
+    "spacestation gaming": {
+      "entity_type": "org",
+      "entity_id": "spacestation-gaming",
+      "note": "One organisation across the 2024 EMEA team (a359db61, Dreamhack Dallas) and the 2025+ NA team (6ddc0431): scope/org_decisions.json maps each id over its own era, so the org key is the same on both sides at any time. Decided by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
     "supernova american team": {
       "entity_type": "team",
       "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
       "note": "small roster transition to/from Team Z",
       "decided_at": "2026-09-23T05:02:41+00:00"
+    },
+    "team falcons": {
+      "entity_type": "team",
+      "entity_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
+      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "team z": {
       "entity_type": "team",
@@ -78,6 +114,12 @@
       "entity_id": "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
       "note": "Timeless is team id c5116cb3's own era (2024 Stage 1 to 2025 Stage 1); NTMR picked the roster up in 2025 Stage 2 and the NTMR org is mapped only from that window (scope/org_decisions.json). Was 'org ntmr' before the window decision, which made every Timeless-era link disagree on teams.",
       "decided_at": "2026-10-02T01:04:44+00:00"
+    },
+    "toronto defiant": {
+      "entity_type": "team",
+      "entity_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "vanir quick": {
       "entity_type": "team",

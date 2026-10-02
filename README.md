@@ -177,8 +177,18 @@ under a restricted `search_path` when it plans a materialized-view refresh.
   needed and would break `SET search_path`.
 - Objects land in `public`, next to nothing of ours; Supabase's own
   `auth`, `storage`, `realtime` and `extensions` schemas are untouched.
+- Nothing in this project uses Supabase's Data API (PostgREST) or a Supabase
+  client library: the CLI, the API server and the collector talk to Postgres
+  over `DATABASE_URL` only, and the frontend talks to this project's own API.
+  Disabling the Data API for the project changes nothing here.
 - Supabase runs PostgreSQL 17; CI runs the database suites on 16 and 17 (see
-  **CI**). A `LANGUAGE sql` function that names a table must be written
+  **CI**).
+- Collation: Supabase and CI's `postgres:16`/`postgres:17` images are
+  `en_US.UTF-8`; a local cluster is often `C.UTF-8` (the dev one here is).
+  Mixed-case name ordering differs between the two, so a local `ORDER BY name`
+  is not production's. Leaderboards carry a deterministic last key (the
+  player, org or map) so a planner or collation difference cannot reorder
+  tied rows. A `LANGUAGE sql` function that names a table must be written
   `{{schema}}.table` or carry `SET search_path`, or every materialized-view
   refresh fails on 17 (migration `033_pin_search_path.sql`).
 - **Row Level Security is not enabled on any of these tables.** Plain SQL
@@ -1040,7 +1050,7 @@ starts:
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2025/2026 main series | not started |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
 | 3 | source-agnostic match model and cross-source identity | not started |
-| 4 | LAN and international events | Dreamhack Dallas 2024: page owner-confirmed (`Overwatch_Champions_Series/2024/Major`, in `scope/liquipedia_map.json`), one request planned, not yet fetched |
+| 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved |
 | 5 | Korea and China, results only | not started |
 
 ### The client (Stage 0)
@@ -1234,6 +1244,24 @@ room or the Liquipedia page, and an answer that used a Liquipedia-only series ca
   against its sources, and a linked pair whose Liquipedia teams are decided names the same identities on both sides -
   a link that stops agreeing after an identity decision fails here rather than staying.
 
+### Stage 3: in-game name history and an owner's display name
+
+The in-game name (`players.game_player_name`) is the name answers display, and it changes: three rename gaps bit
+before migration `035_game_names_display.sql`. `player_game_names` now keeps every value a GUID has carried with
+its first and last sighting, the same shape as `player_nicknames`; the collector versions it on every change, and
+`python tools/backfill_game_names.py` fills the earlier values out of the stored `/matches/{id}` payloads
+(`raw_payloads`, no request). `entity_names` makes each historical value searchable (`historical_game_name`).
+`players.display_name` is an owner's override set by `identity load` from a player identity decision's `display`
+(`identity decide <page> --player <guid> --display "ZZZ"`, or `--nickname <FACEIT name>` to find the GUID by a
+name that names exactly one player): shown everywhere, searchable by nothing new, every nickname and in-game
+name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss) and Astro (FACEIT Astronexz).
+
+**SpaceStation Gaming is one organisation** across its 2024 EMEA team (`a359db61`, OWCS 2024 EMEA Stage 1 and
+Dreamhack Dallas) and its NA partner team from 2025 (`6ddc0431`): decided by the owner on 2026-10-02, reversing
+the 2026-09-19 unmerge. Each team id is mapped over its own era; the region check carries the org as an
+owner-decided exception (`cross_region_ok` in every window's evidence, listed under
+`decided_cross_region_orgs`), since the rule it enforces exists to catch merges nobody decided.
+
 ### Stage 3: capability, not just coverage
 
 A source may carry a slice without carrying what a question needs from it. `region_sources` (migration
@@ -1398,6 +1426,8 @@ migrations/031_capabilities.sql region_sources (declared) and source_capabilitie
 migrations/032_best_of_from_wins.sql  best-of derived from the winning score; corrections counted and listed
 migrations/033_pin_search_path.sql  every table-reading SQL function survives PostgreSQL 17's restricted search_path
 migrations/034_map_winner_precedence.sql  map winner from the scores; Liquipedia the source of record where linked; phantom maps; best-of from played wins
+migrations/035_game_names_display.sql  in-game name history (player_game_names), players.display_name, deterministic leaderboard order
+tools/backfill_game_names.py    every earlier in-game name out of the stored match payloads -> player_game_names
 tests/test_search_path.py       refreshes every matview under search_path = pg_catalog, pg_temp; every table-reading SQL function qualified or pinned
 tools/window_review.py          the three name-change signals over every multi-name team id -> scope/org_window_review.md
 scope/org_window_decisions.json the owner's verdict on each of the 18 multi-name team ids (audit record; windows apply via org_decisions.json)

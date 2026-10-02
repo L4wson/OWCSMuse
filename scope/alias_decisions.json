@@ -14,10 +14,10 @@
       "decided_at": "2026-09-21T19:17:28+00:00"
     },
     "ssg": {
-      "entity_type": "team",
-      "entity_id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
-      "note": "community shorthand for SpaceStation Gaming; not in FACEIT's own name history. Points at the team id, not an org: the org merge with the EMEA 'SpaceStation' team was reversed as a wrong cross-region merge, leaving this team unmapped.",
-      "decided_at": "2026-09-19T01:29:16+00:00"
+      "entity_type": "org",
+      "entity_id": "spacestation-gaming",
+      "note": "community shorthand for SpaceStation Gaming; not in FACEIT's own name history. Points at the org: the owner decided (2026-10-02) that the 2024 EMEA team (a359db61) and the 2025+ NA team (6ddc0431) are one organisation, reversing the 2026-09-19 unmerge.",
+      "decided_at": "2026-10-02T01:29:49+00:00"
     },
     "tl": {
       "entity_type": "team",

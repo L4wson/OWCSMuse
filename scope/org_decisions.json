@@ -210,6 +210,28 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf": {
+      "org_id": "spacestation-gaming",
+      "org_name": "SpaceStation Gaming",
+      "team_name": "SpaceStation Gaming",
+      "note": "SpaceStation Gaming's NA partner team from 2025 Stage 1: 'SpaceStation' (first name on the id, 2025-02-01) renamed 'SpaceStation Gaming' 2025-09-28, a rename only, so the id's whole life is this org and the mapping is for all time; the 2024 EMEA team is a359db61.",
+      "evidence": [
+        "decided by the project owner (2026-10-02)",
+        "cross_region_ok: SpaceStation Gaming played EMEA in 2024 and became an NA partner team in 2025; one organisation across the two team ids, each over its own era. The 2026-09-19 rejection (region-locked, 0% roster overlap) is reversed by the owner: org branding, not roster continuity, is the identity here."
+      ],
+      "decided_at": "2026-10-02T01:33:45+00:00"
+    },
+    "a359db61-26e2-44e0-8961-e0b373f4db21": {
+      "org_id": "spacestation-gaming",
+      "org_name": "SpaceStation Gaming",
+      "team_name": "SpaceStation",
+      "note": "SpaceStation Gaming's 2024 EMEA team (OWCS 2024 EMEA Stage 1 and Dreamhack Dallas). The id carried no other name; mapped for all of its life, which ends in 2024.",
+      "evidence": [
+        "decided by the project owner (2026-10-02)",
+        "cross_region_ok: SpaceStation Gaming played EMEA in 2024 and became an NA partner team in 2025; one organisation across the two team ids, each over its own era. The 2026-09-19 rejection (region-locked, 0% roster overlap) is reversed by the owner: org branding, not roster continuity, is the identity here."
+      ],
+      "decided_at": "2026-10-02T01:29:49+00:00"
+    },
     "0c629c99-0333-47f6-96c9-87c0617a9d21": {
       "org_id": "students-of-the-game",
       "org_name": "Students of the Game",
@@ -432,18 +454,6 @@
       ],
       "reason": "reviewed rejection: distinct organisations. The roster overlap is a squad that transferred, not a rename; the names share no tokens.",
       "decided_at": "2026-09-18T01:43:51+00:00"
-    },
-    "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf|a359db61-26e2-44e0-8961-e0b373f4db21": {
-      "team_ids": [
-        "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
-        "a359db61-26e2-44e0-8961-e0b373f4db21"
-      ],
-      "names": [
-        "SpaceStation Gaming",
-        "SpaceStation"
-      ],
-      "reason": "reviewed rejection: region-locked conflict. 'SpaceStation Gaming' competed only in na (S4-S9 NA OWCS Central), 'SpaceStation' only in emea/international (2024 EMEA Stage 1-2, Dreamhack Dallas). OWCS rosters do not cross regions; the original merge was name-containment with 0% roster overlap, which is not evidence of identity. This wrong merge caused sug2rfree (SpaceStation Gaming NA player) to show EMEA matches in his team record.",
-      "decided_at": "2026-09-19T00:49:08+00:00"
     },
     "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e|cd157523-5c58-41bc-b62d-e1a635ea61b8": {
       "team_ids": [

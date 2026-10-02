@@ -387,8 +387,8 @@ def test_all_twenty_stage_1_pages_fit_one_request_and_are_filtered_by_the_page_t
     assert PAGE_FIELD == "pagename"
     pages = json.load(open("scope/liquipedia_map.json", encoding="utf-8"))["pages"]
     wants = {underscored(e["page"]): 15 for e in pages.values()}
-    assert len(wants) == 21                      # the twenty 2025/2026 stage pages plus the owner-confirmed 2024 Major (Dallas)
+    assert len(wants) == 29                      # twenty 2025/2026 stage pages, the 2024 Major (Dallas) and the eight verified 2024 stage pages
     plan = plan_requests(MemoryStore(), endpoint="match", field_name=PAGE_FIELD, wants=wants, limit=500)
     assert len(plan.batches) == 1 and plan.projected_requests == 1
     assert len(quote(plan.batches[0].conditions, safe="")) < 5500       # the URL stays well under an 8 KB limit
-    assert plan.batches[0].conditions.count("[[pagename::") == 21
+    assert plan.batches[0].conditions.count("[[pagename::") == 29

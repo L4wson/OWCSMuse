@@ -131,8 +131,13 @@ assert [m["map"] for m in LP_OVERRIDES[A823]] == ["Oasis", "King's Row", "Runasa
 tm_all = I.team_record(S, tm, liquipedia_overrides=LP_OVERRIDES)
 tm26 = I.team_record(S, tm, season=2026, liquipedia_overrides=LP_OVERRIDES)
 ssg_id = team_id("SpaceStation Gaming")
-ssg = I.team_record(S, [ssg_id])
-assert ssg["regions"] == ["na"]
+ssg_2024 = team_id("SpaceStation")
+# The owner decided (2026-10-02) that the 2024 EMEA 'SpaceStation' team and the 2025+ NA 'SpaceStation Gaming' team
+# are one organisation (scope/org_decisions.json, org spacestation-gaming), reversing the 2026-09-19 unmerge: the
+# org's record is both team ids' series.
+ssg = I.team_record(S, [ssg_id, ssg_2024])
+ssg_na = I.team_record(S, [ssg_id])
+assert ssg["regions"] == ["emea", "na"] and ssg["matches"] == ssg_na["matches"] + 2
 
 
 def team_row(rec, name):
@@ -160,12 +165,14 @@ case("G09", "Twisted Minds 2026, one series enriched from Liquipedia instead of 
      regression="result-only series counted at series grain only; then, after Stage 2, its Liquipedia maps must "
                 "count at map grain and the limitation must drop once nothing in the slice is missing them")
 
-case("G10", "SpaceStation Gaming's record (NA only)", "exact", "SpaceStation Gaming record",
-     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": ssg_id, "name": "SpaceStation Gaming"},
-      "rows": [team_row(ssg, "SpaceStation Gaming")], "evidence": {"regions_only": ["na"]}},
-     f"{ssg['matches']} NA series. The golden set also holds two 2024 EMEA series of 'SpaceStation' (team "
-     f"{team_id('SpaceStation')[:8]}), which are a different team and must not be added.",
-     regression="region bug: SpaceStation Gaming merged with the EMEA SpaceStation")
+case("G10", "SpaceStation Gaming's record: one organisation, EMEA in 2024 then NA", "exact", "SpaceStation Gaming record",
+     {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "spacestation-gaming", "name": "SpaceStation Gaming"},
+      "rows": [team_row(ssg, "SpaceStation Gaming")], "evidence": {"regions_only": ["emea", "na"]}},
+     f"{ssg_na['matches']} NA series of team {ssg_id[:8]} plus the two 2024 EMEA series of 'SpaceStation' (team "
+     f"{ssg_2024[:8]}): the owner decided on 2026-10-02 that these are one organisation (SSG played EMEA in 2024 and became "
+     f"an NA partner team in 2025), each team id mapped over its own era. Until then the two were held apart as a wrong "
+     f"cross-region merge; the region check now carries this org as an owner-decided exception.",
+     regression="region bug: SpaceStation Gaming merged with the EMEA SpaceStation; reversed by the owner's 2026-10-02 decision")
 
 h2h = I.team_record(S, tm, opponent_ids=[team_id("Ex Oblivione")])
 case("G11", "Twisted Minds vs Ex Oblivione, series grain", "exact", "Twisted Minds series record against Ex Oblivione",
@@ -184,7 +191,7 @@ vp = I.team_record(S, vp_ids, exclude_names={"Ex Oblivione"})
 tl_id = team_id("Team Liquid")
 tl = I.team_record(S, [tl_id])
 case("G12", "'SSG' resolves to SpaceStation Gaming", "exact", "SSG record",
-     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": ssg_id, "name": "SpaceStation Gaming"},
+     {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "spacestation-gaming", "name": "SpaceStation Gaming"},
       "rows": [team_row(ssg, "SpaceStation Gaming")]},
      "Same numbers as G10, reached through the shorthand. Expectation is the community meaning of SSG.",
      regression="alias: SSG did not resolve to SpaceStation Gaming")

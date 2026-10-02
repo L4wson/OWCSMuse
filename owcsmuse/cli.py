@@ -456,8 +456,21 @@ def cmd_identity(args: argparse.Namespace, settings: Settings) -> int:
     decisions = lp_identity.PlayerDecisions(args.decisions)
     team_map = TeamMap(args.team_map)
     if args.identity_cmd == "decide":
-        decisions.set(args.page, None if args.new else args.player, args.handle or args.page.split("_(")[0].replace("_", " "),
-                      args.note, args.real_name)
+        guid = args.player
+        if getattr(args, "nickname", None):
+            # the GUID by a FACEIT name (nickname or in-game name), which must name exactly one player
+            with connect(settings.database_url, schema=settings.db_schema) as conn, conn.cursor() as cur:
+                cur.execute("""SELECT player_id, nickname, game_player_name FROM players
+                                WHERE fold_name(nickname) = fold_name(%s) OR fold_name(game_player_name) = fold_name(%s)
+                                   OR player_id IN (SELECT player_id FROM player_nicknames WHERE fold_name(nickname) = fold_name(%s))""",
+                            (args.nickname, args.nickname, args.nickname))
+                hits = cur.fetchall()
+            if len(hits) != 1:
+                _print({"error": f"--nickname {args.nickname!r} names {len(hits)} players, not one", "players": hits})
+                return 2
+            guid = hits[0]["player_id"]
+        decisions.set(args.page, None if args.new else guid, args.handle or args.page.split("_(")[0].replace("_", " "),
+                      args.note, args.real_name, display=getattr(args, "display", None))
         _print({"decisions_file": str(decisions.save()), "page": args.page, "decision": decisions.data[args.page]})
         return 0
     if args.identity_cmd == "forget":
@@ -902,8 +915,10 @@ def build_parser() -> argparse.ArgumentParser:
     idd.add_argument("page")
     g = idd.add_mutually_exclusive_group(required=True)
     g.add_argument("--player", help="the FACEIT player GUID this page is")
+    g.add_argument("--nickname", help="the FACEIT player by a name (nickname, in-game name or a past nickname) that names exactly one player (needs the database)")
     g.add_argument("--new", action="store_true", help="a Liquipedia-born player: no FACEIT id (gets lp:player:<page>)")
     idd.add_argument("--handle"); idd.add_argument("--real-name"); idd.add_argument("--note")
+    idd.add_argument("--display", help="the display name answers use for this player (players.display_name on load); search is unaffected")
     idf = ids.add_parser("forget", help="drop a decision"); idf.add_argument("page")
     idr = ids.add_parser("reject", help="record that this page is NOT this GUID")
     idr.add_argument("page"); idr.add_argument("player"); idr.add_argument("--reason", required=True)

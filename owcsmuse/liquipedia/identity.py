@@ -170,8 +170,9 @@ class PlayerDecisions:
             self.rejections = dict(doc.get("rejections") or {})
 
     def set(self, page: str, entity_id: Optional[str], handle: str, note: Optional[str] = None,
-            real_name: Optional[str] = None) -> dict[str, Any]:
-        self.data[page] = {"entity_id": entity_id, "handle": handle, "real_name": real_name, "note": note,
+            real_name: Optional[str] = None, display: Optional[str] = None) -> dict[str, Any]:
+        """`display` is the owner's display name for this player (players.display_name on load); search is unaffected."""
+        self.data[page] = {"entity_id": entity_id, "handle": handle, "real_name": real_name, "note": note, "display": display,
                            "decided_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
         return self.data[page]
 
@@ -316,6 +317,15 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
         cur.execute("DELETE FROM players WHERE player_id LIKE %s AND NOT (player_id = ANY(%s))",
                     (BORN_PREFIX + "%", [BORN_PREFIX + p for p, d in decisions.data.items() if d.get("entity_id") is None]))
         ghosts = cur.rowcount
+        # the owner's display names: the file is the whole truth, so a withdrawn one is cleared
+        cur.execute("UPDATE players SET display_name = NULL WHERE display_name IS NOT NULL")
+        displays = 0
+        for page, d in decisions.data.items():
+            if d.get("display"):
+                pid = d["entity_id"] if d.get("entity_id") else BORN_PREFIX + page
+                cur.execute("UPDATE players SET display_name = %s WHERE player_id = %s", (d["display"], pid))
+                displays += cur.rowcount
     conn.commit()
     return {"team_anchors": teams, "liquipedia_born_teams_mapped": born_teams, "player_anchors": players,
-            "liquipedia_born_players": born, "unknown_faceit_ids_skipped": skipped, "ghost_players_removed": ghosts}
+            "liquipedia_born_players": born, "unknown_faceit_ids_skipped": skipped, "ghost_players_removed": ghosts,
+            "display_names_set": displays}
