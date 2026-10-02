@@ -7,6 +7,10 @@ Each negative case damages the scratch schema inside a transaction and rolls it
 back, so the fixtures stay intact for whatever runs next.
 """
 
+import importlib.util
+import os
+from pathlib import Path
+
 import pytest
 
 from owcsmuse.consistency import CHECKS, render_text, run_checks
@@ -21,10 +25,36 @@ def _by_name(results):
 
 
 def test_every_check_passes_on_the_fixture_warehouse(agg_db):
-    results = run_checks(agg_db)
-    assert len(results) == len(CHECKS)
+    # agg_db loads no scope/ decision file by design (the shared fixture other suites count against), so
+    # decisions_loaded is judged on the CI warehouse below, which loads them all
+    names = [n for n in CHECKS if n != "decisions_loaded"]
+    results = run_checks(agg_db, names)
+    assert len(results) == len(CHECKS) - 1
     failed = [r for r in results if not r.ok]
     assert not failed, render_text(results)
+
+
+def test_every_check_passes_on_the_warehouse_ci_checks():
+    """The `consistency checks` CI job's own warehouse: the fixtures with every scope/ decision file loaded."""
+    db_url = os.environ.get("OWCS_TEST_DATABASE_URL")
+    if not db_url:
+        pytest.skip("OWCS_TEST_DATABASE_URL not set")
+    path = Path(__file__).resolve().parent.parent / "tools" / "build_fixture_db.py"
+    spec = importlib.util.spec_from_file_location("build_fixture_db", path)
+    tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tool)
+    conn, raw = tool.build_scratch_db(db_url, "owcs_test_ci_fixture")
+    try:
+        tool.ingest_window_opener(conn, raw, db_url)
+        tool.load_decisions(conn)
+        results = run_checks(conn)
+        conn.commit()
+        assert len(results) == len(CHECKS)
+        assert not [r for r in results if not r.ok], render_text(results)
+        assert _by_name(results)["decisions_loaded"].counts["files"]["org_decisions.json"]["not_applicable_here"] > 0
+    finally:
+        conn.close()
+        raw.close()
 
 
 def test_counts_are_reported_even_when_everything_passes(agg_db):

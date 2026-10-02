@@ -357,8 +357,10 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
     discrepancies: list[dict[str, Any]] = []
     # an org the owner decided spans regions (SpaceStation Gaming: EMEA in 2024, an NA partner team from 2025) carries
     # the token in every window's evidence (scope/org_decisions.json); it is reported, not failed
+    # Liquipedia-born windows (`lp:team:`) are derived from the team map by `identity load`, not merge decisions, so
+    # they are not judged against the token: loading SpaceStation Gaming's team-map name once failed this check
     decided_cross = {r["org_id"] for r in _rows(conn, """
-        SELECT org_id FROM team_orgs GROUP BY org_id
+        SELECT org_id FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%' GROUP BY org_id
         HAVING bool_and(EXISTS (SELECT 1 FROM jsonb_array_elements_text(evidence) e WHERE e LIKE 'cross_region_ok%'))""")}
     for key_col, kind in (("org_key", "org_spans_regions"), ("team_id", "team_id_spans_regions")):
         for r in _rows(conn, f"""
@@ -636,6 +638,26 @@ def check_liquipedia_map_isolation(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} Liquipedia-sourced map(s) have a player row that should not exist", counts)
 
 
+# ------------------------------------------------------- decisions loaded
+
+def check_decisions_loaded(conn: psycopg.Connection) -> CheckResult:
+    """Every reviewed decision in scope/ is in the tables its loader writes, and nothing loaded lacks a decision.
+
+    A decision recorded and never loaded is invisible to every answer: production once held 166 decided player
+    identities with no anchor and a stale team anchor that failed five series_integrity rows. See
+    owcsmuse/decisions_loaded.py for each file's rule.
+    """
+    from . import decisions_loaded
+
+    discrepancies, counts = decisions_loaded.check(conn)
+    n = sum(c["decisions"] for c in counts["files"].values())
+    return _result("decisions_loaded", discrepancies,
+                   f"all {n} decision(s) across {len(counts['files'])} scope file(s) are loaded, and nothing loaded "
+                   "lacks one",
+                   f"{counts['decided_not_loaded']} decided but not loaded, {counts['loaded_not_decided']} loaded "
+                   f"but not decided, {counts['loaded_differs']} loaded with a different value", counts)
+
+
 CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "fact_view_reconciliation": check_fact_view_reconciliation,
     "date_visibility": check_date_visibility,
@@ -649,6 +671,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
     "map_winner_consistency": check_map_winner_consistency,
     "phantom_map_isolation": check_phantom_map_isolation,
+    "decisions_loaded": check_decisions_loaded,
 }
 
 

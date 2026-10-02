@@ -148,6 +148,14 @@ def test_an_owner_decided_cross_region_org_is_reported_not_failed(agg_db):
                             (r["team_id"], Jsonb(["cross_region_ok: decided by the owner in this test"])))
         res = {c.name: c for c in run_checks(agg_db, ["region_consistency"])}["region_consistency"]
         assert res.ok and res.counts["decided_cross_region_orgs"] == ["x-org"]
+        # a Liquipedia-born team id `identity load` maps to the org is derived from the team map, not a merge decision:
+        # it carries no token and must not take the owner's exception away (SpaceStation Gaming, 2026-10-02)
+        with agg_db.cursor() as cur:
+            cur.execute("INSERT INTO teams (team_id, name) VALUES ('lp:team:x', 'X')")
+            cur.execute("""INSERT INTO team_orgs (team_id, org_id, source, evidence)
+                           VALUES ('lp:team:x', 'x-org', 'manual', '["Liquipedia team name anchored to this org"]')""")
+        res = {c.name: c for c in run_checks(agg_db, ["region_consistency"])}["region_consistency"]
+        assert res.ok and res.counts["decided_cross_region_orgs"] == ["x-org"]
         with agg_db.cursor() as cur:
             cur.execute("UPDATE team_orgs SET evidence = '[]'::jsonb WHERE org_id = 'x-org'")
         res = {c.name: c for c in run_checks(agg_db, ["region_consistency"])}["region_consistency"]

@@ -1022,8 +1022,9 @@ and exits 1 with the specific discrepancy:
 | `series_integrity` | a match is one series whichever source holds it; the series count reconciles against FACEIT plus the resolved Liquipedia-only records; a linked pair names the same identities on both sides |
 | `score_plausibility` | no series presents a score its best-of cannot hold, no map is both won and drawn, and map wins never exceed the presented series score; counts the best-of corrections (raised, lowered, unknown, implausible) and the results taken from Liquipedia |
 | `map_winner_consistency` | every fact row follows the winner the map scores give; lists every `winner_team_id` that contradicts its scores (1-3e78e269 map 5) |
-| `phantom_map_isolation` | a FACEIT map row beyond Liquipedia's game count for a linked series is in no fact view; counts the player rows that rode on one |
-| `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges |
+| `phantom_map_isolation` | a FACEIT map row beyond Liquipedia's game count for a linked series is in no fact view; counts the player rows that rode on one (none has ever been stored: see **Phantom maps**) |
+| `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges. An owner-decided exception (`cross_region_ok` on every one of the org's FACEIT windows) is listed, not failed; the Liquipedia-born `lp:team:` windows `identity load` derives from the team map are not merge decisions and are not judged against it |
+| `decisions_loaded` | every reviewed decision in `scope/` (org, alias, team map, player identity, link, scope and competition-name files) is in the table its loader writes, and nothing loaded lacks one; each discrepancy is `decided_not_loaded`, `loaded_not_decided` or `loaded_differs`, with the file, the key and the command that reloads it. A decision about a team, player, championship or record the warehouse does not hold is counted as not applicable, by the loader's own skip rule. Added 2026-10-02 after production was found carrying 166 decided player identities with no anchor, 11 decided team names with none, and a stale `timeless` anchor that failed five `series_integrity` rows |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
 ```bash
@@ -1222,7 +1223,8 @@ room or the Liquipedia page, and an answer that used a Liquipedia-only series ca
 - **Liquipedia is the source of record for a linked series' result and best-of; FACEIT only where Liquipedia has
   nothing** (034, inverting Stage 2's rule). FACEIT keeps a fixed number of map slots per format and, when a sweep
   closes a series early, logs a default win for the winner on the next map in the rotation (the 2024 Stage 1 grand
-  finals: real 4-0s stored as 5-0 with a Dorado nobody played), and it counts a drawn map as a win. Where a linked
+  finals, see **Phantom maps** below: a real 4-0 stored as 5-0 and a real 4-1 stored as 5-1), and it counts a drawn
+  map as a win. Where a linked
   record orients to the FACEIT factions (decided anchors, then names, then an unlevel score, then the winner), the
   series presents Liquipedia's score, winner and best-of (`result_source`, `score_source`, `best_of_source` =
   `liquipedia`). A FACEIT map row beyond Liquipedia's game count for a linked series is a phantom (`phantom_maps`):
@@ -1254,7 +1256,7 @@ its first and last sighting, the same shape as `player_nicknames`; the collector
 `players.display_name` is an owner's override set by `identity load` from a player identity decision's `display`
 (`identity decide <page> --player <guid> --display "ZZZ"`, or `--nickname <FACEIT name>` to find the GUID by a
 name that names exactly one player): shown everywhere, searchable by nothing new, every nickname and in-game
-name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss) and Astro (FACEIT Astronexz).
+name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss). Astro (FACEIT Astronexz) was listed here, but no display decision for it exists in `scope/player_identity_decisions.json` or in production (2026-10-02): it is undecided until recorded.
 
 **SpaceStation Gaming is one organisation** across its 2024 EMEA team (`a359db61`, OWCS 2024 EMEA Stage 1 and
 Dreamhack Dallas) and its NA partner team from 2025 (`6ddc0431`): decided by the owner on 2026-10-02, reversing
@@ -1276,10 +1278,23 @@ is, and says so by construction rather than by returning nobody.
 
 ### Phantom maps: FACEIT map rows for maps never played
 
-FACEIT keeps a fixed number of map slots per series format and, when a sweep closes a series early, logs a default
-win for the winner on the next map in the rotation (the 2024 NA and EMEA Stage 1 grand finals: real 4-0 sweeps that
-FACEIT stores as 5-0 with a Dorado nobody played; Liquipedia records the 4-0). Map records, series scores and the
-best-of a score implies are all inflated by such a row. `python -m owcsmuse liquipedia phantoms` (sends nothing)
+FACEIT keeps a fixed number of map slots per series format and, when a series is decided early, logs a default
+win for the winner on the next map in the rotation. **Where the phantom lives, precisely:** only in the `/matches`
+payload's `detailed_results` (one entry per map slot) and therefore in FACEIT's stored series score. The `/stats`
+payload, which is what `match_rounds` and every player row are built from, carries only the maps actually played,
+so **no fabricated map has ever entered the warehouse** as of the 2024 fetch. The two known cases, both confirmed in
+`scope/liquipedia_link_decisions.json` on 2026-10-02:
+
+| grand final | FACEIT score | phantom entry in `detailed_results` | `match_rounds` | Liquipedia |
+|---|---|---|---|---|
+| 2024 NA Stage 1, Toronto Defiant v Timeless (1-70cff415) | 5-0 | 5th: Dorado (the next pick), 1-0 | 4 maps, 10 player rows each | 4-0, the same 4 maps |
+| 2024 EMEA Stage 1, Twisted Minds v ENCE (1-c5823143) | 5-1 | 6th: Ilios (the next pick), 0-0, credited to the winner | 5 maps, 10 player rows each | 4-1, the same 5 maps |
+
+So what the phantom inflates is the **series score** (and the best-of a score implies), which the linked Liquipedia
+record corrects (`score_source = liquipedia`). `phantom_maps` and `check` (`phantom_map_isolation`) guard the other
+shape, a FACEIT map *row* beyond Liquipedia's game count, which would carry the phantom into map records, map/mode
+win rates and player aggregates; it holds 0 rows today and stands as a guard should a payload ever carry one.
+`python -m owcsmuse liquipedia phantoms` (sends nothing)
 writes `scope/phantom_maps.md` from stored data: every record carrying a FACEIT id where FACEIT's map count or
 series score exceeds Liquipedia's, with both values and the map Liquipedia lacks; every FACEIT map row with a
 placeholder shape (a win with no player rows while the match has them elsewhere, a score its mode cannot produce, no
@@ -1359,7 +1374,7 @@ private, so the badge above renders only for accounts with access:
 | `database tests` | `pytest -m "not golden"` against `postgres:16` **and** `postgres:17` service containers (a matrix): 17 is what Supabase runs, 16 is docker-compose and the dev default |
 | `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**), on both majors |
 | `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
-| `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`) and runs `python -m owcsmuse check` against it, on both majors |
+| `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`), loads every `scope/` decision file through its own loader as production does, and runs `python -m owcsmuse check` against it, on both majors. It also ingests the golden capture of 1-36219ab4, the series that opens Virtus pro's window on `bb5dd404`, so `identity_windows` judges a decided window against a series it covers |
 
 Why both majors: migrations 026 to 031 passed every gate on 16 and failed on
 production (Supabase, PostgreSQL 17.6) at the first materialized view. PG 17
