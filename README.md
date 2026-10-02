@@ -463,7 +463,19 @@ ordering, twice:
   it, one of them as 1DIPv100GORILLA in 2025 Stage 2, and a name change on a
   team id can be the same organisation fielding a different roster - neither
   FACEIT's team leader and avatar nor Liquipedia's team pages tell the two
-  apart, so a window needs the owner's knowledge, not the signals. A team id whose
+  apart, so a window needs the owner's knowledge, not the signals.
+
+  **A FACEIT team id follows the roster, not the organisation.** Neither the
+  team's `leader` nor its avatar tells "the org got a new roster" from "the
+  roster moved to a new org". Across all 19 multi-name team ids (2026-10-02)
+  the leader is a rostered player in every match, rotates inside one brand
+  (GenG had five), and carries over exactly when the players do: it carried
+  across Timeless -> NTMR (different orgs) and changed between Quick Esports'
+  June and September rosters (one org). The one signal that helps is whether
+  the later brand also fields a team id of its own (NTMR on two ids, Virtus pro
+  and Extinction on a second id in 2026): that makes it an organisation in its
+  own right, though it still does not prove the earlier brand was a different
+  one. A team id whose
   names are several organisations' eras carries one mapping per era
   (`orgs decide --add`, stored under `windows`): 0464a373 is UNC inc (its own),
   Rad, Sakura / Sakura Esports and LuneX; d20d1868 is team_chiime / Dreamland
