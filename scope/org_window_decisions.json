@@ -62,9 +62,9 @@
       "decided_at": "2026-10-01T23:16:28+00:00"
     },
     "cb90edf6-60cb-4f73-8172-bf944729a114": {
-      "verdict": "roster_drop",
-      "note": "Quick Esports' roster played as 1DIPv100GORILLA: a pickup, windowed at that era. The overlapping dates are a FACEIT artifact, not an alias.",
-      "decided_at": "2026-10-01T23:16:28+00:00"
+      "verdict": "rename_only",
+      "note": "Quick Esports throughout, no window (owner, 2026-10-02, reversing the 2026-10-01 roster_drop verdict). Quick Esports fielded three rosters on this id: the Stage 1 roster (2025-05-11..05-25), a promoted roster that played Stage 2 as 1DIPv100GORILLA (2025-06-01..06-15) and was later dropped and relegated out of OWCS, and a different promoted roster for Stage 3 (2025-09-07..10-12). Roster change is not org change. The 2026-10-01 verdict windowed 1DIPv100GORILLA as its own org from 2025-06-01 open-ended, which also swallowed the Stage 3 series; its note misdated the change as 2026-06-01.",
+      "decided_at": "2026-10-02T04:43:37+00:00"
     },
     "0464a373-df2f-4d23-93f5-80cbaa07802f": {
       "verdict": "org_changes",

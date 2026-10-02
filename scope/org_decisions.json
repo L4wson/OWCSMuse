@@ -12,17 +12,6 @@
       "valid_from_name": "1234",
       "decided_at": "2026-10-01T23:15:38+00:00"
     },
-    "cb90edf6-60cb-4f73-8172-bf944729a114": {
-      "org_id": "1dipv100gorilla",
-      "org_name": "1DIPv100GORILLA",
-      "team_name": "1DIPv100GORILLA",
-      "note": "Quick Esports' roster played as '1DIPv100GORILLA' from 2026-06-01. A roster drop: the organisation dropped the roster, which continued under the new name on the same team id. The overlapping sighting dates are a FACEIT artifact, not an alias. Window from the first sighting of the new name; open-ended, so later sightings of the old name on this id fall in this era (to be confirmed per match on production).",
-      "evidence": [
-        "decided by the project owner (Stage 3 window review, 2026-10-01)"
-      ],
-      "valid_from_name": "1DIPv100GORILLA",
-      "decided_at": "2026-10-01T23:15:38+00:00"
-    },
     "ebfd8060-fcbd-467b-9701-0801b2260a9c": {
       "org_id": "ataraxia",
       "org_name": "Ataraxia",

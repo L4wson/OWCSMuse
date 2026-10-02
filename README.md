@@ -457,8 +457,13 @@ ordering, twice:
   verdict on each is `scope/org_window_decisions.json`, and the report shows it
   under the id, flagging where a signal reads the id differently (Umbrellaacademy
   -> ROCstars fires the placeholder signal and was decided an org change; the
-  overlapping Anyones Legend / 1234 and Quick Esports / 1DIPv100GORILLA dates
-  are a FACEIT artifact over a roster drop, decided pickups). A team id whose
+  overlapping Anyones Legend / 1234 dates are a FACEIT artifact over a roster
+  drop, decided a pickup). cb90edf6 is Quick Esports throughout (owner,
+  2026-10-02, reversing a 2026-10-01 window): the org fielded three rosters on
+  it, one of them as 1DIPv100GORILLA in 2025 Stage 2, and a name change on a
+  team id can be the same organisation fielding a different roster - neither
+  FACEIT's team leader and avatar nor Liquipedia's team pages tell the two
+  apart, so a window needs the owner's knowledge, not the signals. A team id whose
   names are several organisations' eras carries one mapping per era
   (`orgs decide --add`, stored under `windows`): 0464a373 is UNC inc (its own),
   Rad, Sakura / Sakura Esports and LuneX; d20d1868 is team_chiime / Dreamland
