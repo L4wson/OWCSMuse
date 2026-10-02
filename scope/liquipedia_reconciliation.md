@@ -16,7 +16,7 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | OWCS 2024: EMEA Stage 1 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 4 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group D | 20 | 6 | 17 | 0 | 3 | 0 | 1 | 1 |
-| OWCS 2024: EMEA Stage 1 - Main Event | 14 | 14 | 10 | 0 | 4 | 0 | 4 | 0 |
+| OWCS 2024: EMEA Stage 1 - Main Event | 14 | 14 | 10 | 0 | 4 | 0 | 3 | 0 |
 | OWCS 2024: EMEA Stage 2 - Group A | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 2 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 2 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
@@ -26,7 +26,7 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | OWCS 2024: NA Stage 1 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 1 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 1 - Group D | 20 | 6 | 20 | 0 | 0 | 0 | 1 | 0 |
-| OWCS 2024: NA Stage 1 - Main Event | 14 | 14 | 0 | 11 | 1 | 2 | 3 | 0 |
+| OWCS 2024: NA Stage 1 - Main Event | 14 | 14 | 0 | 11 | 1 | 2 | 2 | 0 |
 | OWCS 2024: NA Stage 2 - Group A | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 2 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 2 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
@@ -52,11 +52,9 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S9 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | S9 NA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
-| **total** | **451** | **473** | **407** | **11** | **25** | **8** | **52** | **11** |
+| **total** | **451** | **473** | **407** | **11** | **25** | **8** | **50** | **11** |
 
-8 link(s) rest on a team-name mapping nobody has reviewed yet (marked provisional below).
-
-## Needs review: ambiguous matches (22)
+## Needs review: ambiguous matches (20)
 
 ### 2024-03-08 18:30Z  Vanir Quick 0-3 LeftRightGnight  (bo5)
 - page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage
@@ -93,12 +91,6 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 - why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on teams
   - candidate 1-40296472-ccfe-45f1-9f44-0d58a318219a:  - disagrees_on=['teams']
 - decide: `python -m owcsmuse liquipedia links decide 127216_1Sxcy6HVqj_R02-M003 --faceit-id <id>` or `--none`
-
-### 2024-03-24 18:30Z  ENCE 1-4 Twisted Minds  (bo7)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1
-- why it is ambiguous: the page's FACEIT id disagrees with the FACEIT record on score
-  - candidate 1-c5823143-d7e8-4efe-a957-6d54cfee1a8e:  - disagrees_on=['score']
-- decide: `python -m owcsmuse liquipedia links decide 127216_1Sxcy6HVqj_R05-M001 --faceit-id <id>` or `--none`
 
 ### 2024-05-31 20:45Z  Spacestation Gaming 3-0 NRG Shock  (bo5)
 - page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
@@ -186,20 +178,16 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
   - candidate 1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b: Crazy Raccoons 4-2 Team Falcons - faceit_time=2024-06-02T23:59+00:00, minutes_from_liquipedia=159, disagrees_on=['time (FACEIT has no start time: its time is when the result was entered)', 'best_of']
 - decide: `python -m owcsmuse liquipedia links decide 127124_zooRkLJB0v_R05-M001 --faceit-id <id>` or `--none`
 
-### 2024-03-24 22:30Z  Toronto Defiant 4-0 Timeless  (bo7)
-- page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1
-- why it is ambiguous: the same two teams within a day, but the records disagree
-  - candidate 1-70cff415-3817-4144-9eca-e917f89cb6e7: Toronto Defiant 5-0 Timeless - faceit_time=2024-03-24T23:40+00:00, minutes_from_liquipedia=70, disagrees_on=['score']
-- decide: `python -m owcsmuse liquipedia links decide 127200_p9x4ti8iHl_R05-M001 --faceit-id <id>` or `--none`
 
-
-## Ambiguous matches already decided (3)
+## Ambiguous matches already decided (5)
 
 - [confirmed] 2025-10-26 18:20Z  Al Qadsiah 1-4 Twisted Minds  (bo7)  -> FACEIT 1-3e78e269-28b7-481c-9ccc-46c173314ab9  (the page's FACEIT id disagrees with the FACEIT record on best_of)
 - [confirmed] 2026-03-29 22:15Z  Disguised 3-0 Team Liquid  (bo5)  -> FACEIT 1-472cc9eb-d7a3-4811-b633-397a99d6a502  (the page's FACEIT id disagrees with the FACEIT record on score)
 - [confirmed] 2026-04-11 21:00Z  Dallas Fuel 3-1 Spacestation Gaming  (bo5)  -> FACEIT 1-28ea62bc-16c1-4686-b41b-479d5275d151  (the page's FACEIT id disagrees with the FACEIT record on score)
+- [confirmed] 2024-03-24 18:30Z  ENCE 1-4 Twisted Minds  (bo7)  -> FACEIT 1-c5823143-d7e8-4efe-a957-6d54cfee1a8e  (the page's FACEIT id disagrees with the FACEIT record on score)
+- [confirmed] 2024-03-24 22:30Z  Toronto Defiant 4-0 Timeless  (bo7)  -> FACEIT 1-70cff415-3817-4144-9eca-e917f89cb6e7  (the same two teams within a day, but the records disagree)
 
-## Linked pairs where the two sources disagree (14)
+## Linked pairs where the two sources disagree (15)
 
 Either source can be wrong. `maps` tells which is more likely: FACEIT's own stats count the maps played.
 
@@ -259,6 +247,10 @@ Either source can be wrong. `maps` tells which is more likely: FACEIT's own stat
   FACEIT: 2024-03-17 19:18Z  ROC ESPORT 3-0 Sheer Cold  (bo5, result_only)  1-2e64f1ab-7cc5-43a6-8ac1-e3d8301bcb40
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage
   - **date**: Liquipedia '2024-03-09T20:00+00:00', FACEIT '2024-03-17T19:18+00:00' - FACEIT is +191.3 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
+- [ambiguous] 2024-03-24 18:30Z  ENCE 1-4 Twisted Minds  (bo7)
+  FACEIT: 2024-03-24 20:15Z  Twisted Minds 5-1 ENCE  (bo7, complete)  1-c5823143-d7e8-4efe-a957-6d54cfee1a8e
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1
+  - **score**: Liquipedia '1-4', FACEIT '1-5 (as LP orders them)' - FACEIT has stats for 5 maps; Liquipedia lists 5 games; FACEIT's 5-1 is more wins than a best-of-7 allows
 
 ## Liquipedia records a FACEIT id we do not hold (3)
 
@@ -318,12 +310,11 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 ### OWCS 2024: EMEA Stage 1 - Main Event
 
-- links: 10 exact, 0 strong, 4 ambiguous; 0 Liquipedia-only; 4 FACEIT-only
+- links: 10 exact, 0 strong, 4 ambiguous; 0 Liquipedia-only; 3 FACEIT-only
 - FACEIT matches with no Liquipedia counterpart:
   - 2024-03-21 17:13Z  Twisted Minds 3-0 Quick esports  (bo5, complete)  1-9180da8a-080e-40bf-bd58-6213bce4b0d6
   - 2024-03-21 18:23Z  ROC ESPORT 0-3 Quick esports  (bo5, complete)  1-71ee0038-4fa9-465d-8742-529b259c8612
   - 2024-03-22 18:13Z  SpaceStation 3-0 Quick esports  (bo5, complete)  1-40296472-ccfe-45f1-9f44-0d58a318219a
-  - 2024-03-24 20:15Z  Twisted Minds 5-1 ENCE  (bo7, complete)  1-c5823143-d7e8-4efe-a957-6d54cfee1a8e
 
 ### OWCS 2024: EMEA Stage 2 - Group A
 
@@ -382,22 +373,21 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 ### OWCS 2024: NA Stage 1 - Main Event
 
-- links: 0 exact, 11 strong, 1 ambiguous; 2 Liquipedia-only; 3 FACEIT-only
-  - strong (provisional): 2024-03-21 21:00Z  Toronto Defiant 3-1 LFO  (bo5) -> 1-82515b5c-13b5-468a-8fe3-7244af1d42fd - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-  - strong (provisional): 2024-03-21 21:00Z  Timeless 3-2 Pirates in Pyjamas  (bo5) -> 1-8241bf51-9906-4e8d-9705-23870d2d6932 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-  - strong (provisional): 2024-03-21 21:00Z  Students of the Game 0-3 M80  (bo5) -> 1-f1ba158c-daf9-4463-9a05-52f44da840e6 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-  - strong (provisional): 2024-03-21 22:30Z  LFO 2-3 Pirates in Pyjamas  (bo5) -> 1-39d83a78-e8a4-4f20-92d2-6dc72f9979e2 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+- links: 0 exact, 11 strong, 1 ambiguous; 2 Liquipedia-only; 2 FACEIT-only
+  - strong: 2024-03-21 21:00Z  Toronto Defiant 3-1 LFO  (bo5) -> 1-82515b5c-13b5-468a-8fe3-7244af1d42fd - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-21 21:00Z  Timeless 3-2 Pirates in Pyjamas  (bo5) -> 1-8241bf51-9906-4e8d-9705-23870d2d6932 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-21 21:00Z  Students of the Game 0-3 M80  (bo5) -> 1-f1ba158c-daf9-4463-9a05-52f44da840e6 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-21 22:30Z  LFO 2-3 Pirates in Pyjamas  (bo5) -> 1-39d83a78-e8a4-4f20-92d2-6dc72f9979e2 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-21 23:30Z  Toronto Defiant 3-2 Timeless  (bo5) -> 1-4b984ffd-9868-45fa-92c5-c6a290bfe68a - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-  - strong (provisional): 2024-03-22 20:00Z  Luminosity Gaming 0-3 M80  (bo5) -> 1-a52030d9-a7d4-4256-b55c-352b1c018e43 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-  - strong (provisional): 2024-03-22 21:30Z  Luminosity Gaming 3-0 Pirates in Pyjamas  (bo5) -> 1-8629048b-1981-4175-91ea-6e9b6787aa2f - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-  - strong (provisional): 2024-03-22 22:30Z  Timeless 3-1 Students of the Game  (bo5) -> 1-66cdc159-710a-4c5c-b710-e6ad39a4ccae - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-22 20:00Z  Luminosity Gaming 0-3 M80  (bo5) -> 1-a52030d9-a7d4-4256-b55c-352b1c018e43 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-22 21:30Z  Luminosity Gaming 3-0 Pirates in Pyjamas  (bo5) -> 1-8629048b-1981-4175-91ea-6e9b6787aa2f - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-22 22:30Z  Timeless 3-1 Students of the Game  (bo5) -> 1-66cdc159-710a-4c5c-b710-e6ad39a4ccae - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-23 20:30Z  Toronto Defiant 3-0 M80  (bo5) -> 1-1d1c6149-1d38-4e62-9c7b-c2ac82ef8036 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
-  - strong (provisional): 2024-03-23 22:00Z  Luminosity Gaming 0-3 Timeless  (bo5) -> 1-2974d920-c4b7-42aa-8c8f-1d55f425a4b8 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
+  - strong: 2024-03-23 22:00Z  Luminosity Gaming 0-3 Timeless  (bo5) -> 1-2974d920-c4b7-42aa-8c8f-1d55f425a4b8 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
   - strong: 2024-03-24 21:00Z  M80 1-3 Timeless  (bo5) -> 1-dd63f190-1b64-4763-915c-e54c83d6ab56 - teams, region, time, best-of and series score agree; the only FACEIT match that fits
 - FACEIT matches with no Liquipedia counterpart:
   - 2024-03-21 21:39Z  Luminosity 3-0 Shikigami  (bo5, complete)  1-3ed67b74-6ada-4f85-9244-8d7cd634e243
   - 2024-03-21 22:59Z  SOG 3-0 Shikigami  (bo5, complete)  1-ce861626-84a0-489f-9cec-624fd732663d
-  - 2024-03-24 23:40Z  Toronto Defiant 5-0 Timeless  (bo7, complete)  1-70cff415-3817-4144-9eca-e917f89cb6e7
 - Liquipedia matches with no FACEIT counterpart:
   - 2024-03-21 21:00Z  Luminosity Gaming 3-0 Shikigami  (bo5)  (team name not mapped: Shikigami)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1
   - 2024-03-21 22:30Z  Shikigami 0-3 Students of the Game  (bo5)  (team name not mapped: Shikigami)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1

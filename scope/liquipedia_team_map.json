@@ -43,6 +43,18 @@
       "note": "Extinction is one organisation across two FACEIT team ids (2b7f8ef6 in 2025, a35f8d47 in 2026), each mapped to the org over its own Extinction era in scope/org_decisions.json; the Liquipedia name resolves to the org at the series' time, which keys to whichever team id carried it then. Supersedes the Stage 1 decision (team 2b7f8ef6 for all time), whose 5 conflicting votes for a35f8d47 were the 2026 era.",
       "decided_at": "2026-10-01T22:00:00+00:00"
     },
+    "lfo": {
+      "entity_type": "team",
+      "entity_id": "a24592c1-8b7f-414b-a751-0e43b6da1522",
+      "note": "3/3 id-linked matches; one FACEIT name (LFO) over the id's whole life, 2024-03-08..03-21, 2024 NA Stage 1 only. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:36+00:00"
+    },
+    "luminosity gaming": {
+      "entity_type": "team",
+      "entity_id": "d4ec89d7-7d41-4c0e-9834-fbf87a199347",
+      "note": "7/7 id-linked matches; FACEIT 'Luminosity', one name, 2024 NA Stages 1-2. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:40+00:00"
+    },
     "lunex gaming": {
       "entity_type": "team",
       "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
@@ -67,6 +79,12 @@
       "note": "org-level identity already resolved to ntmr",
       "decided_at": "2026-09-23T05:02:38+00:00"
     },
+    "pirates in pyjamas": {
+      "entity_type": "team",
+      "entity_id": "f4401a61-5010-484b-8429-ad09e524b097",
+      "note": "8/8 id-linked matches across 2024 NA Stages 1-2; FACEIT PIP -> PxG PiP on 2024-04-14 is a rename on one id (the new name extends the old). Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:38+00:00"
+    },
     "rad esports": {
       "entity_type": "team",
       "entity_id": "0464a373-df2f-4d23-93f5-80cbaa07802f",
@@ -84,6 +102,12 @@
       "entity_id": "spacestation-gaming",
       "note": "One organisation across the 2024 EMEA team (a359db61, Dreamhack Dallas) and the 2025+ NA team (6ddc0431): scope/org_decisions.json maps each id over its own era, so the org key is the same on both sides at any time. Decided by the owner (2026-10-02).",
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "students of the game": {
+      "entity_type": "org",
+      "entity_id": "students-of-the-game",
+      "note": "9/9 id-linked matches across 0c629c99 (team_Rakattack__, 2024 NA Stage 1 Group D) and d566d889 ('SOG', Stage 1 Main Event on; also Dallas as 'NRG Shock'). Org-level because no single team id covers 2024 NA Stage 1. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:42+00:00"
     },
     "supernova american team": {
       "entity_type": "team",

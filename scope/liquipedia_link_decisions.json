@@ -1,20 +1,30 @@
 {
   "note": "Reviewed decisions on Liquipedia matches the reconciler could not link on its own. Keys are Liquipedia objectnames, or `faceit:<match id>` for the one record that names that FACEIT id (an exact id whose records disagree); faceit_match_id names the FACEIT match it is, or is null when there is none. Edit by hand or with `python -m owcsmuse liquipedia links decide`.",
   "decisions": {
+    "127200_p9x4ti8iHl_R05-M001": {
+      "faceit_match_id": "1-70cff415-3817-4144-9eca-e917f89cb6e7",
+      "note": "Confirmed: Toronto Defiant 4-0 Timeless, OWCS 2024 NA Stage 1 grand final (bo7). FACEIT stores 5-0: its /matches detailed_results carries a 5th entry (Dorado, the next pick, 1-0) that was never played; /stats and match_rounds hold the 4 real maps, matching Liquipedia map for map. Liquipedia's 4-0 is the series score. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:44+00:00"
+    },
+    "127216_1Sxcy6HVqj_R05-M001": {
+      "faceit_match_id": "1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+      "note": "Confirmed: Twisted Minds 4-1 ENCE, OWCS 2024 EMEA Stage 1 grand final (bo7). FACEIT stores 5-1: its /matches detailed_results carries a 6th entry (Ilios, the next pick, 0-0) that was never played; /stats and match_rounds hold the 5 real maps, matching Liquipedia map for map. Liquipedia's 4-1 is the series score. Approved by the owner (2026-10-02).",
+      "decided_at": "2026-10-02T02:37:45+00:00"
+    },
     "faceit:1-28ea62bc-16c1-4686-b41b-479d5275d151": {
       "faceit_match_id": "1-28ea62bc-16c1-4686-b41b-479d5275d151",
       "note": "Confirmed: Dallas Fuel vs Spacestation Gaming, 2026-04-11 (S8 NA playoffs). FACEIT 4-1 vs Liquipedia 3-1: map 2 Numbani was drawn 3-3 (winner NULL in the Stage 2 enrichment) and FACEIT counted it as a win. Liquipedia's 3-1 is the true series score; FACEIT's stored score is left as is and the series view presents the map-derived score (score_source = maps).",
-      "decided_at": "2026-10-01T22:42:55+00:00"
-    },
-    "faceit:1-472cc9eb-d7a3-4811-b633-397a99d6a502": {
-      "faceit_match_id": "1-472cc9eb-d7a3-4811-b633-397a99d6a502",
-      "note": "Confirmed: Disguised vs Team Liquid, 2026-03-29 (S8 NA regular season). FACEIT 4-0 vs Liquipedia 3-0: map 2 Blizzard World was drawn 3-3 and FACEIT counted the draw as a win for the series winner. Liquipedia's 3-0 is the true series score; FACEIT's stored score is left as is and the series view presents the map-derived score (score_source = maps).",
       "decided_at": "2026-10-01T22:42:55+00:00"
     },
     "faceit:1-3e78e269-28b7-481c-9ccc-46c173314ab9": {
       "faceit_match_id": "1-3e78e269-28b7-481c-9ccc-46c173314ab9",
       "note": "Confirmed: Al Qadsiah 1-4 Twisted Minds, 2025-10-26 (S6 EMEA Stage 3 playoffs). Liquipedia bo7 vs FACEIT bo5: a series with 4 map wins is a best-of-7 whatever FACEIT stored, so the pairing is right and FACEIT's best_of is wrong. FACEIT's stored value is left as is; the series view derives best-of from the winning score (best_of_source = derived from score).",
       "decided_at": "2026-10-01T23:11:33+00:00"
+    },
+    "faceit:1-472cc9eb-d7a3-4811-b633-397a99d6a502": {
+      "faceit_match_id": "1-472cc9eb-d7a3-4811-b633-397a99d6a502",
+      "note": "Confirmed: Disguised vs Team Liquid, 2026-03-29 (S8 NA regular season). FACEIT 4-0 vs Liquipedia 3-0: map 2 Blizzard World was drawn 3-3 and FACEIT counted the draw as a win for the series winner. Liquipedia's 3-0 is the true series score; FACEIT's stored score is left as is and the series view presents the map-derived score (score_source = maps).",
+      "decided_at": "2026-10-01T22:42:55+00:00"
     }
   }
 }

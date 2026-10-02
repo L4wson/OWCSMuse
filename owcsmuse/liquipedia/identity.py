@@ -284,8 +284,10 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
                             (tid, row["name"] if row else name))
                 cur.execute("SELECT 1 FROM orgs WHERE org_id = %s", (d["entity_id"],))
                 if cur.fetchone():
-                    cur.execute("""INSERT INTO team_orgs (team_id, org_id, source, evidence)
-                                   VALUES (%s, %s, 'manual', %s) ON CONFLICT (team_id, valid_from) DO UPDATE SET org_id = EXCLUDED.org_id""",
+                    # replace, never upsert: team_orgs' overlap trigger fires BEFORE INSERT, ahead of any ON CONFLICT,
+                    # so an upsert onto the window a previous load wrote raised and made every second load fail
+                    cur.execute("DELETE FROM team_orgs WHERE team_id = %s", (tid,))
+                    cur.execute("""INSERT INTO team_orgs (team_id, org_id, source, evidence) VALUES (%s, %s, 'manual', %s)""",
                                 (tid, d["entity_id"], psycopg.types.json.Jsonb(["Liquipedia team name anchored to this org (scope/liquipedia_team_map.json)"])))
                     born_teams += 1
         cur.execute("DELETE FROM team_orgs WHERE team_id LIKE %s AND NOT (team_id = ANY(%s))", (BORN_TEAM_PREFIX + "%", wanted_born_teams))

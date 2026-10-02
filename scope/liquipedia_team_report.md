@@ -1,13 +1,13 @@
 # Liquipedia team names -> FACEIT orgs
 
-78 Liquipedia team names, learned from 407 matches Liquipedia ties to FACEIT by match id. 21 decided, 54 proposed strong, 5 need a person.
+78 Liquipedia team names, learned from 407 matches Liquipedia ties to FACEIT by match id. 25 decided, 50 proposed strong, 5 need a person.
 
 Nothing is matched by fuzzy string similarity. Decide with:
 
     python -m owcsmuse liquipedia teams decide "<Liquipedia name>" --org <org slug> [--region na|emea]   (or --team <FACEIT team id>)
     python -m owcsmuse liquipedia teams accept        # accept every strong proposal below, in bulk
 
-## Proposed - strong evidence (54)
+## Proposed - strong evidence (50)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -40,19 +40,15 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Good Boys | any | team:626ee9e6-1bb4-4a77-8660-a220fcf7a178 | 2 | stood opposite FACEIT org 'team:626ee9e6-1bb4-4a77-8660-a220fcf7a178' in 2 of 2 id-linked matches (FACEIT called it 'Visored') |
 | Goud Guys ANM | any | team:602d3c11-ccee-404d-858e-b03267c83d47 | 7 | stood opposite FACEIT org 'team:602d3c11-ccee-404d-858e-b03267c83d47' in 7 of 7 id-linked matches (FACEIT called it 'Goud Guys', 'Goud Guys ANM'); the folded names are identical |
 | LeftRightGnight | any | team:3c56dcad-8041-4214-86bd-ac75db1d610f | 3 | stood opposite FACEIT org 'team:3c56dcad-8041-4214-86bd-ac75db1d610f' in 3 of 3 id-linked matches (FACEIT called it 'LeftRightGnight'); the folded names are identical |
-| LFO | any | team:a24592c1-8b7f-414b-a751-0e43b6da1522 | 3 | stood opposite FACEIT org 'team:a24592c1-8b7f-414b-a751-0e43b6da1522' in 3 of 3 id-linked matches (FACEIT called it 'LFO'); the folded names are identical |
-| Luminosity Gaming | any | team:d4ec89d7-7d41-4c0e-9834-fbf87a199347 | 7 | stood opposite FACEIT org 'team:d4ec89d7-7d41-4c0e-9834-fbf87a199347' in 7 of 7 id-linked matches (FACEIT called it 'Luminosity') |
 | Metaboiz | any | team:6c2f5887-e6e6-44a8-8f9c-3bb3bcfb9b83 | 1 | stood opposite FACEIT org 'team:6c2f5887-e6e6-44a8-8f9c-3bb3bcfb9b83' in 1 of 1 id-linked matches (FACEIT called it 'Metaboiz'); the folded names are identical |
 | Nah I'd Win | any | team:61a69c78-3207-4687-b249-68475fc85a20 | 2 | stood opposite FACEIT org 'team:61a69c78-3207-4687-b249-68475fc85a20' in 2 of 2 id-linked matches (FACEIT called it 'nah id win') |
 | Nightmare Rotation | any | team:dc443c37-abc3-4e69-9e4c-56f966f64d8b | 2 | stood opposite FACEIT org 'team:dc443c37-abc3-4e69-9e4c-56f966f64d8b' in 2 of 2 id-linked matches (FACEIT called it 'TML Nightmare') |
 | Nu.age | any | team:b696c66d-dc53-4a60-8e50-2009b03c110d | 3 | stood opposite FACEIT org 'team:b696c66d-dc53-4a60-8e50-2009b03c110d' in 3 of 3 id-linked matches (FACEIT called it 'nuage') |
 | Peace and Love | any | team:d8cd2ece-fe1e-46f1-bf8d-00fcd5ab71ab | 6 | stood opposite FACEIT org 'team:d8cd2ece-fe1e-46f1-bf8d-00fcd5ab71ab' in 6 of 6 id-linked matches (FACEIT called it 'Peace and Love'); the folded names are identical |
-| Pirates in Pyjamas | any | team:f4401a61-5010-484b-8429-ad09e524b097 | 8 | stood opposite FACEIT org 'team:f4401a61-5010-484b-8429-ad09e524b097' in 8 of 8 id-linked matches (FACEIT called it 'PIP', 'PxG PiP') |
 | ROC Esports | any | team:03869857-7f73-4176-a27d-dafcc8d469ae | 4 | stood opposite FACEIT org 'team:03869857-7f73-4176-a27d-dafcc8d469ae' in 4 of 4 id-linked matches (FACEIT called it 'ROC ESPORT') |
 | Sakura Esports | emea | team:b6e7f5e3-cfed-4d10-9a58-fa7a0e3812f0 | 7 | stood opposite FACEIT org 'team:b6e7f5e3-cfed-4d10-9a58-fa7a0e3812f0' in 7 of 7 id-linked matches on emea pages (FACEIT called it 'Sakura'); REGION SPLIT: this name is different FACEIT teams in NA and EMEA, so it is decided per region |
 | SCHMUNGUS | any | team:865c189c-702d-4896-bd99-56fae201451e | 2 | stood opposite FACEIT org 'team:865c189c-702d-4896-bd99-56fae201451e' in 2 of 2 id-linked matches (FACEIT called it 'SCHMUNGUS'); the folded names are identical |
 | Sheer Cold | any | sheer-cold | 7 | stood opposite FACEIT org 'sheer-cold' in 7 of 7 id-linked matches (FACEIT called it 'Sheer Cold'); the folded names are identical |
-| Students of the Game | any | students-of-the-game | 9 | stood opposite FACEIT org 'students-of-the-game' in 9 of 9 id-linked matches (FACEIT called it 'SOG', 'team_Rakattack__') |
 | Supershy | any | team:98798472-6b02-4707-8827-0b7f5f3075b9 | 6 | stood opposite FACEIT org 'team:98798472-6b02-4707-8827-0b7f5f3075b9' in 6 of 6 id-linked matches (FACEIT called it 'SupershyOW') |
 | Team Liquid | any | team:a58dedff-8045-46be-a13e-2402495b6a9d | 45 | stood opposite FACEIT org 'team:a58dedff-8045-46be-a13e-2402495b6a9d' in 45 of 45 id-linked matches (FACEIT called it 'Team Liquid'); the folded names are identical |
 | Team Peps | any | team-peps | 46 | stood opposite FACEIT org 'team-peps' in 46 of 46 id-linked matches (FACEIT called it 'Team Peps'); the folded names are identical |
@@ -76,7 +72,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Team Danteh | any | - | 0 | no id-linked match and no FACEIT team has this name |
 | Team Hydron | any | - | 0 | no id-linked match and no FACEIT team has this name |
 
-## Already decided (21)
+## Already decided (25)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -87,13 +83,17 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Crazy Raccoon | any | team:4cbafe8a-486c-41f9-82e3-b7b84f1855d7 | 0 | decided in scope/liquipedia_team_map.json |
 | ENCE | any | team:62f7752b-0b79-4fa8-9a23-78800e2b4539 | 0 | decided in scope/liquipedia_team_map.json |
 | Extinction | any | extinction | 0 | decided in scope/liquipedia_team_map.json |
+| LFO | any | team:a24592c1-8b7f-414b-a751-0e43b6da1522 | 0 | decided in scope/liquipedia_team_map.json |
+| Luminosity Gaming | any | team:d4ec89d7-7d41-4c0e-9834-fbf87a199347 | 0 | decided in scope/liquipedia_team_map.json |
 | LuneX Gaming | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
 | M80 | any | team:3aca5abd-ee5d-4542-92e9-392b6f5d0dbc | 0 | decided in scope/liquipedia_team_map.json |
 | NRG Shock | any | team:d566d889-7885-4e74-a9dc-d29c111d2c1e | 0 | decided in scope/liquipedia_team_map.json |
 | NTMR | any | ntmr | 0 | decided in scope/liquipedia_team_map.json |
+| Pirates in Pyjamas | any | team:f4401a61-5010-484b-8429-ad09e524b097 | 0 | decided in scope/liquipedia_team_map.json |
 | Rad Esports | any | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
 | Sakura Esports | na | team:0464a373-df2f-4d23-93f5-80cbaa07802f | 0 | decided in scope/liquipedia_team_map.json |
 | Spacestation Gaming | any | spacestation-gaming | 0 | decided in scope/liquipedia_team_map.json |
+| Students of the Game | any | students-of-the-game | 0 | decided in scope/liquipedia_team_map.json |
 | Supernova (American team) | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
 | Team Falcons | any | team:2ab92d33-4c33-46e1-a13f-743a95291d0e | 0 | decided in scope/liquipedia_team_map.json |
 | Team Z | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
