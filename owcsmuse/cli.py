@@ -299,6 +299,16 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
                 return 0
             _print(probe_pages(client, pages, settings.liquipedia_page_limit))
             return 0
+        if args.lp_cmd == "phantoms":
+            from .liquipedia import phantoms as lp_phantoms
+            from .liquipedia.pipeline import run_reconciliation
+            with connect(settings.database_url, schema=settings.db_schema) as conn:
+                run = run_reconciliation(conn, team_map_path=args.team_map, use_proposals=True)
+                rep = lp_phantoms.find(conn, run, args.team_map)
+            Path(args.report).write_text(lp_phantoms.render(rep), encoding="utf-8")
+            _print({"report": args.report, "linked_checked": rep.linked_checked, "faceit_maps_checked": rep.faceit_maps_checked,
+                    **rep.clustering()})
+            return 0
         if args.lp_cmd == "verify":
             # One request, to confirm the key works and to see the shape of a match record. Then stop.
             got = client.get(MATCH_ENDPOINT, dict(VERIFY_PARAMS))
@@ -786,6 +796,10 @@ def build_parser() -> argparse.ArgumentParser:
     pp.add_argument("--extra", default="scope/competition_pages.json")
     pp.add_argument("--execute", action="store_true")
     lqs.add_parser("probe-limit", help="ONE request: find the API's real rows-per-request cap")
+    ph = lqs.add_parser("phantoms", help="FACEIT map rows for maps never played: linked series where FACEIT exceeds "
+                                         "Liquipedia, placeholder-shaped map rows, clustering (sends nothing)")
+    ph.add_argument("--report", default="scope/phantom_maps.md")
+    ph.add_argument("--team-map", default="scope/liquipedia_team_map.json")
     rc = lqs.add_parser("reconcile", help="tie stored Liquipedia matches to FACEIT matches, in tiers, and write the report "
                                           "(sends nothing)")
     rc.add_argument("--decided-only", action="store_true", help="do not use unreviewed team-name proposals at all")

@@ -1224,6 +1224,20 @@ a mixed slice answers and names the results-only part in a note and the `results
 Korean team's record is answerable the moment its Liquipedia results are loaded; a Korean player leaderboard never
 is, and says so by construction rather than by returning nobody.
 
+### Phantom maps: FACEIT map rows for maps never played
+
+FACEIT keeps a fixed number of map slots per series format and, when a sweep closes a series early, logs a default
+win for the winner on the next map in the rotation (the 2024 NA and EMEA Stage 1 grand finals: real 4-0 sweeps that
+FACEIT stores as 5-0 with a Dorado nobody played; Liquipedia records the 4-0). Map records, series scores and the
+best-of a score implies are all inflated by such a row. `python -m owcsmuse liquipedia phantoms` (sends nothing)
+writes `scope/phantom_maps.md` from stored data: every record carrying a FACEIT id where FACEIT's map count or
+series score exceeds Liquipedia's, with both values and the map Liquipedia lacks; every FACEIT map row with a
+placeholder shape (a win with no player rows while the match has them elsewhere, a score its mode cannot produce, no
+map name); and whether those cluster on sweeps and last maps as the mechanism predicts. An exact FACEIT id whose
+score a phantom inflated lands in the ambiguous tier (the records disagree on the score), so the report includes
+those rather than only confirmed links. The precedence change this implies (Liquipedia as the source of record for
+results and maps wherever a linked record exists) waits on that report.
+
 ### Open items for later stages
 
 - **Stage 3, date-bounded team-to-org mapping.** A team id maps to an org for all time
@@ -1365,6 +1379,7 @@ tests/test_search_path.py       refreshes every matview under search_path = pg_c
 tools/window_review.py          the three name-change signals over every multi-name team id -> scope/org_window_review.md
 scope/org_window_decisions.json the owner's verdict on each of the 18 multi-name team ids (audit record; windows apply via org_decisions.json)
 owcsmuse/liquipedia/identity.py  cross-source player identity: match-level evidence, decisions, anchors
+owcsmuse/liquipedia/phantoms.py  FACEIT map rows for maps never played: extent report (-> scope/phantom_maps.md)
 owcsmuse/scope.py               classifier, decisions file, review report
 owcsmuse/orgs.py                org identity: proposals, evidence, decisions and rejections
 owcsmuse/aliases.py             community shorthand ("SSG" -> SpaceStation Gaming): decisions and lookup
