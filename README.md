@@ -78,7 +78,7 @@ Postgres; the code has no localhost fallback.
    decision. Once the proposals look right, accept them in bulk with
    `--accept-proposals`, or decide each one explicitly.
 
-3. **Load** the reviewed manifest:
+6. **Load** the reviewed manifest:
 
    ```bash
    python -m owcsmuse load-manifest manifest.json                    # manual decisions only
@@ -86,7 +86,7 @@ Postgres; the code has no localhost fallback.
    python -m owcsmuse check-listings                                 # read-only: sizes + offset-cap check
    ```
 
-4. **Collect**:
+7. **Collect**:
 
    ```bash
    python -m owcsmuse backfill                 # LIST then DETAIL for every included championship
@@ -99,7 +99,7 @@ Postgres; the code has no localhost fallback.
    `detail_fetched`; `--include-failed` retries `failed` ones; `--refresh`
    re-fetches everything. Re-running never duplicates rows.
 
-5. **Reprocess** after a parser change, without touching FACEIT:
+8. **Reprocess** after a parser change, without touching FACEIT:
 
    ```bash
    python -m owcsmuse reprocess
@@ -561,9 +561,24 @@ team) scores 0.9 against the bare letters "tm" by starting with them, close
 enough that the ordinary ambiguity margin would have asked which one was
 meant. A human already decided that; resolve() must not re-open it.
 
-Decided so far: `SSG` -> SpaceStation Gaming and `VP` -> Virtus pro (orgs);
-`TL` -> Team Liquid, `TM` -> Twisted Minds, `CR` -> Crazy Raccoons, `DSG` ->
-Disguised and `DF` -> Dallas Fuel (team ids, unmapped to any org).
+Decided so far: `SSG` -> SpaceStation Gaming, `VP` -> Virtus pro, `peps` ->
+Team Peps and `quick` -> Quick Esports (orgs); `TL` -> Team Liquid, `TM` ->
+Twisted Minds, `CR` -> Crazy Raccoons, `DSG` -> Disguised, `DF` -> Dallas Fuel,
+`toronto` / `defiant` / `TD` -> Toronto Defiant, `GG` / `Gen.G` -> GenG
+Esports and `TF` -> Team Falcons (team ids, unmapped to any org).
+
+A partial name ("toronto", "peps") is the same mechanism as an initialism: an
+alias is an exact lookup of the folded string, whatever its shape, and fires
+only when the whole name asked for equals it, ahead of fuzzy scoring.
+"Toronto Defiant" still resolves by its own name. `quick` was checked for
+collisions first: "Vanir Quick" is a historical name of the Quick Esports org
+itself, not another team.
+
+`TF` overrides a resolution that existed: "tf" reached the team TFW (no series)
+by prefix. The collision is settled in Team Falcons' favour by community
+usage, not by evidence strength, so TFW also fitting the initials is no reason
+to undo it (golden G45). `GG` likewise overrides a fuzzy match to the player
+Zerggy.
 
 An alias that names a team id follows that team into its org once the team is
 mapped and has no era of its own (`ALIAS_TARGET` in `resolve.py`), and its name
@@ -571,13 +586,6 @@ comes from the entity, else the stored team or org name, never the id. `SSG`
 pointed at team 6ddc0431 until that team joined the spacestation-gaming org;
 from then on it answered with the UUID as its name and the team's empty slice
 as its data.
-
-**Not covered (2026-10-08).** Of the 35 multi-word teams and orgs with series,
-the ones a community abbreviation would plausibly name and that resolve to
-nothing or to a clarify today include Toronto Defiant, GenG Esports, Geekay
-Esports, Team Peps, Quick Esports, Vision Esports, Team Falcons (`TF` reaches
-"TFW") and Citrus Nation (`CN` reaches the player CNYXC). Which abbreviation
-the community uses is the owner's call, so none is added here.
 
 A team named in front of the player or role noun is a filter ("which DF
 player", "which twisted minds tank", "most deaths by a spacestation gaming
@@ -1413,22 +1421,30 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 
 **Left open**, in the order to pick them up:
 
-1. **Attribution of a Liquipedia result.** `answer_attribution` credits Liquipedia only for its map rows and play times;
-   a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and 4-1) carries no CC-BY-SA attribution.
-2. ~~**The "Team" parser bug.**~~ Closed 2026-10-08: "team" stays in a name and `resolve()` falls back to the rest
-   only when the whole names nobody (golden G43).
-3. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
+1. **Attribution of a Liquipedia result (compliance: first next session).** `answer_attribution` credits Liquipedia
+   only for its map rows and play times; a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and
+   4-1) carries no CC-BY-SA attribution.
+2. **"zzz record in 2026" returns nothing while "zss" works:** the display name is set but the current name is not
+   searchable.
+3. **"this year" and "this stage" do not resolve** to 2026 and the current stage.
+4. **Team abbreviations left to the owner** (2026-10-08), to decide from how people actually refer to them: Geekay
+   Esports, Vision Esports, Citrus Nation.
+5. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+   "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
+   "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
+   backs the synthetic by_match case).
+6. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
    Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
-4. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
+7. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
    matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
    The FACEIT side needs a crawl, not Liquipedia requests.
-5. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
-6. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+8. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
+9. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
    it after the fact, the command should refuse it.
-7. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
-8. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
-9. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
-10. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+10. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
+11. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
+12. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
+13. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Golden answer suite
 

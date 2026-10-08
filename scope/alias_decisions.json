@@ -7,6 +7,12 @@
       "note": "community shorthand for Crazy Raccoons; not in FACEIT's own name history",
       "decided_at": "2026-09-19T01:28:16+00:00"
     },
+    "defiant": {
+      "entity_type": "team",
+      "entity_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "note": "partial name of Toronto Defiant (owner, 2026-10-08); fuzzy matching asked which one with it the only candidate",
+      "decided_at": "2026-10-08T20:57:50+00:00"
+    },
     "df": {
       "entity_type": "team",
       "entity_id": "cd157523-5c58-41bc-b62d-e1a635ea61b8",
@@ -19,11 +25,47 @@
       "note": "community shorthand for Disguised; not in FACEIT's own name history",
       "decided_at": "2026-09-21T19:17:28+00:00"
     },
+    "gen g": {
+      "entity_type": "team",
+      "entity_id": "bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff",
+      "note": "how GenG Esports is usually written (owner, 2026-10-08); folds to 'gen g'",
+      "decided_at": "2026-10-08T20:57:52+00:00"
+    },
+    "gg": {
+      "entity_type": "team",
+      "entity_id": "bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff",
+      "note": "shorthand for GenG Esports (owner, 2026-10-08); overrides the fuzzy match to the player Zerggy",
+      "decided_at": "2026-10-08T20:57:51+00:00"
+    },
+    "peps": {
+      "entity_type": "org",
+      "entity_id": "team-peps",
+      "note": "partial name of Team Peps (owner, 2026-10-08)",
+      "decided_at": "2026-10-08T20:57:53+00:00"
+    },
+    "quick": {
+      "entity_type": "org",
+      "entity_id": "quick-esports",
+      "note": "partial name of Quick Esports (owner, 2026-10-08). Not ambiguous: 'Vanir Quick' is a historical name of this same org (FACEIT and Liquipedia), not another team; checked 2026-10-08",
+      "decided_at": "2026-10-08T20:57:53+00:00"
+    },
     "ssg": {
       "entity_type": "org",
       "entity_id": "spacestation-gaming",
       "note": "community shorthand for SpaceStation Gaming; not in FACEIT's own name history. Points at the org: the owner decided (2026-10-02) that the 2024 EMEA team (a359db61) and the 2025+ NA team (6ddc0431) are one organisation, reversing the 2026-09-19 unmerge.",
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "td": {
+      "entity_type": "team",
+      "entity_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "note": "rarely used shorthand for Toronto Defiant (owner, 2026-10-08); fuzzy matching offered the players Danteh and dust",
+      "decided_at": "2026-10-08T20:57:51+00:00"
+    },
+    "tf": {
+      "entity_type": "team",
+      "entity_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
+      "note": "Team Falcons (owner, 2026-10-08), team 2ab92d33, the id with its series (c2ea6494 is an empty namesake). OVERRIDES the team TFW, which 'tf' reached by prefix before. The collision is resolved in Falcons' favour by community usage, not by evidence strength: TFW also fits the initials, and that is not a reason to undo this",
+      "decided_at": "2026-10-08T20:57:54+00:00"
     },
     "tl": {
       "entity_type": "team",
@@ -36,6 +78,12 @@
       "entity_id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
       "note": "community shorthand for Twisted Minds; not in FACEIT's own name history",
       "decided_at": "2026-09-19T01:28:15+00:00"
+    },
+    "toronto": {
+      "entity_type": "team",
+      "entity_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "note": "partial name of Toronto Defiant (owner, 2026-10-08); no other entity carries the word",
+      "decided_at": "2026-10-08T20:57:49+00:00"
     },
     "vp": {
       "entity_type": "org",

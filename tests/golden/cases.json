@@ -1162,6 +1162,27 @@
    },
    "derivation": "Team Liquid is an unmapped team id, so its rows carry org_key 'team:<uuid>'; the CLI printed that column beside the name. Nothing a reader sees (sentence, reason, rendered answer) may hold a raw id where a display name exists.",
    "status": "confirmed"
+  },
+  {
+   "id": "G45",
+   "title": "'TF' is Team Falcons by the owner's decision, not TFW",
+   "kind": "invariant",
+   "regression": "'TF' resolved to TFW (owner, 2026-10-08)",
+   "question": "TF record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
+     "name": "Team Falcons"
+    },
+    "sentence_contains": [
+     "Team Falcons is"
+    ]
+   },
+   "derivation": "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
+   "status": "confirmed"
   }
  ]
 }

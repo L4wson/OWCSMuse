@@ -61,6 +61,8 @@ CONFIRMED |= {"G35", "G36", "G37"}
 CONFIRMED |= {"G38", "G39", "G40"}
 # G41+ (owner, 2026-10-08): team qualifiers become filters
 CONFIRMED |= {"G41", "G42", "G43", "G44"}
+# G45 (owner, 2026-10-08): "TF" is Team Falcons, overriding TFW
+CONFIRMED |= {"G45"}
 
 CASES: list[dict] = []
 
@@ -708,6 +710,16 @@ case("G44", "An aliased team's answer prints its name, never its id", "invariant
      "Team Liquid is an unmapped team id, so its rows carry org_key 'team:<uuid>'; the CLI printed that column beside the "
      "name. Nothing a reader sees (sentence, reason, rendered answer) may hold a raw id where a display name exists.",
      regression="'SSG vs TL' printed a UUID (owner, 2026-10-08)")
+
+FAL = "2ab92d33-4c33-46e1-a13f-743a95291d0e"
+assert FAL in {s_.team[k] for s_ in S for k in s_.team if s_.name[k] == "Team Falcons"}
+case("G45", "'TF' is Team Falcons by the owner's decision, not TFW", "invariant", "TF record",
+     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": FAL, "name": "Team Falcons"},
+      "sentence_contains": ["Team Falcons is"]},
+     "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id "
+     "with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is "
+     "settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
+     regression="'TF' resolved to TFW (owner, 2026-10-08)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
