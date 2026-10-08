@@ -78,3 +78,89 @@ def test_no_case_is_confirmed_without_a_derivation_and_a_kind():
 def test_at_least_half_the_cases_assert_exact_numbers():
     cases = json.loads(CASES_PATH.read_text(encoding="utf-8"))["cases"]
     assert sum(c["kind"] == "exact" for c in cases) * 2 >= len(cases)
+
+
+# ------------------------------------------------------------------ every expectation is evaluated
+
+def _expectation_paths(node, at: str = "") -> tuple[set[str], set[str]]:
+    """(leaves, every node) of an expect tree, walked without the harness's vocabulary: a key the harness does not
+    know is a leaf like any other, and so is reported unevaluated rather than silently ignored. An empty list or dict
+    is a leaf: it expects nothing to be there."""
+    leaves, nodes = set(), {at} if at else set()
+    children = (node.items() if isinstance(node, dict) else
+                ((f"[{i}]", v) for i, v in enumerate(node)) if isinstance(node, list) else ())
+    children = [(k if str(k).startswith("[") else (f".{k}" if at else str(k)), v) for k, v in children]
+    if not children:
+        return {at}, nodes
+    for k, v in children:
+        sub_leaves, sub_nodes = _expectation_paths(v, f"{at}{k}")
+        leaves |= sub_leaves
+        nodes |= sub_nodes
+    return leaves, nodes
+
+
+def _gates(exp: dict) -> tuple[list[str], list[str]]:
+    """Every clarify candidate id and every alternative question a case names, nested ones included, so a stub answer
+    can open every gate and reach every expectation behind it."""
+    cands, alts = [], []
+    for key, v in exp.items():
+        if key == "answer_candidate":
+            cands.append(v["id"])
+            c, a = _gates(v["expect"])
+            cands += c
+            alts += a
+        elif key == "alternative":
+            alts += [v["question_template"].format(season=s) for s in v["seasons_with_stat"]]
+    return cands, alts
+
+
+def _unevaluated(case: dict) -> tuple[list[str], list[str]]:
+    """(expectations no check evaluated, check sources that name no expectation) for a case run against a stub answer
+    that opens every gate. Values are not the point here: a check that ran and failed still evaluated its expectation."""
+    cands, alts = _gates(case["expect"])
+
+    def ask_fn(q):
+        return _answer(candidates={"subject": [{"entity_id": i, "question": f"candidate {i}"} for i in cands]},
+                       alternatives=alts)
+    o = harness.evaluate(case, ask_fn)
+    assert not o.error, f"{case['id']}: {o.error}"
+    leaves, nodes = _expectation_paths(case["expect"])
+    covered = {s for c in o.checks for s in c.sources}
+    return sorted(leaves - covered), sorted(covered - nodes)
+
+
+def test_every_expectation_in_every_case_is_evaluated():
+    """A harness that silently skips an assertion makes every golden case untrustworthy: a rebound `exp` once skipped
+    every check after by_match for G32-G34, and G24's 2025 leader was never compared. Proposed cases too: confirming
+    one must not be the moment its expectations start being read."""
+    problems = {}
+    for case in json.loads(CASES_PATH.read_text(encoding="utf-8"))["cases"]:
+        skipped, unknown = _unevaluated(case)
+        if skipped or unknown:
+            problems[case["id"]] = {"never evaluated": skipped, "checks naming no expectation": unknown}
+    assert not problems, problems
+
+
+def test_an_expectation_the_harness_does_not_know_is_reported_not_ignored():
+    case = dict(CASE, expect={"status": "ok", "rowz": [{"wins": 4}], "sentence_contains": ["4"]})
+    skipped, _ = _unevaluated(case)
+    assert skipped == ["rowz[0].wins"]
+
+
+def test_every_kind_of_expectation_is_evaluated_after_by_match():
+    # by_match first, then every key the vocabulary has: what the rebound `exp` used to skip
+    exp = {"evidence": {"by_match": {"m1": {"score": "3-1", "sources": ["faceit"]}}, "total_rows": 2,
+                        "regions_only": ["na"], "roles_only": ["Tank"]},
+           "status": "ok", "code": None, "entity": {"role": "subject", "type": "player", "id": "p1", "name": "A"},
+           "rows": [{"wins": 4}], "rows_only_players": ["A"], "limitations": ["offline_map_stats"],
+           "candidate_ids": ["c1"], "sentence_contains": ["A"], "sentence_lacks": ["B"], "spans_match_text": True,
+           "answer_candidate": {"id": "c1", "expect": {"status": "ok", "rows": [{"wins": 1}]}},
+           "alternative": {"question_template": "q {season}", "seasons_with_stat": [2025, 2026],
+                           "top1_by_season": {"2025": {"nickname": "A"}, "2026": {"nickname": "B"}},
+                           "then_rows": [{"total": 9}]}}
+    assert _unevaluated(dict(CASE, expect=exp)) == ([], [])
+
+
+def test_a_malformed_spans_expectation_fails_rather_than_passing_unread():
+    o = harness.evaluate(dict(CASE, expect={"spans_match_text": False}), lambda q: _answer())
+    assert not o.ok

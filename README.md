@@ -1438,6 +1438,12 @@ in-game name `KSAA` belonged.
 - **Each case is labelled** `exact` (asserts numbers) or `invariant` (asserts a
   property: NA only, tank-role players only, a clarify candidate answers verbatim,
   a refusal's alternative works), and names the regression it guards.
+- **Every expectation is evaluated.** Each harness check names the expectation it
+  reads, and `tests/test_golden_harness.py` walks every case's `expect` (without
+  the harness's vocabulary) against a stub answer that opens every gate: an
+  expectation no check reads, including a key the harness does not know, fails
+  the suite. It found G24's 2026 leader had never been compared (only the offered
+  season's was); a rebound `exp` once skipped every check after `by_match`.
 - **Only `confirmed` cases are asserted.** A case is proposed by the derivation and
   becomes an assertion when a person reviews the value and flips `status`.
   `python tools/golden_report.py` compares every case, proposed or confirmed, to the

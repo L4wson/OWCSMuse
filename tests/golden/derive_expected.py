@@ -350,7 +350,7 @@ assert tm25["matches"] == 0
 case("G25", "Twisted Minds in 2025: only a bye, so no data", "invariant", "Twisted Minds record in 2025",
      {"status": "cannot_answer", "code": "no_data",
       "alternative": {"question_template": "Twisted Minds record", "seasons_with_stat": [None],
-                      "top1_by_season": {}, "then_rows": [team_row(tm_all, "Twisted Minds")]}},
+                      "then_rows": [team_row(tm_all, "Twisted Minds")]}},
      "The only 2025 Twisted Minds fixture is the bracket bye, which is not a series: the answer is no_data, not '1-0'. "
      "The offered alternative (the all-seasons record) must answer with G08's numbers.",
      regression="bye: a 2025 bye showed as a 1-0 win")
