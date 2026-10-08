@@ -1013,9 +1013,9 @@ npm run build                                 # static files in web/dist
 Vite + React, plain CSS, no UI framework and no router: two routes (`/` and
 `/q/<slug>`) are thirty lines of `history.pushState` in `src/router.js`, which is
 less code than configuring a router would be. `OWCS_API_URL` moves the dev proxy;
-`VITE_API_BASE` points a build at a deployed service. A static host must rewrite
+`VITE_API_BASE` points a build at a deployed service. The static host must rewrite
 unknown paths to `index.html`, or a shared `/q/<slug>` link 404s before the app
-loads.
+loads; `web/vercel.json` does that on Vercel.
 
 The landing page is a question box and three or four examples taken live from
 `/suggestions`, so every example has data behind it. Everything else is the
@@ -1065,21 +1065,24 @@ sends. `npm test` runs them against a mocked `fetch`; nothing contacts a server.
 
 ## Deploying
 
-Three parts, none of which share a host requirement: the **API** (a stateless container), the **frontend** (static
-files), and **ingest** (a daily GitHub Actions run). Only ingest talks to FACEIT or Liquipedia; the API answers from
+Three parts, none of which share a host requirement: the **API** (a stateless container, on Fly.io), the **frontend**
+(static files, on Vercel), and **ingest** (a daily GitHub Actions run). Only ingest talks to FACEIT or Liquipedia; the API answers from
 the warehouse alone.
 
 ### What lives where
 
 | setting | where it is set | used by |
 |---|---|---|
-| `DATABASE_URL` (Supabase **session** pooler, port 5432) | API host secret; GitHub Actions secret | API, ingest, `migrate` |
+| `DATABASE_URL` (Supabase **session** pooler, port 5432) | Fly secret; GitHub Actions secret | API, ingest, `migrate` |
 | `FACEIT_API_KEY` | GitHub Actions secret only | ingest (`backfill`, `crawl`, `discover`) |
 | `LIQUIPEDIA_API_KEY` | GitHub Actions secret only | ingest (`liquipedia run`); `OWCS_LIQUIPEDIA_ENABLED=1` is set by the workflow |
-| `VITE_API_BASE` (the API's public URL) | static host's **build** environment | the frontend bundle (baked in at build time; see `web/.env.example`) |
-| `PORT` | set by the API host, if it sets one | the container listens on it (default 8000) |
+| `VITE_API_BASE` (the API's public URL) | Vercel project environment variable (used at **build** time) | the frontend bundle (baked in at build time; see `web/.env.example`) |
+| `PORT` | `fly.toml` `[env]`, `8000` | the container listens on it; must equal `internal_port` |
 
-The API never needs `FACEIT_API_KEY` or `LIQUIPEDIA_API_KEY`: keep them out of the API host.
+The API never needs `FACEIT_API_KEY` or `LIQUIPEDIA_API_KEY`: `serve` reads neither (the FACEIT key is demanded
+only by ingest commands, and no Liquipedia request is possible without `OWCS_LIQUIPEDIA_ENABLED`). Keep them in
+GitHub Actions secrets only. The image also lacks the `anthropic` package, so `parser: "auto"` answers with the rules
+parser and `parser: "llm"` is refused; no `ANTHROPIC_API_KEY` is needed either.
 
 ### The pieces in the repository
 
@@ -1101,9 +1104,14 @@ The API never needs `FACEIT_API_KEY` or `LIQUIPEDIA_API_KEY`: keep them out of t
   after the gate (even when it failed), and `tools/scope_report.py` lists every competition the classifier would
   include that has no reviewed decision, as a table in the run summary and a warning annotation each. Only
   `python -m owcsmuse decide` puts a competition in scope. The reports are the run's `ingest-reports` artifact.
-- **`web/public/_redirects`**: `/* /index.html 200`, copied into `web/dist`, so a shared `/q/<slug>` link loads the
-  app instead of a 404 (Cloudflare Pages and Netlify read it; elsewhere, set the same rewrite in the host's config:
-  status 200, a rewrite, not a redirect).
+- **`fly.toml`**: the API on Fly.io. One `shared-cpu-1x` machine (512 MB) in `sea` (Seattle, nearest Supabase
+  `us-west-2`), `auto_stop_machines = "off"` and `min_machines_running = 1` so it never cold starts, `PORT=8000`
+  matching `internal_port = 8000`, an HTTP check on `/healthz`, and `python -m owcsmuse migrate` as the
+  `release_command` (run with the app's secrets before each deploy replaces the machine).
+- **`web/vercel.json`**: the frontend on Vercel (project root `web`). Vite preset, `npm ci`, `npm run build`, output
+  `dist`, and one rewrite, `/(.*)` -> `/index.html`. Vercel serves a file that exists in `dist` (`index.html`,
+  `assets/*`) before it applies rewrites, so only paths with no file, such as a shared `/q/<slug>` link, get the app,
+  whose router reads the slug. It is a rewrite (status 200, URL unchanged), not a redirect.
 
 ### In order
 
@@ -1115,15 +1123,18 @@ Steps marked **[browser]** need an account or a web console; **[command]** steps
 2. **[command] Migrate production** before the first deploy, and on every deploy after (the host's release command):
    `python -m owcsmuse migrate`. It is idempotent and loads the reviewed competition names; `python -m owcsmuse check`
    should then pass every check.
-3. **[browser] API host.** Create the app from this repository's `Dockerfile`, one instance, with `DATABASE_URL` as a
-   secret, `/healthz` as the health check, and `python -m owcsmuse migrate` as the release command. Place it near the
-   database (Supabase is `us-west-2`). Each process keeps up to four idle connections: size instances x 4 against the
-   pooler's limit before scaling out.
+3. **[command] API on Fly.** See **First Fly deploy** below. Each process keeps up to four idle connections: size
+   machines x 4 against the pooler's limit before scaling out.
 4. **[command] Check the API**: `curl https://<api>/healthz` returns `{"ok": true, ...}`, and
    `curl -X POST https://<api>/ask -H 'content-type: application/json' -d '{"question": "Toronto Defiant record"}'`
    answers.
-5. **[browser] Static host.** Connect the repository with root `web`, build `npm ci && npm run build`, output `dist`,
-   and the build variable `VITE_API_BASE=https://<api>`. CORS on the API is open, so a separate origin works as is.
+5. **[browser] Vercel.** Import the repository, set **Root Directory** to `web` (build settings then come from
+   `web/vercel.json`), and add the environment variable `VITE_API_BASE=https://owcsmuse-api.fly.dev` (no trailing
+   slash) for Production and Preview. It is baked in at build time: changing it needs a redeploy. CORS needs no
+   change for the Vercel URL: `owcsmuse/api.py` (`create_app`, the `CORSMiddleware` line) allows every origin, which
+   also covers Vercel's per-commit preview URLs. The API is read-only and uses no cookies or credentials, so that is
+   deliberate; to restrict it, replace `allow_origins=["*"]` there with the production origin (e.g.
+   `["https://<project>.vercel.app"]`) and rebuild, accepting that preview deployments are then refused.
 6. **[command] Check the frontend**: ask a question, then open its shared `/q/<slug>` link in a fresh tab: it must load
    the answer, not a 404.
 7. **[browser] GitHub.** Add the three Actions secrets (`DATABASE_URL`, `FACEIT_API_KEY`, `LIQUIPEDIA_API_KEY`) under
@@ -1131,6 +1142,28 @@ Steps marked **[browser]** need an account or a web console; **[command]** steps
 8. **[command] First ingest by hand**: `gh workflow run ingest.yml`, then `gh run watch`. Read the run summary's
    "Competitions awaiting a scope decision" table; decide each with `python -m owcsmuse decide` and commit the
    decisions file.
+
+### First Fly deploy
+
+Run from the repository root with [`flyctl`](https://fly.io/docs/flyctl/install/) installed. `fly.toml` is already
+committed, so create the app rather than `fly launch` (which would rewrite it); if `owcsmuse-api` is taken, pick
+another name and change `app` in `fly.toml` and `VITE_API_BASE` to match.
+
+```bash
+fly auth login
+fly apps create owcsmuse-api
+fly secrets set --stage DATABASE_URL='postgresql://...'   # the Supabase session pooler string; --stage: no machine yet
+fly deploy --ha=false        # one machine: without --ha=false a first deploy creates two
+fly status                   # one machine in sea, state started, check passing
+fly checks list              # the /healthz check
+fly logs                     # streams JSON logs; the release_command's migrate output appears first
+curl https://owcsmuse-api.fly.dev/healthz
+```
+
+Later deploys are `fly deploy` (the release command migrates first; a failed migrate aborts the deploy and leaves the
+running machine alone). `fly secrets set` without `--stage` restarts the machine with the new value. `fly ssh console`
+opens a shell in the running machine, e.g. for `python -m owcsmuse check`. Set no `FACEIT_API_KEY` or
+`LIQUIPEDIA_API_KEY` here: `fly secrets list` should show `DATABASE_URL` alone.
 
 Every ingest phase is resumable and idempotent, so a failed run is re-run rather than repaired. Daily is ample; OWCS
 plays on weekends. What the schedule deliberately never does: put a newly discovered competition in scope (a person's
