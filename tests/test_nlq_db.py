@@ -42,6 +42,28 @@ def test_stat_missing_for_season_is_no_data_with_reason(agg_db):
     assert a.status == "cannot_answer" and a.code == "no_data" and "2026" in a.reason
 
 
+def test_a_leaderboard_the_map_floor_empties_says_so_and_offers_the_question_without_it(agg_db):
+    # 2026 is one series here: nobody has 4 maps, so a K/D leaderboard (a rate: the floor applies) ranks nobody
+    a = ask(agg_db, "highest kd in 2026")
+    assert a.status == "cannot_answer" and a.code == "no_data"
+    assert "at least 4 maps" in a.reason and "nothing in scope matches" not in a.reason
+    assert a.alternatives == ["highest kd in 2026 with at least 1 map"]
+    again = ask(agg_db, a.alternatives[0])
+    assert again.status == "ok" and again.rows and "at least" not in again.sentence["text"]
+
+
+def test_team_in_front_of_a_name_is_kept_and_dropped_only_when_it_names_nobody(agg_db):
+    # "Team Liquid" is a name and is searched whole; "team twisted minds" is the word in front of one
+    a = ask(agg_db, "team twisted minds record")
+    assert a.status == "ok" and a.entities["subject"]["entity_id"] == TWISTED_MINDS, a.reason
+
+
+def test_the_cli_table_never_prints_a_raw_team_id_beside_its_name(agg_db):
+    a = ask(agg_db, "twisted minds record")
+    assert a.status == "ok" and a.rows[0]["org_key"] == f"team:{TWISTED_MINDS}"     # in the row, for clients
+    assert TWISTED_MINDS not in render_text(a)                                     # not in what a reader sees
+
+
 def test_player_stat_resolves_entity_and_answers(agg_db):
     a = ask(agg_db, "how many eliminations did KSAA have in 2024")
     assert a.status == "ok" and a.entities["subject"]["entity_id"] == KSAA

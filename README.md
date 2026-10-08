@@ -78,7 +78,7 @@ Postgres; the code has no localhost fallback.
    decision. Once the proposals look right, accept them in bulk with
    `--accept-proposals`, or decide each one explicitly.
 
-3. **Load** the reviewed manifest:
+6. **Load** the reviewed manifest:
 
    ```bash
    python -m owcsmuse load-manifest manifest.json                    # manual decisions only
@@ -86,7 +86,7 @@ Postgres; the code has no localhost fallback.
    python -m owcsmuse check-listings                                 # read-only: sizes + offset-cap check
    ```
 
-4. **Collect**:
+7. **Collect**:
 
    ```bash
    python -m owcsmuse backfill                 # LIST then DETAIL for every included championship
@@ -99,7 +99,7 @@ Postgres; the code has no localhost fallback.
    `detail_fetched`; `--include-failed` retries `failed` ones; `--refresh`
    re-fetches everything. Re-running never duplicates rows.
 
-5. **Reprocess** after a parser change, without touching FACEIT:
+8. **Reprocess** after a parser change, without touching FACEIT:
 
    ```bash
    python -m owcsmuse reprocess
@@ -561,9 +561,39 @@ team) scores 0.9 against the bare letters "tm" by starting with them, close
 enough that the ordinary ambiguity margin would have asked which one was
 meant. A human already decided that; resolve() must not re-open it.
 
-Seeded so far: `SSG` -> SpaceStation Gaming, `TL` -> Team Liquid, `TM` ->
-Twisted Minds, `CR` -> Crazy Raccoons, each pointing at a team id rather than
-an org where the team is currently unmapped.
+Decided so far: `SSG` -> SpaceStation Gaming, `VP` -> Virtus pro, `peps` ->
+Team Peps and `quick` -> Quick Esports (orgs); `TL` -> Team Liquid, `TM` ->
+Twisted Minds, `CR` -> Crazy Raccoons, `DSG` -> Disguised, `DF` -> Dallas Fuel,
+`toronto` / `defiant` / `TD` -> Toronto Defiant, `GG` / `Gen.G` -> GenG
+Esports and `TF` -> Team Falcons (team ids, unmapped to any org).
+
+A partial name ("toronto", "peps") is the same mechanism as an initialism: an
+alias is an exact lookup of the folded string, whatever its shape, and fires
+only when the whole name asked for equals it, ahead of fuzzy scoring.
+"Toronto Defiant" still resolves by its own name. `quick` was checked for
+collisions first: "Vanir Quick" is a historical name of the Quick Esports org
+itself, not another team.
+
+`TF` overrides a resolution that existed: "tf" reached the team TFW (no series)
+by prefix. The collision is settled in Team Falcons' favour by community
+usage, not by evidence strength, so TFW also fitting the initials is no reason
+to undo it (golden G45). `GG` likewise overrides a fuzzy match to the player
+Zerggy.
+
+An alias that names a team id follows that team into its org once the team is
+mapped and has no era of its own (`ALIAS_TARGET` in `resolve.py`), and its name
+comes from the entity, else the stored team or org name, never the id. `SSG`
+pointed at team 6ddc0431 until that team joined the spacestation-gaming org;
+from then on it answered with the UUID as its name and the team's empty slice
+as its data.
+
+A team named in front of the player or role noun is a filter ("which DF
+player", "which twisted minds tank", "most deaths by a spacestation gaming
+dps"), read by one extractor (`_find_team_qualifier` in `nlq/parser.py`) before
+role words are stripped, and the sentence names the players it ranked: "TVNT
+leads Deaths among Twisted Minds tanks". "Team" is part of a name: "team
+liquid" is searched whole, and `resolve()` drops the word only when the whole
+names nobody ("team twisted minds").
 
 ## Competition names
 
@@ -706,6 +736,19 @@ ever emits SQL:
    A stat that exists only in some seasons is answered with an explicit
    coverage note (`seasons without it: 2024`) and per-row coverage, never a
    silently partial leaderboard.
+
+**The leaderboard map floor.** A player leaderboard that a small sample can
+win (an ascending total, a per-map average or a rate such as K/D) ranks only
+players with at least `LEADERBOARD_MIN_MAPS` = 4 maps (`nlq/compile.py`), and
+its sentence says so: "(players with at least 4 maps)". Some players genuinely
+get little playing time and should still rank; the floor is there for a
+manager or coach filling in for one series. Danny played 1 map (2024 and
+2025), K0RTAL 3 (one 2024 series), and at no floor Spectra "had the least
+deaths in NA 2024" with 1 death in 1 map. A fill-in lasts as long as the one
+series played, 1-3 maps, so the floor is 4; on production (2026-10-08) it
+leaves out 32 of 513 player-seasons, among them every player whose season was
+one 3-map series. A descending total takes no floor, since few maps cannot top
+it, and an explicit "with at least N maps" replaces it.
 
 Every failure is a first-class answer with a reason code: `unsupported_metric`,
 `unsupported_question`, `out_of_scope`, `results_only`, `ambiguous_entity`, `unknown_entity`,
@@ -1058,6 +1101,7 @@ and exits 1 with the specific discrepancy:
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges. An owner-decided exception (`cross_region_ok` on every one of the org's FACEIT windows) is listed, not failed; the Liquipedia-born `lp:team:` windows `identity load` derives from the team map are not merge decisions and are not judged against it |
 | `decisions_loaded` | every reviewed decision in `scope/` (org, alias, team map, player identity, link, scope and competition-name files) is in the table its loader writes, and nothing loaded lacks one; each discrepancy is `decided_not_loaded`, `loaded_not_decided` or `loaded_differs`, with the file, the key and the command that reloads it. A decision about a team, player, championship or record the warehouse does not hold is counted as not applicable, by the loader's own skip rule. Added 2026-10-02 after production was found carrying 166 decided player identities with no anchor, 11 decided team names with none, and a stale `timeless` anchor that failed five `series_integrity` rows |
 | `lp_name_resolution` | every Liquipedia team-map name resolves, in search, to an entity that holds its linked series: a name anchored to a bare team id whose era sits in an org window answers with the wrong era ("LuneX Gaming" once answered with UNC inc's 2024 record while every record key was correctly split). Also fails a team-map entry naming a team id that is not a FACEIT id or an org no decision defines (a truncated id typed into `teams decide` is accepted). Added 2026-10-02; it caught 1234, NRG Shock and Team Z on its first run |
+| `answer_rates` | asks the rate questions through the real parser and pipeline (highest K/D, eliminations per map, map and series win rate) for every season and all seasons: every rate in a row is plausible (K/D at most 15 over 3+ maps, a percentage within 0-100, an average at most its total, series at most maps) and the sentence quotes the metric's own column. Added 2026-10-02 after "highest NA kd in 2026" printed Attack's 77.80 map win % as his K/D (5.00); on the old code it fails five answers |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
 ```bash
@@ -1377,22 +1421,30 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 
 **Left open**, in the order to pick them up:
 
-1. **Attribution of a Liquipedia result.** `answer_attribution` credits Liquipedia only for its map rows and play times;
-   a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and 4-1) carries no CC-BY-SA attribution.
-2. **The "Team" parser bug.** "Team Z record" searches for "z" and "Team Falcons" for "falcons": the parser takes
-   "Team" as a keyword. Every team name starting with "Team" is at risk (G34 asks by id to step around it).
-3. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
+1. **Attribution of a Liquipedia result (compliance: first next session).** `answer_attribution` credits Liquipedia
+   only for its map rows and play times; a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and
+   4-1) carries no CC-BY-SA attribution.
+2. **"zzz record in 2026" returns nothing while "zss" works:** the display name is set but the current name is not
+   searchable.
+3. **"this year" and "this stage" do not resolve** to 2026 and the current stage.
+4. **Team abbreviations left to the owner** (2026-10-08), to decide from how people actually refer to them: Geekay
+   Esports, Vision Esports, Citrus Nation.
+5. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+   "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
+   "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
+   backs the synthetic by_match case).
+6. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
    Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
-4. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
+7. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
    matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
    The FACEIT side needs a crawl, not Liquipedia requests.
-5. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
-6. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+8. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
+9. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
    it after the fact, the command should refuse it.
-7. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
-8. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
-9. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
-10. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+10. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
+11. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
+12. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
+13. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Golden answer suite
 
@@ -1413,7 +1465,12 @@ in-game name `KSAA` belonged.
   so each past bug has something to bite on. G32-G34 cover Liquipedia-linked results: a 2024 NA series linked
   only through the region fix (G32), the NA grand final presenting Liquipedia's 4-0 over FACEIT's phantom 5-0 (G33),
   and a Dreamhack Dallas series with Liquipedia's maps, a drawn map and its schedule (G34); an evidence `by_match`
-  expectation pins one series' row (score, best-of, sources, played_at).
+  expectation pins one series' row (score, best-of, sources, played_at). G38-G40 cover the leaderboard map
+  floor: a per-map average and an ascending total rank only players with 4+ maps and say so (G38, G40), a
+  descending total takes no floor (G39). G36 asks "with at least 1 map" so it still isolates the primary-role
+  rule, which the floor would otherwise mask. G41-G44 cover team qualifiers: an abbreviation before "player"
+  (G41, DF), a full name before a role (G42), "Team" kept in a name (G43), and no raw id in anything a reader
+  sees (G44, `no_raw_ids`, which scans the rendered CLI answer too).
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with
@@ -1421,6 +1478,12 @@ in-game name `KSAA` belonged.
 - **Each case is labelled** `exact` (asserts numbers) or `invariant` (asserts a
   property: NA only, tank-role players only, a clarify candidate answers verbatim,
   a refusal's alternative works), and names the regression it guards.
+- **Every expectation is evaluated.** Each harness check names the expectation it
+  reads, and `tests/test_golden_harness.py` walks every case's `expect` (without
+  the harness's vocabulary) against a stub answer that opens every gate: an
+  expectation no check reads, including a key the harness does not know, fails
+  the suite. It found G24's 2026 leader had never been compared (only the offered
+  season's was); a rebound `exp` once skipped every check after `by_match`.
 - **Only `confirmed` cases are asserted.** A case is proposed by the derivation and
   becomes an assertion when a person reviews the value and flips `status`.
   `python tools/golden_report.py` compares every case, proposed or confirmed, to the
@@ -1527,6 +1590,7 @@ migrations/032_best_of_from_wins.sql  best-of derived from the winning score; co
 migrations/033_pin_search_path.sql  every table-reading SQL function survives PostgreSQL 17's restricted search_path
 migrations/034_map_winner_precedence.sql  map winner from the scores; Liquipedia the source of record where linked; phantom maps; best-of from played wins
 migrations/035_game_names_display.sql  in-game name history (player_game_names), players.display_name, deterministic leaderboard order
+migrations/036_primary_role.sql  a role leaderboard ranks the players whose primary role it is (player_primary_roles)
 tools/backfill_game_names.py    every earlier in-game name out of the stored match payloads -> player_game_names
 tests/test_search_path.py       refreshes every matview under search_path = pg_catalog, pg_temp; every table-reading SQL function qualified or pinned
 tools/window_review.py          the three name-change signals over every multi-name team id -> scope/org_window_review.md

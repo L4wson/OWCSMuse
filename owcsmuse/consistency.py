@@ -643,6 +643,78 @@ def check_liquipedia_map_isolation(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} Liquipedia-sourced map(s) have a player row that should not exist", counts)
 
 
+# ------------------------------------------------------------ answer rates
+
+# Questions whose answer is a derived rate, asked through the real parser and pipeline for every season and for all of
+# them. A rate is never summed or averaged (it is recomputed from its components), but an answer can still print the
+# wrong column: "highest NA kd in 2026" said Attack's K/D was 77.80 - his map win % - while the row held 5.00.
+RATE_QUESTIONS = (("highest kd", "kd_ratio"), ("most eliminations per map", "avg_per_map"),
+                  ("best map win rate", "map_win_rate"), ("which team has the best series win rate", "win_rate"))
+KD_BOUND = 15            # a season K/D above this over 3+ maps is not a real Overwatch number
+
+
+def check_answer_rates(conn: psycopg.Connection) -> CheckResult:
+    """Every rate an answer presents is plausible, and the sentence quotes the rate the row holds.
+
+    Per row: K/D at most KD_BOUND over 3+ maps, a percentage within 0-100, a per-map average at most its total, a team's
+    series at most its maps. Per answer: the sentence's number is the metric's own column, formatted as the sentence
+    formats it.
+    """
+    from .nlq.pipeline import ask
+    from .nlq.sentence import num, pct
+
+    # the metric's own column, stated here rather than imported from the sentence code this checks
+    own = {"kd_ratio": "kd_ratio", "map_win_rate": "map_win_pct", "win_rate": "win_pct", "avg_per_map": "avg_per_map"}
+
+    seasons = [r["season"] for r in _rows(conn, "SELECT DISTINCT season FROM fact_player_maps WHERE season IS NOT NULL ORDER BY 1")]
+    discrepancies: list[dict[str, Any]] = []
+    asked = floored = 0
+    for season in seasons + [None]:
+        for text, metric in RATE_QUESTIONS:
+            question = f"{text} in {season}" if season else text
+            a = ask(conn, question, with_evidence=False)
+            conn.rollback()
+            asked += 1
+            unfloored = f"{question} with at least 1 map"
+            if a.status != "ok" and unfloored in (a.alternatives or []):
+                # nobody in the slice clears the leaderboard map floor (a small warehouse): the refusal says so and offers
+                # the question without it, whose rates are still to be checked
+                a = ask(conn, unfloored, with_evidence=False)
+                conn.rollback()
+                floored += 1
+            rows = a.rows or []
+            if a.status != "ok" or not rows:
+                discrepancies.append({"kind": "rate_question_unanswered", "question": question, "status": a.status})
+                continue
+            for r in rows:
+                maps = float(r.get("maps") or 0)
+                bad = None
+                if r.get("kd_ratio") is not None and maps >= 3 and float(r["kd_ratio"]) > KD_BOUND:
+                    bad = f"K/D {r['kd_ratio']} over {int(maps)} maps"
+                for k in ("win_pct", "map_win_pct"):
+                    if r.get(k) is not None and not 0 <= float(r[k]) <= 100:
+                        bad = f"{k} {r[k]}"
+                if r.get("avg_per_map") is not None and r.get("total") is not None and float(r["avg_per_map"]) > float(r["total"]):
+                    bad = f"average per map {r['avg_per_map']} exceeds the total {r['total']}"
+                if r.get("matches") is not None and r.get("maps") is not None and float(r["matches"]) > float(r["maps"]):
+                    bad = f"{r['matches']} series over {r['maps']} maps"
+                if bad:
+                    discrepancies.append({"kind": "implausible_rate", "question": question,
+                                          "row": r.get("nickname") or r.get("team"), "why": bad})
+            q = (a.query or {})
+            col = own[metric]
+            v = rows[0].get(col)
+            text_ = (a.sentence or {}).get("text", "")
+            shown = pct(v) if q.get("metric") in ("win_rate", "map_win_rate") else num(v)
+            if v is None or shown not in text_:
+                discrepancies.append({"kind": "sentence_misquotes_rate", "question": question, "column": col,
+                                      "row_value": str(v), "expected_in_sentence": shown, "sentence": text_})
+    return _result("answer_rates", discrepancies,
+                   f"{asked} rate answers across {len(seasons)} season(s) and all seasons: every rate plausible and quoted from its own column",
+                   f"{len(discrepancies)} rate answer problem(s)",
+                   {"questions_asked": asked, "asked_again_without_the_map_floor": floored, "seasons": seasons})
+
+
 # ------------------------------------------------- Liquipedia name resolution
 
 def check_lp_name_resolution(conn: psycopg.Connection) -> CheckResult:
@@ -736,6 +808,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "phantom_map_isolation": check_phantom_map_isolation,
     "decisions_loaded": check_decisions_loaded,
     "lp_name_resolution": check_lp_name_resolution,
+    "answer_rates": check_answer_rates,
 }
 
 

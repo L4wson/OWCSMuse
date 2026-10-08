@@ -92,6 +92,10 @@
   {
    "match_id": "1-43d289c0-bb18-416b-b639-b7e076b41e7f",
    "why": "Dreamhack Dallas, Team Falcons 3-0 ENCE: result_only on FACEIT (best_of stored as 1, entry-time timestamp); linked by owner decision and enriched with Liquipedia's 4 maps, one of them a 3-3 Numbani draw, and Liquipedia's 20:45 play time"
+  },
+  {
+   "match_id": "1-3546e79b-e777-46f3-821e-a37c59d947df",
+   "why": "2024 NA Stage 2 Group A, Toronto Defiant v DhillDucks: MER1T (primary Damage) plays map 3 as Support with 4 deaths - a role leaderboard counts only a player's primary role, so he is no support"
   }
  ]
 }

@@ -14,6 +14,7 @@ asserted in CI. Adding an id to CONFIRMED is the act of confirming it.
 
 from __future__ import annotations
 
+import collections
 import json
 import sys
 from pathlib import Path
@@ -54,6 +55,14 @@ CONFIRMED |= {"G29", "G30"}
 CONFIRMED |= {"G31"}
 # G32-G34 (owner, 2026-10-02): Liquipedia-linked results - the 2024 region fix, a phantom-inflated grand final, Dallas maps
 CONFIRMED |= {"G32", "G33", "G34"}
+# G35+ (owner, 2026-10-02 bug batch): each bug's golden case
+CONFIRMED |= {"G35", "G36", "G37"}
+# G38+ (owner, 2026-10-08): the leaderboard map floor
+CONFIRMED |= {"G38", "G39", "G40"}
+# G41+ (owner, 2026-10-08): team qualifiers become filters
+CONFIRMED |= {"G41", "G42", "G43", "G44"}
+# G45 (owner, 2026-10-08): "TF" is Team Falcons, overriding TFW
+CONFIRMED |= {"G45"}
 
 CASES: list[dict] = []
 
@@ -345,7 +354,7 @@ assert tm25["matches"] == 0
 case("G25", "Twisted Minds in 2025: only a bye, so no data", "invariant", "Twisted Minds record in 2025",
      {"status": "cannot_answer", "code": "no_data",
       "alternative": {"question_template": "Twisted Minds record", "seasons_with_stat": [None],
-                      "top1_by_season": {}, "then_rows": [team_row(tm_all, "Twisted Minds")]}},
+                      "then_rows": [team_row(tm_all, "Twisted Minds")]}},
      "The only 2025 Twisted Minds fixture is the bracket bye, which is not a series: the answer is no_data, not '1-0'. "
      "The offered alternative (the all-seasons record) must answer with G08's numbers.",
      regression="bye: a 2025 bye showed as a 1-0 win")
@@ -436,18 +445,32 @@ case("G32", "A 2024 NA series with no FACEIT id on its page is linked to Liquipe
      "America out), every 2024 NA record was rejected as cross-region and the series carried FACEIT alone.",
      regression="2024 'North_America' pages resolved to region 'other' (2026-10-02)")
 
+tor_rows = []
+for x in S:
+    if not x.counts_as_series:
+        continue
+    for k, o in (("faction1", "faction2"), ("faction2", "faction1")):
+        if x.team[k] == tor:
+            if x.match_id in I.LIQUIPEDIA:
+                (mine, theirs), _ = oriented(x.match_id, "Toronto Defiant")
+            else:
+                mine, theirs = x.score[k], x.score[o]
+            tor_rows.append((x.match_id, mine, theirs, x.winner_faction == k))
+tor_rec = {"matches": len(tor_rows), "wins": sum(w for *_, w in tor_rows), "losses": sum(not w for *_, w in tor_rows),
+           "map_wins": sum(m for _, m, _, _ in tor_rows), "map_losses": sum(t for _, _, t, _ in tor_rows)}
 case("G33", "A grand final FACEIT inflated with a phantom map presents Liquipedia's score", "exact",
      "Toronto Defiant record",
      {"status": "ok", "entity": {"role": "subject", "type": "team", "id": tor, "name": "Toronto Defiant"},
-      "rows": [{"team": "Toronto Defiant", "matches": 2, "wins": 2, "losses": 0,
-                "map_wins": na_for + gf_for, "map_losses": na_against + gf_against}],
+      "rows": [{"team": "Toronto Defiant", **tor_rec}],
       "evidence": {"by_match": {NA_FINAL: {"score": gf_for, "opponent_score": gf_against, "best_of": gf_lp["best_of"],
-                                           "sources": ["faceit", "liquipedia"]}}}},
-     f"Toronto Defiant's only golden series are both against Timeless in 2024 NA Stage 1, each a linked Liquipedia record: "
-     f"{na_for}-{na_against} and the grand final {gf_for}-{gf_against} (bo{gf_lp['best_of']}). FACEIT stores the final as "
-     f"{max(faceit_gf.values())}-{min(faceit_gf.values())}: its detailed_results carries a 5th entry (Dorado, 1-0) nobody "
-     f"played. Map wins come from the series score, so the record is {na_for + gf_for}-{na_against + gf_against}, not "
-     f"{na_for + max(faceit_gf.values())}-{na_against}.",
+                                           "sources": ["faceit", "liquipedia"]}}},
+      # read after by_match in the harness: a real case that breaks if by_match ever again skips what follows it
+      "sentence_contains": [f"{tor_rec['wins']}-{tor_rec['losses']} in series and "
+                            f"{tor_rec['map_wins']}-{tor_rec['map_losses']} in maps"]},
+     f"Toronto Defiant's {tor_rec['matches']} golden series, each scored from Liquipedia where linked (the source of record) "
+     f"and from FACEIT otherwise: " + ", ".join(f"{mid[:10]} {mine}-{theirs}" for mid, mine, theirs, _ in tor_rows)
+     + f". The grand final is {gf_for}-{gf_against} (bo{gf_lp['best_of']}); FACEIT stores it as "
+     f"{max(faceit_gf.values())}-{min(faceit_gf.values())} with a 5th detailed_results entry (Dorado, 1-0) nobody played.",
      regression="FACEIT phantom map in a sweep's series score; Liquipedia is the source of record where linked (034)")
 
 fal, ence = team_id("Team Falcons"), team_id("ENCE")
@@ -468,6 +491,235 @@ case("G34", "A Dreamhack Dallas series has Liquipedia's maps, a drawn map, and L
      f"record has {len(games)} games played: " + ", ".join(f"{g['map']} ({'drawn' if g['winner'] is None else ('Falcons' if g['winner'] == fal_side else 'ENCE')})" for g in games)
      + f", scheduled {dl['played_at']:%Y-%m-%d %H:%M}Z. A drawn map is nobody's win (030).",
      regression="Dallas linked by owner decision and enriched (2026-10-02): Liquipedia maps and schedule for a result_only series")
+
+
+# ------------------------------------------------- bug batch (2026-10-02)
+from decimal import Decimal as _D  # noqa: E402
+
+# The owner's leaderboard floor (2026-10-08): an ascending total, a per-map average or a rate ranks only players with at
+# least this many maps, so a one-series fill-in (Danny 1 map, K0RTAL 3) cannot lead it. Restated here, not imported: the
+# derivation must not read owcsmuse.
+MIN_MAPS = 4
+FLOOR_NOTE = f"(players with at least {MIN_MAPS} maps)"
+
+kd_rows = {}
+for x in S:
+    if x.season != 2026 or not x.rounds:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            e, dth = I.num(pl["stats"], "Eliminations"), I.num(pl["stats"], "Deaths")
+            if e is None or dth is None:
+                continue
+            k = kd_rows.setdefault(pl["player_id"], [0, 0, 0])
+            k[0] += e; k[1] += dth; k[2] += 1
+ranked = sorted(((round(_D(e) / _D(dth), 2), m, pid_) for pid_, (e, dth, m) in kd_rows.items() if dth and m >= MIN_MAPS),
+                key=lambda t: (-t[0], -t[1]))
+kd_top, kd_maps, kd_pid = ranked[0]
+assert ranked[1][0] < kd_top, "a tie at the top would make the expected leader arbitrary"
+kd_shown = format(kd_top.normalize(), "f")
+case("G35", "A K/D leaderboard's sentence quotes the K/D, not the map win %", "exact", "highest kd in 2026",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, kd_pid), "kd_ratio": str(kd_top)}],
+      "sentence_contains": [f"leads K/D ratio with {kd_shown} across {kd_maps} map", FLOOR_NOTE]},
+     f"K/D = total Eliminations / total Deaths over each player's 2026 maps (never a sum or average of per-map ratios), "
+     f"among players with at least {MIN_MAPS} maps (a rate: the leaderboard floor applies). "
+     f"Highest: {I.display_name(S, kd_pid)}, {kd_rows[kd_pid][0]}/{kd_rows[kd_pid][1]} = {kd_top} over {kd_maps} maps. "
+     "The sentence once printed the row's first numeric column instead (production: Attack's 77.80 map win % for a 5.00 K/D).",
+     regression="leaderboard sentence quoted map_win_pct as the K/D (2026-10-02)")
+
+
+# G36/G37: a role leaderboard ranks the players whose primary role it is (most maps that season), over their maps in it
+role_maps = collections.defaultdict(list)
+for x in S:
+    if x.season != 2024 or x.region != "na" or not x.counts_as_series:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            role, dth = pl["stats"].get("Role"), I.num(pl["stats"], "Deaths")
+            if role and role != "-":
+                role_maps[pl["player_id"]].append((role, dth))
+season_roles = collections.defaultdict(collections.Counter)      # primary role is over the whole season, all regions
+for x in S:
+    if x.season != 2024:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            if pl["stats"].get("Role"):
+                season_roles[pl["player_id"]][pl["stats"]["Role"]] += 1
+def primary(pid_):
+    c = season_roles[pid_]; top = max(c.values())
+    return {r for r, n in c.items() if n == top}
+supports = sorted(((sum(d for r, d in ms if r == "Support" and d is not None), sum(r == "Support" for r, _ in ms), pid_)
+                   for pid_, ms in role_maps.items() if "Support" in primary(pid_) and any(r == "Support" for r, _ in ms)),
+                  key=lambda t: (t[0], -t[1]))
+mer1t = next(p_ for p_ in role_maps if I.display_name(S, p_) == "MER1T")
+assert "Support" not in primary(mer1t) and any(r == "Support" for r, _ in role_maps[mer1t])
+low_d, low_maps, low_pid = supports[0]
+low_d = int(low_d)
+assert supports[1][:2] != (low_d, low_maps), "a tie at the bottom would make the expected leader arbitrary"
+# "with at least 1 map" turns the floor off, so this case still isolates the primary-role rule: MER1T's one Support map
+# is under the floor, which would hide him whether or not the role rule works.
+case("G36", "A role leaderboard ranks only players whose role it is", "exact",
+     "which na support had the least deaths in 2024 with at least 1 map",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, low_pid), "total": low_d}],
+      "rows_only_players": sorted({I.display_name(S, p_) for _, _, p_ in supports}),
+      "sentence_contains": [f"{I.display_name(S, low_pid)} has the lowest Deaths among supports with {low_d}"],
+      "sentence_lacks": [FLOOR_NOTE]},
+     f"Among 2024 NA players whose primary 2024 role is Support (most maps), any number of maps (asked for: the floor is "
+     f"off), Deaths summed over their Support maps, lowest first: {I.display_name(S, low_pid)}, {low_d} over {low_maps} map(s). MER1T played one golden map as Support "
+     f"({[d for r, d in role_maps[mer1t] if r == 'Support'][0]} deaths) but his 2024 role is "
+     f"{'/'.join(sorted(primary(mer1t)))}, so he is no support; a per-map filter once ranked him first.",
+     regression="role filter applied per map, so one flex map made a damage player a support (2026-10-02)")
+case("G37", "Every entity link in an ascending sentence covers its own text", "invariant",
+     "which na support had the least deaths in 2024",
+     {"status": "ok", "spans_match_text": True},
+     "The ascending verb ('has the lowest') was substituted for 'leads' after the spans were placed, shifting every later "
+     "span by 9 characters: the stat link covered 'e lowe' inside 'the lowest'. Each span's text must equal the sentence "
+     "text at its offsets.",
+     regression="span offsets shifted by a post-hoc text rewrite (2026-10-02)")
+
+
+# ------------------------------------------------- leaderboard floor (2026-10-08)
+fb_rows = collections.defaultdict(list)                  # 2026 Final Blows per map, every player
+for x in S:
+    if x.season != 2026 or not x.rounds:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            e = I.num(pl["stats"], "Final Blows")
+            if e is not None:
+                fb_rows[pl["player_id"]].append(e)
+per_map = sorted(((round(_D(sum(v)) / len(v), 2), len(v), p_) for p_, v in fb_rows.items() if len(v) >= MIN_MAPS),
+                 key=lambda t: (-t[0], -t[1]))
+pm_top, pm_maps, pm_pid = per_map[0]
+assert per_map[1][0] < pm_top, "a tie at the top would make the expected leader arbitrary"
+under = max(((round(_D(sum(v)) / len(v), 2), len(v), p_) for p_, v in fb_rows.items() if len(v) < MIN_MAPS), default=None)
+assert under and under[0] > pm_top, "the case proves the floor only if a sub-floor player would otherwise lead"
+case("G38", "A per-map average ranks only players with enough maps, and says so", "exact",
+     "most final blows per map in 2026",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, pm_pid), "avg_per_map": str(pm_top)}],
+      "sentence_contains": [f"{I.display_name(S, pm_pid)} leads", FLOOR_NOTE]},
+     f"Final Blows per map = total / maps with the stat, 2026, players with at least {MIN_MAPS} maps: "
+     f"{I.display_name(S, pm_pid)}, {sum(fb_rows[pm_pid])}/{pm_maps} = {pm_top}. Without the floor "
+     f"{I.display_name(S, under[2])} would lead at {under[0]} over {under[1]} map(s).",
+     regression="a one-series appearance led per-map and ascending leaderboards (owner, 2026-10-08)")
+
+deaths24 = collections.defaultdict(lambda: [0, 0])          # 2024 Deaths, every player, every region
+for x in S:
+    if x.season != 2024 or not x.counts_as_series:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            dth = I.num(pl["stats"], "Deaths")
+            if dth is not None:
+                deaths24[pl["player_id"]][0] += dth; deaths24[pl["player_id"]][1] += 1
+most = sorted(((t, m, p_) for p_, (t, m) in deaths24.items()), key=lambda t: (-t[0], -t[1]))
+assert most[1][0] < most[0][0], "a tie at the top would make the expected leader arbitrary"
+case("G39", "A descending total takes no map floor", "exact", "most deaths in 2024",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, most[0][2]), "total": int(most[0][0])}],
+      "sentence_lacks": ["at least"]},
+     f"Deaths summed over every 2024 map, highest first: {I.display_name(S, most[0][2])}, {int(most[0][0])} over "
+     f"{most[0][1]} maps. Few maps cannot top a descending total, so no floor applies and the sentence names none.",
+     regression="the floor is for ascending totals, averages and rates only (owner, 2026-10-08)")
+
+floored = [t for t in supports if sum(r == "Support" and d is not None for r, d in role_maps[t[2]]) >= MIN_MAPS]
+fl_d, fl_maps, fl_pid = floored[0]
+assert floored[1][:2] != (fl_d, fl_maps), "a tie at the bottom would make the expected leader arbitrary"
+assert supports[0][2] != fl_pid, "the case proves the floor only if a sub-floor support would otherwise lead"
+case("G40", "An ascending total ranks only players with enough maps, and says so", "exact",
+     "which na support had the least deaths in 2024",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, fl_pid), "total": int(fl_d)}],
+      "rows_only_players": sorted({I.display_name(S, p_) for _, _, p_ in floored}),
+      "sentence_contains": [f"{I.display_name(S, fl_pid)} has the lowest Deaths among supports with {int(fl_d)}", FLOOR_NOTE]},
+     f"G36's slice with the floor on: 2024 NA primary supports with at least {MIN_MAPS} Support maps, Deaths lowest first: "
+     f"{I.display_name(S, fl_pid)}, {int(fl_d)} over {fl_maps} maps. Without the floor {I.display_name(S, supports[0][2])} "
+     f"leads with {int(supports[0][0])} over {supports[0][1]} map(s).",
+     regression="a one-series appearance led per-map and ascending leaderboards (owner, 2026-10-08)")
+
+
+# ------------------------------------------------- team qualifiers (2026-10-08)
+def team_deaths(team, season, role=None, primary_of=None):
+    """Deaths per player over the maps they played for `team` in `season` (as `role`, when given, and only players whose
+    primary role that season it is, by `primary_of`)."""
+    out = collections.defaultdict(lambda: [0, 0])
+    for x in S:
+        if x.season != season or not x.counts_as_series:
+            continue
+        for rnd in x.rounds:
+            for pl in rnd["players"]:
+                dth = I.num(pl["stats"], "Deaths")
+                if pl["team_id"] != team or dth is None or (role and pl["stats"].get("Role") != role):
+                    continue
+                if role and role not in primary_of(pl["player_id"]):
+                    continue
+                out[pl["player_id"]][0] += dth; out[pl["player_id"]][1] += 1
+    ranked = sorted(((t, m, p_) for p_, (t, m) in out.items()), key=lambda t: (-t[0], -t[1]))
+    assert ranked and (len(ranked) == 1 or ranked[1][0] < ranked[0][0]), "a tie at the top would make the leader arbitrary"
+    return ranked
+
+
+DF = team_id("Dallas Fuel")
+df_rank = team_deaths(DF, 2026)
+case("G41", "An abbreviated team in front of 'player' filters the leaderboard", "exact",
+     "which DF player had the most deaths in 2026",
+     {"status": "ok", "entity": {"role": "team", "type": "team", "id": DF, "name": "Dallas Fuel"},
+      "rows": [{"nickname": I.display_name(S, df_rank[0][2]), "total": int(df_rank[0][0])}],
+      "rows_only_players": sorted({I.display_name(S, p_) for *_, p_ in df_rank}),
+      "sentence_contains": [f"{I.display_name(S, df_rank[0][2])} leads Deaths among Dallas Fuel players with {int(df_rank[0][0])}"]},
+     f"Deaths over the 2026 maps each player played for Dallas Fuel ({DF[:8]}; 'DF' is the owner's alias): "
+     f"{I.display_name(S, df_rank[0][2])} {int(df_rank[0][0])} over {df_rank[0][1]} maps, of {len(df_rank)} Dallas Fuel players. "
+     "The qualifier was once dropped and the whole league ranked.",
+     regression="a team named before 'player' was not a filter (owner, 2026-10-08)")
+
+TM = team_id("Twisted Minds")
+roles24 = collections.defaultdict(collections.Counter)          # primary role is over the whole season, every team
+for x in S:
+    if x.season == 2024:
+        for rnd in x.rounds:
+            for pl in rnd["players"]:
+                if pl["stats"].get("Role"):
+                    roles24[pl["player_id"]][pl["stats"]["Role"]] += 1
+def primary24(p_):
+    c = roles24[p_]; top = max(c.values())
+    return {r for r, n in c.items() if n == top}
+tm_rank = team_deaths(TM, 2024, role="Tank", primary_of=primary24)
+case("G42", "A full team name in front of a role filters the role leaderboard to that team", "exact",
+     "which twisted minds tank had the most deaths in 2024",
+     {"status": "ok", "entity": {"role": "team", "id": TM, "name": "Twisted Minds"},
+      "rows": [{"nickname": I.display_name(S, tm_rank[0][2]), "total": int(tm_rank[0][0])}],
+      "rows_only_players": sorted({I.display_name(S, p_) for *_, p_ in tm_rank}),
+      "sentence_contains": [f"{I.display_name(S, tm_rank[0][2])} leads Deaths among Twisted Minds tanks with {int(tm_rank[0][0])}"]},
+     "Deaths over the 2024 Tank maps each primary-tank player played for Twisted Minds: "
+     + ", ".join(f"{I.display_name(S, p_)} {int(t)}/{m} maps" for t, m, p_ in tm_rank)
+     + ". The team was once dropped, ranking every 2024 tank.",
+     regression="a team named before a role was not a filter (owner, 2026-10-08)")
+
+SUGF = pid(SUG)
+vs_tl = [m for m in I.player_maps(S, SUGF, season=2026) if m["opp_team_id"] == team_id("Team Liquid")]
+vw, vl = sum(m["won"] for m in vs_tl), sum(not m["won"] and not m["drawn"] for m in vs_tl)
+case("G43", "'Team' is part of a team's name, not a keyword", "exact",
+     "sugarfree vs team liquid in 2026",
+     {"status": "ok", "entity": {"role": "opponent", "id": team_id("Team Liquid"), "name": "Team Liquid"},
+      "sentence_contains": [f"{I.display_name(S, SUGF)} is {vw}-{vl} in maps against Team Liquid in 2026"]},
+     f"sugarfree's 2026 maps against Team Liquid's team id: {len(vs_tl)} maps, {vw} won, {vl} lost. The parser once "
+     "dropped 'team' as a stopword and searched 'liquid'.",
+     regression="'Team' eaten as a keyword (README open list, owner 2026-10-08)")
+
+case("G44", "An aliased team's answer prints its name, never its id", "invariant", "TL record in 2026",
+     {"status": "ok", "entity": {"role": "subject", "name": "Team Liquid"}, "no_raw_ids": True},
+     "Team Liquid is an unmapped team id, so its rows carry org_key 'team:<uuid>'; the CLI printed that column beside the "
+     "name. Nothing a reader sees (sentence, reason, rendered answer) may hold a raw id where a display name exists.",
+     regression="'SSG vs TL' printed a UUID (owner, 2026-10-08)")
+
+FAL = "2ab92d33-4c33-46e1-a13f-743a95291d0e"
+assert FAL in {s_.team[k] for s_ in S for k in s_.team if s_.name[k] == "Team Falcons"}
+case("G45", "'TF' is Team Falcons by the owner's decision, not TFW", "invariant", "TF record",
+     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": FAL, "name": "Team Falcons"},
+      "sentence_contains": ["Team Falcons is"]},
+     "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id "
+     "with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is "
+     "settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
+     regression="'TF' resolved to TFW (owner, 2026-10-08)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

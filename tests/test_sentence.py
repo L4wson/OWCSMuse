@@ -131,3 +131,33 @@ def test_a_refusal_is_a_sentence_with_its_entities_marked():
 def test_an_intent_with_no_template_returns_nothing_rather_than_guessing():
     assert render_sentence({"intent": "not_an_intent"}, [{"a": 1}]) is None
     assert render_sentence(VERSUS_Q, []) is None
+
+
+def test_a_leaderboard_sentence_quotes_the_metrics_own_column():
+    # every row also carries the columns that used to win: map_win_pct, win_pct, total. Attack's K/D (5.00) was once
+    # printed as his map win % (77.80); Dallas Fuel's series won (14) as its win % (87.5); a per-map average as the total.
+    base = {"nickname": "P", "player_id": "p1", "maps": 9, "map_win_pct": Decimal("77.8"), "win_pct": Decimal("87.5"),
+            "total": 144, "seasons": [2026]}
+    cases = [({"metric": "kd_ratio"}, {"kd_ratio": Decimal("5.00")}, "with 5 across"),
+             ({"metric": "Eliminations", "aggregation": "avg_per_map"}, {"avg_per_map": Decimal("28.8")}, "at 28.80 per map"),
+             ({"metric": "map_losses"}, {"map_losses": 3}, "with 3 across")]
+    for q, extra, want in cases:
+        s = render_sentence({"intent": "leaderboard", "entity": "player", "filters": {}, "sort": "desc", **q}, [{**base, **extra}])
+        assert want in s.text, (q, s.text)
+    team = {"team": "Dallas Fuel", "org_key": "dallas-fuel", "matches": 16, "wins": 14, "losses": 2, "maps": 61,
+            "win_pct": Decimal("87.5"), "seasons": [2026]}
+    s = render_sentence({"intent": "leaderboard", "entity": "team", "metric": "wins", "filters": {}, "sort": "desc"}, [team])
+    assert "with 14 across" in s.text, s.text
+
+
+def test_a_team_or_role_leaderboard_names_the_players_it_ranked():
+    # a leaderboard that applied "which TM tank" must not read like one that dropped it
+    row = {"player_id": "p1", "nickname": "TVNT", "total": 184, "maps_with_stat": 37, "seasons": [2026]}
+    q = {"intent": "leaderboard", "entity": "player", "metric": "Deaths", "sort": "desc", "filters": {"season": 2026}}
+    team = {"team": {"entity_type": "team", "entity_id": "t1", "current_name": "Twisted Minds"}}
+    s = render_sentence(dict(q, filters={"season": 2026, "role": "Tank"}), [row], team)
+    assert s.text.startswith("TVNT leads Deaths among Twisted Minds tanks with 184")
+    assert [(sp.kind, sp.text) for sp in s.spans if sp.kind == "team"] == [("team", "Twisted Minds")]
+    assert render_sentence(q, [row], team).text.startswith("TVNT leads Deaths among Twisted Minds players with 184")
+    assert render_sentence(dict(q, filters={"role": "Support"}), [row], {}).text.startswith("TVNT leads Deaths among supports")
+    assert render_sentence(q, [row], {}).text.startswith("TVNT leads Deaths with 184")

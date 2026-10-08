@@ -1,7 +1,7 @@
 """Validator and compiler tests with a hand-built SchemaInfo: no database, no model."""
 
 
-from owcsmuse.nlq.compile import Compiled, Resolved, compile_query
+from owcsmuse.nlq.compile import LEADERBOARD_MIN_MAPS, Compiled, Resolved, compile_query
 from owcsmuse.nlq.parser import parse_question
 from owcsmuse.nlq.schema import Filters, StructuredQuery, Unanswerable
 from owcsmuse.nlq.validate import SchemaInfo, Validated, validate
@@ -135,6 +135,30 @@ def test_leaderboard_average_orders_by_avg():
     assert c.params[-1] == "avg"
 
 
+def test_map_floor_applies_where_a_small_sample_can_win():
+    # an ascending total, a per-map average and a rate, on each leaderboard path: the function, the sliced
+    # aggregate, the role rows and the derived K/D
+    for question in ("worst 5 players by deaths", "highest average healing per map", "highest kd in 2024",
+                     "least deaths on Lijiang Tower", "which support had the least deaths in 2024",
+                     "highest K/D Ratio in 2024"):
+        c = _sql(val(question), Resolved())
+        assert c.min_maps_floor == LEADERBOARD_MIN_MAPS, question
+        assert LEADERBOARD_MIN_MAPS in c.params, question
+    # a FACEIT rate key (stat_kind derived_rate) is a rate too, ranked descending
+    info = SchemaInfo(**{**INFO.__dict__, "stat_kinds": {"Eliminations/10m": "derived_rate"}})
+    v = validate(parse("highest eliminations/10m in 2026"), info)
+    assert isinstance(v, Validated)
+    assert _sql(v, Resolved()).min_maps_floor == LEADERBOARD_MIN_MAPS
+
+
+def test_no_map_floor_on_a_descending_total_or_an_explicit_minimum():
+    for question in ("most deaths in 2024", "most eliminations on Lijiang Tower", "which tank had the most deaths in 2024"):
+        c = _sql(val(question), Resolved())
+        assert c.min_maps_floor is None and LEADERBOARD_MIN_MAPS not in c.params, question
+    c = _sql(val("least deaths in 2024 with at least 2 maps"), Resolved())
+    assert c.min_maps_floor is None and 2 in c.params
+
+
 def test_leaderboard_sliced_by_map_uses_typed_columns_only():
     c = _sql(val("most eliminations on Lijiang Tower"), Resolved())
     assert "agg_player_stats" in c.sql and "sum_eliminations" in c.sql and "map_name = %s" in c.sql
@@ -171,7 +195,8 @@ def test_team_record_and_map_record():
     assert "agg_team_matches" in c.sql and c.params == ["team:t1", 2024]
     v = validate(StructuredQuery(intent="team_record", entity="team", metric="record", filters=Filters(team="tm", mode="Control")), INFO)
     c = _sql(v, R_TEAM)
-    assert "agg_team_maps" in c.sql and "game_mode = %s" in c.sql
+    # series counted once each, from the fact view: summing agg_team_maps' per-map `matches` gave Virtus pro 57 for 15
+    assert "fact_team_maps" in c.sql and "count(DISTINCT t.match_id) AS matches" in c.sql and "game_mode = %s" in c.sql
 
 
 def test_team_leaderboard_by_win_rate():
@@ -190,7 +215,8 @@ def test_head_to_head_orders_pair_and_presents_from_first_team():
 
 def test_map_stats_for_team_player_and_global():
     c = _sql(val("which map does Twisted Minds win the most"), R_TEAM)
-    assert "agg_team_maps" in c.sql and "GROUP BY map_name" in c.sql and "ORDER BY win_pct" in c.sql
+    assert "fact_team_maps" in c.sql and "count(DISTINCT match_id) AS matches" in c.sql
+    assert "GROUP BY map_name" in c.sql and "ORDER BY win_pct" in c.sql
     c = _sql(val("KSAA eliminations by map"), R_PLAYER)
     assert "agg_player_stats" in c.sql and "eliminations_total" in c.sql
     c = _sql(val("what are the most played maps in 2024"), Resolved())

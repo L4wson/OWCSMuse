@@ -29,6 +29,25 @@ SUPPORTED = [
      {"intent": "leaderboard", "entity": "player", "metric": "Eliminations/10m", "filters": {}}),
     ("worst 5 players by deaths",
      {"intent": "leaderboard", "entity": "player", "metric": "Deaths", "filters": {}, "sort": "asc", "limit": 5}),
+    # a team named in front of the player or role noun is a filter, however it is written (owner, 2026-10-08)
+    ("which DF player had the most deaths in 2026",
+     {"intent": "leaderboard", "entity": "player", "metric": "Deaths", "filters": {"team": "df", "season": 2026}}),
+    ("which twisted minds tank had the most deaths in 2026",
+     {"intent": "leaderboard", "entity": "player", "filters": {"team": "twisted minds", "season": 2026, "role": "Tank"}}),
+    ("which spacestation gaming dps had the most deaths in 2026",
+     {"intent": "leaderboard", "entity": "player", "filters": {"team": "spacestation gaming", "season": 2026, "role": "Damage"}}),
+    ("most deaths by a twisted minds tank in 2026",
+     {"intent": "leaderboard", "entity": "player", "filters": {"team": "twisted minds", "season": 2026, "role": "Tank"}}),
+    ("which team liquid player had the most eliminations",
+     {"intent": "leaderboard", "entity": "player", "filters": {"team": "team liquid"}}),
+    ("which na support had the least deaths in 2024",          # a region in front of the noun names no team
+     {"intent": "leaderboard", "entity": "player", "filters": {"season": 2024, "region": "na", "role": "Support"}}),
+    ("top 5 healers by healing done",                           # nor does a limit
+     {"intent": "leaderboard", "entity": "player", "filters": {"role": "Support"}, "limit": 5}),
+    ("cjay vs team liquid in 2026",
+     {"intent": "versus", "filters": {"subject": "cjay", "opponent": "team liquid", "season": 2026}}),
+    ("team z record",
+     {"intent": "team_record", "filters": {"subject": "team z"}}),
     ("who has the most healing on push maps with at least 10 maps",
      {"intent": "leaderboard", "entity": "player", "metric": "Healing Done", "filters": {"mode": "Push"}, "min_maps": 10}),
     ("Who had the most eliminations for Twisted Minds?",
@@ -59,7 +78,8 @@ SUPPORTED = [
     ("what is player kellemanden's kd",
      {"intent": "entity_stat", "entity": "player", "metric": "kd_ratio", "filters": {"player": "kellemanden"}}),
     ("How much damage did team ENCE deal in stage 2?",
-     {"intent": "entity_stat", "entity": "team", "metric": "Damage Dealt", "filters": {"team": "ence", "championship": "stage 2"}}),
+     # "team" stays in the name ("Team Liquid" is one); resolve() falls back to "ence" when "team ence" names nobody
+     {"intent": "entity_stat", "entity": "team", "metric": "Damage Dealt", "filters": {"team": "team ence", "championship": "stage 2"}}),
     ("show me Vestola's deaths",
      {"intent": "entity_stat", "entity": "player", "metric": "Deaths", "filters": {"subject": "vestola"}}),
     # ---- team records
