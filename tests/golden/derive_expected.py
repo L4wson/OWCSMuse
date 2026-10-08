@@ -64,7 +64,7 @@ CONFIRMED |= {"G41", "G42", "G43", "G44"}
 # G45 (owner, 2026-10-08): "TF" is Team Falcons, overriding TFW
 CONFIRMED |= {"G45"}
 # G46+ (owner, 2026-10-08, second batch): GK region-qualified; attribution; display names; relative time
-CONFIRMED |= {"G46", "G47", "G48", "G49", "G50"}
+CONFIRMED |= {"G46", "G47", "G48", "G49", "G50", "G51"}
 
 CASES: list[dict] = []
 
@@ -763,6 +763,14 @@ case("G50", "A team history dated by Liquipedia credits the page", "invariant", 
      "iCrimzo's stint is dated by the Dreamhack Dallas series, which FACEIT left without a real time and Liquipedia "
      f"dates ({I.LIQUIPEDIA[DALLAS]['pagename']}). A team history once skipped attribution entirely.",
      regression="a team history carried no attribution (owner, 2026-10-08)")
+
+assert pname(ZSS) == "ZZZ", "the owner's display name for z_ow / zss (player_identity_decisions.json)"
+case("G51", "The name an answer shows is a name it can be asked by", "exact", "ZZZ record",
+     {"status": "ok", "entity": {"role": "subject", "type": "player", "id": pid(ZSS), "name": "ZZZ"},
+      "rows": [{**player_rows(zss, "ZZZ"), "eliminations": zss["eliminations"], "deaths": zss["deaths"]}]},
+     f"G03's player asked by the owner's display name, which every answer shows: {zss['maps']} maps over "
+     f"{zss['matches']} series. 'ZZZ' was searchable by nothing (035 left search untouched); 'zss' worked.",
+     regression="a display name was shown but not searchable (owner, 2026-10-08)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

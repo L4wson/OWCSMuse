@@ -1273,6 +1273,34 @@
    },
    "derivation": "iCrimzo's stint is dated by the Dreamhack Dallas series, which FACEIT left without a real time and Liquipedia dates (Overwatch_Champions_Series/2024/Major). A team history once skipped attribution entirely.",
    "status": "confirmed"
+  },
+  {
+   "id": "G51",
+   "title": "The name an answer shows is a name it can be asked by",
+   "kind": "exact",
+   "regression": "a display name was shown but not searchable (owner, 2026-10-08)",
+   "question": "ZZZ record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "player",
+     "id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
+     "name": "ZZZ"
+    },
+    "rows": [
+     {
+      "nickname": "ZZZ",
+      "maps": 17,
+      "map_wins": 7,
+      "map_losses": 10,
+      "eliminations": 171,
+      "deaths": 103
+     }
+    ]
+   },
+   "derivation": "G03's player asked by the owner's display name, which every answer shows: 17 maps over 5 series. 'ZZZ' was searchable by nothing (035 left search untouched); 'zss' worked.",
+   "status": "confirmed"
   }
  ]
 }
