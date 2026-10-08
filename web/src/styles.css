@@ -13,6 +13,8 @@
   --accent-soft: #eaf0ff;
   --warn: #8a5b00;
   --warn-soft: #fff5e0;
+  --beta: #5c4400;
+  --beta-soft: #fde68a;
   --won: #0f7b4a;
   --lost: #a02020;
   --radius: 10px;
@@ -30,6 +32,8 @@
     --accent-soft: #223056;
     --warn: #f0c274;
     --warn-soft: #3a2e14;
+    --beta: #fbd85d;
+    --beta-soft: #463808;
     --won: #63d39b;
     --lost: #ef8d8d;
   }
@@ -61,6 +65,8 @@ body {
 .masthead {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
   padding-bottom: 8px;
 }
 
@@ -73,6 +79,17 @@ body {
   text-transform: uppercase;
   color: var(--muted);
   cursor: pointer;
+}
+
+.beta-tag {
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--beta);
+  background: var(--beta-soft);
 }
 
 main {

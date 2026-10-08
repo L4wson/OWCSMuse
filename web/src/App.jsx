@@ -133,6 +133,7 @@ export default function App() {
         <button type="button" className="wordmark" onClick={goHome}>
           OWCS Muse
         </button>
+        <span className="beta-tag">beta</span>
       </header>
 
       <main>
