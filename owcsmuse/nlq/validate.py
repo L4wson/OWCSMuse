@@ -161,6 +161,7 @@ class Validated:
     mode_name: Optional[str] = None
     notes: list[str] = field(default_factory=list)
     results_only_parts: list[str] = field(default_factory=list)   # competitions in the slice that carry no player stats
+    stat_kind: Optional[str] = None                                # countable | derived_rate | non_numeric, for a stat key
 
 
 # ------------------------------------------------------------------ capability
@@ -357,4 +358,4 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
                      + " there, so that part is not in this answer")
 
     return Validated(query=q, championship_ids=champ_ids, map_name=map_name, mode_name=mode_name, notes=notes,
-                     results_only_parts=parts if cap == "partial" else [])
+                     results_only_parts=parts if cap == "partial" else [], stat_kind=info.stat_kinds.get(stat_key or ""))

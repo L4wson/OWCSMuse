@@ -57,6 +57,8 @@ CONFIRMED |= {"G31"}
 CONFIRMED |= {"G32", "G33", "G34"}
 # G35+ (owner, 2026-10-02 bug batch): each bug's golden case
 CONFIRMED |= {"G35", "G36", "G37"}
+# G38+ (owner, 2026-10-08): the leaderboard map floor
+CONFIRMED |= {"G38", "G39", "G40"}
 
 CASES: list[dict] = []
 
@@ -487,6 +489,12 @@ case("G34", "A Dreamhack Dallas series has Liquipedia's maps, a drawn map, and L
 # ------------------------------------------------- bug batch (2026-10-02)
 from decimal import Decimal as _D  # noqa: E402
 
+# The owner's leaderboard floor (2026-10-08): an ascending total, a per-map average or a rate ranks only players with at
+# least this many maps, so a one-series fill-in (Danny 1 map, K0RTAL 3) cannot lead it. Restated here, not imported: the
+# derivation must not read owcsmuse.
+MIN_MAPS = 4
+FLOOR_NOTE = f"(players with at least {MIN_MAPS} maps)"
+
 kd_rows = {}
 for x in S:
     if x.season != 2026 or not x.rounds:
@@ -498,15 +506,16 @@ for x in S:
                 continue
             k = kd_rows.setdefault(pl["player_id"], [0, 0, 0])
             k[0] += e; k[1] += dth; k[2] += 1
-ranked = sorted(((round(_D(e) / _D(dth), 2), m, pid_) for pid_, (e, dth, m) in kd_rows.items() if dth),
+ranked = sorted(((round(_D(e) / _D(dth), 2), m, pid_) for pid_, (e, dth, m) in kd_rows.items() if dth and m >= MIN_MAPS),
                 key=lambda t: (-t[0], -t[1]))
 kd_top, kd_maps, kd_pid = ranked[0]
 assert ranked[1][0] < kd_top, "a tie at the top would make the expected leader arbitrary"
 kd_shown = format(kd_top.normalize(), "f")
 case("G35", "A K/D leaderboard's sentence quotes the K/D, not the map win %", "exact", "highest kd in 2026",
      {"status": "ok", "rows": [{"nickname": I.display_name(S, kd_pid), "kd_ratio": str(kd_top)}],
-      "sentence_contains": [f"leads K/D ratio with {kd_shown} across {kd_maps} map"]},
-     f"K/D = total Eliminations / total Deaths over each player's 2026 maps (never a sum or average of per-map ratios). "
+      "sentence_contains": [f"leads K/D ratio with {kd_shown} across {kd_maps} map", FLOOR_NOTE]},
+     f"K/D = total Eliminations / total Deaths over each player's 2026 maps (never a sum or average of per-map ratios), "
+     f"among players with at least {MIN_MAPS} maps (a rate: the leaderboard floor applies). "
      f"Highest: {I.display_name(S, kd_pid)}, {kd_rows[kd_pid][0]}/{kd_rows[kd_pid][1]} = {kd_top} over {kd_maps} maps. "
      "The sentence once printed the row's first numeric column instead (production: Attack's 77.80 map win % for a 5.00 K/D).",
      regression="leaderboard sentence quoted map_win_pct as the K/D (2026-10-02)")
@@ -541,13 +550,16 @@ assert "Support" not in primary(mer1t) and any(r == "Support" for r, _ in role_m
 low_d, low_maps, low_pid = supports[0]
 low_d = int(low_d)
 assert supports[1][:2] != (low_d, low_maps), "a tie at the bottom would make the expected leader arbitrary"
+# "with at least 1 map" turns the floor off, so this case still isolates the primary-role rule: MER1T's one Support map
+# is under the floor, which would hide him whether or not the role rule works.
 case("G36", "A role leaderboard ranks only players whose role it is", "exact",
-     "which na support had the least deaths in 2024",
+     "which na support had the least deaths in 2024 with at least 1 map",
      {"status": "ok", "rows": [{"nickname": I.display_name(S, low_pid), "total": low_d}],
       "rows_only_players": sorted({I.display_name(S, p_) for _, _, p_ in supports}),
-      "sentence_contains": [f"{I.display_name(S, low_pid)} has the lowest Deaths with {low_d}"]},
-     f"Among 2024 NA players whose primary 2024 role is Support (most maps), Deaths summed over their Support maps, "
-     f"lowest first: {I.display_name(S, low_pid)}, {low_d} over {low_maps} map(s). MER1T played one golden map as Support "
+      "sentence_contains": [f"{I.display_name(S, low_pid)} has the lowest Deaths with {low_d}"],
+      "sentence_lacks": [FLOOR_NOTE]},
+     f"Among 2024 NA players whose primary 2024 role is Support (most maps), any number of maps (asked for: the floor is "
+     f"off), Deaths summed over their Support maps, lowest first: {I.display_name(S, low_pid)}, {low_d} over {low_maps} map(s). MER1T played one golden map as Support "
      f"({[d for r, d in role_maps[mer1t] if r == 'Support'][0]} deaths) but his 2024 role is "
      f"{'/'.join(sorted(primary(mer1t)))}, so he is no support; a per-map filter once ranked him first.",
      regression="role filter applied per map, so one flex map made a damage player a support (2026-10-02)")
@@ -558,6 +570,64 @@ case("G37", "Every entity link in an ascending sentence covers its own text", "i
      "span by 9 characters: the stat link covered 'e lowe' inside 'the lowest'. Each span's text must equal the sentence "
      "text at its offsets.",
      regression="span offsets shifted by a post-hoc text rewrite (2026-10-02)")
+
+
+# ------------------------------------------------- leaderboard floor (2026-10-08)
+fb_rows = collections.defaultdict(list)                  # 2026 Final Blows per map, every player
+for x in S:
+    if x.season != 2026 or not x.rounds:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            e = I.num(pl["stats"], "Final Blows")
+            if e is not None:
+                fb_rows[pl["player_id"]].append(e)
+per_map = sorted(((round(_D(sum(v)) / len(v), 2), len(v), p_) for p_, v in fb_rows.items() if len(v) >= MIN_MAPS),
+                 key=lambda t: (-t[0], -t[1]))
+pm_top, pm_maps, pm_pid = per_map[0]
+assert per_map[1][0] < pm_top, "a tie at the top would make the expected leader arbitrary"
+under = max(((round(_D(sum(v)) / len(v), 2), len(v), p_) for p_, v in fb_rows.items() if len(v) < MIN_MAPS), default=None)
+assert under and under[0] > pm_top, "the case proves the floor only if a sub-floor player would otherwise lead"
+case("G38", "A per-map average ranks only players with enough maps, and says so", "exact",
+     "most final blows per map in 2026",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, pm_pid), "avg_per_map": str(pm_top)}],
+      "sentence_contains": [f"{I.display_name(S, pm_pid)} leads", FLOOR_NOTE]},
+     f"Final Blows per map = total / maps with the stat, 2026, players with at least {MIN_MAPS} maps: "
+     f"{I.display_name(S, pm_pid)}, {sum(fb_rows[pm_pid])}/{pm_maps} = {pm_top}. Without the floor "
+     f"{I.display_name(S, under[2])} would lead at {under[0]} over {under[1]} map(s).",
+     regression="a one-series appearance led per-map and ascending leaderboards (owner, 2026-10-08)")
+
+deaths24 = collections.defaultdict(lambda: [0, 0])          # 2024 Deaths, every player, every region
+for x in S:
+    if x.season != 2024 or not x.counts_as_series:
+        continue
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            dth = I.num(pl["stats"], "Deaths")
+            if dth is not None:
+                deaths24[pl["player_id"]][0] += dth; deaths24[pl["player_id"]][1] += 1
+most = sorted(((t, m, p_) for p_, (t, m) in deaths24.items()), key=lambda t: (-t[0], -t[1]))
+assert most[1][0] < most[0][0], "a tie at the top would make the expected leader arbitrary"
+case("G39", "A descending total takes no map floor", "exact", "most deaths in 2024",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, most[0][2]), "total": int(most[0][0])}],
+      "sentence_lacks": ["at least"]},
+     f"Deaths summed over every 2024 map, highest first: {I.display_name(S, most[0][2])}, {int(most[0][0])} over "
+     f"{most[0][1]} maps. Few maps cannot top a descending total, so no floor applies and the sentence names none.",
+     regression="the floor is for ascending totals, averages and rates only (owner, 2026-10-08)")
+
+floored = [t for t in supports if sum(r == "Support" and d is not None for r, d in role_maps[t[2]]) >= MIN_MAPS]
+fl_d, fl_maps, fl_pid = floored[0]
+assert floored[1][:2] != (fl_d, fl_maps), "a tie at the bottom would make the expected leader arbitrary"
+assert supports[0][2] != fl_pid, "the case proves the floor only if a sub-floor support would otherwise lead"
+case("G40", "An ascending total ranks only players with enough maps, and says so", "exact",
+     "which na support had the least deaths in 2024",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, fl_pid), "total": int(fl_d)}],
+      "rows_only_players": sorted({I.display_name(S, p_) for _, _, p_ in floored}),
+      "sentence_contains": [f"{I.display_name(S, fl_pid)} has the lowest Deaths with {int(fl_d)}", FLOOR_NOTE]},
+     f"G36's slice with the floor on: 2024 NA primary supports with at least {MIN_MAPS} Support maps, Deaths lowest first: "
+     f"{I.display_name(S, fl_pid)}, {int(fl_d)} over {fl_maps} maps. Without the floor {I.display_name(S, supports[0][2])} "
+     f"leads with {int(supports[0][0])} over {supports[0][1]} map(s).",
+     regression="a one-series appearance led per-map and ascending leaderboards (owner, 2026-10-08)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

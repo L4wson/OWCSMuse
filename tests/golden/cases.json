@@ -933,15 +933,16 @@
     "status": "ok",
     "rows": [
      {
-      "nickname": "JaeWoo",
-      "kd_ratio": "7.27"
+      "nickname": "Hawk",
+      "kd_ratio": "4.57"
      }
     ],
     "sentence_contains": [
-     "leads K/D ratio with 7.27 across 3 map"
+     "leads K/D ratio with 4.57 across 21 map",
+     "(players with at least 4 maps)"
     ]
    },
-   "derivation": "K/D = total Eliminations / total Deaths over each player's 2026 maps (never a sum or average of per-map ratios). Highest: JaeWoo, 80/11 = 7.27 over 3 maps. The sentence once printed the row's first numeric column instead (production: Attack's 77.80 map win % for a 5.00 K/D).",
+   "derivation": "K/D = total Eliminations / total Deaths over each player's 2026 maps (never a sum or average of per-map ratios), among players with at least 4 maps (a rate: the leaderboard floor applies). Highest: Hawk, 457/100 = 4.57 over 21 maps. The sentence once printed the row's first numeric column instead (production: Attack's 77.80 map win % for a 5.00 K/D).",
    "status": "confirmed"
   },
   {
@@ -949,7 +950,7 @@
    "title": "A role leaderboard ranks only players whose role it is",
    "kind": "exact",
    "regression": "role filter applied per map, so one flex map made a damage player a support (2026-10-02)",
-   "question": "which na support had the least deaths in 2024",
+   "question": "which na support had the least deaths in 2024 with at least 1 map",
    "expect": {
     "status": "ok",
     "rows": [
@@ -968,9 +969,12 @@
     ],
     "sentence_contains": [
      "FrothyFilly7 has the lowest Deaths with 19"
+    ],
+    "sentence_lacks": [
+     "(players with at least 4 maps)"
     ]
    },
-   "derivation": "Among 2024 NA players whose primary 2024 role is Support (most maps), Deaths summed over their Support maps, lowest first: FrothyFilly7, 19 over 3 map(s). MER1T played one golden map as Support (4 deaths) but his 2024 role is Damage, so he is no support; a per-map filter once ranked him first.",
+   "derivation": "Among 2024 NA players whose primary 2024 role is Support (most maps), any number of maps (asked for: the floor is off), Deaths summed over their Support maps, lowest first: FrothyFilly7, 19 over 3 map(s). MER1T played one golden map as Support (4 deaths) but his 2024 role is Damage, so he is no support; a per-map filter once ranked him first.",
    "status": "confirmed"
   },
   {
@@ -984,6 +988,77 @@
     "spans_match_text": true
    },
    "derivation": "The ascending verb ('has the lowest') was substituted for 'leads' after the spans were placed, shifting every later span by 9 characters: the stat link covered 'e lowe' inside 'the lowest'. Each span's text must equal the sentence text at its offsets.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G38",
+   "title": "A per-map average ranks only players with enough maps, and says so",
+   "kind": "exact",
+   "regression": "a one-series appearance led per-map and ascending leaderboards (owner, 2026-10-08)",
+   "question": "most final blows per map in 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Lethal",
+      "avg_per_map": "11.71"
+     }
+    ],
+    "sentence_contains": [
+     "Lethal leads",
+     "(players with at least 4 maps)"
+    ]
+   },
+   "derivation": "Final Blows per map = total / maps with the stat, 2026, players with at least 4 maps: Lethal, 246/21 = 11.71. Without the floor JaeWoo would lead at 14.33 over 3 map(s).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G39",
+   "title": "A descending total takes no map floor",
+   "kind": "exact",
+   "regression": "the floor is for ascending totals, averages and rates only (owner, 2026-10-08)",
+   "question": "most deaths in 2024",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Chasetorch",
+      "total": 80
+     }
+    ],
+    "sentence_lacks": [
+     "at least"
+    ]
+   },
+   "derivation": "Deaths summed over every 2024 map, highest first: Chasetorch, 80 over 13 maps. Few maps cannot top a descending total, so no floor applies and the sentence names none.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G40",
+   "title": "An ascending total ranks only players with enough maps, and says so",
+   "kind": "exact",
+   "regression": "a one-series appearance led per-map and ascending leaderboards (owner, 2026-10-08)",
+   "question": "which na support had the least deaths in 2024",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Vega",
+      "total": 40
+     }
+    ],
+    "rows_only_players": [
+     "OPENER",
+     "Rupal",
+     "Vega",
+     "cjay"
+    ],
+    "sentence_contains": [
+     "Vega has the lowest Deaths with 40",
+     "(players with at least 4 maps)"
+    ]
+   },
+   "derivation": "G36's slice with the floor on: 2024 NA primary supports with at least 4 Support maps, Deaths lowest first: Vega, 40 over 11 maps. Without the floor FrothyFilly7 leads with 19 over 3 map(s).",
    "status": "confirmed"
   }
  ]

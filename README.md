@@ -707,6 +707,19 @@ ever emits SQL:
    coverage note (`seasons without it: 2024`) and per-row coverage, never a
    silently partial leaderboard.
 
+**The leaderboard map floor.** A player leaderboard that a small sample can
+win (an ascending total, a per-map average or a rate such as K/D) ranks only
+players with at least `LEADERBOARD_MIN_MAPS` = 4 maps (`nlq/compile.py`), and
+its sentence says so: "(players with at least 4 maps)". Some players genuinely
+get little playing time and should still rank; the floor is there for a
+manager or coach filling in for one series. Danny played 1 map (2024 and
+2025), K0RTAL 3 (one 2024 series), and at no floor Spectra "had the least
+deaths in NA 2024" with 1 death in 1 map. A fill-in lasts as long as the one
+series played, 1-3 maps, so the floor is 4; on production (2026-10-08) it
+leaves out 32 of 513 player-seasons, among them every player whose season was
+one 3-map series. A descending total takes no floor, since few maps cannot top
+it, and an explicit "with at least N maps" replaces it.
+
 Every failure is a first-class answer with a reason code: `unsupported_metric`,
 `unsupported_question`, `out_of_scope`, `results_only`, `ambiguous_entity`, `unknown_entity`,
 `no_data`, `invalid_query`, each with suggestions. Exit code is 0 for an
@@ -1414,7 +1427,10 @@ in-game name `KSAA` belonged.
   so each past bug has something to bite on. G32-G34 cover Liquipedia-linked results: a 2024 NA series linked
   only through the region fix (G32), the NA grand final presenting Liquipedia's 4-0 over FACEIT's phantom 5-0 (G33),
   and a Dreamhack Dallas series with Liquipedia's maps, a drawn map and its schedule (G34); an evidence `by_match`
-  expectation pins one series' row (score, best-of, sources, played_at).
+  expectation pins one series' row (score, best-of, sources, played_at). G38-G40 cover the leaderboard map
+  floor: a per-map average and an ascending total rank only players with 4+ maps and say so (G38, G40), a
+  descending total takes no floor (G39). G36 asks "with at least 1 map" so it still isolates the primary-role
+  rule, which the floor would otherwise mask.
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with

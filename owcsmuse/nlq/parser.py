@@ -478,7 +478,7 @@ def parse_question(question: str) -> ParseResult:
             f = f.model_copy(update={"subject": subject})
         met = metric if metric else ("map_win_rate" if (subject or _has(q, ["win rate", "winrate", "best", "worst"])) else "maps")
         return StructuredQuery(intent="map_stats", entity=entity, metric=met, filters=f, aggregation=aggregation, sort=sort,
-                               limit=limit or 10, min_maps=min_maps or 1)
+                               limit=limit or 10, min_maps=min_maps)
 
     # --- leaderboard
     if _has(q, LEADERBOARD_CUES):
@@ -489,7 +489,7 @@ def parse_question(question: str) -> ParseResult:
         entity = "team" if (_has(q, ["team"]) or metric in ("win_rate", "record", "wins", "losses", "map_wins", "map_losses", "map_win_rate")) else "player"
         f = filters.model_copy(update={"team": subject}) if (subject and entity == "player") else filters
         return StructuredQuery(intent="leaderboard", entity=entity, metric=metric, filters=f, aggregation=aggregation,
-                               sort=sort, limit=limit or 10, min_maps=min_maps or 1)
+                               sort=sort, limit=limit or 10, min_maps=min_maps)
 
     # --- team record / counts for a named entity (kind resolved later)
     if metric in ("record", "win_rate", "wins", "losses", "matches", "maps", "map_wins", "map_losses", "map_win_rate") or _has(q, ["record", "standings"]):
@@ -509,7 +509,7 @@ def parse_question(question: str) -> ParseResult:
     if metric and not subject:
         # "eliminations in 2024" -> nobody named: rank everyone
         return StructuredQuery(intent="leaderboard", entity="player", metric=metric, filters=filters, aggregation=aggregation,
-                               sort=sort, limit=limit or 10, min_maps=min_maps or 1)
+                               sort=sort, limit=limit or 10, min_maps=min_maps)
     if subject and not metric:
         return Unanswerable(code="unsupported_metric", reason=f"which stat for '{subject}'? e.g. eliminations, healing, K/D, record",
                             suggestions=["Ask `what stats are available`."])

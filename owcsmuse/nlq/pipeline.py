@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Any, Optional
 
@@ -540,6 +540,20 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         if debug:
             a.sql, a.params = c.sql, c.params
         return a
+    if not rows and c.min_maps_floor:
+        # the floor, not the slice, may be what emptied it: say so rather than "nothing matches", and offer the question
+        # without it
+        unfloored = compile_query(replace(v, query=v.query.model_copy(update={"min_maps": 1})), r)
+        if isinstance(unfloored, Compiled) and run_compiled(conn, unfloored):
+            u = Unanswerable(code="no_data",
+                             reason=f"no player in this slice has played at least {c.min_maps_floor} maps, the fewest this "
+                                    "leaderboard ranks, so a one-series appearance cannot lead it",
+                             suggestions=["Ask with \"with at least 1 map\" to rank everyone, or widen the season."])
+            a = _cannot(question, u, q, used, pre.entities, [f"{question} with at least 1 map"])
+            a.coverage, a.notes, a.limitations = coverage, notes, limitations
+            if debug:
+                a.sql, a.params = c.sql, c.params
+            return a
     if not rows:
         reason, tips, swaps = _empty_slice(conn, question, q, r)
         u = Unanswerable(code="no_data", reason=reason, suggestions=tips)
@@ -560,7 +574,8 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
                 row["entity"] = entity
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows, coverage=coverage,
                notes=notes, limitations=limitations, description=c.description, parser=used)
-    sentence = render_sentence(a.query, rows, pre.entities, c.description)
+    # the floor is the compiler's, not the question's: handed to the sentence so it can say who was left out
+    sentence = render_sentence(dict(a.query, min_maps_floor=c.min_maps_floor), rows, pre.entities, c.description)
     a.sentence = sentence.as_dict() if sentence else None
     if with_evidence:
         # The aggregate is the claim; these are the rows that produce it.

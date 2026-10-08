@@ -1,7 +1,7 @@
 """Validator and compiler tests with a hand-built SchemaInfo: no database, no model."""
 
 
-from owcsmuse.nlq.compile import Compiled, Resolved, compile_query
+from owcsmuse.nlq.compile import LEADERBOARD_MIN_MAPS, Compiled, Resolved, compile_query
 from owcsmuse.nlq.parser import parse_question
 from owcsmuse.nlq.schema import Filters, StructuredQuery, Unanswerable
 from owcsmuse.nlq.validate import SchemaInfo, Validated, validate
@@ -133,6 +133,30 @@ def test_leaderboard_ascending_wraps_the_function():
 def test_leaderboard_average_orders_by_avg():
     c = _sql(val("highest average healing per map"), Resolved())
     assert c.params[-1] == "avg"
+
+
+def test_map_floor_applies_where_a_small_sample_can_win():
+    # an ascending total, a per-map average and a rate, on each leaderboard path: the function, the sliced
+    # aggregate, the role rows and the derived K/D
+    for question in ("worst 5 players by deaths", "highest average healing per map", "highest kd in 2024",
+                     "least deaths on Lijiang Tower", "which support had the least deaths in 2024",
+                     "highest K/D Ratio in 2024"):
+        c = _sql(val(question), Resolved())
+        assert c.min_maps_floor == LEADERBOARD_MIN_MAPS, question
+        assert LEADERBOARD_MIN_MAPS in c.params, question
+    # a FACEIT rate key (stat_kind derived_rate) is a rate too, ranked descending
+    info = SchemaInfo(**{**INFO.__dict__, "stat_kinds": {"Eliminations/10m": "derived_rate"}})
+    v = validate(parse("highest eliminations/10m in 2026"), info)
+    assert isinstance(v, Validated)
+    assert _sql(v, Resolved()).min_maps_floor == LEADERBOARD_MIN_MAPS
+
+
+def test_no_map_floor_on_a_descending_total_or_an_explicit_minimum():
+    for question in ("most deaths in 2024", "most eliminations on Lijiang Tower", "which tank had the most deaths in 2024"):
+        c = _sql(val(question), Resolved())
+        assert c.min_maps_floor is None and LEADERBOARD_MIN_MAPS not in c.params, question
+    c = _sql(val("least deaths in 2024 with at least 2 maps"), Resolved())
+    assert c.min_maps_floor is None and 2 in c.params
 
 
 def test_leaderboard_sliced_by_map_uses_typed_columns_only():

@@ -327,6 +327,10 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     if len(rows) > 1:
         b.add(f", out of {len(rows)} shown" if ascending else
               f", ahead of {len(rows) - 1} other{'' if len(rows) == 2 else 's'} shown")
+    floor = query.get("min_maps_floor")
+    if floor:
+        # say why a player is missing: the floor left out everyone under it
+        b.add(f" (players with at least {floor} maps)")
     return b.done()
 
 

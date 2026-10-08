@@ -668,13 +668,20 @@ def check_answer_rates(conn: psycopg.Connection) -> CheckResult:
 
     seasons = [r["season"] for r in _rows(conn, "SELECT DISTINCT season FROM fact_player_maps WHERE season IS NOT NULL ORDER BY 1")]
     discrepancies: list[dict[str, Any]] = []
-    asked = 0
+    asked = floored = 0
     for season in seasons + [None]:
         for text, metric in RATE_QUESTIONS:
             question = f"{text} in {season}" if season else text
             a = ask(conn, question, with_evidence=False)
             conn.rollback()
             asked += 1
+            unfloored = f"{question} with at least 1 map"
+            if a.status != "ok" and unfloored in (a.alternatives or []):
+                # nobody in the slice clears the leaderboard map floor (a small warehouse): the refusal says so and offers
+                # the question without it, whose rates are still to be checked
+                a = ask(conn, unfloored, with_evidence=False)
+                conn.rollback()
+                floored += 1
             rows = a.rows or []
             if a.status != "ok" or not rows:
                 discrepancies.append({"kind": "rate_question_unanswered", "question": question, "status": a.status})
@@ -704,7 +711,8 @@ def check_answer_rates(conn: psycopg.Connection) -> CheckResult:
                                       "row_value": str(v), "expected_in_sentence": shown, "sentence": text_})
     return _result("answer_rates", discrepancies,
                    f"{asked} rate answers across {len(seasons)} season(s) and all seasons: every rate plausible and quoted from its own column",
-                   f"{len(discrepancies)} rate answer problem(s)", {"questions_asked": asked, "seasons": seasons})
+                   f"{len(discrepancies)} rate answer problem(s)",
+                   {"questions_asked": asked, "asked_again_without_the_map_floor": floored, "seasons": seasons})
 
 
 # ------------------------------------------------- Liquipedia name resolution

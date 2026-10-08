@@ -12,6 +12,9 @@ and not a test body. A case's "expect" is a vocabulary, and every key is optiona
   candidate_ids            a clarify's candidates, as a set
   answer_candidate         {id, expect}: ask that candidate's own question, verbatim, and check the result
   alternative              a refusal's offered questions: one must be a listed template that answers as expected
+  sentence_contains        substrings the answer's sentence must contain
+  sentence_lacks           substrings it must not contain
+  spans_match_text         every entity span's text equals the sentence text at its offsets
 
 This module never computes an expected value. That is independent.py's job.
 """
@@ -143,6 +146,9 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str) -> None:
     for want in exp.get("sentence_contains") or []:
         text = (a.sentence or {}).get("text", "") if isinstance(a.sentence, dict) else str(a.sentence or "")
         _check(out, f"{p}sentence contains {want!r}", want, text, ok=want in text)
+    for unwanted in exp.get("sentence_lacks") or []:
+        text = (a.sentence or {}).get("text", "") if isinstance(a.sentence, dict) else str(a.sentence or "")
+        _check(out, f"{p}sentence lacks {unwanted!r}", unwanted, text, ok=bool(text) and unwanted not in text)
     if "limitations" in exp:
         have = [x.get("id") for x in (a.limitations or [])]
         missing = [x for x in exp["limitations"] if x not in have]

@@ -89,7 +89,7 @@ class StructuredQuery(BaseModel):
     aggregation: Aggregation = "total"
     sort: Literal["desc", "asc"] = "desc"
     limit: int = Field(default=10, ge=1, le=100)
-    min_maps: int = Field(default=1, ge=1, le=1000)
+    min_maps: Optional[int] = Field(default=None, ge=1, le=1000)   # None: not asked for; the compiler picks the floor
 
     def compact(self) -> dict:
         """Dict without None / default noise, for tests and logs."""

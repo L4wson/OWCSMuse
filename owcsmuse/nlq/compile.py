@@ -50,9 +50,31 @@ class Compiled:
     coverage_season: Optional[int] = None
     coverage_championship: Optional[str] = None  # only when exactly one championship is in play
     sample_columns: tuple[str, ...] = ("maps", "matches")
+    min_maps_floor: Optional[int] = None         # LEADERBOARD_MIN_MAPS when it applied, so the answer can say so
 
 
 CompileResult = Union[Compiled, Unanswerable]
+
+# The fewest maps a player needs to appear on a leaderboard that a small sample can win: an ascending total, a per-map
+# average or a rate. Some players genuinely get little playing time and should still rank, but a manager or coach
+# filling in for one series should not: Danny played 1 map (2024 and 2025), K0RTAL 3 (one series, 2024), and at 1
+# map Spectra "had the least deaths in NA 2024" with 1. Fill-ins run 1-3 maps, the length of the one series they
+# played, so the floor is 4. Of 513 player-seasons it leaves out 32 (production, 2026-10-08); a 2024 group stage
+# alone is about 6 maps.
+# A descending total needs no floor: few maps cannot top one. An explicit "at least N maps" overrides it.
+LEADERBOARD_MIN_MAPS = 4
+
+
+def _min_maps(v: Validated) -> tuple[int, Optional[int]]:
+    """(the HAVING floor to bind, LEADERBOARD_MIN_MAPS when that is what decided it)."""
+    q = v.query
+    if q.min_maps is not None:
+        return q.min_maps, None
+    small_sample_wins = (q.sort == "asc" or q.aggregation == "avg_per_map"
+                         or q.metric in ("kd_ratio", "map_win_rate") or v.stat_kind == "derived_rate")
+    if q.intent == "leaderboard" and q.entity == "player" and small_sample_wins:
+        return LEADERBOARD_MIN_MAPS, LEADERBOARD_MIN_MAPS
+    return 1, None
 
 
 
@@ -79,12 +101,20 @@ def _dir(sort: str) -> str:
 
 
 def compile_query(v: Validated, r: Resolved) -> CompileResult:
+    c = _compile(v, r)
+    if isinstance(c, Compiled):
+        c.min_maps_floor = _min_maps(v)[1]
+    return c
+
+
+def _compile(v: Validated, r: Resolved) -> CompileResult:
     q = v.query
     f = q.filters
     champ = v.championship_ids or None
     single_champ = champ[0] if champ and len(champ) == 1 else None
     stat = None if (q.metric in DERIVED_METRICS or q.metric is None) else q.metric
     col = TYPED_STATS.get(stat) if stat else None
+    min_maps = _min_maps(v)[0]
 
     # ------------------------------------------------------------- availability
     if q.intent == "stat_availability":
@@ -248,7 +278,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         if per_team:
             enough = "count(DISTINCT t.match_id)" if table == "fact_team_maps" else "sum(t.matches)"
             sql += f" HAVING {enough} >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, matches DESC, t.org_key LIMIT %s"
-            params += [q.min_maps, q.limit]
+            params += [min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"team {'leaderboard' if per_team else 'record'} ({q.metric})",
                         coverage_season=f.season, coverage_championship=single_champ)
 
@@ -295,7 +325,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
             params = params + params
         else:
             sql = f"SELECT {select} FROM {table}{where} GROUP BY {group} HAVING {enough} >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC, {group} LIMIT %s"
-        params += [q.min_maps, q.limit]
+        params += [min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"{q.entity} breakdown ({q.metric})", coverage_stat=stat,
                         coverage_season=f.season, coverage_championship=single_champ)
 
@@ -323,7 +353,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
                f"GROUP BY a.org_key, ti.display_name")
         if q.intent == "leaderboard":
             sql += f" HAVING sum(a.maps_with_{col}) >= %s ORDER BY {'avg_per_player_map' if q.aggregation == 'avg_per_map' else 'total'} {_dir(q.sort)} NULLS LAST, a.org_key LIMIT %s"
-            params += [q.min_maps, q.limit]
+            params += [min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"team {stat}", coverage_stat=stat, coverage_season=f.season,
                         coverage_championship=single_champ, sample_columns=("player_map_rows",))
 
@@ -369,7 +399,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         if q.intent == "leaderboard":
             sql += f" HAVING count(*) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC LIMIT %s" if f.role else \
                    f" HAVING sum(a.maps) >= %s ORDER BY {order_key} {_dir(q.sort)} NULLS LAST, maps DESC LIMIT %s"
-            params += [q.min_maps, q.limit]
+            params += [min_maps, q.limit]
         return Compiled(sql=sql, params=params, description=f"player {q.metric}" + (f" ({f.role})" if f.role else ""),
                         coverage_stat="Eliminations" if q.metric == "kd_ratio" else None,
                         coverage_season=f.season, coverage_championship=single_champ)
@@ -435,10 +465,10 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         # reuse the SQL function; asc sort needs a wrapper because the function ranks descending
         if q.sort == "asc":
             sql = (f"SELECT * FROM stat_leaderboard(%s, %s, %s, %s, 10000, %s) ORDER BY {order_expr} ASC NULLS LAST LIMIT %s")
-            params = [stat, f.season, single_champ, q.min_maps, "avg" if q.aggregation == "avg_per_map" else "total", q.limit]
+            params = [stat, f.season, single_champ, min_maps, "avg" if q.aggregation == "avg_per_map" else "total", q.limit]
         else:
             sql = "SELECT * FROM stat_leaderboard(%s, %s, %s, %s, %s, %s)"
-            params = [stat, f.season, single_champ, q.min_maps, q.limit, "avg" if q.aggregation == "avg_per_map" else "total"]
+            params = [stat, f.season, single_champ, min_maps, q.limit, "avg" if q.aggregation == "avg_per_map" else "total"]
         return Compiled(sql=sql, params=params, description=f"{stat} leaderboard", coverage_stat=stat, coverage_season=f.season,
                         coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
 
@@ -447,10 +477,10 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
         # generic over any numeric stat key, just with p_role passed through.
         if q.sort == "asc":
             sql = (f"SELECT * FROM stat_leaderboard(%s, %s, %s, %s, 10000, %s, %s) ORDER BY {order_expr} ASC NULLS LAST LIMIT %s")
-            params = [stat, f.season, single_champ, q.min_maps, "avg" if q.aggregation == "avg_per_map" else "total", f.role, q.limit]
+            params = [stat, f.season, single_champ, min_maps, "avg" if q.aggregation == "avg_per_map" else "total", f.role, q.limit]
         else:
             sql = "SELECT * FROM stat_leaderboard(%s, %s, %s, %s, %s, %s, %s)"
-            params = [stat, f.season, single_champ, q.min_maps, q.limit, "avg" if q.aggregation == "avg_per_map" else "total", f.role]
+            params = [stat, f.season, single_champ, min_maps, q.limit, "avg" if q.aggregation == "avg_per_map" else "total", f.role]
         return Compiled(sql=sql, params=params, description=f"{stat} leaderboard ({f.role})", coverage_stat=stat, coverage_season=f.season,
                         coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
 
@@ -486,7 +516,7 @@ def compile_query(v: Validated, r: Resolved) -> CompileResult:
                "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
                f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id{where} GROUP BY a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) "
                f"HAVING sum(a.maps_with_{col}) >= %s ORDER BY {order_expr} {_dir(q.sort)} NULLS LAST, maps_with_stat DESC LIMIT %s")
-    params += [q.min_maps, q.limit]
+    params += [min_maps, q.limit]
     return Compiled(sql=sql, params=params, description=f"{stat} leaderboard (sliced)" + (f" ({f.role})" if f.role else ""),
                     coverage_stat=stat, coverage_season=f.season,
                     coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
