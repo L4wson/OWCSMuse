@@ -1,0 +1,4 @@
+# Static hosting (Cloudflare Pages, Netlify): every path that is not a built file serves the app, so a shared
+# /q/<slug> link loads index.html and the app's router reads the slug. Hosts without _redirects need the same
+# rule set in their own config: rewrite /* to /index.html with status 200 (a rewrite, not a redirect).
+/*    /index.html   200

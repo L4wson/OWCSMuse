@@ -1,0 +1,23 @@
+# The build context is pyproject.toml, owcsmuse/, migrations/ and scope/. Everything else stays out, and a .env
+# (which holds a real DATABASE_URL and API keys) must never reach an image layer.
+.env
+.env.*
+.git
+.github
+**/__pycache__
+*.pyc
+*.egg-info
+.pytest_cache
+.ruff_cache
+.venv
+venv
+tests
+tools
+web
+manifest.json
+raw
+payloads
+data
+README.md
+Dockerfile
+docker-compose.yml

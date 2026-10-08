@@ -18,7 +18,7 @@ offline.
 python -m venv .venv && . .venv/Scripts/activate    # or source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env                                  # put FACEIT_API_KEY in .env
-docker compose up -d                                  # local Postgres on :5432 (optional)
+docker compose up -d db                               # local Postgres 17 on :5432 (optional)
 python -m owcsmuse migrate
 ```
 
@@ -1065,42 +1065,78 @@ sends. `npm test` runs them against a mocked `fetch`; nothing contacts a server.
 
 ## Deploying
 
-Three moving parts, none of which share a host requirement.
+Three parts, none of which share a host requirement: the **API** (a stateless container), the **frontend** (static
+files), and **ingest** (a daily GitHub Actions run). Only ingest talks to FACEIT or Liquipedia; the API answers from
+the warehouse alone.
 
-**The API** is a stateless uvicorn process: `python -m owcsmuse serve --host
-0.0.0.0 --port 8000`, or any ASGI runner pointed at `owcsmuse.api:app_factory`.
-It needs `DATABASE_URL`, outbound access to Postgres, and TLS in front of it.
-It does not need `FACEIT_API_KEY`: no request path calls FACEIT, answers come
-from the warehouse. Each process keeps up to four idle connections, so size
-`workers x 4` against the Supabase pooler's ceiling before scaling out. Run
-`python -m owcsmuse migrate` on deploy; it is idempotent and applies in filename
-order.
+### What lives where
 
-**The frontend** is static: `cd web && npm ci && npm run build` produces
-`web/dist`, which any static host or CDN serves. Two requirements. It needs
-`VITE_API_BASE` at build time pointing at the API (or same-origin routing, in
-which case leave it unset), and the host must rewrite unknown paths to
-`index.html` or a shared `/q/<slug>` link 404s before the app loads. CORS on the
-API is open, so a separate origin works as-is.
+| setting | where it is set | used by |
+|---|---|---|
+| `DATABASE_URL` (Supabase **session** pooler, port 5432) | API host secret; GitHub Actions secret | API, ingest, `migrate` |
+| `FACEIT_API_KEY` | GitHub Actions secret only | ingest (`backfill`, `crawl`, `discover`) |
+| `LIQUIPEDIA_API_KEY` | GitHub Actions secret only | ingest (`liquipedia run`); `OWCS_LIQUIPEDIA_ENABLED=1` is set by the workflow |
+| `VITE_API_BASE` (the API's public URL) | static host's **build** environment | the frontend bundle (baked in at build time; see `web/.env.example`) |
+| `PORT` | set by the API host, if it sets one | the container listens on it (default 8000) |
 
-**Ingest is a cron, not part of the API.** A scheduled worker with
-`FACEIT_API_KEY`, `DATABASE_URL` and outbound access to FACEIT:
+The API never needs `FACEIT_API_KEY` or `LIQUIPEDIA_API_KEY`: keep them out of the API host.
 
-```bash
-python -m owcsmuse backfill           # LIST + DETAIL for the championships in scope
-python -m owcsmuse crawl run          # the 2025/2026 main series, which the endpoints hide
-python -m owcsmuse refresh            # materialized views; nothing new is visible until this runs
-python -m owcsmuse check              # gate: exit 1 means do not trust what just landed
-```
+### The pieces in the repository
 
-Every phase is resumable and idempotent, so a failed run is re-run rather than
-repaired, and the adaptive limiter keeps FACEIT requests inside the published
-allowance. Daily is ample; OWCS plays on weekends. Two things it deliberately
-does not do: it never marks a newly discovered competition as in scope - that
-stays a human decision through `classify` and `scope/decisions.json` - and it
-never merges an org identity without a reviewed entry in
-`scope/org_decisions.json`. A deploy that automates those away gets wrong answers
-that look right.
+- **`Dockerfile`**: the API image. Multi-stage (the package and its `api` extra are built in a venv, and only that venv,
+  `migrations/` and `scope/` reach the runtime image), runs as the non-root user `owcs`, carries no tests or dev tools
+  and never a `.env` (`.dockerignore`). `HEALTHCHECK` hits `/healthz`, which is liveness plus a database round trip:
+  503 when Postgres is unreachable. 252 MB on `python:3.12-slim` (2026-10-08). CI's `API image` job builds it and
+  checks the user and the absence of pytest and ruff.
+- **`docker-compose.yml`**: local development, the API image plus `postgres:17` (production's major). `docker compose
+  up -d --build` migrates and serves on `localhost:8000` (`OWCS_API_PORT` moves it, `OWCS_DB_SCHEMA` picks the
+  schema).
+- **`.github/workflows/ingest.yml`**: daily at 09:17 UTC and on demand. `backfill` -> `crawl seed --from-rosters` +
+  `crawl run` -> `liquipedia run --execute` -> `liquipedia reconcile --decided-only` -> `liquipedia enrich` -> `refresh`
+  -> `check`. `enrich` alone sends nothing and adds nothing new: it uses Liquipedia records already fetched and
+  linked, so the fetch and the reconcile come first, and `--decided-only` keeps unreviewed team-name proposals out of
+  an unattended run. A failed step or a failing `check` fails the run with an error annotation, the check output in
+  the run summary, and one open issue ("Scheduled ingest failed", commented on by each later failure).
+  **New competitions are a report, never an inclusion**: `discover --no-db` and `crawl competitions` run read-only
+  after the gate (even when it failed), and `tools/scope_report.py` lists every competition the classifier would
+  include that has no reviewed decision, as a table in the run summary and a warning annotation each. Only
+  `python -m owcsmuse decide` puts a competition in scope. The reports are the run's `ingest-reports` artifact.
+- **`web/public/_redirects`**: `/* /index.html 200`, copied into `web/dist`, so a shared `/q/<slug>` link loads the
+  app instead of a 404 (Cloudflare Pages and Netlify read it; elsewhere, set the same rewrite in the host's config:
+  status 200, a rewrite, not a redirect).
+
+### In order
+
+Steps marked **[browser]** need an account or a web console; **[command]** steps run in a terminal.
+
+1. **[browser] Supabase.** Copy the session-pooler connection string (port 5432, not the 6543 transaction pooler:
+   the CLI and API pin `search_path`). Decide on Row Level Security or revoke the Data API grants on these tables (see
+   **Supabase notes**): a public API makes the project easier to find, and the Data API is open with RLS off.
+2. **[command] Migrate production** before the first deploy, and on every deploy after (the host's release command):
+   `python -m owcsmuse migrate`. It is idempotent and loads the reviewed competition names; `python -m owcsmuse check`
+   should then pass every check.
+3. **[browser] API host.** Create the app from this repository's `Dockerfile`, one instance, with `DATABASE_URL` as a
+   secret, `/healthz` as the health check, and `python -m owcsmuse migrate` as the release command. Place it near the
+   database (Supabase is `us-west-2`). Each process keeps up to four idle connections: size instances x 4 against the
+   pooler's limit before scaling out.
+4. **[command] Check the API**: `curl https://<api>/healthz` returns `{"ok": true, ...}`, and
+   `curl -X POST https://<api>/ask -H 'content-type: application/json' -d '{"question": "Toronto Defiant record"}'`
+   answers.
+5. **[browser] Static host.** Connect the repository with root `web`, build `npm ci && npm run build`, output `dist`,
+   and the build variable `VITE_API_BASE=https://<api>`. CORS on the API is open, so a separate origin works as is.
+6. **[command] Check the frontend**: ask a question, then open its shared `/q/<slug>` link in a fresh tab: it must load
+   the answer, not a 404.
+7. **[browser] GitHub.** Add the three Actions secrets (`DATABASE_URL`, `FACEIT_API_KEY`, `LIQUIPEDIA_API_KEY`) under
+   Settings > Secrets and variables > Actions, and make sure Actions are enabled for scheduled runs.
+8. **[command] First ingest by hand**: `gh workflow run ingest.yml`, then `gh run watch`. Read the run summary's
+   "Competitions awaiting a scope decision" table; decide each with `python -m owcsmuse decide` and commit the
+   decisions file.
+
+Every ingest phase is resumable and idempotent, so a failed run is re-run rather than repaired. Daily is ample; OWCS
+plays on weekends. What the schedule deliberately never does: put a newly discovered competition in scope (a person's
+`decide` through `scope/decisions.json`), merge an org identity without a reviewed entry in `scope/org_decisions.json`,
+or use an unreviewed Liquipedia team-name proposal. A deploy that automates those away gets wrong answers that look
+right.
 
 ## Consistency checks
 
@@ -1556,8 +1592,9 @@ private, so the badge above renders only for accounts with access:
 | job | what it runs |
 |---|---|
 | `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
+| `API image` | `docker build` of the deployable image, then checks it runs as the non-root user `owcs` and carries neither pytest nor ruff |
 | `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
-| `database tests` | `pytest -m "not golden"` against `postgres:16` **and** `postgres:17` service containers (a matrix): 17 is what Supabase runs, 16 is docker-compose and the dev default |
+| `database tests` | `pytest -m "not golden"` against `postgres:16` **and** `postgres:17` service containers (a matrix): 17 is what Supabase and docker-compose run; 16 stays covered |
 | `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**), on both majors |
 | `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
 | `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`), loads every `scope/` decision file through its own loader as production does, and runs `python -m owcsmuse check` against it, on both majors. It also ingests the golden capture of 1-36219ab4, the series that opens Virtus pro's window on `bb5dd404`, so `identity_windows` judges a decided window against a series it covers |
