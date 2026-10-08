@@ -296,6 +296,22 @@ def _find_limit(q: str) -> Optional[int]:
     return None
 
 
+# A period named relative to now. "this year" and "this season" are one thing here: an OWCS season is a calendar year.
+_PERIODS = [
+    (r"\b(?:this|the current|current) (?:year|season)\b|\bthis year'?s\b", "this_season"),
+    (r"\b(?:last|previous|the previous) (?:year|season)\b|\blast year'?s\b", "last_season"),
+    (r"\b(?:this|the current|current) stage\b", "this_stage"),
+    (r"\b(?:last|previous|the previous) stage\b", "last_stage"),
+]
+
+
+def _find_period(q: str) -> Optional[str]:
+    for rx, period in _PERIODS:
+        if re.search(rx, q):
+            return period
+    return None
+
+
 def _find_min_maps(q: str) -> Optional[int]:
     m = re.search(r"\b(?:at least|min(?:imum)?)\s+(\d{1,4})\s+maps?\b", q)
     return int(m.group(1)) if m else None
@@ -324,7 +340,9 @@ def _strip_filters(q: str, keep_years: bool = False) -> str:
     q = re.sub(r"\b(in|for)\s+(na|emea|eu|europe|north america|international|korea|south korea)\b", " ", q)
     q = re.sub(r"\bkorean\b", " ", q)
     q = re.sub(r"\b(at least|min(?:imum)?)\s+\d{1,4}\s+maps?\b", " ", q)
-    q = re.sub(r"\bthis season\b|\blast season\b|\ball time\b|\boverall\b|\bso far\b|\bever\b|\bper map\b|\bon average\b", " ", q)
+    for rx, _ in _PERIODS:
+        q = re.sub(r"\b(?:in|during|for|from|of)?\s*" + rx, " ", q)
+    q = re.sub(r"\ball time\b|\boverall\b|\bso far\b|\bever\b|\bper map\b|\bon average\b", " ", q)
     return re.sub(r"\s+", " ", q).strip()
 
 
@@ -437,7 +455,7 @@ def parse_question(question: str) -> ParseResult:
 
     filters = Filters(
         season=_find_season(q), mode=_find_mode(q), map=_find_map(q), region=_find_region(q), championship=_find_championship(q),
-        role=_find_role(q),
+        role=_find_role(q), period=_find_period(q),
     )
     metric, q_wo_metric = _find_metric(q)
     limit = _find_limit(q)
@@ -449,7 +467,7 @@ def parse_question(question: str) -> ParseResult:
     team_subject = _find_membership_subject(_strip_filters(q))
     if team_subject:
         return StructuredQuery(intent="team_membership", entity="player", metric="team",
-                               filters=Filters(subject=team_subject, season=filters.season))
+                               filters=Filters(subject=team_subject, season=filters.season, period=filters.period))
 
     # --- stat availability
     if _has(q, AVAIL_CUES) and not _has(q, ["who", "most", "top"]):

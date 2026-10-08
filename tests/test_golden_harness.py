@@ -19,7 +19,7 @@ CASES_PATH = Path(__file__).parent / "golden" / "cases.json"
 
 def _answer(**kw):
     base = dict(status="ok", code=None, reason=None, entities={}, rows=[], evidence=None, limitations=[], candidates={},
-                alternatives=[], sentence={"text": "an answer"}, attribution=None)
+                alternatives=[], sentence={"text": "an answer"}, attribution=None, notes=[])
     base.update(kw)
     return SimpleNamespace(**base)
 
@@ -154,7 +154,7 @@ def test_every_kind_of_expectation_is_evaluated_after_by_match():
            "status": "ok", "code": None, "entity": {"role": "subject", "type": "player", "id": "p1", "name": "A"},
            "rows": [{"wins": 4}], "rows_only_players": ["A"], "limitations": ["offline_map_stats"],
            "candidate_ids": ["c1"], "sentence_contains": ["A"], "sentence_lacks": ["B"], "spans_match_text": True, "no_raw_ids": True,
-           "attribution_pages": ["https://liquipedia.net/overwatch/X"],
+           "attribution_pages": ["https://liquipedia.net/overwatch/X"], "notes_contain": ["read as"],
            "answer_candidate": {"id": "c1", "expect": {"status": "ok", "rows": [{"wins": 1}]}},
            "alternative": {"question_template": "q {season}", "seasons_with_stat": [2025, 2026],
                            "top1_by_season": {"2025": {"nickname": "A"}, "2026": {"nickname": "B"}},

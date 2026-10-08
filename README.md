@@ -759,6 +759,26 @@ leaves out 32 of 513 player-seasons, among them every player whose season was
 one 3-map series. A descending total takes no floor, since few maps cannot top
 it, and an explicit "with at least N maps" replaces it.
 
+**Relative periods.** "this year" / "this season", "last year" / "last season",
+"this stage" and "last stage" are read against the data, never the calendar
+(`resolve_period` in `nlq/validate.py`), and the answer's first note says what
+they were read as: "'this stage' is read as OWCS 2026 Stage 2 (EMEA and NA), the
+most recent stage in scope, played 2026-05-25 to 2026-07-06."
+
+- The current season is the most recent season with series in scope; last
+  season the one before it with series.
+- A stage is every championship whose OWCS name says "Stage N" in a season
+  (regular season, playoffs and relegation alike); the current stage is the
+  latest (season, N) with series, in the asked region when there is one. NA and
+  EMEA run side by side, so without a region it is both.
+- **Between stages** (no stage running, as on 2026-10-08, three months after
+  Stage 2's playoffs) "this stage" is the stage just finished; the note's dates
+  show it is over. In January, before a season's first series, "this year" is
+  still the last season played, and the note names it.
+- A year given as well ("this stage in 2025") picks the period within that
+  year. A period with nothing to read ("last stage" with one stage in scope) is
+  `no_data`, never every season.
+
 Every failure is a first-class answer with a reason code: `unsupported_metric`,
 `unsupported_question`, `out_of_scope`, `results_only`, `ambiguous_entity`, `unknown_entity`,
 `no_data`, `invalid_query`, each with suggestions. Exit code is 0 for an
@@ -1445,23 +1465,22 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 
 **Left open**, in the order to pick them up:
 
-1. **"this year" and "this stage" do not resolve** to 2026 and the current stage.
-2. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+1. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
    "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
    "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
    backs the synthetic by_match case).
-3. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
+2. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
    Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
-4. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
+3. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
    matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
    The FACEIT side needs a crawl, not Liquipedia requests.
-5. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
-6. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+4. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
+5. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
    it after the fact, the command should refuse it.
-7. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
-8. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
-9. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
-10. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+6. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
+7. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
+8. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
+9. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Golden answer suite
 
@@ -1487,7 +1506,9 @@ in-game name `KSAA` belonged.
   descending total takes no floor (G39). G36 asks "with at least 1 map" so it still isolates the primary-role
   rule, which the floor would otherwise mask. G41-G44 cover team qualifiers: an abbreviation before "player"
   (G41, DF), a full name before a role (G42), "Team" kept in a name (G43), and no raw id in anything a reader
-  sees (G44, `no_raw_ids`, which scans the rendered CLI answer too).
+  sees (G44, `no_raw_ids`, which scans the rendered CLI answer too). G45-G47 cover overriding and region-qualified
+  aliases, G48-G50 Liquipedia attribution (`attribution_pages`), G51 display-name search, G52-G54 relative periods
+  (`notes_contain`).
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with

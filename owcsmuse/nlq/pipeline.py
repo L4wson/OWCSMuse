@@ -23,7 +23,7 @@ from .membership import history_matches, team_history
 from .parser import parse_question
 from .sentence import render_sentence, render_unanswerable
 from .schema import StructuredQuery, Unanswerable
-from .validate import SchemaInfo, validate
+from .validate import SchemaInfo, resolve_period, validate
 
 log = get_logger("owcsmuse.nlq")
 
@@ -438,6 +438,19 @@ def run_compiled(conn: psycopg.Connection, c: Compiled) -> list[dict]:
 def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Optional[SchemaInfo] = None,
         debug: bool = False, with_evidence: bool = True, evidence_for: Optional[str] = None,
         evidence_page: int = 1, evidence_page_size: int = DEFAULT_PAGE_SIZE) -> Answer:
+    """question -> Answer. A relative period ("this stage") is read against the data, and whatever the answer turns
+    out to be, it says first what the period was read as."""
+    period_notes: list[str] = []
+    a = _ask(conn, question, parser, info, debug, with_evidence, evidence_for, evidence_page, evidence_page_size,
+             period_notes)
+    if period_notes:
+        a.notes = period_notes + [n for n in (a.notes or []) if n not in period_notes]
+    return a
+
+
+def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[SchemaInfo], debug: bool,
+         with_evidence: bool, evidence_for: Optional[str], evidence_page: int, evidence_page_size: int,
+         period_notes: list[str]) -> Answer:
     # 1. parse
     used = "rules"
     parsed = None
@@ -465,11 +478,19 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         return pre
     q = _retarget(q, r)
 
+    # "this stage", "last year": read against what is in scope, before anything filters on a season
+    info = info or SchemaInfo.from_db(conn)
+    period = resolve_period(q, info)
+    if isinstance(period, Unanswerable):
+        return _cannot(question, period, q, used, pre.entities)
+    q, note = period
+    if note:
+        period_notes.append(note)
+
     if q.intent == "team_membership":
         return _membership_answer(conn, question, q, r, pre, used)
 
     # 3. validate against the live schema
-    info = info or SchemaInfo.from_db(conn)
     v = validate(q, info)
     if isinstance(v, Unanswerable):
         # A stat that exists in other seasons is a question away from working.
