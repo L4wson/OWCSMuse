@@ -63,6 +63,8 @@ CONFIRMED |= {"G38", "G39", "G40"}
 CONFIRMED |= {"G41", "G42", "G43", "G44"}
 # G45 (owner, 2026-10-08): "TF" is Team Falcons, overriding TFW
 CONFIRMED |= {"G45"}
+# G46+ (owner, 2026-10-08, second batch): GK region-qualified; attribution; display names; relative time
+CONFIRMED |= {"G46", "G47", "G48", "G49", "G50", "G51", "G52", "G53", "G54"}
 
 CASES: list[dict] = []
 
@@ -720,6 +722,117 @@ case("G45", "'TF' is Team Falcons by the owner's decision, not TFW", "invariant"
      "with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is "
      "settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
      regression="'TF' resolved to TFW (owner, 2026-10-08)")
+
+GK_NA, GK_EMEA = team_id("Geekay Esports", "na"), team_id("Geekay Esports", "emea")
+case("G46", "A bare 'GK' asks which Geekay: the alias is region-qualified", "invariant", "GK record",
+     {"status": "clarify", "candidate_ids": [GK_NA, GK_EMEA],
+      "answer_candidate": {"id": GK_NA, "expect": {"status": "ok", "entity": {"role": "subject", "id": GK_NA}}}},
+     "Geekay Esports is two team ids, NA and EMEA. The owner's aliases are 'GK NA' and 'GK EMEA' (2026-10-08), so a bare "
+     "'gk' prefix-matches both and must ask, never pick a region silently.",
+     regression="one alias for a region-split name would pick a region (owner, 2026-10-08)")
+case("G47", "'GK EMEA' is the EMEA Geekay", "invariant", "GK EMEA record",
+     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": GK_EMEA, "name": "Geekay Esports"}},
+     "Owner alias 'GK EMEA' -> the EMEA Geekay team id (2026-10-08).",
+     regression="one alias for a region-split name would pick a region (owner, 2026-10-08)")
+
+# Liquipedia attribution. The page URL is the site plus the record's own page name (CC-BY-SA credit names the page).
+def lp_page(match_id):
+    return "https://liquipedia.net/overwatch/" + I.LIQUIPEDIA[match_id]["pagename"].replace(" ", "_")
+
+
+case("G48", "A series record whose score came from Liquipedia credits the page", "invariant", "Toronto Defiant record",
+     {"status": "ok", "attribution_pages": [lp_page(NA_FINAL)]},
+     f"Toronto Defiant's grand final presents Liquipedia's {gf_for}-{gf_against} (FACEIT stores 5-0), and a linked series "
+     "takes its score, result and best-of from Liquipedia (migration 034). Its maps and date are FACEIT's, so the old "
+     "rule (credit only Liquipedia maps or dates) named no page: 397 of 445 linked series on production.",
+     regression="a Liquipedia score carried no CC-BY-SA attribution (owner, 2026-10-08)")
+
+lp24 = sorted({lp_page(x.match_id) for x in S if x.season == 2024 and x.counts_as_series and x.match_id in I.LIQUIPEDIA})
+teams24 = {x.team[k] for x in S if x.season == 2024 and x.counts_as_series for k in x.team}
+assert len(teams24) <= 10, "every 2024 team must be a shown row, so every linked 2024 series is behind the answer"
+case("G49", "A leaderboard credits the pages behind every row, not only the expanded one", "invariant",
+     "which team has the most wins in 2024",
+     {"status": "ok", "attribution_pages": lp24},
+     f"All {len(teams24)} 2024 teams are ranked rows, so every linked 2024 series is behind the answer: "
+     + ", ".join(lp24) + ". Attribution once read only the evidence page of the expanded top row.",
+     regression="attribution read one evidence page, not the answer (owner, 2026-10-08)")
+
+icrimzo = pid("iCrimzo")
+case("G50", "A team history dated by Liquipedia credits the page", "invariant", "what team is iCrimzo on",
+     {"status": "ok", "attribution_pages": [lp_page(DALLAS)]},
+     "iCrimzo's stint is dated by the Dreamhack Dallas series, which FACEIT left without a real time and Liquipedia "
+     f"dates ({I.LIQUIPEDIA[DALLAS]['pagename']}). A team history once skipped attribution entirely.",
+     regression="a team history carried no attribution (owner, 2026-10-08)")
+
+assert pname(ZSS) == "ZZZ", "the owner's display name for z_ow / zss (player_identity_decisions.json)"
+case("G51", "The name an answer shows is a name it can be asked by", "exact", "ZZZ record",
+     {"status": "ok", "entity": {"role": "subject", "type": "player", "id": pid(ZSS), "name": "ZZZ"},
+      "rows": [{**player_rows(zss, "ZZZ"), "eliminations": zss["eliminations"], "deaths": zss["deaths"]}]},
+     f"G03's player asked by the owner's display name, which every answer shows: {zss['maps']} maps over "
+     f"{zss['matches']} series. 'ZZZ' was searchable by nothing (035 left search untouched); 'zss' worked.",
+     regression="a display name was shown but not searchable (owner, 2026-10-08)")
+
+# Relative periods. A stage is every championship whose OWCS name (the owner's competition names, scope/) says
+# "Stage N" in a season; the current one is the latest (season, N) with series, the last one the one before.
+import re as _re  # noqa: E402
+_names = json.loads((Path(__file__).parents[2] / "scope" / "competition_names.json").read_text(encoding="utf-8"))["decisions"]
+def stage_of(champ_id):
+    m = _re.search(r"\bStage (\d+)\b", (_names.get(champ_id) or {}).get("display_name") or "")
+    return (CHAMPS[champ_id]["season"], int(m.group(1))) if m else None
+stage_keys = sorted({stage_of(x.champ) for x in S if x.counts_as_series and stage_of(x.champ)})
+this_stage, last_stage = stage_keys[-1], stage_keys[-2]
+in_stage = lambda key: [x for x in S if x.counts_as_series and stage_of(x.champ) == key]  # noqa: E731
+regions_of = lambda key: " and ".join(sorted({x.region.upper() for x in in_stage(key)}))  # noqa: E731
+
+roles26 = collections.defaultdict(collections.Counter)
+for x in S:
+    if x.season == 2026:
+        for rnd in x.rounds:
+            for pl in rnd["players"]:
+                if pl["stats"].get("Role"):
+                    roles26[pl["player_id"]][pl["stats"]["Role"]] += 1
+dm = collections.defaultdict(lambda: [0, 0])
+for x in in_stage(this_stage):
+    for rnd in x.rounds:
+        for pl in rnd["players"]:
+            c = roles26[pl["player_id"]]
+            v = I.num(pl["stats"], "Damage Mitigated")
+            if pl["stats"].get("Role") == "Tank" and c and c["Tank"] == max(c.values()) and v is not None:
+                dm[pl["player_id"]][0] += v; dm[pl["player_id"]][1] += 1
+dm_rank = sorted(((t, m, p_) for p_, (t, m) in dm.items()), key=lambda t: (-t[0], -t[1]))
+assert len(dm_rank) > 1 and dm_rank[1][0] < dm_rank[0][0]
+stage_note = f"read as OWCS {this_stage[0]} Stage {this_stage[1]} ({regions_of(this_stage)}), the most recent stage in scope"
+case("G52", "'this stage' is the most recent stage in scope, and the answer says so", "exact",
+     "which tanks have the most damage mitigated this stage",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, dm_rank[0][2]), "total": int(dm_rank[0][0])}],
+      "notes_contain": [stage_note]},
+     f"The latest (season, stage) with series is {this_stage} ({len(in_stage(this_stage))} golden series, "
+     f"{regions_of(this_stage)}). Damage Mitigated over its Tank maps by primary 2026 tanks: "
+     f"{I.display_name(S, dm_rank[0][2])} {int(dm_rank[0][0])} over {dm_rank[0][1]} maps. It once returned 2024-2025 "
+     "data: 'this stage' was stripped and ignored.",
+     regression="'this stage' did not resolve (owner, 2026-10-08)")
+
+latest_season = max(x.season for x in S if x.counts_as_series)
+tm_now = I.team_record(S, [TM], season=latest_season)
+case("G53", "'this year' is the most recent season in scope", "exact", "Twisted Minds record this year",
+     {"status": "ok", "rows": [{"team": "Twisted Minds", "matches": tm_now["matches"], "wins": tm_now["wins"],
+                                "losses": tm_now["losses"]}],
+      "notes_contain": [f"read as the {latest_season} season, the most recent season in scope"]},
+     f"The latest season with series is {latest_season}; Twisted Minds there: {tm_now['wins']}-{tm_now['losses']} over "
+     f"{tm_now['matches']} series. 'this year' once answered across every season.",
+     regression="'this year' did not resolve (owner, 2026-10-08)")
+
+ssg_ids = {x.team[k] for x in S for k in x.team if x.name[k] in ("SpaceStation Gaming", "SpaceStation")}
+ssg_last = I.team_record(in_stage(last_stage), ssg_ids)
+assert ssg_last["matches"] > 0
+case("G54", "'last stage' is the stage before the most recent", "exact", "SSG record last stage",
+     {"status": "ok", "rows": [{"team": "SpaceStation Gaming", "matches": ssg_last["matches"], "wins": ssg_last["wins"],
+                                "losses": ssg_last["losses"]}],
+      "notes_contain": [f"read as OWCS {last_stage[0]} Stage {last_stage[1]} ({regions_of(last_stage)}), the stage before "
+                        "the most recent in scope"]},
+     f"Stages with series, in order: {stage_keys}; the one before the latest is {last_stage}. SpaceStation Gaming "
+     f"(the org) there: {ssg_last['wins']}-{ssg_last['losses']} over {ssg_last['matches']} series.",
+     regression="'last stage' did not resolve (owner, 2026-10-08)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

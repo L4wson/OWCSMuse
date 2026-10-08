@@ -1183,6 +1183,191 @@
    },
    "derivation": "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
    "status": "confirmed"
+  },
+  {
+   "id": "G46",
+   "title": "A bare 'GK' asks which Geekay: the alias is region-qualified",
+   "kind": "invariant",
+   "regression": "one alias for a region-split name would pick a region (owner, 2026-10-08)",
+   "question": "GK record",
+   "expect": {
+    "status": "clarify",
+    "candidate_ids": [
+     "590b7d3b-a200-47b9-a967-f02274c1977b",
+     "46f8e560-76fe-4b5f-85e7-397957e0dc74"
+    ],
+    "answer_candidate": {
+     "id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+     "expect": {
+      "status": "ok",
+      "entity": {
+       "role": "subject",
+       "id": "590b7d3b-a200-47b9-a967-f02274c1977b"
+      }
+     }
+    }
+   },
+   "derivation": "Geekay Esports is two team ids, NA and EMEA. The owner's aliases are 'GK NA' and 'GK EMEA' (2026-10-08), so a bare 'gk' prefix-matches both and must ask, never pick a region silently.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G47",
+   "title": "'GK EMEA' is the EMEA Geekay",
+   "kind": "invariant",
+   "regression": "one alias for a region-split name would pick a region (owner, 2026-10-08)",
+   "question": "GK EMEA record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+     "name": "Geekay Esports"
+    }
+   },
+   "derivation": "Owner alias 'GK EMEA' -> the EMEA Geekay team id (2026-10-08).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G48",
+   "title": "A series record whose score came from Liquipedia credits the page",
+   "kind": "invariant",
+   "regression": "a Liquipedia score carried no CC-BY-SA attribution (owner, 2026-10-08)",
+   "question": "Toronto Defiant record",
+   "expect": {
+    "status": "ok",
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1"
+    ]
+   },
+   "derivation": "Toronto Defiant's grand final presents Liquipedia's 4-0 (FACEIT stores 5-0), and a linked series takes its score, result and best-of from Liquipedia (migration 034). Its maps and date are FACEIT's, so the old rule (credit only Liquipedia maps or dates) named no page: 397 of 445 linked series on production.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G49",
+   "title": "A leaderboard credits the pages behind every row, not only the expanded one",
+   "kind": "invariant",
+   "regression": "attribution read one evidence page, not the answer (owner, 2026-10-08)",
+   "question": "which team has the most wins in 2024",
+   "expect": {
+    "status": "ok",
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major",
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1"
+    ]
+   },
+   "derivation": "All 9 2024 teams are ranked rows, so every linked 2024 series is behind the answer: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major, https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1. Attribution once read only the evidence page of the expanded top row.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G50",
+   "title": "A team history dated by Liquipedia credits the page",
+   "kind": "invariant",
+   "regression": "a team history carried no attribution (owner, 2026-10-08)",
+   "question": "what team is iCrimzo on",
+   "expect": {
+    "status": "ok",
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major"
+    ]
+   },
+   "derivation": "iCrimzo's stint is dated by the Dreamhack Dallas series, which FACEIT left without a real time and Liquipedia dates (Overwatch_Champions_Series/2024/Major). A team history once skipped attribution entirely.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G51",
+   "title": "The name an answer shows is a name it can be asked by",
+   "kind": "exact",
+   "regression": "a display name was shown but not searchable (owner, 2026-10-08)",
+   "question": "ZZZ record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "player",
+     "id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
+     "name": "ZZZ"
+    },
+    "rows": [
+     {
+      "nickname": "ZZZ",
+      "maps": 17,
+      "map_wins": 7,
+      "map_losses": 10,
+      "eliminations": 171,
+      "deaths": 103
+     }
+    ]
+   },
+   "derivation": "G03's player asked by the owner's display name, which every answer shows: 17 maps over 5 series. 'ZZZ' was searchable by nothing (035 left search untouched); 'zss' worked.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G52",
+   "title": "'this stage' is the most recent stage in scope, and the answer says so",
+   "kind": "exact",
+   "regression": "'this stage' did not resolve (owner, 2026-10-08)",
+   "question": "which tanks have the most damage mitigated this stage",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Hawk",
+      "total": 256606
+     }
+    ],
+    "notes_contain": [
+     "read as OWCS 2026 Stage 2 (EMEA and NA), the most recent stage in scope"
+    ]
+   },
+   "derivation": "The latest (season, stage) with series is (2026, 2) (9 golden series, EMEA and NA). Damage Mitigated over its Tank maps by primary 2026 tanks: Hawk 256606 over 16 maps. It once returned 2024-2025 data: 'this stage' was stripped and ignored.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G53",
+   "title": "'this year' is the most recent season in scope",
+   "kind": "exact",
+   "regression": "'this year' did not resolve (owner, 2026-10-08)",
+   "question": "Twisted Minds record this year",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "matches": 2,
+      "wins": 2,
+      "losses": 0
+     }
+    ],
+    "notes_contain": [
+     "read as the 2026 season, the most recent season in scope"
+    ]
+   },
+   "derivation": "The latest season with series is 2026; Twisted Minds there: 2-0 over 2 series. 'this year' once answered across every season.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G54",
+   "title": "'last stage' is the stage before the most recent",
+   "kind": "exact",
+   "regression": "'last stage' did not resolve (owner, 2026-10-08)",
+   "question": "SSG record last stage",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "SpaceStation Gaming",
+      "matches": 1,
+      "wins": 1,
+      "losses": 0
+     }
+    ],
+    "notes_contain": [
+     "read as OWCS 2026 Stage 1 (EMEA and NA), the stage before the most recent in scope"
+    ]
+   },
+   "derivation": "Stages with series, in order: [(2024, 1), (2024, 2), (2025, 1), (2025, 2), (2026, 1), (2026, 2)]; the one before the latest is (2026, 1). SpaceStation Gaming (the org) there: 1-0 over 1 series.",
+   "status": "confirmed"
   }
  ]
 }

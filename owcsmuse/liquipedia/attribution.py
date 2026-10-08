@@ -74,17 +74,26 @@ def attribution_block(urls: Iterable[str]) -> Optional[dict[str, Any]]:
     return {"source": CREDIT, "license": LICENSE, "license_url": LICENSE_URL, "pages": pages}
 
 
-def answer_attribution(conn: psycopg.Connection, match_ids: Iterable[str]) -> Optional[dict[str, Any]]:
-    """The attribution block for an answer, from the FACEIT match ids its rows actually named.
+def answer_attribution(conn: psycopg.Connection, match_ids: Iterable[str], grain: str = "map") -> Optional[dict[str, Any]]:
+    """The attribution block for an answer, from every FACEIT match id behind it (not one page of evidence).
 
-    A match only carries a page here when a value it contributed was Liquipedia's: a Stage 2 map (`match_rounds.
-    source = 'liquipedia'`) or a Stage 2 date correction (`matches.date_source = 'liquipedia'`). A match FACEIT
-    covers completely names no page, exactly like an answer that used no Liquipedia value at all.
+    What a match owes depends on what the answer presented from it:
+
+      * a series-grain answer (a record, a head-to-head, a series leaderboard, missing-series evidence) presents the
+        series' score, result and best-of, which a linked series takes from Liquipedia (migration 034), and its date:
+        it owes its page whenever any of those, or its maps, are Liquipedia's (`series.*_source`);
+      * a map-grain answer presents map rows and dates: it owes the page when a map it used is Liquipedia's
+        (`match_rounds.source`), its date is (`matches.date_source`), or Liquipedia's game count removed a FACEIT
+        phantom map from it (`phantom_maps`).
+
+    Until 2026-10-08 only the map-grain rule existed, so 397 of 445 linked series presented Liquipedia's score with no
+    credit. A Liquipedia-only series (Stage 3) is keyed `lp:<objectname>` and owes its page for everything.
     """
+    if grain not in ("map", "series"):
+        raise ValueError(f"grain must be 'map' or 'series', got {grain!r}")
     ids = [m for m in dict.fromkeys(match_ids) if m]
     if not ids:
         return None
-    # a Liquipedia-only series (Stage 3) is keyed `lp:<objectname>` and owes its page for everything
     lp_only = [m[3:] for m in ids if m.startswith("lp:")]
     with conn.cursor() as cur:
         cur.execute(
@@ -92,19 +101,35 @@ def answer_attribution(conn: psycopg.Connection, match_ids: Iterable[str]) -> Op
             SELECT DISTINCT lm.page_url
               FROM liquipedia_links ll
               JOIN liquipedia_matches lm ON lm.objectname = ll.lp_objectname
-             WHERE ll.faceit_match_id = ANY(%s)
+             WHERE ll.faceit_match_id = ANY(%(ids)s)
                AND (
                     EXISTS (SELECT 1 FROM match_rounds r WHERE r.match_id = ll.faceit_match_id AND r.source = 'liquipedia')
                  OR EXISTS (SELECT 1 FROM matches m WHERE m.match_id = ll.faceit_match_id AND m.date_source = 'liquipedia')
+                 -- a FACEIT map Liquipedia's game count ruled out (034): the maps an answer counts are Liquipedia's count
+                 OR EXISTS (SELECT 1 FROM phantom_maps p WHERE p.match_id = ll.faceit_match_id)
                )
             UNION
-            SELECT DISTINCT lm.page_url FROM liquipedia_matches lm WHERE lm.objectname = ANY(%s)
+            -- the page the series view itself read its values from (never a provisional or rejected link's)
+            SELECT DISTINCT s.liquipedia_page_url FROM series s
+             WHERE %(grain)s = 'series' AND s.faceit_match_id = ANY(%(ids)s) AND s.liquipedia_page_url IS NOT NULL
+               AND 'liquipedia' IN (s.score_source, s.result_source, s.best_of_source, s.played_at_source, s.maps_source)
+            UNION
+            SELECT DISTINCT lm.page_url FROM liquipedia_matches lm WHERE lm.objectname = ANY(%(lp_only)s)
             """,
-            (ids, lp_only),
+            {"ids": ids, "lp_only": lp_only, "grain": grain},
         )
         urls = [r["page_url"] for r in cur.fetchall()]
     conn.commit()
     return attribution_block(urls)
+
+
+def attribution_for(conn: psycopg.Connection, matches_by_grain: dict[str, Iterable[str]]) -> Optional[dict[str, Any]]:
+    """One block for an answer that drew on matches at more than one grain."""
+    pages: list[str] = []
+    for grain, ids in matches_by_grain.items():
+        block = answer_attribution(conn, ids, grain)
+        pages += (block or {}).get("pages", [])
+    return attribution_block(pages)
 
 
 def render_lines(block: Optional[dict[str, Any]]) -> list[str]:

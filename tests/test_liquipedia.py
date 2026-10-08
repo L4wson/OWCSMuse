@@ -392,3 +392,19 @@ def test_all_twenty_stage_1_pages_fit_one_request_and_are_filtered_by_the_page_t
     assert len(plan.batches) == 1 and plan.projected_requests == 1
     assert len(quote(plan.batches[0].conditions, safe="")) < 5500       # the URL stays well under an 8 KB limit
     assert plan.batches[0].conditions.count("[[pagename::") == 29
+
+
+def test_an_attribution_that_cannot_be_computed_is_said_in_the_answer_not_dropped():
+    from owcsmuse.nlq.pipeline import ATTRIBUTION_UNKNOWN, Answer, _attribute
+
+    class Conn:
+        def rollback(self):
+            pass
+
+    def boom():
+        raise RuntimeError("the database went away")
+
+    a = Answer(status="ok", question="Toronto Defiant record")
+    _attribute(Conn(), a, boom)
+    assert a.attribution is None and a.notes == [ATTRIBUTION_UNKNOWN]
+    assert "CC-BY-SA" in ATTRIBUTION_UNKNOWN

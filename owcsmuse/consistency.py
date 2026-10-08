@@ -773,6 +773,37 @@ def check_lp_name_resolution(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} Liquipedia team name(s) resolve to the wrong entity", counts)
 
 
+# ------------------------------------------------------- display names are searchable
+
+def check_display_names_searchable(conn: psycopg.Connection) -> CheckResult:
+    """Every entity's shown name is one of its own search names: a name a reader sees is a name they can ask by.
+
+    An owner's display name (035) was shown everywhere and searchable nowhere until 037: "ZZZ record" found nobody
+    while "zss" worked, and "Astro" resolved only as a prefix of the nickname Astronexz. A shown name shared by two
+    entities is not a failure (it asks which, as the two Geekay Esports do); it is counted.
+    """
+    bad = _rows(conn, """
+        WITH shown AS (SELECT DISTINCT entity_type, entity_id, current_name FROM entity_names WHERE current_name IS NOT NULL)
+        SELECT s.entity_type, s.entity_id, s.current_name
+          FROM shown s
+         WHERE NOT EXISTS (SELECT 1 FROM entity_names n WHERE n.entity_type = s.entity_type AND n.entity_id = s.entity_id
+                             AND n.name_folded = fold_name(s.current_name))
+         ORDER BY 1, 3""")
+    counts = _rows(conn, """
+        WITH shown AS (SELECT DISTINCT entity_type, entity_id, current_name FROM entity_names WHERE current_name IS NOT NULL)
+        SELECT count(*) AS entities,
+               count(*) FILTER (WHERE EXISTS (SELECT 1 FROM shown o WHERE fold_name(o.current_name) = fold_name(s.current_name)
+                                                AND (o.entity_type, o.entity_id) <> (s.entity_type, s.entity_id))) AS shown_name_shared
+          FROM shown s""")[0]
+    discrepancies = [{"kind": "shown_name_not_searchable", "entity_type": b["entity_type"], "entity_id": b["entity_id"],
+                      "shown_as": b["current_name"], "hint": "entity_names needs a search row for the name it shows"}
+                     for b in bad]
+    return _result("display_names_searchable", discrepancies,
+                   f"all {counts['entities']} entities can be asked for by the name they are shown as "
+                   f"({counts['shown_name_shared']} share that name with another entity and ask which)",
+                   f"{len(discrepancies)} entit(ies) are shown by a name nobody can search for", dict(counts))
+
+
 # ------------------------------------------------------- decisions loaded
 
 def check_decisions_loaded(conn: psycopg.Connection) -> CheckResult:
@@ -806,6 +837,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
     "map_winner_consistency": check_map_winner_consistency,
     "phantom_map_isolation": check_phantom_map_isolation,
+    "display_names_searchable": check_display_names_searchable,
     "decisions_loaded": check_decisions_loaded,
     "lp_name_resolution": check_lp_name_resolution,
     "answer_rates": check_answer_rates,

@@ -48,6 +48,13 @@ SUPPORTED = [
      {"intent": "versus", "filters": {"subject": "cjay", "opponent": "team liquid", "season": 2026}}),
     ("team z record",
      {"intent": "team_record", "filters": {"subject": "team z"}}),
+    # relative periods are read against the data later; the parser only names them (owner, 2026-10-08)
+    ("which tanks have the most damage mitigated this stage",
+     {"intent": "leaderboard", "filters": {"role": "Tank", "period": "this_stage"}}),
+    ("Twisted Minds record this year", {"intent": "team_record", "filters": {"subject": "twisted minds", "period": "this_season"}}),
+    ("who had the most eliminations last year", {"intent": "leaderboard", "filters": {"period": "last_season"}}),
+    ("SSG record in the previous stage", {"intent": "team_record", "filters": {"subject": "ssg", "period": "last_stage"}}),
+    ("what team is cjay on this year", {"intent": "team_membership", "filters": {"subject": "cjay", "period": "this_season"}}),
     ("who has the most healing on push maps with at least 10 maps",
      {"intent": "leaderboard", "entity": "player", "metric": "Healing Done", "filters": {"mode": "Push"}, "min_maps": 10}),
     ("Who had the most eliminations for Twisted Minds?",

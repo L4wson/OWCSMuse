@@ -565,7 +565,16 @@ Decided so far: `SSG` -> SpaceStation Gaming, `VP` -> Virtus pro, `peps` ->
 Team Peps and `quick` -> Quick Esports (orgs); `TL` -> Team Liquid, `TM` ->
 Twisted Minds, `CR` -> Crazy Raccoons, `DSG` -> Disguised, `DF` -> Dallas Fuel,
 `toronto` / `defiant` / `TD` -> Toronto Defiant, `GG` / `Gen.G` -> GenG
-Esports and `TF` -> Team Falcons (team ids, unmapped to any org).
+Esports, `TF` -> Team Falcons, and `GK NA` / `GK EMEA` -> the two Geekay
+Esports teams (team ids, unmapped to any org).
+
+Geekay is region-split: two team ids, NA (2025) and EMEA (2026), and an alias
+names one entity. A single `GK` would pick a region silently, so the aliases
+carry the region; a bare "GK" prefix-matches both and asks which (golden
+G46-G47). Not aliased, by owner decision (2026-10-08): `vision` is the exact
+in-game name of the player Vision (VisionLIVE), and an alias to Vision Esports
+would hide that player; it stays a clarify between the two. `CN` (Citrus Nation over
+the player CNYXC) was considered and dropped.
 
 A partial name ("toronto", "peps") is the same mechanism as an initialism: an
 alias is an exact lookup of the folded string, whatever its shape, and fires
@@ -749,6 +758,26 @@ series played, 1-3 maps, so the floor is 4; on production (2026-10-08) it
 leaves out 32 of 513 player-seasons, among them every player whose season was
 one 3-map series. A descending total takes no floor, since few maps cannot top
 it, and an explicit "with at least N maps" replaces it.
+
+**Relative periods.** "this year" / "this season", "last year" / "last season",
+"this stage" and "last stage" are read against the data, never the calendar
+(`resolve_period` in `nlq/validate.py`), and the answer's first note says what
+they were read as: "'this stage' is read as OWCS 2026 Stage 2 (EMEA and NA), the
+most recent stage in scope, played 2026-05-25 to 2026-07-06."
+
+- The current season is the most recent season with series in scope; last
+  season the one before it with series.
+- A stage is every championship whose OWCS name says "Stage N" in a season
+  (regular season, playoffs and relegation alike); the current stage is the
+  latest (season, N) with series, in the asked region when there is one. NA and
+  EMEA run side by side, so without a region it is both.
+- **Between stages** (no stage running, as on 2026-10-08, three months after
+  Stage 2's playoffs) "this stage" is the stage just finished; the note's dates
+  show it is over. In January, before a season's first series, "this year" is
+  still the last season played, and the note names it.
+- A year given as well ("this stage in 2025") picks the period within that
+  year. A period with nothing to read ("last stage" with one stage in scope) is
+  `no_data`, never every season.
 
 Every failure is a first-class answer with a reason code: `unsupported_metric`,
 `unsupported_question`, `out_of_scope`, `results_only`, `ambiguous_entity`, `unknown_entity`,
@@ -1099,6 +1128,7 @@ and exits 1 with the specific discrepancy:
 | `map_winner_consistency` | every fact row follows the winner the map scores give; lists every `winner_team_id` that contradicts its scores (1-3e78e269 map 5) |
 | `phantom_map_isolation` | a FACEIT map row beyond Liquipedia's game count for a linked series is in no fact view; counts the player rows that rode on one (none has ever been stored: see **Phantom maps**) |
 | `region_consistency` | no org and no team id has matches in both `na` and `emea` (OWCS is region-locked); `international` never counts. This audits what is applied, where the proposer's `region_conflict()` only guards new merges. An owner-decided exception (`cross_region_ok` on every one of the org's FACEIT windows) is listed, not failed; the Liquipedia-born `lp:team:` windows `identity load` derives from the team map are not merge decisions and are not judged against it |
+| `display_names_searchable` | every entity's shown name (`entity_names.current_name`) is one of its own search names, so a name a reader sees is a name they can ask by; a shown name shared by two entities is counted, not failed (it asks which). Added 2026-10-08: it failed Astro and ZZZ, the two owner display names, until migration 037 |
 | `decisions_loaded` | every reviewed decision in `scope/` (org, alias, team map, player identity, link, scope and competition-name files) is in the table its loader writes, and nothing loaded lacks one; each discrepancy is `decided_not_loaded`, `loaded_not_decided` or `loaded_differs`, with the file, the key and the command that reloads it. A decision about a team, player, championship or record the warehouse does not hold is counted as not applicable, by the loader's own skip rule. Added 2026-10-02 after production was found carrying 166 decided player identities with no anchor, 11 decided team names with none, and a stale `timeless` anchor that failed five `series_integrity` rows |
 | `lp_name_resolution` | every Liquipedia team-map name resolves, in search, to an entity that holds its linked series: a name anchored to a bare team id whose era sits in an org window answers with the wrong era ("LuneX Gaming" once answered with UNC inc's 2024 record while every record key was correctly split). Also fails a team-map entry naming a team id that is not a FACEIT id or an org no decision defines (a truncated id typed into `teams decide` is accepted). Added 2026-10-02; it caught 1234, NRG Shock and Team Z on its first run |
 | `answer_rates` | asks the rate questions through the real parser and pipeline (highest K/D, eliminations per map, map and series win rate) for every season and all seasons: every rate in a row is plausible (K/D at most 15 over 3+ maps, a percentage within 0-100, an average at most its total, series at most maps) and the sentence quotes the metric's own column. Added 2026-10-02 after "highest NA kd in 2026" printed Attack's 77.80 map win % as his K/D (5.00); on the old code it fails five answers |
@@ -1225,10 +1255,22 @@ Never touched: `match_players`, and therefore `fact_player_maps` and every playe
 no player stats, so none is invented. `python -m owcsmuse check` asserts this directly
 (`liquipedia_map_isolation`): no `match_players` row may join to a `source = 'liquipedia'` round.
 
-**Attribution.** `Answer.attribution` (CLI and API, see above) is populated from the FACEIT match ids an answer's
-evidence rows actually name: a match only carries a page when a Liquipedia-sourced value (a map or a date
-correction) contributed to it. An answer built entirely from FACEIT's own data carries `attribution: null`, exactly
-as before Stage 2.
+**Attribution.** `Answer.attribution` (CLI and API, see above) names the Liquipedia page of every value an answer
+presented, by the grain it presented them at (`answer_attribution` in `liquipedia/attribution.py`):
+
+- a series-grain answer (a record, a head-to-head, a series leaderboard, a versus answer's missing series) presents
+  a linked series' score, result and best-of, which are Liquipedia's since migration 034, so a linked series always
+  owes its page (the `series` view's `*_source` columns, and the page it read);
+- a map-grain answer owes the page for a Liquipedia map, a Liquipedia date, or a FACEIT phantom map Liquipedia's
+  game count removed;
+- a team history owes it for a stint dated by Liquipedia.
+
+It covers every match behind the answer (`answer_matches` in `nlq/evidence.py`): every ranked row, every page of
+evidence, with or without evidence asked for. If it cannot be computed the answer says so in a note rather than
+shipping uncredited. An answer built entirely from FACEIT's own data carries `attribution: null`. Until 2026-10-08
+only the map-grain rule existed, read from the one evidence page shown: 397 of 445 linked series on production
+presented Liquipedia's score with no credit, and no answer asked without evidence carried any (golden G48-G50, and
+`test_attribution_does_not_depend_on_evidence_being_asked_for`).
 
 ### Stage 3: identity without FACEIT
 
@@ -1338,8 +1380,10 @@ its first and last sighting, the same shape as `player_nicknames`; the collector
 (`raw_payloads`, no request). `entity_names` makes each historical value searchable (`historical_game_name`).
 `players.display_name` is an owner's override set by `identity load` from a player identity decision's `display`
 (`identity decide <page> --player <guid> --display "ZZZ"`, or `--nickname <FACEIT name>` to find the GUID by a
-name that names exactly one player): shown everywhere, searchable by nothing new, every nickname and in-game
-name still searchable. Decided so far: ZZZ (FACEIT z_ow, in-game zss) and Astro (FACEIT Astronexz). Astro's decision was
+name that names exactly one player): shown everywhere and, since migration `037_display_name_search.sql`, searchable
+too (`display_name` rows in `entity_names`), every nickname and in-game name still searchable. Until 037 "ZZZ record"
+found nobody while "zss" worked, and "Astro" resolved only as a prefix of Astronexz. `check` (display_names_searchable)
+proves every entity's shown name is one of its own search names (golden G51). Decided so far: ZZZ (FACEIT z_ow, in-game zss) and Astro (FACEIT Astronexz). Astro's decision was
 committed to `stage3-identity` three minutes after PR #6 merged (363a35e) and so never reached main; restored from that
 commit on 2026-10-02. `decisions_loaded` compares the files on main with production in both directions, display names
 included, but a decision stranded on an unmerged branch is in neither and no file-to-table comparison can see it.
@@ -1421,30 +1465,22 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 
 **Left open**, in the order to pick them up:
 
-1. **Attribution of a Liquipedia result (compliance: first next session).** `answer_attribution` credits Liquipedia
-   only for its map rows and play times; a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and
-   4-1) carries no CC-BY-SA attribution.
-2. **"zzz record in 2026" returns nothing while "zss" works:** the display name is set but the current name is not
-   searchable.
-3. **"this year" and "this stage" do not resolve** to 2026 and the current stage.
-4. **Team abbreviations left to the owner** (2026-10-08), to decide from how people actually refer to them: Geekay
-   Esports, Vision Esports, Citrus Nation.
-5. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+1. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
    "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
    "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
    backs the synthetic by_match case).
-6. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
+2. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
    Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
-7. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
+3. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
    matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
    The FACEIT side needs a crawl, not Liquipedia requests.
-8. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
-9. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+4. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
+5. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
    it after the fact, the command should refuse it.
-10. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
-11. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
-12. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
-13. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+6. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
+7. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
+8. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
+9. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Golden answer suite
 
@@ -1470,7 +1506,9 @@ in-game name `KSAA` belonged.
   descending total takes no floor (G39). G36 asks "with at least 1 map" so it still isolates the primary-role
   rule, which the floor would otherwise mask. G41-G44 cover team qualifiers: an abbreviation before "player"
   (G41, DF), a full name before a role (G42), "Team" kept in a name (G43), and no raw id in anything a reader
-  sees (G44, `no_raw_ids`, which scans the rendered CLI answer too).
+  sees (G44, `no_raw_ids`, which scans the rendered CLI answer too). G45-G47 cover overriding and region-qualified
+  aliases, G48-G50 Liquipedia attribution (`attribution_pages`), G51 display-name search, G52-G54 relative periods
+  (`notes_contain`).
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with

@@ -68,6 +68,8 @@ class Filters(BaseModel):
     mode: Optional[str] = None
     region: Optional[Region] = None
     role: Optional[Role] = None         # Tank | Damage | Support, per map (see Role above)
+    # "this year", "last stage": resolved against the data by validate(), which says in a note what it read it as
+    period: Optional[Literal["this_season", "last_season", "this_stage", "last_stage"]] = None
 
     def names(self) -> list[tuple[str, str]]:
         """(role, name) pairs that need entity resolution."""

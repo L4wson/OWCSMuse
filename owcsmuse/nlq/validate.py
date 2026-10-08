@@ -57,6 +57,8 @@ class SchemaInfo:
     # region, whether any source records player stats there at all (korea: no, by construction).
     capabilities: dict[str, dict[str, Any]] = field(default_factory=dict)
     region_player_stats: dict[str, bool] = field(default_factory=dict)
+    # first and last series per championship (the series view), for reading "this stage" and saying when it was played
+    championship_dates: dict[str, tuple[Any, Any]] = field(default_factory=dict)
 
     @classmethod
     def from_db(cls, conn: psycopg.Connection) -> "SchemaInfo":
@@ -83,6 +85,10 @@ class SchemaInfo:
             cur.execute("SELECT region, player_stats FROM region_sources")
             for r in cur.fetchall():
                 info.region_player_stats[r["region"]] = bool(r["player_stats"])
+            cur.execute("SELECT championship_id, min(played_at) AS first_at, max(played_at) AS last_at FROM series "
+                        "WHERE championship_id IS NOT NULL GROUP BY championship_id")
+            for r in cur.fetchall():
+                info.championship_dates[r["championship_id"]] = (r["first_at"], r["last_at"])
             cur.execute("SELECT championship_id, name, championship_display_name(name) AS display_name, season, "
                         "scope_region FROM championships WHERE include")
             for r in cur.fetchall():
@@ -96,6 +102,32 @@ class SchemaInfo:
                     info.championship_season[cid] = r["season"]
         conn.commit()
         return info
+
+    # ---- relative periods
+    def stages(self, region: Optional[str] = None, season: Optional[int] = None) -> list[tuple[int, int, list[str]]]:
+        """(season, stage number, championship ids) of every stage with series in scope, oldest first.
+
+        A stage is every included championship whose OWCS name says "Stage N" in that season ("Regular Season",
+        "Playoffs" and "Relegation" alike), in the given region when one is asked for. NA and EMEA run their stages
+        side by side, so without a region a stage is both.
+        """
+        out: dict[tuple[int, int], list[str]] = {}
+        for cid in self.championship_dates:
+            if cid not in self.championships or self.championship_season.get(cid) is None:
+                continue
+            if region is not None and self.championship_region.get(cid) not in (None, region):
+                continue
+            if season is not None and self.championship_season[cid] != season:
+                continue
+            m = re.search(r"\bstage\s*(\d+)\b", fold(self.championship_display.get(cid, self.championships[cid])))
+            if m:
+                out.setdefault((self.championship_season[cid], int(m.group(1))), []).append(cid)
+        return [(se, n, sorted(cids)) for (se, n), cids in sorted(out.items())]
+
+    def seasons_played(self) -> list[int]:
+        """Seasons with series in scope, oldest first."""
+        return sorted({self.championship_season[c] for c in self.championship_dates
+                       if c in self.championships and self.championship_season.get(c) is not None})
 
     # ---- lookups used by validation and compilation
     def match_map(self, name: str) -> Optional[str]:
@@ -217,6 +249,52 @@ def capability(q: StructuredQuery, info: SchemaInfo, champ_ids: list[str]) -> tu
 
 
 ValidationResult = Union[Validated, Unanswerable]
+
+
+_PERIOD_WORDS = {"this_season": "this year / this season", "last_season": "last year / last season", "this_stage": "this stage",
+                 "last_stage": "last stage"}
+
+
+def resolve_period(q: StructuredQuery, info: SchemaInfo) -> Union[tuple[StructuredQuery, Optional[str]], Unanswerable]:
+    """Read "this year", "last season", "this stage", "last stage" against the data: (query with a season and, for a
+    stage, a championship filter; the note that says what it was read as).
+
+    The current season is the most recent season in scope and the current stage the most recent stage with series
+    (by season, then stage number), in the asked region if there is one. Nothing reads today's date: between stages
+    "this stage" is the stage just finished, and the note gives its dates so a reader can see it is over; in January,
+    before the new season's first series, "this year" is still the last season played, and the note says which.
+    A year asked for as well ("this stage in 2025") picks the period within that year.
+    """
+    f = q.filters
+    if not f.period:
+        return q, None
+    words = _PERIOD_WORDS[f.period]
+    if f.period in ("this_season", "last_season"):
+        played = info.seasons_played() or sorted(info.seasons)
+        if f.season is not None:
+            return q.model_copy(update={"filters": f.model_copy(update={"period": None})}), (
+                f"'{words}' was given with {f.season}; the year asked for is used")
+        if not played or (f.period == "last_season" and len(played) < 2):
+            return Unanswerable(code="no_data", reason=f"there is no {words} in scope: seasons with data: "
+                                + (", ".join(map(str, played)) or "none"))
+        season = played[-1] if f.period == "this_season" else played[-2]
+        why = "the most recent season in scope" if f.period == "this_season" else "the season before the most recent in scope"
+        return (q.model_copy(update={"filters": f.model_copy(update={"season": season, "period": None})}),
+                f"'{words}' is read as the {season} season, {why}.")
+    stages = info.stages(f.region, f.season)
+    need = 1 if f.period == "this_stage" else 2
+    if len(stages) < need:
+        where = f" in {f.region.upper()}" if f.region else ""
+        return Unanswerable(code="no_data", reason=f"there is no {words}{where} in scope: no stage has series"
+                            + (f" in {f.season}" if f.season else ""))
+    season, n, cids = stages[-need]
+    dates = [d for c in cids for d in info.championship_dates.get(c, ()) if d is not None]
+    regions = sorted({(info.championship_region.get(c) or "").upper() for c in cids} - {""})
+    played = f", played {min(dates):%Y-%m-%d} to {max(dates):%Y-%m-%d}" if dates else ""
+    why = "the most recent stage in scope" if f.period == "this_stage" else "the stage before the most recent in scope"
+    champ = f"stage {n}" + (f" {f.championship}" if f.championship else "")
+    return (q.model_copy(update={"filters": f.model_copy(update={"season": season, "championship": champ, "period": None})}),
+            f"'{words}' is read as OWCS {season} Stage {n} ({' and '.join(regions) or 'all regions'}), {why}{played}.")
 
 
 def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:

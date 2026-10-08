@@ -16,6 +16,8 @@ and not a test body. A case's "expect" is a vocabulary, and every key is optiona
   sentence_lacks           substrings it must not contain
   spans_match_text         every entity span's text equals the sentence text at its offsets
   no_raw_ids               nothing a reader sees (sentence, reason, the rendered answer) holds a FACEIT id
+  attribution_pages        Liquipedia page URLs the answer's CC-BY-SA attribution must name
+  notes_contain            substrings some note of the answer must contain (what a period was read as)
 
 This module never computes an expected value. That is independent.py's job.
 """
@@ -193,6 +195,13 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str, src: str) -> None:
         ids = sorted({m for t in shown for m in RAW_ID.findall(t)})
         _check(out, f"{p}no raw id where a name is shown", [], ids, ok=exp["no_raw_ids"] is True and not ids,
                source=f"{src}no_raw_ids")
+    for i, want in enumerate(exp.get("notes_contain") or []):
+        notes = list(a.notes or [])
+        _check(out, f"{p}a note contains {want!r}", want, notes, ok=any(want in n for n in notes),
+               source=f"{src}notes_contain[{i}]")
+    for i, page in enumerate(exp.get("attribution_pages") or []):
+        have = sorted((a.attribution or {}).get("pages") or [])
+        _check(out, f"{p}attribution names {page}", page, have, ok=page in have, source=f"{src}attribution_pages[{i}]")
     for i, want in enumerate(exp.get("sentence_contains") or []):
         _check(out, f"{p}sentence contains {want!r}", want, _text(a), ok=want in _text(a),
                source=f"{src}sentence_contains[{i}]")

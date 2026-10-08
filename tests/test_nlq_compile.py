@@ -327,3 +327,58 @@ def test_words_cannot_be_assembled_from_two_different_names():
     info = _competitions()
     # 'regular season' is in the stored name of s9na_rs and 'playoffs' in the stored name of s9na_po: no one name has both
     assert _ids(info, "regular season playoffs", 2026, "na") == []
+
+
+# ------------------------------------------------------------------- relative periods
+
+def _period_info():
+    from datetime import datetime, timezone
+    d = lambda m, day: datetime(2026, m, day, tzinfo=timezone.utc)  # noqa: E731
+    info = SchemaInfo(**{**INFO.__dict__})
+    info.championships = {"na1": "S8 NA", "eu1": "S8 EMEA", "na2": "S9 NA", "eu2": "S9 EMEA", "fin": "World Finals",
+                          "old": "OWCS 2024 NA Stage 4"}
+    info.championship_display = {"na1": "OWCS 2026 NA Stage 1 Regular Season", "eu1": "OWCS 2026 EMEA Stage 1 Playoffs",
+                                 "na2": "OWCS 2026 NA Stage 2 Playoffs", "eu2": "OWCS 2026 EMEA Stage 2 Playoffs",
+                                 "fin": "OWCS 2026 World Finals", "old": "OWCS 2024 NA Stage 4"}
+    info.championship_season = {"na1": 2026, "eu1": 2026, "na2": 2026, "eu2": 2026, "fin": 2026, "old": 2024}
+    info.championship_region = {"na1": "na", "eu1": "emea", "na2": "na", "eu2": "emea", "fin": "international", "old": "na"}
+    info.championship_dates = {"na1": (d(3, 21), d(4, 11)), "eu1": (d(3, 22), d(4, 10)), "na2": (d(6, 13), d(7, 6)),
+                               "fin": (d(9, 1), d(9, 3)), "old": (datetime(2024, 9, 1, tzinfo=timezone.utc),) * 2}
+    return info
+
+
+def test_this_stage_is_the_latest_stage_with_series_and_the_note_says_which_and_when():
+    from owcsmuse.nlq.validate import resolve_period
+    q, note = resolve_period(parse("most deaths this stage"), _period_info())
+    # EMEA Stage 2 has no series yet (no dates), and the World Finals is no stage: NA's Stage 2 is the latest stage
+    assert (q.filters.season, q.filters.championship, q.filters.period) == (2026, "stage 2", None)
+    assert note == ("'this stage' is read as OWCS 2026 Stage 2 (NA), the most recent stage in scope, "
+                    "played 2026-06-13 to 2026-07-06.")
+
+
+def test_last_stage_and_a_region_and_a_competition_word():
+    from owcsmuse.nlq.validate import resolve_period
+    q, note = resolve_period(parse("most deaths last stage"), _period_info())
+    assert (q.filters.season, q.filters.championship) == (2026, "stage 1") and "(EMEA and NA)" in note
+    q, note = resolve_period(parse("most deaths in emea this stage playoffs"), _period_info())
+    assert (q.filters.championship, q.filters.region) == ("stage 1 playoffs", "emea") and "(EMEA)" in note
+
+
+def test_seasons_are_the_data_not_the_calendar():
+    from owcsmuse.nlq.validate import resolve_period
+    q, note = resolve_period(parse("most deaths this year"), _period_info())
+    assert q.filters.season == 2026 and "the most recent season in scope" in note
+    q, note = resolve_period(parse("most deaths last season"), _period_info())
+    assert q.filters.season == 2024                          # the season before, with data: not 2025
+    q, note = resolve_period(parse("most deaths this year in 2024"), _period_info())
+    assert q.filters.season == 2024 and "the year asked for is used" in note
+
+
+def test_a_period_with_nothing_to_read_is_no_data_not_everything():
+    from owcsmuse.nlq.validate import resolve_period
+    info = _period_info()
+    info.championship_dates = {"fin": info.championship_dates["fin"]}
+    u = resolve_period(parse("most deaths this stage"), info)
+    assert isinstance(u, Unanswerable) and u.code == "no_data"
+    u = resolve_period(parse("most deaths last season"), info)
+    assert isinstance(u, Unanswerable) and u.code == "no_data"

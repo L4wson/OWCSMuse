@@ -9,7 +9,7 @@ from typing import Any, Optional
 
 import psycopg
 
-from ..liquipedia.attribution import answer_attribution
+from ..liquipedia.attribution import answer_attribution, attribution_for
 from ..liquipedia.attribution import render_lines as render_attribution
 from ..aggregates import stat_coverage_summary
 from ..limitations import applicable as applicable_limitations, entity_match_filter
@@ -17,13 +17,13 @@ from ..log import get_logger, log_event
 from ..resolve import Candidate, resolve
 from .columns import UNDESCRIBED
 from .compile import Compiled, Resolved, compile_query
-from .evidence import (DEFAULT_PAGE_SIZE, Evidence, entity_of, fetch_evidence, fetch_missing_series,
+from .evidence import (DEFAULT_PAGE_SIZE, Evidence, answer_matches, entity_of, fetch_evidence, fetch_missing_series,
                        is_map_grain)
-from .membership import team_history
+from .membership import history_matches, team_history
 from .parser import parse_question
 from .sentence import render_sentence, render_unanswerable
 from .schema import StructuredQuery, Unanswerable
-from .validate import SchemaInfo, validate
+from .validate import SchemaInfo, resolve_period, validate
 
 log = get_logger("owcsmuse.nlq")
 
@@ -403,7 +403,23 @@ def _membership_answer(conn: psycopg.Connection, question: str, q: StructuredQue
                                            grain="series")
     sentence = render_sentence(a.query, rows, pre.entities, a.description)
     a.sentence = sentence.as_dict() if sentence else None
+    # a stint's from/to dates are Liquipedia's where a series is linked and dated there
+    _attribute(conn, a, lambda: answer_attribution(conn, history_matches(conn, r.player_id, q.filters.season), "map"))
     return a
+
+
+ATTRIBUTION_UNKNOWN = ("Liquipedia attribution could not be determined for this answer: values in it may come from "
+                       "Liquipedia (CC-BY-SA 3.0, https://liquipedia.net/overwatch) without their page named.")
+
+
+def _attribute(conn: psycopg.Connection, a: Answer, compute) -> None:
+    """Credit every Liquipedia page the answer drew on. A failure is said in the answer, never shipped silently."""
+    try:
+        a.attribution = compute()
+    except Exception:
+        conn.rollback()
+        log_event(log, logging.ERROR, "attribution_failed", question=a.question, exc_info=True)
+        a.notes = list(a.notes or []) + [ATTRIBUTION_UNKNOWN]
 
 
 def run_compiled(conn: psycopg.Connection, c: Compiled) -> list[dict]:
@@ -422,6 +438,19 @@ def run_compiled(conn: psycopg.Connection, c: Compiled) -> list[dict]:
 def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Optional[SchemaInfo] = None,
         debug: bool = False, with_evidence: bool = True, evidence_for: Optional[str] = None,
         evidence_page: int = 1, evidence_page_size: int = DEFAULT_PAGE_SIZE) -> Answer:
+    """question -> Answer. A relative period ("this stage") is read against the data, and whatever the answer turns
+    out to be, it says first what the period was read as."""
+    period_notes: list[str] = []
+    a = _ask(conn, question, parser, info, debug, with_evidence, evidence_for, evidence_page, evidence_page_size,
+             period_notes)
+    if period_notes:
+        a.notes = period_notes + [n for n in (a.notes or []) if n not in period_notes]
+    return a
+
+
+def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[SchemaInfo], debug: bool,
+         with_evidence: bool, evidence_for: Optional[str], evidence_page: int, evidence_page_size: int,
+         period_notes: list[str]) -> Answer:
     # 1. parse
     used = "rules"
     parsed = None
@@ -449,11 +478,19 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         return pre
     q = _retarget(q, r)
 
+    # "this stage", "last year": read against what is in scope, before anything filters on a season
+    info = info or SchemaInfo.from_db(conn)
+    period = resolve_period(q, info)
+    if isinstance(period, Unanswerable):
+        return _cannot(question, period, q, used, pre.entities)
+    q, note = period
+    if note:
+        period_notes.append(note)
+
     if q.intent == "team_membership":
         return _membership_answer(conn, question, q, r, pre, used)
 
     # 3. validate against the live schema
-    info = info or SchemaInfo.from_db(conn)
     v = validate(q, info)
     if isinstance(v, Unanswerable):
         # A stat that exists in other seasons is a question away from working.
@@ -518,6 +555,9 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
             a = _cannot(question, u, q, used, pre.entities,
                         _alternatives(question, q, r, coverage, met_but_no_maps=bool(notes)))
             a.notes, a.limitations = notes, limitations
+            if notes:
+                # the note counts the missing series' maps by their score, which may be Liquipedia's
+                _attribute(conn, a, lambda: attribution_for(conn, answer_matches(conn, v, r, [], missing_series=True)))
             if with_evidence and notes:
                 # they did meet: the series with no map stats are the evidence
                 # for why the map record is empty
@@ -583,14 +623,13 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
         try:
             a.evidence = fetch_evidence(conn, v, r, rows, evidence_for, evidence_page, evidence_page_size,
                                         c.coverage_stat).as_dict()
-            match_ids = [row.get("match_id") for row in (a.evidence.get("rows") or [])]
-            try:
-                a.attribution = answer_attribution(conn, match_ids)
-            except Exception:
-                log_event(log, logging.WARNING, "attribution_failed", intent=q.intent, exc_info=True)
         except Exception:
             log_event(log, logging.ERROR, "evidence_failed", intent=q.intent, exc_info=True)
             a.evidence = Evidence(reason="the evidence rows could not be loaded for this answer").as_dict()
+    # Every match behind the answer, not the evidence page shown, and with or without evidence asked for: the values
+    # were presented either way.
+    _attribute(conn, a, lambda: attribution_for(conn, answer_matches(conn, v, r, rows, c.coverage_stat,
+                                                                      missing_series=q.intent == "versus")))
     if debug:
         a.sql, a.params = c.sql, c.params
     return a
