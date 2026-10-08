@@ -140,3 +140,33 @@ def test_resolve_returns_the_alias_alone_never_a_clarify_shaped_tie(tmp_path, ag
         assert found[0].entity_id == team["team_id"] and found[0].score == 1.0
     finally:
         load_decisions(agg_db, AliasDecisions(tmp_path / "empty.json"))
+
+
+@dbonly
+def test_an_alias_whose_team_joined_an_org_follows_it_and_never_names_itself_by_id(tmp_path, agg_db):
+    """"SSG" pointed at team 6ddc0431 until that team was mapped to the spacestation-gaming org. A mapped team with no
+    era of its own is no longer an entity, so the alias found no name and answered with the UUID (and the team's empty
+    slice). It must follow the team to its org."""
+    from owcsmuse.aggregates import refresh
+    with agg_db.cursor() as cur:
+        cur.execute("SELECT team_id, name FROM teams WHERE name IS NOT NULL ORDER BY team_id LIMIT 1")
+        team = cur.fetchone()
+    agg_db.commit()
+    d = AliasDecisions(tmp_path / "a.json")
+    d.set("QQA", "team", team["team_id"])
+    load_decisions(agg_db, d)
+    try:
+        with agg_db.cursor() as cur:
+            cur.execute("INSERT INTO orgs (org_id, name) VALUES ('test-org', 'Test Org Name')")
+            cur.execute("INSERT INTO team_orgs (team_id, org_id) VALUES (%s, 'test-org')", (team["team_id"],))
+        agg_db.commit()
+        refresh(agg_db)
+        for found in (resolve_alias(agg_db, "QQA"), resolve(agg_db, "QQA")):
+            assert [(c.entity_type, c.entity_id, c.current_name) for c in found] == [("org", "test-org", "Test Org Name")]
+    finally:
+        with agg_db.cursor() as cur:
+            cur.execute("DELETE FROM team_orgs WHERE org_id = 'test-org'")
+            cur.execute("DELETE FROM orgs WHERE org_id = 'test-org'")
+        agg_db.commit()
+        refresh(agg_db)
+        load_decisions(agg_db, AliasDecisions(tmp_path / "empty.json"))

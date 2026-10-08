@@ -139,6 +139,28 @@ def rank_candidates(
     return ranked[:limit]
 
 
+# What a reviewed alias resolves to, for `ea` (a row of entity_aliases). An alias names a team id or an org; when that
+# team id has since been mapped to an org and has no era of its own, it is no longer an entity (entity_names lists only
+# the org), so the alias follows it to the org. The name is the entity's own, else the team's or org's stored name,
+# never its id: "SSG" pointed at team 6ddc0431 until that team joined the spacestation-gaming org, and from then on
+# answered with the UUID as its name (and the team's empty slice as its data).
+ALIAS_TARGET = """
+    SELECT coalesce(en.entity_type, ea.entity_type) AS entity_type, coalesce(en.entity_id, ea.entity_id) AS entity_id,
+           coalesce(en.current_name, (SELECT t.name FROM teams t WHERE t.team_id = ea.entity_id),
+                    (SELECT o.name FROM orgs o WHERE o.org_id = ea.entity_id), ea.alias) AS current_name,
+           coalesce(en.matches, 0) AS matches, en.seasons, en.first_at, en.last_at
+      FROM (SELECT 1) one
+      LEFT JOIN LATERAL (
+          SELECT n.entity_type, n.entity_id, n.current_name, n.matches, n.seasons, n.first_at, n.last_at
+            FROM entity_names n
+           WHERE (n.entity_type = ea.entity_type AND n.entity_id = ea.entity_id)
+              OR (ea.entity_type = 'team' AND n.entity_type = 'org'
+                  AND n.entity_id IN (SELECT w.org_id FROM team_orgs w WHERE w.team_id = ea.entity_id))
+           ORDER BY (n.entity_type = ea.entity_type) DESC, (n.name_kind LIKE 'current%%') DESC LIMIT 1
+      ) en ON true
+"""
+
+
 def load_names(conn: psycopg.Connection, entity_type: Optional[str] = None) -> list[dict[str, Any]]:
     with conn.cursor() as cur:
         cur.execute(
@@ -155,16 +177,11 @@ def load_names(conn: psycopg.Connection, entity_type: Optional[str] = None) -> l
             -- folded, and fold() is idempotent) so it scores an exact match against the query
             -- the same way any other name does; `current_name` carries the entity's real display
             -- name for showing what the alias actually resolved to.
-            SELECT ea.entity_type, ea.entity_id, ea.alias AS name,
-                   'alias' AS name_kind, ea.alias AS name_folded, coalesce(en.current_name, ea.entity_id) AS current_name,
-                   coalesce(en.matches, 0) AS matches, en.seasons, en.first_at, en.last_at
-            FROM entity_aliases ea
-            LEFT JOIN LATERAL (
-                SELECT current_name, matches, seasons, first_at, last_at FROM entity_names n
-                 WHERE n.entity_type = ea.entity_type AND n.entity_id = ea.entity_id
-                 ORDER BY (n.name_kind LIKE 'current%%') DESC LIMIT 1
-            ) en ON true
-            WHERE %s::text IS NULL OR ea.entity_type = %s
+            SELECT at.entity_type, at.entity_id, ea.alias AS name,
+                   'alias' AS name_kind, ea.alias AS name_folded, at.current_name,
+                   at.matches, at.seasons, at.first_at, at.last_at
+            FROM entity_aliases ea, LATERAL (""" + ALIAS_TARGET + """) at
+            WHERE %s::text IS NULL OR at.entity_type = %s
             """,
             (entity_type, entity_type, entity_type, entity_type),
         )
@@ -207,15 +224,10 @@ def resolve_alias(conn: psycopg.Connection, alias: str, entity_type: Optional[st
     with conn.cursor() as cur:
         cur.execute(
             """
-            SELECT ea.entity_type, ea.entity_id, en.current_name, ea.alias AS name, en.matches, en.seasons,
-                   en.first_at, en.last_at
-            FROM entity_aliases ea
-            LEFT JOIN LATERAL (
-                SELECT current_name, matches, seasons, first_at, last_at FROM entity_names n
-                 WHERE n.entity_type = ea.entity_type AND n.entity_id = ea.entity_id
-                 ORDER BY (n.name_kind LIKE 'current%%') DESC LIMIT 1
-            ) en ON true
-            WHERE ea.alias = %s AND (%s::text IS NULL OR ea.entity_type = %s)
+            SELECT at.entity_type, at.entity_id, at.current_name, ea.alias AS name, at.matches, at.seasons,
+                   at.first_at, at.last_at
+            FROM entity_aliases ea, LATERAL (""" + ALIAS_TARGET + """) at
+            WHERE ea.alias = %s AND (%s::text IS NULL OR at.entity_type = %s)
             """,
             (fold(alias), entity_type, entity_type),
         )
@@ -224,7 +236,7 @@ def resolve_alias(conn: psycopg.Connection, alias: str, entity_type: Optional[st
     if not row:
         return []
     return [Candidate(entity_type=row["entity_type"], entity_id=row["entity_id"],
-                      current_name=row["current_name"] or row["entity_id"], matched_name=row["name"],
+                      current_name=row["current_name"], matched_name=row["name"],
                       name_kind="alias", score=1.0, matches=int(row.get("matches") or 0),
                       seasons=list(row.get("seasons") or []), first_at=row.get("first_at"), last_at=row.get("last_at"))]
 
@@ -249,4 +261,11 @@ def resolve(conn: psycopg.Connection, query: str, entity_type: Optional[str] = N
     alias_hit = resolve_alias(conn, q, entity_type)
     if alias_hit:
         return alias_hit
-    return rank_candidates(query, load_names(conn, entity_type), limit=limit, min_score=min_score)
+    cands = rank_candidates(query, load_names(conn, entity_type), limit=limit, min_score=min_score)
+    words = q.split()
+    if len(words) > 1 and fold(words[0]) == "team" and not (cands and cands[0].score >= 1.0):
+        # "Team Liquid" is a name and matched whole above; "team twisted minds" is the word in front of one
+        rest = resolve(conn, " ".join(words[1:]), entity_type, limit=limit, min_score=min_score)
+        if rest and (not cands or rest[0].score > cands[0].score):
+            return rest
+    return cands

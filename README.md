@@ -561,9 +561,31 @@ team) scores 0.9 against the bare letters "tm" by starting with them, close
 enough that the ordinary ambiguity margin would have asked which one was
 meant. A human already decided that; resolve() must not re-open it.
 
-Seeded so far: `SSG` -> SpaceStation Gaming, `TL` -> Team Liquid, `TM` ->
-Twisted Minds, `CR` -> Crazy Raccoons, each pointing at a team id rather than
-an org where the team is currently unmapped.
+Decided so far: `SSG` -> SpaceStation Gaming and `VP` -> Virtus pro (orgs);
+`TL` -> Team Liquid, `TM` -> Twisted Minds, `CR` -> Crazy Raccoons, `DSG` ->
+Disguised and `DF` -> Dallas Fuel (team ids, unmapped to any org).
+
+An alias that names a team id follows that team into its org once the team is
+mapped and has no era of its own (`ALIAS_TARGET` in `resolve.py`), and its name
+comes from the entity, else the stored team or org name, never the id. `SSG`
+pointed at team 6ddc0431 until that team joined the spacestation-gaming org;
+from then on it answered with the UUID as its name and the team's empty slice
+as its data.
+
+**Not covered (2026-10-08).** Of the 35 multi-word teams and orgs with series,
+the ones a community abbreviation would plausibly name and that resolve to
+nothing or to a clarify today include Toronto Defiant, GenG Esports, Geekay
+Esports, Team Peps, Quick Esports, Vision Esports, Team Falcons (`TF` reaches
+"TFW") and Citrus Nation (`CN` reaches the player CNYXC). Which abbreviation
+the community uses is the owner's call, so none is added here.
+
+A team named in front of the player or role noun is a filter ("which DF
+player", "which twisted minds tank", "most deaths by a spacestation gaming
+dps"), read by one extractor (`_find_team_qualifier` in `nlq/parser.py`) before
+role words are stripped, and the sentence names the players it ranked: "TVNT
+leads Deaths among Twisted Minds tanks". "Team" is part of a name: "team
+liquid" is searched whole, and `resolve()` drops the word only when the whole
+names nobody ("team twisted minds").
 
 ## Competition names
 
@@ -1393,8 +1415,8 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 
 1. **Attribution of a Liquipedia result.** `answer_attribution` credits Liquipedia only for its map rows and play times;
    a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and 4-1) carries no CC-BY-SA attribution.
-2. **The "Team" parser bug.** "Team Z record" searches for "z" and "Team Falcons" for "falcons": the parser takes
-   "Team" as a keyword. Every team name starting with "Team" is at risk (G34 asks by id to step around it).
+2. ~~**The "Team" parser bug.**~~ Closed 2026-10-08: "team" stays in a name and `resolve()` falls back to the rest
+   only when the whole names nobody (golden G43).
 3. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
    Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
 4. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
@@ -1430,7 +1452,9 @@ in-game name `KSAA` belonged.
   expectation pins one series' row (score, best-of, sources, played_at). G38-G40 cover the leaderboard map
   floor: a per-map average and an ascending total rank only players with 4+ maps and say so (G38, G40), a
   descending total takes no floor (G39). G36 asks "with at least 1 map" so it still isolates the primary-role
-  rule, which the floor would otherwise mask.
+  rule, which the floor would otherwise mask. G41-G44 cover team qualifiers: an abbreviation before "player"
+  (G41, DF), a full name before a role (G42), "Team" kept in a name (G43), and no raw id in anything a reader
+  sees (G44, `no_raw_ids`, which scans the rendered CLI answer too).
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with

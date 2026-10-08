@@ -153,7 +153,7 @@ def test_every_kind_of_expectation_is_evaluated_after_by_match():
                         "regions_only": ["na"], "roles_only": ["Tank"]},
            "status": "ok", "code": None, "entity": {"role": "subject", "type": "player", "id": "p1", "name": "A"},
            "rows": [{"wins": 4}], "rows_only_players": ["A"], "limitations": ["offline_map_stats"],
-           "candidate_ids": ["c1"], "sentence_contains": ["A"], "sentence_lacks": ["B"], "spans_match_text": True,
+           "candidate_ids": ["c1"], "sentence_contains": ["A"], "sentence_lacks": ["B"], "spans_match_text": True, "no_raw_ids": True,
            "answer_candidate": {"id": "c1", "expect": {"status": "ok", "rows": [{"wins": 1}]}},
            "alternative": {"question_template": "q {season}", "seasons_with_stat": [2025, 2026],
                            "top1_by_season": {"2025": {"nickname": "A"}, "2026": {"nickname": "B"}},

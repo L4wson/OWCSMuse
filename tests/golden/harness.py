@@ -15,6 +15,7 @@ and not a test body. A case's "expect" is a vocabulary, and every key is optiona
   sentence_contains        substrings the answer's sentence must contain
   sentence_lacks           substrings it must not contain
   spans_match_text         every entity span's text equals the sentence text at its offsets
+  no_raw_ids               nothing a reader sees (sentence, reason, the rendered answer) holds a FACEIT id
 
 This module never computes an expected value. That is independent.py's job.
 """
@@ -22,6 +23,7 @@ This module never computes an expected value. That is independent.py's job.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 from decimal import Decimal
 from pathlib import Path
@@ -30,6 +32,7 @@ from typing import Any, Callable
 GOLDEN = Path(__file__).parent
 CHAMPIONSHIPS = {c["championship_id"]: c for c in
                  json.loads((GOLDEN / "championships.json").read_text(encoding="utf-8"))["championships"]}
+RAW_ID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.I)
 EVIDENCE_PAGE = 500          # large enough that "all evidence rows" really is all of them for these questions
 
 
@@ -182,6 +185,14 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str, src: str) -> None:
         # only `true` means anything; any other value is a malformed case, and fails rather than passing unread
         ok = exp["spans_match_text"] is True and not bad and bool(sent.get("spans"))
         _check(out, f"{p}every entity span covers its own text", [], bad, ok=ok, source=f"{src}spans_match_text")
+    if "no_raw_ids" in exp:
+        shown = [_text(a), a.reason or ""]
+        from owcsmuse.nlq.pipeline import Answer, render_text
+        if isinstance(a, Answer):               # the CLI's text is what a reader sees there; a stub answer has none
+            shown.append(render_text(a))
+        ids = sorted({m for t in shown for m in RAW_ID.findall(t)})
+        _check(out, f"{p}no raw id where a name is shown", [], ids, ok=exp["no_raw_ids"] is True and not ids,
+               source=f"{src}no_raw_ids")
     for i, want in enumerate(exp.get("sentence_contains") or []):
         _check(out, f"{p}sentence contains {want!r}", want, _text(a), ok=want in _text(a),
                source=f"{src}sentence_contains[{i}]")

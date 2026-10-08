@@ -135,6 +135,9 @@ def _role_entity(entities: dict[str, dict], *roles: str) -> tuple[Optional[str],
     return None, None, None
 
 
+_ROLE_PLURAL = {"Tank": "tanks", "Damage": "DPS players", "Support": "supports"}
+
+
 def _metric_label(metric: Optional[str]) -> str:
     return {
         "kd_ratio": "K/D ratio", "win_rate": "series win rate", "map_win_rate": "map win rate",
@@ -307,6 +310,16 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     # so the stat link landed on "e lowe" inside "the lowest"
     b.add(" has the lowest " if ascending else " leads ")
     b.mark(_metric_label(metric) or str(metric), "stat", str(metric))
+    # the players a team or role filter ranked: without it, a leaderboard that applied "which TM tank" reads the same
+    # as one that silently dropped it
+    team, team_id, team_type = _role_entity(entities, "team")
+    role = (query.get("filters") or {}).get("role")
+    if row.get("player_id") and (team or role):
+        b.add(" among ")
+        if team:
+            b.mark(str(team), team_type or "team", team_id)
+            b.add(" ")
+        b.add(_ROLE_PLURAL.get(role or "", "players"))
     key = value_column(query, row)
     value = row.get(key) if key else None
     if value is None:

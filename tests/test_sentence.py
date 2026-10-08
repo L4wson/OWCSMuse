@@ -148,3 +148,16 @@ def test_a_leaderboard_sentence_quotes_the_metrics_own_column():
             "win_pct": Decimal("87.5"), "seasons": [2026]}
     s = render_sentence({"intent": "leaderboard", "entity": "team", "metric": "wins", "filters": {}, "sort": "desc"}, [team])
     assert "with 14 across" in s.text, s.text
+
+
+def test_a_team_or_role_leaderboard_names_the_players_it_ranked():
+    # a leaderboard that applied "which TM tank" must not read like one that dropped it
+    row = {"player_id": "p1", "nickname": "TVNT", "total": 184, "maps_with_stat": 37, "seasons": [2026]}
+    q = {"intent": "leaderboard", "entity": "player", "metric": "Deaths", "sort": "desc", "filters": {"season": 2026}}
+    team = {"team": {"entity_type": "team", "entity_id": "t1", "current_name": "Twisted Minds"}}
+    s = render_sentence(dict(q, filters={"season": 2026, "role": "Tank"}), [row], team)
+    assert s.text.startswith("TVNT leads Deaths among Twisted Minds tanks with 184")
+    assert [(sp.kind, sp.text) for sp in s.spans if sp.kind == "team"] == [("team", "Twisted Minds")]
+    assert render_sentence(q, [row], team).text.startswith("TVNT leads Deaths among Twisted Minds players with 184")
+    assert render_sentence(dict(q, filters={"role": "Support"}), [row], {}).text.startswith("TVNT leads Deaths among supports")
+    assert render_sentence(q, [row], {}).text.startswith("TVNT leads Deaths with 184")

@@ -15,6 +15,7 @@ from ..aggregates import stat_coverage_summary
 from ..limitations import applicable as applicable_limitations, entity_match_filter
 from ..log import get_logger, log_event
 from ..resolve import Candidate, resolve
+from .columns import UNDESCRIBED
 from .compile import Compiled, Resolved, compile_query
 from .evidence import (DEFAULT_PAGE_SIZE, Evidence, entity_of, fetch_evidence, fetch_missing_series,
                        is_map_grain)
@@ -671,7 +672,8 @@ def render_text(a: Answer, max_rows: int = 25, evidence_rows: int = 5) -> str:
         lines.append("  for: " + ", ".join(f"{role}={e['current_name']}" for role, e in a.entities.items()))
     rows = a.rows[:max_rows]
     if rows:
-        cols = [c for c in rows[0].keys() if not c.endswith("_id")]
+        # the columns a reader can use, as the API describes them: org_key printed "team:<uuid>" beside the team's name
+        cols = [c for c in rows[0].keys() if c not in UNDESCRIBED and not c.endswith("_id")]
         widths = {c: max(len(c), *(len(_fmt(r.get(c))) for r in rows)) for c in cols}
         lines.append("  " + "  ".join(c.ljust(widths[c]) for c in cols))
         for r in rows:

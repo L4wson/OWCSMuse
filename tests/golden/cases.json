@@ -970,7 +970,7 @@
      "redex"
     ],
     "sentence_contains": [
-     "FrothyFilly7 has the lowest Deaths with 19"
+     "FrothyFilly7 has the lowest Deaths among supports with 19"
     ],
     "sentence_lacks": [
      "(players with at least 4 maps)"
@@ -1056,11 +1056,111 @@
      "cjay"
     ],
     "sentence_contains": [
-     "Vega has the lowest Deaths with 40",
+     "Vega has the lowest Deaths among supports with 40",
      "(players with at least 4 maps)"
     ]
    },
    "derivation": "G36's slice with the floor on: 2024 NA primary supports with at least 4 Support maps, Deaths lowest first: Vega, 40 over 11 maps. Without the floor FrothyFilly7 leads with 19 over 3 map(s).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G41",
+   "title": "An abbreviated team in front of 'player' filters the leaderboard",
+   "kind": "exact",
+   "regression": "a team named before 'player' was not a filter (owner, 2026-10-08)",
+   "question": "which DF player had the most deaths in 2026",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "team",
+     "type": "team",
+     "id": "cd157523-5c58-41bc-b62d-e1a635ea61b8",
+     "name": "Dallas Fuel"
+    },
+    "rows": [
+     {
+      "nickname": "SeonJun",
+      "total": 91
+     }
+    ],
+    "rows_only_players": [
+     "Kellan",
+     "Kronik",
+     "Lukemino",
+     "SeonJun",
+     "cjay"
+    ],
+    "sentence_contains": [
+     "SeonJun leads Deaths among Dallas Fuel players with 91"
+    ]
+   },
+   "derivation": "Deaths over the 2026 maps each player played for Dallas Fuel (cd157523; 'DF' is the owner's alias): SeonJun 91 over 12 maps, of 5 Dallas Fuel players. The qualifier was once dropped and the whole league ranked.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G42",
+   "title": "A full team name in front of a role filters the role leaderboard to that team",
+   "kind": "exact",
+   "regression": "a team named before a role was not a filter (owner, 2026-10-08)",
+   "question": "which twisted minds tank had the most deaths in 2024",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "team",
+     "id": "2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+     "name": "Twisted Minds"
+    },
+    "rows": [
+     {
+      "nickname": "KSAA",
+      "total": 36
+     }
+    ],
+    "rows_only_players": [
+     "KSAA"
+    ],
+    "sentence_contains": [
+     "KSAA leads Deaths among Twisted Minds tanks with 36"
+    ]
+   },
+   "derivation": "Deaths over the 2024 Tank maps each primary-tank player played for Twisted Minds: KSAA 36/8 maps. The team was once dropped, ranking every 2024 tank.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G43",
+   "title": "'Team' is part of a team's name, not a keyword",
+   "kind": "exact",
+   "regression": "'Team' eaten as a keyword (README open list, owner 2026-10-08)",
+   "question": "sugarfree vs team liquid in 2026",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "opponent",
+     "id": "a58dedff-8045-46be-a13e-2402495b6a9d",
+     "name": "Team Liquid"
+    },
+    "sentence_contains": [
+     "sugarfree is 3-1 in maps against Team Liquid in 2026"
+    ]
+   },
+   "derivation": "sugarfree's 2026 maps against Team Liquid's team id: 4 maps, 3 won, 1 lost. The parser once dropped 'team' as a stopword and searched 'liquid'.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G44",
+   "title": "An aliased team's answer prints its name, never its id",
+   "kind": "invariant",
+   "regression": "'SSG vs TL' printed a UUID (owner, 2026-10-08)",
+   "question": "TL record in 2026",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "name": "Team Liquid"
+    },
+    "no_raw_ids": true
+   },
+   "derivation": "Team Liquid is an unmapped team id, so its rows carry org_key 'team:<uuid>'; the CLI printed that column beside the name. Nothing a reader sees (sentence, reason, rendered answer) may hold a raw id where a display name exists.",
    "status": "confirmed"
   }
  ]

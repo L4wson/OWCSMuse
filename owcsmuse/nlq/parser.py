@@ -160,7 +160,7 @@ _NUM_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "s
               "fifteen": 15, "twenty": 20, "fifty": 50}
 
 _LEAD_STOP = {"what", "was", "is", "did", "does", "do", "has", "have", "had", "the", "how", "show", "me", "of", "for", "by", "and",
-              "many", "much", "are", "were", "who", "which", "a", "an", "team", "player", "give", "tell", "about", "with", "to",
+              "many", "much", "are", "were", "who", "which", "a", "an", "player", "give", "tell", "about", "with", "to",
               "whats", "in", "on", "at", "from", "as", "playing"}
 _TRAIL_STOP = {"do", "did", "does", "have", "has", "play", "played", "go", "went", "fare", "fared", "perform", "performed", "record",
                "standings", "results", "result", "stats", "stat", "numbers", "team", "player", "in", "on", "at", "for", "the", "of",
@@ -196,6 +196,8 @@ def _clean_name(s: Optional[str]) -> Optional[str]:
         words.pop(0)
     while words and words[-1] in _TRAIL_STOP:
         words.pop()
+    if words == ["team"]:
+        return None           # the word, not a name; "team liquid" keeps it, and resolve() tries "liquid" if it must
     if not words or len(words) > 5 or any(w in _BAD_NAME_WORDS for w in words):
         return None
     name = " ".join(words).strip(" ?.,!'\"")
@@ -378,6 +380,34 @@ def _side_season(text: str) -> tuple[Optional[int], str]:
     return int(m.group("y2")), m.group("rest2")
 
 
+# "which DF player", "which twisted minds tank", "the spacestation gaming dps with the most": a team named in front of
+# the player or role noun qualifies the ranked players. It is read before role words are stripped, since the noun is
+# what marks the name; a region, a superlative or a stopword in front of the name is not part of it ("which na
+# support" names no team).
+_ROLE_NOUN = r"(?:players?|tanks?|dps|damage|supports?|healers?)"
+_QUALIFIER = re.compile(r"(?:^|\b(?:which|what|a|an|the|by|among|for|from|on)\s+)(?P<n>[a-z0-9_.:\-' ]+?)\s+" + _ROLE_NOUN + r"\b")
+_QUALIFIER_LEAD = (_LEAD_STOP | _BAD_NAME_WORDS | set(REGION_TERMS) | {"north", "american", "korean", "international"}) - {"team"}
+
+
+def _find_team_qualifier(q: str) -> Optional[str]:
+    q = re.sub(r"\b(?:in|during|for|of|from|the)?\s*20[2-3]\d\b", " ", q)
+    for m in _QUALIFIER.finditer(q):
+        words = m.group("n").split()
+        while words and (words[0] in _QUALIFIER_LEAD or words[0] in _NUM_WORDS or words[0].isdigit()):
+            words.pop(0)            # "top 5 healers": a limit, not a team
+        name = _clean_name(" ".join(words))
+        if name and fold(name) not in REGION_TERMS:
+            return name
+    return None
+
+
+def _team_cue(q: str, qualifier: Optional[str]) -> bool:
+    """The question is about teams: "which team", "team leaderboard", not the "team" in a qualifier's "Team Liquid"."""
+    if qualifier:
+        q = re.sub(r"\b" + re.escape(qualifier) + r"\b", " ", q)
+    return _has(q, ["team"])
+
+
 def _find_subject(q: str) -> Optional[str]:
     for rx in _SUBJECT_PATTERNS:
         m = rx.search(q)
@@ -485,8 +515,9 @@ def parse_question(question: str) -> ParseResult:
         if metric is None:
             return Unanswerable(code="unsupported_metric", reason="a leaderboard needs a stat (e.g. eliminations, healing, K/D, win rate)",
                                 suggestions=["Ask `what stats are available`."])
-        subject = _find_subject(body)  # "most eliminations for Twisted Minds" -> team slice
-        entity = "team" if (_has(q, ["team"]) or metric in ("win_rate", "record", "wins", "losses", "map_wins", "map_losses", "map_win_rate")) else "player"
+        qualifier = _find_team_qualifier(q_wo_metric if metric else q)
+        subject = qualifier or _find_subject(body)  # "which TM player", "most eliminations for Twisted Minds" -> team slice
+        entity = "team" if (_team_cue(q, qualifier) or metric in ("win_rate", "record", "wins", "losses", "map_wins", "map_losses", "map_win_rate")) else "player"
         f = filters.model_copy(update={"team": subject}) if (subject and entity == "player") else filters
         return StructuredQuery(intent="leaderboard", entity=entity, metric=metric, filters=f, aggregation=aggregation,
                                sort=sort, limit=limit or 10, min_maps=min_maps)
