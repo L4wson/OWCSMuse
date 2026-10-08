@@ -1,0 +1,119 @@
+name: Scheduled ingest
+
+# Daily: collect what FACEIT and Liquipedia added, make it visible, and refuse to call the run good unless `check`
+# passes. It never puts a competition in scope: what discovery finds is a report on the run page, and only a person's
+# `decide` includes anything.
+#
+# Actions secrets (Settings > Secrets and variables > Actions):
+#   DATABASE_URL          the production Postgres (the Supabase session pooler string)
+#   FACEIT_API_KEY        FACEIT Data API v4, server-side key
+#   LIQUIPEDIA_API_KEY    LiquipediaDB API v3 (60 requests an hour; the client paces itself)
+
+on:
+  schedule:
+    - cron: "17 9 * * *"        # 09:17 UTC daily: after the weekend's matches, off the top of the hour
+  workflow_dispatch:
+
+concurrency:
+  group: ingest                 # never two runs writing at once; a late run waits rather than overlapping
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write                 # a failed run opens (or comments on) one issue, so it cannot go unnoticed
+
+env:
+  PYTHON_VERSION: "3.12"
+  OWCS_LOG_FORMAT: text
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+jobs:
+  ingest:
+    name: ingest, refresh, check
+    runs-on: ubuntu-latest
+    timeout-minutes: 180          # Liquipedia's hourly allowance can pace a large catch-up past an hour
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install .        # runtime dependencies only: no api extra, no dev tools
+      - name: secrets present
+        run: |
+          for s in DATABASE_URL FACEIT_API_KEY LIQUIPEDIA_API_KEY; do
+            [ -n "${!s}" ] || { echo "::error title=Missing secret::$s is not set in Actions secrets"; exit 1; }
+          done
+        env:
+          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
+          LIQUIPEDIA_API_KEY: ${{ secrets.LIQUIPEDIA_API_KEY }}
+
+      # ---- FACEIT: the championships in scope, then the 2025/2026 main series the endpoints hide
+      - name: backfill
+        run: python -m owcsmuse backfill
+        env:
+          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
+      - name: crawl
+        run: |
+          python -m owcsmuse crawl seed --from-rosters     # new rosters bring new players to follow
+          python -m owcsmuse crawl run
+        env:
+          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
+
+      # ---- Liquipedia: fetch what is new, link it to FACEIT, then fill result_only series with its maps.
+      # `enrich` alone sends nothing and adds nothing new: it only uses records already fetched and linked.
+      # `--decided-only` keeps unreviewed team-name proposals out of an unattended run.
+      - name: liquipedia
+        run: |
+          python -m owcsmuse liquipedia run --execute
+          python -m owcsmuse liquipedia reconcile --decided-only
+          python -m owcsmuse liquipedia enrich
+        env:
+          LIQUIPEDIA_API_KEY: ${{ secrets.LIQUIPEDIA_API_KEY }}
+          OWCS_LIQUIPEDIA_ENABLED: "1"
+
+      # ---- make it visible, then the gate
+      - name: refresh
+        run: python -m owcsmuse refresh
+      - name: check
+        run: |
+          set -o pipefail
+          python -m owcsmuse check | tee check.txt
+      - name: check failed
+        if: failure()
+        run: |
+          echo "::error title=Ingest failed::a step failed or check found a discrepancy: do not trust what just landed"
+          { echo "## Ingest failed"; echo; echo '```'; tail -n 200 check.txt 2>/dev/null || echo "(check did not run)"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+      # ---- what discovery found: a report, never an action. Read-only (--no-db) and run even when a step failed.
+      - name: competitions awaiting a decision
+        if: always()
+        run: |
+          mkdir -p out
+          python -m owcsmuse discover --no-db --out out/manifest.json --report out/classification_report.md
+          python -m owcsmuse crawl competitions --out out/history_competitions.json
+          python tools/scope_report.py --manifest out/manifest.json --history out/history_competitions.json --github \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+        env:
+          FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ingest-reports
+          path: |
+            check.txt
+            out/
+            scope/liquipedia_reconciliation.md
+            scope/liquipedia_team_report.md
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: open an issue for the failure
+        if: failure() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Scheduled ingest failed"
+          body="Run ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} failed. check.txt and the reports are in its artifacts."
+          n=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$n" ]; then gh issue comment "$n" --body "$body"; else gh issue create --title "$title" --body "$body"; fi

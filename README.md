@@ -18,7 +18,7 @@ offline.
 python -m venv .venv && . .venv/Scripts/activate    # or source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env                                  # put FACEIT_API_KEY in .env
-docker compose up -d                                  # local Postgres on :5432 (optional)
+docker compose up -d db                               # local Postgres 17 on :5432 (optional)
 python -m owcsmuse migrate
 ```
 
@@ -1013,9 +1013,9 @@ npm run build                                 # static files in web/dist
 Vite + React, plain CSS, no UI framework and no router: two routes (`/` and
 `/q/<slug>`) are thirty lines of `history.pushState` in `src/router.js`, which is
 less code than configuring a router would be. `OWCS_API_URL` moves the dev proxy;
-`VITE_API_BASE` points a build at a deployed service. A static host must rewrite
+`VITE_API_BASE` points a build at a deployed service. The static host must rewrite
 unknown paths to `index.html`, or a shared `/q/<slug>` link 404s before the app
-loads.
+loads; `web/vercel.json` does that on Vercel.
 
 The landing page is a question box and three or four examples taken live from
 `/suggestions`, so every example has data behind it. Everything else is the
@@ -1065,42 +1065,111 @@ sends. `npm test` runs them against a mocked `fetch`; nothing contacts a server.
 
 ## Deploying
 
-Three moving parts, none of which share a host requirement.
+Three parts, none of which share a host requirement: the **API** (a stateless container, on Fly.io), the **frontend**
+(static files, on Vercel), and **ingest** (a daily GitHub Actions run). Only ingest talks to FACEIT or Liquipedia; the API answers from
+the warehouse alone.
 
-**The API** is a stateless uvicorn process: `python -m owcsmuse serve --host
-0.0.0.0 --port 8000`, or any ASGI runner pointed at `owcsmuse.api:app_factory`.
-It needs `DATABASE_URL`, outbound access to Postgres, and TLS in front of it.
-It does not need `FACEIT_API_KEY`: no request path calls FACEIT, answers come
-from the warehouse. Each process keeps up to four idle connections, so size
-`workers x 4` against the Supabase pooler's ceiling before scaling out. Run
-`python -m owcsmuse migrate` on deploy; it is idempotent and applies in filename
-order.
+### What lives where
 
-**The frontend** is static: `cd web && npm ci && npm run build` produces
-`web/dist`, which any static host or CDN serves. Two requirements. It needs
-`VITE_API_BASE` at build time pointing at the API (or same-origin routing, in
-which case leave it unset), and the host must rewrite unknown paths to
-`index.html` or a shared `/q/<slug>` link 404s before the app loads. CORS on the
-API is open, so a separate origin works as-is.
+| setting | where it is set | used by |
+|---|---|---|
+| `DATABASE_URL` (Supabase **session** pooler, port 5432) | Fly secret; GitHub Actions secret | API, ingest, `migrate` |
+| `FACEIT_API_KEY` | GitHub Actions secret only | ingest (`backfill`, `crawl`, `discover`) |
+| `LIQUIPEDIA_API_KEY` | GitHub Actions secret only | ingest (`liquipedia run`); `OWCS_LIQUIPEDIA_ENABLED=1` is set by the workflow |
+| `VITE_API_BASE` (the API's public URL) | Vercel project environment variable (used at **build** time) | the frontend bundle (baked in at build time; see `web/.env.example`) |
+| `PORT` | `fly.toml` `[env]`, `8000` | the container listens on it; must equal `internal_port` |
 
-**Ingest is a cron, not part of the API.** A scheduled worker with
-`FACEIT_API_KEY`, `DATABASE_URL` and outbound access to FACEIT:
+The API never needs `FACEIT_API_KEY` or `LIQUIPEDIA_API_KEY`: `serve` reads neither (the FACEIT key is demanded
+only by ingest commands, and no Liquipedia request is possible without `OWCS_LIQUIPEDIA_ENABLED`). Keep them in
+GitHub Actions secrets only. The image also lacks the `anthropic` package, so `parser: "auto"` answers with the rules
+parser and `parser: "llm"` is refused; no `ANTHROPIC_API_KEY` is needed either.
+
+### The pieces in the repository
+
+- **`Dockerfile`**: the API image. Multi-stage (the package and its `api` extra are built in a venv, and only that venv,
+  `migrations/` and `scope/` reach the runtime image), runs as the non-root user `owcs`, carries no tests or dev tools
+  and never a `.env` (`.dockerignore`). `HEALTHCHECK` hits `/healthz`, which is liveness plus a database round trip:
+  503 when Postgres is unreachable. 252 MB on `python:3.12-slim` (2026-10-08). CI's `API image` job builds it and
+  checks the user and the absence of pytest and ruff.
+- **`docker-compose.yml`**: local development, the API image plus `postgres:17` (production's major). `docker compose
+  up -d --build` migrates and serves on `localhost:8000` (`OWCS_API_PORT` moves it, `OWCS_DB_SCHEMA` picks the
+  schema).
+- **`.github/workflows/ingest.yml`**: daily at 09:17 UTC and on demand. `backfill` -> `crawl seed --from-rosters` +
+  `crawl run` -> `liquipedia run --execute` -> `liquipedia reconcile --decided-only` -> `liquipedia enrich` -> `refresh`
+  -> `check`. `enrich` alone sends nothing and adds nothing new: it uses Liquipedia records already fetched and
+  linked, so the fetch and the reconcile come first, and `--decided-only` keeps unreviewed team-name proposals out of
+  an unattended run. A failed step or a failing `check` fails the run with an error annotation, the check output in
+  the run summary, and one open issue ("Scheduled ingest failed", commented on by each later failure).
+  **New competitions are a report, never an inclusion**: `discover --no-db` and `crawl competitions` run read-only
+  after the gate (even when it failed), and `tools/scope_report.py` lists every competition the classifier would
+  include that has no reviewed decision, as a table in the run summary and a warning annotation each. Only
+  `python -m owcsmuse decide` puts a competition in scope. The reports are the run's `ingest-reports` artifact.
+- **`fly.toml`**: the API on Fly.io. One `shared-cpu-1x` machine (512 MB) in `sea` (Seattle, nearest Supabase
+  `us-west-2`), `auto_stop_machines = "off"` and `min_machines_running = 1` so it never cold starts, `PORT=8000`
+  matching `internal_port = 8000`, an HTTP check on `/healthz`, and `python -m owcsmuse migrate` as the
+  `release_command` (run with the app's secrets before each deploy replaces the machine).
+- **`web/vercel.json`**: the frontend on Vercel (project root `web`). Vite preset, `npm ci`, `npm run build`, output
+  `dist`, and one rewrite, `/(.*)` -> `/index.html`. Vercel serves a file that exists in `dist` (`index.html`,
+  `assets/*`) before it applies rewrites, so only paths with no file, such as a shared `/q/<slug>` link, get the app,
+  whose router reads the slug. It is a rewrite (status 200, URL unchanged), not a redirect.
+
+### In order
+
+Steps marked **[browser]** need an account or a web console; **[command]** steps run in a terminal.
+
+1. **[browser] Supabase.** Copy the session-pooler connection string (port 5432, not the 6543 transaction pooler:
+   the CLI and API pin `search_path`). Decide on Row Level Security or revoke the Data API grants on these tables (see
+   **Supabase notes**): a public API makes the project easier to find, and the Data API is open with RLS off.
+2. **[command] Migrate production** before the first deploy, and on every deploy after (the host's release command):
+   `python -m owcsmuse migrate`. It is idempotent and loads the reviewed competition names; `python -m owcsmuse check`
+   should then pass every check.
+3. **[command] API on Fly.** See **First Fly deploy** below. Each process keeps up to four idle connections: size
+   machines x 4 against the pooler's limit before scaling out.
+4. **[command] Check the API**: `curl https://<api>/healthz` returns `{"ok": true, ...}`, and
+   `curl -X POST https://<api>/ask -H 'content-type: application/json' -d '{"question": "Toronto Defiant record"}'`
+   answers.
+5. **[browser] Vercel.** Import the repository, set **Root Directory** to `web` (build settings then come from
+   `web/vercel.json`), and add the environment variable `VITE_API_BASE=https://owcsmuse-api.fly.dev` (no trailing
+   slash) for Production and Preview. It is baked in at build time: changing it needs a redeploy. CORS needs no
+   change for the Vercel URL: `owcsmuse/api.py` (`create_app`, the `CORSMiddleware` line) allows every origin, which
+   also covers Vercel's per-commit preview URLs. The API is read-only and uses no cookies or credentials, so that is
+   deliberate; to restrict it, replace `allow_origins=["*"]` there with the production origin (e.g.
+   `["https://<project>.vercel.app"]`) and rebuild, accepting that preview deployments are then refused.
+6. **[command] Check the frontend**: ask a question, then open its shared `/q/<slug>` link in a fresh tab: it must load
+   the answer, not a 404.
+7. **[browser] GitHub.** Add the three Actions secrets (`DATABASE_URL`, `FACEIT_API_KEY`, `LIQUIPEDIA_API_KEY`) under
+   Settings > Secrets and variables > Actions, and make sure Actions are enabled for scheduled runs.
+8. **[command] First ingest by hand**: `gh workflow run ingest.yml`, then `gh run watch`. Read the run summary's
+   "Competitions awaiting a scope decision" table; decide each with `python -m owcsmuse decide` and commit the
+   decisions file.
+
+### First Fly deploy
+
+Run from the repository root with [`flyctl`](https://fly.io/docs/flyctl/install/) installed. `fly.toml` is already
+committed, so create the app rather than `fly launch` (which would rewrite it); if `owcsmuse-api` is taken, pick
+another name and change `app` in `fly.toml` and `VITE_API_BASE` to match.
 
 ```bash
-python -m owcsmuse backfill           # LIST + DETAIL for the championships in scope
-python -m owcsmuse crawl run          # the 2025/2026 main series, which the endpoints hide
-python -m owcsmuse refresh            # materialized views; nothing new is visible until this runs
-python -m owcsmuse check              # gate: exit 1 means do not trust what just landed
+fly auth login
+fly apps create owcsmuse-api
+fly secrets set --stage DATABASE_URL='postgresql://...'   # the Supabase session pooler string; --stage: no machine yet
+fly deploy --ha=false        # one machine: without --ha=false a first deploy creates two
+fly status                   # one machine in sea, state started, check passing
+fly checks list              # the /healthz check
+fly logs                     # streams JSON logs; the release_command's migrate output appears first
+curl https://owcsmuse-api.fly.dev/healthz
 ```
 
-Every phase is resumable and idempotent, so a failed run is re-run rather than
-repaired, and the adaptive limiter keeps FACEIT requests inside the published
-allowance. Daily is ample; OWCS plays on weekends. Two things it deliberately
-does not do: it never marks a newly discovered competition as in scope - that
-stays a human decision through `classify` and `scope/decisions.json` - and it
-never merges an org identity without a reviewed entry in
-`scope/org_decisions.json`. A deploy that automates those away gets wrong answers
-that look right.
+Later deploys are `fly deploy` (the release command migrates first; a failed migrate aborts the deploy and leaves the
+running machine alone). `fly secrets set` without `--stage` restarts the machine with the new value. `fly ssh console`
+opens a shell in the running machine, e.g. for `python -m owcsmuse check`. Set no `FACEIT_API_KEY` or
+`LIQUIPEDIA_API_KEY` here: `fly secrets list` should show `DATABASE_URL` alone.
+
+Every ingest phase is resumable and idempotent, so a failed run is re-run rather than repaired. Daily is ample; OWCS
+plays on weekends. What the schedule deliberately never does: put a newly discovered competition in scope (a person's
+`decide` through `scope/decisions.json`), merge an org identity without a reviewed entry in `scope/org_decisions.json`,
+or use an unreviewed Liquipedia team-name proposal. A deploy that automates those away gets wrong answers that look
+right.
 
 ## Consistency checks
 
@@ -1556,8 +1625,9 @@ private, so the badge above renders only for accounts with access:
 | job | what it runs |
 |---|---|
 | `lint` | `ruff check .` - correctness rules only (`E`, `F`, `W`, `B`); line length and statement layout are deliberately not enforced |
+| `API image` | `docker build` of the deployable image, then checks it runs as the non-root user `owcs` and carries neither pytest nor ruff |
 | `offline tests` | `pytest` with no database configured, proving the parsers, classifier, limiter and query layer need neither network nor DB |
-| `database tests` | `pytest -m "not golden"` against `postgres:16` **and** `postgres:17` service containers (a matrix): 17 is what Supabase runs, 16 is docker-compose and the dev default |
+| `database tests` | `pytest -m "not golden"` against `postgres:16` **and** `postgres:17` service containers (a matrix): 17 is what Supabase and docker-compose run; 16 stays covered |
 | `golden answers` | builds the golden warehouse and asserts the confirmed golden cases through `ask()` (see **Golden answer suite**), on both majors |
 | `frontend` | `npm ci && npm test && npm run build` in `web/` - component tests against a mocked API, then a production build |
 | `consistency checks` | builds a warehouse from the captured fixtures (`tools/build_fixture_db.py`), loads every `scope/` decision file through its own loader as production does, and runs `python -m owcsmuse check` against it, on both majors. It also ingests the golden capture of 1-36219ab4, the series that opens Virtus pro's window on `bb5dd404`, so `identity_windows` judges a decided window against a series it covers |

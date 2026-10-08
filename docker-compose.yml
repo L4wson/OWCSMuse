@@ -1,7 +1,14 @@
-# Local Postgres for development: `docker compose up -d`
+# Local development: the API (the same image a host runs) and Postgres 17, the major production runs (Supabase).
+#
+#   docker compose up -d --build            # migrate, then serve on http://localhost:8000 (OWCS_API_PORT to move it)
+#   docker compose up -d db                 # Postgres alone, for pytest or the CLI on the host
+#
+# From the host, the database is postgresql://owcs:owcs@localhost:5432/owcsmuse (also usable as
+# OWCS_TEST_DATABASE_URL). The volume is new with the move from 16 to 17: a 16 data directory does not start on 17,
+# so an old `owcs_pgdata` volume is simply no longer used (`docker volume rm owcsmuse_owcs_pgdata` to reclaim it).
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: owcs
       POSTGRES_PASSWORD: owcs
@@ -9,6 +16,27 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - owcs_pgdata:/var/lib/postgresql/data
+      - owcs_pgdata17:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U owcs -d owcsmuse"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://owcs:owcs@db:5432/owcsmuse
+      # which schema the API reads (default public); the golden warehouse lives in owcs_golden
+      OWCS_DB_SCHEMA: ${OWCS_DB_SCHEMA:-public}
+      OWCS_LOG_FORMAT: text
+    # migrate is idempotent, as on a deploy: the release step, then the server
+    command: ["sh", "-c", "python -m owcsmuse migrate && exec python -m owcsmuse serve --host 0.0.0.0 --port 8000"]
+    ports:
+      - "${OWCS_API_PORT:-8000}:8000"     # OWCS_API_PORT=8010 when the host's 8000 is taken
+
 volumes:
-  owcs_pgdata:
+  owcs_pgdata17:
