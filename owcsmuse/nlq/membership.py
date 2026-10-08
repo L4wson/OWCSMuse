@@ -15,8 +15,8 @@ from typing import Any, Optional
 
 import psycopg
 
-STINTS_SQL = """
-WITH played AS (
+# the series a player was rostered in, dated as answers date them (a Liquipedia date where linked)
+PLAYED_SQL = """
     SELECT DISTINCT m.match_id, ti.org_key, ti.org_id, ti.team_id, ti.display_name, x.at, c.season, r.is_substitute
       FROM match_rosters r
       JOIN matches m ON m.match_id = r.match_id
@@ -27,7 +27,10 @@ WITH played AS (
      WHERE r.player_id = %s AND c.include
        AND m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED'
        AND (%s::int IS NULL OR c.season = %s)
-), marked AS (
+"""
+
+STINTS_SQL = """
+WITH played AS (""" + PLAYED_SQL + """), marked AS (
     SELECT *, CASE WHEN org_key IS DISTINCT FROM lag(org_key) OVER w THEN 1 ELSE 0 END AS new_stint
       FROM played WINDOW w AS (ORDER BY at, match_id)
 ), stinted AS (
@@ -43,6 +46,15 @@ SELECT org_key,
        array_agg(DISTINCT season ORDER BY season) AS seasons
   FROM stinted GROUP BY stint, org_key ORDER BY min(at) DESC, stint DESC
 """
+
+
+def history_matches(conn: psycopg.Connection, player_id: str, season: Optional[int] = None) -> list[str]:
+    """The series a team history is built from: what its attribution must cover (a stint's dates can be Liquipedia's)."""
+    with conn.cursor() as cur:
+        cur.execute("SELECT DISTINCT match_id FROM (" + PLAYED_SQL + ") p", [player_id, season, season])
+        ids = [r["match_id"] for r in cur.fetchall()]
+    conn.commit()
+    return ids
 
 
 def team_history(conn: psycopg.Connection, player_id: str, season: Optional[int] = None) -> list[dict[str, Any]]:

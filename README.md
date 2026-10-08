@@ -1234,10 +1234,22 @@ Never touched: `match_players`, and therefore `fact_player_maps` and every playe
 no player stats, so none is invented. `python -m owcsmuse check` asserts this directly
 (`liquipedia_map_isolation`): no `match_players` row may join to a `source = 'liquipedia'` round.
 
-**Attribution.** `Answer.attribution` (CLI and API, see above) is populated from the FACEIT match ids an answer's
-evidence rows actually name: a match only carries a page when a Liquipedia-sourced value (a map or a date
-correction) contributed to it. An answer built entirely from FACEIT's own data carries `attribution: null`, exactly
-as before Stage 2.
+**Attribution.** `Answer.attribution` (CLI and API, see above) names the Liquipedia page of every value an answer
+presented, by the grain it presented them at (`answer_attribution` in `liquipedia/attribution.py`):
+
+- a series-grain answer (a record, a head-to-head, a series leaderboard, a versus answer's missing series) presents
+  a linked series' score, result and best-of, which are Liquipedia's since migration 034, so a linked series always
+  owes its page (the `series` view's `*_source` columns, and the page it read);
+- a map-grain answer owes the page for a Liquipedia map, a Liquipedia date, or a FACEIT phantom map Liquipedia's
+  game count removed;
+- a team history owes it for a stint dated by Liquipedia.
+
+It covers every match behind the answer (`answer_matches` in `nlq/evidence.py`): every ranked row, every page of
+evidence, with or without evidence asked for. If it cannot be computed the answer says so in a note rather than
+shipping uncredited. An answer built entirely from FACEIT's own data carries `attribution: null`. Until 2026-10-08
+only the map-grain rule existed, read from the one evidence page shown: 397 of 445 linked series on production
+presented Liquipedia's score with no credit, and no answer asked without evidence carried any (golden G48-G50, and
+`test_attribution_does_not_depend_on_evidence_being_asked_for`).
 
 ### Stage 3: identity without FACEIT
 
@@ -1430,28 +1442,25 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 
 **Left open**, in the order to pick them up:
 
-1. **Attribution of a Liquipedia result (compliance: first next session).** `answer_attribution` credits Liquipedia
-   only for its map rows and play times; a linked series presenting Liquipedia's *score* (the grand finals' 4-0 and
-   4-1) carries no CC-BY-SA attribution.
-2. **"zzz record in 2026" returns nothing while "zss" works:** the display name is set but the current name is not
+1. **"zzz record in 2026" returns nothing while "zss" works:** the display name is set but the current name is not
    searchable.
-3. **"this year" and "this stage" do not resolve** to 2026 and the current stage.
-4. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+2. **"this year" and "this stage" do not resolve** to 2026 and the current stage.
+3. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
    "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
    "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
    backs the synthetic by_match case).
-5. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
+4. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
    Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
-6. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
+5. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
    matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
    The FACEIT side needs a crawl, not Liquipedia requests.
-7. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
-8. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+6. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
+7. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
    it after the fact, the command should refuse it.
-9. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
-10. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
-11. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
-12. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+8. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
+9. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
+10. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
+11. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Golden answer suite
 

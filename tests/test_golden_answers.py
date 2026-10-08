@@ -66,3 +66,15 @@ def test_golden_answer(golden_db, case):
             pytest.fail(f"{case['id']} now agrees with its expectation: delete its known_bug ({known!r}).")
         pytest.xfail(f"known bug: {known}")
     assert outcome.ok, "\n" + harness.render(outcome)
+
+
+
+def test_attribution_does_not_depend_on_evidence_being_asked_for(golden_db):
+    """The values were presented whether or not the rows behind them were: an answer asked without evidence once
+    carried no attribution at all. Every attribution case must credit the same pages with evidence off."""
+    cases = [c for c in CONFIRMED if c["expect"].get("attribution_pages")]
+    assert cases, "no golden case asserts attribution"
+    for case in cases:
+        a = ask(golden_db, case["question"], with_evidence=False)
+        have = (a.attribution or {}).get("pages") or []
+        assert set(case["expect"]["attribution_pages"]) <= set(have), (case["id"], have)

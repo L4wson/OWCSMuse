@@ -1227,6 +1227,52 @@
    },
    "derivation": "Owner alias 'GK EMEA' -> the EMEA Geekay team id (2026-10-08).",
    "status": "confirmed"
+  },
+  {
+   "id": "G48",
+   "title": "A series record whose score came from Liquipedia credits the page",
+   "kind": "invariant",
+   "regression": "a Liquipedia score carried no CC-BY-SA attribution (owner, 2026-10-08)",
+   "question": "Toronto Defiant record",
+   "expect": {
+    "status": "ok",
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1"
+    ]
+   },
+   "derivation": "Toronto Defiant's grand final presents Liquipedia's 4-0 (FACEIT stores 5-0), and a linked series takes its score, result and best-of from Liquipedia (migration 034). Its maps and date are FACEIT's, so the old rule (credit only Liquipedia maps or dates) named no page: 397 of 445 linked series on production.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G49",
+   "title": "A leaderboard credits the pages behind every row, not only the expanded one",
+   "kind": "invariant",
+   "regression": "attribution read one evidence page, not the answer (owner, 2026-10-08)",
+   "question": "which team has the most wins in 2024",
+   "expect": {
+    "status": "ok",
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major",
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1"
+    ]
+   },
+   "derivation": "All 9 2024 teams are ranked rows, so every linked 2024 series is behind the answer: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major, https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1. Attribution once read only the evidence page of the expanded top row.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G50",
+   "title": "A team history dated by Liquipedia credits the page",
+   "kind": "invariant",
+   "regression": "a team history carried no attribution (owner, 2026-10-08)",
+   "question": "what team is iCrimzo on",
+   "expect": {
+    "status": "ok",
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major"
+    ]
+   },
+   "derivation": "iCrimzo's stint is dated by the Dreamhack Dallas series, which FACEIT left without a real time and Liquipedia dates (Overwatch_Champions_Series/2024/Major). A team history once skipped attribution entirely.",
+   "status": "confirmed"
   }
  ]
 }

@@ -438,3 +438,45 @@ def fetch_evidence(conn: psycopg.Connection, v: Validated, r: Resolved, rows: li
     return _run(conn, compiled, page, page_size,
                 expand=expand if (ranked or evidence_for) else None,
                 expandable_by=(expand or {}).get("column") if ranked else None)
+
+
+# ------------------------------------------------------------------- what the answer drew on
+
+ALL_ROWS = 1_000_000      # one page that holds every row: the sources of an answer are not paged
+
+
+def answer_matches(conn: psycopg.Connection, v: Validated, r: Resolved, rows: list[dict[str, Any]],
+                   stat_key: Optional[str] = None, missing_series: bool = False) -> dict[str, set[str]]:
+    """Every match behind an answer, by grain ('map' or 'series'): what its attribution must cover.
+
+    Not the evidence page a reader is looking at: page 2 of a record, the rows of a leaderboard other than the one
+    expanded, or an answer asked without evidence still presented values from these matches. A versus answer's
+    missing series (a note counts their maps by series score) are series-grain too.
+    """
+    queries: list[EvidenceQuery] = []
+    if v.query.intent in ("leaderboard", "map_stats"):
+        for row in rows:
+            target = row.get("entity") or entity_of(row)
+            if target:
+                q = compile_evidence(v, r, target, 1, ALL_ROWS, stat_key)
+                if q:
+                    queries.append(q)
+    else:
+        q = compile_evidence(v, r, None, 1, ALL_ROWS, stat_key)
+        if q:
+            queries.append(q)
+    if missing_series:
+        q = compile_missing_series(v, r, 1, ALL_ROWS)
+        if q:
+            queries.append(q)
+    out: dict[str, set[str]] = {}
+    try:
+        with conn.cursor() as cur:
+            for q in queries:
+                cur.execute(f"SELECT DISTINCT match_id FROM ({q.sql}) x", q.params)
+                out.setdefault(q.grain, set()).update(x["match_id"] for x in cur.fetchall() if x["match_id"])
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    return out

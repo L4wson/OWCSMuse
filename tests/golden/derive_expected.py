@@ -64,7 +64,7 @@ CONFIRMED |= {"G41", "G42", "G43", "G44"}
 # G45 (owner, 2026-10-08): "TF" is Team Falcons, overriding TFW
 CONFIRMED |= {"G45"}
 # G46+ (owner, 2026-10-08, second batch): GK region-qualified; attribution; display names; relative time
-CONFIRMED |= {"G46", "G47"}
+CONFIRMED |= {"G46", "G47", "G48", "G49", "G50"}
 
 CASES: list[dict] = []
 
@@ -734,6 +734,35 @@ case("G47", "'GK EMEA' is the EMEA Geekay", "invariant", "GK EMEA record",
      {"status": "ok", "entity": {"role": "subject", "type": "team", "id": GK_EMEA, "name": "Geekay Esports"}},
      "Owner alias 'GK EMEA' -> the EMEA Geekay team id (2026-10-08).",
      regression="one alias for a region-split name would pick a region (owner, 2026-10-08)")
+
+# Liquipedia attribution. The page URL is the site plus the record's own page name (CC-BY-SA credit names the page).
+def lp_page(match_id):
+    return "https://liquipedia.net/overwatch/" + I.LIQUIPEDIA[match_id]["pagename"].replace(" ", "_")
+
+
+case("G48", "A series record whose score came from Liquipedia credits the page", "invariant", "Toronto Defiant record",
+     {"status": "ok", "attribution_pages": [lp_page(NA_FINAL)]},
+     f"Toronto Defiant's grand final presents Liquipedia's {gf_for}-{gf_against} (FACEIT stores 5-0), and a linked series "
+     "takes its score, result and best-of from Liquipedia (migration 034). Its maps and date are FACEIT's, so the old "
+     "rule (credit only Liquipedia maps or dates) named no page: 397 of 445 linked series on production.",
+     regression="a Liquipedia score carried no CC-BY-SA attribution (owner, 2026-10-08)")
+
+lp24 = sorted({lp_page(x.match_id) for x in S if x.season == 2024 and x.counts_as_series and x.match_id in I.LIQUIPEDIA})
+teams24 = {x.team[k] for x in S if x.season == 2024 and x.counts_as_series for k in x.team}
+assert len(teams24) <= 10, "every 2024 team must be a shown row, so every linked 2024 series is behind the answer"
+case("G49", "A leaderboard credits the pages behind every row, not only the expanded one", "invariant",
+     "which team has the most wins in 2024",
+     {"status": "ok", "attribution_pages": lp24},
+     f"All {len(teams24)} 2024 teams are ranked rows, so every linked 2024 series is behind the answer: "
+     + ", ".join(lp24) + ". Attribution once read only the evidence page of the expanded top row.",
+     regression="attribution read one evidence page, not the answer (owner, 2026-10-08)")
+
+icrimzo = pid("iCrimzo")
+case("G50", "A team history dated by Liquipedia credits the page", "invariant", "what team is iCrimzo on",
+     {"status": "ok", "attribution_pages": [lp_page(DALLAS)]},
+     "iCrimzo's stint is dated by the Dreamhack Dallas series, which FACEIT left without a real time and Liquipedia "
+     f"dates ({I.LIQUIPEDIA[DALLAS]['pagename']}). A team history once skipped attribution entirely.",
+     regression="a team history carried no attribution (owner, 2026-10-08)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
