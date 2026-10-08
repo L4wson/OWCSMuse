@@ -63,6 +63,8 @@ CONFIRMED |= {"G38", "G39", "G40"}
 CONFIRMED |= {"G41", "G42", "G43", "G44"}
 # G45 (owner, 2026-10-08): "TF" is Team Falcons, overriding TFW
 CONFIRMED |= {"G45"}
+# G46+ (owner, 2026-10-08, second batch): GK region-qualified; attribution; display names; relative time
+CONFIRMED |= {"G46", "G47"}
 
 CASES: list[dict] = []
 
@@ -720,6 +722,18 @@ case("G45", "'TF' is Team Falcons by the owner's decision, not TFW", "invariant"
      "with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is "
      "settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
      regression="'TF' resolved to TFW (owner, 2026-10-08)")
+
+GK_NA, GK_EMEA = team_id("Geekay Esports", "na"), team_id("Geekay Esports", "emea")
+case("G46", "A bare 'GK' asks which Geekay: the alias is region-qualified", "invariant", "GK record",
+     {"status": "clarify", "candidate_ids": [GK_NA, GK_EMEA],
+      "answer_candidate": {"id": GK_NA, "expect": {"status": "ok", "entity": {"role": "subject", "id": GK_NA}}}},
+     "Geekay Esports is two team ids, NA and EMEA. The owner's aliases are 'GK NA' and 'GK EMEA' (2026-10-08), so a bare "
+     "'gk' prefix-matches both and must ask, never pick a region silently.",
+     regression="one alias for a region-split name would pick a region (owner, 2026-10-08)")
+case("G47", "'GK EMEA' is the EMEA Geekay", "invariant", "GK EMEA record",
+     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": GK_EMEA, "name": "Geekay Esports"}},
+     "Owner alias 'GK EMEA' -> the EMEA Geekay team id (2026-10-08).",
+     regression="one alias for a region-split name would pick a region (owner, 2026-10-08)")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

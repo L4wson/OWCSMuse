@@ -1183,6 +1183,50 @@
    },
    "derivation": "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
    "status": "confirmed"
+  },
+  {
+   "id": "G46",
+   "title": "A bare 'GK' asks which Geekay: the alias is region-qualified",
+   "kind": "invariant",
+   "regression": "one alias for a region-split name would pick a region (owner, 2026-10-08)",
+   "question": "GK record",
+   "expect": {
+    "status": "clarify",
+    "candidate_ids": [
+     "590b7d3b-a200-47b9-a967-f02274c1977b",
+     "46f8e560-76fe-4b5f-85e7-397957e0dc74"
+    ],
+    "answer_candidate": {
+     "id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+     "expect": {
+      "status": "ok",
+      "entity": {
+       "role": "subject",
+       "id": "590b7d3b-a200-47b9-a967-f02274c1977b"
+      }
+     }
+    }
+   },
+   "derivation": "Geekay Esports is two team ids, NA and EMEA. The owner's aliases are 'GK NA' and 'GK EMEA' (2026-10-08), so a bare 'gk' prefix-matches both and must ask, never pick a region silently.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G47",
+   "title": "'GK EMEA' is the EMEA Geekay",
+   "kind": "invariant",
+   "regression": "one alias for a region-split name would pick a region (owner, 2026-10-08)",
+   "question": "GK EMEA record",
+   "expect": {
+    "status": "ok",
+    "entity": {
+     "role": "subject",
+     "type": "team",
+     "id": "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+     "name": "Geekay Esports"
+    }
+   },
+   "derivation": "Owner alias 'GK EMEA' -> the EMEA Geekay team id (2026-10-08).",
+   "status": "confirmed"
   }
  ]
 }

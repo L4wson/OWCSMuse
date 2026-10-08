@@ -565,7 +565,16 @@ Decided so far: `SSG` -> SpaceStation Gaming, `VP` -> Virtus pro, `peps` ->
 Team Peps and `quick` -> Quick Esports (orgs); `TL` -> Team Liquid, `TM` ->
 Twisted Minds, `CR` -> Crazy Raccoons, `DSG` -> Disguised, `DF` -> Dallas Fuel,
 `toronto` / `defiant` / `TD` -> Toronto Defiant, `GG` / `Gen.G` -> GenG
-Esports and `TF` -> Team Falcons (team ids, unmapped to any org).
+Esports, `TF` -> Team Falcons, and `GK NA` / `GK EMEA` -> the two Geekay
+Esports teams (team ids, unmapped to any org).
+
+Geekay is region-split: two team ids, NA (2025) and EMEA (2026), and an alias
+names one entity. A single `GK` would pick a region silently, so the aliases
+carry the region; a bare "GK" prefix-matches both and asks which (golden
+G46-G47). Not aliased, by owner decision (2026-10-08): `vision` is the exact
+in-game name of the player Vision (VisionLIVE), and an alias to Vision Esports
+would hide him; it stays a clarify between the two. `CN` (Citrus Nation over
+the player CNYXC) was considered and dropped.
 
 A partial name ("toronto", "peps") is the same mechanism as an initialism: an
 alias is an exact lookup of the folded string, whatever its shape, and fires
@@ -1427,24 +1436,22 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 2. **"zzz record in 2026" returns nothing while "zss" works:** the display name is set but the current name is not
    searchable.
 3. **"this year" and "this stage" do not resolve** to 2026 and the current stage.
-4. **Team abbreviations left to the owner** (2026-10-08), to decide from how people actually refer to them: Geekay
-   Esports, Vision Esports, Citrus Nation.
-5. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+4. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
    "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
    "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
    backs the synthetic by_match case).
-6. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
+5. **Identities left undecided by the owner:** Shaq (two candidate GUIDs), Massivepoop, and the 4 held pages (W1ll,
    Ailiseu, Aniyun, Niann03: Liquipedia lists them in series whose FACEIT roster lacks the proposed GUID).
-7. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
+6. **6 unmatched Liquipedia records:** 3 name FACEIT ids not in the warehouse (Ataraxia-Metaboiz 2024, two 2026-04-12
    matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
    The FACEIT side needs a crawl, not Liquipedia requests.
-8. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
-9. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+7. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
+8. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
    it after the fact, the command should refuse it.
-10. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
-11. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
-12. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
-13. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+9. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
+10. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
+11. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
+12. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Golden answer suite
 

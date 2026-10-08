@@ -37,6 +37,18 @@
       "note": "shorthand for GenG Esports (owner, 2026-10-08); overrides the fuzzy match to the player Zerggy",
       "decided_at": "2026-10-08T20:57:51+00:00"
     },
+    "gk emea": {
+      "entity_type": "team",
+      "entity_id": "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+      "note": "Geekay Esports, the EMEA team (2026) (owner, 2026-10-08). Region-qualified: see 'gk na'",
+      "decided_at": "2026-10-08T21:14:04+00:00"
+    },
+    "gk na": {
+      "entity_type": "team",
+      "entity_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+      "note": "Geekay Esports, the NA team (2025) (owner, 2026-10-08). Region-qualified because Geekay is two team ids, NA and EMEA: one 'GK' entry would silently pick a region. A bare 'gk' prefix-matches both qualified aliases and asks which, as 'geekay esports' does",
+      "decided_at": "2026-10-08T21:14:03+00:00"
+    },
     "peps": {
       "entity_type": "org",
       "entity_id": "team-peps",
