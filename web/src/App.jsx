@@ -146,11 +146,18 @@ export default function App() {
           <>
             <QuestionBar value={question} onSubmit={runQuestion} busy={phase === "loading"} compact />
             {phase === "loading" && !answer ? <Loading question={question} /> : null}
+            {phase === "loading" && answer ? (
+              // a new question while the last answer is still on screen: say so, and dim what is now out of date
+              <p className="loading-line" role="status" data-testid="loading-line">
+                <span className="spinner spinner--inline" aria-hidden="true" />
+                Looking up{question ? `: ${question}` : "..."}
+              </p>
+            ) : null}
             {phase === "error" ? (
               <ErrorState error={error} onRetry={() => (question ? runQuestion(question) : goHome())} onHome={goHome} />
             ) : null}
             {answer && phase !== "error" ? (
-              <>
+              <div className={phase === "loading" ? "result-stale" : undefined} aria-busy={phase === "loading" || undefined}>
                 <Result
                   answer={answer}
                   suggestions={suggestions?.suggestions ?? []}
@@ -162,14 +169,14 @@ export default function App() {
                   onExpand={onExpand}
                 />
                 <ShareLine slug={answer.slug} />
-              </>
+              </div>
             ) : null}
           </>
         )}
       </main>
 
       <footer className="footer">
-        <span>OWCS NA + EMEA main competition, 2024-2026. Every row links to its FACEIT match.</span>
+        <span>OWCS NA + EMEA main competition and the international events, 2024-2026. Every row links to its source.</span>
       </footer>
     </div>
   );

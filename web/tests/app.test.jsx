@@ -55,6 +55,53 @@ describe("asking", () => {
     expect(screen.queryByTestId("loading")).not.toBeInTheDocument();
   });
 
+  it("shows a spinner in the ask box while a clicked example is in flight", async () => {
+    let release;
+    const gate = new Promise((resolve) => {
+      release = resolve;
+    });
+    mount([["/ask", async () => { await gate; return ok(LEADERBOARD); }]]);
+    const example = (await screen.findAllByRole("button", { name: SUGGESTIONS.suggestions[0].question }))[0];
+    await userEvent.click(example);
+
+    // the click submits at once: the box holds the question, the button says it is working
+    expect(screen.getByRole("textbox", { name: /ask about owcs/i })).toHaveValue(SUGGESTIONS.suggestions[0].question);
+    const button = screen.getByRole("button", { name: /asking/i });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(within(button).getByTestId("ask-spinner")).toBeInTheDocument();
+
+    release();
+    await screen.findByTestId("answer");
+    expect(screen.queryByTestId("ask-spinner")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ask" })).toBeInTheDocument();
+  });
+
+  it("marks the last answer out of date while the next question is in flight", async () => {
+    let release;
+    let gate = Promise.resolve();
+    mount([["/ask", async ({ body }) => {
+      await gate;
+      return ok(body.question.startsWith("who") ? LEADERBOARD : VERSUS);
+    }]]);
+    const box = await screen.findByRole("textbox");
+    await userEvent.type(box, "Sugarfree map record against Zeruhh{Enter}");
+    await screen.findByTestId("answer");
+
+    gate = new Promise((resolve) => {
+      release = resolve;
+    });
+    await userEvent.clear(screen.getByRole("textbox"));
+    await userEvent.type(screen.getByRole("textbox"), "who had the most eliminations{Enter}");
+
+    expect(await screen.findByTestId("loading-line")).toHaveTextContent("Looking up: who had the most eliminations");
+    expect(screen.getByTestId("answer").closest(".result-stale")).not.toBeNull();
+    expect(screen.getByTestId("ask-spinner")).toBeInTheDocument();
+
+    release();
+    await waitFor(() => expect(screen.queryByTestId("loading-line")).not.toBeInTheDocument());
+    expect(screen.getByTestId("answer").closest(".result-stale")).toBeNull();
+  });
+
   it("puts the answer on its own URL", async () => {
     mount([["/ask", ok(VERSUS)]]);
     await userEvent.type(await screen.findByRole("textbox"), "Sugarfree map record against Zeruhh{Enter}");
