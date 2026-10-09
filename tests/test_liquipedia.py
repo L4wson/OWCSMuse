@@ -276,6 +276,16 @@ def test_a_run_pages_until_a_short_page_and_records_coverage_only_when_the_batch
     assert _plan(store, {"A": 3, "B": 2}).projected_requests == 0
 
 
+def test_a_run_stops_at_its_own_request_ceiling_and_covers_nothing_it_did_not_finish():
+    # a batch that keeps returning full pages would page on until the hourly budget ran out; the ceiling stops it
+    wire = Wire(lambda req: rows_response(2, parent="A"))
+    client, store, _ = make_client(wire)
+    res = run_plan(client, _plan(store, {"A": 3}, limit=2, max_chars=100000), max_requests=3)
+    assert res.outcome == "budget" and res.stopped_by == "StageCeiling"
+    assert res.requests_sent == 3 and len(wire.requests) == 3
+    assert ("match", "parent", "A") not in store.coverage
+
+
 def test_a_rerun_after_the_budget_ran_out_resumes_and_repeats_nothing():
     wire = Wire(lambda req: rows_response(1))
     client, store, clock = make_client(wire, budget=2)

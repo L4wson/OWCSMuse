@@ -77,7 +77,7 @@ class Run:
                 "inside_window": sum(1 for x in v if -w.before_min <= x <= w.after_min)}
 
 
-def load_map(path: str = DEFAULT_MAP_PATH) -> tuple[dict[str, set[str]], dict[str, str]]:
+def load_map(path: str = DEFAULT_MAP_PATH, events_path: Optional[str] = None) -> tuple[dict[str, set[str]], dict[str, str]]:
     pages = json.loads(Path(path).read_text(encoding="utf-8"))["pages"]
     comps: dict[str, set[str]] = {}
     names: dict[str, str] = {}
@@ -85,6 +85,12 @@ def load_map(path: str = DEFAULT_MAP_PATH) -> tuple[dict[str, set[str]], dict[st
         page = e["page"].replace(" ", "_")
         comps.setdefault(page, set()).add(cid)
         names[page] = e["name"]
+    # Stage 4: pages of events with no FACEIT competition, under their `lp:` championship (scope/liquipedia_events.json)
+    from .events import event_comps
+    ev_comps, ev_names = event_comps(events_path)
+    for page, cids in ev_comps.items():
+        comps.setdefault(page, set()).update(cids)
+        names.setdefault(page, ev_names[page])
     return comps, names
 
 
@@ -118,7 +124,8 @@ def stored_match_rows(conn: psycopg.Connection, field_name: str = "pagename") ->
 
 def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT_TEAM_MAP_PATH,
                        decisions_path: str = DEFAULT_LINK_DECISIONS_PATH, map_path: str = DEFAULT_MAP_PATH,
-                       window: Window = DEFAULT_WINDOW, use_proposals: bool = True, wiki: str = "overwatch") -> Run:
+                       window: Window = DEFAULT_WINDOW, use_proposals: bool = True, wiki: str = "overwatch",
+                       events_path: Optional[str] = None) -> Run:
     rows, raw_ids = stored_match_rows(conn)
     if not rows:
         raise RuntimeError("no stored Liquipedia match responses: the Stage 1 fetch has not been run "
@@ -127,7 +134,7 @@ def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT
     for rid in raw_ids:
         lps += parse_rows([{k: v for k, v in r.items() if k != "_raw_id"} for r in rows if r["_raw_id"] == rid], rid, wiki)
     lps, dups = dedupe(lps)
-    comps_of_page, page_names = load_map(map_path)
+    comps_of_page, page_names = load_map(map_path, events_path)
     faceit = load_faceit_side(conn, sorted({c for cs in comps_of_page.values() for c in cs}))
     by_id = {f.match_id: f for f in faceit}
 

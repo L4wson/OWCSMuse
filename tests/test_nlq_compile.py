@@ -204,11 +204,15 @@ def test_team_leaderboard_by_win_rate():
     assert "agg_team_matches" in c.sql and "region = %s" in c.sql and "ORDER BY win_pct DESC" in c.sql
 
 
-def test_head_to_head_orders_pair_and_presents_from_first_team():
+def test_head_to_head_keys_both_sides_by_org_and_presents_from_the_first_named():
     v = validate(parse("Twisted Minds series record against ENCE in 2024"), INFO)
     c = _sql(v, Resolved(team_id="t2", opponent_id="t1", names={"team": "Twisted Minds", "opponent": "ENCE"}))
-    assert "agg_head_to_head" in c.sql and c.params[2:4] == ["t1", "t2"]
-    assert "sum(b_wins) AS wins" in c.sql  # first-named team is team_b
+    # from the first-named team's row of each series, by org key: a raw team id never matched an org's series
+    assert "fact_team_matches" in c.sql and c.params[2:4] == ["team:t2", "team:t1"]
+    assert "org_key = %s AND opponent_org_key = %s" in c.sql and "HAVING count(*) > 0" in c.sql
+    c = _sql(v, Resolved(team_id="spacestation-gaming", subject_type="org", opponent_id="t1",
+                         names={"team": "SpaceStation Gaming", "opponent": "ENCE"}))
+    assert c.params[2:4] == ["spacestation-gaming", "team:t1"]
     u = compile_query(v, Resolved(team_id="t1"))
     assert isinstance(u, Unanswerable) and u.code == "invalid_query"
 

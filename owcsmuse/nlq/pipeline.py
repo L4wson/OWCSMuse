@@ -9,7 +9,7 @@ from typing import Any, Optional
 
 import psycopg
 
-from ..liquipedia.attribution import answer_attribution, attribution_for
+from ..liquipedia.attribution import answer_attribution, attribution_block, attribution_for
 from ..liquipedia.attribution import render_lines as render_attribution
 from ..aggregates import stat_coverage_summary
 from ..limitations import applicable as applicable_limitations, entity_match_filter
@@ -208,6 +208,13 @@ def _results_only_alternatives(question: str, q: StructuredQuery, r: Resolved) -
     for name in (left, right):
         if name:
             out.append(f"{name} record")
+    champ = q.filters.championship
+    if champ and not left:
+        # an event-wide question: where the teams finished (placings need no identity decision), then the same
+        # event at series grain
+        season = f"{q.filters.season} " if q.filters.season else ""
+        out.append(f"{season}{champ} standings")
+        out.append(f"team with the most series wins at the {season}{champ}")
     region = q.filters.region
     if region:
         import re as _re
@@ -408,6 +415,53 @@ def _membership_answer(conn: psycopg.Connection, question: str, q: StructuredQue
     return a
 
 
+def _placement_answer(conn: psycopg.Connection, question: str, q: StructuredQuery, r: Resolved, pre: Answer,
+                      used: str, info: SchemaInfo) -> Answer:
+    """Where teams finished at an event: Liquipedia's prize pool (`placements`), credited to its page.
+
+    A team name no decision resolves is still shown as Liquipedia names it (`identity: undecided`): that is
+    Liquipedia's own record of who finished where, not an identity claim, and nothing about it is merged.
+    """
+    v = validate(q, info)
+    if isinstance(v, Unanswerable):
+        return _cannot(question, v, q, used, pre.entities)
+    f = q.filters
+    clauses, params = ["championship_id = ANY(%s)"], [v.championship_ids]
+    if f.place is not None:
+        clauses.append("place_high <= %s AND %s <= place_low")
+        params += [f.place, f.place]
+    key = r.org_key(r.team_id, r.subject_type) if r.team_id else None
+    if key:
+        clauses.append("org_key = %s")
+        params.append(key)
+    rows = run_compiled(conn, Compiled(
+        sql=f"""SELECT championship_name AS championship, season, placement, place_high, place_low, display_name AS team,
+                       team_name AS liquipedia_name, CASE WHEN team_id IS NULL THEN 'undecided' ELSE 'decided' END AS identity,
+                       qualifier, page_url
+                  FROM placements WHERE {' AND '.join(clauses)}
+                 ORDER BY season, championship_id, place_high, display_name""",
+        params=params, description="event placings"))
+    names = [info.championship_display.get(cid) or info.championships.get(cid) for cid in v.championship_ids]
+    if not rows:
+        who = r.names.get("subject") or r.names.get("team")
+        reason = (f"{who} has no placing recorded at {', '.join(names)}" if who else
+                  f"no placing recorded at {', '.join(names)}" + (f" for position {f.place}" if f.place else ""))
+        u = Unanswerable(code="no_data", reason=reason,
+                         suggestions=["Placings come from Liquipedia's prize pool for the international events "
+                                      "(World Finals, Midseason Championships, Champions Clash, EWC 2024)."])
+        alts = [f"{who} record at the {f.season or ''} {f.championship}".replace("  ", " ")] if who else []
+        return _cannot(question, u, q, used, pre.entities, alts)
+    a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows,
+               description="event placings", parser=used, notes=list(v.notes))
+    undecided = sorted({x["liquipedia_name"] for x in rows if x["identity"] == "undecided"})
+    if undecided:
+        a.notes.append("named as Liquipedia names them, with no identity decided yet: " + ", ".join(undecided))
+    sentence = render_sentence(dict(a.query, championship_names=names), rows, pre.entities, a.description)
+    a.sentence = sentence.as_dict() if sentence else None
+    _attribute(conn, a, lambda: attribution_block(x["page_url"] for x in rows))
+    return a
+
+
 ATTRIBUTION_UNKNOWN = ("Liquipedia attribution could not be determined for this answer: values in it may come from "
                        "Liquipedia (CC-BY-SA 3.0, https://liquipedia.net/overwatch) without their page named.")
 
@@ -489,6 +543,8 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
 
     if q.intent == "team_membership":
         return _membership_answer(conn, question, q, r, pre, used)
+    if q.intent == "placement":
+        return _placement_answer(conn, question, q, r, pre, used, info)
 
     # 3. validate against the live schema
     v = validate(q, info)
@@ -496,7 +552,8 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
         # A stat that exists in other seasons is a question away from working.
         seasons_with = sorted(info.stat_keys.get(q.metric or "", set()) or [])
         swapped = None
-        if q.filters.season and seasons_with and q.filters.season not in seasons_with:
+        # (not for a results-only slice: another season does not give an event player stats it never had)
+        if v.code != "results_only" and q.filters.season and seasons_with and q.filters.season not in seasons_with:
             swapped = question.replace(str(q.filters.season), str(seasons_with[-1]))
         alts = [swapped] if swapped and swapped != question else []
         if v.code == "results_only":
@@ -616,7 +673,10 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows, coverage=coverage,
                notes=notes, limitations=limitations, description=c.description, parser=used)
     # the floor is the compiler's, not the question's: handed to the sentence so it can say who was left out
-    sentence = render_sentence(dict(a.query, min_maps_floor=c.min_maps_floor), rows, pre.entities, c.description)
+    sentence = render_sentence(dict(a.query, min_maps_floor=c.min_maps_floor,
+                                    championship_names=[info.championship_display.get(cid) or info.championships.get(cid)
+                                                        for cid in v.championship_ids]),
+                               rows, pre.entities, c.description)
     a.sentence = sentence.as_dict() if sentence else None
     if with_evidence:
         # The aggregate is the claim; these are the rows that produce it.

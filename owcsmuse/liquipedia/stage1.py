@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 import psycopg
 
@@ -42,8 +42,10 @@ def underscored(page: str) -> str:
     return page.strip().replace(" ", "_")
 
 
-def stage1_wants(conn: psycopg.Connection, map_path: str = MAP_PATH) -> dict[str, int]:
-    """{Liquipedia page: how many series FACEIT has for the competitions mapped to it}."""
+def stage1_wants(conn: psycopg.Connection, map_path: str = MAP_PATH, events_path: Optional[str] = None) -> dict[str, int]:
+    """{Liquipedia page: how many series FACEIT has for the competitions mapped to it}, plus every Stage 4 event page
+    (scope/liquipedia_events.json) at the match count its probe saw: those have no FACEIT side to count."""
+    from .events import EVENTS_PATH, event_wants
     pages = json.loads(Path(map_path).read_text(encoding="utf-8"))["pages"]
     with conn.cursor() as cur:
         cur.execute("""SELECT championship_id, count(*) AS n FROM matches
@@ -54,6 +56,8 @@ def stage1_wants(conn: psycopg.Connection, map_path: str = MAP_PATH) -> dict[str
     for cid, entry in pages.items():
         page = underscored(entry["page"])
         wants[page] = wants.get(page, 0) + counts.get(cid, 0)
+    for page, n in event_wants(events_path or EVENTS_PATH).items():
+        wants[page] = max(wants.get(page, 0), n)
     return wants
 
 

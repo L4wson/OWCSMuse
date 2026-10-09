@@ -30,6 +30,7 @@ from owcsmuse.db import RawPayloadStore  # noqa: E402
 from owcsmuse import aliases, orgs  # noqa: E402
 from owcsmuse.aggregates import refresh  # noqa: E402
 from owcsmuse.liquipedia import competition_names, identity  # noqa: E402
+from owcsmuse.liquipedia import events as lp_events  # noqa: E402
 from owcsmuse.liquipedia.teams import TeamMap  # noqa: E402
 
 
@@ -72,7 +73,8 @@ def load_decisions(conn) -> dict:
            "competition_names": competition_names.load(
                conn, competition_names.CompetitionDecisions(scope / "competition_names.json"),
                competition_names.propose(scope / "liquipedia_map.json", scope / "decisions.json",
-                                         scope / "competition_pages.json"))}
+                                         scope / "competition_pages.json")),
+           "events": lp_events.load_championships(conn, scope / "liquipedia_events.json")}
     with conn.cursor() as cur:
         # the shared fixture labels its 2026 qualifier 'manual', but no decision in scope/decisions.json covers it:
         # it is the classifier's call here, as it would be in production

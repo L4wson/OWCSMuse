@@ -649,7 +649,9 @@ def load_decisions(conn: psycopg.Connection, decisions: OrgDecisions) -> dict[st
         # a wrong cross-region merge) must not linger: it would then resolve as
         # an org entity with no team_ids under it and no rows in any fact view -
         # exactly the shape of a stale reference this project keeps finding.
-        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%')")
+        # An org a Liquipedia-born team maps to stays: a Liquipedia-only org (scope/liquipedia_team_map.json's
+        # `org_name`) has no FACEIT team id at all, and `identity load` owns it and its `lp:team:` mapping.
+        cur.execute("DELETE FROM orgs WHERE org_id NOT IN (SELECT DISTINCT org_id FROM team_orgs)")
         cur.execute("DELETE FROM team_orgs WHERE org_id NOT IN (SELECT org_id FROM orgs)")
         orphaned = cur.rowcount
     conn.commit()

@@ -114,6 +114,15 @@ def seasons_phrase(seasons: Any, prefix_single: str = "in ", prefix_many: str = 
     return f"{prefix_many}{', '.join(str(s) for s in ss[:-1])} and {ss[-1]}"
 
 
+def slice_phrase(row: dict[str, Any], query: dict) -> str:
+    """Where the numbers come from: 'at OWCS 2025 World Finals' when the question named one or two competitions,
+    else the seasons ('in 2025'). A record filtered to one event said only 'in 2025' before, which reads as the year."""
+    names = [n for n in (query.get("championship_names") or []) if n]
+    if 1 <= len(names) <= 2:
+        return "at " + " and ".join(names)
+    return seasons_phrase(row.get("seasons") or query.get("filters", {}).get("season"))
+
+
 def _maps_phrase(row: dict[str, Any]) -> str:
     maps = row.get("maps") or row.get("maps_played") or row.get("maps_with_stat")
     matches = row.get("matches")
@@ -164,7 +173,7 @@ def _versus(rows: list[dict], entities: dict[str, dict], query: dict) -> Optiona
     b.mark(str(subject), subject_type or "player", subject_id)
     b.add(f" is {record} in maps against ")
     b.mark(str(opponent), opponent_type or "player", opponent_id)
-    seasons = seasons_phrase(row.get("seasons") or query.get("filters", {}).get("season"))
+    seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
     return b.done()
@@ -203,7 +212,7 @@ def _head_to_head(rows: list[dict], entities: dict[str, dict], query: dict) -> O
     b.mark(str(subject), subject_type or "team", subject_id)
     b.add(f" is {num(row.get('wins'))}-{num(row.get('losses'))} in series against ")
     b.mark(str(opponent), opponent_type or "team", opponent_id)
-    seasons = seasons_phrase(row.get("seasons") or query.get("filters", {}).get("season"))
+    seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
     if row.get("map_wins") is not None:
@@ -227,7 +236,7 @@ def _team_record(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
         b.add(f" is {num(row['map_wins'])}-{num(row['map_losses'])} in maps")
     else:
         return None
-    seasons = seasons_phrase(row.get("seasons") or query.get("filters", {}).get("season"))
+    seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
     win_pct = row.get("win_pct") if row.get("win_pct") is not None else row.get("map_win_pct")
@@ -273,7 +282,7 @@ def _entity_stat(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     phrase = _maps_phrase(row)
     if phrase:
         b.add(f" across {phrase}")
-    seasons = seasons_phrase(row.get("seasons") or query.get("filters", {}).get("season"))
+    seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
     return b.done()
@@ -334,7 +343,7 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     phrase = _maps_phrase(row)
     if phrase:
         b.add(f" across {phrase}")
-    seasons = seasons_phrase(row.get("seasons") or query.get("filters", {}).get("season"))
+    seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
     if len(rows) > 1:
@@ -372,7 +381,7 @@ def _map_stats(rows: list[dict], entities: dict[str, dict], query: dict) -> Opti
         b.mark(str(label), what, str(label))
         b.add(f", {num(row.get('maps'))} maps in {num(row.get('matches'))} series"
               if row.get("matches") else f", {num(row.get('maps'))} maps")
-    seasons = seasons_phrase(query.get("filters", {}).get("season"))
+    seasons = slice_phrase({}, query)
     if seasons:
         b.add(f" {seasons}")
     return b.done()
@@ -430,8 +439,48 @@ def _team_membership(rows: list[dict], entities: dict[str, dict], query: dict) -
     return b.done()
 
 
+def ordinal(n: int) -> str:
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def place_phrase(row: dict) -> str:
+    """'1st', '3rd', '7th-8th' (a shared placing is a range: nobody finished 7th alone)."""
+    hi, lo = int(row["place_high"]), int(row["place_low"])
+    return ordinal(hi) if hi == lo else f"{ordinal(hi)}-{ordinal(lo)}"
+
+
+def _placement(rows: list[dict], entities: dict[str, dict], query: dict) -> Optional[Sentence]:
+    """'Twisted Minds won OWCS 2025 World Finals.' / 'Spacestation Gaming and Team Liquid placed 7th-8th at ...'"""
+    b = _Builder()
+    events = list(dict.fromkeys(r["championship"] for r in rows))
+    if query.get("filters", {}).get("subject") or query.get("filters", {}).get("team"):
+        name, entity_id, entity_type = _role_entity(entities, "subject", "team")
+        b.mark(str(name or rows[0]["team"]), entity_type or "team", entity_id)
+        for i, r in enumerate(rows):
+            b.add("," if 0 < i < len(rows) - 1 else (" and" if i else ""))
+            b.add(f" won {r['championship']}" if r["place_low"] == 1 else f" placed {place_phrase(r)} at {r['championship']}")
+        return b.done()
+    if len(events) != 1:
+        return None
+    place = rows[0]
+    same = [r for r in rows if (r["place_high"], r["place_low"]) == (place["place_high"], place["place_low"])]
+    for i, r in enumerate(same):
+        b.add(", " if 0 < i < len(same) - 1 else (" and " if i else ""))
+        b.mark(str(r["team"]), "team")
+    b.add(f" won {events[0]}" if place["place_low"] == 1 else f" placed {place_phrase(place)} at {events[0]}")
+    rest = [r for r in rows if r not in same][:2]
+    if rest and not query.get("filters", {}).get("place"):
+        b.add(", ahead of ")
+        for i, r in enumerate(rest):
+            b.add(" and " if i else "")
+            b.mark(str(r["team"]), "team")
+            b.add(f" ({place_phrase(r)})")
+    return b.done()
+
+
 _TEMPLATES = {
     "team_membership": _team_membership,
+    "placement": _placement,
     "versus": _versus,
     "season_compare": _season_compare,
     "head_to_head": _head_to_head,

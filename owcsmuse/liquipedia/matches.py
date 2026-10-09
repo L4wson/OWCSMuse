@@ -108,6 +108,10 @@ def region_of(pagename: str) -> str:
     2024 pages spell North America out (`.../2024/North_America/Stage_1`); 2025 onward abbreviate it (`.../2025/NA/...`).
     Missing the long form once made every 2024 NA record 'other' and so cross-region against FACEIT's 'na'."""
     parts = {p.upper().replace(" ", "_") for p in pagename.split("/")}
+    # an international event (Stage 4, and Dreamhack Dallas): its own bucket, so a name that is two teams in NA and
+    # EMEA can be decided for the events separately, from each event's qualifier
+    if parts.intersection(("WORLD_FINALS", "MIDSEASON_CHAMPIONSHIP", "CHAMPIONS_CLASH", "MAJOR")) or "ESPORTS_WORLD_CUP" in parts:
+        return "international"
     for names, label in ((("NA", "NORTH_AMERICA"), "na"), (("EMEA",), "emea"), (("KOREA",), "korea"),
                          (("CHINA",), "china"), (("JAPAN",), "japan"), (("PACIFIC",), "pacific")):
         if parts.intersection(names):

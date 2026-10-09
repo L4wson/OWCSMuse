@@ -148,6 +148,49 @@ main {
   cursor: default;
 }
 
+/* in flight: the button stays legible and says so, rather than greying out like an empty box */
+.question-bar button[aria-busy="true"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 1;
+  cursor: progress;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex: none;
+}
+
+.spinner--inline {
+  margin-right: 8px;
+  vertical-align: -2px;
+  color: var(--accent);
+}
+
+.loading-line {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+
+.result-stale {
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .question-bar--compact {
   margin-bottom: 20px;
 }
@@ -503,6 +546,11 @@ table.data tbody tr:last-child td {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.6;
+  }
   .skeleton {
     animation: none;
   }

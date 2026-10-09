@@ -13,6 +13,26 @@
       "note": "Quick Esports' roster in 2025 Stage 2, played as 1DIPv100GORILLA; one org. Owner decision (2026-10-02).",
       "decided_at": "2026-10-02T08:11:37+00:00"
     },
+    "9z team": {
+      "entity_type": "org",
+      "entity_id": "9z-team",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Smaller South American team that reached EWC.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "9z Team"
+    },
+    "al qadsiah": {
+      "entity_type": "org",
+      "entity_id": "qadsiah",
+      "note": "Strong proposal accepted (owner, 2026-10-09 (Stage 4)): every id-linked match stood opposite this org.",
+      "decided_at": "2026-10-09T18:13:17+00:00"
+    },
+    "all gamers global": {
+      "entity_type": "org",
+      "entity_id": "all-gamers-global",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Chinese partner team.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "All Gamers Global"
+    },
     "anyone s legend": {
       "entity_type": "team",
       "entity_id": "75516399-4c1d-40fc-bb46-a887edadc5a2",
@@ -25,17 +45,32 @@
       "note": "same roster as Extinction, different org names; roster continuity over org branding",
       "decided_at": "2026-09-23T05:02:31+00:00"
     },
+    "bleed esports": {
+      "entity_type": "org",
+      "entity_id": "bleed-esports",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Pacific.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "Bleed Esports"
+    },
     "crazy raccoon": {
-      "entity_type": "team",
-      "entity_id": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7",
-      "note": "FACEIT 'Crazy Raccoons'. Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T01:29:49+00:00"
+      "entity_type": "org",
+      "entity_id": "crazy-raccoon",
+      "note": "One continuous org including the Dallas entry (owner, 2026-10-09 (Stage 4)); was anchored to the bare Dallas team id 4cbafe8a with no window, which keyed every later event to the 2024 team.",
+      "decided_at": "2026-10-09T17:59:55+00:00"
+    },
+    "dallas fuel": {
+      "entity_type": "org",
+      "entity_id": "dallas-fuel",
+      "note": "Strong proposal accepted as an org, not the bare id cd157523 (owner, 2026-10-09 (Stage 4)).",
+      "decided_at": "2026-10-09T18:13:17+00:00"
     },
     "ence": {
       "entity_type": "team",
       "entity_id": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
-      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T01:29:49+00:00"
+      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02). Window bounded to the 2024 season by the owner (2026-10-09): played in 2024 and did not return in later seasons. Liquipedia shows 2024 play after the FACEIT activity ends (2024-06-02): EWC 2024 (ENCE, M80) and the 2024 World Finals (Toronto Defiant, ENCE), all inside this window.",
+      "decided_at": "2026-10-02T01:29:49+00:00",
+      "valid_from": "2024-01-01T00:00:00+00:00",
+      "valid_to": "2025-01-01T00:00:00+00:00"
     },
     "extinction": {
       "entity_type": "org",
@@ -43,11 +78,69 @@
       "note": "Extinction is one organisation across two FACEIT team ids (2b7f8ef6 in 2025, a35f8d47 in 2026), each mapped to the org over its own Extinction era in scope/org_decisions.json; the Liquipedia name resolves to the org at the series' time, which keys to whichever team id carried it then. Supersedes the Stage 1 decision (team 2b7f8ef6 for all time), whose 5 conflicting votes for a35f8d47 were the 2026 era.",
       "decided_at": "2026-10-01T22:00:00+00:00"
     },
+    "fnatic": {
+      "entity_type": "org",
+      "entity_id": "fnatic",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Previously played in Korea; no longer does.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "Fnatic"
+    },
+    "gaimin gladiators": {
+      "entity_type": "org",
+      "entity_id": "gaimin-gladiators",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Picked up one roster for EWC 2024 and never played Overwatch again after 2024 Stage 4.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "Gaimin Gladiators"
+    },
+    "geekay esports|emea": {
+      "entity_type": "team",
+      "entity_id": "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+      "note": "EMEA Geekay Esports (owner, 2026-10-09 (Stage 4)): the region-qualified scheme of the GK aliases; 16/16 id-linked EMEA matches.",
+      "decided_at": "2026-10-09T17:59:55+00:00"
+    },
+    "geekay esports|international": {
+      "note": "Geekay Esports at the international events, which carry no region for the region-qualified entries ('geekay esports|na', '|emea') to match (owner, 2026-10-09 (Stage 4)): each era is taken from the event's qualifier. 2025 events (Midseason Championship, World Finals): qualified via OWCS NA Stages 2 and 3, the NA team. 2026 Midseason Championship: via OWCS EMEA Stage 2, the EMEA team. HOLDS ONLY WHILE ONE GEEKAY ATTENDS EACH EVENT: if both ever qualify for the same event, this needs revisiting.",
+      "decided_at": "2026-10-09T00:00:00+00:00",
+      "eras": [
+        {
+          "entity_type": "team",
+          "entity_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+          "valid_from": "2025-01-01T00:00:00+00:00",
+          "valid_to": "2026-01-01T00:00:00+00:00"
+        },
+        {
+          "entity_type": "team",
+          "entity_id": "46f8e560-76fe-4b5f-85e7-397957e0dc74",
+          "valid_from": "2026-01-01T00:00:00+00:00",
+          "valid_to": "2027-01-01T00:00:00+00:00"
+        }
+      ]
+    },
+    "geekay esports|na": {
+      "entity_type": "team",
+      "entity_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
+      "note": "NA Geekay Esports (owner, 2026-10-09 (Stage 4)): the region-qualified scheme of the GK aliases; 21/21 id-linked NA matches.",
+      "decided_at": "2026-10-09T17:59:55+00:00"
+    },
+    "jd gaming": {
+      "entity_type": "org",
+      "entity_id": "jd-gaming",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS China.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "JD Gaming"
+    },
     "lfo": {
       "entity_type": "team",
       "entity_id": "a24592c1-8b7f-414b-a751-0e43b6da1522",
       "note": "3/3 id-linked matches; one FACEIT name (LFO) over the id's whole life, 2024-03-08..03-21, 2024 NA Stage 1 only. Approved by the owner (2026-10-02).",
       "decided_at": "2026-10-02T02:37:36+00:00"
+    },
+    "lgd oa": {
+      "entity_type": "org",
+      "entity_id": "lgd-oa",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Weibo Gaming, LGD.OA and Once Again are the same core roster across org changes; kept as separate orgs by the owner's decision, and recorded here so the relationship is not rediscovered as a merge candidate.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "LGD.OA"
     },
     "luminosity gaming": {
       "entity_type": "team",
@@ -64,8 +157,17 @@
     "m80": {
       "entity_type": "team",
       "entity_id": "3aca5abd-ee5d-4542-92e9-392b6f5d0dbc",
-      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T01:29:49+00:00"
+      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02). Window bounded to the 2024 season by the owner (2026-10-09): played in 2024 and did not return in later seasons. Liquipedia shows 2024 play after the FACEIT activity ends (2024-06-02): EWC 2024 (ENCE, M80) and the 2024 World Finals (Toronto Defiant, ENCE), all inside this window.",
+      "decided_at": "2026-10-02T01:29:49+00:00",
+      "valid_from": "2024-01-01T00:00:00+00:00",
+      "valid_to": "2025-01-01T00:00:00+00:00"
+    },
+    "mkers": {
+      "entity_type": "org",
+      "entity_id": "mkers",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OCE qualifier (FACEIT Master OCE), one appearance (EWC 2024).",
+      "decided_at": "2026-10-09T18:13:17+00:00",
+      "org_name": "Mkers"
     },
     "nrg shock": {
       "entity_type": "org",
@@ -79,6 +181,13 @@
       "note": "org-level identity already resolved to ntmr",
       "decided_at": "2026-09-23T05:02:38+00:00"
     },
+    "once again": {
+      "entity_type": "org",
+      "entity_id": "once-again",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Weibo Gaming, LGD.OA and Once Again are the same core roster across org changes; kept as separate orgs by the owner's decision, and recorded here so the relationship is not rediscovered as a merge candidate.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "Once Again"
+    },
     "pirates in pyjamas": {
       "entity_type": "team",
       "entity_id": "f4401a61-5010-484b-8429-ad09e524b097",
@@ -91,6 +200,24 @@
       "note": "Rad (2025 Stages 1-2) on 0464a373, a recycled team id; anchored to the org. Owner decision (2026-10-02).",
       "decided_at": "2026-10-02T08:11:37+00:00"
     },
+    "roc esports": {
+      "note": "ROC, ROCstars and ROC 2024 were the same roster; ROC became an OWCS China partner team in 2025, a separate org, and the original ROC no longer plays (owner, 2026-10-09 (Stage 4)). 2024: the FACEIT team id 03869857, which keys to ROCstars from 2024-04-12 by org_window_decisions; from 2025: the China org, Liquipedia-only.",
+      "decided_at": "2026-10-09T00:00:00+00:00",
+      "eras": [
+        {
+          "entity_type": "team",
+          "entity_id": "03869857-7f73-4176-a27d-dafcc8d469ae",
+          "valid_from": "2024-01-01T00:00:00+00:00",
+          "valid_to": "2025-01-01T00:00:00+00:00"
+        },
+        {
+          "entity_type": "org",
+          "entity_id": "roc-esports-china",
+          "org_name": "ROC Esports",
+          "valid_from": "2025-01-01T00:00:00+00:00"
+        }
+      ]
+    },
     "sakura esports|na": {
       "entity_type": "org",
       "entity_id": "sakura",
@@ -102,6 +229,14 @@
       "entity_id": "ec69a520-047f-4754-b36e-b0c95e2066ff",
       "note": "FACEIT has two Shikigami series on 2024-03-21, the dates of the two unmatched Liquipedia records (2024 NA Stage 1 main event); 9 other Liquipedia records already link to this team id by FACEIT id. One FACEIT id and name throughout; Graveyard and Solo play in every era. Approved by the owner (2026-10-02).",
       "decided_at": "2026-10-02T20:52:37+00:00"
+    },
+    "sign esports": {
+      "entity_type": "org",
+      "entity_id": "ntmr",
+      "note": "NTMR under a short-lived name (owner, 2026-10-09 (Stage 4)): Sign Esports picked up NTMR after it qualified for EWC 2025, with no roster change (Kronik, Lep, Lukemino, Painkiller, Rokit: 5/5 of NTMR's NA Stage 2 roster on FACEIT team c5116cb3), and never played again. Answers say NTMR; Liquipedia's 'Sign Esports' stays on the row. Window: after NTMR's last NA Stage 2 series (2025-06-29) to its first Stage 3 series (2025-09-06), so a later unrelated 'Sign Esports' is undecided rather than NTMR.",
+      "decided_at": "2026-10-09T18:13:17+00:00",
+      "valid_from": "2025-06-30T00:00:00+00:00",
+      "valid_to": "2025-09-06T00:00:00+00:00"
     },
     "spacestation gaming": {
       "entity_type": "org",
@@ -116,22 +251,62 @@
       "decided_at": "2026-10-02T02:37:42+00:00"
     },
     "supernova american team": {
-      "entity_type": "team",
-      "entity_id": "d20d1868-8937-4a85-8706-bf936d265392",
-      "note": "small roster transition to/from Team Z",
-      "decided_at": "2026-09-23T05:02:41+00:00"
+      "entity_type": "org",
+      "entity_id": "supernova",
+      "note": "Search routing (owner, 2026-10-09; the NRG Shock and 1234 fix): was anchored to the bare team id d20d1868, whose own entity holds none of this name's series - all 7 are keyed to the org supernova over the id's Supernova era. The anchor never matched before migration 040 (SQL fold kept the parentheses), which hid it. Previously: small roster transition to/from Team Z",
+      "decided_at": "2026-10-09T20:43:55+00:00"
+    },
+    "t1": {
+      "entity_type": "org",
+      "entity_id": "t1",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Korea partner team.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "T1"
+    },
+    "team cc chinese orgless team": {
+      "entity_type": "org",
+      "entity_id": "team-cc",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Notable OWCS China team. Liquipedia carries three templates (orig, 2025, august 2025): roster changes on one team.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "Team CC"
     },
     "team falcons": {
-      "entity_type": "team",
-      "entity_id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
-      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T01:29:49+00:00"
+      "entity_type": "org",
+      "entity_id": "team-falcons",
+      "note": "One continuous org including the Dallas entry (owner, 2026-10-09 (Stage 4)); was anchored to the bare Dallas team id 2ab92d33 with no window, which keyed every later event to the 2024 team.",
+      "decided_at": "2026-10-09T17:59:55+00:00"
+    },
+    "team liquid": {
+      "entity_type": "org",
+      "entity_id": "team-liquid",
+      "note": "Strong proposal accepted as an org, not the bare id a58dedff (owner, 2026-10-09 (Stage 4)).",
+      "decided_at": "2026-10-09T18:13:17+00:00"
+    },
+    "team peps": {
+      "entity_type": "org",
+      "entity_id": "team-peps",
+      "note": "Strong proposal accepted (owner, 2026-10-09 (Stage 4)): every id-linked match stood opposite this org.",
+      "decided_at": "2026-10-09T18:13:17+00:00"
+    },
+    "team secret": {
+      "entity_type": "org",
+      "entity_id": "team-secret",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Pacific.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "Team Secret"
     },
     "team z": {
       "entity_type": "org",
       "entity_id": "team-z",
       "decided_at": "2026-10-02T21:19:06+00:00",
       "note": "Search routing (owner, 2026-10-02): Team Z's era of d20d1868 (a roster picked up by a different org). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
+    },
+    "the gatos guapos": {
+      "entity_type": "org",
+      "entity_id": "the-gatos-guapos",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Pacific.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "The Gatos Guapos"
     },
     "the kafe": {
       "entity_type": "team",
@@ -148,8 +323,18 @@
     "toronto defiant": {
       "entity_type": "team",
       "entity_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
-      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02).",
-      "decided_at": "2026-10-02T01:29:49+00:00"
+      "note": "Dreamhack Dallas 2024: every FACEIT series aligns one to one with a Liquipedia match by opponent and score, FACEIT's entry time one to two hours after Liquipedia's. Decided by the owner (2026-10-02). Window bounded to the 2024 season by the owner (2026-10-09): played in 2024 and did not return in later seasons. Liquipedia shows 2024 play after the FACEIT activity ends (2024-06-02): EWC 2024 (ENCE, M80) and the 2024 World Finals (Toronto Defiant, ENCE), all inside this window.",
+      "decided_at": "2026-10-02T01:29:49+00:00",
+      "valid_from": "2024-01-01T00:00:00+00:00",
+      "valid_to": "2025-01-01T00:00:00+00:00"
+    },
+    "toronto ultra": {
+      "entity_type": "team",
+      "entity_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
+      "note": "Toronto Defiant played EWC 2024 as 'Toronto Ultra' to keep its EWC teams' naming consistent across titles (owner, 2026-10-09 (Stage 4)). Same window as the 'toronto defiant' anchor: the 2024 season, which holds EWC 2024 (2024-07-24..28).",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "valid_from": "2024-01-01T00:00:00+00:00",
+      "valid_to": "2025-01-01T00:00:00+00:00"
     },
     "twisted minds": {
       "entity_type": "team",
@@ -162,6 +347,40 @@
       "entity_id": "quick-esports",
       "note": "Quick Esports' Liquipedia name in 2024 and 2025 (templates quick esports orig / 2025); one org. Owner decision (2026-10-02).",
       "decided_at": "2026-10-02T08:11:37+00:00"
+    },
+    "varrel": {
+      "entity_type": "org",
+      "entity_id": "varrel",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Pacific (Japan). Liquipedia templates varrel 2023 / varrel 2026.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "VARREL"
+    },
+    "virtus pro": {
+      "entity_type": "org",
+      "entity_id": "virtus-pro",
+      "note": "Strong proposal accepted (owner, 2026-10-09 (Stage 4)): every id-linked match stood opposite this org.",
+      "decided_at": "2026-10-09T18:13:17+00:00"
+    },
+    "weibo gaming": {
+      "entity_type": "org",
+      "entity_id": "weibo-gaming",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Weibo Gaming, LGD.OA and Once Again are the same core roster across org changes; kept as separate orgs by the owner's decision, and recorded here so the relationship is not rediscovered as a merge candidate.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "Weibo Gaming"
+    },
+    "zeta division": {
+      "entity_type": "org",
+      "entity_id": "zeta-division",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Korea partner team.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "ZETA DIVISION"
+    },
+    "zokorp esports": {
+      "entity_type": "org",
+      "entity_id": "zokorp-esports",
+      "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): Picked up a South American roster that reached EWC.",
+      "decided_at": "2026-10-09T17:59:55+00:00",
+      "org_name": "ZoKorp Esports"
     }
   }
 }

@@ -143,3 +143,21 @@ def test_a_display_name_loaded_without_a_decision_fails(loaded):
     _sql(conn, "UPDATE players SET display_name = 'Hand Set' WHERE player_id = %s", (ids["p1"],))
     found, _ = _found(conn, scope)
     assert found == {("loaded_not_decided", "scope/player_identity_decisions.json", json.dumps(["display_name", ids["p1"]]))}
+
+
+def test_a_stage4_event_decided_but_not_loaded_or_loaded_differently_is_found(loaded):
+    from owcsmuse.liquipedia import events
+
+    conn, scope, _ = loaded
+    root = "Overwatch_Champions_Series/2025/World_Finals"
+    path = scope / "liquipedia_events.json"
+    path.write_text(json.dumps({"events": {root: {"display_name": "OWCS 2025 World Finals", "season": 2025,
+                                                  "region": "international", "tier": "main", "include": True,
+                                                  "pages": {}}}}), encoding="utf-8")
+    found, _ = _found(conn, scope)
+    assert found == {("decided_not_loaded", "scope/liquipedia_events.json", json.dumps(f"lp:{root}"))}
+    events.load_championships(conn, path)
+    assert _found(conn, scope)[0] == set()
+    _sql(conn, "UPDATE championships SET include = false WHERE championship_id = %s", (f"lp:{root}",))
+    found, _ = _found(conn, scope)
+    assert found == {("loaded_differs", "scope/liquipedia_events.json", json.dumps(f"lp:{root}"))}

@@ -16,6 +16,7 @@ export default function QuestionBar({ value = "", onSubmit, busy = false, autoFo
   return (
     <form
       className={compact ? "question-bar question-bar--compact" : "question-bar"}
+      aria-busy={busy || undefined}
       onSubmit={(event) => {
         event.preventDefault();
         const question = text.trim();
@@ -37,8 +38,15 @@ export default function QuestionBar({ value = "", onSubmit, busy = false, autoFo
         placeholder="Ask about OWCS"
         onChange={(event) => setText(event.target.value)}
       />
-      <button type="submit" disabled={busy || !text.trim()}>
-        {busy ? "..." : "Ask"}
+      <button type="submit" disabled={busy || !text.trim()} aria-busy={busy || undefined}>
+        {busy ? (
+          <>
+            <span className="spinner" aria-hidden="true" data-testid="ask-spinner" />
+            <span>Asking</span>
+          </>
+        ) : (
+          "Ask"
+        )}
       </button>
     </form>
   );

@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from ..resolve import fold
 from .schema import DERIVED_METRICS, Filters, StructuredQuery, Unanswerable
@@ -128,7 +128,7 @@ REGION_TERMS = {"north america": "na", "na": "na", "emea": "emea", "europe": "em
 CHAMPIONSHIP_TERMS = [
     "stage 1", "stage 2", "stage 3", "stage 4", "stage one", "stage two", "main event", "group stage", "group a", "group b",
     "group c", "group d", "playoffs", "playoff", "regular season", "relegation", "dreamhack dallas", "dreamhack",
-    "midseason championship", "midseason", "world finals", "champions clash", "major",
+    "midseason championship", "midseason", "world finals", "champions clash", "major", "esports world cup",
 ]
 
 VERSUS_CUES = ["map record against", "record against", "against", " vs ", " vs. ", "versus", "head to head", "h2h",
@@ -210,6 +210,7 @@ def _normalize(q: str) -> str:
     q = _ascii(q.strip()).replace("’", "'")
     q = q.replace("k/d", "kd").replace("k / d", "kd")
     q = re.sub(r"[?!.]+$", "", q)
+    q = re.sub(r"\bewc\b", "esports world cup", q, flags=re.I)   # the event's own name, so it matches a championship
     return re.sub(r"\s+", " ", q).strip()
 
 
@@ -241,7 +242,8 @@ def _find_season(q: str) -> Optional[int]:
 
 def _find_mode(q: str) -> Optional[str]:
     for k, v in MODES.items():
-        if re.search(r"\b" + k + r"\b", q):
+        # "champions clash" is an event, not the Clash mode
+        if re.search(r"(?<!champions )\b" + k + r"\b", q):
             return v
     return None
 
@@ -326,12 +328,13 @@ def _strip_filters(q: str, keep_years: bool = False) -> str:
     if not keep_years:
         q = re.sub(r"\b(in|during|for|of|from|the)\s+(the\s+)?20[2-3]\d(\s+season)?\b", " ", q)
         q = re.sub(r"\b20[2-3]\d\b", " ", q)
+    # championships first: "champions clash" must go whole before "clash" is read as a mode
+    for term in sorted(CHAMPIONSHIP_TERMS, key=len, reverse=True):
+        q = re.sub(r"\b(in|at|during|of)?\s*(the\s+)?" + re.escape(term) + r"\b", " ", q)
     q = re.sub(r"\b(on|in|at)\s+(control|hybrid|escort|push|flashpoint|clash)(\s+maps?)?\b", " ", q)
     q = re.sub(r"\b(control|hybrid|escort|push|flashpoint|clash)(\s+maps?)?\b", " ", q)
     q = re.sub(r"\b(?:as (?:a |an )?|playing )(tank|dps|support|healer)s?\b", " ", q)
     q = re.sub(r"\b(tank|dps|support|healer)s?\b", " ", q)
-    for term in sorted(CHAMPIONSHIP_TERMS, key=len, reverse=True):
-        q = re.sub(r"\b(in|at|during|of)?\s*(the\s+)?" + re.escape(term) + r"\b", " ", q)
     for am in sorted(_MAP_BY_ASCII, key=len, reverse=True):
         q = re.sub(r"\b(on|at)?\s*" + re.escape(am) + r"(?![a-z0-9])", " ", q)
     for alias in _MAP_ALIASES:
@@ -438,6 +441,44 @@ def _find_subject(q: str) -> Optional[str]:
 
 # --------------------------------------------------------------------- parse
 
+_PLACES = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "runner up": 2, "runner-up": 2, "runners up": 2, "third": 3,
+           "3rd": 3, "fourth": 4, "4th": 4, "fifth": 5, "5th": 5, "sixth": 6, "6th": 6, "seventh": 7, "7th": 7,
+           "eighth": 8, "8th": 8, "ninth": 9, "9th": 9, "tenth": 10, "10th": 10, "eleventh": 11, "11th": 11,
+           "twelfth": 12, "12th": 12}
+_PLACE_RX = "|".join(sorted((re.escape(k) for k in _PLACES), key=len, reverse=True))
+
+
+def _find_placement(q: str, filters: Filters) -> Optional[StructuredQuery]:
+    """'who won the 2025 world finals', 'who placed second at ...', 'who was runner up at ...', 'where did X place at
+    ...', 'X placement at ...', '... standings'. Only with an event named: a placing belongs to one event."""
+    if not filters.championship:
+        return None
+    base = {"championship": filters.championship, "season": filters.season}
+
+    def placement(**f: Any) -> StructuredQuery:
+        return StructuredQuery(intent="placement", entity="team", metric="placement", filters=Filters(**base, **f),
+                               sort="asc", limit=100)
+
+    m = re.search(r"^(?:where|how|what place) did (?P<t>.+?) (?:place|finish|end up)\b", q) \
+        or re.search(r"^(?P<t>.+?)(?:'s)? (?:final )?(?:placement|placing|finish|final position|result) (?:at|in)\b", q)
+    if m:
+        team = _clean_name(_strip_filters(m.group("t")))
+        if team:
+            return placement(subject=team)
+    # "who won the most series at ..." is a leaderboard, not the event's winner
+    if re.search(r"\bwho won\b", q) and not re.search(r"\bwho won (?:the )?(?:most|fewest|more|less)\b|\bwon \d", q):
+        return placement(place=1)
+    if re.search(r"\b(?:winner|champion)s? of\b", q):
+        return placement(place=1)
+    m = re.search(r"\bwho (?:placed|finished|came|was|were|got|took)(?: in)? (?P<p>" + _PLACE_RX + r")\b", q) \
+        or re.search(r"\b(?P<p>" + _PLACE_RX + r") place\b", q)
+    if m:
+        return placement(place=_PLACES[m.group("p")])
+    if re.search(r"\b(?:placements|placings|standings|final standings|prize pool)\b", q):
+        return placement()
+    return None
+
+
 def parse_question(question: str) -> ParseResult:
     if not question or not question.strip():
         return Unanswerable(code="invalid_query", reason="empty question")
@@ -468,6 +509,11 @@ def parse_question(question: str) -> ParseResult:
     if team_subject:
         return StructuredQuery(intent="team_membership", entity="player", metric="team",
                                filters=Filters(subject=team_subject, season=filters.season, period=filters.period))
+
+    # --- where a team finished at an event (Liquipedia's prize pool)
+    placed = _find_placement(q, filters)
+    if placed:
+        return placed
 
     # --- stat availability
     if _has(q, AVAIL_CUES) and not _has(q, ["who", "most", "top"]):

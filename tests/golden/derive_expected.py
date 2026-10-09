@@ -66,6 +66,14 @@ CONFIRMED |= {"G45"}
 # G46+ (owner, 2026-10-08, second batch): GK region-qualified; attribution; display names; relative time
 CONFIRMED |= {"G46", "G47", "G48", "G49", "G50", "G51", "G52", "G53", "G54"}
 
+# G55+ (owner, 2026-10-09, Stage 4): the owner's own values for the international events, known independently of the
+# data; each is also derived below from the captured Liquipedia records. Only those that need no pending identity
+# decision are confirmed; G57 waits on Al Qadsiah, and G61 and G63 on the event series loading (load_matches).
+CONFIRMED |= {"G55", "G56", "G58", "G59", "G60", "G62"}
+# G57 and G63 are the owner's own values; they waited only on identity decisions, all made 2026-10-09. G61 (a Korean
+# team's record) is the assistant's case and stays proposed for the owner's review.
+CONFIRMED |= {"G57", "G63"}
+
 CASES: list[dict] = []
 
 
@@ -141,16 +149,23 @@ A823 = "1-a823bbde-de66-4928-8527-54f4e8882293"
 LP_OVERRIDES = {A823: I.liquipedia_rounds(A823, tm[0], gk_em)}
 assert [m["map"] for m in LP_OVERRIDES[A823]] == ["Oasis", "King's Row", "Runasapi", "Circuit Royal", "Suravasa"]
 
-tm_all = I.team_record(S, tm, liquipedia_overrides=LP_OVERRIDES)
+# Since Stage 4 (owner, 2026-10-09) a record also counts the identity's Liquipedia-only event series in the captured
+# records (tests/golden/liquipedia_events.json), by the name Liquipedia gives it there; every team at those events is
+# decided. FACEIT and the events are disjoint series.
+tm_faceit = I.team_record(S, tm, liquipedia_overrides=LP_OVERRIDES)
+tm_events = I.event_record(["Twisted Minds"])
+tm_all = I.plus(tm_faceit, tm_events)
 tm26 = I.team_record(S, tm, season=2026, liquipedia_overrides=LP_OVERRIDES)
 ssg_id = team_id("SpaceStation Gaming")
 ssg_2024 = team_id("SpaceStation")
 # The owner decided (2026-10-02) that the 2024 EMEA 'SpaceStation' team and the 2025+ NA 'SpaceStation Gaming' team
 # are one organisation (scope/org_decisions.json, org spacestation-gaming), reversing the 2026-09-19 unmerge: the
 # org's record is both team ids' series.
-ssg = I.team_record(S, [ssg_id, ssg_2024])
+ssg_faceit = I.team_record(S, [ssg_id, ssg_2024])
 ssg_na = I.team_record(S, [ssg_id])
-assert ssg["regions"] == ["emea", "na"] and ssg["matches"] == ssg_na["matches"] + 2
+assert ssg_faceit["regions"] == ["emea", "na"] and ssg_faceit["matches"] == ssg_na["matches"] + 2
+ssg_events = I.event_record(["Spacestation Gaming"])
+ssg = I.plus(ssg_faceit, ssg_events)
 
 
 def team_row(rec, name):
@@ -161,8 +176,10 @@ def team_row(rec, name):
 case("G08", "Twisted Minds' record, all seasons, byes excluded", "exact", "Twisted Minds record",
      {"status": "ok", "entity": {"role": "subject", "type": "team", "id": tm[0], "name": "Twisted Minds"},
       "rows": [team_row(tm_all, "Twisted Minds")]},
-     f"Series where Twisted Minds is a faction and the opponent is a real team: {tm_all['matches']} "
-     f"(the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted as a 5th). "
+     f"Series where Twisted Minds is a faction and the opponent is a real team: {tm_faceit['matches']} on FACEIT "
+     f"(the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted), plus "
+     f"{tm_events['matches']} at the 2025 World Finals ({tm_events['wins']}-{tm_events['losses']}, Liquipedia only): "
+     f"{tm_all['matches']}. "
      f"map_wins/losses are series scores; 'maps' counts rounds that have stats, {tm_all['maps']} (of which 5 are "
      f"{A823[:10]}'s, Stage 2 map results from Liquipedia rather than a FACEIT stats payload); "
      f"{tm_all['result_only_series']} of the series still has no FACEIT stats payload of its own.",
@@ -180,11 +197,13 @@ case("G09", "Twisted Minds 2026, one series enriched from Liquipedia instead of 
 
 case("G10", "SpaceStation Gaming's record: one organisation, EMEA in 2024 then NA", "exact", "SpaceStation Gaming record",
      {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "spacestation-gaming", "name": "SpaceStation Gaming"},
-      "rows": [team_row(ssg, "SpaceStation Gaming")], "evidence": {"regions_only": ["emea", "na"]}},
+      "rows": [team_row(ssg, "SpaceStation Gaming")], "evidence": {"regions_only": ["emea", "international", "na"]}},
      f"{ssg_na['matches']} NA series of team {ssg_id[:8]} plus the two 2024 EMEA series of 'SpaceStation' (team "
      f"{ssg_2024[:8]}): the owner decided on 2026-10-02 that these are one organisation (SSG played EMEA in 2024 and became "
      f"an NA partner team in 2025), each team id mapped over its own era. Until then the two were held apart as a wrong "
-     f"cross-region merge; the region check now carries this org as an owner-decided exception.",
+     f"cross-region merge; the region check now carries this org as an owner-decided exception. Since Stage 4, also "
+     f"its {ssg_events['matches']} 2025 World Finals series ({ssg_events['wins']}-{ssg_events['losses']}), Liquipedia's "
+     f"'Spacestation Gaming' anchored to the org.",
      regression="region bug: SpaceStation Gaming merged with the EMEA SpaceStation; reversed by the owner's 2026-10-02 decision")
 
 h2h = I.team_record(S, tm, opponent_ids=[team_id("Ex Oblivione")])
@@ -202,7 +221,7 @@ dsg = I.team_record(S, [dsg_id])
 vp_ids = [team_id("Virtus pro"), team_id("Virtuspro")]
 vp = I.team_record(S, vp_ids, exclude_names={"Ex Oblivione"})
 tl_id = team_id("Team Liquid")
-tl = I.team_record(S, [tl_id])
+tl = I.plus(I.team_record(S, [tl_id]), I.event_record(["Team Liquid"]))
 case("G12", "'SSG' resolves to SpaceStation Gaming", "exact", "SSG record",
      {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "spacestation-gaming", "name": "SpaceStation Gaming"},
       "rows": [team_row(ssg, "SpaceStation Gaming")]},
@@ -231,12 +250,15 @@ case("G14", "'DSG' resolves to Disguised", "exact", "DSG record",
      regression="alias: DSG")
 
 case("G15", "'TL' resolves to Team Liquid", "exact", "TL record",
-     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": tl_id, "name": "Team Liquid"},
+     {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "team-liquid", "name": "Team Liquid"},   # org since 2026-10-09
       "rows": [{"team": "Team Liquid", "matches": tl["matches"], "wins": tl["wins"], "losses": tl["losses"]}]},
-     f"Team Liquid: {tl['matches']} series.", regression="alias")
+     f"Team Liquid: {tl['matches']} series, its 2025 World Finals series included (Liquipedia's 'Team Liquid', "
+     "anchored to the org team-liquid since 2026-10-09).", regression="alias")
 
 # ----------------------------------------------------------------- clarify
-r_na = I.team_record(S, [gk_na])
+# the NA team since Stage 4 also holds the 2025 World Finals series: 'geekay esports|international' gives the 2025
+# events to the NA id (owner, 2026-10-09, from the qualifier)
+r_na = I.plus(I.team_record(S, [gk_na]), I.event_record(["Geekay Esports"], season=2025))
 r_em = I.team_record(S, [gk_em], liquipedia_overrides=LP_OVERRIDES)
 case("G16", "Two teams named Geekay Esports ask, never guess", "invariant", "Geekay Esports record",
      {"status": "clarify", "code": "ambiguous_entity", "candidate_ids": sorted([gk_na, gk_em])},
@@ -246,7 +268,7 @@ case("G16", "Two teams named Geekay Esports ask, never guess", "invariant", "Gee
 case("G17", "Clarify candidate (NA Geekay) answered verbatim", "exact", "Geekay Esports record",
      {"status": "clarify", "answer_candidate": {"id": gk_na, "expect": {
          "status": "ok", "entity": {"role": "subject", "id": gk_na},
-         "rows": [team_row(r_na, "Geekay Esports")], "evidence": {"regions_only": ["na"]}}}},
+         "rows": [team_row(r_na, "Geekay Esports")], "evidence": {"regions_only": ["international", "na"]}}}},
      f"Ask the NA candidate's own question, unedited. {r_na['matches']} NA series ({r_na['wins']}-{r_na['losses']}).",
      regression="clarify: a candidate must be answerable verbatim")
 case("G18", "Clarify candidate (EMEA Geekay) answered verbatim", "exact", "Geekay Esports record",
@@ -353,12 +375,13 @@ case("G28", "A player on the enriched match still has no player stats from it", 
 
 tm25 = I.team_record(S, tm, season=2025)
 assert tm25["matches"] == 0
-case("G25", "Twisted Minds in 2025: only a bye, so no data", "invariant", "Twisted Minds record in 2025",
-     {"status": "cannot_answer", "code": "no_data",
-      "alternative": {"question_template": "Twisted Minds record", "seasons_with_stat": [None],
-                      "then_rows": [team_row(tm_all, "Twisted Minds")]}},
-     "The only 2025 Twisted Minds fixture is the bracket bye, which is not a series: the answer is no_data, not '1-0'. "
-     "The offered alternative (the all-seasons record) must answer with G08's numbers.",
+tm25_events = I.event_record(["Twisted Minds"], season=2025)
+case("G25", "Twisted Minds in 2025: the bye is still not a series", "invariant", "Twisted Minds record in 2025",
+     {"status": "ok", "rows": [team_row(I.plus(tm25, tm25_events), "Twisted Minds")]},
+     "The only 2025 Twisted Minds fixture on FACEIT in the golden set is the bracket bye, which is not a series. Until "
+     "Stage 4 the answer was no_data; since then the 2025 World Finals (Liquipedia only) gives Twisted Minds "
+     f"{tm25_events['matches']} series in 2025 ({tm25_events['wins']}-{tm25_events['losses']}), and the record must be "
+     f"exactly those {tm25_events['matches']}: the bye still not counted as a {tm25_events['matches'] + 1}th.",
      regression="bye: a 2025 bye showed as a 1-0 win")
 
 # --- the displayed OWCS name is searchable -------------------------------------------------------------------------
@@ -664,7 +687,7 @@ DF = team_id("Dallas Fuel")
 df_rank = team_deaths(DF, 2026)
 case("G41", "An abbreviated team in front of 'player' filters the leaderboard", "exact",
      "which DF player had the most deaths in 2026",
-     {"status": "ok", "entity": {"role": "team", "type": "team", "id": DF, "name": "Dallas Fuel"},
+     {"status": "ok", "entity": {"role": "team", "type": "org", "id": "dallas-fuel", "name": "Dallas Fuel"},   # org since 2026-10-09
       "rows": [{"nickname": I.display_name(S, df_rank[0][2]), "total": int(df_rank[0][0])}],
       "rows_only_players": sorted({I.display_name(S, p_) for *_, p_ in df_rank}),
       "sentence_contains": [f"{I.display_name(S, df_rank[0][2])} leads Deaths among Dallas Fuel players with {int(df_rank[0][0])}"]},
@@ -701,7 +724,7 @@ vs_tl = [m for m in I.player_maps(S, SUGF, season=2026) if m["opp_team_id"] == t
 vw, vl = sum(m["won"] for m in vs_tl), sum(not m["won"] and not m["drawn"] for m in vs_tl)
 case("G43", "'Team' is part of a team's name, not a keyword", "exact",
      "sugarfree vs team liquid in 2026",
-     {"status": "ok", "entity": {"role": "opponent", "id": team_id("Team Liquid"), "name": "Team Liquid"},
+     {"status": "ok", "entity": {"role": "opponent", "id": "team-liquid", "name": "Team Liquid"},   # org since 2026-10-09
       "sentence_contains": [f"{I.display_name(S, SUGF)} is {vw}-{vl} in maps against Team Liquid in 2026"]},
      f"sugarfree's 2026 maps against Team Liquid's team id: {len(vs_tl)} maps, {vw} won, {vl} lost. The parser once "
      "dropped 'team' as a stopword and searched 'liquid'.",
@@ -716,11 +739,13 @@ case("G44", "An aliased team's answer prints its name, never its id", "invariant
 FAL = "2ab92d33-4c33-46e1-a13f-743a95291d0e"
 assert FAL in {s_.team[k] for s_ in S for k in s_.team if s_.name[k] == "Team Falcons"}
 case("G45", "'TF' is Team Falcons by the owner's decision, not TFW", "invariant", "TF record",
-     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": FAL, "name": "Team Falcons"},
+     {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "team-falcons", "name": "Team Falcons"},
       "sentence_contains": ["Team Falcons is"]},
      "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id "
      "with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is "
-     "settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
+     "settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it. Since the owner's "
+     "Stage 4 decision (2026-10-09) the Dallas id belongs to the org team-falcons for its whole life, and the alias "
+     "follows its team into the org: Team Falcons the org, not the bare team id.",
      regression="'TF' resolved to TFW (owner, 2026-10-08)")
 
 GK_NA, GK_EMEA = team_id("Geekay Esports", "na"), team_id("Geekay Esports", "emea")
@@ -833,6 +858,90 @@ case("G54", "'last stage' is the stage before the most recent", "exact", "SSG re
      f"Stages with series, in order: {stage_keys}; the one before the latest is {last_stage}. SpaceStation Gaming "
      f"(the org) there: {ssg_last['wins']}-{ssg_last['losses']} over {ssg_last['matches']} series.",
      regression="'last stage' did not resolve (owner, 2026-10-08)")
+
+# ------------------------------------------------------------------- Stage 4: Liquipedia-only international events
+WF25 = "Overwatch_Champions_Series/2025/World_Finals"
+MSC25 = "Overwatch_Champions_Series/2025/Midseason_Championship"
+CC25 = "Overwatch_Champions_Series/2025/Champions_Clash"
+LP = "https://liquipedia.net/overwatch/"
+
+wf_first, wf_second, wf_seventh = I.placed(WF25, 1), I.placed(WF25, 2), I.placed(WF25, 7)
+assert wf_first == ["Twisted Minds"] and I.last_series_winner(WF25) == "Twisted Minds"          # the owner's value
+case("G55", "Who won the 2025 World Finals", "exact", "who won the 2025 world finals",
+     {"status": "ok", "rows": [{"team": "Twisted Minds", "placement": "1"}],
+      "sentence_contains": ["Twisted Minds won OWCS 2025 World Finals"], "attribution_pages": [LP + WF25]},
+     f"Liquipedia's prize pool for {WF25} places {wf_first} 1st, and the event's last series was won by "
+     f"{I.last_series_winner(WF25)}. Owner's value: Twisted Minds won the 2025 World Finals.",
+     regression="'who won the 2025 world finals' could not be answered (first beta tester, 2026-10-09)")
+
+assert wf_second == ["Al Qadsiah"]
+case("G56", "Al Qadsiah placed second at the 2025 World Finals", "exact", "who placed second at the 2025 world finals",
+     {"status": "ok", "rows": [{"team": "Al Qadsiah", "placement": "2"}],
+      "sentence_contains": ["Al Qadsiah placed 2nd at OWCS 2025 World Finals"]},
+     f"The prize pool places {wf_second} 2nd. Owner's value: Al Qadsiah placed second. Liquipedia's name is shown as "
+     "Liquipedia names it while the name has no identity decision.")
+
+gf = I.event_series(WF25, "Twisted Minds", "Al Qadsiah")
+assert gf[-1]["a"] == 4 and gf[-1]["b"] == 1                                                    # the owner's 4-1
+case("G57", "Twisted Minds beat Al Qadsiah 4-1 in the 2025 World Finals grand final", "exact",
+     "twisted minds series record against al qadsiah at the 2025 world finals",
+     {"status": "ok", "rows": [{"matches": len(gf), "wins": sum(x["a"] > x["b"] for x in gf),
+                                "losses": sum(x["a"] < x["b"] for x in gf)}]},
+     f"The records hold {len(gf)} series between them at the event: " + "; ".join(f"{x['date']} {x['a']}-{x['b']}" for x in gf)
+     + ". The grand final (the later) is Twisted Minds 4-1 (owner's value); the upper final went to Al Qadsiah 3-1. "
+       "Proposed: Al Qadsiah has no identity decision, so the series between them reach no answer yet.")
+
+assert wf_seventh == ["Spacestation Gaming", "Team Liquid"] and {I.placing_text(WF25, t) for t in wf_seventh} == {"7-8"}
+case("G58", "SSG and Team Liquid shared 7th-8th at the 2025 World Finals", "exact", "who placed 7th at the 2025 world finals",
+     {"status": "ok", "rows": [{"team": "SpaceStation Gaming", "placement": "7-8"}, {"team": "Team Liquid", "placement": "7-8"}],
+      "sentence_contains": ["SpaceStation Gaming and Team Liquid placed 7th-8th at OWCS 2025 World Finals"]},
+     f"The prize pool places {wf_seventh} at 7-8. Owner's value: SSG and Team Liquid both placed 7-8th. "
+     "'Spacestation Gaming' is anchored to the org spacestation-gaming (scope/liquipedia_team_map.json), shown by its "
+     "org name; Team Liquid is shown by Liquipedia's name while undecided.")
+
+assert I.placed(MSC25, 1) == ["Team Falcons"] and I.last_series_winner(MSC25) == "Team Falcons"
+case("G59", "Team Falcons won the 2025 Midseason Championship", "exact", "who won the 2025 midseason championship",
+     {"status": "ok", "rows": [{"team": "Team Falcons", "placement": "1"}],
+      "sentence_contains": ["Team Falcons won OWCS 2025 Midseason Championship"], "attribution_pages": [LP + MSC25]},
+     f"The prize pool places {I.placed(MSC25, 1)} 1st; the grand final was won by {I.last_series_winner(MSC25)}. "
+     "Owner's value: Team Falcons won the 2025 Midseason Championship.")
+
+assert I.placed(CC25, 1) == ["Crazy Raccoon"] and I.last_series_winner(CC25) == "Crazy Raccoon"
+case("G60", "Crazy Raccoon won the 2025 Champions Clash", "exact", "who won the 2025 champions clash",
+     {"status": "ok", "rows": [{"team": "Crazy Raccoon", "placement": "1"}],
+      "sentence_contains": ["Crazy Raccoon won OWCS 2025 Champions Clash"]},
+     f"The prize pool places {I.placed(CC25, 1)} 1st; the grand final was won by {I.last_series_winner(CC25)}. "
+     "Owner's value: Crazy Raccoon won the 2025 Champions Clash. Was a known bug until the owner's decision of "
+     "2026-10-09 (one continuous org, Dallas included): the name had resolved to the Dallas FACEIT id, whose name "
+     "is 'Crazy Raccoons'.")
+
+t1 = I.team_series_record(WF25, "T1")
+case("G61", "A Korean team's record at an international event", "exact", "T1 record at the 2025 world finals",
+     {"status": "ok", "rows": [{"matches": t1["matches"], "wins": t1["wins"], "losses": t1["losses"]}],
+      "attribution_pages": [LP + WF25]},
+     f"T1's series at {WF25} in the records: {t1['wins']}-{t1['losses']} over {t1['matches']}. T1 has no FACEIT "
+     "counterpart; proposed until the owner decides it as a Liquipedia-only org.")
+
+case("G62", "A player-stat question about a results-only event refuses, and says what works", "invariant",
+     "most eliminations at the 2025 world finals",
+     {"status": "cannot_answer", "code": "results_only",
+      "alternative": {"question_template": "2025 world finals standings", "seasons_with_stat": [None],
+                      "then_rows": [{"team": "Twisted Minds", "placement": "1"}, {"team": "Al Qadsiah", "placement": "2"}]}},
+     "OWCS 2025 World Finals is Liquipedia-only: no source records player stats there, so the answer is the "
+     "results_only refusal, not an empty leaderboard and not 'not recorded for 2025', and the alternative it offers "
+     f"(the event's standings) answers, led by the prize pool's {wf_first} and {wf_second}.")
+
+cr_dallas = [x for x in S if x.match_id == "1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b"]
+assert len(cr_dallas) == 1
+cr_lp = [I.team_series_record(p, "Crazy Raccoon") for p in (WF25, CC25)]
+cr_total = {k: 1 + sum(r[k] for r in cr_lp) if k == "matches" else sum(r[k] for r in cr_lp) for k in ("matches", "wins", "losses")}
+cr_total["wins"] += 1          # Dallas grand final: Crazy Raccoons 4-2 Team Falcons
+case("G63", "A cross-source team counted once across FACEIT and Liquipedia", "exact", "crazy raccoons record",
+     {"status": "ok", "rows": [cr_total]},
+     f"Crazy Raccoon: the Dallas grand final on FACEIT (won 4-2) plus its Liquipedia-only series in the captured "
+     f"records ({WF25}: {cr_lp[0]}, {CC25}: {cr_lp[1]}), each once: {cr_total}. Proposed: the count depends on the "
+     "owner's held decision (an org spanning Dallas and the later events counts all of them; a window ending after "
+     "Dallas leaves the later ones undecided).")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

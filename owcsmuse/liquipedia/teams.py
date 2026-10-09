@@ -21,6 +21,7 @@ disagree the proposal is per region ("Geekay Esports" in na, in emea) and a deci
 
 from __future__ import annotations
 
+import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -46,11 +47,11 @@ def _covers(entry: dict[str, Any], at: Optional[datetime]) -> bool:
     return (lo is None or at >= lo) and (hi is None or at < hi)
 
 DEFAULT_TEAM_MAP_PATH = "scope/liquipedia_team_map.json"
-LOCKED = ("na", "emea")
+LOCKED = ("na", "emea", "international")
 
 
 def region_bucket(region: Optional[str]) -> Optional[str]:
-    """Only NA and EMEA split a name; every other page is 'region-agnostic' (None)."""
+    """NA, EMEA and the international events split a name; every other page is 'region-agnostic' (None)."""
     return region if region in LOCKED else None
 
 
@@ -87,8 +88,12 @@ class TeamMap(AliasDecisions):
         return None
 
     def decide(self, name: str, entity_type: str, entity_id: str, note: Optional[str] = None,
-               region: Optional[str] = None, valid_from: Optional[str] = None, valid_to: Optional[str] = None) -> dict:
+               region: Optional[str] = None, valid_from: Optional[str] = None, valid_to: Optional[str] = None,
+               org_name: Optional[str] = None) -> dict:
         d = self.set(name, entity_type, entity_id, note)          # validates the type; stores under the plain key
+        if org_name:
+            # a Liquipedia-only org: `identity load` creates it, since no FACEIT team id can carry it in org_decisions
+            d["org_name"] = org_name
         if valid_from or valid_to:
             d.update({"valid_from": valid_from, "valid_to": valid_to})
         if region:
@@ -107,6 +112,38 @@ class TeamMap(AliasDecisions):
             if at is not None and (lo is None or at >= lo) and (hi is None or at < hi):
                 return org
         return f"team:{d['entity_id']}"
+
+
+FACEIT_TEAM_ID = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+ORG_SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
+
+def decision_target_error(entity_type: str, entity_id: str, known_teams: set[str], known_orgs: set[str],
+                          new_org: bool = False) -> Optional[str]:
+    """Why `teams decide` must refuse this target, or None.
+
+    A decision names a FACEIT team id or an org slug that already exists. A truncated id (`ec69a520-04`) or a typo'd
+    slug was once accepted and written to the team map, where it anchored a name to nothing: `lp_name_resolution`
+    caught it only after the fact, and `identity load` skips an org it does not know without a word.
+    """
+    if entity_type == "team":
+        if not FACEIT_TEAM_ID.fullmatch(entity_id):
+            return f"--team {entity_id!r} is not a full FACEIT team id (36 characters, 8-4-4-4-12 hex)"
+        if entity_id not in known_teams:
+            return f"--team {entity_id} is not a team in the warehouse"
+        return None
+    if entity_type == "org":
+        if not ORG_SLUG.fullmatch(entity_id):
+            return f"--org {entity_id!r} is not an org slug (lowercase letters, digits and single hyphens)"
+        if new_org:
+            # a Liquipedia-only org (no FACEIT team to hang it on): it must really be new, or the name would be
+            # silently renamed onto an existing org
+            return f"--org {entity_id} already exists; drop --new-org-name to anchor to it" if entity_id in known_orgs else None
+        if entity_id not in known_orgs:
+            return (f"--org {entity_id} is not a known org (neither in the orgs table nor in scope/org_decisions.json); "
+                    "decide the org first, or pass --new-org-name for a team with no FACEIT counterpart")
+        return None
+    return f"unknown entity type {entity_type!r}"
 
 
 def entity_of_org_key(key: str) -> tuple[str, str]:

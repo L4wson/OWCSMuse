@@ -93,11 +93,11 @@ LIMITATIONS: tuple[Limitation, ...] = (
     Limitation(
         "scope_na_emea",
         "Scope is OWCS NA + EMEA main competition",
-        "Korea, China, Japan and the Pacific regions are not ingested, nor are open qualifiers, community cups "
-        "or the relegation brackets held outside the main series. A leaderboard here is a leaderboard of NA and "
-        "EMEA main-competition play, not of OWCS worldwide. Korea is declared a results-only region "
-        "(region_sources): when its data arrives through Liquipedia it will answer records, head-to-heads and "
-        "placings, never a player stat.",
+        "The Korea, China, Japan and Pacific regional leagues are not ingested, nor are open qualifiers, community "
+        "cups or the relegation brackets held outside the main series. A leaderboard here is a leaderboard of NA and "
+        "EMEA main-competition play plus the international events (Dreamhack Dallas, EWC 2024, the World Finals, "
+        "Midseason Championships and Champions Clash), not of OWCS worldwide. The international events other than "
+        "Dallas come from Liquipedia alone: they answer records, head-to-heads and placings, never a player stat.",
     ),
     Limitation(
         "results_only_source",
@@ -220,7 +220,10 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
             "Map duration is derived from per-player Time Played, which 2024 does not carry, so 2024 maps "
             "contribute nothing here."))
 
-    if intent in ("leaderboard", "map_stats") and not region:
+    # a Liquipedia-only event (an `lp:` championship) is neither NA/EMEA-scoped nor crawled from FACEIT player history
+    lp_event = bool(championship_id and championship_id.startswith("lp:"))
+
+    if intent in ("leaderboard", "map_stats") and not region and not lp_event:
         out.append(BY_ID["scope_na_emea"].as_dict())
 
     if results_only_parts:
@@ -228,7 +231,7 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
             "No source records player stats for " + ", ".join(results_only_parts) + ": results only there. "
             + ("That part is not in this answer." if grain == "map" else "Series-grain answers still count it.")))
 
-    if any(s in CRAWLED_SEASONS for s in seasons):
+    if not lp_event and any(s in CRAWLED_SEASONS for s in seasons):
         out.append(BY_ID["main_series_2025_2026"].as_dict(
             "The "
             + " and ".join(str(s) for s in seasons if s in CRAWLED_SEASONS)

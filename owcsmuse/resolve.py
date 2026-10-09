@@ -203,9 +203,16 @@ def resolve_id(conn: psycopg.Connection, entity_id: str, entity_type: Optional[s
             (entity_id, entity_type, entity_type),
         )
         row = cur.fetchone()
+        orgs: list[str] = []
+        if not row and entity_type in (None, "team"):
+            # a team id an org decision has since folded into an org is no entity of its own any more, but a question
+            # (or a shared link) asked by it still means that team: it answers as its org, or asks which if it was more
+            # than one org's over its life
+            cur.execute("SELECT DISTINCT org_id FROM team_orgs WHERE team_id = %s ORDER BY org_id", (entity_id,))
+            orgs = [r["org_id"] for r in cur.fetchall()]
     conn.commit()
     if not row:
-        return []
+        return [c for org in orgs for c in resolve_id(conn, org, "org")]
     return [Candidate(entity_type=row["entity_type"], entity_id=row["entity_id"], current_name=row["current_name"],
                       matched_name=row["name"], name_kind="entity_id", score=1.0,
                       matches=int(row.get("matches") or 0), seasons=list(row.get("seasons") or []),

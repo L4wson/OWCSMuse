@@ -35,6 +35,7 @@ from typing import Any, Optional
 UNDESCRIBED = frozenset({
     "match_id", "championship_id", "player_id", "org_key", "org_id", "team_id",
     "opponent_team_id", "total_rows", "entity",
+    "place_high", "place_low",          # a placing's range, for sorting: `placement` says it ("7-8")
 })
 
 LABELS: dict[str, str] = {

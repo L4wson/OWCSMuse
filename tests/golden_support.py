@@ -23,6 +23,7 @@ from owcsmuse.db import RawPayloadStore, connect, migrate
 from owcsmuse.faceit.client import FaceitNotFound, FetchResult, ListResult
 from owcsmuse.liquipedia import competition_names as lp_names
 from owcsmuse.liquipedia import enrich as lp_enrich
+from owcsmuse.liquipedia import events as lp_events
 from owcsmuse.liquipedia import identity as lp_identity
 from owcsmuse.liquipedia.teams import TeamMap
 from owcsmuse.liquipedia import pipeline as lp_pipeline
@@ -133,13 +134,40 @@ def load_liquipedia_enrichment(conn, raw_conn) -> None:
                    VALUES ('match', 'pagename', %s, %s, %s, %s)""",
                 (page, f"https://liquipedia.net/overwatch/{page}", len(records), [raw_id]))
     conn.commit()
+    events_path = ROOT / "scope" / "liquipedia_events.json"
+    load_stage4_events(conn, sink, now, events_path)
     # the repository's own reviewed team map and link decisions, as production reconciles: the 2024 NA records carry no
     # FACEIT id and link only through decided team names; the grand final and the Dallas series through link decisions
     run = lp_pipeline.run_reconciliation(conn, team_map_path=str(ROOT / "scope" / "liquipedia_team_map.json"),
                                          decisions_path=str(ROOT / "scope" / "liquipedia_link_decisions.json"),
-                                         map_path=str(GOLDEN / "liquipedia_map.json"))
+                                         map_path=str(GOLDEN / "liquipedia_map.json"), events_path=str(events_path))
     lp_pipeline.store_run(conn, run)
     lp_enrich.enrich(conn, run, str(ROOT / "scope" / "liquipedia_team_map.json"))
+    lp_events.load_placements(conn, events_path)
+
+
+def load_stage4_events(conn, sink, now, events_path) -> None:
+    """Stage 4's captured records (tests/golden/liquipedia_events.json): stored as responses with their coverage, and
+    the repository's own scope/liquipedia_events.json loaded as `lp:` championships, as production does it."""
+    path = GOLDEN / "liquipedia_events.json"
+    if not path.exists():
+        return
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    # The event series wait on the owner's identity decisions (the file's `load_matches`): loaded before them, a
+    # team's record would count its event series against decided opponents and silently drop the rest (Twisted
+    # Minds: 2 of its 5 2025 World Finals series). Placings resolve nothing into a record, so they load now.
+    loads = [("placement", doc["placements"])] + ([("match", doc["matches"])] if doc.get("load_matches") else [])
+    with conn.cursor() as cur:
+        for endpoint, records in loads:
+            raw_id = sink.store(endpoint=endpoint, params={}, http_status=200, payload={"result": records},
+                                body_text=None, fetched_at=now, source="liquipedia")
+            for page in sorted({r["pagename"] for r in records}):
+                cur.execute("""INSERT INTO liquipedia_coverage (endpoint, field, value, page_url, rows_seen, raw_ids)
+                               VALUES (%s, 'pagename', %s, %s, %s, %s)""",
+                            (endpoint, page, f"https://liquipedia.net/overwatch/{page}",
+                             sum(r["pagename"] == page for r in records), [raw_id]))
+    conn.commit()
+    lp_events.load_championships(conn, events_path)
 
 
 def golden_schema() -> str:

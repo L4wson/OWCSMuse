@@ -71,7 +71,8 @@ _PLAYER_MAP_COLUMNS = """
     s.championship_id, championship_display_name(c.name) AS competition,
     s.display_name AS team, s.opponent_display_name AS opponent,
     s.map_name, s.game_mode,
-    tm.score AS score, tm.opp_score AS opponent_score,
+    CASE WHEN mr.team1_team_id = s.team_id THEN mr.team1_score ELSE mr.team2_score END AS score,
+    CASE WHEN mr.team1_team_id = s.team_id THEN mr.team2_score ELSE mr.team1_score END AS opponent_score,
     CASE WHEN s.map_won THEN 'won' WHEN s.map_drawn THEN 'drawn' ELSE 'lost' END AS result,
     s.role, s.eliminations, s.deaths, s.assists, s.damage_dealt, s.healing_done, s.damage_mitigated
 """
@@ -121,6 +122,11 @@ def _paged(select: str, from_where: str, select_params: list[Any], where_params:
     which is right for every player-grain row. Team-grain rows come from `series` and carry `source_url`, the
     FACEIT room or, for a Liquipedia-only series, the Liquipedia page.
     """
+    if page_size >= ALL_ROWS:
+        # answer_matches asks for every row only to read their match ids: the same rows, without the window count, the
+        # sort and the paging, which made the planner materialize each view whole - one 3.5 s query per ranked row, a
+        # 10-row player leaderboard 36 s (2026-10-09).
+        return f"SELECT DISTINCT s.match_id AS match_id FROM {from_where}", list(where_params)
     sql = (f"SELECT {select}, {url or MATCH_URL.format(col='s.match_id')} AS match_url, "
            f"count(*) OVER () AS total_rows FROM {from_where}{_ORDER} LIMIT %s OFFSET %s")
     return sql, select_params + where_params + [page_size, (page - 1) * page_size]
@@ -159,11 +165,15 @@ def _player_maps(v: Validated, player_id: str, extra: list[str], extra_params: l
     clauses, params = _filters(v, "s")
     clauses = ["s.player_id = %s"] + clauses + extra
     params = [player_id] + params + extra_params
+    # the map's score, oriented to the player's side, straight from its round: fact_team_maps carries the same two
+    # numbers but is a view over the whole series view, built once per query (3-5 s for a player on an org's team).
+    # A player row is never on a phantom map (check: phantom_map_isolation), the one row fact_team_maps leaves out.
+    # Only shown, never filtered on, so the match ids alone (answer_matches) skip it.
+    score_join = ("" if page_size >= ALL_ROWS else
+                  "LEFT JOIN match_rounds mr ON mr.match_id = s.match_id AND mr.round_number = s.round_number ")
     from_where = ("fact_player_maps s "
                   "JOIN championships c ON c.championship_id = s.championship_id "
-                  "LEFT JOIN fact_team_maps tm ON tm.match_id = s.match_id "
-                  "AND tm.round_number = s.round_number AND tm.team_id = s.team_id "
-                  "WHERE " + " AND ".join(clauses))
+                  + score_join + "WHERE " + " AND ".join(clauses))
     return _paged(select, from_where, select_params, params, page, page_size)
 
 

@@ -311,3 +311,99 @@ def versus_maps(series_list, player_id, opponent_player_id=None, opponent_team_i
     return {"maps": len(out), "map_wins": sum(x["won"] for x in out),
             "map_losses": sum((not x["won"]) and (not x["drawn"]) for x in out),
             "matches": len({x["match_id"] for x in out})}
+
+
+# ------------------------------------------------------------------- Stage 4: Liquipedia-only events
+# Read straight from tests/golden/liquipedia_events.json (records copied verbatim from raw_payloads). A placing is a
+# prize-pool row with a team and a position; an award (an MVP, a team award with no position) is not one.
+
+def load_events() -> dict:
+    return json.loads((GOLDEN / "liquipedia_events.json").read_text(encoding="utf-8"))
+
+
+def _place_range(text: str):
+    parts = [int(x) for x in str(text or "").replace(" ", "").split("-") if x.isdigit()]
+    return (parts[0], parts[-1]) if parts else None
+
+
+def placed(page: str, position: int) -> list[str]:
+    """Liquipedia's names of every team whose placing at `page` covers `position` (7 finds a team placed 7-8)."""
+    out = []
+    for p in load_events()["placements"]:
+        rng = _place_range(p.get("placement"))
+        if p["pagename"] == page and p.get("opponenttype") == "team" and rng and rng[0] <= position <= rng[1]:
+            out.append(p["opponentname"])
+    return sorted(out)
+
+
+def placing_text(page: str, team: str) -> str:
+    return next(p["placement"] for p in load_events()["placements"]
+                if p["pagename"] == page and p.get("opponenttype") == "team" and p["opponentname"] == team)
+
+
+def event_series(page: str, team_a: str, team_b: str) -> list[dict]:
+    """Every finished series between two teams on one event page: (date, score for a, score for b), from the records."""
+    out = []
+    for m in load_events()["matches"]:
+        names = [o["name"] for o in m["match2opponents"]]
+        if m["pagename"] != page or sorted(names) != sorted([team_a, team_b]) or not m.get("finished"):
+            continue
+        sa, sb = (m["match2opponents"][0]["score"], m["match2opponents"][1]["score"])
+        if names[0] != team_a:
+            sa, sb = sb, sa
+        out.append({"date": m["date"], "a": int(sa), "b": int(sb), "maps": len(m.get("match2games") or [])})
+    return sorted(out, key=lambda x: x["date"])
+
+
+def last_series_winner(page: str) -> str:
+    m = max((m for m in load_events()["matches"] if m["pagename"] == page and m.get("finished")),
+            key=lambda m: (m["date"], m["objectname"]))
+    return m["match2opponents"][int(m["winner"]) - 1]["name"]
+
+
+def team_series_record(page: str, team: str) -> dict:
+    """A team's series won-lost on one event page, counting each record once."""
+    w = l = 0
+    for m in load_events()["matches"]:
+        names = [o["name"] for o in m["match2opponents"]]
+        if m["pagename"] != page or team not in names or not m.get("finished"):
+            continue
+        won = names[int(m["winner"]) - 1] == team
+        w, l = w + won, l + (not won)
+    return {"matches": w + l, "wins": w, "losses": l}
+
+
+def event_record(lp_names, season=None) -> dict:
+    """A team's series record at the captured Liquipedia-only events, by the names Liquipedia gives it there.
+
+    Same definitions as team_record: map_wins / map_losses are series scores, and 'maps' counts the maps the record
+    lists as played - Stage 2's rule for a result_only series (team_record's `liquipedia_overrides`), where Liquipedia's
+    game-by-game results are the maps. A slot marked not played is not a map. Each record is one series.
+    """
+    names = set(lp_names)
+    out = {"matches": 0, "wins": 0, "losses": 0, "map_wins": 0, "map_losses": 0, "maps": 0, "result_only_series": 0,
+           "regions": set()}
+    for m in load_events()["matches"]:
+        if not m.get("finished") or (season and int(m["date"][:4]) != season):
+            continue
+        opp = m["match2opponents"]
+        for i, j in ((0, 1), (1, 0)):
+            if opp[i]["name"] in names:
+                out["matches"] += 1
+                out["wins"] += int(m["winner"]) == i + 1
+                out["losses"] += int(m["winner"]) == j + 1
+                out["map_wins"] += int(opp[i]["score"])
+                out["map_losses"] += int(opp[j]["score"])
+                out["maps"] += sum(1 for g in m.get("match2games") or []
+                                   if g.get("status") != "notplayed" and g.get("resulttype") != "np")
+                out["result_only_series"] += 1
+                out["regions"].add("international")
+    out["regions"] = sorted(out["regions"])
+    return out
+
+
+def plus(a: dict, b: dict) -> dict:
+    """Two records of one identity, from disjoint series (FACEIT payloads and Liquipedia-only events)."""
+    out = {k: a[k] + b[k] for k in ("matches", "wins", "losses", "map_wins", "map_losses", "maps", "result_only_series")}
+    out["regions"] = sorted(set(a.get("regions", [])) | set(b.get("regions", [])))
+    return out

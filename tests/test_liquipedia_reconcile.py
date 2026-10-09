@@ -44,7 +44,13 @@ def test_the_region_comes_from_the_page_and_time_from_the_epoch():
     assert region_of("Overwatch_Champions_Series/2024/North_America/Stage_1") == "na"
     assert region_of("Overwatch Champions Series/2024/North America/Stage 1/Group Stage") == "na"
     assert region_of("Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage") == "emea"
-    assert region_of("Overwatch_Champions_Series/2024/Major") == "other"
+    # the international events are their own bucket (FACEIT scopes Dallas 'international' too), so a name that is two
+    # teams in NA and EMEA can be decided for them separately (Geekay Esports, owner 2026-10-09)
+    for page in ("Overwatch_Champions_Series/2024/Major", "Overwatch_Champions_Series/2025/World_Finals",
+                 "Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage",
+                 "Overwatch_Champions_Series/2025/Champions_Clash", "Esports_World_Cup/2024/Group_Stage"):
+        assert region_of(page) == "international", page
+    assert region_of("Overwatch_Champions_Series/2026/Korea/Stage_1") == "korea"
     row = lp_row("A", "B", 3, 0)
     row["date"] = "2000-01-01 00:00:00"                        # the epoch is authoritative; `date` is the fallback
     assert parse_row(row, 1).played_at == T0

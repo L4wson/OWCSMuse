@@ -581,6 +581,7 @@ def check_identity_windows(conn: psycopg.Connection) -> CheckResult:
         SELECT w.team_id, w.org_id, w.valid_from::text AS valid_from, w.valid_to::text AS valid_to
           FROM team_orgs w
          WHERE (w.valid_from <> '-infinity' OR w.valid_to <> 'infinity')
+           AND w.team_id NOT LIKE 'lp:team:%'   -- a team-map era, checked by lp_name_resolution, not an org decision
            AND NOT EXISTS (SELECT 1 FROM fact_team_matches f WHERE f.team_id = w.team_id
                              AND f.started_at >= w.valid_from AND f.started_at < w.valid_to)"""):
         discrepancies.append({"kind": "window_covers_no_series", **{k: str(v) for k, v in r.items()},
@@ -735,6 +736,12 @@ def check_lp_name_resolution(conn: psycopg.Connection) -> CheckResult:
     # decision defines.
     od = OrgDecisions(SCOPE / "org_decisions.json")
     decided_orgs = {m["org_id"] for t in od.data for m in od.mappings(t)}
+    # a Liquipedia-only org (Stage 4) is defined by the team map itself (`org_name`): no FACEIT team id can carry it
+    from .liquipedia.teams import TeamMap
+    for v in TeamMap(SCOPE / "liquipedia_team_map.json").data.values():
+        for e in v.get("eras") or [v]:
+            if e.get("entity_type") == "org" and (e.get("org_name") or v.get("org_name")):
+                decided_orgs.add(e["entity_id"])
     guid = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
     for r in _rows(conn, "SELECT anchor, region, entity_type, entity_id FROM entity_anchors WHERE anchor_kind = 'team_name'"):
         if (r["entity_type"] == "team" and not guid.match(r["entity_id"])) or \
@@ -824,6 +831,38 @@ def check_decisions_loaded(conn: psycopg.Connection) -> CheckResult:
                    f"but not decided, {counts['loaded_differs']} loaded with a different value", counts)
 
 
+# ------------------------------------------------------------ placements
+
+def check_placement_consistency(conn: psycopg.Connection) -> CheckResult:
+    """Every event with placings has exactly one winner, and it won the event's last series.
+
+    Both sides are Liquipedia's own record (the prize pool and the bracket), compared by Liquipedia's names, so this
+    holds whether or not the teams are decided. A bracket reset, an LCQ's prize pool mixed into the event's, or a
+    placing entered before the final was played would each break it, and a winner is never picked between two.
+    """
+    discrepancies: list[dict[str, Any]] = []
+    for r in _rows(conn, """
+        WITH last AS (   -- each event's last finished series, and who won it
+            SELECT DISTINCT ON (championship_id) championship_id,
+                   CASE winner WHEN '1' THEN team1_name WHEN '2' THEN team2_name END AS won
+              FROM liquipedia_matches WHERE finished
+             ORDER BY championship_id, played_at DESC, objectname DESC)
+        SELECT p.championship_id, count(*) FILTER (WHERE p.place_low = 1) AS winners,
+               min(p.team_name) FILTER (WHERE p.place_low = 1) AS placed_first, min(l.won) AS won_last_series
+          FROM liquipedia_placements p LEFT JOIN last l USING (championship_id) GROUP BY p.championship_id"""):
+        r["placed_first_folded"] = _scalar(conn, "SELECT fold_name(%s)", (r["placed_first"],)) if r["placed_first"] else None
+        r["won_last_folded"] = _scalar(conn, "SELECT fold_name(%s)", (r["won_last_series"],)) if r["won_last_series"] else None
+        if r["winners"] != 1:
+            discrepancies.append({"kind": "not_one_winner", **r})
+        elif r["won_last_series"] is not None and r["won_last_folded"] != r["placed_first_folded"]:
+            discrepancies.append({"kind": "winner_lost_the_last_series", **r})
+    n = int(_scalar(conn, "SELECT count(DISTINCT championship_id) FROM liquipedia_placements") or 0)
+    return _result("placement_consistency", discrepancies,
+                   f"{n} event(s) with placings: each has one winner, and it won the event's last series",
+                   f"{len(discrepancies)} event(s) whose placings do not agree with their bracket",
+                   {"events": n})
+
+
 CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "fact_view_reconciliation": check_fact_view_reconciliation,
     "date_visibility": check_date_visibility,
@@ -840,6 +879,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "display_names_searchable": check_display_names_searchable,
     "decisions_loaded": check_decisions_loaded,
     "lp_name_resolution": check_lp_name_resolution,
+    "placement_consistency": check_placement_consistency,
     "answer_rates": check_answer_rates,
 }
 

@@ -178,25 +178,49 @@ def suggestions(conn: psycopg.Connection, per_group: int = 4) -> Suggestions:
                 (per_group,),
             )
             stats = [r["stat_key"] for r in cur.fetchall()]
+            # head-to-heads from pairs that really met on maps: "<top team> vs <second team>" is a map-grain question,
+            # and the two most active teams need not share a single map with stats (Twisted Minds and SpaceStation
+            # Gaming's meetings are all results-only or Liquipedia-only), which answered no_data from a suggestion
+            cur.execute(
+                """
+                SELECT display_name, opponent_display_name, sum(maps) AS maps
+                  FROM agg_org_versus_maps
+                 WHERE display_name IS NOT NULL AND opponent_display_name IS NOT NULL AND org_key < opponent_org_key
+                 GROUP BY display_name, opponent_display_name HAVING sum(maps) > 0
+                 ORDER BY sum(maps) DESC, display_name LIMIT 2
+                """)
+            pairs = [(r["display_name"], r["opponent_display_name"]) for r in cur.fetchall()]
+            # likewise two players who faced each other on the most maps, among the most active (the two most active
+            # overall may never have met)
+            cur.execute(
+                """
+                WITH top AS (SELECT player_id FROM agg_player_stats GROUP BY player_id ORDER BY sum(maps) DESC LIMIT 20)
+                SELECT player_display_name(p.display_name, p.nickname, p.game_player_name) AS a,
+                       player_display_name(o.display_name, o.nickname, o.game_player_name) AS b, count(*) AS maps
+                  FROM fact_player_versus v
+                  JOIN players p ON p.player_id = v.player_id JOIN players o ON o.player_id = v.opponent_player_id
+                 WHERE v.player_id IN (SELECT player_id FROM top) AND v.opponent_player_id IN (SELECT player_id FROM top)
+                   AND v.player_id < v.opponent_player_id
+                 GROUP BY 1, 2 ORDER BY count(*) DESC, 1 LIMIT 1
+                """)
+            player_pairs = [(r["a"], r["b"]) for r in cur.fetchall()]
             cur.execute("SELECT DISTINCT season FROM agg_player_stats WHERE season IS NOT NULL ORDER BY season DESC")
             seasons = [r["season"] for r in cur.fetchall()]
         conn.commit()
     except Exception:
         conn.rollback()
         log_event(log, logging.WARNING, "suggestions_failed", exc_info=True)
-        players, teams, stats, seasons = [], [], [], []
+        players, teams, stats, seasons, pairs, player_pairs = [], [], [], [], [], []
 
     latest = seasons[0] if seasons else None
     for stat in stats[:per_group]:
         out.append(Suggestion(f"who had the most {stat.lower()}" + (f" in {latest}" if latest else ""), "Leaderboards"))
     for team in teams[:per_group]:
         out.append(Suggestion(f"{team} record", "Teams"))
-    if len(teams) >= 2:
-        out.append(Suggestion(f"{teams[0]} vs {teams[1]}", "Head to head"))
-    if len(teams) >= 4:
-        out.append(Suggestion(f"{teams[2]} vs {teams[3]}", "Head to head"))
-    if len(players) >= 2:
-        out.append(Suggestion(f"{players[0]} map record against {players[1]}", "Head to head"))
+    for a, b in pairs:
+        out.append(Suggestion(f"{a} vs {b}", "Head to head"))
+    for a, b in player_pairs:
+        out.append(Suggestion(f"{a} map record against {b}", "Head to head"))
     for player in players[:per_group]:
         stat = stats[0] if stats else "eliminations"
         out.append(Suggestion(f"{player} {stat.lower()}", "Players"))

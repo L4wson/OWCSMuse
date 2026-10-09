@@ -52,7 +52,14 @@ def _count(rows: list[dict[str, Any]], field_name: str) -> dict[str, int]:
     return out
 
 
-def run_plan(client: LiquipediaClient, plan: Plan, max_pages_per_batch: int = 50) -> RunResult:
+class StageCeiling(LiquipediaError):
+    """The run's own request ceiling (`--max-requests`) is reached; the hourly budget is not involved."""
+
+
+def run_plan(client: LiquipediaClient, plan: Plan, max_pages_per_batch: int = 50,
+             max_requests: Optional[int] = None) -> RunResult:
+    """Carry out `plan`. `max_requests` caps what this run may send (cache hits are free), below the hourly budget:
+    a batch that keeps returning full pages stops there rather than paging on until the budget runs out."""
     res = RunResult(batches_total=len(plan.batches))
     sent_before = client.sent
     for batch in plan.batches:
@@ -61,6 +68,8 @@ def run_plan(client: LiquipediaClient, plan: Plan, max_pages_per_batch: int = 50
         offset = 0
         try:
             for _ in range(max_pages_per_batch):
+                if max_requests is not None and client.sent - sent_before >= max_requests:
+                    raise StageCeiling(f"this run's ceiling of {max_requests} request(s) is reached")
                 got = client.get(plan.endpoint, plan.params_for(batch, offset))
                 res.cache_hits += got.from_cache
                 raw_ids.append(got.raw_id)
@@ -74,7 +83,7 @@ def run_plan(client: LiquipediaClient, plan: Plan, max_pages_per_batch: int = 50
         except LiquipediaRateLimited as exc:
             res.outcome, res.stopped_by, res.detail = "rate_limited", "429", str(exc)
             break
-        except (BudgetExhausted, LiquipediaHalted) as exc:
+        except (BudgetExhausted, LiquipediaHalted, StageCeiling) as exc:
             res.outcome, res.stopped_by, res.detail = "budget", type(exc).__name__, str(exc)
             break
         except LiquipediaError as exc:

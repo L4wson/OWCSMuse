@@ -223,22 +223,20 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
     if q.intent == "head_to_head":
         if not (r.team_id and r.opponent_id):
             return Unanswerable(code="invalid_query", reason="head-to-head needs two resolved teams")
-        a, b = sorted([r.team_id, r.opponent_id])
-        clauses, params = ["team_a = %s", "team_b = %s"], [a, b]
+        # Keyed like a team record: by org key, from the first-named side's row of each series in the fact view. The
+        # aggregate (agg_head_to_head) is keyed by raw team id, so an org on either side - SpaceStation Gaming, Al Qadsiah,
+        # a Liquipedia-born team's org - matched nothing and answered "ok" with an empty row.
+        clauses = ["org_key = %s", "opponent_org_key = %s"]
+        params = [r.org_key(r.team_id, r.subject_type), r.org_key(r.opponent_id, r.opponent_type)]
         _where(clauses, params, "season", f.season)
         _where(clauses, params, "championship_id", champ)
         _where(clauses, params, "region", f.region)
-        # present from the perspective of the first-named team
-        first_is_a = r.team_id == a
         sql = (
-            "SELECT %s AS team, %s AS opponent, "
-            + ("sum(a_wins)" if first_is_a else "sum(b_wins)") + " AS wins, "
-            + ("sum(b_wins)" if first_is_a else "sum(a_wins)") + " AS losses, "
-            + ("sum(a_map_wins)" if first_is_a else "sum(b_map_wins)") + " AS map_wins, "
-            + ("sum(b_map_wins)" if first_is_a else "sum(a_map_wins)") + " AS map_losses, "
-            "sum(matches) AS matches, sum(maps) AS maps, min(first_match_at) AS first_match_at, max(last_match_at) AS last_match_at, "
+            "SELECT %s AS team, %s AS opponent, count(*) FILTER (WHERE won) AS wins, count(*) FILTER (WHERE NOT won) AS losses, "
+            "sum(map_wins) AS map_wins, sum(map_losses) AS map_losses, count(*) AS matches, sum(maps_played) AS maps, "
+            "min(started_at) AS first_match_at, max(started_at) AS last_match_at, "
             "array_agg(DISTINCT season ORDER BY season) AS seasons "
-            "FROM agg_head_to_head WHERE " + " AND ".join(clauses)
+            "FROM fact_team_matches WHERE " + " AND ".join(clauses) + " HAVING count(*) > 0"
         )
         return Compiled(sql=sql, params=[r.names.get("team"), r.names.get("opponent")] + params,
                         description="head-to-head series record", coverage_season=f.season, coverage_championship=single_champ)

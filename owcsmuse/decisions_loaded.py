@@ -26,6 +26,8 @@ from typing import Any, Optional
 
 import psycopg
 
+from .liquipedia.events import LP_CHAMPIONSHIP_PREFIX, championship_id as lp_championship_id, load_events
+
 ROOT = Path(__file__).resolve().parent.parent
 SCOPE = ROOT / "scope"
 
@@ -37,6 +39,7 @@ LOADERS = {
     "liquipedia_link_decisions.json": "python -m owcsmuse liquipedia reconcile",
     "decisions.json": "python -m owcsmuse classify, then python -m owcsmuse load-manifest",
     "competition_names.json": "python -m owcsmuse competitions load",
+    "liquipedia_events.json": "python -m owcsmuse liquipedia events load",
 }
 
 
@@ -44,6 +47,12 @@ def _rows(conn: psycopg.Connection, sql: str) -> list[dict[str, Any]]:
     with conn.cursor() as cur:
         cur.execute(sql)
         return [dict(r) for r in cur.fetchall()]
+
+
+def _lp_champs(conn: psycopg.Connection) -> dict[str, dict[str, Any]]:
+    return {r["championship_id"]: r for r in _rows(
+        conn, "SELECT championship_id, name, scope_region, tier, season, include FROM championships "
+              "WHERE championship_id LIKE 'lp:%'")}
 
 
 def _ts(v: Any) -> Optional[datetime]:
@@ -132,17 +141,25 @@ def check(conn: psycopg.Connection, scope_dir: Path = SCOPE) -> tuple[list[dict[
         eras = v.get("eras") or [v]
         for e in eras:
             decided_anchors[(name, region, _ts(e.get("valid_from")))] = (e["entity_type"], e["entity_id"], _ts(e.get("valid_to")))
-        single = {**v, **eras[0]} if len(eras) == 1 else v
-        if single.get("entity_type") == "org" and single["entity_id"] in orgs:
-            decided_born[BORN_TEAM_PREFIX + key] = single["entity_id"]
+        org_eras = [{**v, **e} for e in eras if e.get("entity_type") == "org"
+                    and (e["entity_id"] in orgs or e.get("org_name") or v.get("org_name"))]
+        if org_eras:
+            decided_born[BORN_TEAM_PREFIX + key] = tuple(sorted(
+                ((e["entity_id"], None if len(eras) == 1 else _ts(e.get("valid_from")),
+                  None if len(eras) == 1 else _ts(e.get("valid_to"))) for e in org_eras), key=str))
     d.compare("liquipedia_team_map.json", decided_anchors,
               {(r["anchor"], r["region"], _ts(r["vf"])): (r["entity_type"], r["entity_id"], _ts(r["vt"]))
                for r in _rows(conn, """SELECT anchor, region, entity_type, entity_id,
                                               CASE WHEN valid_from = '-infinity' THEN NULL ELSE valid_from END AS vf,
                                               CASE WHEN valid_to = 'infinity' THEN NULL ELSE valid_to END AS vt
                                          FROM entity_anchors WHERE anchor_kind = 'team_name'""")})
-    d.compare("liquipedia_team_map.json", decided_born,
-              {r["team_id"]: r["org_id"] for r in _rows(conn, "SELECT team_id, org_id FROM team_orgs WHERE team_id LIKE 'lp:team:%'")},
+    born_rows: dict[str, list] = {}
+    for r in _rows(conn, """SELECT team_id, org_id,
+                                   CASE WHEN valid_from = '-infinity' THEN NULL ELSE valid_from END AS vf,
+                                   CASE WHEN valid_to = 'infinity' THEN NULL ELSE valid_to END AS vt
+                              FROM team_orgs WHERE team_id LIKE 'lp:team:%'"""):
+        born_rows.setdefault(r["team_id"], []).append((r["org_id"], _ts(r["vf"]), _ts(r["vt"])))
+    d.compare("liquipedia_team_map.json", decided_born, {k: tuple(sorted(v, key=str)) for k, v in born_rows.items()},
               counted=False)
 
     # ---- player identities -> entity_anchors (player_page), and the owner's display names -> players.display_name
@@ -208,9 +225,16 @@ def check(conn: psycopg.Connection, scope_dir: Path = SCOPE) -> tuple[list[dict[
         decided_scope[cid] = tuple(sorted((f, v[f]) for f in cols if f in v)) + (("source", "manual"),)
         loaded_scope[cid] = tuple(sorted((f, champs[cid][cols[f]]) for f in cols if f in v)) + (("source", champs[cid]["classification_source"]),)
     for cid, r in champs.items():
-        if r["classification_source"] == "manual" and cid not in sd.data:
+        if r["classification_source"] == "manual" and cid not in sd.data and not cid.startswith(LP_CHAMPIONSHIP_PREFIX):
             loaded_scope[cid] = (("source", "manual"),)
     d.compare("decisions.json", decided_scope, loaded_scope, na)
+
+    # ---- Stage 4 events -> lp: championships (`liquipedia events load`; the file is the whole truth for them)
+    decided_events = {lp_championship_id(root): (e["display_name"], e["region"], e["tier"], int(e["season"]), bool(e["include"]))
+                      for root, e in load_events(scope_dir / "liquipedia_events.json").items()}
+    loaded_events = {cid: (r["name"], r["scope_region"], r["tier"], r["season"], r["include"])
+                     for cid, r in _lp_champs(conn).items()}
+    d.compare("liquipedia_events.json", decided_events, loaded_events, 0)
 
     # ---- competition names -> competition_names (a decision made against a FACEIT name since renamed is stale and,
     # by the loader's own rule, not applied)
