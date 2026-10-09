@@ -271,10 +271,12 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
                     (era["entity_type"], era["entity_id"], name, region or "", d.get("note"),
                      era.get("valid_from"), era.get("valid_to")))
                 teams += 1
-            d = {**d, **eras[0]} if len(eras) == 1 else d
-            if d.get("entity_type") == "org":
-                # the org's Liquipedia side: a Liquipedia-born team id, mapped to the org for all time, so a
-                # Liquipedia-only series of this org keys to it like any FACEIT series does
+            # the org's Liquipedia side: a Liquipedia-born team id, mapped to the org, so a Liquipedia-only series of
+            # this org keys to it like any FACEIT series does. A single-era entry maps it for all time (its anchor's own
+            # window bounds when it is used); in a multi-era entry each org era maps it over that era's window, so a
+            # name that was one team's in 2024 and a new org's from 2025 (ROC Esports) resolves to each in turn.
+            org_eras = [{**d, **e} for e in eras if e.get("entity_type") == "org"]
+            if org_eras:
                 tid = BORN_TEAM_PREFIX + key
                 wanted_born_teams.append(tid)
                 cur.execute("SELECT name FROM lp_team_names WHERE fold_name(name) = %s ORDER BY last_seen_at DESC LIMIT 1", (name,))
@@ -282,13 +284,23 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
                 cur.execute("""INSERT INTO teams (team_id, name) VALUES (%s, %s)
                                ON CONFLICT (team_id) DO UPDATE SET name = EXCLUDED.name, updated_at = now()""",
                             (tid, row["name"] if row else name))
-                cur.execute("SELECT 1 FROM orgs WHERE org_id = %s", (d["entity_id"],))
-                if cur.fetchone():
-                    # replace, never upsert: team_orgs' overlap trigger fires BEFORE INSERT, ahead of any ON CONFLICT,
-                    # so an upsert onto the window a previous load wrote raised and made every second load fail
-                    cur.execute("DELETE FROM team_orgs WHERE team_id = %s", (tid,))
-                    cur.execute("""INSERT INTO team_orgs (team_id, org_id, source, evidence) VALUES (%s, %s, 'manual', %s)""",
-                                (tid, d["entity_id"], psycopg.types.json.Jsonb(["Liquipedia team name anchored to this org (scope/liquipedia_team_map.json)"])))
+                # replace, never upsert: team_orgs' overlap trigger fires BEFORE INSERT, ahead of any ON CONFLICT,
+                # so an upsert onto the window a previous load wrote raised and made every second load fail
+                cur.execute("DELETE FROM team_orgs WHERE team_id = %s", (tid,))
+                for e in org_eras:
+                    if e.get("org_name"):
+                        # a Liquipedia-only org, declared in the team map; never renames an org that already exists
+                        cur.execute("INSERT INTO orgs (org_id, name) VALUES (%s, %s) ON CONFLICT (org_id) DO NOTHING",
+                                    (e["entity_id"], e["org_name"]))
+                    cur.execute("SELECT 1 FROM orgs WHERE org_id = %s", (e["entity_id"],))
+                    if not cur.fetchone():
+                        continue
+                    lo, hi = (None, None) if len(eras) == 1 else (e.get("valid_from"), e.get("valid_to"))
+                    cur.execute("""INSERT INTO team_orgs (team_id, org_id, source, evidence, valid_from, valid_to)
+                                   VALUES (%s, %s, 'manual', %s, coalesce(%s::timestamptz, '-infinity'),
+                                           coalesce(%s::timestamptz, 'infinity'))""",
+                                (tid, e["entity_id"], psycopg.types.json.Jsonb(["Liquipedia team name anchored to this org (scope/liquipedia_team_map.json)"]),
+                                 lo, hi))
                     born_teams += 1
         cur.execute("DELETE FROM team_orgs WHERE team_id LIKE %s AND NOT (team_id = ANY(%s))", (BORN_TEAM_PREFIX + "%", wanted_born_teams))
         cur.execute("DELETE FROM teams WHERE team_id LIKE %s AND NOT (team_id = ANY(%s))", (BORN_TEAM_PREFIX + "%", wanted_born_teams))

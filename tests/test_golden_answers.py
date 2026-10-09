@@ -78,3 +78,18 @@ def test_attribution_does_not_depend_on_evidence_being_asked_for(golden_db):
         a = ask(golden_db, case["question"], with_evidence=False)
         have = (a.attribution or {}).get("pages") or []
         assert set(case["expect"]["attribution_pages"]) <= set(have), (case["id"], have)
+
+
+def test_every_suggestion_answers(golden_db):
+    """A suggestion is a promise that the question works: each must answer, not refuse or ask back.
+
+    "Twisted Minds vs SpaceStation Gaming" (the two most active teams, paired blindly) answered no_data on production
+    (2026-10-09): every meeting between them was results-only or Liquipedia-only, with no map to compare.
+    """
+    from owcsmuse.web import suggestions
+
+    picked = suggestions(golden_db).suggestions
+    assert picked
+    bad = [(s["question"], a.status, a.code) for s in picked
+           for a in [ask(golden_db, s["question"], with_evidence=False)] if a.status != "ok"]
+    assert bad == []

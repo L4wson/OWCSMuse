@@ -31,11 +31,14 @@ Supported intents:
 - head_to_head: two teams; filters.team and filters.opponent; metric=record.
 - map_stats: rows are maps (entity=map) or game modes (entity=mode), optionally for one player/team in filters.subject.
 - stat_availability: which stats exist for which season; metric optional.
+- placement: where teams finished at one event (entity=team, metric=placement); filters.championship names the event
+  (required), filters.place a position (1 for "who won", 2 for runner-up), filters.subject a team ("where did X place").
 
 Metrics are FACEIT stat keys exactly as spelled: Eliminations, Final Blows, Deaths, Assists, Damage Dealt, Healing Done,
 Damage Mitigated, Solo Kills, Multi Kills, Environmental Kills, Objective Time, Time Played (append "/10m" for per-10-minute
 rates), or derived metrics: {', '.join(DERIVED_METRICS)}.
-Filters: season (year), championship (free text such as "stage 1", "main event", "dreamhack dallas"), map (one of {', '.join(MAPS)}),
+Filters: season (year), championship (free text such as "stage 1", "main event", "dreamhack dallas", "world finals",
+"midseason championship", "champions clash", "esports world cup"), map (one of {', '.join(MAPS)}),
 mode (one of {', '.join(MODES.values())}), region (na, emea, international). aggregation: total or avg_per_map.
 Keep entity names exactly as the user typed them; do not guess ids.
 

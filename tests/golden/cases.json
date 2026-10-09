@@ -182,16 +182,16 @@
     "rows": [
      {
       "team": "Twisted Minds",
-      "matches": 4,
-      "wins": 4,
-      "losses": 0,
-      "map_wins": 12,
-      "map_losses": 4,
-      "maps": 16
+      "matches": 9,
+      "wins": 8,
+      "losses": 1,
+      "map_wins": 26,
+      "map_losses": 11,
+      "maps": 37
      }
     ]
    },
-   "derivation": "Series where Twisted Minds is a faction and the opponent is a real team: 4 (the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted as a 5th). map_wins/losses are series scores; 'maps' counts rounds that have stats, 16 (of which 5 are 1-a823bbde's, Stage 2 map results from Liquipedia rather than a FACEIT stats payload); 1 of the series still has no FACEIT stats payload of its own.",
+   "derivation": "Series where Twisted Minds is a faction and the opponent is a real team: 4 on FACEIT (the golden set also holds a TM-vs-'bye' bracket slot, which is not a series and must not be counted), plus 5 at the 2025 World Finals (4-1, Liquipedia only): 9. map_wins/losses are series scores; 'maps' counts rounds that have stats, 37 (of which 5 are 1-a823bbde's, Stage 2 map results from Liquipedia rather than a FACEIT stats payload); 6 of the series still has no FACEIT stats payload of its own.",
    "status": "confirmed"
   },
   {
@@ -237,22 +237,23 @@
     "rows": [
      {
       "team": "SpaceStation Gaming",
-      "matches": 7,
-      "wins": 6,
-      "losses": 1,
-      "map_wins": 20,
-      "map_losses": 9,
-      "maps": 29
+      "matches": 11,
+      "wins": 8,
+      "losses": 3,
+      "map_wins": 24,
+      "map_losses": 16,
+      "maps": 40
      }
     ],
     "evidence": {
      "regions_only": [
       "emea",
+      "international",
       "na"
      ]
     }
    },
-   "derivation": "5 NA series of team 6ddc0431 plus the two 2024 EMEA series of 'SpaceStation' (team a359db61): the owner decided on 2026-10-02 that these are one organisation (SSG played EMEA in 2024 and became an NA partner team in 2025), each team id mapped over its own era. Until then the two were held apart as a wrong cross-region merge; the region check now carries this org as an owner-decided exception.",
+   "derivation": "5 NA series of team 6ddc0431 plus the two 2024 EMEA series of 'SpaceStation' (team a359db61): the owner decided on 2026-10-02 that these are one organisation (SSG played EMEA in 2024 and became an NA partner team in 2025), each team id mapped over its own era. Until then the two were held apart as a wrong cross-region merge; the region check now carries this org as an owner-decided exception. Since Stage 4, also its 4 2025 World Finals series (2-2), Liquipedia's 'Spacestation Gaming' anchored to the org.",
    "status": "confirmed"
   },
   {
@@ -291,12 +292,12 @@
     "rows": [
      {
       "team": "SpaceStation Gaming",
-      "matches": 7,
-      "wins": 6,
-      "losses": 1,
-      "map_wins": 20,
-      "map_losses": 9,
-      "maps": 29
+      "matches": 11,
+      "wins": 8,
+      "losses": 3,
+      "map_wins": 24,
+      "map_losses": 16,
+      "maps": 40
      }
     ]
    },
@@ -384,20 +385,20 @@
     "status": "ok",
     "entity": {
      "role": "subject",
-     "type": "team",
-     "id": "a58dedff-8045-46be-a13e-2402495b6a9d",
+     "type": "org",
+     "id": "team-liquid",
      "name": "Team Liquid"
     },
     "rows": [
      {
       "team": "Team Liquid",
-      "matches": 3,
-      "wins": 1,
-      "losses": 2
+      "matches": 6,
+      "wins": 2,
+      "losses": 4
      }
     ]
    },
-   "derivation": "Team Liquid: 3 series.",
+   "derivation": "Team Liquid: 6 series, its 2025 World Finals series included (Liquipedia's 'Team Liquid', anchored to the org team-liquid since 2026-10-09).",
    "status": "confirmed"
   },
   {
@@ -436,23 +437,24 @@
       "rows": [
        {
         "team": "Geekay Esports",
-        "matches": 2,
+        "matches": 4,
         "wins": 2,
-        "losses": 0,
-        "map_wins": 6,
-        "map_losses": 2,
-        "maps": 8
+        "losses": 2,
+        "map_wins": 7,
+        "map_losses": 6,
+        "maps": 13
        }
       ],
       "evidence": {
        "regions_only": [
+        "international",
         "na"
        ]
       }
      }
     }
    },
-   "derivation": "Ask the NA candidate's own question, unedited. 2 NA series (2-0).",
+   "derivation": "Ask the NA candidate's own question, unedited. 4 NA series (2-2).",
    "status": "confirmed"
   },
   {
@@ -724,32 +726,25 @@
   },
   {
    "id": "G25",
-   "title": "Twisted Minds in 2025: only a bye, so no data",
+   "title": "Twisted Minds in 2025: the bye is still not a series",
    "kind": "invariant",
    "regression": "bye: a 2025 bye showed as a 1-0 win",
    "question": "Twisted Minds record in 2025",
    "expect": {
-    "status": "cannot_answer",
-    "code": "no_data",
-    "alternative": {
-     "question_template": "Twisted Minds record",
-     "seasons_with_stat": [
-      null
-     ],
-     "then_rows": [
-      {
-       "team": "Twisted Minds",
-       "matches": 4,
-       "wins": 4,
-       "losses": 0,
-       "map_wins": 12,
-       "map_losses": 4,
-       "maps": 16
-      }
-     ]
-    }
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "matches": 5,
+      "wins": 4,
+      "losses": 1,
+      "map_wins": 14,
+      "map_losses": 7,
+      "maps": 21
+     }
+    ]
    },
-   "derivation": "The only 2025 Twisted Minds fixture is the bracket bye, which is not a series: the answer is no_data, not '1-0'. The offered alternative (the all-seasons record) must answer with G08's numbers.",
+   "derivation": "The only 2025 Twisted Minds fixture on FACEIT in the golden set is the bracket bye, which is not a series. Until Stage 4 the answer was no_data; since then the 2025 World Finals (Liquipedia only) gives Twisted Minds 5 series in 2025 (4-1), and the record must be exactly those 5: the bye still not counted as a 6th.",
    "status": "confirmed"
   },
   {
@@ -1073,8 +1068,8 @@
     "status": "ok",
     "entity": {
      "role": "team",
-     "type": "team",
-     "id": "cd157523-5c58-41bc-b62d-e1a635ea61b8",
+     "type": "org",
+     "id": "dallas-fuel",
      "name": "Dallas Fuel"
     },
     "rows": [
@@ -1136,7 +1131,7 @@
     "status": "ok",
     "entity": {
      "role": "opponent",
-     "id": "a58dedff-8045-46be-a13e-2402495b6a9d",
+     "id": "team-liquid",
      "name": "Team Liquid"
     },
     "sentence_contains": [
@@ -1173,15 +1168,15 @@
     "status": "ok",
     "entity": {
      "role": "subject",
-     "type": "team",
-     "id": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
+     "type": "org",
+     "id": "team-falcons",
      "name": "Team Falcons"
     },
     "sentence_contains": [
      "Team Falcons is"
     ]
    },
-   "derivation": "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it.",
+   "derivation": "Owner decision 2026-10-08 (scope/alias_decisions.json 'tf'): community usage gives TF to Team Falcons, the team id with its Dreamhack Dallas series. Before it, 'tf' reached the team TFW (0 series) by prefix. The collision is settled by usage, not evidence strength; TFW fitting the initials is no reason to undo it. Since the owner's Stage 4 decision (2026-10-09) the Dallas id belongs to the org team-falcons for its whole life, and the alias follows its team into the org: Team Falcons the org, not the bare team id.",
    "status": "confirmed"
   },
   {
@@ -1256,7 +1251,7 @@
      "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1"
     ]
    },
-   "derivation": "All 9 2024 teams are ranked rows, so every linked 2024 series is behind the answer: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major, https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1. Attribution once read only the evidence page of the expanded top row.",
+   "derivation": "All 10 2024 teams are ranked rows, so every linked 2024 series is behind the answer: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major, https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1. Attribution once read only the evidence page of the expanded top row.",
    "status": "confirmed"
   },
   {
@@ -1367,6 +1362,210 @@
     ]
    },
    "derivation": "Stages with series, in order: [(2024, 1), (2024, 2), (2025, 1), (2025, 2), (2026, 1), (2026, 2)]; the one before the latest is (2026, 1). SpaceStation Gaming (the org) there: 1-0 over 1 series.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G55",
+   "title": "Who won the 2025 World Finals",
+   "kind": "exact",
+   "regression": "'who won the 2025 world finals' could not be answered (first beta tester, 2026-10-09)",
+   "question": "who won the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Twisted Minds won OWCS 2025 World Finals"
+    ],
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals"
+    ]
+   },
+   "derivation": "Liquipedia's prize pool for Overwatch_Champions_Series/2025/World_Finals places ['Twisted Minds'] 1st, and the event's last series was won by Twisted Minds. Owner's value: Twisted Minds won the 2025 World Finals.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G56",
+   "title": "Al Qadsiah placed second at the 2025 World Finals",
+   "kind": "exact",
+   "regression": null,
+   "question": "who placed second at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Al Qadsiah",
+      "placement": "2"
+     }
+    ],
+    "sentence_contains": [
+     "Al Qadsiah placed 2nd at OWCS 2025 World Finals"
+    ]
+   },
+   "derivation": "The prize pool places ['Al Qadsiah'] 2nd. Owner's value: Al Qadsiah placed second. Liquipedia's name is shown as Liquipedia names it while the name has no identity decision.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G57",
+   "title": "Twisted Minds beat Al Qadsiah 4-1 in the 2025 World Finals grand final",
+   "kind": "exact",
+   "regression": null,
+   "question": "twisted minds series record against al qadsiah at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 2,
+      "wins": 1,
+      "losses": 1
+     }
+    ]
+   },
+   "derivation": "The records hold 2 series between them at the event: 2025-11-30 10:15:00 1-3; 2025-11-30 15:30:00 4-1. The grand final (the later) is Twisted Minds 4-1 (owner's value); the upper final went to Al Qadsiah 3-1. Proposed: Al Qadsiah has no identity decision, so the series between them reach no answer yet.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G58",
+   "title": "SSG and Team Liquid shared 7th-8th at the 2025 World Finals",
+   "kind": "exact",
+   "regression": null,
+   "question": "who placed 7th at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "SpaceStation Gaming",
+      "placement": "7-8"
+     },
+     {
+      "team": "Team Liquid",
+      "placement": "7-8"
+     }
+    ],
+    "sentence_contains": [
+     "SpaceStation Gaming and Team Liquid placed 7th-8th at OWCS 2025 World Finals"
+    ]
+   },
+   "derivation": "The prize pool places ['Spacestation Gaming', 'Team Liquid'] at 7-8. Owner's value: SSG and Team Liquid both placed 7-8th. 'Spacestation Gaming' is anchored to the org spacestation-gaming (scope/liquipedia_team_map.json), shown by its org name; Team Liquid is shown by Liquipedia's name while undecided.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G59",
+   "title": "Team Falcons won the 2025 Midseason Championship",
+   "kind": "exact",
+   "regression": null,
+   "question": "who won the 2025 midseason championship",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Team Falcons",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Team Falcons won OWCS 2025 Midseason Championship"
+    ],
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship"
+    ]
+   },
+   "derivation": "The prize pool places ['Team Falcons'] 1st; the grand final was won by Team Falcons. Owner's value: Team Falcons won the 2025 Midseason Championship.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G60",
+   "title": "Crazy Raccoon won the 2025 Champions Clash",
+   "kind": "exact",
+   "regression": null,
+   "question": "who won the 2025 champions clash",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Crazy Raccoon",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Crazy Raccoon won OWCS 2025 Champions Clash"
+    ]
+   },
+   "derivation": "The prize pool places ['Crazy Raccoon'] 1st; the grand final was won by Crazy Raccoon. Owner's value: Crazy Raccoon won the 2025 Champions Clash. Was a known bug until the owner's decision of 2026-10-09 (one continuous org, Dallas included): the name had resolved to the Dallas FACEIT id, whose name is 'Crazy Raccoons'.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G61",
+   "title": "A Korean team's record at an international event",
+   "kind": "exact",
+   "regression": null,
+   "question": "T1 record at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 5,
+      "wins": 3,
+      "losses": 2
+     }
+    ],
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals"
+    ]
+   },
+   "derivation": "T1's series at Overwatch_Champions_Series/2025/World_Finals in the records: 3-2 over 5. T1 has no FACEIT counterpart; proposed until the owner decides it as a Liquipedia-only org.",
+   "status": "proposed"
+  },
+  {
+   "id": "G62",
+   "title": "A player-stat question about a results-only event refuses, and says what works",
+   "kind": "invariant",
+   "regression": null,
+   "question": "most eliminations at the 2025 world finals",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "results_only",
+    "alternative": {
+     "question_template": "2025 world finals standings",
+     "seasons_with_stat": [
+      null
+     ],
+     "then_rows": [
+      {
+       "team": "Twisted Minds",
+       "placement": "1"
+      },
+      {
+       "team": "Al Qadsiah",
+       "placement": "2"
+      }
+     ]
+    }
+   },
+   "derivation": "OWCS 2025 World Finals is Liquipedia-only: no source records player stats there, so the answer is the results_only refusal, not an empty leaderboard and not 'not recorded for 2025', and the alternative it offers (the event's standings) answers, led by the prize pool's ['Twisted Minds'] and ['Al Qadsiah'].",
+   "status": "confirmed"
+  },
+  {
+   "id": "G63",
+   "title": "A cross-source team counted once across FACEIT and Liquipedia",
+   "kind": "exact",
+   "regression": null,
+   "question": "crazy raccoons record",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 7,
+      "wins": 5,
+      "losses": 2
+     }
+    ]
+   },
+   "derivation": "Crazy Raccoon: the Dallas grand final on FACEIT (won 4-2) plus its Liquipedia-only series in the captured records (Overwatch_Champions_Series/2025/World_Finals: {'matches': 5, 'wins': 3, 'losses': 2}, Overwatch_Champions_Series/2025/Champions_Clash: {'matches': 1, 'wins': 1, 'losses': 0}), each once: {'matches': 7, 'wins': 5, 'losses': 2}. Proposed: the count depends on the owner's held decision (an org spanning Dallas and the later events counts all of them; a window ending after Dallas leaves the later ones undecided).",
    "status": "confirmed"
   }
  ]

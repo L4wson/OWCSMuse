@@ -46,12 +46,21 @@ def test_spacestation_gaming_is_one_org_over_two_eras_and_the_old_rejection_is_g
 
 def test_the_dallas_names_and_the_2024_pages_are_decided():
     t = TeamMap("scope/liquipedia_team_map.json")
-    want = {"Crazy Raccoon": "4cbafe8a-486c-41f9-82e3-b7b84f1855d7", "ENCE": "62f7752b-0b79-4fa8-9a23-78800e2b4539",
-            "M80": "3aca5abd-ee5d-4542-92e9-392b6f5d0dbc", "Team Falcons": "2ab92d33-4c33-46e1-a13f-743a95291d0e",
-            "Toronto Defiant": "8f632648-b26f-4554-bae4-40f9aee1773b"}
+    want = {"ENCE": "62f7752b-0b79-4fa8-9a23-78800e2b4539", "M80": "3aca5abd-ee5d-4542-92e9-392b6f5d0dbc",
+            "Toronto Defiant": "8f632648-b26f-4554-bae4-40f9aee1773b",
+            "Toronto Ultra": "8f632648-b26f-4554-bae4-40f9aee1773b"}   # Defiant's EWC 2024 name (owner, 2026-10-09)
     for name, tid in want.items():
         d = t.find(name)
         assert d and (d["entity_type"], d["entity_id"]) == ("team", tid), name
+        # played 2024 and never returned (owner, 2026-10-09): the 2024 season, EWC 2024 and the World Finals included
+        assert (d["valid_from"][:10], d["valid_to"][:10]) == ("2024-01-01", "2025-01-01"), name
+    # Crazy Raccoon and Team Falcons are one continuous org each, the Dallas id included (owner, 2026-10-09)
+    od = json.load(open("scope/org_decisions.json", encoding="utf-8"))["decisions"]
+    for name, org, tid in (("Crazy Raccoon", "crazy-raccoon", "4cbafe8a-486c-41f9-82e3-b7b84f1855d7"),
+                           ("Team Falcons", "team-falcons", "2ab92d33-4c33-46e1-a13f-743a95291d0e")):
+        d = t.find(name)
+        assert (d["entity_type"], d["entity_id"]) == ("org", org), name
+        assert od[tid]["org_id"] == org and "valid_from" not in od[tid] and "valid_to" not in od[tid], name
     # NRG Shock (FACEIT 'SOG', d566d889) routes to the org that id belongs to for its whole life: anchored to the bare
     # id, "NRG Shock record" found nothing (search routing, owner 2026-10-02; lp_name_resolution guards it)
     d = t.find("NRG Shock")

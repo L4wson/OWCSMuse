@@ -1,6 +1,6 @@
 # Liquipedia <-> FACEIT reconciliation
 
-Built from 3 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219); no request was made to build this report. 451 Liquipedia records (0 placeholder rows excluded) against 473 FACEIT series in the same 29 competitions.
+Built from 4 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219, 4222); no request was made to build this report. 592 Liquipedia records (0 placeholder rows excluded) against 473 FACEIT series in the same 38 competitions.
 
 Nothing here links into an answer. Exact and strong links are proposed; ambiguous matches and team-name mappings wait for review, and the disagreements section says where either source may be wrong.
 
@@ -13,6 +13,8 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | competition | Liquipedia | FACEIT | exact | strong | ambiguous | Liquipedia only | FACEIT only | disagreements |
 |---|---|---|---|---|---|---|---|---|
 | Dreamhack Dallas | 15 | 14 | 0 | 0 | 14 | 1 | 0 | 0 |
+| Esports World Cup 2024 | 35 | 0 | 0 | 0 | 0 | 35 | 0 | 0 |
+| OWCS 2024 World Finals | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group D | 20 | 6 | 20 | 0 | 0 | 0 | 1 | 1 |
@@ -32,6 +34,10 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | OWCS 2024: NA Stage 2 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 2 - Group D | 20 | 6 | 20 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: NA Stage 2 - Main Event | 14 | 14 | 14 | 0 | 0 | 0 | 0 | 0 |
+| OWCS 2025 Champions Clash | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
+| OWCS 2025 Midseason Championship | 28 | 0 | 0 | 0 | 0 | 28 | 0 | 0 |
+| OWCS 2025 World Finals | 22 | 0 | 0 | 0 | 0 | 22 | 0 | 0 |
+| OWCS 2026 Midseason Championship | 28 | 0 | 0 | 0 | 0 | 28 | 0 | 0 |
 | S4 EMEA OWCS Central - Playoffs | 8 | 10 | 8 | 0 | 0 | 0 | 2 | 0 |
 | S4 EMEA OWCS Central - Regular Season | 28 | 28 | 28 | 0 | 0 | 0 | 0 | 0 |
 | S4 NA OWCS Central - Playoffs | 8 | 10 | 8 | 0 | 0 | 0 | 2 | 0 |
@@ -52,7 +58,7 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S9 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | S9 NA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
-| **total** | **451** | **473** | **413** | **13** | **19** | **6** | **28** | **11** |
+| **total** | **592** | **473** | **413** | **13** | **19** | **147** | **28** | **11** |
 
 ## Needs review: ambiguous matches (0)
 
@@ -165,6 +171,65 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 - links: 0 exact, 0 strong, 14 ambiguous; 1 Liquipedia-only; 0 FACEIT-only
 - Liquipedia matches with no FACEIT counterpart:
   - 2024-06-01 21:30Z  Team Hydron 0-1 Team Danteh  (bo1)  (team name not mapped: Team Hydron, Team Danteh)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/Major
+
+### Esports World Cup 2024
+
+- links: 0 exact, 0 strong, 0 ambiguous; 35 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-07-24 12:00Z  Toronto Ultra 3-1 Gaimin Gladiators  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 12:00Z  Crazy Raccoon 3-0 ROC Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 13:30Z  Team Falcons 3-0 Mkers  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 13:30Z  LGD.OA 0-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 15:00Z  ENCE 3-0 M80  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 15:00Z  ZETA DIVISION 3-1 Bleed Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 16:30Z  Spacestation Gaming 3-1 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 16:30Z  Fnatic 1-3 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 18:00Z  ENCE 3-1 Bleed Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 19:45Z  ZETA DIVISION 3-1 M80  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 20:00Z  Fnatic 2-3 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-24 21:30Z  Spacestation Gaming 1-3 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 12:00Z  Toronto Ultra 3-0 ROC Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 12:00Z  Crazy Raccoon 3-0 Gaimin Gladiators  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 13:15Z  LGD.OA 3-0 Mkers  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 13:20Z  Team Falcons 3-1 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 14:30Z  Gaimin Gladiators 3-0 ROC Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 15:45Z  Twisted Minds 3-2 Mkers  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 15:45Z  Crazy Raccoon 3-0 Toronto Ultra  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 17:00Z  Team Falcons 1-3 LGD.OA  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 18:00Z  M80 3-1 Bleed Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 19:00Z  ZETA DIVISION 3-0 ENCE  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 19:45Z  Virtus.pro 3-2 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-25 20:45Z  Spacestation Gaming 2-3 Fnatic  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024/Group_Stage
+  - 2024-07-26 13:00Z  Spacestation Gaming 4-0 Gaimin Gladiators  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-26 15:00Z  ENCE 4-2 Fnatic  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-26 18:15Z  Team Falcons 4-0 M80  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-26 19:45Z  Toronto Ultra 4-1 LGD.OA  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-27 13:00Z  Crazy Raccoon 4-0 ENCE  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-27 14:50Z  ZETA DIVISION 4-2 Spacestation Gaming  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-27 18:15Z  Twisted Minds 0-4 Toronto Ultra  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-27 20:00Z  Virtus.pro 1-4 Team Falcons  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-28 15:00Z  Crazy Raccoon 4-1 Team Falcons  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-28 17:00Z  ZETA DIVISION 3-4 Toronto Ultra  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+  - 2024-07-28 19:00Z  Crazy Raccoon 4-1 Toronto Ultra  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+
+### OWCS 2024 World Finals
+
+- links: 0 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-11-22 10:00Z  Team Falcons 2-1 Twisted Minds  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-22 11:30Z  Crazy Raccoon 2-0 NRG Shock  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-22 12:25Z  Spacestation Gaming 0-2 NTMR  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-22 13:30Z  Toronto Defiant 2-0 ENCE  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-22 15:25Z  Twisted Minds 3-1 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-22 17:15Z  NRG Shock 3-0 ENCE  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-23 10:05Z  Team Falcons 3-0 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-23 11:20Z  Crazy Raccoon 3-0 Toronto Defiant  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-23 12:30Z  NTMR 0-3 NRG Shock  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-23 13:45Z  Toronto Defiant 3-2 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-23 15:50Z  Toronto Defiant 3-0 NRG Shock  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-24 11:20Z  Team Falcons 3-0 Crazy Raccoon  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-24 12:30Z  Crazy Raccoon 3-0 Toronto Defiant  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
+  - 2024-11-24 14:15Z  Team Falcons 4-1 Crazy Raccoon  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/World_Finals
 
 ### OWCS 2024: EMEA Stage 1 - Group B
 
@@ -287,6 +352,118 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 ### OWCS 2024: NA Stage 2 - Main Event
 
 - links: 14 exact, 0 strong, 0 ambiguous; 0 Liquipedia-only; 0 FACEIT-only
+
+### OWCS 2025 Champions Clash
+
+- links: 0 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2025-04-18 05:10Z  Team Falcons 2-1 Al Qadsiah  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-18 07:00Z  Virtus.pro 0-2 Once Again  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-18 08:10Z  NTMR 2-0 Team CC (Chinese orgless team)  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-18 09:45Z  Crazy Raccoon 2-0 Spacestation Gaming  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-18 10:30Z  Al Qadsiah 0-3 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-18 11:35Z  Team CC (Chinese orgless team) 0-3 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-19 05:00Z  NTMR 3-1 Crazy Raccoon  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-19 06:55Z  Team Falcons 3-2 Once Again  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-19 09:00Z  Crazy Raccoon 3-1 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-19 10:35Z  Once Again 3-1 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-19 12:10Z  Crazy Raccoon 3-0 Once Again  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-20 06:15Z  Team Falcons 3-0 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-20 07:50Z  NTMR 0-3 Crazy Raccoon  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+  - 2025-04-20 09:30Z  Team Falcons 2-4 Crazy Raccoon  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash
+
+### OWCS 2025 Midseason Championship
+
+- links: 0 exact, 0 strong, 0 ambiguous; 28 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2025-07-31 13:20Z  All Gamers Global 0-2 Team Falcons  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 13:30Z  Weibo Gaming 2-1 Virtus.pro  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 14:25Z  Crazy Raccoon 2-0 VARREL  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 15:10Z  Team Liquid 2-0 ROC Esports  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 15:45Z  Al Qadsiah 2-0 Team CC (Chinese orgless team)  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 16:15Z  Geekay Esports 2-0 ZoKorp Esports  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 16:40Z  Twisted Minds 1-2 Sign Esports  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 17:05Z  T1 2-0 The Gatos Guapos  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 18:05Z  Crazy Raccoon 3-2 Team Liquid  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 18:10Z  Team Falcons 3-2 Weibo Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 20:10Z  Sign Esports 0-3 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-07-31 20:10Z  Al Qadsiah 3-2 Geekay Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 13:05Z  All Gamers Global 0-3 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 13:10Z  Team CC (Chinese orgless team) 3-0 ZoKorp Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 14:35Z  Twisted Minds 3-0 The Gatos Guapos  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 14:45Z  VARREL 3-2 ROC Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 16:30Z  Geekay Esports 3-2 Team CC (Chinese orgless team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 17:10Z  Weibo Gaming 2-3 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 19:25Z  Team Liquid 3-0 VARREL  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-01 20:55Z  Sign Esports 0-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage
+  - 2025-08-02 13:15Z  Crazy Raccoon 2-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+  - 2025-08-02 15:30Z  Al Qadsiah 3-0 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+  - 2025-08-02 17:00Z  T1 3-0 Team Liquid  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+  - 2025-08-02 18:35Z  Team Falcons 3-2 Geekay Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+  - 2025-08-03 13:00Z  Twisted Minds 2-3 Al Qadsiah  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+  - 2025-08-03 15:25Z  T1 1-3 Team Falcons  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+  - 2025-08-03 17:30Z  Twisted Minds 3-1 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+  - 2025-08-03 19:20Z  Al Qadsiah 0-4 Team Falcons  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship
+
+### OWCS 2025 World Finals
+
+- links: 0 exact, 0 strong, 0 ambiguous; 22 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2025-11-26 11:05Z  Team CC (Chinese orgless team) 1-2 T1  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-26 12:40Z  Team Falcons 2-1 VARREL  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-26 14:00Z  Al Qadsiah 2-0 Geekay Esports  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-26 15:05Z  Spacestation Gaming 2-1 Team Peps  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-27 11:15Z  Crazy Raccoon 3-0 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-27 12:30Z  Weibo Gaming 0-3 Al Qadsiah  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-27 13:50Z  Twisted Minds 3-2 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-27 16:10Z  Team Liquid 1-3 Team Falcons  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-28 11:30Z  Weibo Gaming 2-0 Team CC (Chinese orgless team)  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-28 12:45Z  Spacestation Gaming 2-0 VARREL  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-28 13:40Z  T1 2-1 Geekay Esports  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-28 15:00Z  Team Liquid 2-0 Team Peps  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-28 16:05Z  Weibo Gaming 3-0 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-28 17:30Z  Team Liquid 0-3 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-29 10:05Z  Crazy Raccoon 1-3 Al Qadsiah  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-29 11:55Z  Twisted Minds 3-0 Team Falcons  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-29 13:25Z  Crazy Raccoon 3-0 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-29 14:50Z  Team Falcons 3-0 Weibo Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-29 16:50Z  Crazy Raccoon 3-2 Team Falcons  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-30 10:15Z  Al Qadsiah 3-1 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-30 12:10Z  Twisted Minds 3-1 Crazy Raccoon  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+  - 2025-11-30 15:30Z  Al Qadsiah 1-4 Twisted Minds  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
+
+### OWCS 2026 Midseason Championship
+
+- links: 0 exact, 0 strong, 0 ambiguous; 28 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2026-07-29 10:15Z  ZETA DIVISION 2-0 VARREL  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-29 11:15Z  Crazy Raccoon 2-0 Team Secret  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-29 12:45Z  Geekay Esports 2-0 All Gamers Global  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-29 14:00Z  Spacestation Gaming 2-1 JD Gaming  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-29 15:30Z  T1 1-2 Twisted Minds  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-29 17:20Z  Weibo Gaming 2-1 Team Liquid  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-29 18:50Z  Virtus.pro 2-0 9z Team  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-29 19:45Z  Dallas Fuel 0-2 Team Falcons  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-30 10:05Z  Crazy Raccoon 2-0 Spacestation Gaming  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-30 10:55Z  Weibo Gaming 2-1 Team Falcons  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-30 12:25Z  All Gamers Global 1-2 VARREL  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-30 13:45Z  Team Secret 0-2 JD Gaming  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-30 14:35Z  9z Team 0-2 T1  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-30 15:25Z  Team Liquid 0-2 Dallas Fuel  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-31 10:10Z  Virtus.pro 0-2 Twisted Minds  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-31 11:00Z  Geekay Esports 1-2 ZETA DIVISION  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-31 12:15Z  Team Falcons 0-2 T1  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-31 13:10Z  Spacestation Gaming 2-1 VARREL  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-31 14:25Z  Virtus.pro 0-2 Dallas Fuel  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-07-31 15:15Z  Geekay Esports 2-0 JD Gaming  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage
+  - 2026-08-01 10:00Z  Crazy Raccoon 0-3 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+  - 2026-08-01 11:40Z  ZETA DIVISION 3-0 Dallas Fuel  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+  - 2026-08-01 13:00Z  Weibo Gaming 3-1 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+  - 2026-08-01 14:50Z  Twisted Minds 3-1 Geekay Esports  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+  - 2026-08-02 10:00Z  ZETA DIVISION 3-0 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+  - 2026-08-02 11:20Z  Twisted Minds 3-2 Weibo Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+  - 2026-08-02 13:45Z  Weibo Gaming 0-3 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+  - 2026-08-02 15:30Z  Twisted Minds 2-4 ZETA DIVISION  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
 
 ### S4 EMEA OWCS Central - Playoffs
 

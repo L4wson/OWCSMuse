@@ -59,6 +59,9 @@ class SchemaInfo:
     region_player_stats: dict[str, bool] = field(default_factory=dict)
     # first and last series per championship (the series view), for reading "this stage" and saying when it was played
     championship_dates: dict[str, tuple[Any, Any]] = field(default_factory=dict)
+    # championships whose only source is Liquipedia (`lp:`, Stage 4): results only by declaration, like a region in
+    # region_sources, whether or not any of their series has loaded yet
+    liquipedia_only: set[str] = field(default_factory=set)
 
     @classmethod
     def from_db(cls, conn: psycopg.Connection) -> "SchemaInfo":
@@ -90,10 +93,12 @@ class SchemaInfo:
             for r in cur.fetchall():
                 info.championship_dates[r["championship_id"]] = (r["first_at"], r["last_at"])
             cur.execute("SELECT championship_id, name, championship_display_name(name) AS display_name, season, "
-                        "scope_region FROM championships WHERE include")
+                        "scope_region, source FROM championships WHERE include")
             for r in cur.fetchall():
                 cid = r["championship_id"]
                 info.championships[cid] = r["name"]
+                if r["source"] == "liquipedia":
+                    info.liquipedia_only.add(cid)
                 info.championship_display[cid] = r["display_name"] or r["name"]
                 if r["scope_region"]:
                     info.championship_region[cid] = r["scope_region"]
@@ -239,9 +244,10 @@ def capability(q: StructuredQuery, info: SchemaInfo, champ_ids: list[str]) -> tu
         if region and info.region_player_stats.get(region) is False and need == "player_stats":
             return "none", [f"the {region.upper()} region"]
         return "full", []
-    # an included championship with no series at all is empty, not results-only: leave that to the no-data path
-    lacking = [cid for cid in cids if info.capabilities.get(cid, {}).get(key) is False
-               and info.capabilities.get(cid, {}).get("series", 0) > 0]
+    # an included championship with no series at all is empty, not results-only: leave that to the no-data path. A
+    # Liquipedia-only one is results-only by declaration (no player stats, and map rows are FACEIT-keyed), loaded or not.
+    lacking = [cid for cid in cids if cid in info.liquipedia_only
+               or (info.capabilities.get(cid, {}).get(key) is False and info.capabilities.get(cid, {}).get("series", 0) > 0)]
     if not lacking:
         return "full", []
     names = sorted({info.championship_display.get(cid, info.championships.get(cid, cid)) for cid in lacking})
@@ -297,6 +303,22 @@ def resolve_period(q: StructuredQuery, info: SchemaInfo) -> Union[tuple[Structur
             f"'{words}' is read as OWCS {season} Stage {n} ({' and '.join(regions) or 'all regions'}), {why}{played}.")
 
 
+def _validate_placement(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
+    """A placing belongs to one event: the question must name one, and it must be in scope."""
+    f = q.filters
+    if not f.championship:
+        return Unanswerable(code="invalid_query", reason="a placing is per event: name the event, e.g. `who won the 2025 world finals`")
+    matches = info.match_championships(f.championship, f.season, f.region)
+    if not matches:
+        return Unanswerable(code="no_data", reason=f"no included championship matches '{f.championship}'"
+                                                   + (f" in {f.season}" if f.season else ""))
+    notes = []
+    if len(matches) > 1:
+        notes.append(f"'{f.championship}' matched {len(matches)} events; placings are listed for each: "
+                     + "; ".join(n for _, n in matches)[:300])
+    return Validated(query=q, championship_ids=[cid for cid, _ in matches], notes=notes)
+
+
 def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
     notes: list[str] = []
     f = q.filters
@@ -312,6 +334,9 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
         if val is not None and val not in info.seasons:
             have = ", ".join(str(s) for s in sorted(info.seasons)) or "none"
             return Unanswerable(code="no_data", reason=f"no data for the {val} season; seasons with data: {have}")
+
+    if q.intent == "placement":
+        return _validate_placement(q, info)
 
     # --- metric
     if q.intent in ("versus", "season_compare"):
@@ -416,13 +441,17 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
     if q.intent == "stat_availability" and (f.map or f.mode or f.championship or f.role):
         notes.append("stat availability is reported per season; map/mode/championship/role filters ignored")
 
+    # --- capability: does any source give this slice what the question needs? Asked before the season's stat
+    # coverage: a slice that can carry no player stats at all (a Liquipedia-only event) refuses for that reason,
+    # not because its season happens to lack this one stat elsewhere ("final blows at EWC 2024": 2024's FACEIT
+    # payloads carry 9 keys, but EWC 2024 carries none).
+    cap, parts = capability(q, info, champ_ids)
+
     # --- metric availability in the requested season slice
-    if stat_key and f.season is not None and f.season not in info.stat_keys.get(stat_key, set()):
+    if cap != "none" and stat_key and f.season is not None and f.season not in info.stat_keys.get(stat_key, set()):
         with_stat = ", ".join(str(s) for s in sorted(info.stat_keys.get(stat_key, set()))) or "none"
         return Unanswerable(code="no_data", reason=f"'{stat_key}' is not recorded for the {f.season} season (seasons with it: {with_stat})")
 
-    # --- capability: does any source give this slice what the question needs?
-    cap, parts = capability(q, info, champ_ids)
     if cap == "none":
         what = "player stats" if needs(q, info) == "player_stats" else "map results"
         where = ", ".join(parts) if parts else "this slice"

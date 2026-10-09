@@ -299,6 +299,35 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
                 return 0
             _print(probe_pages(client, pages, settings.liquipedia_page_limit))
             return 0
+        if args.lp_cmd == "probe-subpages":
+            from .liquipedia.events import probe_subpages, project_subpage_probe
+            print(json.dumps(project_subpage_probe(args.roots, client.budget_state()), indent=2, default=str),
+                  file=sys.stderr)
+            if not args.execute:
+                print("dry run: this is ONE request; pass --execute to send it", file=sys.stderr)
+                return 0
+            _print(probe_subpages(client, args.roots))
+            return 0
+        if args.lp_cmd == "events":
+            from .liquipedia.events import load_championships
+            _print(load_championships(conn, args.events))
+            return 0
+        if args.lp_cmd == "placements" and args.placements_cmd == "load":
+            from .liquipedia.events import load_placements
+            _print(load_placements(conn, args.events, settings.liquipedia_wiki))
+            return 0
+        if args.lp_cmd == "placements":
+            from .liquipedia.events import placement_plan
+            plan = placement_plan(store, limit=settings.liquipedia_page_limit, wiki=settings.liquipedia_wiki,
+                                  budget=client.budget_state(), refresh=args.refresh, path=args.events)
+            print(plan.render(), file=sys.stderr)
+            if args.placements_cmd == "plan" or not args.execute:
+                if args.placements_cmd == "run":
+                    print("dry run: pass --execute to send these requests", file=sys.stderr)
+                return 0
+            result = run_plan(client, plan, max_requests=args.max_requests)
+            _print(result.as_dict())
+            return {"complete": 0, "budget": 0, "rate_limited": 3, "failed": 4}[result.outcome]
         if args.lp_cmd == "phantoms":
             from .liquipedia import phantoms as lp_phantoms
             from .liquipedia.pipeline import run_reconciliation
@@ -326,7 +355,7 @@ def cmd_liquipedia(args: argparse.Namespace, settings: Settings) -> int:
         if not args.execute:
             print("dry run: pass --execute to send these requests", file=sys.stderr)
             return 0
-        result = run_plan(client, plan)
+        result = run_plan(client, plan, max_requests=args.max_requests)
         _print(result.as_dict())
         return {"complete": 0, "budget": 0, "rate_limited": 3, "failed": 4}[result.outcome]
     except LiquipediaDisabled as exc:
@@ -372,7 +401,22 @@ def _cmd_liquipedia_reconcile(args: argparse.Namespace, conn) -> int:
     if args.lp_cmd == "teams" and args.teams_cmd in ("decide", "accept", "status"):
         if args.teams_cmd == "decide":
             etype, eid = ("org", args.org) if args.org else ("team", args.team)
-            rec = tmap.decide(args.name, etype, eid, args.note, args.region)
+            from .orgs import OrgDecisions
+            with conn.cursor() as cur:
+                cur.execute("SELECT team_id FROM teams WHERE team_id NOT LIKE 'lp:team:%'")
+                known_teams = {r["team_id"] for r in cur.fetchall()}
+                cur.execute("SELECT org_id FROM orgs")
+                known_orgs = {r["org_id"] for r in cur.fetchall()}
+            decided = OrgDecisions()
+            known_orgs |= {d["org_id"] for t in decided.data for d in decided.mappings(t) if d.get("org_id")}
+            if args.new_org_name and etype != "org":
+                print("refused: --new-org-name goes with --org", file=sys.stderr)
+                return 2
+            err = lp_teams.decision_target_error(etype, eid, known_teams, known_orgs, new_org=bool(args.new_org_name))
+            if err:
+                print(f"refused: {err}", file=sys.stderr)
+                return 2
+            rec = tmap.decide(args.name, etype, eid, args.note, args.region, org_name=args.new_org_name)
             _print({"decisions_file": str(tmap.save()), "name": args.name, "decision": rec})
             return 0
         run = pipeline.run_reconciliation(conn, team_map_path=args.team_map, use_proposals=True)
@@ -808,6 +852,28 @@ def build_parser() -> argparse.ArgumentParser:
     pp.add_argument("pages", nargs="*")
     pp.add_argument("--extra", default="scope/competition_pages.json")
     pp.add_argument("--execute", action="store_true")
+    ps = lqs.add_parser("probe-subpages", help="ONE request: which pages at or under these event root pages hold "
+                                               "matches (matches pagename or parent). Shows the projection first; "
+                                               "--execute sends it")
+    ps.add_argument("roots", nargs="+")
+    ps.add_argument("--execute", action="store_true")
+    ev = lqs.add_parser("events", help="Stage 4: write scope/liquipedia_events.json's events as lp: championships "
+                                       "(sends nothing)")
+    evs = ev.add_subparsers(dest="events_cmd", required=True)
+    evl = evs.add_parser("load", help="write every event as an lp: championship; the file is the whole truth for them")
+    evl.add_argument("--events", default="scope/liquipedia_events.json")
+    pl = lqs.add_parser("placements", help="Stage 4: each event's prize-pool placements (GET /placement by root page)")
+    pls = pl.add_subparsers(dest="placements_cmd", required=True)
+    pll = pls.add_parser("load", help="rebuild liquipedia_placements from the stored responses; sends nothing")
+    pll.add_argument("--events", default="scope/liquipedia_events.json")
+    for name in ("plan", "run"):
+        sp = pls.add_parser(name, help="the projection; sends nothing" if name == "plan" else
+                            "show the plan, then (only with --execute) carry it out")
+        sp.add_argument("--events", default="scope/liquipedia_events.json")
+        sp.add_argument("--refresh", action="store_true", help="re-request values already covered")
+        if name == "run":
+            sp.add_argument("--execute", action="store_true")
+            sp.add_argument("--max-requests", type=int, help="stop this run after sending this many")
     lqs.add_parser("probe-limit", help="ONE request: find the API's real rows-per-request cap")
     ph = lqs.add_parser("phantoms", help="FACEIT map rows for maps never played: linked series where FACEIT exceeds "
                                          "Liquipedia, placeholder-shaped map rows, clustering (sends nothing)")
@@ -839,7 +905,10 @@ def build_parser() -> argparse.ArgumentParser:
     g = td.add_mutually_exclusive_group(required=True)
     g.add_argument("--org", help="the org slug")
     g.add_argument("--team", help="an unmapped FACEIT team id")
-    td.add_argument("--region", choices=["na", "emea"], help="only for pages of this region (the same name is two teams)")
+    td.add_argument("--region", choices=["na", "emea", "international"],
+                    help="only for pages of this region (the same name is two teams)")
+    td.add_argument("--new-org-name", help="with --org: create this org (display name) for a team with no FACEIT "
+                                           "counterpart; `identity load` writes it")
     td.add_argument("--note")
     lk = lqs.add_parser("links", help="decide an ambiguous match (sends nothing)")
     lks = lk.add_subparsers(dest="links_cmd", required=True)
@@ -859,6 +928,7 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--json", action="store_true")
         if name == "run":
             sp.add_argument("--execute", action="store_true", help="actually send the requests")
+            sp.add_argument("--max-requests", type=int, help="stop this run after sending this many (cache hits are free)")
     lq.set_defaults(func=cmd_liquipedia)
 
     og = sub.add_parser("orgs", help="org-level team identity: propose, review, apply")

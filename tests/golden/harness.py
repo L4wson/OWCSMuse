@@ -108,6 +108,14 @@ def _each(src: str, items: list) -> list[str]:
     return [f"{src}[{i}]" for i in range(len(items))]
 
 
+def _region_of(championship_id):
+    """A golden championship's scope region; an `lp:` event's from the reviewed scope/liquipedia_events.json."""
+    if championship_id and championship_id.startswith("lp:"):
+        events = json.loads((Path(__file__).resolve().parents[2] / "scope" / "liquipedia_events.json").read_text(encoding="utf-8"))
+        return (events["events"].get(championship_id[3:]) or {}).get("region")
+    return (CHAMPIONSHIPS.get(championship_id) or {}).get("scope_region")
+
+
 def _check_rows(out: Outcome, path: str, wants: list[dict], a, src: str) -> None:
     """Row i of the answer has the fields of wants[i]; `src` is where wants sits in the case's expect."""
     rows = a.rows or []
@@ -163,7 +171,7 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str, src: str) -> None:
             _check(out, f"{p}evidence rows returned == total_rows", ev["total_rows"], len(rows),
                    source=f"{src}evidence.total_rows")
         if "regions_only" in ev:
-            regions = sorted({(CHAMPIONSHIPS.get(r.get("championship_id")) or {}).get("scope_region") for r in rows})
+            regions = sorted({_region_of(r.get("championship_id")) for r in rows}, key=str)
             _check(out, f"{p}regions of the evidence rows", sorted(ev["regions_only"]), regions,
                    source=_each(f"{src}evidence.regions_only", ev["regions_only"]))
         if "roles_only" in ev:

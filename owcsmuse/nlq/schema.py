@@ -16,6 +16,7 @@ Intent = Literal[
     "map_stats",          # rows are maps or modes
     "stat_availability",  # which stats exist for which season
     "team_membership",    # which team a player is on now, and the teams they have been on
+    "placement",          # where teams finished at one event (Liquipedia's prize pool)
 ]
 EntityType = Literal["player", "team", "org", "map", "mode"]
 Aggregation = Literal["total", "avg_per_map", "count", "rate"]
@@ -70,6 +71,7 @@ class Filters(BaseModel):
     role: Optional[Role] = None         # Tank | Damage | Support, per map (see Role above)
     # "this year", "last stage": resolved against the data by validate(), which says in a note what it read it as
     period: Optional[Literal["this_season", "last_season", "this_stage", "last_stage"]] = None
+    place: Optional[int] = Field(default=None, ge=1, le=64)   # a finishing position at an event: 1 is the winner
 
     def names(self) -> list[tuple[str, str]]:
         """(role, name) pairs that need entity resolution."""

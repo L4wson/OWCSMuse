@@ -96,6 +96,10 @@
   {
    "match_id": "1-3546e79b-e777-46f3-821e-a37c59d947df",
    "why": "2024 NA Stage 2 Group A, Toronto Defiant v DhillDucks: MER1T (primary Damage) plays map 3 as Support with 4 deaths - a role leaderboard counts only a player's primary role, so he is no support"
+  },
+  {
+   "match_id": "1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b",
+   "why": "Dreamhack Dallas 2024 grand final, Crazy Raccoons 4-2 Team Falcons (FACEIT, result_only): puts the two Dallas team ids every later Crazy Raccoon and Team Falcons Liquipedia record keys to into the warehouse, so a Stage 4 answer about them shows what production shows (FACEIT's 'Crazy Raccoons'), not a Liquipedia name an empty warehouse falls back to"
   }
  ]
 }

@@ -249,3 +249,40 @@ def test_a_competition_phrase_is_kept_whole(question, championship, season, regi
 def test_the_brand_word_is_not_part_of_a_team_name():
     parsed = parse_question("SpaceStation Gaming record in OWCS 2026 NA Stage 2 Regular Season")
     assert parsed.filters.subject == "spacestation gaming"
+
+
+# ---- Stage 4: placings, and the international events' names
+
+
+
+@pytest.mark.parametrize("question, place, subject", [
+    ("who won the 2025 world finals", 1, None),
+    ("Who won the 2025 Champions Clash?", 1, None),
+    ("who won ewc 2024", 1, None),
+    ("who placed second at the 2025 world finals", 2, None),
+    ("who was runner up at the 2025 world finals", 2, None),
+    ("who placed 7th at the 2025 world finals", 7, None),
+    ("where did spacestation place at the 2025 world finals", None, "spacestation"),
+    ("crazy raccoon placement at the 2025 world finals", None, "crazy raccoon"),
+    ("2025 world finals standings", None, None),
+])
+def test_a_placing_question_names_its_event(question, place, subject):
+    q = parse_question(question)
+    assert q.intent == "placement" and q.filters.place == place and q.filters.subject == subject
+    assert q.filters.championship and q.filters.mode is None
+
+
+def test_who_won_the_most_series_is_still_a_leaderboard():
+    assert parse_question("who won the most series at the 2025 world finals").intent == "leaderboard"
+
+
+def test_who_won_without_an_event_is_not_a_placing():
+    assert getattr(parse_question("who won in 2025"), "intent", None) != "placement"
+
+
+def test_champions_clash_is_an_event_not_the_clash_mode_and_ewc_is_the_esports_world_cup():
+    q = parse_question("crazy raccoon record at the 2025 champions clash")
+    assert q.filters.subject == "crazy raccoon" and q.filters.mode is None and q.filters.championship == "champions clash"
+    q = parse_question("crazy raccoon record at ewc 2024")
+    assert q.filters.subject == "crazy raccoon" and q.filters.championship == "esports world cup"
+    assert parse_question("twisted minds record on clash maps in 2025").filters.mode == "Clash"

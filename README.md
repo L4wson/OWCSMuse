@@ -344,13 +344,14 @@ of 2026, and none of 2024's 478.
 
 ### Scope is OWCS NA + EMEA main competition
 
-`scope_na_emea` - Korea, China, Japan and the Pacific regions are not ingested,
-nor are open qualifiers, community cups or relegation brackets held outside the
-main series. Korea in particular has no usable FACEIT data at all. A leaderboard
-here ranks NA and EMEA main-competition play, not OWCS worldwide. Korea is
-declared a results-only region (`region_sources`): when its data arrives through
-Liquipedia it will answer records, head-to-heads and placings, never a player
-stat.
+`scope_na_emea` - The Korea, China, Japan and Pacific regional leagues are not
+ingested, nor are open qualifiers, community cups or relegation brackets held
+outside the main series. Korea in particular has no usable FACEIT data at all. A
+leaderboard here ranks NA and EMEA main-competition play plus the international
+events (Dreamhack Dallas, EWC 2024, the World Finals, Midseason Championships and
+Champions Clash), not OWCS worldwide. The international events other than Dallas
+come from Liquipedia alone: they answer records, head-to-heads and placings, never a
+player stat. The note is not attached to an answer about one of those events.
 
 ### A results-only slice has series results but no player stats, from any source
 
@@ -1112,6 +1113,11 @@ parser and `parser: "llm"` is refused; no `ANTHROPIC_API_KEY` is needed either.
   `dist`, and one rewrite, `/(.*)` -> `/index.html`. Vercel serves a file that exists in `dist` (`index.html`,
   `assets/*`) before it applies rewrites, so only paths with no file, such as a shared `/q/<slug>` link, get the app,
   whose router reads the slug. It is a rewrite (status 200, URL unchanged), not a redirect.
+- **Vercel Web Analytics and Speed Insights** (`@vercel/analytics`, `@vercel/speed-insights`, mounted in
+  `web/src/main.jsx`). Each loads its script from the deployment's own `/_vercel/insights` and
+  `/_vercel/speed-insights` paths, which Vercel serves ahead of the rewrite above, so they report only from a Vercel
+  deployment with Analytics and Speed Insights enabled in the project's dashboard. In `npm run dev`, the tests and any
+  other host they send nothing.
 
 ### In order
 
@@ -1200,6 +1206,7 @@ and exits 1 with the specific discrepancy:
 | `display_names_searchable` | every entity's shown name (`entity_names.current_name`) is one of its own search names, so a name a reader sees is a name they can ask by; a shown name shared by two entities is counted, not failed (it asks which). Added 2026-10-08: it failed Astro and ZZZ, the two owner display names, until migration 037 |
 | `decisions_loaded` | every reviewed decision in `scope/` (org, alias, team map, player identity, link, scope and competition-name files) is in the table its loader writes, and nothing loaded lacks one; each discrepancy is `decided_not_loaded`, `loaded_not_decided` or `loaded_differs`, with the file, the key and the command that reloads it. A decision about a team, player, championship or record the warehouse does not hold is counted as not applicable, by the loader's own skip rule. Added 2026-10-02 after production was found carrying 166 decided player identities with no anchor, 11 decided team names with none, and a stale `timeless` anchor that failed five `series_integrity` rows |
 | `lp_name_resolution` | every Liquipedia team-map name resolves, in search, to an entity that holds its linked series: a name anchored to a bare team id whose era sits in an org window answers with the wrong era ("LuneX Gaming" once answered with UNC inc's 2024 record while every record key was correctly split). Also fails a team-map entry naming a team id that is not a FACEIT id or an org no decision defines (a truncated id typed into `teams decide` is accepted). Added 2026-10-02; it caught 1234, NRG Shock and Team Z on its first run |
+| `placement_consistency` | every event with placings (Stage 4) has exactly one winner, and that winner won the event's last series, both by Liquipedia's own names: a bracket reset, an LCQ prize pool mixed into the event's, or a placing entered before the final would each break it. Added 2026-10-09 |
 | `answer_rates` | asks the rate questions through the real parser and pipeline (highest K/D, eliminations per map, map and series win rate) for every season and all seasons: every rate in a row is plausible (K/D at most 15 over 3+ maps, a percentage within 0-100, an average at most its total, series at most maps) and the sentence quotes the metric's own column. Added 2026-10-02 after "highest NA kd in 2026" printed Attack's 77.80 map win % as his K/D (5.00); on the old code it fails five answers |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
 
@@ -1227,7 +1234,7 @@ starts:
 | 1 | completeness cross-check: FACEIT match ids joined to Liquipedia, 2024-2026 main series and Dallas | done: `liquipedia reconcile` ties every stored record to FACEIT in tiers (413 exact, 13 strong, 19 ambiguous all decided by the owner, 6 unmatched; `scope/liquipedia_reconciliation.md`) |
 | 2 | enrich the 76 result-only series with map-level results, source recorded per field | done: 33 of them are exact-linked and now enriched (122 maps); see below |
 | 3 | source-agnostic match model and cross-source identity | done (closed 2026-10-02): see **Stage 3: closing summary** below |
-| 4 | LAN and international events | Dreamhack Dallas 2024 fetched (15 records); its six team names and NRG Shock decided 2026-10-02; the 8 verified 2024 stage pages are in `scope/liquipedia_map.json`, one request approved. All 14 Dallas series are linked by owner decision (2026-10-02) and present Liquipedia's score, best-of (bo5/bo7, replacing FACEIT's junk bo1), play time and map results (53 maps) |
+| 4 | LAN and international events | done (2026-10-09; 4 of 15 approved requests): EWC 2024, the 2024 and 2025 World Finals, the 2025 Champions Clash and the 2025 and 2026 Midseason Championships as `lp:` championships, with placings, every team decided and loaded (see **Stage 4** below) |
 | 5 | Korea and China, results only | not started |
 
 ### The client (Stage 0)
@@ -1544,12 +1551,81 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
    matches), 2 are 2026-04-12 finals with no FACEIT counterpart, 1 is a Dallas show match (Team Hydron v Team Danteh).
    The FACEIT side needs a crawl, not Liquipedia requests.
 4. **28 result_only series with no map results:** Liquipedia does not cover them or has no record.
-5. **`teams decide` does not validate its id** (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
+5. ~~**`teams decide` does not validate its id**~~ (done 2026-10-09: it refuses a truncated or unknown id and an unknown org) (a truncated `ec69a520-04` was accepted); `lp_name_resolution` catches
    it after the fact, the command should refuse it.
 6. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI step.
 7. **Golden G27** (Twisted Minds v Geekay at map grain, Stage 2 enrichment) is still `proposed`, not asserted.
 8. **Stage 4:** LAN and international events beyond Dreamhack Dallas.
 9. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+
+### Stage 4: LAN and international events (2026-10-09)
+
+The events with no FACEIT competition - EWC 2024, the 2024 and 2025 World Finals, the 2025 Champions Clash and the
+2025 and 2026 Midseason Championships - come from Liquipedia alone. Dreamhack Dallas stays a FACEIT competition with
+Liquipedia linked onto it.
+
+```bash
+python -m owcsmuse liquipedia probe-subpages <root page>...    # ONE request: which pages at or under each root hold matches
+python -m owcsmuse liquipedia plan                              # the match fetch, now including every event page
+python -m owcsmuse liquipedia run --execute --max-requests 15   # a per-run ceiling below the hourly budget
+python -m owcsmuse liquipedia placements plan|run|load          # /placement by event root page; load sends nothing
+python -m owcsmuse liquipedia events load                       # scope/liquipedia_events.json -> lp: championships
+python -m owcsmuse liquipedia teams decide "<name>" --org <slug> --new-org-name "<display>"   # a Liquipedia-only org
+```
+
+- **`lp:` championships** (migration `038_lp_championships.sql`). `scope/liquipedia_events.json` is the reviewed list,
+  keyed by the event's root page; its `pages` come only from a probe response, never a guessed path. `events load`
+  writes each as `lp:<root page>` with `source = 'liquipedia'` and the usual scope columns, and the reconciler stores
+  every record on those pages under it, so a Liquipedia-only series has an included championship like any FACEIT one.
+  `decisions_loaded` compares the file with the table.
+- **The subpage probe** matches `pagename` OR `parent`: a LAN event's matches sit on subpages (`/Group_Stage`), which an
+  exact-pagename probe reports as not found. It found 141 matches on 9 pages; the alternative roots
+  `.../2024/Finals`, `Esports_World_Cup/2025` and `/2026` hold none (the Midseason Championships at EWC sit under the
+  OWCS path).
+- **Placings** (migration `039_placements.sql`): `liquipedia_placements` is the parsed prize pool, team rows only
+  (individual awards and team awards with no position are left out), the position kept as a range (`7-8`), each with
+  its page for attribution. The `placements` view resolves a name through the same decided anchors as `series`, at the
+  team's exit date; an undecided name is shown as Liquipedia names it, marked `identity: undecided`, never merged.
+  A page whose team placings sit in more than one prize pool is reported as ambiguous and none of its rows load.
+  `check` (`placement_consistency`) holds each event to exactly one winner who also won its last series: a bracket
+  reset, a mixed-in LCQ pool or a placing entered early would break it. All six events pass; none has a bracket reset.
+- **Questions:** a `placement` intent - "who won the 2025 world finals", "who placed second / 7th at ...", "where did X
+  place at ...", "... standings". "Champions Clash" is an event, not the Clash mode, and "EWC" is the Esports World Cup.
+  A sentence about a named event now says "at OWCS 2025 World Finals" rather than "in 2025".
+- **Results only, by declaration.** An `lp:` championship can carry no player stats and no map rows (map grain is
+  FACEIT-keyed), loaded or not, so a player-stat question about one refuses `results_only` before the season's stat
+  coverage is consulted, and offers the event's standings and its series-wins table. A map-grain versus at one refuses
+  the same way.
+- **Liquipedia-only orgs.** A team with no FACEIT counterpart (T1, Weibo Gaming, ZETA DIVISION, ...) is decided with
+  `--new-org-name`; `identity load` creates the org and its `lp:team:` id, and `orgs load` no longer deletes an org that
+  only a Liquipedia-born team maps to. `teams decide` refuses a truncated or unknown team id, an unknown org, and a
+  `--new-org-name` for an org that already exists.
+
+**Loaded into production 2026-10-09** (rehearsed first on a local copy of production): migrations 038-040,
+`orgs load`, `identity load`, `liquipedia events load`, `liquipedia reconcile`, `liquipedia placements load`,
+`refresh`; `check` passes all 17. Every team at the six events is decided (`scope/stage4_team_report.md`): Crazy Raccoon
+and Team Falcons are one continuous org each, Dallas included (`crazy-raccoon`, `team-falcons`); Team Liquid and Dallas
+Fuel are orgs, not bare ids; Toronto Ultra is Toronto Defiant at EWC 2024; Sign Esports is NTMR under a short-lived
+name (2025-06-30 to 2025-09-06); Geekay Esports at the events is the NA team in 2025 and the EMEA team in 2026, from
+each event's qualifier, under the `international` region bucket (revisit if both ever attend one event); ROC Esports
+is the 2024 roster's id through 2024, then a separate China org; 18 teams are Liquipedia-only orgs. 143 series are
+Liquipedia-only: the 141 event series and the two 2026 Stage 1 grand finals Stage 3 left unmatched.
+
+Found while loading, and fixed:
+
+- **SQL `fold_name()` now folds as Python's `fold()` does** (migration 040). Anchors are written with one and looked
+  up with the other; a Liquipedia name with a dot, apostrophe, hyphen or parenthesis (Virtus.pro, Anyone's Legend,
+  Team CC (Chinese orgless team)) never met its anchor, so its Liquipedia-only series reached no answer.
+  `tests/test_fold_parity.py` holds the two equal.
+- **Head-to-head keys both sides by org** (`org_key` in `fact_team_matches`), like a team record. `agg_head_to_head`
+  is keyed by raw team id, so an org on either side (SpaceStation Gaming, Al Qadsiah) matched nothing and answered
+  "ok" with an empty row; no series is now no data.
+- **A question by a team id an org since absorbed** (`team:<id>`, as in a clarify hint or a shared link) answers as
+  that org.
+- **Attribution no longer rebuilds the team-map view per ranked row.** `answer_matches` asks only for match ids, and a
+  player's evidence reads the map score from its round: a 10-row player leaderboard took 22-40 s, now under a second.
+- **Suggestions pair teams and players that met on maps.** The two most active were paired blindly and one pair
+  answered no data; the golden suite now asks every suggestion and fails on any that does not answer.
 
 ## Golden answer suite
 
@@ -1602,8 +1678,11 @@ in-game name `KSAA` belonged.
   commit.
 - **Definitions the expected values rest on**, confirmed by the project owner:
   "kills" means FACEIT's `Eliminations`; a team's `map_wins` / `map_losses` come from
-  the series score, so a series with no map stats still counts in them (the `maps`
-  column counts only rounds that have stats); `kd_ratio` is total Eliminations over
+  the series score, so a series with no map stats still counts in them; the `maps`
+  column counts the maps a series records as played: FACEIT rounds where there are
+  stats, otherwise Liquipedia's game-by-game results (Stage 2's rule for a linked
+  result_only series, and the same for a Liquipedia-only one), a slot Liquipedia marks
+  not played never counted; `kd_ratio` is total Eliminations over
   total Deaths; a map is won when the round's `Winner` is the team's id; a bracket
   bye is not a series.
 - **`known_bug`** marks a case whose expectation is right and whose answer is wrong

@@ -12,6 +12,27 @@
       "valid_from_name": "1234",
       "decided_at": "2026-10-01T23:15:38+00:00"
     },
+    "4cbafe8a-486c-41f9-82e3-b7b84f1855d7": {
+      "org_id": "crazy-raccoon",
+      "org_name": "Crazy Raccoon",
+      "team_name": "Crazy Raccoons",
+      "note": "Crazy Raccoon is one continuous organisation from Dreamhack Dallas 2024 through every later event (owner, 2026-10-09 (Stage 4)): occasional player moves (Stalk3r, SP1NT between the two) are normal roster churn, not identity change. This is the Dallas FACEIT id, which carries no other name; mapped for all of its life (it appears only at Dallas). Liquipedia keeps one template for the team across all events.",
+      "evidence": [
+        "decided by the project owner (owner, 2026-10-09 (Stage 4))",
+        "Liquipedia template unchanged across Dallas, EWC 2024, both World Finals, CC 2025, both Midseason Championships"
+      ],
+      "decided_at": "2026-10-09T17:59:55+00:00"
+    },
+    "cd157523-5c58-41bc-b62d-e1a635ea61b8": {
+      "org_id": "dallas-fuel",
+      "org_name": "Dallas Fuel",
+      "team_name": "Dallas Fuel",
+      "note": "Dallas Fuel as an org, not a bare team id (owner, 2026-10-09 (Stage 4)): a bare id is the shape that keyed later Crazy Raccoon and Team Falcons events to their 2024 ids. This FACEIT id has carried only the name 'Dallas Fuel' (from 2026-03-21); mapped for all of its life.",
+      "evidence": [
+        "decided by the project owner (owner, 2026-10-09 (Stage 4))"
+      ],
+      "decided_at": "2026-10-09T18:13:17+00:00"
+    },
     "c6248ff8-64ff-47ad-8602-7eec0eeda9b0": {
       "org_id": "dhillducks",
       "org_name": "Dhillducks",
@@ -101,7 +122,7 @@
     },
     "10fdda79-bf26-4b61-8823-48d9d531c027": {
       "org_id": "qadsiah",
-      "org_name": "qadsiah",
+      "org_name": "Al Qadsiah",
       "team_name": "Al qadsiah",
       "note": "merged on name identity: names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
       "evidence": [
@@ -114,7 +135,7 @@
     },
     "97ef2653-81b3-45e4-b57f-4df4c27d3ea0": {
       "org_id": "qadsiah",
-      "org_name": "qadsiah",
+      "org_name": "Al Qadsiah",
       "team_name": "qadsiah",
       "note": "merged on name identity: names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
       "evidence": [
@@ -299,6 +320,27 @@
         }
       ],
       "decided_at": "2026-10-01T23:15:38+00:00"
+    },
+    "2ab92d33-4c33-46e1-a13f-743a95291d0e": {
+      "org_id": "team-falcons",
+      "org_name": "Team Falcons",
+      "team_name": "Team Falcons",
+      "note": "Team Falcons is one continuous organisation from Dreamhack Dallas 2024 through every later event (owner, 2026-10-09 (Stage 4)): occasional player moves (Stalk3r, SP1NT between the two) are normal roster churn, not identity change. This is the Dallas FACEIT id, which carries no other name; mapped for all of its life (it appears only at Dallas). Liquipedia keeps one template for the team across all events.",
+      "evidence": [
+        "decided by the project owner (owner, 2026-10-09 (Stage 4))",
+        "Liquipedia template unchanged across Dallas, EWC 2024, both World Finals, CC 2025, both Midseason Championships"
+      ],
+      "decided_at": "2026-10-09T17:59:55+00:00"
+    },
+    "a58dedff-8045-46be-a13e-2402495b6a9d": {
+      "org_id": "team-liquid",
+      "org_name": "Team Liquid",
+      "team_name": "Team Liquid",
+      "note": "Team Liquid as an org, not a bare team id (owner, 2026-10-09 (Stage 4)): a bare id is the shape that keyed later Crazy Raccoon and Team Falcons events to their 2024 ids. This FACEIT id has carried only the name 'Team Liquid' (from 2025-01-31); mapped for all of its life.",
+      "evidence": [
+        "decided by the project owner (owner, 2026-10-09 (Stage 4))"
+      ],
+      "decided_at": "2026-10-09T18:13:17+00:00"
     },
     "9870dc60-9607-4fde-8e81-c729349f4087": {
       "org_id": "team-peps",

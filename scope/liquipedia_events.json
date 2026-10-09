@@ -1,0 +1,92 @@
+{
+  "note": "Stage 4: events with no FACEIT competition, keyed by their Liquipedia root page. `pages` comes only from a probe response (`liquipedia probe-subpages`), never a guessed path, and is what `liquipedia plan` fetches. `liquipedia events load` writes each as an `lp:<root>` championship; this file is the whole truth for those rows. Not probed into the plan and not found by the probe: Overwatch_Champions_Series/2024/Finals, Esports_World_Cup/2025, Esports_World_Cup/2026 (the 2025 and 2026 Midseason Championships at EWC sit under the OWCS path).",
+  "events": {
+    "Overwatch_Champions_Series/2024/World_Finals": {
+      "display_name": "OWCS 2024 World Finals",
+      "season": 2024,
+      "region": "international",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-09",
+      "pages": {
+        "Overwatch_Champions_Series/2024/World_Finals": 14
+      },
+      "probe_raw_id": 4220,
+      "note": "In scope by the owner's Stage 4 decision (2026-10-09). Pages are exactly those the subpage probe (raw_payloads 4220) found at or under this root, with its match counts. Display name follows the page path; not yet confirmed by the owner."
+    },
+    "Overwatch_Champions_Series/2025/World_Finals": {
+      "display_name": "OWCS 2025 World Finals",
+      "season": 2025,
+      "region": "international",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-09",
+      "pages": {
+        "Overwatch_Champions_Series/2025/World_Finals": 22
+      },
+      "probe_raw_id": 4220,
+      "note": "In scope by the owner's Stage 4 decision (2026-10-09). Pages are exactly those the subpage probe (raw_payloads 4220) found at or under this root, with its match counts. Display name follows the page path; not yet confirmed by the owner."
+    },
+    "Overwatch_Champions_Series/2025/Midseason_Championship": {
+      "display_name": "OWCS 2025 Midseason Championship",
+      "season": 2025,
+      "region": "international",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-09",
+      "pages": {
+        "Overwatch_Champions_Series/2025/Midseason_Championship": 8,
+        "Overwatch_Champions_Series/2025/Midseason_Championship/Group_Stage": 20
+      },
+      "probe_raw_id": 4220,
+      "note": "In scope by the owner's Stage 4 decision (2026-10-09). Pages are exactly those the subpage probe (raw_payloads 4220) found at or under this root, with its match counts. Display name follows the page path; not yet confirmed by the owner."
+    },
+    "Overwatch_Champions_Series/2026/Midseason_Championship": {
+      "display_name": "OWCS 2026 Midseason Championship",
+      "season": 2026,
+      "region": "international",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-09",
+      "pages": {
+        "Overwatch_Champions_Series/2026/Midseason_Championship": 8,
+        "Overwatch_Champions_Series/2026/Midseason_Championship/Group_Stage": 20
+      },
+      "probe_raw_id": 4220,
+      "note": "In scope by the owner's Stage 4 decision (2026-10-09). Pages are exactly those the subpage probe (raw_payloads 4220) found at or under this root, with its match counts. Display name follows the page path; not yet confirmed by the owner."
+    },
+    "Esports_World_Cup/2024": {
+      "display_name": "Esports World Cup 2024",
+      "season": 2024,
+      "region": "international",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-09",
+      "pages": {
+        "Esports_World_Cup/2024": 11,
+        "Esports_World_Cup/2024/Group_Stage": 24
+      },
+      "probe_raw_id": 4220,
+      "note": "In scope by the owner's Stage 4 decision (2026-10-09); EWC 2024 sat outside the official circuit but counts as a major event. Pages are exactly those the subpage probe (raw_payloads 4220) found at or under this root, with its match counts. Display name follows the page path; not yet confirmed by the owner."
+    },
+    "Overwatch_Champions_Series/2025/Champions_Clash": {
+      "display_name": "OWCS 2025 Champions Clash",
+      "season": 2025,
+      "region": "international",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-09",
+      "pages": {
+        "Overwatch_Champions_Series/2025/Champions_Clash": 14
+      },
+      "probe_raw_id": 4221,
+      "note": "In scope by the owner's Stage 4 scope addition (2026-10-09). Pages are exactly those the subpage probe (raw_payloads 4221) found at or under this root; not found: Overwatch_Champions_Series/2025/Asia/Champions_Clash, Champions_Clash/2025. Display name follows the page path; not yet confirmed by the owner."
+    }
+  }
+}
