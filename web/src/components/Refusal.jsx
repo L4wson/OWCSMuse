@@ -1,3 +1,4 @@
+import GrainToggle from "./GrainToggle.jsx";
 import Evidence from "./Evidence.jsx";
 import Context from "./Context.jsx";
 
@@ -18,6 +19,7 @@ export default function Refusal({ answer, suggestions = [], onAsk, onPage, busy,
 
   return (
     <section className="refusal" data-testid="refusal">
+      <GrainToggle answer={answer} onAsk={onAsk} busy={busy} />
       <p className="refusal-reason" data-testid="refusal-reason">
         {answer.reason}
       </p>

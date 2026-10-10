@@ -1024,6 +1024,69 @@ case("G81", "A bare 'finals' with a stage word stays that stage", "invariant",
      {"status": "cannot_answer", "sentence_lacks": ["World Finals"]},
      "'NA Stage 2 finals' is the stage's own final, not the World Finals; the stages have no prize-pool placings here.")
 
+# ------------------------------------------------------- every versus combination, both grains (owner, 2026-10-10)
+CONFIRMED |= {f"G{n}" for n in range(82, 88)}
+CJ, SG = pid("cjay4"), pid(SUG)
+DF_IDS, SSG_IDS = {team_id("Dallas Fuel")}, {x.team[k] for x in S for k in x.team if x.name[k] in ("SpaceStation Gaming", "SpaceStation")}
+
+pvp = I.opposed_record(S, ("player", {CJ}), ("player", {SG}))
+assert pvp["matches"] == 4
+case("G82", "A player's series record against a player: the series they were on opposite sides of", "exact",
+     f"{pname('cjay4')} series record against {pname(SUG)}",
+     {"status": "ok", "rows": [{"matches": pvp["matches"], "wins": pvp["wins"], "losses": pvp["losses"]}],
+      "notes_contain": ["Players do not win series, their teams do"],
+      "other_grain": f"{pname('cjay4')} map record against {pname(SUG)}"},
+     f"Series with {pname('cjay4')} on one declared line-up and {pname(SUG)} on the other: {pvp['matches']} "
+     f"({', '.join(m[:10] for m in pvp['match_ids'])}), {pvp['wins']}-{pvp['losses']} from {pname('cjay4')}'s side. "
+     "Before: 'head-to-head needs two resolved teams'.",
+     regression="series-grain player v player demanded two teams (2026-10-10)")
+
+pvo = I.opposed_record(S, ("player", {SG}), ("team", DF_IDS))
+case("G83", "A player's series record against an org", "exact", f"{pname(SUG)} series record against Dallas Fuel",
+     {"status": "ok", "rows": [{"matches": pvo["matches"], "wins": pvo["wins"], "losses": pvo["losses"]}],
+      "other_grain": f"{pname(SUG)} map record against Dallas Fuel"},
+     f"Series with {pname(SUG)} on one line-up and Dallas Fuel on the other side: {pvo['matches']}, "
+     f"{pvo['wins']}-{pvo['losses']} from his team's side.",
+     regression="series-grain player v org demanded two teams (2026-10-10)")
+
+ovp = I.opposed_record(S, ("team", DF_IDS), ("player", {SG}))
+assert (ovp["wins"], ovp["losses"]) == (pvo["losses"], pvo["wins"])
+case("G84", "An org's series record against a player", "exact", f"Dallas Fuel series record against {pname(SUG)}",
+     {"status": "ok", "rows": [{"matches": ovp["matches"], "wins": ovp["wins"], "losses": ovp["losses"]}],
+      "other_grain": f"Dallas Fuel map record against {pname(SUG)}"},
+     f"The same {ovp['matches']} series from Dallas Fuel's side: {ovp['wins']}-{ovp['losses']}. Before: 'Dallas Fuel has no "
+     "series' (the player was keyed as an org).",
+     regression="series-grain org v player answered no data (2026-10-10)")
+
+tmp = I.team_maps_against_player(S, DF_IDS, SG)
+case("G85", "An org's map record against a player is the org's, not the player's", "exact",
+     f"Dallas Fuel map record against {pname(SUG)}",
+     {"status": "ok", "rows": [{"maps": tmp["maps"], "map_wins": tmp["map_wins"], "map_losses": tmp["map_losses"]}],
+      "other_grain": f"Dallas Fuel series record against {pname(SUG)}"},
+     f"Rounds {pname(SUG)} played against Dallas Fuel: {tmp['maps']}, Dallas Fuel won {tmp['map_wins']}, lost "
+     f"{tmp['map_losses']}. The answer read the player's own rows unflipped and gave his record as the org's.",
+     regression="org v player map record presented the player's wins as the org's (2026-10-10)")
+
+own = I.same_side_series(S, ("player", {SG}), ("team", SSG_IDS), season=2026)
+assert own > 0 and I.opposed_record(S, ("player", {SG}), ("team", SSG_IDS), season=2026)["matches"] == 0
+case("G86", "A player against his own team is refused as that, not as 'they met'", "invariant",
+     f"{pname(SUG)} map record against SpaceStation Gaming in 2026",
+     {"status": "cannot_answer", "code": "no_data",
+      "sentence_contains": [f"played for SpaceStation Gaming in 2026 ({own} series), never against them"]},
+     f"In 2026 {pname(SUG)} was on SpaceStation Gaming's line-up in {own} series and never opposite it. The note "
+     "once counted any series both appeared in, his own team's among them ('they did meet').",
+     regression="a player and his own team were said to have met (2026-10-10)")
+
+h2h = I.opposed_record(S, ("team", SSG_IDS), ("team", DF_IDS))
+case("G87", "An org v org series record's evidence holds every series behind it", "exact",
+     "SpaceStation Gaming series record against Dallas Fuel",
+     {"status": "ok", "rows": [{"matches": h2h["matches"], "wins": h2h["wins"], "losses": h2h["losses"]}],
+      "evidence": {"total_rows": h2h["matches"]},
+      "other_grain": "SpaceStation Gaming map record against Dallas Fuel"},
+     f"SpaceStation Gaming (both team ids, one org) v Dallas Fuel: {h2h['matches']} series, {h2h['wins']}-{h2h['losses']}. "
+     "The evidence filtered raw team ids, so with an org on either side the record answered and its evidence was empty.",
+     regression="head-to-head evidence empty for an org (2026-10-10)")
+
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
            "cases": CASES}, open(Path(__file__).parent / "cases.json", "w", encoding="utf-8"), indent=1)

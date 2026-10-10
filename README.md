@@ -808,10 +808,29 @@ python -m owcsmuse ask "2024 Twisted Minds vs 2026 Twisted Minds"
 python -m owcsmuse ask "Twisted Minds series record against ENCE"   # series grain instead
 ```
 
-`result_only` series contribute no map rows, so they cannot deflate a record
-unnoticed: the answer counts them separately and says how many series and how
-many maps by series score are excluded. An empty result distinguishes "never
-met" from "met, but FACEIT recorded no maps".
+Every combination answers at both grains:
+
+| | series grain ("X series record against Y") | map grain ("X vs Y", "X map record against Y") |
+|---|---|---|
+| player v player | the series they were on opposite sides of | the maps they played against each other |
+| player v org, org v player | the series the player was on the side opposite the org | the maps the player played against the org, from the first-named side |
+| org v org | series between the two orgs | maps between the two orgs |
+
+**A player's series record** (migration `042_series_lineups.sql`): players do not win series, their teams do, so it
+counts the series the two were on opposite sides of and scores each from the first-named side's team. Sides come from
+`series_lineups`: FACEIT's declared line-up (a substitute only when he played a map), and Liquipedia's line-up for a
+Liquipedia-only series through a reviewed player identity. The answer says so in a note. A player and his own team,
+or two players only ever on one line-up, is refused as that ("sugarfree played for SpaceStation Gaming in 2026 (20
+series), never against them"), never as "they met".
+
+**Both grains from either answer:** a versus or series-record answer (and its refusal) carries `other_grain`, the same
+two sides, season and event at the other grain, and the frontend shows it as a "Series record | Map record" toggle.
+
+A series with no map results contributes no map rows, so it cannot deflate a record unnoticed: the answer counts such
+series separately and says how many, and how many maps by series score, are excluded. For two orgs that means no
+source has the maps (FACEIT's rounds or, since 041, Liquipedia's games); with a player on either side it means no
+per-map player stats (results-only on FACEIT, or Liquipedia-only). An empty result distinguishes "never met" from
+"met, but no map results".
 
 ## HTTP API
 

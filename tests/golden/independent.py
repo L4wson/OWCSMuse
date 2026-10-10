@@ -428,3 +428,57 @@ def event_maps(team_a: str, team_b: str, page: Optional[str] = None) -> dict:
             out["map_losses"] += w not in (0, me)
             out["draws"] += w == 0
     return out
+
+
+# ------------------------------------------------------------------- who was on which side of a series
+# A player is on a side by being on its declared line-up (the detail payload's `roster`; `substitutes` is the bench).
+# A team or org is on a side by its team id. Players do not win series, their teams do: a player's series record
+# against someone is the series they were on opposite sides of, scored from his side.
+
+def _on(s, side, who):
+    kind, ids = who
+    if kind == "player":
+        return any(p["player_id"] in ids for p in s.f[side].get("roster", []))
+    return s.team[side] in ids
+
+
+def opposed_series(series_list, a, b, season=None):
+    """[(series, a's faction, b's faction)] for every counted series with `a` on one side and `b` on the other.
+    `a` / `b` are ("player", {player_id}) or ("team", {team ids of one identity})."""
+    out = []
+    for s in series_list:
+        if not s.counts_as_series or (season and s.season != season):
+            continue
+        for k, o in (("faction1", "faction2"), ("faction2", "faction1")):
+            if _on(s, k, a) and _on(s, o, b):
+                out.append((s, k, o))
+                break
+    return out
+
+
+def opposed_record(series_list, a, b, season=None) -> dict:
+    rows = opposed_series(series_list, a, b, season)
+    return {"matches": len(rows), "wins": sum(s.winner_faction == k for s, k, _ in rows),
+            "losses": sum(s.winner_faction == o for s, _, o in rows), "match_ids": [s.match_id for s, _, _ in rows]}
+
+
+def same_side_series(series_list, a, b, season=None) -> int:
+    """Series in which `a` and `b` were on the same side: a player and his own team, or two teammates."""
+    return sum(1 for s in series_list if s.counts_as_series and (not season or s.season == season)
+               and any(_on(s, k, a) and _on(s, k, b) for k in ("faction1", "faction2")))
+
+
+def team_maps_against_player(series_list, team_ids, player_id, season=None) -> dict:
+    """A team's map record in the maps a given opposing player played (his round rows), from the team's side."""
+    out = {"maps": 0, "map_wins": 0, "map_losses": 0}
+    for s in series_list:
+        if not s.counts_as_series or (season and s.season != season):
+            continue
+        for r in s.rounds:
+            mine = [p for p in r["players"] if p["player_id"] == player_id]
+            if not mine or mine[0]["team_id"] in team_ids or not any(t in team_ids for t in r["teams"]):
+                continue
+            out["maps"] += 1
+            out["map_wins"] += r["winner"] in team_ids
+            out["map_losses"] += r["winner"] == mine[0]["team_id"]
+    return out

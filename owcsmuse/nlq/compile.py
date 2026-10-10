@@ -100,6 +100,21 @@ def _dir(sort: str) -> str:
     return "ASC" if sort == "asc" else "DESC"
 
 
+# A player on one side of a series row (`fact_team_matches s`, or any alias): on that side's line-up (series_lineups,
+# 042: FACEIT's declared roster, Liquipedia's for a Liquipedia-only series). An org or team: by org key, like a record.
+_ON_LINEUP = ("EXISTS (SELECT 1 FROM series_lineups l WHERE l.match_id = {a}.match_id"
+              " AND l.player_id = %s AND l.team_id = {a}.{side})")
+
+
+def side_clause(entity_id: str, entity_type: Optional[str], r: Resolved, side: str, alias: str = "s") -> tuple[str, list[Any]]:
+    """Restrict a series row to this entity being on `side` ('team_id': the row's own side; 'opponent_team_id': the
+    other). Players do not win series, their teams do: a player is on a side by being on its line-up."""
+    if entity_type == "player":
+        return _ON_LINEUP.format(a=alias, side=side), [entity_id]
+    column = "org_key" if side == "team_id" else "opponent_org_key"
+    return f"{alias}.{column} = %s", [r.org_key(entity_id, entity_type)]
+
+
 def compile_query(v: Validated, r: Resolved) -> CompileResult:
     c = _compile(v, r)
     if isinstance(c, Compiled):
@@ -165,10 +180,14 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
         else:
             distinct = None
         where = " WHERE " + " AND ".join(head + clauses)
+        # org v player reads the player's own rows: his map won is the org's map lost (a draw is a draw either way).
+        # Read unflipped it presented the player's record as the org's: "SpaceStation Gaming is 4-9 in maps against
+        # zeruhh" for zeruhh's 4-9 against them.
+        won = "(NOT won AND NOT drawn) AS won" if (not subject_is_player and opponent_is_player) else "won"
         if table == "fact_player_versus":
-            base = (f"SELECT DISTINCT match_id, round_number, season, map_name, game_mode, won, drawn, started_at "
+            base = (f"SELECT DISTINCT match_id, round_number, season, map_name, game_mode, {won}, drawn, started_at "
                     f"FROM {table}{where}") if distinct else (
-                   f"SELECT match_id, round_number, season, map_name, game_mode, won, drawn, started_at "
+                   f"SELECT match_id, round_number, season, map_name, game_mode, {won}, drawn, started_at "
                    f"FROM {table}{where}")
         else:
             base = (f"SELECT match_id, round_number, season, map_name, game_mode, won, drawn, started_at "
@@ -221,13 +240,15 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
 
     # ------------------------------------------------------------- head to head
     if q.intent == "head_to_head":
-        if not (r.team_id and r.opponent_id):
-            return Unanswerable(code="invalid_query", reason="head-to-head needs two resolved teams")
-        # Keyed like a team record: by org key, from the first-named side's row of each series in the fact view. The
-        # aggregate (agg_head_to_head) is keyed by raw team id, so an org on either side - SpaceStation Gaming, Al Qadsiah,
-        # a Liquipedia-born team's org - matched nothing and answered "ok" with an empty row.
-        clauses = ["org_key = %s", "opponent_org_key = %s"]
-        params = [r.org_key(r.team_id, r.subject_type), r.org_key(r.opponent_id, r.opponent_type)]
+        subject_id = r.player_id if r.subject_type == "player" else r.team_id
+        if not (subject_id and r.opponent_id):
+            return Unanswerable(code="invalid_query", reason="a series record needs two sides: name both")
+        # From the first-named side's row of each series in the fact view: an org by org key, like a team record (the
+        # aggregate agg_head_to_head is keyed by raw team id, so an org on either side matched nothing); a player by
+        # being on that side's line-up, the series then scored from his team's side (042).
+        a_sql, a_params = side_clause(subject_id, r.subject_type, r, "team_id", alias="fact_team_matches")
+        b_sql, b_params = side_clause(r.opponent_id, r.opponent_type, r, "opponent_team_id", alias="fact_team_matches")
+        clauses, params = [a_sql, b_sql], a_params + b_params
         _where(clauses, params, "season", f.season)
         _where(clauses, params, "championship_id", champ)
         _where(clauses, params, "region", f.region)

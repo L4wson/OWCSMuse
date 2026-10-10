@@ -233,6 +233,10 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str, src: str) -> None:
         if cand:
             _apply(out, want["expect"], ask_fn(cand["question"]), ask_fn, prefix=f"{p}[{cand['question']!r}] ",
                    src=f"{src}answer_candidate.expect.")
+    if "other_grain" in exp:
+        # the other grain of a versus answer, ready to ask: both grains reachable from either answer
+        _check(out, f"{p}other grain offered", exp["other_grain"], (getattr(a, "other_grain", None) or {}).get("question"),
+               source=f"{src}other_grain")
     if "alternative" in exp:
         alt = exp["alternative"]
         at = f"{src}alternative"

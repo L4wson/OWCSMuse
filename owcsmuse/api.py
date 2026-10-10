@@ -182,6 +182,7 @@ def answer_payload(answer: Answer, slug: str) -> dict[str, Any]:
         "reason": answer.reason,
         "suggestions": answer.suggestions,
         "alternatives": answer.alternatives,
+        "other_grain": answer.other_grain,
         "parser": answer.parser,
     })
 

@@ -1936,6 +1936,128 @@
    },
    "derivation": "'NA Stage 2 finals' is the stage's own final, not the World Finals; the stages have no prize-pool placings here.",
    "status": "confirmed"
+  },
+  {
+   "id": "G82",
+   "title": "A player's series record against a player: the series they were on opposite sides of",
+   "kind": "exact",
+   "regression": "series-grain player v player demanded two teams (2026-10-10)",
+   "question": "cjay series record against sugarfree",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 4,
+      "wins": 1,
+      "losses": 3
+     }
+    ],
+    "notes_contain": [
+     "Players do not win series, their teams do"
+    ],
+    "other_grain": "cjay map record against sugarfree"
+   },
+   "derivation": "Series with cjay on one declared line-up and sugarfree on the other: 4 (1-2b2f7884, 1-0c28ddf5, 1-4b984ffd, 1-70cff415), 1-3 from cjay's side. Before: 'head-to-head needs two resolved teams'.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G83",
+   "title": "A player's series record against an org",
+   "kind": "exact",
+   "regression": "series-grain player v org demanded two teams (2026-10-10)",
+   "question": "sugarfree series record against Dallas Fuel",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 2,
+      "wins": 1,
+      "losses": 1
+     }
+    ],
+    "other_grain": "sugarfree map record against Dallas Fuel"
+   },
+   "derivation": "Series with sugarfree on one line-up and Dallas Fuel on the other side: 2, 1-1 from his team's side.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G84",
+   "title": "An org's series record against a player",
+   "kind": "exact",
+   "regression": "series-grain org v player answered no data (2026-10-10)",
+   "question": "Dallas Fuel series record against sugarfree",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 2,
+      "wins": 1,
+      "losses": 1
+     }
+    ],
+    "other_grain": "Dallas Fuel map record against sugarfree"
+   },
+   "derivation": "The same 2 series from Dallas Fuel's side: 1-1. Before: 'Dallas Fuel has no series' (the player was keyed as an org).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G85",
+   "title": "An org's map record against a player is the org's, not the player's",
+   "kind": "exact",
+   "regression": "org v player map record presented the player's wins as the org's (2026-10-10)",
+   "question": "Dallas Fuel map record against sugarfree",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 9,
+      "map_wins": 4,
+      "map_losses": 5
+     }
+    ],
+    "other_grain": "Dallas Fuel series record against sugarfree"
+   },
+   "derivation": "Rounds sugarfree played against Dallas Fuel: 9, Dallas Fuel won 4, lost 5. The answer read the player's own rows unflipped and gave his record as the org's.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G86",
+   "title": "A player against his own team is refused as that, not as 'they met'",
+   "kind": "invariant",
+   "regression": "a player and his own team were said to have met (2026-10-10)",
+   "question": "sugarfree map record against SpaceStation Gaming in 2026",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "sentence_contains": [
+     "played for SpaceStation Gaming in 2026 (5 series), never against them"
+    ]
+   },
+   "derivation": "In 2026 sugarfree was on SpaceStation Gaming's line-up in 5 series and never opposite it. The note once counted any series both appeared in, his own team's among them ('they did meet').",
+   "status": "confirmed"
+  },
+  {
+   "id": "G87",
+   "title": "An org v org series record's evidence holds every series behind it",
+   "kind": "exact",
+   "regression": "head-to-head evidence empty for an org (2026-10-10)",
+   "question": "SpaceStation Gaming series record against Dallas Fuel",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 2,
+      "wins": 1,
+      "losses": 1
+     }
+    ],
+    "evidence": {
+     "total_rows": 2
+    },
+    "other_grain": "SpaceStation Gaming map record against Dallas Fuel"
+   },
+   "derivation": "SpaceStation Gaming (both team ids, one org) v Dallas Fuel: 2 series, 1-1. The evidence filtered raw team ids, so with an org on either side the record answered and its evidence was empty.",
+   "status": "confirmed"
   }
  ]
 }

@@ -18,7 +18,7 @@ from typing import Any, Optional
 import psycopg
 
 from .columns import describe
-from .compile import Resolved
+from .compile import Resolved, side_clause
 from .validate import Validated
 
 DEFAULT_PAGE_SIZE = 25
@@ -205,16 +205,9 @@ def _team_series(v: Validated, column: str, value: str, extra: list[str], extra_
     return _paged(_TEAM_SERIES_COLUMNS, from_where, [], params, page, page_size, url="s.source_url")
 
 
-_ON_ROSTER = ("EXISTS (SELECT 1 FROM match_rosters mr WHERE mr.match_id = s.match_id"
-              " AND mr.player_id = %s AND mr.team_id = s.{side})")
-
-
 def _side_clause(entity_id: str, entity_type: Optional[str], r: Resolved, side: str) -> tuple[str, list[Any]]:
-    """Restrict a series row to one side being this entity, player or org."""
-    if entity_type == "player":
-        return _ON_ROSTER.format(side=side), [entity_id]
-    column = "org_key" if side == "team_id" else "opponent_org_key"
-    return f"s.{column} = %s", [r.org_key(entity_id, entity_type)]
+    """Restrict a series row to one side being this entity, player or org (compile.side_clause, one definition)."""
+    return side_clause(entity_id, entity_type, r, side)
 
 
 def compile_missing_series(v: Validated, r: Resolved, page: int, page_size: int) -> Optional[EvidenceQuery]:
@@ -301,11 +294,20 @@ def compile_evidence(v: Validated, r: Resolved, expand: Optional[dict[str, Any]]
         return EvidenceQuery(sql, params, "map", "every map behind this record", kind, subject_id)
 
     if intent == "head_to_head":
-        if not (r.team_id and r.opponent_id):
+        subject_id = r.player_id if r.subject_type == "player" else r.team_id
+        if not (subject_id and r.opponent_id):
             return None
-        sql, params = _team_series(v, "team_id", r.team_id, ["s.opponent_team_id = %s"], [r.opponent_id],
-                                   page, page_size)
-        return EvidenceQuery(sql, params, "series", "every series behind this record", "team", r.team_id)
+        # the same two sides as the record: it filtered raw team ids, so with an org on either side the record
+        # answered and its evidence was empty
+        a_sql, a_params = _side_clause(subject_id, r.subject_type, r, "team_id")
+        b_sql, b_params = _side_clause(r.opponent_id, r.opponent_type, r, "opponent_team_id")
+        clauses, params = _filters(v, "s", map_mode=False)
+        from_where = ("fact_team_matches s JOIN championships c ON c.championship_id = s.championship_id "
+                      "WHERE " + " AND ".join([a_sql, b_sql] + clauses))
+        sql, all_params = _paged(_TEAM_SERIES_COLUMNS, from_where, [], a_params + b_params + params, page, page_size,
+                                 url="s.source_url")
+        return EvidenceQuery(sql, all_params, "series", "every series behind this record", r.subject_type or "team",
+                             subject_id)
 
     if intent == "season_compare":
         seasons = [s for s in (q.filters.subject_season, q.filters.opponent_season) if s]

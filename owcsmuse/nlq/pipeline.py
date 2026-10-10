@@ -12,7 +12,7 @@ import psycopg
 from ..liquipedia.attribution import answer_attribution, attribution_block, attribution_for
 from ..liquipedia.attribution import render_lines as render_attribution
 from ..aggregates import stat_coverage_summary
-from ..limitations import applicable as applicable_limitations, entity_match_filter
+from ..limitations import applicable as applicable_limitations
 from ..log import get_logger, log_event
 from ..resolve import Candidate, resolve
 from .columns import UNDESCRIBED
@@ -42,6 +42,8 @@ class Answer:
     reason: Optional[str] = None
     suggestions: list[str] = field(default_factory=list)          # advice, when advice is the answer
     alternatives: list[str] = field(default_factory=list)         # questions that do work, ready to run
+    # a versus or head-to-head answer's other grain, ready to run: {"grain": "series"|"map", "label", "question"}
+    other_grain: Optional[dict] = None
     candidates: dict[str, list[dict]] = field(default_factory=dict)   # role -> candidate dicts (clarify)
     entities: dict[str, dict] = field(default_factory=dict)           # role -> resolved entity
     rows: list[dict] = field(default_factory=list)
@@ -266,6 +268,45 @@ def _alternatives(question: str, q: StructuredQuery, r: Resolved,
     return seen[:4]
 
 
+def _pairing_sides(conn: psycopg.Connection, q: StructuredQuery, r: Resolved) -> dict[str, int]:
+    """How a pairing's series split, by line-up for a player (042): {'opposed': on opposite sides, 'same_side': on one}.
+    'same_side' is a player on the org's own side, or two players on one line-up - teammates, never opponents."""
+    from .compile import side_clause
+    left_id = r.player_id if r.subject_type == "player" else r.team_id
+    if not (left_id and r.opponent_id):
+        return {"opposed": 0, "same_side": 0}
+    a_sql, a_params = side_clause(left_id, r.subject_type, r, "team_id", alias="f")
+    opp_sql, opp_params = side_clause(r.opponent_id, r.opponent_type, r, "opponent_team_id", alias="f")
+    same_sql, same_params = side_clause(r.opponent_id, r.opponent_type, r, "team_id", alias="f")
+    season = "(%s::int IS NULL OR f.season = %s)"
+    try:
+        with conn.cursor() as cur:
+            cur.execute(f"""SELECT (SELECT count(*) FROM fact_team_matches f WHERE {a_sql} AND {opp_sql} AND {season}) AS opposed,
+                                   (SELECT count(*) FROM fact_team_matches f WHERE {a_sql} AND {same_sql} AND {season}) AS same_side""",
+                        a_params + opp_params + [q.filters.season] * 2 + a_params + same_params + [q.filters.season] * 2)
+            row = cur.fetchone()
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        log_event(log, logging.WARNING, "pairing_sides_failed", exc_info=True)
+        return {"opposed": 0, "same_side": 0}
+    return {"opposed": int(row["opposed"] or 0), "same_side": int(row["same_side"] or 0)}
+
+
+def _never_opposed_reason(q: StructuredQuery, r: Resolved, sides: dict[str, int]) -> Optional[str]:
+    """A pairing that was only ever on one side: a player and his own team, or two teammates."""
+    if sides["opposed"] or not sides["same_side"]:
+        return None
+    left = r.names.get("subject") or r.names.get("player") or r.names.get("team") or ""
+    right = r.names.get("opponent") or ""
+    where = f" in {q.filters.season}" if q.filters.season else ""
+    n = sides["same_side"]
+    if r.subject_type == "player" and r.opponent_type == "player":
+        return f"{left} and {right} were teammates{where} ({n} series on the same side), never on opposite sides"
+    player, team = (left, right) if r.subject_type == "player" else (right, left)
+    return f"{player} played for {team}{where} ({n} series), never against them"
+
+
 def _missing_team_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved, rows: list[dict]) -> list[str]:
     """Team v team: the series between them with no map results from any source (neither FACEIT's rounds nor
     Liquipedia's games), by org key like the record itself. Since 041 a Liquipedia-only series has maps; only a
@@ -309,21 +350,26 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
         return []
     if left_type != "player" and r.opponent_type != "player":
         return _missing_team_maps_note(conn, q, r, rows)
-    a_sql, a_params = entity_match_filter(left_id, left_type)
-    b_sql, b_params = entity_match_filter(r.opponent_id, r.opponent_type)
+    # a player on either side: the series the two were on opposite sides of (042's line-ups, so never his own team's),
+    # with no per-map player row for the pairing - results-only on FACEIT, or Liquipedia-only, where no player stats exist
+    from .compile import side_clause
+    a_sql, a_params = side_clause(left_id, left_type, r, "team_id", alias="f")
+    b_sql, b_params = side_clause(r.opponent_id, r.opponent_type, r, "opponent_team_id", alias="f")
+    if left_type == "player" and r.opponent_type == "player":
+        pair, pair_params = "v.player_id = %s AND v.opponent_player_id = %s", [left_id, r.opponent_id]
+    elif left_type == "player":
+        pair, pair_params = "v.player_id = %s AND v.opponent_org_key = %s", [left_id, r.org_key(r.opponent_id, r.opponent_type)]
+    else:
+        pair, pair_params = "v.player_id = %s AND v.opponent_org_key = %s", [r.opponent_id, r.org_key(left_id, left_type)]
     try:
         with conn.cursor() as cur:
             cur.execute(
-                f"""
-                SELECT count(*) AS matches,
-                       sum(coalesce(m.faction1_score, 0) + coalesce(m.faction2_score, 0)) AS maps,
-                       array_agg(DISTINCT c.season ORDER BY c.season) AS seasons
-                FROM matches m JOIN championships c USING (championship_id)
-                WHERE c.include AND m.ingest_state = 'result_only' AND {a_sql} AND {b_sql}
-                  AND (%s::int IS NULL OR c.season = %s)
-                """,
-                a_params + b_params + [q.filters.season, q.filters.season],
-            )
+                f"""SELECT count(*) AS matches, sum(coalesce(f.map_wins, 0) + coalesce(f.map_losses, 0)) AS maps,
+                           array_agg(DISTINCT f.season ORDER BY f.season) AS seasons
+                      FROM fact_team_matches f
+                     WHERE {a_sql} AND {b_sql} AND (%s::int IS NULL OR f.season = %s)
+                       AND NOT EXISTS (SELECT 1 FROM fact_player_versus v WHERE v.match_id = f.match_id AND {pair})""",
+                a_params + b_params + [q.filters.season, q.filters.season] + pair_params)
             row = cur.fetchone()
         conn.commit()
     except Exception:
@@ -332,16 +378,13 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
         return []
     if not row or not row["matches"]:
         return []
-    seasons = ", ".join(map(str, row["seasons"] or []))
-    n = row["matches"]
-    plural = "series" if n == 1 else "series"
-    maps = row["maps"] or 0
+    n, maps, seasons = row["matches"], row["maps"] or 0, ", ".join(map(str, row["seasons"] or []))
     if not rows or not (rows[0].get("maps") or 0):
-        return [f"They did meet: {n} {plural} in season {seasons} ({maps} maps by series score), "
-                "but FACEIT recorded no map stats for them, so none can count toward a map record."]
-    return [f"A further {n} {plural} between them in season {seasons} ({maps} maps by series score) "
-            "carry no map stats on FACEIT and are excluded from the record above."]
-
+        return [f"They were on opposite sides in {n} series in season {seasons} ({maps} maps by series score), but no "
+                "per-map player stats exist for them (results-only on FACEIT, or Liquipedia-only), so none can count "
+                "toward a map record."]
+    return [f"A further {n} series on opposite sides in season {seasons} ({maps} maps by series score) have no per-map "
+            "player stats and are excluded from the record above."]
 
 def _slice_phrase(q: StructuredQuery) -> str:
     f = q.filters
@@ -533,7 +576,30 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
              period_notes)
     if period_notes:
         a.notes = period_notes + [n for n in (a.notes or []) if n not in period_notes]
+    a.other_grain = other_grain(a)
     return a
+
+
+def other_grain(a: Answer) -> Optional[dict]:
+    """A versus answer's series record, a series record's map record: the same two sides, season and event, the other
+    grain, ready to ask. Not for a comparison across seasons ("2024 X vs 2026 X"), which has no series reading."""
+    q = a.query or {}
+    intent, f = q.get("intent"), q.get("filters") or {}
+    if a.status not in ("ok", "cannot_answer") or intent not in ("versus", "head_to_head"):
+        return None
+    if f.get("subject_season") or f.get("opponent_season"):
+        return None
+    ents = a.entities or {}
+    left = next((ents[k] for k in ("subject", "player", "team") if k in ents), None)
+    right = ents.get("opponent")
+    if not (left and right):
+        return None
+    name = lambda e: e.get("current_name") or e.get("matched_name")  # noqa: E731
+    season, champ = f.get("season"), f.get("championship")
+    where = (f" at the {season} {champ}" if season else f" at the {champ}") if champ else (f" in {season}" if season else "")
+    if intent == "versus":
+        return {"grain": "series", "label": "Series record", "question": f"{name(left)} series record against {name(right)}{where}"}
+    return {"grain": "map", "label": "Map record", "question": f"{name(left)} map record against {name(right)}{where}"}
 
 
 def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[SchemaInfo], debug: bool,
@@ -636,10 +702,16 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
             left = r.names.get("subject") or r.names.get("player") or r.names.get("team") or ""
             right = r.names.get("opponent") or ""
             where = f" in {q.filters.season}" if q.filters.season else ""
-            if notes:
+            never = _never_opposed_reason(q, r, _pairing_sides(conn, q, r)) if "player" in (r.subject_type, r.opponent_type) else None
+            if never:
+                reason = never
+                tips = ["A record against someone counts only the series they were on opposite sides of."]
+                notes = []
+            elif notes:
                 reason = (f"{left} and {right} met{where}, but none of those series has map results from any source"
                           if r.subject_type != "player" and r.opponent_type != "player" else
-                          f"{left} and {right} met{where}, but none of those series has map stats on FACEIT")
+                          f"{left} and {right} were on opposite sides{where}, but no per-map player stats exist for "
+                          "those series (results-only on FACEIT, or Liquipedia-only)")
                 tips = ["The series results are known; only the per-map breakdown is missing."]
             else:
                 reason = f"{left} and {right} never faced each other{where} in the competitions in scope"
@@ -688,6 +760,18 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
             if debug:
                 a.sql, a.params = c.sql, c.params
             return a
+    if not rows and q.intent == "head_to_head":
+        # a series record with nothing in it: say why - teammates, a player and his own team, or never opposed
+        sides = _pairing_sides(conn, q, r)
+        left = r.names.get("subject") or r.names.get("player") or r.names.get("team") or ""
+        where = f" in {q.filters.season}" if q.filters.season else ""
+        reason = _never_opposed_reason(q, r, sides) or (
+            f"{left} and {r.names.get('opponent') or ''} were never on opposite sides of a series{where} in scope")
+        u = Unanswerable(code="no_data", reason=reason,
+                         suggestions=["A series record against someone counts the series they were on opposite sides of."])
+        a = _cannot(question, u, q, used, pre.entities, _alternatives(question, q, r, coverage))
+        a.coverage, a.notes, a.limitations = coverage, notes, limitations
+        return a
     if not rows:
         reason, tips, swaps = _empty_slice(conn, question, q, r)
         u = Unanswerable(code="no_data", reason=reason, suggestions=tips)
@@ -708,6 +792,10 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
                 row["entity"] = entity
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows, coverage=coverage,
                notes=notes, limitations=limitations, description=c.description, parser=used)
+    if q.intent == "head_to_head" and "player" in (r.subject_type, r.opponent_type):
+        who = r.names.get("player") or r.names.get("subject") or r.names.get("team") or "the first-named"
+        a.notes = [f"Players do not win series, their teams do: this counts the series the two were on opposite sides "
+                   f"of (declared line-ups), each scored from {who}'s team's side."] + list(a.notes)
     # the floor is the compiler's, not the question's: handed to the sentence so it can say who was left out
     sentence = render_sentence(dict(a.query, min_maps_floor=c.min_maps_floor,
                                     championship_names=[info.championship_display.get(cid) or info.championships.get(cid)
