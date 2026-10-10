@@ -101,7 +101,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Sign Esports | any | ntmr | 0 | decided in scope/liquipedia_team_map.json |
 | Spacestation Gaming | any | spacestation-gaming | 0 | decided in scope/liquipedia_team_map.json |
 | Students of the Game | any | students-of-the-game | 0 | decided in scope/liquipedia_team_map.json |
-| Supernova (American team) | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 0 | decided in scope/liquipedia_team_map.json |
+| Supernova (American team) | any | supernova | 0 | decided in scope/liquipedia_team_map.json |
 | T1 | any | t1 | 0 | decided in scope/liquipedia_team_map.json |
 | Team CC (Chinese orgless team) | any | team-cc | 0 | decided in scope/liquipedia_team_map.json |
 | Team Falcons | any | team-falcons | 0 | decided in scope/liquipedia_team_map.json |
