@@ -72,6 +72,9 @@ class Filters(BaseModel):
     # "this year", "last stage": resolved against the data by validate(), which says in a note what it read it as
     period: Optional[Literal["this_season", "last_season", "this_stage", "last_stage"]] = None
     place: Optional[int] = Field(default=None, ge=1, le=64)   # a finishing position at an event: 1 is the winner
+    # set when the event was not named but read from the words ("the 2025 champion": the World Finals), so the answer
+    # can say how it read the question
+    event_read_as: Optional[Literal["world champion"]] = None
 
     def names(self) -> list[tuple[str, str]]:
         """(role, name) pairs that need entity resolution."""

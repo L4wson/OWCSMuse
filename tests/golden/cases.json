@@ -1567,6 +1567,375 @@
    },
    "derivation": "Crazy Raccoon: the Dallas grand final on FACEIT (won 4-2) plus its Liquipedia-only series in the captured records (Overwatch_Champions_Series/2025/World_Finals: {'matches': 5, 'wins': 3, 'losses': 2}, Overwatch_Champions_Series/2025/Champions_Clash: {'matches': 1, 'wins': 1, 'losses': 0}), each once: {'matches': 7, 'wins': 5, 'losses': 2}. Proposed: the count depends on the owner's held decision (an org spanning Dallas and the later events counts all of them; a window ending after Dallas leaves the later ones undecided).",
    "status": "confirmed"
+  },
+  {
+   "id": "G64",
+   "title": "A Liquipedia-only event answers at map grain",
+   "kind": "exact",
+   "regression": "map grain ignored Liquipedia-only series: 95 pairings refused, 15 silently incomplete (2026-10-09)",
+   "question": "Twisted Minds vs Al Qadsiah at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 9,
+      "map_wins": 5,
+      "map_losses": 4
+     }
+    ],
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals"
+    ]
+   },
+   "derivation": "Liquipedia's games for their 2 series at Overwatch_Champions_Series/2025/World_Finals: 5-4 over 9 maps. Before 041 the map grain read FACEIT rounds only and refused 'no map stats on FACEIT'.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G65",
+   "title": "A pairing with Liquipedia-only and map-less series counts every map and says what it left out",
+   "kind": "exact",
+   "regression": "map grain silently incomplete for 15 pairings (2026-10-09)",
+   "question": "Crazy Raccoon vs Team Falcons",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 11,
+      "map_wins": 7,
+      "map_losses": 4
+     }
+    ],
+    "notes_contain": [
+     "have no map results from any source"
+    ]
+   },
+   "derivation": "Every captured Liquipedia game between them (2 series): 7-4 over 11 maps. The Dreamhack Dallas final (FACEIT result_only, no Liquipedia record in this set) has no map results from any source: excluded, and said so. Before 041 the answer counted only map rows and said nothing of the Liquipedia series it left out.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G66",
+   "title": "No map results from any source: the refusal says that, not 'no map stats on FACEIT'",
+   "kind": "invariant",
+   "regression": null,
+   "question": "Crazy Raccoon vs Team Falcons in 2024",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "sentence_contains": [
+     "none of those series has map results from any source"
+    ]
+   },
+   "derivation": "In 2024 the only series between them is the Dreamhack Dallas final, FACEIT result_only with no Liquipedia record in this set: no source has its maps. FACEIT having none is no longer the same as no source having any.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G67",
+   "title": "'who won the 2025 finals' is the OWCS 2025 World Finals winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "who won the 2025 finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Twisted Minds won OWCS 2025 World Finals"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/World_Finals places ['Twisted Minds'] 1st. Owner's value: Twisted Minds.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G68",
+   "title": "'who was the 2025 champion' is the OWCS 2025 World Finals winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "who was the 2025 champion",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Twisted Minds won OWCS 2025 World Finals"
+    ],
+    "notes_contain": [
+     "\"champion\" with no event named read as the world champion"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/World_Finals places ['Twisted Minds'] 1st. Owner's value: Twisted Minds. No event named: a champion reads as the world champion, and the answer says so.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G69",
+   "title": "'2025 world champion' is the OWCS 2025 World Finals winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "2025 world champion",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Twisted Minds won OWCS 2025 World Finals"
+    ],
+    "notes_contain": [
+     "\"champion\" with no event named read as the world champion"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/World_Finals places ['Twisted Minds'] 1st. Owner's value: Twisted Minds. No event named: a champion reads as the world champion, and the answer says so.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G70",
+   "title": "'who won worlds in 2025' is the OWCS 2025 World Finals winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "who won worlds in 2025",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Twisted Minds won OWCS 2025 World Finals"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/World_Finals places ['Twisted Minds'] 1st. Owner's value: Twisted Minds.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G71",
+   "title": "'2025 world finals winner' is the OWCS 2025 World Finals winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "2025 world finals winner",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Twisted Minds won OWCS 2025 World Finals"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/World_Finals places ['Twisted Minds'] 1st. Owner's value: Twisted Minds.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G72",
+   "title": "'who was the 2025 midseason champion' is the OWCS 2025 Midseason Championship winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "who was the 2025 midseason champion",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Team Falcons",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Team Falcons won OWCS 2025 Midseason Championship"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/Midseason_Championship places ['Team Falcons'] 1st. Owner's value: Team Falcons.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G73",
+   "title": "'who won msc 2025' is the OWCS 2025 Midseason Championship winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "who won msc 2025",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Team Falcons",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Team Falcons won OWCS 2025 Midseason Championship"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/Midseason_Championship places ['Team Falcons'] 1st. Owner's value: Team Falcons.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G74",
+   "title": "'2025 midseason winner' is the OWCS 2025 Midseason Championship winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "2025 midseason winner",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Team Falcons",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Team Falcons won OWCS 2025 Midseason Championship"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/Midseason_Championship places ['Team Falcons'] 1st. Owner's value: Team Falcons.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G75",
+   "title": "'who won the 2025 mid-season championship' is the OWCS 2025 Midseason Championship winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "who won the 2025 mid-season championship",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Team Falcons",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Team Falcons won OWCS 2025 Midseason Championship"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/Midseason_Championship places ['Team Falcons'] 1st. Owner's value: Team Falcons.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G76",
+   "title": "'2025 champions clash winner' is the OWCS 2025 Champions Clash winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "2025 champions clash winner",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Crazy Raccoon",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Crazy Raccoon won OWCS 2025 Champions Clash"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/Champions_Clash places ['Crazy Raccoon'] 1st. Owner's value: Crazy Raccoon.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G77",
+   "title": "'who was the champion of the 2025 champions clash' is the OWCS 2025 Champions Clash winner",
+   "kind": "exact",
+   "regression": "natural phrasings of who won returned nothing on production (2026-10-09)",
+   "question": "who was the champion of the 2025 champions clash",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Crazy Raccoon",
+      "placement": "1"
+     }
+    ],
+    "sentence_contains": [
+     "Crazy Raccoon won OWCS 2025 Champions Clash"
+    ]
+   },
+   "derivation": "The prize pool for Overwatch_Champions_Series/2025/Champions_Clash places ['Crazy Raccoon'] 1st. Owner's value: Crazy Raccoon.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G78",
+   "title": "'who won the most series at ...' stays a leaderboard, not the event's winner",
+   "kind": "exact",
+   "regression": null,
+   "question": "who won the most series at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "wins": 4
+     }
+    ]
+   },
+   "derivation": "Series wins at Overwatch_Champions_Series/2025/World_Finals from the records: the most is 4 (['Al Qadsiah', 'Twisted Minds']).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G79",
+   "title": "'clash' alone is still the Clash mode, not the Champions Clash",
+   "kind": "invariant",
+   "regression": null,
+   "question": "Twisted Minds record on clash maps",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "sentence_contains": [
+     "game mode 'Clash'"
+    ],
+    "sentence_lacks": [
+     "Champions Clash"
+    ]
+   },
+   "derivation": "Only 'champions clash' names the event; the game mode keeps its word. The golden set holds no Clash map, so the answer is the mode's own no-data refusal - which is the proof it was read as the mode.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G80",
+   "title": "'champions clash' is the event even with 'champion' in it",
+   "kind": "exact",
+   "regression": null,
+   "question": "champions clash 2025 standings",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Crazy Raccoon",
+      "placement": "1"
+     }
+    ],
+    "sentence_lacks": [
+     "world champion"
+    ]
+   },
+   "derivation": "The 2025 Champions Clash prize pool, led by ['Crazy Raccoon']; 'champions' inside the event's name is not a champion.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G81",
+   "title": "A bare 'finals' with a stage word stays that stage",
+   "kind": "invariant",
+   "regression": null,
+   "question": "who won the 2026 NA stage 2 finals",
+   "expect": {
+    "status": "cannot_answer",
+    "sentence_lacks": [
+     "World Finals"
+    ]
+   },
+   "derivation": "'NA Stage 2 finals' is the stage's own final, not the World Finals; the stages have no prize-pool placings here.",
+   "status": "confirmed"
   }
  ]
 }

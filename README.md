@@ -1149,6 +1149,37 @@ Steps marked **[browser]** need an account or a web console; **[command]** steps
    "Competitions awaiting a scope decision" table; decide each with `python -m owcsmuse decide` and commit the
    decisions file.
 
+### Deploying on merge
+
+`.github/workflows/deploy.yml` deploys the API to Fly after **CI passes on a push to `main`**: it is triggered by
+the CI workflow finishing (`workflow_run`), runs only when that run succeeded and was a push, and deploys exactly the
+commit CI tested. Pull requests never deploy; one deploy runs at a time.
+
+- **Secret:** `FLY_API_TOKEN` (repository secret). Generate a deploy token scoped to the app with
+  `fly tokens create deploy -a owcsmuse-api` (optionally `-x 8760h` for a one-year expiry), then
+  `gh secret set FLY_API_TOKEN` and paste it, or add it under Settings > Secrets and variables > Actions.
+- **Migrations run first.** `fly.toml`'s `release_command` (`python -m owcsmuse migrate`) runs in a temporary machine
+  from the new image, with the app's secrets, before any machine is replaced. If it exits non-zero, Fly stops the
+  deploy: the running machine keeps serving the previous version, and the workflow fails.
+- **A migration failing mid-deploy:** each migration file is its own transaction (`owcsmuse.db.migrate`), so the
+  failing file leaves no trace; files applied before it in the same run stay applied and recorded, and the old code
+  keeps serving against them. A fix is a new commit; the next deploy resumes from the failed file.
+- **So a merge now changes production's schema unattended.** Write migrations expand-then-contract: the version still
+  serving must work against the new schema until its machine is replaced (`CREATE OR REPLACE VIEW` with the same
+  columns, new tables and columns), and anything destructive (`DROP ... CASCADE`, dropping a column the running code
+  reads) belongs in a later migration, after the code that stopped reading it has shipped. A `DROP ... CASCADE` drops
+  every dependent object without saying so: check `pg_depend` first (041's drop of `agg_map_modes` has none).
+  `release_command` times out after 5 minutes by default; a slow materialized view belongs in `refresh`, not a
+  migration.
+- **Data is not part of a deploy.** Loaders (`orgs load`, `identity load`, `liquipedia events load`,
+  `liquipedia reconcile`, `liquipedia placements load`) and `refresh` do not run on deploy; the daily ingest runs
+  `liquipedia reconcile` and `refresh`, or run them by hand. A migration whose new table is filled by a loader (041's
+  `liquipedia_rounds`, filled by `liquipedia reconcile`) is empty until then, which degrades to the previous answers,
+  never wrong ones.
+- **Images** come from Amazon ECR Public's mirror of Docker Hub's official images (`public.ecr.aws/docker/library/...`)
+  in the Dockerfile, CI and `docker-compose.yml`: identical images without Docker Hub's anonymous pull limit, which
+  shared CI runners hit (`toomanyrequests`, 2026-10-09).
+
 ### First Fly deploy
 
 Run from the repository root with [`flyctl`](https://fly.io/docs/flyctl/install/) installed. `fly.toml` is already
@@ -1408,7 +1439,9 @@ room or the Liquipedia page, and an answer that used a Liquipedia-only series ca
   anchor: a team anchored to a FACEIT team id plays as that id, a team anchored to an org plays as its
   Liquipedia-born team id (`lp:team:<name>`, mapped to the org by `identity load`). An undecided team keeps the record
   out of every answer; `check` counts those (`liquipedia_unresolved_not_in_series`).
-- Map grain stays FACEIT-keyed (`match_rounds`), so a Liquipedia-only series answers at series grain only, for now.
+- A Liquipedia-only series has maps too (migration `041_liquipedia_only_maps.sql`): its played games are stored in
+  `liquipedia_rounds` and read by `fact_team_maps` and `agg_map_modes` beside FACEIT's `match_rounds`, which a
+  foreign key keeps FACEIT-only. No player row exists for those maps.
 - **A tied map is nobody's win** (migration `030_draws.sql`). FACEIT counts a drawn map as a win for the series
   winner (4-0 in a best-of-5 with four maps played, one of them 3-3) and stored Dreamhack Dallas as best-of-1 with
   3-1 scores. A map is drawn when its scores are equal or no winner is recorded, a draw is excluded from map wins in
@@ -1590,12 +1623,19 @@ python -m owcsmuse liquipedia teams decide "<name>" --org <slug> --new-org-name 
   `check` (`placement_consistency`) holds each event to exactly one winner who also won its last series: a bracket
   reset, a mixed-in LCQ pool or a placing entered early would break it. All six events pass; none has a bracket reset.
 - **Questions:** a `placement` intent - "who won the 2025 world finals", "who placed second / 7th at ...", "where did X
-  place at ...", "... standings". "Champions Clash" is an event, not the Clash mode, and "EWC" is the Esports World Cup.
-  A sentence about a named event now says "at OWCS 2025 World Finals" rather than "in 2025".
-- **Results only, by declaration.** An `lp:` championship can carry no player stats and no map rows (map grain is
-  FACEIT-keyed), loaded or not, so a player-stat question about one refuses `results_only` before the season's stat
-  coverage is consulted, and offers the event's standings and its series-wins table. A map-grain versus at one refuses
-  the same way.
+  place at ...", "... standings". The winner as people ask it: "who won", "winner", "champion", "who took the title".
+  The events as people say them: "worlds" and a bare "finals" (with no stage, region or bracket word: "NA Stage 2
+  finals" stays the stage) are the World Finals; "MSC" and "mid-season" the Midseason Championship; "EWC" the
+  Esports World Cup; "Champions Clash" is the event, while "clash" alone stays the game mode. A champion with no event
+  named ("who was the 2025 champion") is the world champion, the World Finals winner (owner, 2026-10-09), and the
+  answer says that is how it read the question. Golden G55-G60 and G67-G81 pin each phrasing. A sentence about a named
+  event says "at OWCS 2025 World Finals" rather than "in 2025".
+- **No player stats, by declaration.** An `lp:` championship can carry no player stats, loaded or not, so a player-stat
+  question about one refuses `results_only` before the season's stat coverage is consulted, and offers the event's
+  standings and its series-wins table. Its map results are Liquipedia's game-by-game results (041) and answer at map
+  grain like any other: a team v team map record counts them, and refuses only when no source has a series' maps
+  ("none of those series has map results from any source"; before 041, 95 pairings refused although every map was
+  on Liquipedia, and 15 answered with those series silently left out).
 - **Liquipedia-only orgs.** A team with no FACEIT counterpart (T1, Weibo Gaming, ZETA DIVISION, ...) is decided with
   `--new-org-name`; `identity load` creates the org and its `lp:team:` id, and `orgs load` no longer deletes an org that
   only a Liquipedia-born team maps to. `teams decide` refuses a truncated or unknown team id, an unknown org, and a

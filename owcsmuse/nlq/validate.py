@@ -59,7 +59,7 @@ class SchemaInfo:
     region_player_stats: dict[str, bool] = field(default_factory=dict)
     # first and last series per championship (the series view), for reading "this stage" and saying when it was played
     championship_dates: dict[str, tuple[Any, Any]] = field(default_factory=dict)
-    # championships whose only source is Liquipedia (`lp:`, Stage 4): results only by declaration, like a region in
+    # championships whose only source is Liquipedia (`lp:`, Stage 4): no player stats by declaration, like a region in
     # region_sources, whether or not any of their series has loaded yet
     liquipedia_only: set[str] = field(default_factory=set)
 
@@ -245,8 +245,9 @@ def capability(q: StructuredQuery, info: SchemaInfo, champ_ids: list[str]) -> tu
             return "none", [f"the {region.upper()} region"]
         return "full", []
     # an included championship with no series at all is empty, not results-only: leave that to the no-data path. A
-    # Liquipedia-only one is results-only by declaration (no player stats, and map rows are FACEIT-keyed), loaded or not.
-    lacking = [cid for cid in cids if cid in info.liquipedia_only
+    # Liquipedia-only one never has player stats, by declaration, loaded or not; its map results are Liquipedia's own
+    # (041) and count like any other.
+    lacking = [cid for cid in cids if (cid in info.liquipedia_only and key == "player_stats")
                or (info.capabilities.get(cid, {}).get(key) is False and info.capabilities.get(cid, {}).get("series", 0) > 0)]
     if not lacking:
         return "full", []

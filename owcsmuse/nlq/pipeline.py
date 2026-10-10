@@ -266,6 +266,36 @@ def _alternatives(question: str, q: StructuredQuery, r: Resolved,
     return seen[:4]
 
 
+def _missing_team_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved, rows: list[dict]) -> list[str]:
+    """Team v team: the series between them with no map results from any source (neither FACEIT's rounds nor
+    Liquipedia's games), by org key like the record itself. Since 041 a Liquipedia-only series has maps; only a
+    FACEIT result_only series Liquipedia does not cover has none."""
+    a, b = r.org_key(r.team_id, r.subject_type), r.org_key(r.opponent_id, r.opponent_type)
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT count(*) AS matches, sum(coalesce(f.map_wins, 0) + coalesce(f.map_losses, 0)) AS maps,
+                          array_agg(DISTINCT f.season ORDER BY f.season) AS seasons
+                     FROM fact_team_matches f
+                    WHERE f.org_key = %s AND f.opponent_org_key = %s AND (%s::int IS NULL OR f.season = %s)
+                      AND NOT EXISTS (SELECT 1 FROM fact_team_maps m WHERE m.match_id = f.match_id)""",
+                (a, b, q.filters.season, q.filters.season))
+            row = cur.fetchone()
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        log_event(log, logging.WARNING, "missing_maps_note_failed", exc_info=True)
+        return []
+    if not row or not row["matches"]:
+        return []
+    n, maps, seasons = row["matches"], row["maps"] or 0, ", ".join(map(str, row["seasons"] or []))
+    if not rows or not (rows[0].get("maps") or 0):
+        return [f"They did meet: {n} series in season {seasons} ({maps} maps by series score), but no source records "
+                "their map results, so none can count toward a map record."]
+    return [f"A further {n} series between them in season {seasons} ({maps} maps by series score) have no map results "
+            "from any source and are excluded from the record above."]
+
+
 def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved, rows: list[dict]) -> list[str]:
     """Series both sides played that carry no map stats.
 
@@ -277,6 +307,8 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
     left_type = r.subject_type
     if not (left_id and r.opponent_id):
         return []
+    if left_type != "player" and r.opponent_type != "player":
+        return _missing_team_maps_note(conn, q, r, rows)
     a_sql, a_params = entity_match_filter(left_id, left_type)
     b_sql, b_params = entity_match_filter(r.opponent_id, r.opponent_type)
     try:
@@ -453,6 +485,8 @@ def _placement_answer(conn: psycopg.Connection, question: str, q: StructuredQuer
         return _cannot(question, u, q, used, pre.entities, alts)
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows,
                description="event placings", parser=used, notes=list(v.notes))
+    if f.event_read_as == "world champion":
+        a.notes.insert(0, f"\"champion\" with no event named read as the world champion, the winner of {' and '.join(names)}")
     undecided = sorted({x["liquipedia_name"] for x in rows if x["identity"] == "undecided"})
     if undecided:
         a.notes.append("named as Liquipedia names them, with no identity decided yet: " + ", ".join(undecided))
@@ -603,7 +637,9 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
             right = r.names.get("opponent") or ""
             where = f" in {q.filters.season}" if q.filters.season else ""
             if notes:
-                reason = f"{left} and {right} met{where}, but none of those series has map stats on FACEIT"
+                reason = (f"{left} and {right} met{where}, but none of those series has map results from any source"
+                          if r.subject_type != "player" and r.opponent_type != "player" else
+                          f"{left} and {right} met{where}, but none of those series has map stats on FACEIT")
                 tips = ["The series results are known; only the per-map breakdown is missing."]
             else:
                 reason = f"{left} and {right} never faced each other{where} in the competitions in scope"

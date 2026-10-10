@@ -943,6 +943,87 @@ case("G63", "A cross-source team counted once across FACEIT and Liquipedia", "ex
      "owner's held decision (an org spanning Dallas and the later events counts all of them; a window ending after "
      "Dallas leaves the later ones undecided).")
 
+# ----------------------------------------------- Liquipedia-only series at map grain (041) and how people ask who won
+# (owner, 2026-10-09). The winners are the owner's values; each is also the captured prize pool's first place.
+CONFIRMED |= {f"G{n}" for n in range(64, 82)}
+
+tm_aq = I.event_maps("Twisted Minds", "Al Qadsiah", WF25)
+case("G64", "A Liquipedia-only event answers at map grain", "exact",
+     "Twisted Minds vs Al Qadsiah at the 2025 world finals",
+     {"status": "ok", "rows": [{"maps": tm_aq["maps"], "map_wins": tm_aq["map_wins"], "map_losses": tm_aq["map_losses"]}],
+      "attribution_pages": [LP + WF25]},
+     f"Liquipedia's games for their {tm_aq['series']} series at {WF25}: {tm_aq['map_wins']}-{tm_aq['map_losses']} over "
+     f"{tm_aq['maps']} maps. Before 041 the map grain read FACEIT rounds only and refused 'no map stats on FACEIT'.",
+     regression="map grain ignored Liquipedia-only series: 95 pairings refused, 15 silently incomplete (2026-10-09)")
+
+cr_tf = I.event_maps("Crazy Raccoon", "Team Falcons")
+case("G65", "A pairing with Liquipedia-only and map-less series counts every map and says what it left out", "exact",
+     "Crazy Raccoon vs Team Falcons",
+     {"status": "ok", "rows": [{"maps": cr_tf["maps"], "map_wins": cr_tf["map_wins"], "map_losses": cr_tf["map_losses"]}],
+      "notes_contain": ["have no map results from any source"]},
+     f"Every captured Liquipedia game between them ({cr_tf['series']} series): {cr_tf['map_wins']}-{cr_tf['map_losses']} "
+     f"over {cr_tf['maps']} maps. The Dreamhack Dallas final (FACEIT result_only, no Liquipedia record in this set) has "
+     "no map results from any source: excluded, and said so. Before 041 the answer counted only map rows and said "
+     "nothing of the Liquipedia series it left out.",
+     regression="map grain silently incomplete for 15 pairings (2026-10-09)")
+
+case("G66", "No map results from any source: the refusal says that, not 'no map stats on FACEIT'", "invariant",
+     "Crazy Raccoon vs Team Falcons in 2024",
+     {"status": "cannot_answer", "code": "no_data",
+      "sentence_contains": ["none of those series has map results from any source"]},
+     "In 2024 the only series between them is the Dreamhack Dallas final, FACEIT result_only with no Liquipedia "
+     "record in this set: no source has its maps. FACEIT having none is no longer the same as no source having any.")
+
+placement_phrasings = [
+    ("G67", "who won the 2025 finals", "Twisted Minds", "OWCS 2025 World Finals", WF25, None),
+    ("G68", "who was the 2025 champion", "Twisted Minds", "OWCS 2025 World Finals", WF25,
+     '"champion" with no event named read as the world champion'),
+    ("G69", "2025 world champion", "Twisted Minds", "OWCS 2025 World Finals", WF25,
+     '"champion" with no event named read as the world champion'),
+    ("G70", "who won worlds in 2025", "Twisted Minds", "OWCS 2025 World Finals", WF25, None),
+    ("G71", "2025 world finals winner", "Twisted Minds", "OWCS 2025 World Finals", WF25, None),
+    ("G72", "who was the 2025 midseason champion", "Team Falcons", "OWCS 2025 Midseason Championship", MSC25, None),
+    ("G73", "who won msc 2025", "Team Falcons", "OWCS 2025 Midseason Championship", MSC25, None),
+    ("G74", "2025 midseason winner", "Team Falcons", "OWCS 2025 Midseason Championship", MSC25, None),
+    ("G75", "who won the 2025 mid-season championship", "Team Falcons", "OWCS 2025 Midseason Championship", MSC25, None),
+    ("G76", "2025 champions clash winner", "Crazy Raccoon", "OWCS 2025 Champions Clash", CC25, None),
+    ("G77", "who was the champion of the 2025 champions clash", "Crazy Raccoon", "OWCS 2025 Champions Clash", CC25, None),
+]
+for gid, question, winner, event, page, note in placement_phrasings:
+    assert I.placed(page, 1) == [winner if winner != "Crazy Raccoon" else "Crazy Raccoon"], (page, I.placed(page, 1))
+    expect = {"status": "ok", "rows": [{"team": winner, "placement": "1"}], "sentence_contains": [f"{winner} won {event}"]}
+    if note:
+        expect["notes_contain"] = [note]
+    case(gid, f"'{question}' is the {event} winner", "exact", question, expect,
+         f"The prize pool for {page} places {I.placed(page, 1)} 1st. Owner's value: {winner}."
+         + (" No event named: a champion reads as the world champion, and the answer says so." if note else ""),
+         regression="natural phrasings of who won returned nothing on production (2026-10-09)")
+
+wf_wins = sorted(((I.team_series_record(WF25, t)["wins"], t) for t in
+                  {o["name"] for m in I.load_events()["matches"] if m["pagename"] == WF25 for o in m["match2opponents"]}),
+                 key=lambda x: (-x[0], x[1]))
+case("G78", "'who won the most series at ...' stays a leaderboard, not the event's winner", "exact",
+     "who won the most series at the 2025 world finals",
+     {"status": "ok", "rows": [{"wins": wf_wins[0][0]}]},
+     f"Series wins at {WF25} from the records: the most is {wf_wins[0][0]} ({[t for w, t in wf_wins if w == wf_wins[0][0]]}).")
+
+case("G79", "'clash' alone is still the Clash mode, not the Champions Clash", "invariant",
+     "Twisted Minds record on clash maps",
+     {"status": "cannot_answer", "code": "no_data", "sentence_contains": ["game mode 'Clash'"],
+      "sentence_lacks": ["Champions Clash"]},
+     "Only 'champions clash' names the event; the game mode keeps its word. The golden set holds no Clash map, so the "
+     "answer is the mode's own no-data refusal - which is the proof it was read as the mode.")
+
+case("G80", "'champions clash' is the event even with 'champion' in it", "exact",
+     "champions clash 2025 standings",
+     {"status": "ok", "rows": [{"team": "Crazy Raccoon", "placement": "1"}], "sentence_lacks": ["world champion"]},
+     f"The 2025 Champions Clash prize pool, led by {I.placed(CC25, 1)}; 'champions' inside the event's name is not a champion.")
+
+case("G81", "A bare 'finals' with a stage word stays that stage", "invariant",
+     "who won the 2026 NA stage 2 finals",
+     {"status": "cannot_answer", "sentence_lacks": ["World Finals"]},
+     "'NA Stage 2 finals' is the stage's own final, not the World Finals; the stages have no prize-pool placings here.")
+
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
            "cases": CASES}, open(Path(__file__).parent / "cases.json", "w", encoding="utf-8"), indent=1)

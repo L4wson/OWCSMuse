@@ -167,6 +167,8 @@ def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT
 
 def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
     """Replace liquipedia_matches / liquipedia_links with this run's. Idempotent; reviewer decisions come from the file."""
+    from .enrich import _round_scores
+
     comp_by_page = {p: sorted(c)[0] for p, c in run.comps_of_page.items()}
     with conn.cursor() as cur:
         cur.execute("DELETE FROM liquipedia_links")
@@ -183,6 +185,13 @@ def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
                  comp_by_page.get(m.pagename), m.played_at, m.best_of, m.finished, m.winner, m.walkover, m.team1,
                  m.team2, m.score1, m.score2, m.status1, m.status2, m.section, m.faceit_match_id, m.n_games,
                  m.placeholder, m.team1_template, m.team2_template, m.team1_page, m.team2_page))
+            # its played games (041): what a Liquipedia-only series' map-grain answers read. Scored as Stage 2 scores
+            # them (enrich._round_scores: Push as a win indicator); a slot marked not played was never parsed as a game
+            for i, game in enumerate(m.games or [], start=1):
+                s1, s2 = _round_scores(game)
+                cur.execute("""INSERT INTO liquipedia_rounds (lp_objectname, round_number, map_name, game_mode, score1,
+                                                              score2, winner) VALUES (%s,%s,%s,%s,%s,%s,%s)""",
+                            (m.objectname, i, game.map, game.mode, s1, s2, game.winner if game.winner in (1, 2) else 0))
             # the line-ups, a parsed copy like the match itself (rebuilt from raw_payloads on every run)
             for side, players in ((1, m.players1), (2, m.players2)):
                 seen: set[str] = set()
