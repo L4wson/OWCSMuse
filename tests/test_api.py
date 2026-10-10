@@ -163,7 +163,8 @@ def test_a_pairing_that_never_met_says_so_and_offers_no_rows(client, never_met):
     a, b = never_met
     answer = _ask(client, f"{a} map record against {b}")
     assert answer["status"] == "cannot_answer" and answer["code"] == "no_data"
-    assert "never faced each other" in answer["reason"]
+    # these two were teammates (2 series on one line-up), never opposed: said as that since 042, not "never faced"
+    assert "never on opposite sides" in answer["reason"]
     assert answer["notes"] == []                       # nothing was excluded, so nothing is claimed
     assert not (answer["evidence"] or {}).get("rows")
 

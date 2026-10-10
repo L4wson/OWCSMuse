@@ -135,7 +135,7 @@ def test_missing_series_evidence_is_the_result_only_series_between_two_sides():
     r = Resolved(player_id="p1", opponent_id="ence", subject_type="player", opponent_type="org")
     c = _check(compile_missing_series(_v("versus"), r, 1, DEFAULT_PAGE_SIZE))
     assert "s.ingest_state = 'result_only'" in c.sql
-    assert "match_rosters mr" in c.sql and "s.opponent_org_key = %s" in c.sql
+    assert "series_lineups l" in c.sql and "s.opponent_org_key = %s" in c.sql      # a player's side: his line-up (042)
     assert c.grain == "series"
     assert compile_missing_series(_v("versus"), Resolved(), 1, 10) is None
 

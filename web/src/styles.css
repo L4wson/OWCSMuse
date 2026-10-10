@@ -654,3 +654,38 @@ table.data tbody tr:last-child td {
   background: var(--panel);
   color: var(--ink);
 }
+
+/* versus answers: which grain is on screen, and the other one a click away */
+.grain-toggle {
+  display: inline-flex;
+  margin: 4px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.grain-toggle__option {
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--accent);
+  background: var(--panel);
+  border: 0;
+  cursor: pointer;
+}
+
+.grain-toggle__option + .grain-toggle__option {
+  border-left: 1px solid var(--line);
+}
+
+.grain-toggle__option[aria-pressed="true"] {
+  color: var(--ink);
+  background: var(--accent-soft);
+  font-weight: 600;
+  cursor: default;
+}
+
+.grain-toggle__option:disabled[aria-pressed="false"] {
+  opacity: 0.5;
+  cursor: progress;
+}

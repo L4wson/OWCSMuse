@@ -209,7 +209,8 @@ def test_head_to_head_keys_both_sides_by_org_and_presents_from_the_first_named()
     c = _sql(v, Resolved(team_id="t2", opponent_id="t1", names={"team": "Twisted Minds", "opponent": "ENCE"}))
     # from the first-named team's row of each series, by org key: a raw team id never matched an org's series
     assert "fact_team_matches" in c.sql and c.params[2:4] == ["team:t2", "team:t1"]
-    assert "org_key = %s AND opponent_org_key = %s" in c.sql and "HAVING count(*) > 0" in c.sql
+    assert "fact_team_matches.org_key = %s AND fact_team_matches.opponent_org_key = %s" in c.sql
+    assert "HAVING count(*) > 0" in c.sql
     c = _sql(v, Resolved(team_id="spacestation-gaming", subject_type="org", opponent_id="t1",
                          names={"team": "SpaceStation Gaming", "opponent": "ENCE"}))
     assert c.params[2:4] == ["spacestation-gaming", "team:t1"]
@@ -386,3 +387,12 @@ def test_a_period_with_nothing_to_read_is_no_data_not_everything():
     assert isinstance(u, Unanswerable) and u.code == "no_data"
     u = resolve_period(parse("most deaths last season"), info)
     assert isinstance(u, Unanswerable) and u.code == "no_data"
+
+
+def test_a_series_record_with_a_player_on_either_side_puts_him_on_a_line_up():
+    v = validate(parse("zeruhh series record against sugarfree in 2024"), INFO)
+    c = _sql(v, Resolved(player_id="p1", subject_type="player", opponent_id="p2", opponent_type="player",
+                         names={"player": "zeruhh", "opponent": "sugarfree"}))
+    # each on his own side's line-up (042), scored from the first-named side's row
+    assert c.sql.count("series_lineups l") == 2 and c.params[2:4] == ["p1", "p2"]
+    assert "l.team_id = fact_team_matches.team_id" in c.sql and "l.team_id = fact_team_matches.opponent_team_id" in c.sql

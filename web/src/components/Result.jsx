@@ -3,6 +3,7 @@ import Clarify from "./Clarify.jsx";
 import Context from "./Context.jsx";
 import DataTable from "./DataTable.jsx";
 import Evidence from "./Evidence.jsx";
+import GrainToggle from "./GrainToggle.jsx";
 import Refusal from "./Refusal.jsx";
 
 /** An answer, whichever of the three kinds it turned out to be. */
@@ -39,6 +40,7 @@ export default function Result({ answer, suggestions, busy, onAsk, onPage, onExp
   return (
     <article className="answer" data-testid="answer">
       <AnswerSentence sentence={answer.sentence} onAsk={onAsk} />
+      <GrainToggle answer={answer} onAsk={onAsk} busy={busy} />
       <ParseChange changes={parseChanged} />
       <Context coverage={answer.coverage} notes={answer.notes} limitations={answer.limitations} />
 
