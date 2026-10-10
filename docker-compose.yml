@@ -8,7 +8,7 @@
 # so an old `owcs_pgdata` volume is simply no longer used (`docker volume rm owcsmuse_owcs_pgdata` to reclaim it).
 services:
   db:
-    image: postgres:17-alpine
+    image: public.ecr.aws/docker/library/postgres:17-alpine   # Docker Hub's official image via ECR Public
     environment:
       POSTGRES_USER: owcs
       POSTGRES_PASSWORD: owcs

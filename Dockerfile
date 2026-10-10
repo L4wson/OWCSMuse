@@ -8,7 +8,8 @@
 # release command. It carries no tests, no frontend and no dev tools, and never a .env (see .dockerignore).
 
 # ---------------------------------------------------------------- build: the package and the api extra, in a venv
-FROM python:3.12-slim AS build
+# the official image through Amazon ECR Public's mirror of Docker Hub: identical, without Docker Hub's anonymous pull limit
+FROM public.ecr.aws/docker/library/python:3.12-slim AS build
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 RUN python -m venv /opt/venv
 ENV PATH=/opt/venv/bin:$PATH
@@ -19,7 +20,7 @@ COPY owcsmuse ./owcsmuse
 RUN pip install ".[api]"
 
 # ---------------------------------------------------------------- runtime: the venv, migrations and scope, non-root
-FROM python:3.12-slim
+FROM public.ecr.aws/docker/library/python:3.12-slim
 ENV PATH=/opt/venv/bin:$PATH \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
