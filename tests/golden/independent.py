@@ -407,3 +407,24 @@ def plus(a: dict, b: dict) -> dict:
     out = {k: a[k] + b[k] for k in ("matches", "wins", "losses", "map_wins", "map_losses", "maps", "result_only_series")}
     out["regions"] = sorted(set(a.get("regions", [])) | set(b.get("regions", [])))
     return out
+
+
+def event_maps(team_a: str, team_b: str, page: Optional[str] = None) -> dict:
+    """team_a's map record against team_b at the captured Liquipedia-only events: each played game once (a slot
+    marked not played is no game), won by the side Liquipedia's game `winner` names, a 0 winner a draw."""
+    out = {"maps": 0, "map_wins": 0, "map_losses": 0, "draws": 0, "series": 0}
+    for m in load_events()["matches"]:
+        names = [o["name"] for o in m["match2opponents"]]
+        if sorted(names) != sorted([team_a, team_b]) or not m.get("finished") or (page and m["pagename"] != page):
+            continue
+        me = names.index(team_a) + 1
+        out["series"] += 1
+        for g in m.get("match2games") or []:
+            if g.get("status") == "notplayed" or g.get("resulttype") == "np":
+                continue
+            out["maps"] += 1
+            w = int(g.get("winner") or 0)
+            out["map_wins"] += w == me
+            out["map_losses"] += w not in (0, me)
+            out["draws"] += w == 0
+    return out

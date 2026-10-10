@@ -448,12 +448,42 @@ _PLACES = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "runner up": 2, "runner-
 _PLACE_RX = "|".join(sorted((re.escape(k) for k in _PLACES), key=len, reverse=True))
 
 
+_STAGE_WORDS = re.compile(r"\b(?:stage|playoffs?|regular season|group|main event|major|na|emea|north america|europe|korea|"
+                          r"china|japan|pacific|owcs na|owcs emea)\b")
+
+
+def _expand_event_words(q: str) -> str:
+    """The international events as people say them: "worlds", "MSC", "mid-season", and a bare "finals" with no stage,
+    region or bracket word, which is the World Finals ("NA Stage 2 finals" stays the stage's)."""
+    q = re.sub(r"\bworlds\b", "world finals", q)
+    q = re.sub(r"\bmid[- ]season\b", "midseason", q)
+    q = re.sub(r"\bmsc\b", "midseason championship", q)
+    if re.search(r"\bfinals\b", q) and not re.search(r"\b(?:world|grand)\s+finals\b", q) and not _STAGE_WORDS.search(q):
+        q = re.sub(r"\bfinals\b", "world finals", q)
+    return q
+
+
+# a champion, outside the event's own name ("champions clash" is an event, not a champion)
+_CHAMPION = re.compile(r"\b(?:world\s+)?champions?\b(?!\s+clash)")
+_WINNER = re.compile(r"\bwho won\b(?!\s+(?:the\s+)?(?:most|fewest|more|less)\b)(?!\s+\d)|\bwinners?\b"
+                     r"|\b(?:took|won|lifted|claimed)\s+(?:the\s+)?(?:title|trophy)\b")
+
+
 def _find_placement(q: str, filters: Filters) -> Optional[StructuredQuery]:
-    """'who won the 2025 world finals', 'who placed second at ...', 'who was runner up at ...', 'where did X place at
-    ...', 'X placement at ...', '... standings'. Only with an event named: a placing belongs to one event."""
-    if not filters.championship:
+    """'who won the 2025 world finals', 'who was the 2025 champion', '2025 midseason winner', 'who placed second at
+    ...', 'who was runner up at ...', 'where did X place at ...', 'X placement at ...', '... standings'.
+
+    A placing belongs to one event. With none named, only a champion has one meaning: "the 2025 champion" is the
+    season's World Finals winner, the world champion (owner, 2026-10-09), and the answer says that is how it read it."""
+    if re.search(r"\bwho won (?:the\s+)?(?:most|fewest|more|less)\b", q):
         return None
-    base = {"championship": filters.championship, "season": filters.season}
+    read_as = None
+    if not filters.championship:
+        if not _CHAMPION.search(q):
+            return None
+        filters = filters.model_copy(update={"championship": "world finals"})
+        read_as = "world champion"
+    base = {"championship": filters.championship, "season": filters.season, "event_read_as": read_as}
 
     def placement(**f: Any) -> StructuredQuery:
         return StructuredQuery(intent="placement", entity="team", metric="placement", filters=Filters(**base, **f),
@@ -465,10 +495,8 @@ def _find_placement(q: str, filters: Filters) -> Optional[StructuredQuery]:
         team = _clean_name(_strip_filters(m.group("t")))
         if team:
             return placement(subject=team)
-    # "who won the most series at ..." is a leaderboard, not the event's winner
-    if re.search(r"\bwho won\b", q) and not re.search(r"\bwho won (?:the )?(?:most|fewest|more|less)\b|\bwon \d", q):
-        return placement(place=1)
-    if re.search(r"\b(?:winner|champion)s? of\b", q):
+    # who won it, its winner, its champion ("who won the most series at ..." is a leaderboard, caught above)
+    if _WINNER.search(q) or _CHAMPION.search(q):
         return placement(place=1)
     m = re.search(r"\bwho (?:placed|finished|came|was|were|got|took)(?: in)? (?P<p>" + _PLACE_RX + r")\b", q) \
         or re.search(r"\b(?P<p>" + _PLACE_RX + r") place\b", q)
@@ -482,7 +510,7 @@ def _find_placement(q: str, filters: Filters) -> Optional[StructuredQuery]:
 def parse_question(question: str) -> ParseResult:
     if not question or not question.strip():
         return Unanswerable(code="invalid_query", reason="empty question")
-    q = _normalize(question)
+    q = _expand_event_words(_normalize(question))
 
     # --- hard stops first: things we know we cannot answer
     for term, why in OUT_OF_SCOPE_TERMS:

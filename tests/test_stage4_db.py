@@ -190,3 +190,17 @@ def test_a_head_to_head_between_two_orgs_counts_their_series(stage4):
     assert a.sentence["text"].startswith("T1 is 2-0 in series against Weibo Gaming at OWCS 2025 World Finals")
     none = ask(conn, "t1 series record against weibo gaming in 2024")
     assert none.status == "cannot_answer", "no series is no data, never an ok answer with an empty row"
+
+
+def test_a_liquipedia_only_series_counts_at_map_grain(stage4):
+    # 041: the maps were on Liquipedia and in no map-grain answer ("met, but no map stats on FACEIT")
+    conn, _, _ = stage4
+    a = ask(conn, "t1 vs weibo gaming at the 2025 world finals")
+    assert a.status == "ok", (a.code, a.reason)
+    r = a.rows[0]
+    # the fixture's games: T1 3-1 (4 maps, all won by Liquipedia's team 1 = T1) and Weibo 2-3 T1 (5 maps, all team 1 = Weibo)
+    assert (r["maps"], r["map_wins"], r["map_losses"]) == (9, 4, 5)
+    with conn.cursor() as cur:
+        cur.execute("SELECT count(*) AS n FROM liquipedia_rounds")
+        assert cur.fetchone()["n"] == 9          # the event's two records' played games
+    conn.commit()

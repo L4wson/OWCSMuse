@@ -93,12 +93,15 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
           JOIN matches m ON m.match_id = mp.match_id
           JOIN championships c ON c.championship_id = m.championship_id
          WHERE m.ingest_state = 'complete' AND c.include"""),
-    ("fact_team_maps", "two rows per map, one per side",
-     """SELECT coalesce(sum((r.team1_team_id IS NOT NULL)::int + (r.team2_team_id IS NOT NULL)::int), 0)
-          FROM match_rounds r
-          JOIN matches m ON m.match_id = r.match_id
-          JOIN championships c ON c.championship_id = m.championship_id
-         WHERE m.ingest_state IN ('complete', 'result_only') AND c.include"""),
+    ("fact_team_maps", "two rows per map, one per side (FACEIT rounds, and a Liquipedia-only series' games)",
+     """SELECT (SELECT coalesce(sum((r.team1_team_id IS NOT NULL)::int + (r.team2_team_id IS NOT NULL)::int), 0)
+                  FROM match_rounds r
+                  JOIN matches m ON m.match_id = r.match_id
+                  JOIN championships c ON c.championship_id = m.championship_id
+                 WHERE m.ingest_state IN ('complete', 'result_only') AND c.include)
+             + (SELECT coalesce(sum((s.side1_team_id IS NOT NULL)::int + (s.side2_team_id IS NOT NULL)::int), 0)
+                  FROM liquipedia_rounds lr
+                  JOIN series s ON s.lp_objectname = lr.lp_objectname AND s.sources = ARRAY['liquipedia'::text])"""),
     ("fact_team_matches", "two rows per series, one per side",
      """SELECT coalesce(sum((side1_team_id IS NOT NULL)::int + (side2_team_id IS NOT NULL)::int), 0) FROM series"""),
     ("fact_player_versus", "one row per player per map per opposing player",
