@@ -244,9 +244,11 @@ case("G26", "'VP' resolves to the Virtus pro org", "invariant", "VP record",
      "alias stays covered while G13's record is a known bug.", regression="alias: VP")
 
 case("G14", "'DSG' resolves to Disguised", "exact", "DSG record",
-     {"status": "ok", "entity": {"role": "subject", "type": "team", "id": dsg_id, "name": "Disguised"},
+     {"status": "ok", "entity": {"role": "subject", "type": "org", "id": "disguised", "name": "Disguised"},   # org since 2026-10-10
       "rows": [{"team": "Disguised", "matches": dsg["matches"], "wins": dsg["wins"], "losses": dsg["losses"]}]},
-     f"Disguised: {dsg['matches']} series in the golden set. DSG is the community shorthand for Disguised.",
+     f"Disguised: {dsg['matches']} series in the golden set. DSG is the community shorthand for Disguised. Since the "
+     "owner's decision of 2026-10-10 (Disguised is DSG) the team id is the org 'disguised' for its whole life, and the "
+     "alias follows it there.",
      regression="alias: DSG")
 
 case("G15", "'TL' resolves to Team Liquid", "exact", "TL record",
@@ -1086,6 +1088,43 @@ case("G87", "An org v org series record's evidence holds every series behind it"
      f"SpaceStation Gaming (both team ids, one org) v Dallas Fuel: {h2h['matches']} series, {h2h['wins']}-{h2h['losses']}. "
      "The evidence filtered raw team ids, so with an org on either side the record answered and its evidence was empty.",
      regression="head-to-head evidence empty for an org (2026-10-10)")
+
+# ------------------------------------------------------- partner teams, a season-scoped group (owner, 2026-10-10)
+CONFIRMED |= {f"G{n}" for n in range(88, 93)}
+p25, p26 = I.partner_names(2025), I.partner_names(2026)
+assert len(p25) == 9 and len(p26) == 14 and I.partner_seasons() == [2025, 2026]
+case("G88", "The 2025 partner teams, by Liquipedia's own record", "exact", "who were the 2025 partner teams",
+     {"status": "ok", "rows_set": {"liquipedia_name": p25}, "sentence_contains": ["The 2025 partner teams"]},
+     f"The 2025 Stage 1 prize-pool rows qualified as 'Partner Team' (raw_payloads 4226): {', '.join(p25)}.",
+     regression="partner teams were not a queryable concept (owner, 2026-10-10)")
+case("G89", "With no season named, the partner teams are the latest season's, and the answer says so", "exact",
+     "which teams are the partner teams",
+     {"status": "ok", "rows_set": {"liquipedia_name": p26},
+      "notes_contain": ["read as 2026, the latest season with partner teams"]},
+     f"The latest season with partner rows is 2026: {', '.join(p26)}.")
+case("G90", "A season with no partner group is no data, naming the seasons that have one", "invariant",
+     "who were the 2024 partner teams",
+     {"status": "cannot_answer", "code": "no_data", "sentence_contains": ["seasons with them: 2025, 2026"]},
+     "Liquipedia records no 'Partner Team' qualifier in 2024: the partner program's rows start in 2025.")
+
+# the partners in this warehouse by their FACEIT names (the owner's identity decisions: Liquipedia's 'Spacestation
+# Gaming' is SpaceStation Gaming, 'Virtus.pro' is Virtus pro, 'Disguised' is DSG, ...); a team counts only in 2026 here
+FACEIT_NAME = {"Spacestation Gaming": ("SpaceStation Gaming", "SpaceStation"), "Virtus.pro": ("Virtus pro", "Virtuspro")}
+partner_ids_26 = {n: {x.team[k] for x in S for k in x.team if x.name[k] in FACEIT_NAME.get(n, (n,))} for n in p26}
+wins_26 = sorted(((I.team_record(S, ids, season=2026)["wins"], n) for n, ids in partner_ids_26.items() if ids),
+                 key=lambda x: (-x[0], x[1]))
+assert wins_26 and wins_26[0][0] > 0
+case("G91", "A partner-only leaderboard counts each team in a season it was a partner, and names who it included", "exact",
+     "which partner team won the most series in 2026",
+     {"status": "ok", "rows": [{"wins": wins_26[0][0]}],
+      "notes_contain": ["Partner teams only, each counted in a season it was one: 2026"]},
+     f"2026 series wins of the 2026 partners present in this warehouse: {wins_26[:4]}. The note lists every 2026 partner.")
+non = sorted({x.name[k] for x in S for k in x.team if x.season == 2026 and x.counts_as_series}
+             - {nm for names in FACEIT_NAME.values() for nm in names} - set(p26))
+case("G92", "A team that was not a partner that season is not on a partner leaderboard", "invariant",
+     "which partner team won the most series in 2026",
+     {"status": "ok", "sentence_lacks": non[:3]},
+     f"2026 teams in this warehouse that were not 2026 partners ({non[:3]}) must not appear in the sentence.")
 
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",

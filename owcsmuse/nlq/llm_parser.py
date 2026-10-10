@@ -33,6 +33,9 @@ Supported intents:
 - stat_availability: which stats exist for which season; metric optional.
 - placement: where teams finished at one event (entity=team, metric=placement); filters.championship names the event
   (required), filters.place a position (1 for "who won", 2 for runner-up), filters.subject a team ("where did X place").
+- team_group: the members of a group of teams (entity=team, metric=members, filters.group="partner"): "which teams are the
+  partner teams", optionally filters.season and filters.region. Any team question about partner teams ("which partner team
+  won the most series in 2026") keeps its own intent and sets filters.group="partner".
 
 Metrics are FACEIT stat keys exactly as spelled: Eliminations, Final Blows, Deaths, Assists, Damage Dealt, Healing Done,
 Damage Mitigated, Solo Kills, Multi Kills, Environmental Kills, Objective Time, Time Played (append "/10m" for per-10-minute

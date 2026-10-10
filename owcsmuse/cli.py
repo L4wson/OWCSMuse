@@ -70,6 +70,13 @@ def cmd_migrate(args: argparse.Namespace, settings: Settings) -> int:
     return 0
 
 
+def cmd_groups(args: argparse.Namespace, settings: Settings) -> int:
+    from . import groups
+    with connect(settings.database_url, schema=settings.db_schema) as conn:
+        _print(groups.load(conn, args.groups))
+    return 0
+
+
 def cmd_discover(args: argparse.Namespace, settings: Settings) -> int:
     pattern = re.compile(args.pattern, re.IGNORECASE) if args.pattern else OWCS_PATTERN
     names = args.name or list(DEFAULT_SEARCH_NAMES)
@@ -930,6 +937,12 @@ def build_parser() -> argparse.ArgumentParser:
             sp.add_argument("--execute", action="store_true", help="actually send the requests")
             sp.add_argument("--max-requests", type=int, help="stop this run after sending this many (cache hits are free)")
     lq.set_defaults(func=cmd_liquipedia)
+
+    gr = sub.add_parser("groups", help="season-scoped team groups (the partner teams): load scope/partner_teams.json")
+    grs = gr.add_subparsers(dest="groups_cmd", required=True)
+    grl = grs.add_parser("load", help="write the reviewed groups into team_groups; the file is the whole truth")
+    grl.add_argument("--groups", default="scope/partner_teams.json")
+    gr.set_defaults(func=cmd_groups)
 
     og = sub.add_parser("orgs", help="org-level team identity: propose, review, apply")
     og.add_argument("--decisions", default=str(DEFAULT_ORG_DECISIONS_PATH))

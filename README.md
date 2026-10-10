@@ -1686,6 +1686,30 @@ Found while loading, and fixed:
 - **Suggestions pair teams and players that met on maps.** The two most active were paired blindly and one pair
   answered no data; the golden suite now asks every suggestion and fails on any that does not answer.
 
+### Partner teams (2026-10-10)
+
+The OWCS partner teams are a **season-scoped group**: partner status is per season and per region and changes year to
+year. Membership is Liquipedia's own record, never inferred: a Stage 1 prize-pool row whose `qualifier` is
+`Partner Team`, fetched as one `/placement [[qualifier::Partner Team]]` request (the Partner_Teams page itself stores no
+structured data). The reviewed groups are `scope/partner_teams.json` (proposals and evidence in
+`scope/partner_teams_report.md`), loaded by `python -m owcsmuse groups load` into `team_groups` (migration
+`043_team_groups.sql`); `team_group_members` resolves each Liquipedia name through the decided anchors at its own date.
+`decisions_loaded` compares the file with the table.
+
+| season | partner teams |
+|---|---|
+| 2025 | Korea: T1, Team Falcons, Crazy Raccoon, ZETA DIVISION; EMEA: Gen.G Esports, Twisted Minds, Virtus.pro; NA: Team Liquid, Spacestation Gaming |
+| 2026 | Korea: the same four; China: All Gamers (Global), JD Gaming, Weibo Gaming; EMEA: Team Peps, Twisted Minds, Virtus.pro; NA: Disguised, Dallas Fuel, Spacestation Gaming, Team Liquid |
+
+Liquipedia tags no partners for China 2025, Japan or the Pacific.
+
+- "which teams are the partner teams" lists the latest season's (saying so), or the season or region named.
+- Any team question restricted to them ("which partner team won the most series in 2026") counts a team only in a
+  season it was a partner, and the answer names every team it included. "Games" means series.
+- A tie at the top of any leaderboard is said as a shared lead ("Dallas Fuel and Twisted Minds share the lead in
+  series won with 17"), never as whichever row sorted first.
+- Keeping it current: one `/placement [[qualifier::Partner Team]]` request a season, reviewed like any decision.
+
 ## Golden answer suite
 
 Unit tests check that code does what its author meant. The golden suite checks

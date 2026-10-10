@@ -59,6 +59,16 @@
       ],
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
+    "968066cc-6255-4fcd-8d9b-bc455ca9d998": {
+      "org_id": "disguised",
+      "org_name": "Disguised",
+      "team_name": "Disguised",
+      "note": "Disguised is DSG (owner, 2026-10-10). This FACEIT id carried only the name 'Disguised' (2026-03-21..2026-07-01); mapped for all of its life. The 'DSG' alias follows the id into the org.",
+      "evidence": [
+        "decided by the project owner (owner, 2026-10-10)"
+      ],
+      "decided_at": "2026-10-10T23:31:27+00:00"
+    },
     "2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae": {
       "org_id": "extinction",
       "org_name": "Extinction",
@@ -97,6 +107,16 @@
       ],
       "valid_from_name": "Frost Tails",
       "decided_at": "2026-10-01T23:15:38+00:00"
+    },
+    "bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff": {
+      "org_id": "gen-g",
+      "org_name": "Gen.G Esports",
+      "team_name": "GenG Esports",
+      "note": "Gen.G and Gen.G Esports are one team (owner, 2026-10-10). This FACEIT id carried 'GenG' (2025-01-31..2025-09-27) and then 'GenG Esports' (from 2025-10-05), a rename only; mapped for all of its life. An org, not the bare id, as with Team Liquid and Dallas Fuel. The 'Gen.G' and 'gg' aliases follow the id into the org.",
+      "evidence": [
+        "decided by the project owner (owner, 2026-10-10)"
+      ],
+      "decided_at": "2026-10-10T23:31:27+00:00"
     },
     "c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e": {
       "org_id": "ntmr",

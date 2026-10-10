@@ -108,8 +108,10 @@ def build_golden_db(db_url: str, schema: str):
                                    ROOT / lp_names.DEFAULT_EXTRA_PATH))
     load_liquipedia_enrichment(conn, raw_conn)
     # Stage 3: the reviewed cross-source anchors (team names from the team map, players from their decisions file)
+    from owcsmuse import groups as team_groups
     lp_identity.load_identity(conn, lp_identity.PlayerDecisions(ROOT / "scope" / "player_identity_decisions.json"),
                               TeamMap(ROOT / "scope" / "liquipedia_team_map.json"))
+    team_groups.load(conn, ROOT / "scope" / "partner_teams.json")     # the reviewed partner teams (043)
     refresh(conn)
     return conn, raw_conn
 

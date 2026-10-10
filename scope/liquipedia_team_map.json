@@ -26,6 +26,12 @@
       "note": "Strong proposal accepted (owner, 2026-10-09 (Stage 4)): every id-linked match stood opposite this org.",
       "decided_at": "2026-10-09T18:13:17+00:00"
     },
+    "all gamers": {
+      "entity_type": "org",
+      "entity_id": "all-gamers-global",
+      "note": "All Gamers is All Gamers Global (owner, 2026-10-10): Liquipedia's 2026 China name for the Liquipedia-only org (both Midseason Championships list 'All Gamers Global', template 'ag.al international 2025'). A 2026 China partner team.",
+      "decided_at": "2026-10-10T23:31:27+00:00"
+    },
     "all gamers global": {
       "entity_type": "org",
       "entity_id": "all-gamers-global",
@@ -63,6 +69,12 @@
       "entity_id": "dallas-fuel",
       "note": "Strong proposal accepted as an org, not the bare id cd157523 (owner, 2026-10-09 (Stage 4)).",
       "decided_at": "2026-10-09T18:13:17+00:00"
+    },
+    "disguised": {
+      "entity_type": "org",
+      "entity_id": "disguised",
+      "note": "Disguised is DSG (owner, 2026-10-10): 10/10 id-linked matches opposite FACEIT team 968066cc. A 2026 NA partner team.",
+      "decided_at": "2026-10-10T23:31:27+00:00"
     },
     "ence": {
       "entity_type": "team",
@@ -121,6 +133,12 @@
       "entity_id": "590b7d3b-a200-47b9-a967-f02274c1977b",
       "note": "NA Geekay Esports (owner, 2026-10-09 (Stage 4)): the region-qualified scheme of the GK aliases; 21/21 id-linked NA matches.",
       "decided_at": "2026-10-09T17:59:55+00:00"
+    },
+    "gen g esports": {
+      "entity_type": "org",
+      "entity_id": "gen-g",
+      "note": "Gen.G and Gen.G Esports are one team (owner, 2026-10-10): 26/26 id-linked matches opposite FACEIT team bc8a3617 ('GenG'). A 2025 EMEA partner team (scope/partner_teams_report.md).",
+      "decided_at": "2026-10-10T23:31:27+00:00"
     },
     "jd gaming": {
       "entity_type": "org",

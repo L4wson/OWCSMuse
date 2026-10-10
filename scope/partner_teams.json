@@ -1,0 +1,164 @@
+{
+  "note": "Season-scoped team groups, reviewed (owner, 2026-10-10). 'partner': the OWCS partner teams, from Liquipedia's own record - a Stage 1 prize-pool row whose qualifier is 'Partner Team' - fetched as /placement [[qualifier::Partner Team]] (raw_payloads 4226, 23 rows; scope/partner_teams_report.md). Names are Liquipedia's; each resolves through scope/liquipedia_team_map.json at its own date. Liquipedia tags no partners for China 2025, Japan or the Pacific. Loaded by `python -m owcsmuse groups load`.",
+  "source_raw_id": 4226,
+  "groups": {
+    "partner": {
+      "2025": {
+        "korea": [
+          {
+            "liquipedia_name": "T1",
+            "page": "Overwatch_Champions_Series/2025/Asia/Stage_1/Korea",
+            "placed_at": "2025-02-28T10:20:00+00:00",
+            "placement": "5-6"
+          },
+          {
+            "liquipedia_name": "Team Falcons",
+            "page": "Overwatch_Champions_Series/2025/Asia/Stage_1/Korea",
+            "placed_at": "2025-03-01T11:20:00+00:00",
+            "placement": "3-4"
+          },
+          {
+            "liquipedia_name": "Crazy Raccoon",
+            "page": "Overwatch_Champions_Series/2025/Asia/Stage_1/Korea",
+            "placed_at": "2025-03-02T10:15:00+00:00",
+            "placement": "1"
+          },
+          {
+            "liquipedia_name": "ZETA DIVISION",
+            "page": "Overwatch_Champions_Series/2025/Asia/Stage_1/Korea",
+            "placed_at": "2025-03-02T10:15:00+00:00",
+            "placement": "2"
+          }
+        ],
+        "emea": [
+          {
+            "liquipedia_name": "Gen.G Esports",
+            "page": "Overwatch_Champions_Series/2025/EMEA/Stage_1",
+            "placed_at": "2025-03-02T18:00:00+00:00",
+            "placement": "5-6"
+          },
+          {
+            "liquipedia_name": "Twisted Minds",
+            "page": "Overwatch_Champions_Series/2025/EMEA/Stage_1",
+            "placed_at": "2025-03-08T18:30:00+00:00",
+            "placement": "4"
+          },
+          {
+            "liquipedia_name": "Virtus.pro",
+            "page": "Overwatch_Champions_Series/2025/EMEA/Stage_1",
+            "placed_at": "2025-03-09T20:00:00+00:00",
+            "placement": "1"
+          }
+        ],
+        "na": [
+          {
+            "liquipedia_name": "Team Liquid",
+            "page": "Overwatch_Champions_Series/2025/NA/Stage_1",
+            "placed_at": "2025-03-09T22:20:00+00:00",
+            "placement": "3"
+          },
+          {
+            "liquipedia_name": "Spacestation Gaming",
+            "page": "Overwatch_Champions_Series/2025/NA/Stage_1",
+            "placed_at": "2025-03-10T00:40:00+00:00",
+            "placement": "2"
+          }
+        ]
+      },
+      "2026": {
+        "emea": [
+          {
+            "liquipedia_name": "Team Peps",
+            "page": "Overwatch_Champions_Series/2026/EMEA/Stage_1",
+            "placed_at": "2026-04-05T21:30:01+00:00",
+            "placement": "6"
+          },
+          {
+            "liquipedia_name": "Twisted Minds",
+            "page": "Overwatch_Champions_Series/2026/EMEA/Stage_1",
+            "placed_at": "2026-04-12T18:35:00+00:00",
+            "placement": "1"
+          },
+          {
+            "liquipedia_name": "Virtus.pro",
+            "page": "Overwatch_Champions_Series/2026/EMEA/Stage_1",
+            "placed_at": "2026-04-12T18:35:00+00:00",
+            "placement": "2"
+          }
+        ],
+        "na": [
+          {
+            "liquipedia_name": "Disguised",
+            "page": "Overwatch_Champions_Series/2026/NA/Stage_1",
+            "placed_at": "2026-04-06T04:30:01+00:00",
+            "placement": "6"
+          },
+          {
+            "liquipedia_name": "Team Liquid",
+            "page": "Overwatch_Champions_Series/2026/NA/Stage_1",
+            "placed_at": "2026-04-12T20:30:00+00:00",
+            "placement": "3"
+          },
+          {
+            "liquipedia_name": "Dallas Fuel",
+            "page": "Overwatch_Champions_Series/2026/NA/Stage_1",
+            "placed_at": "2026-04-12T21:45:00+00:00",
+            "placement": "1"
+          },
+          {
+            "liquipedia_name": "Spacestation Gaming",
+            "page": "Overwatch_Champions_Series/2026/NA/Stage_1",
+            "placed_at": "2026-04-12T21:45:00+00:00",
+            "placement": "2"
+          }
+        ],
+        "china": [
+          {
+            "liquipedia_name": "JD Gaming",
+            "page": "Overwatch_Champions_Series/2026/China/Stage_1",
+            "placed_at": "2026-04-26T10:40:00+00:00",
+            "placement": "3"
+          },
+          {
+            "liquipedia_name": "All Gamers",
+            "page": "Overwatch_Champions_Series/2026/China/Stage_1",
+            "placed_at": "2026-04-26T13:20:00+00:00",
+            "placement": "2"
+          },
+          {
+            "liquipedia_name": "Weibo Gaming",
+            "page": "Overwatch_Champions_Series/2026/China/Stage_1",
+            "placed_at": "2026-04-26T13:20:00+00:00",
+            "placement": "1"
+          }
+        ],
+        "korea": [
+          {
+            "liquipedia_name": "Crazy Raccoon",
+            "page": "Overwatch_Champions_Series/2026/Asia/Stage_1/Korea",
+            "placed_at": "2026-05-03T06:10:00+00:00",
+            "placement": "3"
+          },
+          {
+            "liquipedia_name": "T1",
+            "page": "Overwatch_Champions_Series/2026/Asia/Stage_1/Korea",
+            "placed_at": "2026-05-03T06:10:00+00:00",
+            "placement": "4"
+          },
+          {
+            "liquipedia_name": "Team Falcons",
+            "page": "Overwatch_Champions_Series/2026/Asia/Stage_1/Korea",
+            "placed_at": "2026-05-03T08:40:00+00:00",
+            "placement": "2"
+          },
+          {
+            "liquipedia_name": "ZETA DIVISION",
+            "page": "Overwatch_Champions_Series/2026/Asia/Stage_1/Korea",
+            "placed_at": "2026-05-03T08:40:00+00:00",
+            "placement": "1"
+          }
+        ]
+      }
+    }
+  }
+}

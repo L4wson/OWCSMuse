@@ -17,6 +17,7 @@ Intent = Literal[
     "stat_availability",  # which stats exist for which season
     "team_membership",    # which team a player is on now, and the teams they have been on
     "placement",          # where teams finished at one event (Liquipedia's prize pool)
+    "team_group",         # the members of a season-scoped group of teams (the partner teams)
 ]
 EntityType = Literal["player", "team", "org", "map", "mode"]
 Aggregation = Literal["total", "avg_per_map", "count", "rate"]
@@ -75,6 +76,8 @@ class Filters(BaseModel):
     # set when the event was not named but read from the words ("the 2025 champion": the World Finals), so the answer
     # can say how it read the question
     event_read_as: Optional[Literal["world champion"]] = None
+    # a season-scoped group of teams (043): restricts a team question to its members, each in a season it was one
+    group: Optional[Literal["partner"]] = None
 
     def names(self) -> list[tuple[str, str]]:
         """(role, name) pairs that need entity resolution."""

@@ -359,8 +359,8 @@
     "status": "ok",
     "entity": {
      "role": "subject",
-     "type": "team",
-     "id": "968066cc-6255-4fcd-8d9b-bc455ca9d998",
+     "type": "org",
+     "id": "disguised",
      "name": "Disguised"
     },
     "rows": [
@@ -372,7 +372,7 @@
      }
     ]
    },
-   "derivation": "Disguised: 2 series in the golden set. DSG is the community shorthand for Disguised.",
+   "derivation": "Disguised: 2 series in the golden set. DSG is the community shorthand for Disguised. Since the owner's decision of 2026-10-10 (Disguised is DSG) the team id is the org 'disguised' for its whole life, and the alias follows it there.",
    "status": "confirmed"
   },
   {
@@ -2057,6 +2057,120 @@
     "other_grain": "SpaceStation Gaming map record against Dallas Fuel"
    },
    "derivation": "SpaceStation Gaming (both team ids, one org) v Dallas Fuel: 2 series, 1-1. The evidence filtered raw team ids, so with an org on either side the record answered and its evidence was empty.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G88",
+   "title": "The 2025 partner teams, by Liquipedia's own record",
+   "kind": "exact",
+   "regression": "partner teams were not a queryable concept (owner, 2026-10-10)",
+   "question": "who were the 2025 partner teams",
+   "expect": {
+    "status": "ok",
+    "rows_set": {
+     "liquipedia_name": [
+      "Crazy Raccoon",
+      "Gen.G Esports",
+      "Spacestation Gaming",
+      "T1",
+      "Team Falcons",
+      "Team Liquid",
+      "Twisted Minds",
+      "Virtus.pro",
+      "ZETA DIVISION"
+     ]
+    },
+    "sentence_contains": [
+     "The 2025 partner teams"
+    ]
+   },
+   "derivation": "The 2025 Stage 1 prize-pool rows qualified as 'Partner Team' (raw_payloads 4226): Crazy Raccoon, Gen.G Esports, Spacestation Gaming, T1, Team Falcons, Team Liquid, Twisted Minds, Virtus.pro, ZETA DIVISION.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G89",
+   "title": "With no season named, the partner teams are the latest season's, and the answer says so",
+   "kind": "exact",
+   "regression": null,
+   "question": "which teams are the partner teams",
+   "expect": {
+    "status": "ok",
+    "rows_set": {
+     "liquipedia_name": [
+      "All Gamers",
+      "Crazy Raccoon",
+      "Dallas Fuel",
+      "Disguised",
+      "JD Gaming",
+      "Spacestation Gaming",
+      "T1",
+      "Team Falcons",
+      "Team Liquid",
+      "Team Peps",
+      "Twisted Minds",
+      "Virtus.pro",
+      "Weibo Gaming",
+      "ZETA DIVISION"
+     ]
+    },
+    "notes_contain": [
+     "read as 2026, the latest season with partner teams"
+    ]
+   },
+   "derivation": "The latest season with partner rows is 2026: All Gamers, Crazy Raccoon, Dallas Fuel, Disguised, JD Gaming, Spacestation Gaming, T1, Team Falcons, Team Liquid, Team Peps, Twisted Minds, Virtus.pro, Weibo Gaming, ZETA DIVISION.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G90",
+   "title": "A season with no partner group is no data, naming the seasons that have one",
+   "kind": "invariant",
+   "regression": null,
+   "question": "who were the 2024 partner teams",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "sentence_contains": [
+     "seasons with them: 2025, 2026"
+    ]
+   },
+   "derivation": "Liquipedia records no 'Partner Team' qualifier in 2024: the partner program's rows start in 2025.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G91",
+   "title": "A partner-only leaderboard counts each team in a season it was a partner, and names who it included",
+   "kind": "exact",
+   "regression": null,
+   "question": "which partner team won the most series in 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "wins": 4
+     }
+    ],
+    "notes_contain": [
+     "Partner teams only, each counted in a season it was one: 2026"
+    ]
+   },
+   "derivation": "2026 series wins of the 2026 partners present in this warehouse: [(4, 'Spacestation Gaming'), (2, 'Dallas Fuel'), (2, 'Twisted Minds'), (1, 'Team Liquid')]. The note lists every 2026 partner.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G92",
+   "title": "A team that was not a partner that season is not on a partner leaderboard",
+   "kind": "invariant",
+   "regression": null,
+   "question": "which partner team won the most series in 2026",
+   "expect": {
+    "status": "ok",
+    "sentence_lacks": [
+     "Geekay Esports",
+     "LuneX",
+     "The Kafe"
+    ]
+   },
+   "derivation": "2026 teams in this warehouse that were not 2026 partners (['Geekay Esports', 'LuneX', 'The Kafe']) must not appear in the sentence.",
    "status": "confirmed"
   }
  ]

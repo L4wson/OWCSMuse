@@ -62,6 +62,8 @@ class SchemaInfo:
     # championships whose only source is Liquipedia (`lp:`, Stage 4): no player stats by declaration, like a region in
     # region_sources, whether or not any of their series has loaded yet
     liquipedia_only: set[str] = field(default_factory=set)
+    # season-scoped team groups (043): the seasons each group has members in
+    group_seasons: dict[str, set[int]] = field(default_factory=dict)
 
     @classmethod
     def from_db(cls, conn: psycopg.Connection) -> "SchemaInfo":
@@ -88,6 +90,9 @@ class SchemaInfo:
             cur.execute("SELECT region, player_stats FROM region_sources")
             for r in cur.fetchall():
                 info.region_player_stats[r["region"]] = bool(r["player_stats"])
+            cur.execute("SELECT group_key, season FROM team_groups GROUP BY group_key, season")
+            for r in cur.fetchall():
+                info.group_seasons.setdefault(r["group_key"], set()).add(r["season"])
             cur.execute("SELECT championship_id, min(played_at) AS first_at, max(played_at) AS last_at FROM series "
                         "WHERE championship_id IS NOT NULL GROUP BY championship_id")
             for r in cur.fetchall():
@@ -338,6 +343,16 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
 
     if q.intent == "placement":
         return _validate_placement(q, info)
+    if f.group:
+        have = sorted(info.group_seasons.get(f.group, set()))
+        if not have:
+            return Unanswerable(code="no_data", reason=f"no {f.group} teams are recorded yet")
+        if f.season is not None and f.season not in have:
+            return Unanswerable(code="no_data",
+                                reason=f"no {f.group} teams are recorded for {f.season}; seasons with them: "
+                                       f"{', '.join(map(str, have))}")
+        if q.intent == "team_group":
+            return Validated(query=q)
 
     # --- metric
     if q.intent in ("versus", "season_compare"):

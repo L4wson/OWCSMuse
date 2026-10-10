@@ -482,3 +482,18 @@ def team_maps_against_player(series_list, team_ids, player_id, season=None) -> d
             out["map_wins"] += r["winner"] in team_ids
             out["map_losses"] += r["winner"] == mine[0]["team_id"]
     return out
+
+
+
+# ------------------------------------------------------------------- partner teams (043)
+# From tests/golden/partner_placements.json: Liquipedia's Stage 1 prize-pool rows whose qualifier is "Partner Team",
+# copied verbatim. A season's partners are the rows dated in it.
+
+def partner_names(season: int) -> list[str]:
+    rows = json.loads((GOLDEN / "partner_placements.json").read_text(encoding="utf-8"))["placements"]
+    return sorted(r["opponentname"] for r in rows if int(r["date"][:4]) == season)
+
+
+def partner_seasons() -> list[int]:
+    rows = json.loads((GOLDEN / "partner_placements.json").read_text(encoding="utf-8"))["placements"]
+    return sorted({int(r["date"][:4]) for r in rows})

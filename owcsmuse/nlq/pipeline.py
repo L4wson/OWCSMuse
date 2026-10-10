@@ -539,6 +539,66 @@ def _placement_answer(conn: psycopg.Connection, question: str, q: StructuredQuer
     return a
 
 
+_REGION_LABEL = {"na": "NA", "emea": "EMEA", "korea": "Korea", "china": "China", "japan": "Japan", "pacific": "Pacific"}
+
+
+def _group_members(conn: psycopg.Connection, group: str, seasons: Optional[list[int]] = None,
+                   region: Optional[str] = None) -> list[dict]:
+    clauses, params = ["group_key = %s"], [group]
+    if seasons:
+        clauses.append("season = ANY(%s)")
+        params.append(seasons)
+    if region:
+        clauses.append("region = %s")
+        params.append(region)
+    return run_compiled(conn, Compiled(
+        sql=f"""SELECT season, region, display_name AS team, liquipedia_name, org_key, page
+                  FROM team_group_members WHERE {' AND '.join(clauses)} ORDER BY season, region, display_name""",
+        params=params, description="group members"))
+
+
+def _members_phrase(rows: list[dict]) -> str:
+    """'2026 - NA: Dallas Fuel, ...; EMEA: ...' for every season in `rows`."""
+    out = []
+    for season in sorted({r["season"] for r in rows}):
+        regions = {}
+        for r in rows:
+            if r["season"] == season:
+                regions.setdefault(r["region"], []).append(r["team"])
+        out.append(f"{season} - " + "; ".join(f"{_REGION_LABEL.get(reg, reg)}: {', '.join(t)}" for reg, t in regions.items()))
+    return " | ".join(out)
+
+
+def _group_pages(rows: list[dict]) -> list[str]:
+    from ..liquipedia.attribution import page_url
+    return [page_url(p) for p in sorted({r["page"] for r in rows})]
+
+
+def _group_answer(conn: psycopg.Connection, question: str, q: StructuredQuery, pre: Answer, used: str,
+                  info: SchemaInfo) -> Answer:
+    """The members of a season-scoped group (the partner teams): a season's, the latest's when none is named."""
+    v = validate(q, info)
+    if isinstance(v, Unanswerable):
+        return _cannot(question, v, q, used, pre.entities)
+    f = q.filters
+    season = f.season or max(info.group_seasons[f.group])
+    rows = _group_members(conn, f.group, [season], f.region)
+    if not rows:
+        u = Unanswerable(code="no_data", reason=f"no {f.group} teams are recorded for {season}"
+                                                + (f" in {_REGION_LABEL.get(f.region, f.region)}" if f.region else ""))
+        return _cannot(question, u, q, used, pre.entities)
+    a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows,
+               description=f"{f.group} teams", parser=used, notes=[])
+    if f.season is None:
+        a.notes.append(f"read as {season}, the latest season with {f.group} teams")
+    a.notes.append("Partner status is per season and region, from Liquipedia's Stage 1 prize pools (qualifier \"Partner "
+                   "Team\"); Liquipedia tags no partners for China 2025, Japan or the Pacific.")
+    text = f"The {season} {f.group} teams: " + _members_phrase(rows).split(" - ", 1)[1] + "."
+    a.sentence = {"text": text, "spans": []}
+    _attribute(conn, a, lambda: attribution_block(_group_pages(rows)))
+    return a
+
+
 ATTRIBUTION_UNKNOWN = ("Liquipedia attribution could not be determined for this answer: values in it may come from "
                        "Liquipedia (CC-BY-SA 3.0, https://liquipedia.net/overwatch) without their page named.")
 
@@ -645,6 +705,8 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
         return _membership_answer(conn, question, q, r, pre, used)
     if q.intent == "placement":
         return _placement_answer(conn, question, q, r, pre, used, info)
+    if q.intent == "team_group":
+        return _group_answer(conn, question, q, pre, used, info)
 
     # 3. validate against the live schema
     v = validate(q, info)
@@ -792,6 +854,12 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
                 row["entity"] = entity
     a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows, coverage=coverage,
                notes=notes, limitations=limitations, description=c.description, parser=used)
+    if q.filters.group:
+        # name every team the restriction included, season by season: a group answer that hides its members is a
+        # ranking of an unknown set
+        members = _group_members(conn, q.filters.group, [q.filters.season] if q.filters.season else None)
+        a.notes = [f"{q.filters.group.capitalize()} teams only, each counted in a season it was one: "
+                   + _members_phrase(members) + "."] + list(a.notes)
     if q.intent == "head_to_head" and "player" in (r.subject_type, r.opponent_type):
         who = r.names.get("player") or r.names.get("subject") or r.names.get("team") or "the first-named"
         a.notes = [f"Players do not win series, their teams do: this counts the series the two were on opposite sides "
@@ -814,6 +882,10 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
     # were presented either way.
     _attribute(conn, a, lambda: attribution_for(conn, answer_matches(conn, v, r, rows, c.coverage_stat,
                                                                       missing_series=q.intent == "versus")))
+    if q.filters.group:
+        # the membership is Liquipedia's too: its Stage 1 prize pools are owed alongside the matches'
+        members = _group_members(conn, q.filters.group, [q.filters.season] if q.filters.season else None)
+        _attribute(conn, a, lambda: attribution_block(list((a.attribution or {}).get("pages") or []) + _group_pages(members)))
     if debug:
         a.sql, a.params = c.sql, c.params
     return a
