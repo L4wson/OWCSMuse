@@ -258,6 +258,14 @@ def load_identity(conn: psycopg.Connection, decisions: PlayerDecisions, team_map
         cur.execute("DELETE FROM entity_anchors")
         teams = born_teams = 0
         wanted_born_teams: list[str] = []
+        # every Liquipedia-only org first: an entry anchoring another name to one ("All Gamers" to the org "All Gamers
+        # Global" declares) may come before the entry that declares it, and its team would map to nothing
+        for d in team_map.data.values():
+            for e in d.get("eras") or [d]:
+                name = e.get("org_name") or (d.get("org_name") if not d.get("eras") else None)
+                if e.get("entity_type") == "org" and name:
+                    cur.execute("INSERT INTO orgs (org_id, name) VALUES (%s, %s) ON CONFLICT (org_id) DO NOTHING",
+                                (e["entity_id"], name))
         for key, d in team_map.data.items():
             name, _, region = key.partition("|")
             eras = d.get("eras") or [d]

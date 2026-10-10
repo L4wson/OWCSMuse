@@ -507,11 +507,30 @@ def _find_placement(q: str, filters: Filters) -> Optional[StructuredQuery]:
     return None
 
 
+_PARTNER = re.compile(r"\bpartners?(?:\s+teams?)?\b")
+_RANKING = re.compile(r"\b(?:most|fewest|least|top|best|worst|highest|lowest|won|wins?|losses|record|win rate|maps?|series)\b")
+
+
 def parse_question(question: str) -> ParseResult:
+    """A question about the partner teams (043) is either the group itself ("which teams are the partner teams") or any
+    team question restricted to it ("which partner team won the most series in 2026"); the rest parses as before."""
     if not question or not question.strip():
         return Unanswerable(code="invalid_query", reason="empty question")
     q = _expand_event_words(_normalize(question))
+    if _PARTNER.search(q):
+        season, region = _find_season(q), _find_region(q)
+        rest = re.sub(r"\s+", " ", _PARTNER.sub(" team ", q)).strip()
+        if not _RANKING.search(rest):
+            return StructuredQuery(intent="team_group", entity="team", metric="members",
+                                   filters=Filters(group="partner", season=season, region=region))
+        parsed = _parse(rest)
+        if isinstance(parsed, StructuredQuery):
+            return parsed.model_copy(update={"entity": "team", "filters": parsed.filters.model_copy(update={"group": "partner"})})
+        return parsed
+    return _parse(q)
 
+
+def _parse(q: str) -> ParseResult:
     # --- hard stops first: things we know we cannot answer
     for term, why in OUT_OF_SCOPE_TERMS:
         if re.search(r"\b" + re.escape(term) + r"\b", q):

@@ -286,3 +286,23 @@ def test_champions_clash_is_an_event_not_the_clash_mode_and_ewc_is_the_esports_w
     q = parse_question("crazy raccoon record at ewc 2024")
     assert q.filters.subject == "crazy raccoon" and q.filters.championship == "esports world cup"
     assert parse_question("twisted minds record on clash maps in 2025").filters.mode == "Clash"
+
+
+
+# ---- partner teams (043): the group itself, or a team question restricted to it
+
+@pytest.mark.parametrize("question, season, region", [
+    ("which teams are the partner teams", None, None),
+    ("who were the 2025 partner teams", 2025, None),
+    ("partner teams in 2026", 2026, None),
+    ("list the NA partner teams", None, "na"),
+])
+def test_asking_for_the_partner_teams_is_the_group(question, season, region):
+    q = parse_question(question)
+    assert (q.intent, q.filters.group, q.filters.season, q.filters.region) == ("team_group", "partner", season, region)
+
+
+def test_a_partner_ranking_keeps_its_intent_and_restricts_it():
+    q = parse_question("which partner team won the most series in 2026")
+    assert (q.intent, q.entity, q.metric, q.filters.group, q.filters.season) == ("leaderboard", "team", "wins", "partner", 2026)
+    assert parse_question("twisted minds record in 2026").filters.group is None

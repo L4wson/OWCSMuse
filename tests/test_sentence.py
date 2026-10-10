@@ -161,3 +161,15 @@ def test_a_team_or_role_leaderboard_names_the_players_it_ranked():
     assert render_sentence(q, [row], team).text.startswith("TVNT leads Deaths among Twisted Minds players with 184")
     assert render_sentence(dict(q, filters={"role": "Support"}), [row], {}).text.startswith("TVNT leads Deaths among supports")
     assert render_sentence(q, [row], {}).text.startswith("TVNT leads Deaths with 184")
+
+
+
+def test_a_tie_at_the_top_is_a_shared_lead_not_whoever_sorted_first():
+    from owcsmuse.nlq.sentence import render_sentence
+    rows = [{"team": "Dallas Fuel", "org_key": "dallas-fuel", "wins": 17, "matches": 21, "maps": 75},
+            {"team": "Twisted Minds", "org_key": "team:tm", "wins": 17, "matches": 21, "maps": 80},
+            {"team": "SpaceStation Gaming", "org_key": "ssg", "wins": 14, "matches": 20, "maps": 70}]
+    text = render_sentence({"intent": "leaderboard", "metric": "wins", "filters": {"season": 2026}}, rows).text
+    assert text.startswith("Dallas Fuel and Twisted Minds share the lead in series won with 17")
+    assert "across" not in text.split(" in 2026")[0]          # no one leader's map sample for two
+    assert "ahead of 1 other shown" in text

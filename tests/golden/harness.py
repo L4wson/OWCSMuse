@@ -233,6 +233,10 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str, src: str) -> None:
         if cand:
             _apply(out, want["expect"], ask_fn(cand["question"]), ask_fn, prefix=f"{p}[{cand['question']!r}] ",
                    src=f"{src}answer_candidate.expect.")
+    for column, want in (exp.get("rows_set") or {}).items():
+        # a column's values over every row, as a set: membership, not order
+        _check(out, f"{p}rows' {column} (as a set)", sorted(want), sorted({str(r.get(column)) for r in (a.rows or [])}),
+               source=_each(f"{src}rows_set.{column}", want))
     if "other_grain" in exp:
         # the other grain of a versus answer, ready to ask: both grains reachable from either answer
         _check(out, f"{p}other grain offered", exp["other_grain"], (getattr(a, "other_grain", None) or {}).get("question"),

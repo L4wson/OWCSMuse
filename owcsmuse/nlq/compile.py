@@ -273,6 +273,11 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, "t.season", f.season)
         _where(clauses, params, "t.championship_id", champ)
         _where(clauses, params, "t.region", f.region)
+        if f.group:
+            # a group member counts only in a season it was one (043): partner status changes year to year
+            clauses.append("EXISTS (SELECT 1 FROM team_group_members g WHERE g.group_key = %s AND g.season = t.season"
+                           " AND g.org_key = t.org_key)")
+            params.append(f.group)
         use_maps = bool(v.map_name or v.mode_name) or q.metric in ("map_wins", "map_losses", "map_win_rate", "maps")
         if use_maps:
             _where(clauses, params, "t.map_name", v.map_name)

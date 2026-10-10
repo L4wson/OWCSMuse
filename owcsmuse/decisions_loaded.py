@@ -40,6 +40,7 @@ LOADERS = {
     "decisions.json": "python -m owcsmuse classify, then python -m owcsmuse load-manifest",
     "competition_names.json": "python -m owcsmuse competitions load",
     "liquipedia_events.json": "python -m owcsmuse liquipedia events load",
+    "partner_teams.json": "python -m owcsmuse groups load",
 }
 
 
@@ -235,6 +236,15 @@ def check(conn: psycopg.Connection, scope_dir: Path = SCOPE) -> tuple[list[dict[
     loaded_events = {cid: (r["name"], r["scope_region"], r["tier"], r["season"], r["include"])
                      for cid, r in _lp_champs(conn).items()}
     d.compare("liquipedia_events.json", decided_events, loaded_events, 0)
+
+    # ---- season-scoped groups (043) -> team_groups (`groups load`; the file is the whole truth)
+    from .groups import load_file as load_groups_file
+    decided_groups = {(g["group_key"], g["season"], g["region"], g["liquipedia_name"]): g["page"]
+                      for g in load_groups_file(scope_dir / "partner_teams.json")}
+    loaded_groups = {(r["group_key"], r["season"], r["region"], r["liquipedia_name"]): r["page"]
+                     for r in _rows(conn, "SELECT group_key, season, region, liquipedia_name, page FROM team_groups")} \
+        if _rows(conn, "SELECT 1 FROM information_schema.tables WHERE table_name = 'team_groups' AND table_schema = current_schema()") else {}
+    d.compare("partner_teams.json", decided_groups, loaded_groups, 0)
 
     # ---- competition names -> competition_names (a decision made against a FACEIT name since renamed is stale and,
     # by the loader's own rule, not applied)

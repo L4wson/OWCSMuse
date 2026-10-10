@@ -308,16 +308,26 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     row = rows[0]
     metric = query.get("metric")
     name = row.get("nickname") or row.get("team") or row.get("display_name")
-    entity_id = row.get("player_id") or row.get("org_key")
     entity_type = "player" if row.get("player_id") else "org"
     if not name:
         return None
     b = _Builder()
-    b.mark(str(name), entity_type, entity_id)
+    # a tie at the top is a shared lead: naming whichever row the sort put first called Dallas Fuel the leader with 17
+    # series won when Twisted Minds also had 17 (2026-10-10)
+    top_key = value_column(query, row)
+    tied = [x for x in rows if top_key and x.get(top_key) is not None and x.get(top_key) == row.get(top_key)]
+    tied = tied if len(tied) > 1 else [row]
+    for i, x in enumerate(tied):
+        b.add(", " if 0 < i < len(tied) - 1 else (" and " if i else ""))
+        b.mark(str(x.get("nickname") or x.get("team") or x.get("display_name")), entity_type,
+               x.get("player_id") or x.get("org_key"))
     ascending = query.get("sort") == "asc"
     # the verb is chosen before any span is marked: rewriting " leads " afterwards shifted every later span by 9 characters,
     # so the stat link landed on "e lowe" inside "the lowest"
-    b.add(" has the lowest " if ascending else " leads ")
+    if len(tied) > 1:
+        b.add(" share the lowest " if ascending else " share the lead in ")
+    else:
+        b.add(" has the lowest " if ascending else " leads ")
     b.mark(_metric_label(metric) or str(metric), "stat", str(metric))
     # the players a team or role filter ranked: without it, a leaderboard that applied "which TM tank" reads the same
     # as one that silently dropped it
@@ -340,15 +350,16 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
         b.add(f" at {num(value)} per map")
     else:
         b.add(f" with {num(value)}")
-    phrase = _maps_phrase(row)
+    phrase = _maps_phrase(row) if len(tied) == 1 else None     # one leader's sample, not the tied leaders'
     if phrase:
         b.add(f" across {phrase}")
     seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
-    if len(rows) > 1:
+    rest = len(rows) - len(tied)
+    if len(rows) > 1 and (ascending or rest):
         b.add(f", out of {len(rows)} shown" if ascending else
-              f", ahead of {len(rows) - 1} other{'' if len(rows) == 2 else 's'} shown")
+              f", ahead of {rest} other{'' if rest == 1 else 's'} shown")
     floor = query.get("min_maps_floor")
     if floor:
         # say why a player is missing: the floor left out everyone under it
