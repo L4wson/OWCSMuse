@@ -175,14 +175,18 @@ class Collector:
         return out
 
     def included_championships(self, ids: Optional[Sequence[str]] = None) -> list[dict[str, Any]]:
+        """The FACEIT championships to collect. A Liquipedia-only one (`lp:`, source 'liquipedia', Stage 4) has no FACEIT
+        side: listing it asked FACEIT for /championships/lp:.../matches and the 404 failed the whole backfill."""
         with self.conn.cursor() as cur:
             if ids:
                 cur.execute(
-                    "SELECT championship_id, name FROM championships WHERE championship_id = ANY(%s) ORDER BY championship_start",
+                    "SELECT championship_id, name FROM championships WHERE championship_id = ANY(%s) AND source <> 'liquipedia' "
+                    "ORDER BY championship_start",
                     (list(ids),),
                 )
             else:
-                cur.execute("SELECT championship_id, name FROM championships WHERE include ORDER BY championship_start")
+                cur.execute("SELECT championship_id, name FROM championships WHERE include AND source <> 'liquipedia' "
+                            "ORDER BY championship_start")
             rows = cur.fetchall()
         self.conn.commit()
         return rows

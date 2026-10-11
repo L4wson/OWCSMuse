@@ -204,3 +204,15 @@ def test_a_liquipedia_only_series_counts_at_map_grain(stage4):
         cur.execute("SELECT count(*) AS n FROM liquipedia_rounds")
         assert cur.fetchone()["n"] == 9          # the event's two records' played games
     conn.commit()
+
+
+def test_the_faceit_collector_never_lists_a_liquipedia_only_championship(stage4):
+    # the first scheduled ingest after Stage 4 asked FACEIT for /championships/lp:.../matches and its 404 failed backfill
+    from owcsmuse.collector import Collector
+    from owcsmuse.config import Settings
+
+    conn, _, _ = stage4
+    col = Collector(conn, None, Settings(database_url="postgresql://unused"))
+    ids = [c["championship_id"] for c in col.included_championships()]
+    assert ids and not any(i.startswith("lp:") for i in ids)
+    assert col.included_championships([f"lp:{WF}"]) == []          # not even when named
