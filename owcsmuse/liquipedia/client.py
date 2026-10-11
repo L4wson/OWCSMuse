@@ -172,13 +172,16 @@ class LiquipediaClient:
 
     # ---------------------------------------------------------------- request
 
-    def get(self, endpoint: str, params: dict[str, Any]) -> Fetched:
-        """GET /{endpoint} with `params` (wiki is added). Cache first; otherwise one request, stored."""
+    def get(self, endpoint: str, params: dict[str, Any], fresh: bool = False) -> Fetched:
+        """GET /{endpoint} with `params` (wiki is added). Cache first; otherwise one request, stored.
+
+        `fresh` skips the cache: a page re-fetched because its matches were unfinished would otherwise be answered
+        with the very response that showed them unfinished."""
         _require_enabled(f"GET /{endpoint}")
         params = {"wiki": self.wiki, **{k: v for k, v in params.items() if v is not None}}
         key_endpoint = endpoint.strip("/")
 
-        held = self.store.cached(key_endpoint, params)
+        held = None if fresh else self.store.cached(key_endpoint, params)
         if held:
             log_event(log, logging.INFO, "liquipedia_cache_hit", endpoint=key_endpoint, raw_id=held["id"])
             return Fetched(key_endpoint, params, held["payload"], held["id"], True, 200, held.get("headers") or {},

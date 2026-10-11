@@ -1,13 +1,13 @@
 # Liquipedia team names -> FACEIT orgs
 
-97 Liquipedia team names, learned from 413 matches Liquipedia ties to FACEIT by match id. 55 decided, 43 proposed strong, 2 need a person.
+98 Liquipedia team names, learned from 416 matches Liquipedia ties to FACEIT by match id. 57 decided, 41 proposed strong, 3 need a person.
 
 Nothing is matched by fuzzy string similarity. Decide with:
 
     python -m owcsmuse liquipedia teams decide "<Liquipedia name>" --org <org slug> [--region na|emea]   (or --team <FACEIT team id>)
     python -m owcsmuse liquipedia teams accept        # accept every strong proposal below, in bulk
 
-## Proposed - strong evidence (43)
+## Proposed - strong evidence (41)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -25,14 +25,12 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Daybreak (team) | any | team:cce69e3f-b11e-4635-8370-8ddd371f690a | 5 | stood opposite FACEIT org 'team:cce69e3f-b11e-4635-8370-8ddd371f690a' in 5 of 5 id-linked matches (FACEIT called it 'Daybreak') |
 | Deimpero | any | team:c82570d6-ded9-4678-8d32-398db37faa98 | 5 | stood opposite FACEIT org 'team:c82570d6-ded9-4678-8d32-398db37faa98' in 5 of 5 id-linked matches (FACEIT called it 'Deimpero'); the folded names are identical |
 | DhillDucks | any | dhillducks | 17 | stood opposite FACEIT org 'dhillducks' in 17 of 17 id-linked matches (FACEIT called it 'DhillDucks'); the folded names are identical |
-| Disguised | any | team:968066cc-6255-4fcd-8d9b-bc455ca9d998 | 10 | stood opposite FACEIT org 'team:968066cc-6255-4fcd-8d9b-bc455ca9d998' in 10 of 10 id-linked matches (FACEIT called it 'Disguised'); the folded names are identical |
 | Dreamland | any | team:d20d1868-8937-4a85-8706-bf936d265392 | 3 | stood opposite FACEIT org 'team:d20d1868-8937-4a85-8706-bf936d265392' in 3 of 3 id-linked matches (FACEIT called it 'Dreamland', 'team_chiime'); the folded names are identical |
 | EF Flexodiax | any | team:241bb1a3-7e39-46ba-8ff0-672a7a7796d6 | 4 | stood opposite FACEIT org 'team:241bb1a3-7e39-46ba-8ff0-672a7a7796d6' in 4 of 4 id-linked matches (FACEIT called it 'EF Flexodiax'); the folded names are identical |
 | Ex Oblivione | any | team:bb5dd404-213c-430f-8d12-8687fc3ff747 | 11 | stood opposite FACEIT org 'team:bb5dd404-213c-430f-8d12-8687fc3ff747' in 11 of 11 id-linked matches (FACEIT called it 'Ex Oblivione'); the folded names are identical |
 | Final Gambit | any | team:6ec39b17-1e07-41df-b720-5a0588b5fcae | 2 | stood opposite FACEIT org 'team:6ec39b17-1e07-41df-b720-5a0588b5fcae' in 2 of 2 id-linked matches (FACEIT called it 'Final Gambit'); the folded names are identical |
 | FMCL | any | team:cefc3f72-5641-43f4-ae4f-bb5eee3b564d | 6 | stood opposite FACEIT org 'team:cefc3f72-5641-43f4-ae4f-bb5eee3b564d' in 6 of 6 id-linked matches (FACEIT called it 'FMCL'); the folded names are identical |
 | Frost Tails eSport | any | frost-tails | 7 | stood opposite FACEIT org 'frost-tails' in 7 of 7 id-linked matches (FACEIT called it 'Frost Tails') |
-| Gen.G Esports | any | team:bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff | 26 | stood opposite FACEIT org 'team:bc8a3617-c6e6-4fbf-9283-c7d9dd2180ff' in 26 of 26 id-linked matches (FACEIT called it 'GenG', 'GenG Esports') |
 | Good Boys | any | team:626ee9e6-1bb4-4a77-8660-a220fcf7a178 | 2 | stood opposite FACEIT org 'team:626ee9e6-1bb4-4a77-8660-a220fcf7a178' in 2 of 2 id-linked matches (FACEIT called it 'Visored') |
 | Goud Guys ANM | any | team:602d3c11-ccee-404d-858e-b03267c83d47 | 7 | stood opposite FACEIT org 'team:602d3c11-ccee-404d-858e-b03267c83d47' in 7 of 7 id-linked matches (FACEIT called it 'Goud Guys', 'Goud Guys ANM'); the folded names are identical |
 | LeftRightGnight | any | team:3c56dcad-8041-4214-86bd-ac75db1d610f | 3 | stood opposite FACEIT org 'team:3c56dcad-8041-4214-86bd-ac75db1d610f' in 3 of 3 id-linked matches (FACEIT called it 'LeftRightGnight'); the folded names are identical |
@@ -55,14 +53,15 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Vice (North American team) | any | team:3a72be04-0086-4831-8e2b-eb85a00cacc5 | 3 | stood opposite FACEIT org 'team:3a72be04-0086-4831-8e2b-eb85a00cacc5' in 3 of 3 id-linked matches (FACEIT called it 'Vice') |
 | Who Is Goldfish | any | who-is-goldfish | 5 | stood opposite FACEIT org 'who-is-goldfish' in 5 of 5 id-linked matches (FACEIT called it 'Who Is Goldfish', 'Who is Goldfish'); the folded names are identical |
 
-## Needs review (2)
+## Needs review (3)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
 | Team Danteh | any | - | 0 | no id-linked match and no FACEIT team has this name |
 | Team Hydron | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Team Risk | any | - | 0 | no id-linked match and no FACEIT team has this name |
 
-## Already decided (55)
+## Already decided (57)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -76,6 +75,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Bleed Esports | any | bleed-esports | 0 | decided in scope/liquipedia_team_map.json |
 | Crazy Raccoon | any | crazy-raccoon | 0 | decided in scope/liquipedia_team_map.json |
 | Dallas Fuel | any | dallas-fuel | 0 | decided in scope/liquipedia_team_map.json |
+| Disguised | any | disguised | 0 | decided in scope/liquipedia_team_map.json |
 | ENCE | any | team:62f7752b-0b79-4fa8-9a23-78800e2b4539 | 0 | decided in scope/liquipedia_team_map.json |
 | Extinction | any | extinction | 0 | decided in scope/liquipedia_team_map.json |
 | Fnatic | any | fnatic | 0 | decided in scope/liquipedia_team_map.json |
@@ -83,6 +83,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Geekay Esports | na | team:590b7d3b-a200-47b9-a967-f02274c1977b | 0 | decided in scope/liquipedia_team_map.json |
 | Geekay Esports | emea | team:46f8e560-76fe-4b5f-85e7-397957e0dc74 | 0 | decided in scope/liquipedia_team_map.json |
 | Geekay Esports | international | team:590b7d3b-a200-47b9-a967-f02274c1977b | 0 | decided in scope/liquipedia_team_map.json |
+| Gen.G Esports | any | gen-g | 0 | decided in scope/liquipedia_team_map.json |
 | JD Gaming | any | jd-gaming | 0 | decided in scope/liquipedia_team_map.json |
 | LFO | any | team:a24592c1-8b7f-414b-a751-0e43b6da1522 | 0 | decided in scope/liquipedia_team_map.json |
 | LGD.OA | any | lgd-oa | 0 | decided in scope/liquipedia_team_map.json |

@@ -305,6 +305,14 @@
       "note": null,
       "decided_at": "2026-10-01T19:46:30+00:00"
     },
+    "2787f33d-4367-46f8-bb08-a7d3af83f63b": {
+      "faceit_name": "S10 EMEA OWCS Central - Regular Season",
+      "display_name": "OWCS 2026 EMEA Stage 3 Regular Season",
+      "basis": "liquipedia",
+      "page": "Overwatch Champions Series/2026/EMEA/Stage 3/Regular Season",
+      "note": null,
+      "decided_at": "2026-10-11T01:12:18+00:00"
+    },
     "51740a2d-0e80-4faa-9b47-06085b9b4a35": {
       "faceit_name": "S8 NA OWCS Central - Playoffs",
       "display_name": "OWCS 2026 NA Stage 1 Playoffs",
@@ -344,6 +352,14 @@
       "page": null,
       "note": null,
       "decided_at": "2026-10-01T19:46:30+00:00"
+    },
+    "cb0339f1-5174-4639-b60e-a176d50b747d": {
+      "faceit_name": "S10 NA OWCS Central - Regular Season",
+      "display_name": "OWCS 2026 NA Stage 3 Regular Season",
+      "basis": "liquipedia",
+      "page": "Overwatch Champions Series/2026/NA/Stage 3/Regular Season",
+      "note": null,
+      "decided_at": "2026-10-11T01:12:19+00:00"
     }
   }
 }

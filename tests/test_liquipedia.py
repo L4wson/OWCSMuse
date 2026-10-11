@@ -397,11 +397,11 @@ def test_all_twenty_stage_1_pages_fit_one_request_and_are_filtered_by_the_page_t
     assert PAGE_FIELD == "pagename"
     pages = json.load(open("scope/liquipedia_map.json", encoding="utf-8"))["pages"]
     wants = {underscored(e["page"]): 15 for e in pages.values()}
-    assert len(wants) == 29                      # twenty 2025/2026 stage pages, the 2024 Major (Dallas) and the eight verified 2024 stage pages
+    assert len(wants) == 31                      # twenty 2025/2026 stage pages, the two 2026 Stage 3 regular seasons, the 2024 Major (Dallas) and the eight verified 2024 stage pages
     plan = plan_requests(MemoryStore(), endpoint="match", field_name=PAGE_FIELD, wants=wants, limit=500)
     assert len(plan.batches) == 1 and plan.projected_requests == 1
     assert len(quote(plan.batches[0].conditions, safe="")) < 5500       # the URL stays well under an 8 KB limit
-    assert plan.batches[0].conditions.count("[[pagename::") == 29
+    assert plan.batches[0].conditions.count("[[pagename::") == 31
 
 
 def test_an_attribution_that_cannot_be_computed_is_said_in_the_answer_not_dropped():
@@ -418,3 +418,35 @@ def test_an_attribution_that_cannot_be_computed_is_said_in_the_answer_not_droppe
     _attribute(Conn(), a, boom)
     assert a.attribution is None and a.notes == [ATTRIBUTION_UNKNOWN]
     assert "CC-BY-SA" in ATTRIBUTION_UNKNOWN
+
+
+def _played(*pages_finished):
+    """One response: for each (page, [finished flags]) the page's match records, finished or not."""
+    return httpx.Response(200, json={"result": [{"match2id": f"{p}{i}", "parent": p, "finished": f}
+                                                for p, flags in pages_finished for i, f in enumerate(flags)]})
+
+
+def test_a_held_page_with_unfinished_matches_is_refetched_past_the_cache_until_all_of_it_is_finished():
+    # a stage in progress: held after the first run, but its unplayed matches would be frozen if it were never asked again
+    served = iter([_played(("A", [1, 0]), ("B", [1])), _played(("A", [1, 0])), _played(("A", [1, 1]))])
+    wire = Wire(lambda req: next(served))
+    client, store, _ = make_client(wire)
+    assert run_plan(client, _plan(store, {"A": 2, "B": 1}, max_chars=100000)).outcome == "complete"
+    again = _plan(store, {"A": 2, "B": 1}, max_chars=100000)
+    assert again.held == ["B"] and again.refetch == ["A"]                 # B is all finished: never asked again
+    assert [(b.values, b.fresh) for b in again.batches] == [(("A",), True)]
+    assert "re-fetched (unfinished matches on them): 1" in again.render()
+    run_plan(client, again)
+    # still unfinished: the same request again, and it goes to Liquipedia, not to the answer that showed it unfinished
+    run_plan(client, _plan(store, {"A": 2, "B": 1}, max_chars=100000))
+    assert len(wire.requests) == 3 and query_of(wire.requests[1]) == query_of(wire.requests[2])
+    done = _plan(store, {"A": 2, "B": 1}, max_chars=100000)
+    assert done.held == ["A", "B"] and done.refetch == [] and done.projected_requests == 0
+
+
+def test_a_refetch_counts_against_the_runs_request_ceiling():
+    served = iter([_played(("A", [0])), _played(("A", [0]))])
+    client, store, _ = make_client(Wire(lambda req: next(served)))
+    run_plan(client, _plan(store, {"A": 1}))
+    res = run_plan(client, _plan(store, {"A": 1}), max_requests=0)
+    assert res.outcome == "budget" and res.stopped_by == "StageCeiling" and res.requests_sent == 0

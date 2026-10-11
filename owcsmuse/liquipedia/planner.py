@@ -5,7 +5,9 @@ from. So nothing here sends anything: it decides, from what is already held, whi
 requests are still needed, and reports the count first.
 
   1. Values already in the coverage ledger are dropped: what is held is never re-requested,
-     however the set of wanted values changes between runs.
+     however the set of wanted values changes between runs. The one exception is a held value whose answer still
+     has an unfinished match on it (a stage in progress, a bracket still to be filled): that is re-requested, past
+     the response cache, every run until Liquipedia shows all of it finished.
   2. The remaining values are OR-ed into as few conditions as the URL length allows.
   3. Each batch is paged at `limit` rows. Its expected row count comes from the caller
      (for the cross-check, how many matches FACEIT has for each competition), so
@@ -52,10 +54,11 @@ class Batch:
     conditions: str
     expected_rows: int
     pages: int                                  # projected requests for this batch
+    fresh: bool = False                         # a re-fetch of held values: asked of Liquipedia, never the cache
 
     def as_dict(self) -> dict[str, Any]:
         return {"values": list(self.values), "condition_chars": len(self.conditions),
-                "expected_rows": self.expected_rows, "projected_requests": self.pages}
+                "expected_rows": self.expected_rows, "projected_requests": self.pages, "refetch": self.fresh}
 
 
 @dataclass
@@ -67,6 +70,7 @@ class Plan:
     query: Optional[str]
     batches: list[Batch] = field(default_factory=list)
     held: list[str] = field(default_factory=list)         # values already covered: not re-requested
+    refetch: list[str] = field(default_factory=list)      # covered, but with unfinished matches: re-requested
     budget: dict[str, Any] = field(default_factory=dict)
     extra: Optional[str] = None
     wiki: str = "overwatch"
@@ -95,7 +99,8 @@ class Plan:
 
     def as_dict(self) -> dict[str, Any]:
         return {"endpoint": self.endpoint, "field": self.field, "limit": self.limit, "wiki": self.wiki,
-                "values_held_already": len(self.held), "values_to_fetch": sum(len(b.values) for b in self.batches),
+                "values_held_already": len(self.held), "values_refetched_unfinished": len(self.refetch),
+                "values_to_fetch": sum(len(b.values) for b in self.batches),
                 "batches": [b.as_dict() for b in self.batches], "projected_requests": self.projected_requests,
                 "budget": {k: (v.isoformat(timespec="seconds") if isinstance(v, datetime) else v)
                            for k, v in self.budget.items()},
@@ -106,6 +111,7 @@ class Plan:
         lines = [
             f"Liquipedia plan: GET /{self.endpoint} on the {self.wiki} wiki, filtered by {self.field}, {self.limit} rows per request",
             f"  values wanted already held (not re-requested): {len(self.held)}",
+            f"  values held but re-fetched (unfinished matches on them): {len(self.refetch)}",
             f"  values to fetch: {sum(len(x.values) for x in self.batches)} in {len(self.batches)} batch(es)",
         ]
         for i, x in enumerate(self.batches, 1):
@@ -130,26 +136,32 @@ def plan_requests(store: Store, *, endpoint: str, field_name: str, wants: dict[s
     """
     plan = Plan(endpoint=endpoint, field=field_name, limit=limit, order=order, query=query, extra=extra,
                 budget=dict(budget or {}), wiki=wiki)
-    held = {} if refresh else store.covered(endpoint, field_name, wants)
-    plan.held = sorted(held)
-    todo = sorted(v for v in wants if v not in held)
+    covered = {} if refresh else store.covered(endpoint, field_name, wants)
+    open_ = store.unfinished(endpoint, field_name, covered) if covered else set()
+    plan.held = sorted(v for v in covered if v not in open_)
+    plan.refetch = sorted(open_)
+    todo = sorted(v for v in wants if v not in covered)
 
-    batch: list[str] = []
-    rows = 0
+    def add(values: list[str], fresh: bool) -> None:
+        batch: list[str] = []
+        rows = 0
 
-    def close() -> None:
-        nonlocal batch, rows
-        if batch:
-            plan.batches.append(Batch(tuple(batch), or_conditions(field_name, batch, extra), rows,
-                                      max(1, math.ceil(rows / limit))))
-        batch, rows = [], 0
+        def close() -> None:
+            nonlocal batch, rows
+            if batch:
+                plan.batches.append(Batch(tuple(batch), or_conditions(field_name, batch, extra), rows,
+                                          max(1, math.ceil(rows / limit)), fresh))
+            batch, rows = [], 0
 
-    for v in todo:
-        trial = batch + [v]
-        if batch and len(or_conditions(field_name, trial, extra)) > max_condition_chars:
-            close()
-            trial = [v]
-        batch = trial
-        rows += max(0, wants[v])
-    close()
+        for v in values:
+            trial = batch + [v]
+            if batch and len(or_conditions(field_name, trial, extra)) > max_condition_chars:
+                close()
+                trial = [v]
+            batch = trial
+            rows += max(0, wants[v])
+        close()
+
+    add(todo, False)
+    add(plan.refetch, True)
     return plan

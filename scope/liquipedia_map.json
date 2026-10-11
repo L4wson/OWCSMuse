@@ -21,6 +21,8 @@
     "f2f36b25-2979-4681-bc74-6a4d869cd1d5": {"name": "S9 EMEA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/EMEA/Stage 2"},
     "db1a7544-766d-4a46-bb69-163429310826": {"name": "S9 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/NA/Stage 2/Regular Season"},
     "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a": {"name": "S9 NA OWCS Central - Playoffs", "page": "Overwatch Champions Series/2026/NA/Stage 2"},
+    "2787f33d-4367-46f8-bb08-a7d3af83f63b": {"name": "S10 EMEA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/EMEA/Stage 3/Regular Season", "note": "page found by the subpage probe (raw 4463), 15 matches; owner added Stage 3 2026-10-10"},
+    "cb0339f1-5174-4639-b60e-a176d50b747d": {"name": "S10 NA OWCS Central - Regular Season", "page": "Overwatch Champions Series/2026/NA/Stage 3/Regular Season", "note": "page found by the subpage probe (raw 4463), 15 matches; owner added Stage 3 2026-10-10"},
     "33781289-61ea-43d5-ac79-1af825dcb291": {"name": "Dreamhack Dallas", "page": "Overwatch Champions Series/2024/Major", "note": "owner-confirmed page (2026-10-01), no probe sent; the 14 FACEIT series are result_only with best_of stored as 1"},
     "9c926cbf-2f1a-4cc0-bf7d-a6961539e15a": {"name": "OWCS 2024: EMEA Stage 1 - Group A", "page": "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage", "note": "2024 page, owner-supplied and probed 2026-10-01; fetch approved 2026-10-02"},
     "418710f7-e2c4-47a7-ada9-5d173adbfbb9": {"name": "OWCS 2024: EMEA Stage 1 - Group B", "page": "Overwatch_Champions_Series/2024/EMEA/Stage_1/Group_Stage", "note": "2024 page, owner-supplied and probed 2026-10-01; fetch approved 2026-10-02"},

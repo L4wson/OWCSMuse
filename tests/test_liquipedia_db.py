@@ -105,3 +105,36 @@ def test_a_whole_run_through_postgres_stops_on_429_and_a_rerun_repeats_nothing(s
     with store.conn.cursor() as cur:
         cur.execute("SELECT headers FROM raw_payloads WHERE http_status = 429")
         assert cur.fetchone()["headers"]["retry-after"] == "60"
+
+
+def _store_answer(store, rows, at=T0):
+    return RawPayloadStore(store.conn).store(endpoint="liquipedia:match", params={"n": len(rows), "at": at.isoformat()},
+                                             http_status=200, payload={"result": rows}, body_text=None, fetched_at=at,
+                                             source="liquipedia")
+
+
+def test_a_covered_page_is_unfinished_while_any_match_on_it_is_and_a_placement_never_is(store):
+    a, b = "Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season", "Overwatch_Champions_Series/2026/NA/Stage_2"
+    rid = _store_answer(store, [{"pagename": a.replace("_", " "), "finished": 1}, {"pagename": a, "finished": 0},
+                                {"pagename": b, "finished": 1}, {"pagename": b, "placement": "1"}])
+    store.mark_covered("match", "pagename", [{"value": a}, {"value": b}], [rid])
+    assert store.unfinished("match", "pagename", [a, b, "not covered"]) == {a}
+    later = _store_answer(store, [{"pagename": a, "finished": 1}, {"pagename": a, "finished": 1}], T0 + timedelta(days=1))
+    store.mark_covered("match", "pagename", [{"value": a}], [later])
+    assert store.unfinished("match", "pagename", [a, b]) == set()
+
+
+def test_reconciliation_reads_a_refetched_page_from_its_newest_answer_only(store):
+    from owcsmuse.liquipedia.pipeline import stored_match_rows
+    a, b = "Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season", "Overwatch_Champions_Series/2026/NA/Stage_2"
+    first = _store_answer(store, [{"objectname": "a1", "pagename": a, "finished": 0}, {"objectname": "b1", "pagename": b, "finished": 1}])
+    store.mark_covered("match", "pagename", [{"value": a}, {"value": b}], [first])
+    newer = _store_answer(store, [{"objectname": "a1", "pagename": a, "finished": 1}], T0 + timedelta(days=1))
+    store.mark_covered("match", "pagename", [{"value": a}], [newer])      # B is still held by the first answer
+    conn = connect(DB_URL, schema=SCHEMA)
+    try:
+        rows, ids = stored_match_rows(conn)
+    finally:
+        conn.close()
+    assert ids == [first, newer]
+    assert sorted((r["objectname"], r["_raw_id"], r["finished"]) for r in rows) == [("a1", newer, 1), ("b1", first, 1)]

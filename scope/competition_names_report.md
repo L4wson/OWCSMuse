@@ -1,6 +1,6 @@
 # OWCS competition names
 
-43 in-scope competitions: 43 decided, 0 proposed and waiting for review, 0 with no proposal (left as they are).
+45 in-scope competitions: 45 decided, 0 proposed and waiting for review, 0 with no proposal (left as they are).
 
 Display-only. FACEIT's name stays the stored source of record; nothing below applies until it is decided (`python -m owcsmuse competitions accept`, or `competitions decide <id> --name ...`) and loaded (`competitions load`).
 
@@ -44,8 +44,10 @@ Display-only. FACEIT's name stays the stored source of record; nothing below app
 | decided | S9 EMEA OWCS Central - Playoffs | OWCS EMEA S9 Playoffs | OWCS 2026 EMEA Stage 2 Playoffs | liquipedia | [Overwatch Champions Series/2026/EMEA/Stage 2](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_2) |  |
 | decided | S9 EMEA OWCS Central - Regular Season | OWCS EMEA S9 Regular Season | OWCS 2026 EMEA Stage 2 Regular Season | liquipedia | [Overwatch Champions Series/2026/EMEA/Stage 2/Regular Season](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_2/Regular_Season) |  |
 | decided | S8 EMEA OWCS Relegation S9 - Season 9 | S8 EMEA OWCS Relegation S9 - Season 9 | OWCS 2026 EMEA Stage 2 Relegation | owner |  | Named by the stage it feeds into, as FACEIT does ('Relegation S9'): held after 2026 Stage 1, the bottom two Stage 1 teams against FACEIT Masters teams for a place in Stage 2. No Liquipedia page supplied. |
+| decided | S10 EMEA OWCS Central - Regular Season | OWCS EMEA S10 Regular Season | OWCS 2026 EMEA Stage 3 Regular Season | liquipedia | [Overwatch Champions Series/2026/EMEA/Stage 3/Regular Season](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season) |  |
 | decided | S8 NA OWCS Central - Playoffs | OWCS NA S8 Playoffs | OWCS 2026 NA Stage 1 Playoffs | liquipedia | [Overwatch Champions Series/2026/NA/Stage 1](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1) |  |
 | decided | S8 NA OWCS Central - Regular Season | OWCS NA S8 Regular Season | OWCS 2026 NA Stage 1 Regular Season | liquipedia | [Overwatch Champions Series/2026/NA/Stage 1/Regular Season](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1/Regular_Season) |  |
 | decided | S9 NA OWCS Central - Playoffs | OWCS NA S9 Playoffs | OWCS 2026 NA Stage 2 Playoffs | liquipedia | [Overwatch Champions Series/2026/NA/Stage 2](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_2) |  |
 | decided | S9 NA OWCS Central - Regular Season | OWCS NA S9 Regular Season | OWCS 2026 NA Stage 2 Regular Season | liquipedia | [Overwatch Champions Series/2026/NA/Stage 2/Regular Season](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_2/Regular_Season) |  |
 | decided | S8 NA OWCS Relegation S9 - Season 9 | S8 NA OWCS Relegation S9 - Season 9 | OWCS 2026 NA Stage 2 Relegation | owner |  | Named by the stage it feeds into, as FACEIT does ('Relegation S9'): held after 2026 Stage 1, the bottom two Stage 1 teams against FACEIT Masters teams for a place in Stage 2. No Liquipedia page supplied. |
+| decided | S10 NA OWCS Central - Regular Season | OWCS NA S10 Regular Season | OWCS 2026 NA Stage 3 Regular Season | liquipedia | [Overwatch Champions Series/2026/NA/Stage 3/Regular Season](https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season) |  |

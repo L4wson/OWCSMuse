@@ -107,15 +107,23 @@ def load_team_windows(conn: psycopg.Connection):
 
 
 def stored_match_rows(conn: psycopg.Connection, field_name: str = "pagename") -> tuple[list[dict[str, Any]], list[int]]:
-    """Every record of the responses the coverage ledger says hold the planned pages (never the probes)."""
+    """Every record of the responses the coverage ledger says hold the planned pages (never the probes).
+
+    A page re-fetched because it had unfinished matches is held by its newest response only, but an older response
+    that also held other pages is still in the ledger for them: its copy of the re-fetched page's records is stale
+    and is not read."""
     with conn.cursor() as cur:
-        cur.execute("SELECT DISTINCT unnest(raw_ids) AS id FROM liquipedia_coverage WHERE endpoint = 'match' AND field = %s",
+        cur.execute("SELECT value, raw_ids FROM liquipedia_coverage WHERE endpoint = 'match' AND field = %s",
                     (field_name,))
-        ids = sorted(r["id"] for r in cur.fetchall())
+        current = {r["value"]: set(r["raw_ids"] or []) for r in cur.fetchall()}
+        ids = sorted({i for v in current.values() for i in v})
         rows: list[tuple[int, dict[str, Any]]] = []
         for rid in ids:
             cur.execute("SELECT payload FROM raw_payloads WHERE id = %s AND source = 'liquipedia'", (rid,))
             for r in (cur.fetchone()["payload"] or {}).get("result") or []:
+                page = str(r.get(field_name) or "").replace(" ", "_")
+                if page in current and rid not in current[page]:
+                    continue
                 rows.append((rid, r))
     conn.commit()
     # parse per response so each record remembers the response it came from
