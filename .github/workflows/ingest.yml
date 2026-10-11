@@ -1,6 +1,6 @@
 name: Scheduled ingest
 
-# Daily: collect what FACEIT and Liquipedia added, make it visible, and refuse to call the run good unless `check`
+# Nightly, done around 23:00 Pacific: collect what FACEIT and Liquipedia added, make it visible, and refuse to call the run good unless `check`
 # passes. It never puts a competition in scope: what discovery finds is a report on the run page, and only a person's
 # `decide` includes anything.
 #
@@ -9,9 +9,14 @@ name: Scheduled ingest
 #   FACEIT_API_KEY        FACEIT Data API v4, server-side key
 #   LIQUIPEDIA_API_KEY    LiquipediaDB API v3 (60 requests an hour; the client paces itself)
 
+# Schedule: 22:35 Pacific every night, so a run (about 15 minutes, plus GitHub's usual few minutes of schedule lag) is done
+# around 23:00. Cron is UTC and Pacific shifts by an hour twice a year, so both UTC times are scheduled and the `when`
+# job keeps the one that is 22:35 Pacific on the day: 05:35 UTC under daylight time (PDT), 06:35 UTC under standard
+# time (PST). It decides by which cron fired, not by the clock, so a late-starting run is never dropped.
 on:
   schedule:
-    - cron: "17 9 * * *"        # 09:17 UTC daily: after the weekend's matches, off the top of the hour
+    - cron: "35 5 * * *"        # 22:35 PDT (Mar-Nov)
+    - cron: "35 6 * * *"        # 22:35 PST (Nov-Mar)
   workflow_dispatch:
 
 concurrency:
@@ -26,10 +31,35 @@ env:
   PYTHON_VERSION: "3.12"
   OWCS_LOG_FORMAT: text
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  LIQUIPEDIA_MAX_REQUESTS: "15" # the most one ingest may send to Liquipedia (cache hits are free); the rest waits a night
 
 jobs:
+  when:
+    name: 22:35 Pacific?
+    runs-on: ubuntu-latest
+    outputs:
+      go: ${{ steps.pick.outputs.go }}
+    steps:
+      - id: pick
+        env:
+          EVENT: ${{ github.event_name }}
+          CRON: ${{ github.event.schedule }}
+        run: |
+          # a manual run always goes; a scheduled one goes only from the cron that matches today's Pacific offset
+          offset=$(TZ=America/Los_Angeles date +%z)       # -0700 under PDT, -0800 under PST
+          case "$EVENT|$CRON|$offset" in
+            workflow_dispatch\|*)            go=true ;;
+            "schedule|35 5 * * *|-0700")     go=true ;;
+            "schedule|35 6 * * *|-0800")     go=true ;;
+            *)                               go=false ;;
+          esac
+          echo "event=$EVENT cron='$CRON' pacific_offset=$offset go=$go"
+          echo "go=$go" >> "$GITHUB_OUTPUT"
+
   ingest:
     name: ingest, refresh, check
+    needs: when
+    if: needs.when.outputs.go == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 180          # Liquipedia's hourly allowance can pace a large catch-up past an hour
     steps:
@@ -63,9 +93,11 @@ jobs:
       # ---- Liquipedia: fetch what is new, link it to FACEIT, then fill result_only series with its maps.
       # `enrich` alone sends nothing and adds nothing new: it only uses records already fetched and linked.
       # `--decided-only` keeps unreviewed team-name proposals out of an unattended run.
+      # `--max-requests` caps what `run` sends (the only step here that sends anything). Reaching the cap is not a
+      # failure: the batches done so far are kept, and the next night's plan starts from what is still uncovered.
       - name: liquipedia
         run: |
-          python -m owcsmuse liquipedia run --execute
+          python -m owcsmuse liquipedia run --execute --max-requests "$LIQUIPEDIA_MAX_REQUESTS"
           python -m owcsmuse liquipedia reconcile --decided-only
           python -m owcsmuse liquipedia enrich
         env:
