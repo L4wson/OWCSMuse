@@ -24,6 +24,7 @@ class Store(Protocol):
     def last_rate_limit(self) -> Optional[tuple[datetime, Optional[float]]]: ...
     def covered(self, endpoint: str, field: str, values: Iterable[str]) -> dict[str, dict[str, Any]]: ...
     def mark_covered(self, endpoint: str, field: str, entries: list[dict[str, Any]], raw_ids: list[int]) -> None: ...
+    def unfinished(self, endpoint: str, field: str, values: Iterable[str]) -> set[str]: ...
 
 
 class PgStore:
@@ -86,6 +87,29 @@ class PgStore:
             cur.execute("SELECT value, page_url, rows_seen, raw_ids, fetched_at FROM liquipedia_coverage "
                         "WHERE endpoint = %s AND field = %s AND value = ANY(%s)", (endpoint, field, values))
             return {r["value"]: dict(r) for r in cur.fetchall()}
+
+    def unfinished(self, endpoint: str, field: str, values: Iterable[str]) -> set[str]:
+        """The covered values whose held answer still has an unfinished record on them: a stage being played, a bracket
+        whose later slots are still to be decided. Only a record that carries `finished` (a match) can be unfinished;
+        a placement never is. These are re-requested every run until Liquipedia shows every record on them finished."""
+        values = list(values)
+        if not values:
+            return set()
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT c.value FROM liquipedia_coverage c
+                 WHERE c.endpoint = %s AND c.field = %s AND c.value = ANY(%s)
+                   AND EXISTS (
+                       SELECT 1 FROM raw_payloads r
+                        CROSS JOIN LATERAL jsonb_array_elements(CASE WHEN jsonb_typeof(r.payload -> 'result') = 'array'
+                                                                     THEN r.payload -> 'result' ELSE '[]'::jsonb END) x
+                        WHERE r.id = ANY(c.raw_ids) AND replace(x ->> %s, ' ', '_') = c.value
+                          AND x ? 'finished' AND (x ->> 'finished') NOT IN ('1', 'true'))
+                """,
+                (endpoint, field, values, field),
+            )
+            return {r["value"] for r in cur.fetchall()}
 
     def mark_covered(self, endpoint: str, field: str, entries: list[dict[str, Any]], raw_ids: list[int]) -> None:
         """`entries`: [{"value", "rows_seen"}]. The page URL is derived here, so no row can exist without one."""

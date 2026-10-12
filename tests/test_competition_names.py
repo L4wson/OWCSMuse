@@ -34,7 +34,7 @@ def test_the_proposal_covers_every_in_scope_competition_and_names_follow_the_pag
     proposals = {p.faceit_name: p for p in cn.propose(ROOT / cn.DEFAULT_MAP_PATH, ROOT / cn.DEFAULT_SCOPE_PATH,
                                                       ROOT / cn.DEFAULT_EXTRA_PATH)}
     scope = json.loads((ROOT / cn.DEFAULT_SCOPE_PATH).read_text())["decisions"]
-    assert len(proposals) == sum(1 for d in scope.values() if d.get("include")) == 43
+    assert len(proposals) == sum(1 for d in scope.values() if d.get("include")) == 45
 
     # FACEIT League season numbers are not OWCS stages: S5 is 2025 Stage 2, S9 is 2026 Stage 2.
     assert proposals["S9 NA OWCS Central - Playoffs"].proposed == "OWCS 2026 NA Stage 2 Playoffs"
@@ -62,11 +62,11 @@ def test_the_proposal_covers_every_in_scope_competition_and_names_follow_the_pag
         assert rel.proposed == f"OWCS 2026 {region} Stage 2 Relegation" and rel.basis == "owner"
 
     by_basis = {b: [p for p in proposals.values() if p.basis == b] for b in ("liquipedia", "liquipedia-owner", "owner")}
-    assert [len(v) for v in by_basis.values()] == [20, 20, 3]
+    assert [len(v) for v in by_basis.values()] == [22, 20, 3]
     assert not any(p.flags for p in by_basis["liquipedia"])                   # the reviewed map has no contradictions
     assert not any("says" in f or "differ" in f for p in proposals.values() for f in p.flags)
     names = [p.proposed for p in proposals.values()]
-    assert len(set(names)) == len(names) == 43                                 # every name is distinct
+    assert len(set(names)) == len(names) == 45                                 # every name is distinct
 
 
 def test_a_contradiction_between_faceit_and_the_page_is_flagged_not_papered_over():
@@ -83,12 +83,12 @@ def test_nothing_applies_until_it_is_decided(tmp_path):
     assert all(p.status in ("pending", "unproposed") or p.proposed is None for p in proposals)
     assert all(p.effective == p.current_display for p in proposals)     # nothing shown differently
 
-    assert cn.accept(decisions, proposals) == 20                         # the reviewed page map, in bulk
+    assert cn.accept(decisions, proposals) == 22                         # the reviewed page map, in bulk
     assert sum(p.status == "pending" and bool(p.proposed) for p in proposals) == 23   # the rest wait for a person
     assert cn.accept(decisions, proposals) == 0                          # and a second accept does not widen itself
     decisions.save()
     again = cn.CompetitionDecisions(tmp_path / "d.json").apply(cn.propose(ROOT / cn.DEFAULT_MAP_PATH, ROOT / cn.DEFAULT_SCOPE_PATH))
-    assert sum(p.status == "decided" for p in again) == 20
+    assert sum(p.status == "decided" for p in again) == 22
 
 
 def test_owner_sourced_proposals_need_an_explicit_basis_to_be_bulk_accepted(tmp_path):
@@ -117,14 +117,14 @@ def test_an_unseen_page_path_is_never_bulk_accepted(tmp_path):
 def test_the_committed_decisions_cover_every_in_scope_competition():
     decided = cn.CompetitionDecisions(ROOT / cn.DEFAULT_DECISIONS_PATH).data
     by_basis = {b: [d for d in decided.values() if d["basis"] == b] for b in ("liquipedia", "liquipedia-owner", "owner")}
-    assert [len(v) for v in by_basis.values()] == [20, 20, 3] and len(decided) == 43
+    assert [len(v) for v in by_basis.values()] == [22, 20, 3] and len(decided) == 45
     scope = json.loads((ROOT / cn.DEFAULT_SCOPE_PATH).read_text())["decisions"]
     assert set(decided) == {cid for cid, d in scope.items() if d.get("include")}        # nothing missing, nothing extra
     assert all(d["display_name"].startswith(("OWCS 2025 ", "OWCS 2026 ")) for d in by_basis["liquipedia"])
     assert all(d["page"] for d in by_basis["liquipedia"] + by_basis["liquipedia-owner"])   # every page-backed name carries it
     assert {d["display_name"] for d in by_basis["owner"]} == {
         "OWCS 2024 Dreamhack Dallas", "OWCS 2026 NA Stage 2 Relegation", "OWCS 2026 EMEA Stage 2 Relegation"}
-    assert len({d["display_name"] for d in decided.values()}) == 43                     # every name is distinct
+    assert len({d["display_name"] for d in decided.values()}) == 45                     # every name is distinct
 
 
 def test_every_2024_page_path_is_recorded_as_verified_with_the_probe_result():
@@ -177,7 +177,7 @@ def test_display_only_reviewed_names_change_what_is_shown_and_never_the_stored_n
         assert shown(faceit) == "OWCS NA S9 Playoffs"                   # proposals alone change nothing
 
         cn.accept(decisions, proposals)
-        assert cn.load(agg_db, decisions, decisions.apply(proposals))["names_written"] == 20
+        assert cn.load(agg_db, decisions, decisions.apply(proposals))["names_written"] == 22
         assert shown(faceit) == "OWCS 2026 NA Stage 2 Playoffs"
         assert shown("OWCS 2024: EMEA Stage 1 - Group A") == "OWCS 2024: EMEA Stage 1 - Group A"   # undecided: as before
         assert shown("Dreamhack Dallas") == "Dreamhack Dallas"

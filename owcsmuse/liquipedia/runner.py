@@ -70,7 +70,7 @@ def run_plan(client: LiquipediaClient, plan: Plan, max_pages_per_batch: int = 50
             for _ in range(max_pages_per_batch):
                 if max_requests is not None and client.sent - sent_before >= max_requests:
                     raise StageCeiling(f"this run's ceiling of {max_requests} request(s) is reached")
-                got = client.get(plan.endpoint, plan.params_for(batch, offset))
+                got = client.get(plan.endpoint, plan.params_for(batch, offset), fresh=batch.fresh)
                 res.cache_hits += got.from_cache
                 raw_ids.append(got.raw_id)
                 page = got.rows

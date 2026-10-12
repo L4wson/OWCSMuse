@@ -1,6 +1,22 @@
 {
   "note": "Reviewed scope decisions. Keys are FACEIT championship ids; values override the classifier's region/tier/season/include. Edit by hand or with `python -m owcsmuse decide`.",
   "decisions": {
+    "2787f33d-4367-46f8-bb08-a7d3af83f63b": {
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "season": 2026,
+      "note": "S10 OWCS Central main series (2026 Stage 3), owner 2026-10-10; found from the FACEIT room links on Liquipedia's Stage 3 page (raw 4464)",
+      "decided_at": "2026-10-11T01:11:13+00:00"
+    },
+    "cb0339f1-5174-4639-b60e-a176d50b747d": {
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "season": 2026,
+      "note": "S10 OWCS Central main series (2026 Stage 3), owner 2026-10-10; found from the FACEIT room links on Liquipedia's Stage 3 page (raw 4464)",
+      "decided_at": "2026-10-11T01:11:12+00:00"
+    },
     "33781289-61ea-43d5-ac79-1af825dcb291": {
       "region": "international",
       "tier": "main",

@@ -1,12 +1,12 @@
 # Liquipedia <-> FACEIT reconciliation
 
-Built from 4 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219, 4222); no request was made to build this report. 592 Liquipedia records (0 placeholder rows excluded) against 473 FACEIT series in the same 38 competitions.
+Built from 5 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219, 4222, 4500); no request was made to build this report. 622 Liquipedia records (0 placeholder rows excluded) against 476 FACEIT series in the same 40 competitions.
 
 Nothing here links into an answer. Exact and strong links are proposed; ambiguous matches and team-name mappings wait for review, and the disagreements section says where either source may be wrong.
 
 ## Timezones
 
-Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly on every row). FACEIT's times are epoch seconds, so also UTC. Across the id-linked pairs FACEIT's start minus Liquipedia's scheduled time is: median 45 min, 5th-95th percentile 24 to 105, extremes -6 to 11478; 402 of 413 inside the matching window (-60 to +360 min).
+Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly on every row). FACEIT's times are epoch seconds, so also UTC. Across the id-linked pairs FACEIT's start minus Liquipedia's scheduled time is: median 45 min, 5th-95th percentile 24 to 107, extremes -6 to 11478; 405 of 416 inside the matching window (-60 to +360 min).
 
 ## Summary by competition
 
@@ -38,6 +38,8 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | OWCS 2025 Midseason Championship | 28 | 0 | 0 | 0 | 0 | 28 | 0 | 0 |
 | OWCS 2025 World Finals | 22 | 0 | 0 | 0 | 0 | 22 | 0 | 0 |
 | OWCS 2026 Midseason Championship | 28 | 0 | 0 | 0 | 0 | 28 | 0 | 0 |
+| S10 EMEA OWCS Central - Regular Season | 15 | 2 | 2 | 0 | 0 | 13 | 0 | 0 |
+| S10 NA OWCS Central - Regular Season | 15 | 1 | 1 | 0 | 0 | 14 | 0 | 0 |
 | S4 EMEA OWCS Central - Playoffs | 8 | 10 | 8 | 0 | 0 | 0 | 2 | 0 |
 | S4 EMEA OWCS Central - Regular Season | 28 | 28 | 28 | 0 | 0 | 0 | 0 | 0 |
 | S4 NA OWCS Central - Playoffs | 8 | 10 | 8 | 0 | 0 | 0 | 2 | 0 |
@@ -58,7 +60,7 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S9 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | S9 NA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
-| **total** | **592** | **473** | **413** | **13** | **19** | **147** | **28** | **11** |
+| **total** | **622** | **476** | **416** | **13** | **19** | **174** | **28** | **11** |
 
 ## Needs review: ambiguous matches (0)
 
@@ -152,13 +154,18 @@ Either source can be wrong. `maps` tells which is more likely: FACEIT's own stat
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1
   - **score**: Liquipedia '1-4', FACEIT '1-5 (as LP orders them)' - FACEIT has stats for 5 maps; Liquipedia lists 5 games; FACEIT's 5-1 is more wins than a best-of-7 allows
 
-## Liquipedia records a FACEIT id we do not hold (3)
+## Liquipedia records a FACEIT id we do not hold (8)
 
 These are FACEIT matches that exist (Liquipedia names them) but our history crawl never found.
 
 - 2026-04-12 17:00Z  Geekay Esports 1-3 Virtus.pro  (bo5)  FACEIT id 1-534bdff7-baf4-40ff-8d1d-fac64ee30ce3  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1
 - 2026-04-12 20:30Z  Spacestation Gaming 3-0 Team Liquid  (bo5)  FACEIT id 1-fcd2bd41-967c-450b-abac-f2137bfe308b  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
 - 2024-04-12 17:30Z  Ataraxia 3-0 Metaboiz  (bo5)  FACEIT id 1-c351f92e-7422-4e9e-83ee-0a4158e1e4d1  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage
+- 2026-10-10 22:20Z  The Kafe 1-3 Disguised  (bo5)  FACEIT id 1-a2f84ad7-0a00-4715-86eb-3225ad8de95e  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-11 00:00Z  Dallas Fuel 3-0 NTMR  (bo5)  FACEIT id 1-eadcb0e1-e73e-4748-acd6-a1ad2ec9a7ce  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-11 17:00Z  Geekay Esports -1--1 Twisted Minds  (bo5)  FACEIT id 1-fbe0734d-0018-4ede-9db8-720fb7dc81fc  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-11 18:30Z  1234 -1--1 Team Risk  (bo5)  FACEIT id 1-a54ce794-8b9a-421b-80b9-4fb7af11fd58  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-11 20:00Z  Virtus.pro -1--1 Team Peps  (bo5)  FACEIT id 1-ff9aa928-1240-4730-b150-1718b2c3da10  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 
 ## Duplicates
 
@@ -464,6 +471,43 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
   - 2026-08-02 11:20Z  Twisted Minds 3-2 Weibo Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
   - 2026-08-02 13:45Z  Weibo Gaming 0-3 T1  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
   - 2026-08-02 15:30Z  Twisted Minds 2-4 ZETA DIVISION  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Midseason_Championship
+
+### S10 EMEA OWCS Central - Regular Season
+
+- links: 2 exact, 0 strong, 0 ambiguous; 13 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2026-10-11 17:00Z  Geekay Esports -1--1 Twisted Minds  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-11 18:30Z  1234 -1--1 Team Risk  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-11 20:00Z  Virtus.pro -1--1 Team Peps  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-17 17:00Z  Twisted Minds -1--1 Team Risk  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-17 18:30Z  Virtus.pro -1--1 1234  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-17 20:00Z  Geekay Esports -1--1 Team Peps  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-18 17:00Z  Virtus.pro -1--1 Team Risk  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-18 18:30Z  Twisted Minds -1--1 1234  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-24 17:00Z  Team Risk -1--1 Team Peps  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-24 18:30Z  Geekay Esports -1--1 1234  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-24 20:00Z  Virtus.pro -1--1 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-25 17:00Z  1234 -1--1 Team Peps  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-25 18:30Z  Geekay Esports -1--1 Team Risk  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+
+### S10 NA OWCS Central - Regular Season
+
+- links: 1 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2026-10-10 22:20Z  The Kafe 1-3 Disguised  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-11 00:00Z  Dallas Fuel 3-0 NTMR  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-11 21:30Z  Dallas Fuel -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-11 23:00Z  Spacestation Gaming -1--1 The Kafe  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-17 21:30Z  Team Liquid -1--1 The Kafe  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-17 23:00Z  NTMR -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-18 20:00Z  Dallas Fuel -1--1 Team Liquid  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-18 21:30Z  Spacestation Gaming -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-18 23:00Z  The Kafe -1--1 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-24 21:30Z  Dallas Fuel -1--1 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-24 23:00Z  Team Liquid -1--1 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-25 20:00Z  Dallas Fuel -1--1 The Kafe  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-25 21:30Z  Spacestation Gaming -1--1 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-25 23:00Z  Team Liquid -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
 
 ### S4 EMEA OWCS Central - Playoffs
 

@@ -50,6 +50,17 @@ class MemoryStore:
     def covered(self, endpoint, field, values):
         return {v: self.coverage[(endpoint, field, v)] for v in values if (endpoint, field, v) in self.coverage}
 
+    def unfinished(self, endpoint, field, values):
+        out = set()
+        for v in values:
+            cov = self.coverage.get((endpoint, field, v))
+            for r in self.rows:
+                if cov and r["id"] in cov["raw_ids"] and isinstance(r["payload"], dict):
+                    if any(str(x.get(field, "")).replace(" ", "_") == v and "finished" in x
+                           and str(x["finished"]) not in ("1", "true") for x in r["payload"].get("result") or []):
+                        out.add(v)
+        return out
+
     def mark_covered(self, endpoint, field, entries, raw_ids):
         for e in entries:
             self.coverage[(endpoint, field, e["value"])] = {"value": e["value"], "rows_seen": e.get("rows_seen"),
