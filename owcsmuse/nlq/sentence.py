@@ -123,6 +123,42 @@ def slice_phrase(row: dict[str, Any], query: dict) -> str:
     return seasons_phrase(row.get("seasons") or query.get("filters", {}).get("season"))
 
 
+def _filter_marks(b: "_Builder", query: dict, maps_word: bool = True) -> bool:
+    """Name the map / mode / region filter a record was cut by, marked: "on Push maps", "on Ilios", "in NA".
+
+    A filtered record that does not say so reads as the whole record ("Twisted Minds is 8-2 in maps against Virtus pro
+    across 2025-2026" was its Control maps only) - the same reason a role leaderboard names the role. Returns whether
+    a map or mode was named, so the caller can drop its own "in maps".
+    """
+    f = query.get("filters") or {}
+    named = False
+    if f.get("map"):
+        b.add(" on ")
+        b.mark(str(f["map"]), "map")
+        named = True
+    elif f.get("mode"):
+        b.add(" on ")
+        b.mark(str(f["mode"]), "mode")
+        b.add(" maps" if maps_word else "")
+        named = True
+    if f.get("region"):
+        b.add(f" in {str(f['region']).upper()}")
+    return named
+
+
+def _after_maps(seasons: str) -> str:
+    """The season phrase that follows "across 45 maps": "in 2024-2026", not a second "across"."""
+    return "in " + seasons[len("across "):] if seasons.startswith("across ") else seasons
+
+
+def _undefeated(wins: Any, losses: Any, draws: Any = 0) -> bool:
+    """An unbeaten record, worth saying in words: at least one win, no loss, no draw."""
+    try:
+        return int(wins or 0) > 0 and int(losses or 0) == 0 and int(draws or 0) == 0
+    except (TypeError, ValueError):
+        return False
+
+
 def _maps_phrase(row: dict[str, Any]) -> str:
     maps = row.get("maps") or row.get("maps_played") or row.get("maps_with_stat")
     matches = row.get("matches")
@@ -171,11 +207,15 @@ def _versus(rows: list[dict], entities: dict[str, dict], query: dict) -> Optiona
     record = f"{num(wins)}-{num(losses)}" + (f"-{num(draws)}" if draws else "")
     b = _Builder()
     b.mark(str(subject), subject_type or "player", subject_id)
-    b.add(f" is {record} in maps against ")
+    unbeaten = _undefeated(wins, losses, draws)
+    b.add(" is undefeated in maps against " if unbeaten else f" is {record} in maps against ")
     b.mark(str(opponent), opponent_type or "player", opponent_id)
+    _filter_marks(b, query)
     seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
+    if unbeaten:
+        b.add(f" ({record})")
     return b.done()
 
 
@@ -210,11 +250,16 @@ def _head_to_head(rows: list[dict], entities: dict[str, dict], query: dict) -> O
         return None
     b = _Builder()
     b.mark(str(subject), subject_type or "team", subject_id)
-    b.add(f" is {num(row.get('wins'))}-{num(row.get('losses'))} in series against ")
+    record = f"{num(row.get('wins'))}-{num(row.get('losses'))}"
+    # "sugarfree is undefeated against zeruhh in 2026 (5-0)": an unbeaten record says so, not a bare 5-0
+    unbeaten = _undefeated(row.get("wins"), row.get("losses"))
+    b.add(" is undefeated against " if unbeaten else f" is {record} in series against ")
     b.mark(str(opponent), opponent_type or "team", opponent_id)
     seasons = slice_phrase(row, query)
     if seasons:
         b.add(f" {seasons}")
+    if unbeaten:
+        b.add(f" ({record} in series)")
     if row.get("map_wins") is not None:
         b.add(f", {num(row.get('map_wins'))}-{num(row.get('map_losses'))} in maps")
     return b.done()
@@ -229,11 +274,18 @@ def _team_record(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     b = _Builder()
     b.mark(str(name), entity_type or "team", entity_id)
     if row.get("wins") is not None and row.get("losses") is not None:
-        b.add(f" is {num(row['wins'])}-{num(row['losses'])} in series")
+        if _undefeated(row["wins"], row["losses"]):
+            b.add(f" is undefeated in series ({num(row['wins'])}-0)")
+        else:
+            b.add(f" is {num(row['wins'])}-{num(row['losses'])} in series")
         if row.get("map_wins") is not None:
             b.add(f" and {num(row['map_wins'])}-{num(row['map_losses'])} in maps")
+        _filter_marks(b, query)
     elif row.get("map_wins") is not None:
-        b.add(f" is {num(row['map_wins'])}-{num(row['map_losses'])} in maps")
+        # "sugarfree is 28-17 on Push maps": the filter takes the place of "in maps", which it already says
+        b.add(f" is {num(row['map_wins'])}-{num(row['map_losses'])}")
+        if not _filter_marks(b, query):
+            b.add(" in maps")
     else:
         return None
     seasons = slice_phrase(row, query)
@@ -254,6 +306,7 @@ def _entity_stat(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
         return None
     b = _Builder()
     b.mark(str(name), entity_type or "player", entity_id)
+    filtered = False
 
     if metric == "kd_ratio" and row.get("kd_ratio") is not None:
         b.add(" has a ")
@@ -264,9 +317,13 @@ def _entity_stat(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
     elif metric in ("maps", "matches", "map_wins", "map_losses", "map_win_rate", "wins", "losses"):
         if row.get("map_wins") is None:
             return None
-        b.add(f" is {num(row['map_wins'])}-{num(row['map_losses'])} in maps")
+        # "sugarfree is 28-17 on Push maps": the filter takes the place of "in maps", which it already says
+        b.add(f" is {num(row['map_wins'])}-{num(row['map_losses'])}")
+        if not _filter_marks(b, query):
+            b.add(" in maps")
         if row.get("map_win_pct") is not None:
             b.add(f", a {pct(row['map_win_pct'])} map win rate")
+        filtered = True
     else:
         total, avg = row.get("total"), row.get("avg_per_map")
         if query.get("aggregation") == "avg_per_map" and avg is not None:
@@ -279,12 +336,14 @@ def _entity_stat(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
             b.mark(str(metric), "stat", str(metric))
         else:
             return None
+    if not filtered:
+        _filter_marks(b, query)       # "zeruhh has 120 Eliminations on Ilios"
     phrase = _maps_phrase(row)
     if phrase:
         b.add(f" across {phrase}")
     seasons = slice_phrase(row, query)
     if seasons:
-        b.add(f" {seasons}")
+        b.add(f" {_after_maps(seasons) if phrase else seasons}")
     return b.done()
 
 
@@ -355,7 +414,7 @@ def _leaderboard(rows: list[dict], entities: dict[str, dict], query: dict) -> Op
         b.add(f" across {phrase}")
     seasons = slice_phrase(row, query)
     if seasons:
-        b.add(f" {seasons}")
+        b.add(f" {_after_maps(seasons) if phrase else seasons}")
     rest = len(rows) - len(tied)
     if len(rows) > 1 and (ascending or rest):
         b.add(f", out of {len(rows)} shown" if ascending else

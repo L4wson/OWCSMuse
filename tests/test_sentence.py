@@ -173,3 +173,46 @@ def test_a_tie_at_the_top_is_a_shared_lead_not_whoever_sorted_first():
     assert text.startswith("Dallas Fuel and Twisted Minds share the lead in series won with 17")
     assert "across" not in text.split(" in 2026")[0]          # no one leader's map sample for two
     assert "ahead of 1 other shown" in text
+
+
+# ------------------------------------------------------------------ undefeated and filters (2026-10-17, owner)
+
+H2H_Q = {"intent": "head_to_head", "entity": "team", "metric": "record", "filters": {"season": 2026}}
+
+
+def test_an_unbeaten_series_record_says_so():
+    s = render_sentence(H2H_Q, [{"team": "sugarfree", "opponent": "zeruhh", "wins": 5, "losses": 0, "map_wins": 15,
+                                 "map_losses": 5, "seasons": [2026]}], ENTITIES)
+    assert s.text == "sugarfree is undefeated against zeruhh in 2026 (5-0 in series), 15-5 in maps."
+
+
+def test_a_record_with_a_loss_is_a_plain_score():
+    s = render_sentence(H2H_Q, [{"team": "zeruhh", "opponent": "sugarfree", "wins": 0, "losses": 5, "map_wins": 5,
+                                 "map_losses": 15, "seasons": [2026]}], ENTITIES)
+    assert s.text.startswith("zeruhh is 0-5 in series against")
+
+
+def test_an_unbeaten_map_record_with_a_draw_is_not_undefeated_in_words():
+    row = dict(VERSUS_ROW, map_wins=3, map_losses=0, draws=1)
+    assert "undefeated" not in render_sentence(VERSUS_Q, [row], ENTITIES).text
+    assert "undefeated in maps against zeruhh" in render_sentence(VERSUS_Q, [dict(row, draws=0)], ENTITIES).text
+
+
+def test_a_mode_filter_is_named_and_marked():
+    q = {"intent": "entity_stat", "entity": "player", "metric": "map_win_rate", "filters": {"mode": "Push"}}
+    s = render_sentence(q, [{"nickname": "sugarfree", "map_wins": 28, "map_losses": 17, "map_win_pct": Decimal("62.2"),
+                             "maps": 45, "seasons": [2024, 2025, 2026]}], {"subject": ENTITIES["subject"]})
+    assert s.text == "sugarfree is 28-17 on Push maps, a 62.2% map win rate across 45 maps in 2024-2026."
+    assert [(sp.kind, sp.text) for sp in s.spans if sp.kind == "mode"] == [("mode", "Push")]
+
+
+def test_a_map_filter_on_a_versus_record_is_named():
+    q = dict(VERSUS_Q, filters={"map": "Ilios"})
+    assert " against zeruhh on Ilios across 2024-2026" in render_sentence(q, [VERSUS_ROW], ENTITIES).text
+
+
+def test_a_season_after_a_maps_count_is_not_a_second_across():
+    q = {"intent": "entity_stat", "entity": "player", "metric": "Eliminations", "filters": {}}
+    s = render_sentence(q, [{"nickname": "zeruhh", "total": 290, "maps": 15, "seasons": [2024, 2025]}],
+                        {"subject": ENTITIES["opponent"]})
+    assert "across 15 maps in 2024-2025" in s.text and s.text.count("across") == 1
