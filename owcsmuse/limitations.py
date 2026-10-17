@@ -112,7 +112,7 @@ LIMITATIONS: tuple[Limitation, ...] = (
     Limitation(
         "main_series_2025_2026",
         "The 2025 and 2026 main series is reconstructed from player history",
-        "FACEIT publishes the 2025/2026 OWCS Central divisions on no championship, hub or league endpoint and "
+        "FACEIT lists the 2025/2026 OWCS Central divisions in no tournament, hub or league listing and "
         "in no search result; they are reachable only through `/players/{id}/history`. Those seasons were "
         "assembled by a roster-seeded crawl that ran to convergence, so a series played entirely by players "
         "the crawl never reached would be absent with nothing to indicate it. 2024 comes from the championship "
@@ -236,8 +236,8 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
         out.append(BY_ID["main_series_2025_2026"].as_dict(
             "The "
             + " and ".join(str(s) for s in seasons if s in CRAWLED_SEASONS)
-            + " part of this answer comes from the player-history crawl, not from FACEIT's championship "
-              "endpoints, which do not publish those divisions."))
+            + " part of this answer comes from the player-history crawl, not from FACEIT's tournament "
+              "listings, which do not include those divisions."))
     return out
 
 

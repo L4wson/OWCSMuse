@@ -319,7 +319,7 @@ def _validate_placement(q: StructuredQuery, info: SchemaInfo) -> ValidationResul
         return Unanswerable(code="invalid_query", reason="a placing is per event: name the event, e.g. `who won the 2025 world finals`")
     matches = info.match_championships(f.championship, f.season, f.region)
     if not matches:
-        return Unanswerable(code="no_data", reason=f"no included championship matches '{f.championship}'"
+        return Unanswerable(code="no_data", reason=f"no tournament in scope matches '{f.championship}'"
                                                    + (f" in {f.season}" if f.season else ""))
     notes = []
     if len(matches) > 1:
@@ -423,11 +423,11 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
     if f.championship:
         matches = info.match_championships(f.championship, f.season, f.region)
         if not matches:
-            return Unanswerable(code="no_data", reason=f"no included championship matches '{f.championship}'",
-                                suggestions=[f"championships in scope: {', '.join(sorted(set(info.championship_display.values() or info.championships.values())))[:400]}"])
+            return Unanswerable(code="no_data", reason=f"no tournament in scope matches '{f.championship}'",
+                                suggestions=[f"tournaments in scope: {', '.join(sorted(set(info.championship_display.values() or info.championships.values())))[:400]}"])
         champ_ids = [cid for cid, _ in matches]
         if len(matches) > 1:
-            notes.append(f"'{f.championship}' matched {len(matches)} championships; results cover all of them: "
+            notes.append(f"'{f.championship}' matched {len(matches)} tournaments; results cover all of them: "
                          + "; ".join(n for _, n in matches)[:300])
 
     # --- role
@@ -447,7 +447,7 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
     stat_key = None if q.metric in DERIVED_METRICS else q.metric
     if q.intent in ("leaderboard", "entity_stat") and q.entity == "player" and stat_key and (map_name or mode_name or f.team or f.region or f.role):
         if stat_key not in TYPED_STATS:
-            reason = (f"'{stat_key}' can only be sliced by season or championship, not by map, mode, team or region "
+            reason = (f"'{stat_key}' can only be sliced by season or tournament, not by map, mode, team or region "
                       f"(only these stats support that: {', '.join(TYPED_STATS)})")
             if f.role:
                 reason = (f"'{stat_key}' can only be filtered by role for these stats: {', '.join(TYPED_STATS)} "
@@ -458,7 +458,7 @@ def validate(q: StructuredQuery, info: SchemaInfo) -> ValidationResult:
     if q.intent == "head_to_head" and (map_name or mode_name):
         return Unanswerable(code="unsupported_question", reason="head-to-head is tracked per series, not per map; drop the map/mode filter")
     if q.intent == "stat_availability" and (f.map or f.mode or f.championship or f.role):
-        notes.append("stat availability is reported per season; map/mode/championship/role filters ignored")
+        notes.append("stat availability is reported per season; map/mode/tournament/role filters ignored")
 
     # --- capability: does any source give this slice what the question needs? Asked before the season's stat
     # coverage: a slice that can carry no player stats at all (a Liquipedia-only event) refuses for that reason,

@@ -80,7 +80,7 @@ def test_unknown_season_map_mode_region():
 
 def test_championship_text_resolves_to_ids_and_notes_multiples():
     v = val("most eliminations in the 2024 main event")
-    assert set(v.championship_ids) == {"f57f9c5f", "7af2d2fa"} and any("2 championships" in n for n in v.notes)
+    assert set(v.championship_ids) == {"f57f9c5f", "7af2d2fa"} and any("2 tournaments" in n for n in v.notes)
     v = val("most eliminations in the EMEA main event")
     assert v.championship_ids == ["f57f9c5f"] and v.notes == []
     u = validate(parse("most eliminations in the world finals"), INFO)

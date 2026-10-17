@@ -288,7 +288,7 @@ export const PAYLOADS = {
       {
         "id": "main_series_2025_2026",
         "title": "The 2025 and 2026 main series is reconstructed from player history",
-        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's championship endpoints, which do not publish those divisions."
+        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's tournament listings, which do not include those divisions."
       }
     ],
     "notes": [
@@ -1072,7 +1072,7 @@ export const PAYLOADS = {
       {
         "id": "main_series_2025_2026",
         "title": "The 2025 and 2026 main series is reconstructed from player history",
-        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's championship endpoints, which do not publish those divisions."
+        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's tournament listings, which do not include those divisions."
       }
     ],
     "notes": [
@@ -1319,7 +1319,7 @@ export const PAYLOADS = {
       {
         "id": "main_series_2025_2026",
         "title": "The 2025 and 2026 main series is reconstructed from player history",
-        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's championship endpoints, which do not publish those divisions."
+        "note": "The 2025 and 2026 part of this answer comes from the player-history crawl, not from FACEIT's tournament listings, which do not include those divisions."
       }
     ],
     "notes": [
