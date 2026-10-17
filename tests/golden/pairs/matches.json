@@ -1,0 +1,49 @@
+{
+ "note": "One pairing's every series - sug2rfree v zeruhh, 11 series 2024-2026 - in a warehouse of its own, so the main golden set's confirmed values do not move. Payloads are shared with tests/golden/payloads.",
+ "matches": [
+  {
+   "match_id": "1-82515b5c-13b5-468a-8fe3-7244af1d42fd",
+   "why": "Sugarfree v Zeruhh 1/11 (G93): 2024, Sugarfree's side 3-1"
+  },
+  {
+   "match_id": "1-1ccf85ac-786a-4543-8750-3c3405e95d1d",
+   "why": "Sugarfree v Zeruhh 2/11 (G93): 2025 SpaceStation 3-1 NTMR"
+  },
+  {
+   "match_id": "1-ef7ae93b-100b-4113-afb7-9175eca7cd7f",
+   "why": "Sugarfree v Zeruhh 3/11 (G93): 2025 SpaceStation 2-4 NTMR"
+  },
+  {
+   "match_id": "1-1d2eaf73-7387-4f1f-b6c8-659dae4ca25f",
+   "why": "Sugarfree v Zeruhh 4/11 (G93): 2025 Team Liquid 3-1 SpaceStation; FACEIT /stats dropped map 1 (Ilios, SpaceStation 2-1), recovered from detailed_results with Liquipedia's same game (045)"
+  },
+  {
+   "match_id": "1-cfc0ad8d-e967-47aa-ab16-73975591bff6",
+   "why": "Sugarfree v Zeruhh 5/11 (G93): 2025 SpaceStation 2-3 Team Liquid"
+  },
+  {
+   "match_id": "1-31a11066-f2c2-4636-b392-bd1429f00b4e",
+   "why": "Sugarfree v Zeruhh 6/11 (G93): 2025 SpaceStation 3-4 Team Liquid"
+  },
+  {
+   "match_id": "1-bd4e6ddb-4b98-42a3-bfeb-842f41cc8a59",
+   "why": "Sugarfree v Zeruhh 7/11 (G93): 2026 SpaceStation 3-1 Team Liquid"
+  },
+  {
+   "match_id": "1-124cc396-ca2c-41d2-aae6-0eb2df9e28b2",
+   "why": "Sugarfree v Zeruhh 8/11 (G93): 2026 SpaceStation 3-2 Team Liquid"
+  },
+  {
+   "match_id": "1-f152ab88-bd95-418f-9c37-f0aeadf8ab40",
+   "why": "Sugarfree v Zeruhh 9/11 (G93): 2026 SpaceStation 3-0 Team Liquid, result_only (stats 404); maps from Liquipedia"
+  },
+  {
+   "match_id": "1-1985af81-96d8-49ec-b71f-ec29739ea719",
+   "why": "Sugarfree v Zeruhh 10/11: 2026 SpaceStation 3-1 Team Liquid (also in the main golden set)"
+  },
+  {
+   "match_id": "1-ea152ea6-d92d-4f4f-b180-3addab36953b",
+   "why": "Sugarfree v Zeruhh 11/11 (G93): 2026 SpaceStation 3-1 Team Liquid, result_only (stats 404); maps from Liquipedia"
+  }
+ ]
+}

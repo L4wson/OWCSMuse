@@ -70,8 +70,9 @@ LIMITATIONS: tuple[Limitation, ...] = (
         "result_only. Map-grain answers therefore under-represent exactly the matches that mattered most. "
         "Series-grain answers (`record`, `series record against`) still count them. Stage 2 of the Liquipedia "
         "integration fills in map, mode, score and winner for 33 of those series from Liquipedia's own match "
-        "records, so those 33 now appear at map grain too - still with no player stats, since Liquipedia has "
-        "none either; `agg_player_stats` and `fact_player_maps` cannot gain a row from them. The remaining "
+        "records, so those 33 now appear at map grain too, in team and player map records alike (045: a player's map "
+        "record counts every map of a series he was on the line-up of) - still with no player stats, since Liquipedia "
+        "has none either; `agg_player_stats` and `fact_player_maps` cannot gain a row from them. The remaining "
         "result_only series either sit on a page outside Liquipedia's covered stages or have no Liquipedia "
         "counterpart at all, and are still absent from every map-grain answer.",
     ),

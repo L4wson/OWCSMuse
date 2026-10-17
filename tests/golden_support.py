@@ -35,9 +35,10 @@ GOLDEN = Path(__file__).parent / "golden"
 MIGRATIONS = str(ROOT / "migrations")
 
 
-def load_matches() -> dict[str, dict]:
-    """match_id -> {"detail", "stats", "stats_http_status"}, exactly as captured."""
-    manifest = json.loads((GOLDEN / "matches.json").read_text(encoding="utf-8"))
+def load_matches(fixtures: Path = GOLDEN) -> dict[str, dict]:
+    """match_id -> {"detail", "stats", "stats_http_status"}, exactly as captured. `fixtures` holds the manifest; the
+    payloads are always tests/golden/payloads, shared by every golden warehouse."""
+    manifest = json.loads((fixtures / "matches.json").read_text(encoding="utf-8"))
     return {m["match_id"]: json.loads((GOLDEN / "payloads" / f"{m['match_id']}.json").read_text(encoding="utf-8"))
             for m in manifest["matches"]}
 
@@ -71,8 +72,11 @@ class GoldenClient:
         return self._fetch(f"/matches/{match_id}/stats", m["stats"], match_id=match_id)
 
 
-def build_golden_db(db_url: str, schema: str):
-    """Drop + recreate `schema`, ingest the golden matches, apply identity decisions, refresh."""
+def build_golden_db(db_url: str, schema: str, fixtures: Path = GOLDEN):
+    """Drop + recreate `schema`, ingest the golden matches, apply identity decisions, refresh.
+
+    `fixtures` is the directory with the manifest, championships and Liquipedia records: tests/golden for the main
+    warehouse, tests/golden/pairs for one pairing's every series (G93/G94), kept apart so neither moves the other."""
     assert schema != "public"
     admin = connect(db_url, autocommit=True, schema=schema)
     admin.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
@@ -81,7 +85,7 @@ def build_golden_db(db_url: str, schema: str):
     raw_conn = connect(db_url, autocommit=True, schema=schema)
     migrate(conn, MIGRATIONS, schema)
 
-    scope = json.loads((GOLDEN / "championships.json").read_text(encoding="utf-8"))
+    scope = json.loads((fixtures / "championships.json").read_text(encoding="utf-8"))
     with conn.cursor() as cur:
         for oid, name in scope["organizers"].items():
             cur.execute("INSERT INTO organizers (organizer_id, name) VALUES (%s, %s)", (oid, name))
@@ -93,7 +97,7 @@ def build_golden_db(db_url: str, schema: str):
                            %(season)s, %(classification_source)s, %(decision_note)s)""", c)
     conn.commit()
 
-    matches = load_matches()
+    matches = load_matches(fixtures)
     sink = RawPayloadStore(raw_conn)
     settings = Settings(_env_file=None, faceit_api_key="x", database_url=db_url)
     col = Collector(conn, GoldenClient(sink, matches), settings, sink)
@@ -106,7 +110,7 @@ def build_golden_db(db_url: str, schema: str):
     lp_names.load(conn, lp_names.CompetitionDecisions(ROOT / lp_names.DEFAULT_DECISIONS_PATH),
                   lp_names.propose(ROOT / lp_names.DEFAULT_MAP_PATH, ROOT / lp_names.DEFAULT_SCOPE_PATH,
                                    ROOT / lp_names.DEFAULT_EXTRA_PATH))
-    load_liquipedia_enrichment(conn, raw_conn)
+    load_liquipedia_enrichment(conn, raw_conn, fixtures)
     # Stage 3: the reviewed cross-source anchors (team names from the team map, players from their decisions file)
     from owcsmuse import groups as team_groups
     lp_identity.load_identity(conn, lp_identity.PlayerDecisions(ROOT / "scope" / "player_identity_decisions.json"),
@@ -116,10 +120,10 @@ def build_golden_db(db_url: str, schema: str):
     return conn, raw_conn
 
 
-def load_liquipedia_enrichment(conn, raw_conn) -> None:
+def load_liquipedia_enrichment(conn, raw_conn, fixtures: Path = GOLDEN) -> None:
     """The captured Liquipedia records (tests/golden/liquipedia_matches.json), reconciled, stored and enriched exactly
     as production does it - offline, no request, same run_reconciliation() + store_run() + enrich.enrich()."""
-    path = GOLDEN / "liquipedia_matches.json"
+    path = fixtures / "liquipedia_matches.json"
     if not path.exists():
         return
     records = json.loads(path.read_text(encoding="utf-8"))["matches"]
@@ -128,7 +132,7 @@ def load_liquipedia_enrichment(conn, raw_conn) -> None:
     raw_id = sink.store(endpoint="match", params={}, http_status=200,
                         payload={"result": [r["record"] for r in records]}, body_text=None, fetched_at=now,
                         source="liquipedia")
-    pages = json.loads((GOLDEN / "liquipedia_map.json").read_text(encoding="utf-8"))["pages"]
+    pages = json.loads((fixtures / "liquipedia_map.json").read_text(encoding="utf-8"))["pages"]
     with conn.cursor() as cur:
         for page in {e["page"] for e in pages.values()}:
             cur.execute(
@@ -137,21 +141,23 @@ def load_liquipedia_enrichment(conn, raw_conn) -> None:
                 (page, f"https://liquipedia.net/overwatch/{page}", len(records), [raw_id]))
     conn.commit()
     events_path = ROOT / "scope" / "liquipedia_events.json"
-    load_stage4_events(conn, sink, now, events_path)
+    load_stage4_events(conn, sink, now, events_path, fixtures)
     # the repository's own reviewed team map and link decisions, as production reconciles: the 2024 NA records carry no
     # FACEIT id and link only through decided team names; the grand final and the Dallas series through link decisions
     run = lp_pipeline.run_reconciliation(conn, team_map_path=str(ROOT / "scope" / "liquipedia_team_map.json"),
                                          decisions_path=str(ROOT / "scope" / "liquipedia_link_decisions.json"),
-                                         map_path=str(GOLDEN / "liquipedia_map.json"), events_path=str(events_path))
+                                         map_path=str(fixtures / "liquipedia_map.json"), events_path=str(events_path))
     lp_pipeline.store_run(conn, run)
     lp_enrich.enrich(conn, run, str(ROOT / "scope" / "liquipedia_team_map.json"))
+    # and the maps FACEIT's /stats dropped, where Liquipedia's record has the same game - as `liquipedia enrich` does
+    lp_enrich.recover_dropped_maps(conn, run, str(ROOT / "scope" / "liquipedia_team_map.json"))
     lp_events.load_placements(conn, events_path)
 
 
-def load_stage4_events(conn, sink, now, events_path) -> None:
+def load_stage4_events(conn, sink, now, events_path, fixtures: Path = GOLDEN) -> None:
     """Stage 4's captured records (tests/golden/liquipedia_events.json): stored as responses with their coverage, and
     the repository's own scope/liquipedia_events.json loaded as `lp:` championships, as production does it."""
-    path = GOLDEN / "liquipedia_events.json"
+    path = fixtures / "liquipedia_events.json"
     if not path.exists():
         return
     doc = json.loads(path.read_text(encoding="utf-8"))

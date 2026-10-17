@@ -350,16 +350,20 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
         return []
     if left_type != "player" and r.opponent_type != "player":
         return _missing_team_maps_note(conn, q, r, rows)
-    # a player on either side: the series the two were on opposite sides of (042's line-ups, so never his own team's),
-    # with no per-map player row for the pairing - results-only on FACEIT, or Liquipedia-only, where no player stats exist
+    # a player on either side: the series the two were on opposite sides of (042's line-ups, so never his own team's)
+    # that put no map into the record - since 045 every played map counts, stats or not, so these are the series with
+    # no map result from any source
     from .compile import side_clause
     a_sql, a_params = side_clause(left_id, left_type, r, "team_id", alias="f")
     b_sql, b_params = side_clause(r.opponent_id, r.opponent_type, r, "opponent_team_id", alias="f")
     if left_type == "player" and r.opponent_type == "player":
+        view = "fact_player_versus"
         pair, pair_params = "v.player_id = %s AND v.opponent_player_id = %s", [left_id, r.opponent_id]
     elif left_type == "player":
+        view = "fact_player_map_results"
         pair, pair_params = "v.player_id = %s AND v.opponent_org_key = %s", [left_id, r.org_key(r.opponent_id, r.opponent_type)]
     else:
+        view = "fact_player_map_results"
         pair, pair_params = "v.player_id = %s AND v.opponent_org_key = %s", [r.opponent_id, r.org_key(left_id, left_type)]
     try:
         with conn.cursor() as cur:
@@ -368,7 +372,7 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
                            array_agg(DISTINCT f.season ORDER BY f.season) AS seasons
                       FROM fact_team_matches f
                      WHERE {a_sql} AND {b_sql} AND (%s::int IS NULL OR f.season = %s)
-                       AND NOT EXISTS (SELECT 1 FROM fact_player_versus v WHERE v.match_id = f.match_id AND {pair})""",
+                       AND NOT EXISTS (SELECT 1 FROM {view} v WHERE v.match_id = f.match_id AND {pair})""",
                 a_params + b_params + [q.filters.season, q.filters.season] + pair_params)
             row = cur.fetchone()
         conn.commit()
@@ -381,10 +385,9 @@ def _missing_maps_note(conn: psycopg.Connection, q: StructuredQuery, r: Resolved
     n, maps, seasons = row["matches"], row["maps"] or 0, ", ".join(map(str, row["seasons"] or []))
     if not rows or not (rows[0].get("maps") or 0):
         return [f"They were on opposite sides in {n} series in season {seasons} ({maps} maps by series score), but no "
-                "per-map player stats exist for them (results-only on FACEIT, or Liquipedia-only), so none can count "
-                "toward a map record."]
-    return [f"A further {n} series on opposite sides in season {seasons} ({maps} maps by series score) have no per-map "
-            "player stats and are excluded from the record above."]
+                "source records those series' map results, so none can count toward a map record."]
+    return [f"A further {n} series on opposite sides in season {seasons} ({maps} maps by series score) have no map "
+            "results from any source and are excluded from the record above."]
 
 def _slice_phrase(q: StructuredQuery) -> str:
     f = q.filters
@@ -770,10 +773,12 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
                 tips = ["A record against someone counts only the series they were on opposite sides of."]
                 notes = []
             elif notes:
+                # since 045 a map counts whether or not it has player stats, so the only empty case is a series no
+                # source has map results for - the same for a player as for an org
                 reason = (f"{left} and {right} met{where}, but none of those series has map results from any source"
                           if r.subject_type != "player" and r.opponent_type != "player" else
-                          f"{left} and {right} were on opposite sides{where}, but no per-map player stats exist for "
-                          "those series (results-only on FACEIT, or Liquipedia-only)")
+                          f"{left} and {right} were on opposite sides{where}, but none of those series has map results "
+                          "from any source")
                 tips = ["The series results are known; only the per-map breakdown is missing."]
             else:
                 reason = f"{left} and {right} never faced each other{where} in the competitions in scope"

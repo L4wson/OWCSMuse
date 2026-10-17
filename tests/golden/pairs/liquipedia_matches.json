@@ -1,0 +1,1122 @@
+{
+ "note": "One real Liquipedia match2 record, copied verbatim from raw_payloads (id 4215). Used by the golden cases about Stage 2 map enrichment; never fetched by this suite. For a record with no FACEIT id, faceit_match_id is the decided pairing (team map or scope/liquipedia_link_decisions.json), not a value on the page.",
+ "matches": [
+  {
+   "faceit_match_id": "1-1d2eaf73-7387-4f1f-b6c8-659dae4ca25f",
+   "why": "2025 NA Stage 2, Team Liquid 3-1 SpaceStation: its game 1 (Ilios) corroborates the map FACEIT's /stats dropped (045, G93)",
+   "record": {
+    "vod": "https://www.youtube.com/watch?v=VFcP8ObVn4Q",
+    "date": "2025-05-10 21:00:00",
+    "game": "overwatch2",
+    "icon": "OWCS North America 2025 icon allmode.png",
+    "mode": "team",
+    "type": "Online",
+    "wiki": "overwatch",
+    "links": {
+     "faceit": "https://www.faceit.com/en/ow2/room/1-1d2eaf73-7387-4f1f-b6c8-659dae4ca25f"
+    },
+    "patch": "",
+    "bestof": 5,
+    "pageid": 133394,
+    "parent": "Overwatch_Champions_Series/2025/NA/Stage_2",
+    "series": "Overwatch Champions Series",
+    "status": "",
+    "stream": {
+     "twitch": "Overwatch_Esports",
+     "youtube": "overwatchleague",
+     "twitch_en_1": "Overwatch_Esports",
+     "youtube_en_1": "overwatchleague"
+    },
+    "winner": "2",
+    "iconurl": "https://liquipedia.net/commons/images/thumb/8/8a/OWCS_North_America_2025_icon_allmode.png/400px-OWCS_North_America_2025_icon_allmode.png",
+    "section": "Week 1",
+    "finished": 1,
+    "icondark": "OWCS North America 2025 icon allmode.png",
+    "match2id": "ok3PnKtPA2_0001",
+    "pagename": "Overwatch_Champions_Series/2025/NA/Stage_2/Regular_Season",
+    "walkover": "",
+    "dateexact": 1,
+    "extradata": {
+     "mvp": {
+      "points": 1,
+      "players": {
+       "1": {
+        "flag": "United States",
+        "name": "Zeruhh",
+        "team": "Team Liquid",
+        "template": "team liquid 2024",
+        "displayname": "zeruhh"
+       }
+      }
+     },
+     "casters": {
+      "1": {
+       "flag": "united kingdom",
+       "name": "Jaws",
+       "displayName": "Jaws"
+      },
+      "2": {
+       "flag": "united states",
+       "name": "Nekkra",
+       "displayName": "Nekkra"
+      }
+     },
+     "timestamp": 1746910800,
+     "timezoneid": "PDT",
+     "timezoneoffset": "-07:00"
+    },
+    "namespace": 0,
+    "shortname": "OWCS",
+    "objectname": "133394_ok3PnKtPA2_0001",
+    "resulttype": "",
+    "tickername": "OWCS Stage 2 NA Regular Season",
+    "tournament": "Overwatch Champions Series 2025 - NA Stage 2 - Regular Season",
+    "icondarkurl": "https://liquipedia.net/commons/images/thumb/8/8a/OWCS_North_America_2025_icon_allmode.png/400px-OWCS_North_America_2025_icon_allmode.png",
+    "match2games": [
+     {
+      "map": "Ilios",
+      "vod": "",
+      "date": "2025-05-10 21:00:00",
+      "game": "overwatch2",
+      "mode": "Control",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       2,
+       1
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "Wrecking Ball",
+       "team2ban1": "Kiriko",
+       "timestamp": 1746910800
+      },
+      "opponents": [
+       {
+        "score": 2,
+        "status": "S"
+       },
+       {
+        "score": 1,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 1,
+      "participants": []
+     },
+     {
+      "map": "Circuit Royal",
+      "vod": "",
+      "date": "2025-05-10 21:00:00",
+      "game": "overwatch2",
+      "mode": "Escort",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       1,
+       2
+      ],
+      "status": "",
+      "winner": "2",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Juno",
+       "team2ban1": "Orisa",
+       "timestamp": 1746910800
+      },
+      "opponents": [
+       {
+        "score": 1,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 2,
+      "participants": []
+     },
+     {
+      "map": "Hollywood",
+      "vod": "",
+      "date": "2025-05-10 21:00:00",
+      "game": "overwatch2",
+      "mode": "Hybrid",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       1,
+       2
+      ],
+      "status": "",
+      "winner": "2",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "Orisa",
+       "team2ban1": "Ana",
+       "timestamp": 1746910800
+      },
+      "opponents": [
+       {
+        "score": 1,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 3,
+      "participants": []
+     },
+     {
+      "map": "Suravasa",
+      "vod": "",
+      "date": "2025-05-10 21:00:00",
+      "game": "overwatch2",
+      "mode": "Flashpoint",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       0,
+       3
+      ],
+      "status": "",
+      "winner": "2",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "Hazard",
+       "team2ban1": "Sojourn",
+       "timestamp": 1746910800
+      },
+      "opponents": [
+       {
+        "score": 0,
+        "status": "S"
+       },
+       {
+        "score": 3,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 4,
+      "participants": []
+     }
+    ],
+    "publishertier": "owcs",
+    "liquipediatier": "2",
+    "match2bracketid": "ok3PnKtPA2",
+    "match2opponents": [
+     {
+      "id": 1,
+      "icon": "Spacestation Gaming 2023 allmode.png",
+      "name": "Spacestation Gaming",
+      "type": "team",
+      "score": 1,
+      "status": "S",
+      "template": "spacestation gaming 2023",
+      "extradata": [],
+      "placement": 2,
+      "teamtemplate": {
+       "name": "Spacestation Gaming",
+       "page": "Spacestation Gaming",
+       "image": "Spacestation Gaming 2023 allmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/1/1a/Spacestation_Gaming_2023_allmode.png/328px-Spacestation_Gaming_2023_allmode.png",
+       "template": "spacestation gaming 2023",
+       "imagedark": "Spacestation Gaming 2023 allmode.png",
+       "shortname": "SSG",
+       "bracketname": "Spacestation",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/1/1a/Spacestation_Gaming_2023_allmode.png/328px-Spacestation_Gaming_2023_allmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "Canada",
+        "name": "Seeker",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "seeker"
+       },
+       {
+        "id": 2,
+        "flag": "United States",
+        "name": "Sugarfree",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "sugarfree"
+       },
+       {
+        "id": 3,
+        "flag": "South Korea",
+        "name": "Kellan",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Kellan"
+       },
+       {
+        "id": 4,
+        "flag": "South Korea",
+        "name": "Bliss",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Bliss"
+       },
+       {
+        "id": 5,
+        "flag": "United States",
+        "name": "Cjay",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "cjay"
+       },
+       {
+        "id": 6,
+        "flag": "United States",
+        "name": "Scissors",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "\u01f6scissors"
+       },
+       {
+        "id": 7,
+        "flag": "United States",
+        "name": "Squid",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "squid"
+       }
+      ]
+     },
+     {
+      "id": 2,
+      "icon": "Team Liquid 2024 lightmode.png",
+      "name": "Team Liquid",
+      "type": "team",
+      "score": 3,
+      "status": "S",
+      "template": "team liquid 2024",
+      "extradata": [],
+      "placement": 1,
+      "teamtemplate": {
+       "name": "Team Liquid",
+       "page": "Team Liquid",
+       "image": "Team Liquid 2024 lightmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/0/01/Team_Liquid_2024_lightmode.png/351px-Team_Liquid_2024_lightmode.png",
+       "template": "team liquid 2024",
+       "imagedark": "Team Liquid 2024 darkmode.png",
+       "shortname": "TL",
+       "bracketname": "Team Liquid",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/5/59/Team_Liquid_2024_darkmode.png/351px-Team_Liquid_2024_darkmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "South Korea",
+        "name": "KNIFE",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "knife"
+       },
+       {
+        "id": 2,
+        "flag": "United States",
+        "name": "TR33",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "TR33"
+       },
+       {
+        "id": 3,
+        "flag": "United States",
+        "name": "Zeruhh",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "zeruhh"
+       },
+       {
+        "id": 4,
+        "flag": "United States",
+        "name": "Infekted",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Infekted"
+       },
+       {
+        "id": 5,
+        "flag": "United States",
+        "name": "Rupal",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Rupal"
+       },
+       {
+        "id": 6,
+        "flag": "United States",
+        "name": "Vega",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Vega"
+       }
+      ]
+     }
+    ],
+    "match2bracketdata": {
+     "next": "ok3PnKtPA2_0002",
+     "type": "matchlist",
+     "title": "Week 1",
+     "header": "May 10th",
+     "matchIndex": 1,
+     "bracketindex": 0,
+     "sectionheader": "Standings",
+     "inheritedheader": "May 10th"
+    },
+    "liquipediatiertype": ""
+   }
+  },
+  {
+   "faceit_match_id": "1-f152ab88-bd95-418f-9c37-f0aeadf8ab40",
+   "why": "2026 NA Stage 2, SpaceStation 3-0 Team Liquid: the maps of a result_only series (G93)",
+   "record": {
+    "vod": "https://www.youtube.com/live/d9uylXw_-dE?si=MEqrcBrOx-Ki1-aw&t=17988",
+    "date": "2026-06-27 21:35:00",
+    "game": "overwatch2",
+    "icon": "OWCS North America 2025 icon allmode.png",
+    "mode": "team",
+    "type": "Online",
+    "wiki": "overwatch",
+    "links": {
+     "faceit": "https://www.faceit.com/en/ow2/room/1-f152ab88-bd95-418f-9c37-f0aeadf8ab40"
+    },
+    "patch": "",
+    "bestof": 5,
+    "pageid": 137927,
+    "parent": "Overwatch_Champions_Series/2026/NA/Stage_2",
+    "series": "Overwatch Champions Series",
+    "status": "",
+    "stream": {
+     "twitch": "Overwatch_Esports",
+     "youtube": "overwatchleague",
+     "twitch_en_1": "Overwatch_Esports",
+     "youtube_en_1": "overwatchleague"
+    },
+    "winner": "1",
+    "iconurl": "https://liquipedia.net/commons/images/thumb/8/8a/OWCS_North_America_2025_icon_allmode.png/400px-OWCS_North_America_2025_icon_allmode.png",
+    "section": "Week 3",
+    "finished": 1,
+    "icondark": "OWCS North America 2025 icon allmode.png",
+    "match2id": "8nvZlkXnHn_0001",
+    "pagename": "Overwatch_Champions_Series/2026/NA/Stage_2/Regular_Season",
+    "walkover": "",
+    "dateexact": 1,
+    "extradata": {
+     "casters": {
+      "1": {
+       "flag": "united kingdom",
+       "name": "Jaws",
+       "displayName": "Jaws"
+      },
+      "2": {
+       "flag": "sweden",
+       "name": "Reinforce",
+       "displayName": "Reinforce"
+      }
+     },
+     "timestamp": 1782596100,
+     "timezoneid": "CDT",
+     "matchsection": "Week 3",
+     "timezoneoffset": "-05:00"
+    },
+    "namespace": 0,
+    "shortname": "OWCS",
+    "objectname": "137927_8nvZlkXnHn_0001",
+    "resulttype": "",
+    "tickername": "OWCS NA Stage 2 - Regular Season",
+    "tournament": "Overwatch Champions Series 2026 - NA Stage 2 - Regular Season",
+    "icondarkurl": "https://liquipedia.net/commons/images/thumb/8/8a/OWCS_North_America_2025_icon_allmode.png/400px-OWCS_North_America_2025_icon_allmode.png",
+    "match2games": [
+     {
+      "map": "Ilios",
+      "vod": "",
+      "date": "2026-06-27 21:35:00",
+      "game": "overwatch2",
+      "mode": "Control",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       2,
+       0
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "L\u00facio",
+       "team2ban1": "Bastion",
+       "timestamp": 1782596100
+      },
+      "opponents": [
+       {
+        "score": 2,
+        "status": "S"
+       },
+       {
+        "score": 0,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 1,
+      "participants": []
+     },
+     {
+      "map": "New Junk City",
+      "vod": "",
+      "date": "2026-06-27 21:35:00",
+      "game": "overwatch2",
+      "mode": "Flashpoint",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       3,
+       2
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Kiriko",
+       "team2ban1": "Sigma",
+       "timestamp": 1782596100
+      },
+      "opponents": [
+       {
+        "score": 3,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 2,
+      "participants": []
+     },
+     {
+      "map": "Circuit Royal",
+      "vod": "",
+      "date": "2026-06-27 21:35:00",
+      "game": "overwatch2",
+      "mode": "Escort",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       3,
+       2
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Illari",
+       "team2ban1": "Mei",
+       "timestamp": 1782596100
+      },
+      "opponents": [
+       {
+        "score": 3,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 3,
+      "participants": []
+     }
+    ],
+    "publishertier": "owcs",
+    "liquipediatier": "2",
+    "match2bracketid": "8nvZlkXnHn",
+    "match2opponents": [
+     {
+      "id": 1,
+      "icon": "Spacestation Gaming 2023 allmode.png",
+      "name": "Spacestation Gaming",
+      "type": "team",
+      "score": 3,
+      "status": "S",
+      "template": "spacestation gaming 2023",
+      "extradata": [],
+      "placement": 1,
+      "teamtemplate": {
+       "name": "Spacestation Gaming",
+       "page": "Spacestation Gaming",
+       "image": "Spacestation Gaming 2023 allmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/1/1a/Spacestation_Gaming_2023_allmode.png/328px-Spacestation_Gaming_2023_allmode.png",
+       "template": "spacestation gaming 2023",
+       "imagedark": "Spacestation Gaming 2023 allmode.png",
+       "shortname": "SSG",
+       "bracketname": "Spacestation",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/1/1a/Spacestation_Gaming_2023_allmode.png/328px-Spacestation_Gaming_2023_allmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "United States",
+        "name": "Sugarfree",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Sugarfree"
+       },
+       {
+        "id": 2,
+        "flag": "Turkey",
+        "name": "Lethal",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Lethal"
+       },
+       {
+        "id": 3,
+        "flag": "United States",
+        "name": "Hawk",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Hawk"
+       },
+       {
+        "id": 4,
+        "flag": "Estonia",
+        "name": "Admiral",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Admiral"
+       },
+       {
+        "id": 5,
+        "flag": "United States",
+        "name": "UltraViolet",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "UltraViolet"
+       }
+      ]
+     },
+     {
+      "id": 2,
+      "icon": "Team Liquid 2024 lightmode.png",
+      "name": "Team Liquid",
+      "type": "team",
+      "score": 0,
+      "status": "S",
+      "template": "team liquid 2024",
+      "extradata": [],
+      "placement": 2,
+      "teamtemplate": {
+       "name": "Team Liquid",
+       "page": "Team Liquid",
+       "image": "Team Liquid 2024 lightmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/0/01/Team_Liquid_2024_lightmode.png/351px-Team_Liquid_2024_lightmode.png",
+       "template": "team liquid 2024",
+       "imagedark": "Team Liquid 2024 darkmode.png",
+       "shortname": "TL",
+       "bracketname": "Team Liquid",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/5/59/Team_Liquid_2024_darkmode.png/351px-Team_Liquid_2024_darkmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "United States",
+        "name": "TR33",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "TR33"
+       },
+       {
+        "id": 2,
+        "flag": "United States",
+        "name": "Zeruhh",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "zeruhh"
+       },
+       {
+        "id": 3,
+        "flag": "United States",
+        "name": "Infekted",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Infekted"
+       },
+       {
+        "id": 4,
+        "flag": "South Korea",
+        "name": "Attack",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Attack"
+       },
+       {
+        "id": 5,
+        "flag": "United States",
+        "name": "Vega",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Vega"
+       },
+       {
+        "id": 6,
+        "flag": "South Korea",
+        "name": "KIVIS",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "KIVIS"
+       }
+      ]
+     }
+    ],
+    "match2bracketdata": {
+     "next": "8nvZlkXnHn_0002",
+     "type": "matchlist",
+     "title": "Week 3",
+     "header": "June 27th",
+     "matchIndex": 1,
+     "bracketindex": 2,
+     "sectionheader": "Standings",
+     "groupRoundIndex": 3,
+     "inheritedheader": "June 27th"
+    },
+    "liquipediatiertype": ""
+   }
+  },
+  {
+   "faceit_match_id": "1-ea152ea6-d92d-4f4f-b180-3addab36953b",
+   "why": "2026 NA Stage 3, SpaceStation 3-1 Team Liquid: the maps of a result_only series (G93)",
+   "record": {
+    "vod": "",
+    "date": "2026-10-10 20:50:00",
+    "game": "overwatch2",
+    "icon": "OWCS North America 2025 icon allmode.png",
+    "mode": "team",
+    "type": "Online",
+    "wiki": "overwatch",
+    "links": {
+     "faceit": "https://www.faceit.com/en/ow2/room/1-ea152ea6-d92d-4f4f-b180-3addab36953b"
+    },
+    "patch": "",
+    "bestof": 5,
+    "pageid": 139001,
+    "parent": "Overwatch_Champions_Series/2026/NA/Stage_3",
+    "series": "Overwatch Champions Series",
+    "status": "",
+    "stream": {
+     "twitch": "Overwatch_Esports",
+     "youtube": "overwatchleague",
+     "twitch_en_1": "Overwatch_Esports",
+     "youtube_en_1": "overwatchleague"
+    },
+    "winner": "1",
+    "iconurl": "https://liquipedia.net/commons/images/thumb/8/8a/OWCS_North_America_2025_icon_allmode.png/400px-OWCS_North_America_2025_icon_allmode.png",
+    "section": "Week 1",
+    "finished": 1,
+    "icondark": "OWCS North America 2025 icon allmode.png",
+    "match2id": "BtyVt2QpVt_0001",
+    "pagename": "Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season",
+    "walkover": "",
+    "dateexact": 1,
+    "extradata": {
+     "casters": {
+      "1": {
+       "flag": "new zealand",
+       "name": "AVRL",
+       "displayName": "AVRL"
+      },
+      "2": {
+       "flag": "sweden",
+       "name": "Reinforce",
+       "displayName": "Reinforce"
+      }
+     },
+     "timestamp": 1791665400,
+     "timezoneid": "CDT",
+     "timezoneoffset": "-05:00"
+    },
+    "namespace": 0,
+    "shortname": "OWCS",
+    "objectname": "139001_BtyVt2QpVt_0001",
+    "resulttype": "",
+    "tickername": "OWCS NA Stage 3 - Regular Season",
+    "tournament": "Overwatch Champions Series 2026 - NA Stage 3 - Regular Season",
+    "icondarkurl": "https://liquipedia.net/commons/images/thumb/8/8a/OWCS_North_America_2025_icon_allmode.png/400px-OWCS_North_America_2025_icon_allmode.png",
+    "match2games": [
+     {
+      "map": "Ilios",
+      "vod": "",
+      "date": "2026-10-10 20:50:00",
+      "game": "overwatch2",
+      "mode": "Control",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       0,
+       2
+      ],
+      "status": "",
+      "winner": "2",
+      "subgroup": "1",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "Ana",
+       "team2ban1": "Bastion",
+       "timestamp": 1791665400
+      },
+      "opponents": [
+       {
+        "score": 0,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 1,
+      "participants": []
+     },
+     {
+      "map": "Route 66",
+      "vod": "",
+      "date": "2026-10-10 20:50:00",
+      "game": "overwatch2",
+      "mode": "Escort",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       2,
+       0
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "2",
+      "walkover": "",
+      "extradata": {
+       "banstart": 1,
+       "dateexact": true,
+       "team1ban1": "Widowmaker",
+       "team2ban1": "D.Mon",
+       "timestamp": 1791665400
+      },
+      "opponents": [
+       {
+        "score": 2,
+        "status": "S"
+       },
+       {
+        "score": 0,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 2,
+      "participants": []
+     },
+     {
+      "map": "New Junk City",
+      "vod": "",
+      "date": "2026-10-10 20:50:00",
+      "game": "overwatch2",
+      "mode": "Flashpoint",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       3,
+       2
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "3",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Genji",
+       "team2ban1": "Doctrine",
+       "timestamp": 1791665400
+      },
+      "opponents": [
+       {
+        "score": 3,
+        "status": "S"
+       },
+       {
+        "score": 2,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 3,
+      "participants": []
+     },
+     {
+      "map": "Esperan\u00e7a",
+      "vod": "",
+      "date": "2026-10-10 20:50:00",
+      "game": "overwatch2",
+      "mode": "Push",
+      "type": "Online",
+      "patch": "",
+      "length": "",
+      "scores": [
+       80.15,
+       60.94
+      ],
+      "status": "",
+      "winner": "1",
+      "subgroup": "4",
+      "walkover": "",
+      "extradata": {
+       "banstart": 2,
+       "dateexact": true,
+       "team1ban1": "Jetpack Cat",
+       "team2ban1": "Orisa",
+       "timestamp": 1791665400
+      },
+      "opponents": [
+       {
+        "score": 80.15,
+        "status": "S"
+       },
+       {
+        "score": 60.94,
+        "status": "S"
+       }
+      ],
+      "resulttype": "",
+      "match2gameid": 4,
+      "participants": []
+     }
+    ],
+    "publishertier": "owcs",
+    "liquipediatier": "2",
+    "match2bracketid": "BtyVt2QpVt",
+    "match2opponents": [
+     {
+      "id": 1,
+      "icon": "Spacestation Gaming 2023 allmode.png",
+      "name": "Spacestation Gaming",
+      "type": "team",
+      "score": 3,
+      "status": "S",
+      "template": "spacestation gaming 2023",
+      "extradata": [],
+      "placement": 1,
+      "teamtemplate": {
+       "name": "Spacestation Gaming",
+       "page": "Spacestation Gaming",
+       "image": "Spacestation Gaming 2023 allmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/1/1a/Spacestation_Gaming_2023_allmode.png/328px-Spacestation_Gaming_2023_allmode.png",
+       "template": "spacestation gaming 2023",
+       "imagedark": "Spacestation Gaming 2023 allmode.png",
+       "shortname": "SSG",
+       "bracketname": "Spacestation",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/1/1a/Spacestation_Gaming_2023_allmode.png/328px-Spacestation_Gaming_2023_allmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "United States",
+        "name": "Sugarfree",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Sugarfree"
+       },
+       {
+        "id": 2,
+        "flag": "Turkey",
+        "name": "Lethal",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Lethal"
+       },
+       {
+        "id": 3,
+        "flag": "United States",
+        "name": "Infekted",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Infekted"
+       },
+       {
+        "id": 4,
+        "flag": "United States",
+        "name": "Hawk",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Hawk"
+       },
+       {
+        "id": 5,
+        "flag": "Estonia",
+        "name": "Admiral",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Admiral"
+       },
+       {
+        "id": 6,
+        "flag": "Spain",
+        "name": "Galaa",
+        "opid": 1,
+        "extradata": [],
+        "displayname": "Galaa"
+       }
+      ]
+     },
+     {
+      "id": 2,
+      "icon": "Team Liquid 2024 lightmode.png",
+      "name": "Team Liquid",
+      "type": "team",
+      "score": 1,
+      "status": "S",
+      "template": "team liquid 2024",
+      "extradata": [],
+      "placement": 2,
+      "teamtemplate": {
+       "name": "Team Liquid",
+       "page": "Team Liquid",
+       "image": "Team Liquid 2024 lightmode.png",
+       "imageurl": "https://liquipedia.net/commons/images/thumb/0/01/Team_Liquid_2024_lightmode.png/351px-Team_Liquid_2024_lightmode.png",
+       "template": "team liquid 2024",
+       "imagedark": "Team Liquid 2024 darkmode.png",
+       "shortname": "TL",
+       "bracketname": "Team Liquid",
+       "legacyimage": "",
+       "imagedarkurl": "https://liquipedia.net/commons/images/thumb/5/59/Team_Liquid_2024_darkmode.png/351px-Team_Liquid_2024_darkmode.png",
+       "legacyimageurl": "",
+       "legacyimagedark": "",
+       "legacyimagedarkurl": ""
+      },
+      "match2players": [
+       {
+        "id": 1,
+        "flag": "United States",
+        "name": "TR33",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "TR33"
+       },
+       {
+        "id": 2,
+        "flag": "United States",
+        "name": "Zeruhh",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "zeruhh"
+       },
+       {
+        "id": 3,
+        "flag": "South Korea",
+        "name": "Attack",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Attack"
+       },
+       {
+        "id": 4,
+        "flag": "United States",
+        "name": "Vega",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "Vega"
+       },
+       {
+        "id": 5,
+        "flag": "United States",
+        "name": "UltraViolet",
+        "opid": 2,
+        "extradata": [],
+        "displayname": "UltraViolet"
+       }
+      ]
+     }
+    ],
+    "match2bracketdata": {
+     "next": "BtyVt2QpVt_0002",
+     "type": "matchlist",
+     "title": "Week 1",
+     "header": "October 10th",
+     "matchIndex": 1,
+     "bracketindex": 0,
+     "sectionheader": "Standings",
+     "inheritedheader": "October 10th"
+    },
+    "liquipediatiertype": ""
+   }
+  }
+ ]
+}

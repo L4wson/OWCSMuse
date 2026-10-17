@@ -1,0 +1,235 @@
+{
+ "detail": {
+  "best_of": 5,
+  "calculate_elo": false,
+  "chat_room_id": "match-1-ea152ea6-d92d-4f4f-b180-3addab36953b",
+  "competition_id": "cb0339f1-5174-4639-b60e-a176d50b747d",
+  "competition_name": "S10 NA OWCS Central - Regular Season",
+  "competition_type": "championship",
+  "detailed_results": [
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 2
+     },
+     "faction2": {
+      "score": 0
+     }
+    },
+    "winner": "faction1"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 0
+     },
+     "faction2": {
+      "score": 2
+     }
+    },
+    "winner": "faction2"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 2
+     },
+     "faction2": {
+      "score": 3
+     }
+    },
+    "winner": "faction2"
+   },
+   {
+    "asc_score": false,
+    "factions": {
+     "faction1": {
+      "score": 0
+     },
+     "faction2": {
+      "score": 1
+     }
+    },
+    "winner": "faction2"
+   }
+  ],
+  "faceit_url": "https://www.faceit.com/{lang}/ow2/room/1-ea152ea6-d92d-4f4f-b180-3addab36953b",
+  "finished_at": 1791670207,
+  "game": "ow2",
+  "group": 1,
+  "match_id": "1-ea152ea6-d92d-4f4f-b180-3addab36953b",
+  "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+  "region": "GLOBAL",
+  "results": {
+   "score": {
+    "faction1": 1,
+    "faction2": 3
+   },
+   "winner": "faction2"
+  },
+  "round": 4,
+  "status": "FINISHED",
+  "teams": {
+   "faction1": {
+    "avatar": "https://distribution.faceit-cdn.net/images/73f5f80b-9a24-455d-8d9e-9375d744e6fb.jpeg",
+    "faction_id": "a58dedff-8045-46be-a13e-2402495b6a9d",
+    "leader": "88cb75a1-b0ff-49c2-8046-11e744f2f5d8",
+    "name": "Team Liquid",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "375952194",
+      "game_player_name": "TR33",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "TR33ow",
+      "player_id": "88cb75a1-b0ff-49c2-8046-11e744f2f5d8"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "709810249",
+      "game_player_name": "Attack",
+      "game_skill_level": 8,
+      "membership": "ow2_league_pass",
+      "nickname": "Atttack",
+      "player_id": "232fdb58-fe04-4a4d-bae1-31671cd371b8"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/8634ec32-fb07-4b1f-a2ae-9289f33c1ec7.jpeg",
+      "game_player_id": "806988051",
+      "game_player_name": "Vega",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "VegaOW",
+      "player_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/6882e73f-028b-433f-8b53-80f48707a6fa.jpeg",
+      "game_player_id": "313984445",
+      "game_player_name": "UltraViolet",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "ultraviol3t",
+      "player_id": "43d39898-d853-4e75-b249-9b41d638a2b0"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/be379589-066e-40b1-8799-bbe6df337bb1.jpeg",
+      "game_player_id": "362000933",
+      "game_player_name": "zeruhh",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "zeruhh",
+      "player_id": "58faa695-b501-4642-a4d9-0e4c2ed8526d"
+     }
+    ],
+    "substituted": false,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "700651989",
+      "game_player_name": "KIVIS",
+      "game_skill_level": 9,
+      "membership": "ow2_league_pass",
+      "nickname": "KIVIS04",
+      "player_id": "1ea17648-a903-4269-a4d7-aca78c3a7d56"
+     }
+    ],
+    "type": "premade"
+   },
+   "faction2": {
+    "avatar": "https://distribution.faceit-cdn.net/images/71401d8e-1a3f-4c05-a84a-311c221ab231.jpeg",
+    "faction_id": "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf",
+    "leader": "04d8399b-8ae4-4142-92dd-512021980e5f",
+    "name": "SpaceStation Gaming",
+    "roster": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/ae397c28-4f7c-4f94-a715-efe493e3f317.jpeg",
+      "game_player_id": "466024737",
+      "game_player_name": "Galaa",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "Galaavv",
+      "player_id": "04d8399b-8ae4-4142-92dd-512021980e5f"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/dd256d46-b605-4990-93e6-78de48a1e77a.jpeg",
+      "game_player_id": "409005325",
+      "game_player_name": "Lethal",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "IHaveLethal",
+      "player_id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/99667e91-4347-4784-9dd0-cd6a4690958d.jpeg",
+      "game_player_id": "426108658",
+      "game_player_name": "Admiral",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "AdmiralRaptr",
+      "player_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "",
+      "game_player_id": "342148316",
+      "game_player_name": "Hawk",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "TheeHawk",
+      "player_id": "a940981f-c750-40b9-bb55-bd3e8e6ef986"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://assets.faceit-cdn.net/avatars/58239fd5-cf2f-4894-a2ec-30fd026c262a_1557014539862.jpg",
+      "game_player_id": "351397614",
+      "game_player_name": "sugarfree",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "sug2rfree",
+      "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a"
+     }
+    ],
+    "substituted": false,
+    "substitutes": [
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/17697b34-2552-4d27-9deb-bb5e7b3e4f58.jpeg",
+      "game_player_id": "387265547",
+      "game_player_name": "\u01f6scissors",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "Scissorssz",
+      "player_id": "8429e08f-a227-4d3d-859c-d7246a6f1394"
+     },
+     {
+      "anticheat_required": false,
+      "avatar": "https://distribution.faceit-cdn.net/images/5f19665d-27ec-4275-a612-e720dc361471.jpeg",
+      "game_player_id": "387192024",
+      "game_player_name": "Infekted",
+      "game_skill_level": 10,
+      "membership": "ow2_league_pass",
+      "nickname": "Infektedow",
+      "player_id": "3d7e3522-9ef9-4c31-abe2-e10dd1c14270"
+     }
+    ],
+    "type": "premade"
+   }
+  },
+  "version": 2
+ },
+ "stats": null,
+ "stats_http_status": 404
+}

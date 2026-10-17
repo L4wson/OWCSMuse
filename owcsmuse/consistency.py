@@ -104,10 +104,17 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
                   JOIN series s ON s.lp_objectname = lr.lp_objectname AND s.sources = ARRAY['liquipedia'::text])"""),
     ("fact_team_matches", "two rows per series, one per side",
      """SELECT coalesce(sum((side1_team_id IS NOT NULL)::int + (side2_team_id IS NOT NULL)::int), 0) FROM series"""),
+    # 045: one row per player per played map - his own row where a player row exists, else one per declared line-up
+    # player of that map's side (series_lineups); counted here from the sources, not from the view's own branches
+    ("fact_player_map_results", "one row per player per played map",
+     """SELECT (SELECT count(*) FROM fact_player_maps)
+             + (SELECT count(*) FROM fact_team_maps t JOIN series_lineups l ON l.match_id = t.match_id AND l.team_id = t.team_id
+                 WHERE NOT EXISTS (SELECT 1 FROM match_players mp
+                                    WHERE mp.match_id = t.match_id AND mp.round_number = t.round_number))"""),
     ("fact_player_versus", "one row per player per map per opposing player",
      """WITH per AS (
             SELECT match_id, round_number, team_id, count(*) AS n
-              FROM fact_player_maps GROUP BY match_id, round_number, team_id
+              FROM fact_player_map_results GROUP BY match_id, round_number, team_id
         ), tot AS (
             SELECT match_id, round_number, sum(n) AS total, sum(n * n) AS same_side
               FROM per GROUP BY match_id, round_number
@@ -137,7 +144,7 @@ def check_fact_view_reconciliation(conn: psycopg.Connection) -> CheckResult:
                       LEFT JOIN match_rounds r ON (r.match_id, r.round_number) = (mp.match_id, mp.round_number)
                      WHERE m.ingest_state = 'complete' AND c.include AND r.match_id IS NULL
                      GROUP BY mp.match_id, mp.round_number LIMIT 10""")   # sample: a diagnostic inside one discrepancy, counted by `difference`
-            if view == "fact_player_versus":
+            if view in ("fact_player_versus", "fact_player_map_results"):
                 d["hint"] = "a materialized view: run `python -m owcsmuse refresh` before treating this as a bug"
             discrepancies.append(d)
     return _result("fact_view_reconciliation", discrepancies,
@@ -647,6 +654,54 @@ def check_liquipedia_map_isolation(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} Liquipedia-sourced map(s) have a player row that should not exist", counts)
 
 
+def check_dropped_stats_maps(conn: psycopg.Connection) -> CheckResult:
+    """Every map a complete series' detailed_results records is a stored round, or is shown not to be a game.
+
+    FACEIT's /stats dropped a map from 9 of 409 complete series (1-1d2eaf73 map 1, Ilios, among them) while the match's
+    own detailed_results kept its winner, so the series counted one map fewer than it played and a player's map record
+    missed it. `liquipedia enrich` recovers such a map where Liquipedia's record of the series has the same game (045).
+    What is left is either explained - a position past the end of Liquipedia's game list, an entry no game stands
+    behind (the phantom 1-0 "map 5" of Toronto Defiant v Timeless, TM v ENCE's 0-0 "map 6") - or a discrepancy: a map
+    with a winner that no stored round and no Liquipedia evidence accounts for.
+    """
+    rows = _rows(conn, """
+        WITH dr AS (
+            SELECT m.match_id, e.n::int AS round_number, e.val->>'winner' AS winner,
+                   (e.val->'factions'->'faction1'->>'score') || '-' || (e.val->'factions'->'faction2'->>'score') AS score
+              FROM matches m
+              JOIN championships c ON c.championship_id = m.championship_id
+              JOIN raw_payloads d ON d.id = m.detail_raw_id
+              CROSS JOIN LATERAL jsonb_array_elements(
+                  CASE WHEN jsonb_typeof(d.payload->'detailed_results') = 'array' THEN d.payload->'detailed_results'
+                       ELSE '[]'::jsonb END) WITH ORDINALITY AS e(val, n)
+             WHERE c.include AND m.ingest_state = 'complete' AND m.status = 'FINISHED'
+               AND e.val->>'winner' IN ('faction1', 'faction2'))
+        SELECT dr.match_id, dr.round_number, dr.winner, dr.score, max(lm.n_games) AS liquipedia_games
+          FROM dr
+          LEFT JOIN match_rounds r ON r.match_id = dr.match_id AND r.round_number = dr.round_number
+          LEFT JOIN liquipedia_links lk ON lk.faceit_match_id = dr.match_id AND NOT lk.provisional
+                                       AND coalesce(lk.decision, '') <> 'rejected'
+          LEFT JOIN liquipedia_matches lm ON lm.objectname = lk.lp_objectname
+         WHERE r.match_id IS NULL
+         GROUP BY dr.match_id, dr.round_number, dr.winner, dr.score
+         ORDER BY dr.match_id, dr.round_number""")
+    explained = [r for r in rows if r["liquipedia_games"] and r["round_number"] > r["liquipedia_games"]]
+    discrepancies = [dict(r, kind="dropped_map_not_recovered",
+                          hint="Liquipedia has a game at this position: run `python -m owcsmuse liquipedia enrich`"
+                          if r["liquipedia_games"] else "no linked Liquipedia record to say whether this was a game")
+                     for r in rows if r not in explained]
+    counts = {
+        "recovered_maps": int(_scalar(conn, "SELECT count(*) FROM match_rounds WHERE source = 'faceit_results'") or 0),
+        "not_a_game_entries": [{"match_id": r["match_id"], "round_number": r["round_number"], "score": r["score"],
+                               "liquipedia_games": r["liquipedia_games"]} for r in explained],
+    }
+    return _result("dropped_stats_maps", discrepancies,
+                   f"every detailed_results map is a stored round ({counts['recovered_maps']} recovered from it), "
+                   f"or past the end of Liquipedia's game list ({len(explained)} entr"
+                   f"{'y' if len(explained) == 1 else 'ies'} no game stands behind)",
+                   f"{len(discrepancies)} map(s) in detailed_results are neither a stored round nor explained", counts)
+
+
 # ------------------------------------------------------------ answer rates
 
 # Questions whose answer is a derived rate, asked through the real parser and pipeline for every season and for all of
@@ -877,6 +932,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "series_integrity": check_series_integrity,
     "score_plausibility": check_score_plausibility,
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
+    "dropped_stats_maps": check_dropped_stats_maps,
     "map_winner_consistency": check_map_winner_consistency,
     "phantom_map_isolation": check_phantom_map_isolation,
     "display_names_searchable": check_display_names_searchable,

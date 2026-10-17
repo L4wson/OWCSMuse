@@ -161,34 +161,29 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
             head = ["player_id = %s", "opponent_player_id = %s"]
             lead = [r.player_id, r.opponent_id]
             table, desc = "fact_player_versus", "player vs player, map grain"
+        # A player against an org reads one row per map he played (045: every played map, stats or not), so the
+        # opposing line-up never has to be known and no map is counted once per opposing player.
         elif subject_is_player and not opponent_is_player:
             head = ["player_id = %s", "opponent_org_key = %s"]
             lead = [r.player_id, r.org_key(r.opponent_id, r.opponent_type)]
-            table, desc = "fact_player_versus", "player vs org, map grain"
+            table, desc = "fact_player_map_results", "player vs org, map grain"
         elif not subject_is_player and opponent_is_player:
             head = ["opponent_org_key = %s", "player_id = %s"]
             lead = [r.org_key(r.team_id, r.subject_type), r.opponent_id]
-            table, desc = "fact_player_versus", "org vs player, map grain"
+            table, desc = "fact_player_map_results", "org vs player, map grain"
         else:
             head = ["org_key = %s", "opponent_org_key = %s"]
             lead = [r.org_key(r.team_id, r.subject_type), r.org_key(r.opponent_id, r.opponent_type)]
             table, desc = "fact_team_maps", "org vs org, map grain"
 
-        if table == "fact_player_versus" and not (subject_is_player and opponent_is_player):
-            # one row per map, not per opposing player, or a map counts five times
-            distinct = "DISTINCT (match_id, round_number)"
-        else:
-            distinct = None
         where = " WHERE " + " AND ".join(head + clauses)
         # org v player reads the player's own rows: his map won is the org's map lost (a draw is a draw either way).
         # Read unflipped it presented the player's record as the org's: "SpaceStation Gaming is 4-9 in maps against
         # zeruhh" for zeruhh's 4-9 against them.
         won = "(NOT won AND NOT drawn) AS won" if (not subject_is_player and opponent_is_player) else "won"
-        if table == "fact_player_versus":
-            base = (f"SELECT DISTINCT match_id, round_number, season, map_name, game_mode, {won}, drawn, started_at "
-                    f"FROM {table}{where}") if distinct else (
-                   f"SELECT match_id, round_number, season, map_name, game_mode, {won}, drawn, started_at "
-                   f"FROM {table}{where}")
+        if table != "fact_team_maps":
+            base = (f"SELECT match_id, round_number, season, map_name, game_mode, {won}, drawn, started_at "
+                    f"FROM {table}{where}")
         else:
             base = (f"SELECT match_id, round_number, season, map_name, game_mode, won, drawn, started_at "
                     f"FROM {table}{where}")

@@ -19,22 +19,31 @@ Definitions (the README's, restated so they can be checked against it):
 from __future__ import annotations
 
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import Any, Optional
 
 GOLDEN = Path(__file__).parent
+# the manifest, championships and Liquipedia records being derived from: the main warehouse, or tests/golden/pairs
+# (one pairing's every series) via use_fixtures(). Payloads are always GOLDEN / "payloads".
+FIXTURES = GOLDEN
+
+
+def use_fixtures(path: Path) -> None:
+    global FIXTURES, LIQUIPEDIA
+    FIXTURES = Path(path)
+    LIQUIPEDIA = load_liquipedia_matches()
 
 
 def load():
-    manifest = json.loads((GOLDEN / "matches.json").read_text(encoding="utf-8"))
+    manifest = json.loads((FIXTURES / "matches.json").read_text(encoding="utf-8"))
     return {m["match_id"]: json.loads((GOLDEN / "payloads" / f"{m['match_id']}.json").read_text(encoding="utf-8"))
             for m in manifest["matches"]}
 
 
 def championships():
-    return {c["championship_id"]: c for c in json.loads((GOLDEN / "championships.json").read_text(encoding="utf-8"))["championships"]}
+    return {c["championship_id"]: c for c in json.loads((FIXTURES / "championships.json").read_text(encoding="utf-8"))["championships"]}
 
 
 def is_bye(f) -> bool:
@@ -89,7 +98,7 @@ def all_series():
 
 def load_liquipedia_matches() -> dict:
     """faceit_match_id -> the captured Liquipedia match2 record, straight from JSON. Empty if the fixture is absent."""
-    path = GOLDEN / "liquipedia_matches.json"
+    path = FIXTURES / "liquipedia_matches.json"
     if not path.exists():
         return {}
     return {m["faceit_match_id"]: m["record"] for m in json.loads(path.read_text(encoding="utf-8"))["matches"]}
@@ -497,3 +506,83 @@ def partner_names(season: int) -> list[str]:
 def partner_seasons() -> list[int]:
     rows = json.loads((GOLDEN / "partner_placements.json").read_text(encoding="utf-8"))["placements"]
     return sorted({int(r["date"][:4]) for r in rows})
+
+
+# ------------------------------------------------------------------- every played map (045)
+# A record against someone counts every map of every series the two were on opposite sides of: a map FACEIT has player
+# rows for when both played it; a map FACEIT's /stats dropped when Liquipedia's game at that position is the same map;
+# a results-only series' maps from Liquipedia's own games. Read from the payloads and the captured Liquipedia records
+# alone - the orientation of Liquipedia's sides to FACEIT's is decided here by name, not by owcsmuse.
+
+def _fold(s):
+    import unicodedata
+    s = unicodedata.normalize("NFKD", s or "")
+    return "".join(c for c in s.lower() if c.isalnum())
+
+
+def _lp_side_of(s, lp_record) -> dict:
+    """{FACEIT faction: Liquipedia side number}, by folded name (one may extend the other: 'SpaceStation' v
+    'Spacestation Gaming'). Asserts exactly one orientation fits."""
+    lp = [_fold(o["name"]) for o in lp_record["match2opponents"]]
+    fc = {k: _fold(s.name[k]) for k in ("faction1", "faction2")}
+
+    def fits(a, b):
+        return bool(a and b) and (a == b or a.startswith(b) or b.startswith(a))
+    straight = fits(fc["faction1"], lp[0]) and fits(fc["faction2"], lp[1])
+    crossed = fits(fc["faction1"], lp[1]) and fits(fc["faction2"], lp[0])
+    assert straight != crossed, (s.match_id, s.name, [o["name"] for o in lp_record["match2opponents"]])
+    return {"faction1": 1, "faction2": 2} if straight else {"faction1": 2, "faction2": 1}
+
+
+def _lp_games(lp_record):
+    return [g for g in lp_record["match2games"]
+            if g.get("map") and not (g.get("status") == "notplayed" or g.get("resulttype") == "np")]
+
+
+def _on_map(s, side, who, round_players) -> bool:
+    """`who` on `side` of one map: by the map's player rows when it has them, else by the series' declared line-up."""
+    kind, ids = who
+    if kind == "team":
+        return s.team[side] in ids
+    if round_players is not None:
+        return any(p["player_id"] in ids and p["team_id"] == s.team[side] for p in round_players)
+    return _on(s, side, who)
+
+
+def opposed_maps(series_list, a, b, season=None) -> dict:
+    """Every played map of every series `a` and `b` were on opposite sides of, from `a`'s side."""
+    maps = []
+    for s, k, o in opposed_series(series_list, a, b, season):
+        lp = LIQUIPEDIA.get(s.match_id)
+        side = _lp_side_of(s, lp) if lp else None
+        stats_rounds = {}
+        if s.rounds:
+            raw_rounds = json.loads((GOLDEN / "payloads" / f"{s.match_id}.json").read_text(encoding="utf-8"))["stats"]["rounds"]
+            stats_rounds = {int(rr["match_round"]): r for rr, r in zip(raw_rounds, s.rounds, strict=True)}
+            for n, r in stats_rounds.items():
+                if _on_map(s, k, a, r["players"]) and _on_map(s, o, b, r["players"]):
+                    maps.append({"match_id": s.match_id, "n": n, "won": r["winner"] == s.team[k], "drawn": not r["winner"],
+                                 "from": "faceit stats"})
+            games = _lp_games(lp) if lp else []
+            picks = s.detail["voting"]["map"]["pick"]
+            names = {e["guid"]: e["name"] for e in s.detail["voting"]["map"]["entities"]}
+            for n, e in enumerate(s.detail.get("detailed_results") or [], start=1):
+                if n in stats_rounds or e.get("winner") not in ("faction1", "faction2"):
+                    continue
+                g = games[n - 1] if n <= len(games) else None
+                if g is None or _fold(g["map"]) != _fold(names.get(picks[n - 1]) if n <= len(picks) else ""):
+                    continue      # not a game on Liquipedia's record of this series
+                assert str(g.get("winner")) == str(side[e["winner"]]), (s.match_id, n)
+                if _on_map(s, k, a, None) and _on_map(s, o, b, None):
+                    maps.append({"match_id": s.match_id, "n": n, "won": e["winner"] == k, "drawn": False,
+                                 "from": "faceit detailed_results, on Liquipedia"})
+        elif lp:
+            for n, g in enumerate(_lp_games(lp), start=1):
+                w = str(g.get("winner"))
+                won = w == str(side[k])
+                maps.append({"match_id": s.match_id, "n": n, "won": won, "drawn": w not in ("1", "2"),
+                             "from": "liquipedia"})
+    return {"maps": len(maps), "map_wins": sum(x["won"] for x in maps),
+            "map_losses": sum((not x["won"]) and (not x["drawn"]) for x in maps),
+            "matches": len({x["match_id"] for x in maps}), "by_source": dict(Counter(x["from"] for x in maps)),
+            "detail": maps}

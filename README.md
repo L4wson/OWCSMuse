@@ -826,11 +826,32 @@ series), never against them"), never as "they met".
 **Both grains from either answer:** a versus or series-record answer (and its refusal) carries `other_grain`, the same
 two sides, season and event at the other grain, and the frontend shows it as a "Series record | Map record" toggle.
 
+**A player's map record counts every played map** (migration `045_every_played_map.sql`). Before 045, "sugarfree map
+record against zeruhh" said 22-20 in 42 maps, while the series record said 29-21 in maps (50). The map grain counted
+only maps FACEIT returned player stats for. `fact_player_map_results` holds one row per player per played map:
+
+- for a map with player rows, who actually played it, with stats;
+- for a map without, the series' declared line-up on that map's side, with no stats.
+
+Maps without player rows are results-only on FACEIT, Liquipedia-enriched, Liquipedia-only, or dropped by FACEIT's
+`/stats`. `fact_player_versus` pairs those rows. Stat answers still read `fact_player_maps` only, so a leaderboard
+never averages over a map with no stats.
+
+**Maps FACEIT's `/stats` dropped.** In 9 of 409 complete series, `/stats` left out a map whose winner and score the
+match's own `detailed_results` still records. `liquipedia enrich` recovers such a map, as `match_rounds.source =
+'faceit_results'`, only where Liquipedia's record of the series has the same map at that position with the same winner.
+Seven are recovered. The other two entries are not games: a 0-0 "map 6" in Twisted Minds v ENCE, and the phantom 1-0
+"Dorado" in Toronto Defiant v Timeless (FACEIT 5-0, Liquipedia 4-0). A score rule alone would have counted that one.
+`maps_played` then follows the stored rounds. The consistency check `dropped_stats_maps` fails on any `detailed_results`
+map that is neither a stored round nor past the end of Liquipedia's game list.
+
 A series with no map results contributes no map rows, so it cannot deflate a record unnoticed: the answer counts such
-series separately and says how many, and how many maps by series score, are excluded. For two orgs that means no
-source has the maps (FACEIT's rounds or, since 041, Liquipedia's games); with a player on either side it means no
-per-map player stats (results-only on FACEIT, or Liquipedia-only). An empty result distinguishes "never met" from
-"met, but no map results".
+series separately and says how many, and how many maps by series score, are excluded. That now means the same thing for
+every pairing: no source has the maps (FACEIT's rounds or, since 041, Liquipedia's games). An empty result
+distinguishes "never met" from "met, but no map results".
+
+Golden G93/G94 pin one pairing at both grains: sug2rfree v zeruhh, 11 series, 7-4, 29-21 in 50 maps. They run in a
+warehouse of their own (`tests/golden/pairs`), so the main golden set's confirmed values do not move.
 
 ## HTTP API
 

@@ -150,3 +150,133 @@ def enrich(conn: psycopg.Connection, run: Run, team_map_path: str) -> EnrichResu
             result.candidates.append(cand)
     conn.commit()
     return result
+
+
+# ------------------------------------------------------------------ maps FACEIT's /stats dropped (045)
+
+@dataclass
+class Recovery:
+    """One map FACEIT's /stats left out of a complete series, and what was done about it."""
+    match_id: str
+    round_number: int
+    map_name: str | None
+    action: str        # recovered | not_on_liquipedia | map_differs | winner_differs | cannot_orient | picks_unaligned
+    faceit: dict[str, Any] = field(default_factory=dict)
+    liquipedia: dict[str, Any] = field(default_factory=dict)
+
+
+def dropped_positions(detailed_results: list[Any], stored: set[int]) -> list[tuple[int, dict[str, Any]]]:
+    """(position, entry) for every detailed_results entry with a winner that /stats returned no round for.
+
+    Not every such entry is a played map: FACEIT keeps entries no game stands behind - the phantom 1-0 "Dorado" in
+    Toronto Defiant v Timeless's grand final (FACEIT 5-0, presented 4-0 from Liquipedia), a 0-0 "map 6" in Twisted
+    Minds v ENCE - so an entry is only a candidate until Liquipedia's record of the same series has a game there.
+    """
+    out = []
+    for n, e in enumerate(detailed_results or [], start=1):
+        if n in stored or not isinstance(e, dict) or e.get("winner") not in ("faction1", "faction2"):
+            continue
+        out.append((n, e))
+    return out
+
+
+def judge(n: int, entry: dict[str, Any], pick_name: str | None, aligned: bool, flip: bool | None,
+          game: LPGame | None) -> str:
+    """Whether a dropped position is a played map: Liquipedia must have a game there, on the same map, with the same
+    winner. Pure, so the rule is testable without a database."""
+    from ..resolve import fold
+    if not aligned:
+        return "picks_unaligned"
+    if flip is None:
+        return "cannot_orient"
+    if game is None:
+        return "not_on_liquipedia"
+    if fold(game.map or "") != fold(pick_name or ""):
+        return "map_differs"
+    faceit_side1_won = entry.get("winner") == "faction1"
+    lp_side1_won = game.winner == 1
+    if game.winner not in (1, 2) or (lp_side1_won != faceit_side1_won) != flip:
+        return "winner_differs"
+    return "recovered"
+
+
+def _complete_links(run: Run) -> list[tuple[LPMatch, FaceitSide, Any]]:
+    by_id = {f.match_id: f for f in run.faceit}
+    return [(lk.lp, by_id[lk.faceit_id], lk) for lk in run.result.links
+            if (lk.tier == EXACT or lk.decision == "confirmed") and lk.faceit_id and not lk.provisional
+            and by_id.get(lk.faceit_id) and by_id[lk.faceit_id].state == "complete"]
+
+
+def recover_dropped_maps(conn: psycopg.Connection, run: Run, team_map_path: str, write: bool = True) -> list[Recovery]:
+    """Write the maps FACEIT's /stats dropped from a complete series, where Liquipedia corroborates them.
+
+    The match's own detailed_results still holds every map's winner and score. A position counts as a played map
+    only when the linked Liquipedia record has a game there with the same map (FACEIT's pick at that position, when
+    every stored round sits at its own pick) and the same winner. Written as source 'faceit_results': FACEIT's
+    winner and score, Liquipedia's mode, no player rows. maps_played then becomes the match's round count. Sends
+    nothing: the detail payload and the Liquipedia record are both already stored. A detail re-apply clears a match's
+    rounds, so this runs with every enrich, after the detail phase, the way Liquipedia's own rounds are restored.
+    """
+    from .pipeline import load_team_windows
+    links = _complete_links(run)
+    if not links:
+        return []
+    ids = [f.match_id for _, f, _ in links]
+    with conn.cursor() as cur:
+        cur.execute("""SELECT m.match_id, m.faction1_team_id, m.faction2_team_id, d.payload->'detailed_results' AS dr
+                         FROM matches m JOIN raw_payloads d ON d.id = m.detail_raw_id WHERE m.match_id = ANY(%s)""", (ids,))
+        detail = {r["match_id"]: r for r in cur.fetchall()}
+        cur.execute("SELECT match_id, round_number, map_guid FROM match_rounds WHERE match_id = ANY(%s)", (ids,))
+        stored: dict[str, dict[int, Any]] = {}
+        for r in cur.fetchall():
+            stored.setdefault(r["match_id"], {})[r["round_number"]] = r["map_guid"]
+        cur.execute("SELECT match_id, pick_order, map_guid, map_name FROM match_map_picks WHERE match_id = ANY(%s)", (ids,))
+        picks: dict[str, dict[int, Any]] = {}
+        for r in cur.fetchall():
+            picks.setdefault(r["match_id"], {})[r["pick_order"]] = r
+    conn.commit()
+
+    todo = [(lp, f) for lp, f, _ in links
+            if dropped_positions((detail.get(f.match_id) or {}).get("dr") or [], set(stored.get(f.match_id, {})))]
+    if not todo:
+        return []
+    resolver = make_resolver(TeamMap(team_map_path), {p.key: p for p in run.proposals}, use_proposals=True,
+                             team_windows=load_team_windows(conn))
+    out: list[Recovery] = []
+    for lp, f in todo:
+        d = detail[f.match_id]
+        have = stored.get(f.match_id, {})
+        mp = picks.get(f.match_id, {})
+        aligned = bool(have) and all(g and n in mp and mp[n]["map_guid"] == g for n, g in have.items())
+        flip, _basis = orient(lp, f, resolver)
+        t1, t2 = d["faction1_team_id"], d["faction2_team_id"]
+        rows = []
+        for n, e in dropped_positions(d["dr"] or [], set(have)):
+            fa = e.get("factions") or {}
+            s1, s2 = (fa.get("faction1") or {}).get("score"), (fa.get("faction2") or {}).get("score")
+            pick = mp.get(n) if aligned else None
+            game = lp.games[n - 1] if 0 < n <= len(lp.games) else None
+            rec = Recovery(f.match_id, n, pick["map_name"] if pick else None,
+                           judge(n, e, pick["map_name"] if pick else None, aligned, flip, game),
+                           faceit={"winner": e.get("winner"), "score": [s1, s2]},
+                           liquipedia={"map": game.map, "winner": game.winner, "mode": game.mode} if game else {})
+            out.append(rec)
+            if rec.action == "recovered":
+                raw = {"recovered_from": "faceit detailed_results", "entry": e,
+                       "corroborated_by": {"liquipedia": rec.liquipedia, "page_url": lp.page_url}}
+                rows.append((f.match_id, n, pick["map_guid"], pick["map_name"], game.mode, f"{s1} / {s2}",
+                             t1 if e["winner"] == "faction1" else t2, t1, s1, t2, s2, None, Jsonb(raw),
+                             "faceit_results"))
+        if rows and write:
+            with conn.cursor() as cur:
+                cur.executemany(
+                    """INSERT INTO match_rounds
+                         (match_id, round_number, map_guid, map_name, game_mode, score_summary, winner_team_id,
+                          team1_team_id, team1_score, team2_team_id, team2_score, team_stats, raw_round_stats, source)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                       ON CONFLICT (match_id, round_number) DO NOTHING""", rows)
+                cur.execute("UPDATE matches SET maps_played = (SELECT count(*) FROM match_rounds r WHERE r.match_id = %s) "
+                            "WHERE match_id = %s", (f.match_id, f.match_id))
+    if write:
+        conn.commit()
+    return out

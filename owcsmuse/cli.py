@@ -391,14 +391,18 @@ def _cmd_liquipedia_reconcile(args: argparse.Namespace, conn) -> int:
         if args.plan:
             planned = lp_enrich.plan(run)
             by_action = planned.by_action()
+            dropped = lp_enrich.recover_dropped_maps(conn, run, args.team_map, write=False)
             _print({"candidates": len(planned.candidates), "by_action": {k: len(v) for k, v in by_action.items()},
-                    "gap_requiring_new_request": 0})
+                    "dropped_maps": [r.__dict__ for r in dropped], "gap_requiring_new_request": 0})
             return 0
         result = lp_enrich.enrich(conn, run, args.team_map)
         by_action = result.by_action()
+        # maps FACEIT's /stats dropped from complete series, where Liquipedia corroborates them (045)
+        dropped = lp_enrich.recover_dropped_maps(conn, run, args.team_map)
         _print({"candidates": len(result.candidates), "by_action": {k: len(v) for k, v in by_action.items()},
                 "games_added": sum(c.games for c in result.candidates),
-                "matches_with_disagreements": [c.match_id for c in result.candidates if c.disagreements]})
+                "matches_with_disagreements": [c.match_id for c in result.candidates if c.disagreements],
+                "dropped_maps": [r.__dict__ for r in dropped]})
         return 0
     if args.lp_cmd == "links":
         d = pipeline.LinkDecisions(args.decisions)

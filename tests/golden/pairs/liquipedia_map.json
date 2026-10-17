@@ -1,0 +1,21 @@
+{
+ "pages": {
+  "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1": {
+   "page": "Overwatch_Champions_Series/2024/North_America/Stage_1",
+   "name": "OWCS 2024: NA Stage 1 - Main Event"
+  },
+  "f1be7b75-9e54-4d57-b524-9d32f5398682": {
+   "name": "S5 NA OWCS Central - Regular Season",
+   "page": "Overwatch Champions Series/2025/NA/Stage 2/Regular Season"
+  },
+  "db1a7544-766d-4a46-bb69-163429310826": {
+   "name": "S9 NA OWCS Central - Regular Season",
+   "page": "Overwatch Champions Series/2026/NA/Stage 2/Regular Season"
+  },
+  "cb0339f1-5174-4639-b60e-a176d50b747d": {
+   "name": "S10 NA OWCS Central - Regular Season",
+   "page": "Overwatch Champions Series/2026/NA/Stage 3/Regular Season",
+   "note": "page found by the subpage probe (raw 4463), 15 matches; owner added Stage 3 2026-10-10"
+  }
+ }
+}

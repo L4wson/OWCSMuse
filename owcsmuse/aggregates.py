@@ -24,6 +24,7 @@ MATERIALIZED_VIEWS: tuple[str, ...] = (
     "agg_team_maps",
     "agg_head_to_head",
     "agg_map_modes",
+    "fact_player_map_results",   # before fact_player_versus, which pairs its rows (045)
     "fact_player_versus",
     "agg_org_versus_maps",
     "entity_names",

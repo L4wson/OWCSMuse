@@ -1,0 +1,49 @@
+{
+ "note": "Golden cases for the pairs warehouse (tests/golden/pairs). Derived by derive.py from raw payloads via independent.py, never from ask() output; only 'confirmed' cases run.",
+ "cases": [
+  {
+   "id": "G93",
+   "title": "A player v player series record: every series, and the same maps as the map record",
+   "kind": "exact",
+   "regression": "series maps (49) disagreed with the series' own map score (29-21 = 50) (2026-10-17)",
+   "question": "sugarfree series record against zeruhh",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 11,
+      "wins": 7,
+      "losses": 4,
+      "map_wins": 29,
+      "map_losses": 21,
+      "maps": 50
+     }
+    ],
+    "other_grain": "sugarfree map record against zeruhh"
+   },
+   "derivation": "Series with sugarfree and zeruhh on opposite declared line-ups: 11 (1-82515b5c, 1-1ccf85ac, 1-ef7ae93b, 1-1d2eaf73, 1-cfc0ad8d, 1-31a11066, 1-bd4e6ddb, 1-124cc396, 1-f152ab88, 1-1985af81, 1-ea152ea6), 7-4 from sugarfree's side; their played maps 29-21 (50: {'faceit stats': 42, 'faceit detailed_results, on Liquipedia': 1, 'liquipedia': 7}). maps read 49 while the stored maps_played of 1-1d2eaf73 said 3 of its 4.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G94",
+   "title": "A player v player map record counts every played map, stats or not",
+   "kind": "exact",
+   "regression": "map grain counted only maps with player stats: 22-20 against 29-21 (2026-10-17)",
+   "question": "sugarfree map record against zeruhh",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "maps": 50,
+      "map_wins": 29,
+      "map_losses": 21,
+      "matches": 11
+     }
+    ],
+    "other_grain": "sugarfree series record against zeruhh"
+   },
+   "derivation": "Every map of the 11 series: {'faceit stats': 42, 'faceit detailed_results, on Liquipedia': 1, 'liquipedia': 7} -> 29-21. Before: 22-20 in 42, the maps FACEIT returned player stats for. Missing were the 7 maps of the two results-only 2026 series (Liquipedia's games) and 1-1d2eaf73's map 1, Ilios (dropped by /stats; in detailed_results, and Liquipedia's game 1).",
+   "status": "confirmed"
+  }
+ ]
+}

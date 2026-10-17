@@ -114,7 +114,7 @@ jobs:
       # Twenty real matches, the repository's own identity decisions, and 25 questions whose expected
       # answers were derived from the raw payloads. A failure means an answer changed; the message shows
       # expected against actual.
-      - run: pytest -q -m golden tests/test_golden_answers.py
+      - run: pytest -q -m golden tests/test_golden_answers.py tests/test_golden_pairs.py
 
   frontend:
     name: frontend

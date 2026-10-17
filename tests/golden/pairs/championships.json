@@ -1,0 +1,129 @@
+{
+ "championships": [
+  {
+   "championship_id": "1933d87e-1047-44f2-8f8a-20d2dea73fb5",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S6 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S9 NA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "51740a2d-0e80-4faa-9b47-06085b9b4a35",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S8 NA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1",
+   "organizer_id": "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce",
+   "name": "OWCS 2024: NA Stage 1 - Main Event",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2024,
+   "classification_source": "manual",
+   "decision_note": "approved in the 2024 scope review (previously applied via --accept-proposals)"
+  },
+  {
+   "championship_id": "cb0339f1-5174-4639-b60e-a176d50b747d",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S10 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S10 OWCS Central main series (2026 Stage 3), owner 2026-10-10; found from the FACEIT room links on Liquipedia's Stage 3 page (raw 4464)"
+  },
+  {
+   "championship_id": "cdef9bcb-85fc-4017-b2dc-59f8e35a1306",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S8 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "db1a7544-766d-4a46-bb69-163429310826",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S9 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2026,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "f1be7b75-9e54-4d57-b524-9d32f5398682",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S5 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "f350948c-b338-41d3-a063-8702026dd008",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S6 NA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "f976d341-4447-41ca-8782-7c5d1790db99",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S4 NA OWCS Central - Playoffs",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  },
+  {
+   "championship_id": "faa79a76-ffd7-4f25-acda-e2006cf29b72",
+   "organizer_id": "f0e8a591-08fd-4619-9d59-d97f0571842e",
+   "name": "S4 NA OWCS Central - Regular Season",
+   "include": true,
+   "scope_region": "na",
+   "tier": "main",
+   "season": 2025,
+   "classification_source": "manual",
+   "decision_note": "S4-S9 OWCS Central main series, both regions"
+  }
+ ],
+ "organizers": {
+  "f0e8a591-08fd-4619-9d59-d97f0571842e": "FACEIT League - Overwatch",
+  "abd401de-e6ec-4ef1-8d4b-3d820f8f62ce": "OWCS | Overwatch Champions Series"
+ }
+}
