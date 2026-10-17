@@ -47,7 +47,12 @@ def pairing(agg_db):
 
 @pytest.fixture(scope="module")
 def never_met(agg_db):
-    """Two players with no map in common: the fixtures span two competitions."""
+    """Two players with no map against each other who were teammates: the case 042 words as "never on opposite sides".
+
+    The pair is chosen for that, not by whichever sorts first. Sorted by the database's collation, en_US (Supabase)
+    put "_gcb" first, a pair that never shared a line-up and is rightly "never faced each other", while C (CI's
+    Postgres) put two teammates first. The test then depended on where it ran.
+    """
     with agg_db.cursor() as cur:
         cur.execute("""
             SELECT a.nickname AS a, b.nickname AS b
@@ -58,7 +63,10 @@ def never_met(agg_db):
              WHERE x.player_id <> y.player_id
                AND NOT EXISTS (SELECT 1 FROM fact_player_versus v
                                 WHERE v.player_id = x.player_id AND v.opponent_player_id = y.player_id)
-             ORDER BY a.nickname, b.nickname LIMIT 1""")
+               AND EXISTS (SELECT 1 FROM series_lineups la JOIN series_lineups lb
+                             ON lb.match_id = la.match_id AND lb.team_id = la.team_id
+                            WHERE la.player_id = x.player_id AND lb.player_id = y.player_id)
+             ORDER BY a.nickname COLLATE "C", b.nickname COLLATE "C" LIMIT 1""")
         row = cur.fetchone()
     agg_db.commit()
     if not row:

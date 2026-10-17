@@ -492,8 +492,10 @@ case("G33", "A grand final FACEIT inflated with a phantom map presents Liquipedi
       "evidence": {"by_match": {NA_FINAL: {"score": gf_for, "opponent_score": gf_against, "best_of": gf_lp["best_of"],
                                            "sources": ["faceit", "liquipedia"]}}},
       # read after by_match in the harness: a real case that breaks if by_match ever again skips what follows it
-      "sentence_contains": [f"{tor_rec['wins']}-{tor_rec['losses']} in series and "
-                            f"{tor_rec['map_wins']}-{tor_rec['map_losses']} in maps"]},
+      # an unbeaten record says so in words (owner, 2026-10-17): "undefeated in series (3-0)", the same numbers
+      "sentence_contains": [(f"undefeated in series ({tor_rec['wins']}-0)" if tor_rec["losses"] == 0
+                             else f"{tor_rec['wins']}-{tor_rec['losses']} in series")
+                            + f" and {tor_rec['map_wins']}-{tor_rec['map_losses']} in maps"]},
      f"Toronto Defiant's {tor_rec['matches']} golden series, each scored from Liquipedia where linked (the source of record) "
      f"and from FACEIT otherwise: " + ", ".join(f"{mid[:10]} {mine}-{theirs}" for mid, mine, theirs, _ in tor_rows)
      + f". The grand final is {gf_for}-{gf_against} (bo{gf_lp['best_of']}); FACEIT stores it as "
