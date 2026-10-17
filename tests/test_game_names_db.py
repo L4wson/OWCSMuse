@@ -117,7 +117,10 @@ def test_identity_load_sets_the_display_name_from_the_decision(agg_db, tmp_path)
 
 def test_leaderboards_order_ties_deterministically(agg_db):
     with agg_db.cursor() as cur:
-        cur.execute("SELECT prosrc FROM pg_proc WHERE proname = 'stat_leaderboard'")
+        # this schema's function: on a database holding other scratch schemas (Supabase), an unqualified lookup read
+        # whichever schema's older copy came first
+        cur.execute("SELECT prosrc FROM pg_proc WHERE proname = 'stat_leaderboard' "
+                    "AND pronamespace = current_schema()::regnamespace")
         assert "maps_with_stat DESC, b.player_id" in cur.fetchone()["prosrc"]
 
 
