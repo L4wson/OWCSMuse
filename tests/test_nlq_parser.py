@@ -118,6 +118,13 @@ SUPPORTED = [
      {"intent": "map_stats", "entity": "map", "metric": "maps", "filters": {"season": 2024}}),
     ("Best mode for KSAA",
      {"intent": "map_stats", "entity": "mode", "metric": "map_win_rate", "filters": {"subject": "ksaa"}}),
+    # from the query log (2026-10-17): the rate words and an org's own "of" stayed in the name
+    ("zeruhh deaths per 10", {"metric": "Deaths/10m", "filters": {"subject": "zeruhh"}}),
+    ("player:58faa695-b501-4642-a4d9-0e4c2ed8526d deaths per 10",
+     {"metric": "Deaths/10m", "filters": {"player": "player:58faa695-b501-4642-a4d9-0e4c2ed8526d"}}),
+    ("quartz eliminations per 10 minutes", {"metric": "Eliminations/10m", "filters": {"subject": "quartz"}}),
+    ("Students of the Game record", {"intent": "team_record", "filters": {"subject": "students of the game"}}),
+    ("the record of team liquid", {"intent": "team_record", "filters": {"subject": "team liquid"}}),
     ("Best control map for ENCE",
      {"intent": "map_stats", "entity": "map", "metric": "map_win_rate", "filters": {"subject": "ence", "mode": "Control"}}),
     ("KSAA eliminations by map",

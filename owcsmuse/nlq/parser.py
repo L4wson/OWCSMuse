@@ -218,9 +218,15 @@ def _has(q: str, cues: list[str]) -> bool:
     return any(re.search(r"\b" + re.escape(c) + r"(?:s|es)?\b", q) for c in cues)
 
 
+# "per 10", "per ten minutes", "/10min", "per 10m": the per-10-minutes rate, whole. A bare "per 10" was not
+# recognised and stayed in the question as part of the name ("zeruhh per 10" clarified between two players);
+# "/10min" lost only "/10m", leaving "in"; "per 10 minutes" lost "per 10 min", leaving "utes". "per 10 maps" is no rate.
+_PER10 = re.compile(r"(?:\bper\s+|/\s?)(?:10|ten)\s?(?:minutes|minute|mins|min|m)?\b(?!\s*maps?\b)")
+
+
 def _find_metric(q: str) -> tuple[Optional[str], str]:
     """Return (metric, question with the metric phrase removed)."""
-    per10 = bool(re.search(r"per (10|ten) ?(min|mins|minutes)|/10m|per 10m", q))
+    per10 = bool(_PER10.search(q))
     for phrase, metric in METRIC_SYNONYMS:
         m = re.search(r"\b" + re.escape(phrase) + r"\b", q)
         if m:
@@ -230,7 +236,7 @@ def _find_metric(q: str) -> tuple[Optional[str], str]:
                 metric = "losses"
             if per10 and metric not in DERIVED_METRICS:
                 metric = metric + "/10m"
-            rest = re.sub(r"per (10|ten) ?(min|mins|minutes)|/10m|per 10m", " ", q[: m.start()] + " " + q[m.end():])
+            rest = _PER10.sub(" ", q[: m.start()] + " " + q[m.end():])
             return metric, re.sub(r"\s+", " ", rest).strip()
     return None, q
 
@@ -360,7 +366,11 @@ _NAME = r"[a-z0-9_.:\-' ]+?"
 _SUBJECT_PATTERNS = [
     re.compile(r"\b(?:did|does|do|has|have|had|is|was|are|were)\s+(?P<n>" + _NAME + r")\s+(?:have|get|got|score|scored|record|recorded|play|played|average|averaged|win|won|lose|lost|deal|dealt|heal|healed|do|done|die|died|post|posted|put up|finish|finished|go|gone|fare|perform)\b"),
     re.compile(r"(?:^|\s)(?P<n>(?:[a-z0-9_.\-']+\s+)?[a-z0-9_.\-']+)'s\b"),
-    re.compile(r"\b(?:for|by|of|from)\s+(?P<n>[a-z0-9_.:\-' ]+)$"),
+    re.compile(r"\b(?:for|by|from)\s+(?P<n>[a-z0-9_.:\-' ]+)$"),
+    # "of" opens a name only after filler ("stats of quartz", "the record of team liquid"): an org can have "of" in its
+    # name, and "students of the game record" was read as "the game", which clarified between two orgs
+    re.compile(r"^(?:(?:the|a|an|total|average|avg|number|count|stats?|numbers?|totals?|record|career|all|show|me|"
+               r"give|get|what|is|are|was|were|what's|whats|how|many|much)\s+)*of\s+(?P<n>[a-z0-9_.:\-' ]+)$"),
     re.compile(r"^(?:show|show me|give me|get|what is|what's|what are|whats|tell me|tell me about)\s+(?P<n>" + _NAME + r")(?:\s+(?:stats?|numbers?|totals?|averages?))?$"),
     re.compile(r"^(?P<n>" + _NAME + r")\s+(?:stats?|numbers?|totals?|averages?)$"),
     re.compile(r"^(?P<n>[a-z0-9_.:\-' ]{2,72})$"),   # a bare name, or an entity id
