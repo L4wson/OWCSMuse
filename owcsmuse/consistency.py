@@ -112,9 +112,17 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
                  WHERE NOT EXISTS (SELECT 1 FROM match_players mp
                                     WHERE mp.match_id = t.match_id AND mp.round_number = t.round_number))"""),
     ("fact_player_versus", "one row per player per map per opposing player",
-     """WITH per AS (
-            SELECT match_id, round_number, team_id, count(*) AS n
-              FROM fact_player_map_results GROUP BY match_id, round_number, team_id
+     # from the sources, not from fact_player_map_results: that is materialized too, and a stale one agreed with a stale
+     # pairing of itself, so a deleted player row went unflagged here
+     """WITH rows AS (
+            SELECT match_id, round_number, team_id FROM fact_player_maps
+            UNION ALL
+            SELECT t.match_id, t.round_number, t.team_id
+              FROM fact_team_maps t JOIN series_lineups l ON l.match_id = t.match_id AND l.team_id = t.team_id
+             WHERE NOT EXISTS (SELECT 1 FROM match_players mp
+                                WHERE mp.match_id = t.match_id AND mp.round_number = t.round_number)
+        ), per AS (
+            SELECT match_id, round_number, team_id, count(*) AS n FROM rows GROUP BY match_id, round_number, team_id
         ), tot AS (
             SELECT match_id, round_number, sum(n) AS total, sum(n * n) AS same_side
               FROM per GROUP BY match_id, round_number

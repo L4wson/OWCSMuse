@@ -305,7 +305,8 @@ def test_player_vs_org_counts_each_map_once_not_once_per_opponent():
                  names={"subject": "Quartz03", "opponent": "Crazy Raccoon"})
     c = _c(q, r)
     assert "opponent_org_key = %s" in c.sql
-    assert "SELECT DISTINCT match_id, round_number" in c.sql, "a map must not count five times, once per opposing player"
+    # one row per player per played map (045), never the per-opposing-player pairing, so a map counts once
+    assert "FROM fact_player_map_results" in c.sql and "fact_player_versus" not in c.sql,         "a map must not count five times, once per opposing player"
     assert c.params[1] == "crazy-raccoon"
 
 

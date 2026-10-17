@@ -107,7 +107,7 @@ def test_a_korean_teams_record_at_the_event_answers(stage4):
     conn, _, _ = stage4
     a = ask(conn, "T1 record at the 2025 world finals")
     assert a.status == "ok", (a.code, a.reason)
-    assert "2-0 in series" in a.sentence["text"], a.sentence
+    assert "undefeated in series (2-0)" in a.sentence["text"], a.sentence   # unbeaten, said in words (2026-10-17)
     assert a.attribution and any(WF in u for u in a.attribution.get("pages", [])), a.attribution
 
 
@@ -187,7 +187,8 @@ def test_a_head_to_head_between_two_orgs_counts_their_series(stage4):
     a = ask(conn, "t1 series record against weibo gaming at the 2025 world finals")
     assert a.status == "ok", (a.code, a.reason)
     assert (a.rows[0]["wins"], a.rows[0]["losses"], a.rows[0]["matches"]) == (2, 0, 2)
-    assert a.sentence["text"].startswith("T1 is 2-0 in series against Weibo Gaming at OWCS 2025 World Finals")
+    # an unbeaten record says so in words (owner, 2026-10-17); the numbers are asserted above
+    assert a.sentence["text"].startswith("T1 is undefeated against Weibo Gaming at OWCS 2025 World Finals (2-0 in series)")
     none = ask(conn, "t1 series record against weibo gaming in 2024")
     assert none.status == "cannot_answer", "no series is no data, never an ok answer with an empty row"
 
