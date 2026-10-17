@@ -59,9 +59,8 @@ jobs:
         postgres: [16, 17]   # 17 is what Supabase runs and docker-compose uses; 16 stays covered
     services:
       postgres:
-        # Docker Hub's official image via Amazon ECR Public: identical, and not under Docker Hub's unauthenticated
-        # pull limit that shared runners keep hitting ("toomanyrequests", 2026-10-09)
-        image: public.ecr.aws/docker/library/postgres:${{ matrix.postgres }}
+        # GitHub-hosted runners can pull Docker Hub official images without the anonymous pull limit.
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs
@@ -91,9 +90,8 @@ jobs:
         postgres: [16, 17]   # 17 is what Supabase runs and docker-compose uses; 16 stays covered
     services:
       postgres:
-        # Docker Hub's official image via Amazon ECR Public: identical, and not under Docker Hub's unauthenticated
-        # pull limit that shared runners keep hitting ("toomanyrequests", 2026-10-09)
-        image: public.ecr.aws/docker/library/postgres:${{ matrix.postgres }}
+        # GitHub-hosted runners can pull Docker Hub official images without the anonymous pull limit.
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs
@@ -143,9 +141,8 @@ jobs:
         postgres: [16, 17]   # 17 is what Supabase runs and docker-compose uses; 16 stays covered
     services:
       postgres:
-        # Docker Hub's official image via Amazon ECR Public: identical, and not under Docker Hub's unauthenticated
-        # pull limit that shared runners keep hitting ("toomanyrequests", 2026-10-09)
-        image: public.ecr.aws/docker/library/postgres:${{ matrix.postgres }}
+        # GitHub-hosted runners can pull Docker Hub official images without the anonymous pull limit.
+        image: postgres:${{ matrix.postgres }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs
