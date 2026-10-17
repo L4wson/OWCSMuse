@@ -46,6 +46,10 @@ _SPACES = re.compile(r"\s+")
 _SPECIAL = str.maketrans({
     "ł": "l", "Ł": "L", "ø": "o", "Ø": "O", "đ": "d", "Đ": "D", "ß": "ss", "æ": "ae", "Æ": "AE",
     "œ": "oe", "Œ": "OE", "ı": "i", "İ": "I", "þ": "th", "Þ": "TH", "ð": "d", "Ð": "D",
+    # the stroke and hook letters NFKD leaves whole (046): dropped, "ĿƗƇĦ" folded to "l" and "ŦūŦ" to "u", and a
+    # one-letter name is "in" almost any question - both were offered at 0.7 for "finals", "liquid", "zeruhh per 10"
+    "Ŀ": "L", "ŀ": "l",   # as SQL's translate() maps them; NFKD splits off a middle dot that became a space
+    **dict(zip("ĦħŦŧƗɨƇƈƁɓƑƒƓɠƘƙƝɲƤƥƬƭƲʋƳƴƵƶƊɗƉɖŊŋɃƀɆɇɈɉɌɍɎɏȻȼȺⱥ", "HhTtIiCcBbFfGgKkNnPpTtVvYyZzDdDdNnBbEeJjRrYyCcAa", strict=True)),
 })
 
 
@@ -92,7 +96,8 @@ def score_name(query_folded: str, name_folded: str) -> float:
         return 0.9
     if query_folded in name_folded:
         return 0.8
-    if name_folded in query_folded:
+    # a name inside a longer question counts only as whole words: "ssg" in "ssg game", never the "l" of "finals"
+    if f" {name_folded} " in f" {query_folded} ":
         return 0.7
     compact_q = query_folded.replace(" ", "")
     compact_n = name_folded.replace(" ", "")

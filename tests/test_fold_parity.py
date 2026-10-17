@@ -15,7 +15,7 @@ pytestmark = pytest.mark.skipif(not DB_URL, reason="OWCS_TEST_DATABASE_URL not s
 
 NAMES = ["Virtus.pro", "Anyone's Legend", "Supernova (American team)", "Team CC (Chinese orgless team)", "LGD.OA",
          "Gen.G Esports", "A-Square Tengu", "Nah I'd Win", "Beluga's Platoon", "  Twisted   Minds ", "Esperança",
-         "Paraíso", "Łukasz", "Øystein", "Straße", "Ætherium", "Œuvre", "ĿƗƇĦ", "Ex Oblivione", "9z Team",
+         "Paraíso", "Łukasz", "Øystein", "Straße", "Ætherium", "Œuvre", "ĿƗƇĦ", "ŦūŦ", "Ƥhoenix", "Ex Oblivione", "9z Team",
          "Team Falcons", "T1", "ZETA DIVISION", "ROC Esports", "Sign Esports", "Weibo Gaming", "Crazy Raccoon"]
 
 

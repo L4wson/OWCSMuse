@@ -62,3 +62,15 @@ def test_one_candidate_per_entity_and_limit():
     ids = [(c.entity_type, c.entity_id) for c in cands]
     assert len(ids) == len(set(ids))
     assert len(rank_candidates("a", NAMES, limit=2, min_score=0.0)) == 2
+
+
+def test_stroke_letters_fold_to_their_base_letter():
+    # NFKD leaves these whole; dropped, "ĿƗƇĦ" folded to "l" and "ŦūŦ" to "u" (046)
+    assert fold("ĿƗƇĦ") == "lich" and fold("ŦūŦ") == "tut" and fold("Ƥhoenix") == "phoenix"
+
+
+def test_a_name_inside_a_question_counts_only_as_whole_words():
+    # a one-letter folded name was "inside" almost anything: offered at 0.7 for "finals", "liquid", "zeruhh per 10"
+    assert score_name("finals", "l") < 0.6 and score_name("liquid", "u") < 0.6
+    assert score_name("ssg game", "ssg") == 0.7
+    assert score_name("sugarfree this year", "sugarfree") == 0.7
