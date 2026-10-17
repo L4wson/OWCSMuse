@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Optional
 
-from . import __version__
+from . import __version__, staleness
 from .aggregates import MATERIALIZED_VIEWS, available_stats, refresh, stat_coverage_summary, stat_leaderboard
 from .collector import Collector
 from .config import Settings, load_settings
@@ -800,6 +800,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--version", action="version", version=f"owcsmuse {__version__}")
     p.add_argument("--log-level", default=None, help="override OWCS_LOG_LEVEL")
     p.add_argument("--log-format", choices=["json", "text"], default=None, help="override OWCS_LOG_FORMAT")
+    p.add_argument("--allow-stale", action="store_true",
+                   help="run even when the database or origin/main is ahead of this checkout (also OWCS_ALLOW_STALE=1)")
     sub = p.add_subparsers(dest="command", required=True)
 
     sub.add_parser("migrate", help="apply pending SQL migrations").set_defaults(func=cmd_migrate)
@@ -1115,11 +1117,47 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
+# Commands that never open the database; everything else is checked against it before it runs.
+_NO_DATABASE = frozenset({"classify", "decide", "limitations"})
+
+
+def _migrations_path(settings: Settings) -> Path:
+    path = Path(settings.migrations_dir)
+    return path if path.is_absolute() or path.exists() else staleness.PROJECT_ROOT / path
+
+
+def _check_not_stale(args: argparse.Namespace, settings: Settings) -> None:
+    """Stop before a stale checkout reads or writes the database (see staleness.py)."""
+    applied = None
+    if args.command not in _NO_DATABASE and not getattr(args, "no_db", False):
+        try:
+            with connect(settings.database_url, schema=settings.db_schema) as conn:
+                applied = staleness.applied_migrations(conn)
+        except Exception:
+            applied = None  # unreachable: the command reports that itself
+    migrations = _migrations_path(settings)
+    # The deployed image must survive a rollback to an older release: `serve` only warns, and
+    # `migrate` refuses only when it would add this checkout's own migrations to a newer schema
+    # (an old branch's 025 onto a database at 043) - with nothing to add it is a no-op.
+    allow = args.allow_stale or args.command == "serve" or (
+        args.command == "migrate" and applied is not None
+        and not staleness.pending_migrations(applied, migrations))
+    found = staleness.guard(applied=applied, migrations_dir=migrations,
+                            behind=staleness.commits_behind(), allow=allow)
+    for problem in found:  # only reached when allowed: say it anyway
+        print(f"warning: stale checkout: {problem}", file=sys.stderr)
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     args = build_parser().parse_args(argv)
     _safe_stdout()
     settings = load_settings()
     configure_logging(args.log_level or settings.log_level, args.log_format or settings.log_format)
+    try:
+        _check_not_stale(args, settings)
+    except staleness.StaleCheckout as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
     return args.func(args, settings)
 
 

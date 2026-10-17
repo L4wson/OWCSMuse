@@ -1277,6 +1277,21 @@ plays on weekends. What the schedule deliberately never does: put a newly discov
 or use an unreviewed Liquipedia team-name proposal. A deploy that automates those away gets wrong answers that look
 right.
 
+## Stale checkouts
+
+Every CLI command first checks that this checkout is not older than what it is about to work against, and stops with
+exit 3 if it is:
+
+- the database has applied a migration this checkout has no file for, so the code predates the schema it would read
+  and write;
+- the branch is behind `origin/main`, by the local remote-tracking ref (`git fetch` keeps that ref current; the check
+  makes no network call).
+
+A stale checkout fails silently otherwise. It connects, ingests and answers from a schema it has never seen, and every
+result looks plausible. `--allow-stale` or `OWCS_ALLOW_STALE=1` runs the command anyway and still prints the reason.
+Two commands only warn, so a rollback to an older image keeps working. `serve` never refuses, and `migrate` refuses
+only when it would add the checkout's own migrations to a newer schema. With nothing to add, it changes nothing.
+
 ## Consistency checks
 
 Four bugs in this project had the same shape: a join or key mismatch that
