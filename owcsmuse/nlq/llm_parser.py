@@ -45,9 +45,10 @@ Filters: season (year), championship (free text such as "stage 1", "main event",
 mode (one of {', '.join(MODES.values())}), region (na, emea, international). aggregation: total or avg_per_map.
 Keep entity names exactly as the user typed them; do not guess ids.
 
-Unanswerable codes: unsupported_metric (hero picks, accuracy, ultimates, ratings, prize money and other untracked stats),
+Unanswerable codes: unsupported_metric (accuracy, ultimates, ratings and other stats FACEIT does not record),
 out_of_scope (Korea/Asia/Japan/China/Pacific, Overwatch League, qualifiers, relegation, ranked/hubs, schedules, predictions),
-unsupported_question (anything else). Give a one-sentence reason."""
+unsupported_question (hero picks and bans, MVP awards, prize money, salaries, and anything else). Give a one-sentence
+reason."""
 
 
 class ParsedQuestion(BaseModel):

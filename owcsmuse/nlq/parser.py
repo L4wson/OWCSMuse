@@ -59,18 +59,25 @@ METRIC_SYNONYMS: list[tuple[str, str]] = sorted(
 )
 
 # Things people ask about that the warehouse does not have. Each maps to a reason.
+# Questions the warehouse has no answer shape for: not a stat it lacks but a kind of question - who picked or banned
+# which hero, who won an award, who earns what. They were refused as unsupported_metric, which tells a client to offer
+# a stat instead ("ask `what stats are available`"); no stat answers them.
+UNSUPPORTED_QUESTION_TERMS: list[tuple[str, str]] = [
+    ("hero", "hero picks and bans are not in the FACEIT payloads"),
+    ("heroes", "hero picks and bans are not in the FACEIT payloads"),
+    ("mvp", "MVP awards are not tracked"),
+    ("salary", "salaries are not tracked"),
+    ("earnings", "prize money is not tracked"),
+    ("prize", "prize money is not tracked"),
+]
+
+# Stats a player could have that FACEIT does not record: an unsupported metric, with the tracked ones as the advice.
 UNSUPPORTED_METRIC_TERMS: list[tuple[str, str]] = [
-    ("hero", "hero picks are not in the FACEIT payloads"),
-    ("heroes", "hero picks are not in the FACEIT payloads"),
     ("ultimate", "ultimate usage is not in the FACEIT payloads"),
     ("ults", "ultimate usage is not in the FACEIT payloads"),
     ("accuracy", "accuracy is not in the FACEIT payloads"),
     ("headshot", "headshot stats are not in the FACEIT payloads"),
     ("critical hits", "critical hit stats are not in the FACEIT payloads"),
-    ("salary", "salaries are not tracked"),
-    ("earnings", "prize money is not tracked"),
-    ("prize", "prize money is not tracked"),
-    ("mvp", "MVP awards are not tracked"),
     ("rating", "there is no rating metric; ask for a specific stat"),
     ("clutch", "clutches are not in the FACEIT payloads"),
     ("first blood", "first bloods are not in the FACEIT payloads"),
@@ -546,6 +553,11 @@ def _parse(q: str) -> ParseResult:
         if re.search(r"\b" + re.escape(term) + r"\b", q):
             return Unanswerable(code="out_of_scope", reason=why,
                                 suggestions=["Scope is OWCS NA + EMEA main competition on FACEIT: regional stages, playoffs and international events."])
+    for term, why in UNSUPPORTED_QUESTION_TERMS:
+        if re.search(r"\b" + re.escape(term) + r"\b", q):
+            return Unanswerable(code="unsupported_question", reason=why,
+                                suggestions=["The warehouse answers records, head-to-heads, stat leaderboards, placings "
+                                             "and team histories."])
     for term, why in UNSUPPORTED_METRIC_TERMS:
         if re.search(r"\b" + re.escape(term) + r"\b", q):
             return Unanswerable(code="unsupported_metric", reason=why,

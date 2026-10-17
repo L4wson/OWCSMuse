@@ -160,11 +160,13 @@ SUPPORTED = [
 ]
 
 UNANSWERABLE = [
-    ("Who has the best hero pool?", {"unsupported_metric"}),
+    ("Who has the best hero pool?", {"unsupported_question"}),   # a kind of question, not a stat
     ("What's Korea's best team?", {"unsupported_metric"}),   # Korea is a region now, not out of scope; "best team" still needs a stat
     ("When is the next match for Twisted Minds?", {"out_of_scope"}),
     ("Who will win OWCS 2026?", {"out_of_scope"}),
-    ("How much prize money did Twisted Minds earn?", {"unsupported_metric"}),
+    ("How much prize money did Twisted Minds earn?", {"unsupported_question"}),
+    ("most banned hero in 2026", {"unsupported_question"}),
+    ("who was the stage 2 2024 na mvp", {"unsupported_question"}),
     ("Who had the most accuracy?", {"unsupported_metric"}),
     ("Show me the open qualifier results", {"out_of_scope"}),
     ("What is KSAA's rating?", {"unsupported_metric"}),

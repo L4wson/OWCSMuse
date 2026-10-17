@@ -128,7 +128,7 @@ def test_availability(agg_db):
 
 
 def test_out_of_scope_and_unsupported_paths_are_clean(agg_db):
-    for q, code in [("who has the best hero pool", "unsupported_metric"), ("best team in china", "out_of_scope"),
+    for q, code in [("who has the best hero pool", "unsupported_question"), ("best team in china", "out_of_scope"),
                     ("most eliminations in korea", "results_only"),
                     ("most eliminations in 2023", "no_data"), ("most eliminations on Numbani", "no_data")]:
         a = ask(agg_db, q)

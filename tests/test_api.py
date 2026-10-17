@@ -217,7 +217,7 @@ def test_ask_returns_a_sentence_an_aggregate_and_the_query_it_understood(client)
 def test_a_refusal_is_a_two_hundred_with_a_reason_and_a_sentence(client):
     answer = _ask(client, "who has the best hero pool")
     assert answer["status"] == "cannot_answer"
-    assert answer["code"] == "unsupported_metric"
+    assert answer["code"] == "unsupported_question"   # hero picks are a kind of question, not a stat
     assert answer["sentence"]["text"] and answer["reason"]
     assert answer["evidence"] is None
 
