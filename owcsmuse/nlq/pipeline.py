@@ -438,7 +438,7 @@ def _empty_slice(conn: psycopg.Connection, question: str, q: StructuredQuery, r:
     answer is what is actually the case: they have no rows in this slice, and these are the seasons they do have.
     """
     generic = ("the query is valid but nothing in scope matches these filters",
-               ["Loosen the season / championship / map filter, or check `status` for what has been ingested."], [])
+               ["Loosen the season / tournament / map filter, or check `status` for what has been ingested."], [])
     name = r.names.get("subject") or r.names.get("player") or r.names.get("team")
     foot = _entity_footprint(conn, r) if name else None
     if not foot:
