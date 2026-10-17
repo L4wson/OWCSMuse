@@ -175,9 +175,11 @@ def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT
 
 def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
     """Replace liquipedia_matches / liquipedia_links with this run's. Idempotent; reviewer decisions come from the file."""
+    from .. import names
     from .enrich import _round_scores
 
     comp_by_page = {p: sorted(c)[0] for p, c in run.comps_of_page.items()}
+    canon = names.load(conn)   # FACEIT's spelling of each map and mode (048), read before the rebuild below
     with conn.cursor() as cur:
         cur.execute("DELETE FROM liquipedia_links")
         cur.execute("DELETE FROM liquipedia_matches")
@@ -199,7 +201,8 @@ def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
                 s1, s2 = _round_scores(game)
                 cur.execute("""INSERT INTO liquipedia_rounds (lp_objectname, round_number, map_name, game_mode, score1,
                                                               score2, winner) VALUES (%s,%s,%s,%s,%s,%s,%s)""",
-                            (m.objectname, i, game.map, game.mode, s1, s2, game.winner if game.winner in (1, 2) else 0))
+                            (m.objectname, i, canon.map(game.map), canon.mode(game.mode), s1, s2,
+                             game.winner if game.winner in (1, 2) else 0))
             # the line-ups, a parsed copy like the match itself (rebuilt from raw_payloads on every run)
             for side, players in ((1, m.players1), (2, m.players2)):
                 seen: set[str] = set()

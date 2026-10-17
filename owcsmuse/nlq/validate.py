@@ -140,19 +140,22 @@ class SchemaInfo:
                        if c in self.championships and self.championship_season.get(c) is not None})
 
     # ---- lookups used by validation and compilation
+    # Sorted: a set's order is the process's hash seed, so with "Control" and "control" both stored, one process
+    # answered every Control question from 2 maps and another from 1,218. 048 keeps one spelling stored; this keeps the
+    # choice the same in every process regardless, and never takes a rarer spelling because a question typed it.
     def match_map(self, name: str) -> Optional[str]:
         f = fold(name)
-        for m in self.maps:
+        for m in sorted(self.maps):
             if fold(m) == f:
                 return m
-        for m in self.maps:
+        for m in sorted(self.maps):
             if f and f in fold(m):
                 return m
         return None
 
     def match_mode(self, name: str) -> Optional[str]:
         f = fold(name)
-        for m in self.modes:
+        for m in sorted(self.modes):
             if fold(m) == f:
                 return m
         return None

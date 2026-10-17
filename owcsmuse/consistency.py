@@ -702,6 +702,32 @@ def check_dropped_stats_maps(conn: psycopg.Connection) -> CheckResult:
                    f"{len(discrepancies)} map(s) in detailed_results are neither a stored round nor explained", counts)
 
 
+def check_name_variants(conn: psycopg.Connection) -> CheckResult:
+    """One stored spelling per map and per mode (048).
+
+    Answers filter on the exact stored value and the validator picks a spelling out of a set, so two spellings that
+    fold together ("Control" and "control") split a filter's maps - and which half an answer read depended on the
+    process's hash seed: "Twisted Minds has no series on Control maps" from one process, 57-28 from the next.
+    """
+    from .resolve import fold
+    discrepancies: list[dict[str, Any]] = []
+    counts: dict[str, Any] = {}
+    for source in ("match_rounds", "liquipedia_rounds", "fact_team_maps", "fact_player_maps"):
+        for col in ("map_name", "game_mode"):
+            rows = _rows(conn, f"SELECT {col} AS v, count(*) AS n FROM {source} WHERE {col} IS NOT NULL GROUP BY 1")
+            by_fold: dict[str, list] = {}
+            for r in rows:
+                by_fold.setdefault(fold(r["v"]), []).append((r["v"], int(r["n"])))
+            counts[f"{source}.{col}"] = len(by_fold)
+            for k, spellings in sorted(by_fold.items()):
+                if len(spellings) > 1:
+                    discrepancies.append({"kind": "spelling_variants", "where": f"{source}.{col}", "fold": k,
+                                          "spellings": sorted(spellings, key=lambda x: -x[1])})
+    return _result("name_variants", discrepancies,
+                   "every map and mode has one stored spelling", f"{len(discrepancies)} name(s) stored in more than one spelling",
+                   counts)
+
+
 # ------------------------------------------------------------ answer rates
 
 # Questions whose answer is a derived rate, asked through the real parser and pipeline for every season and for all of
@@ -950,6 +976,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "score_plausibility": check_score_plausibility,
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
     "dropped_stats_maps": check_dropped_stats_maps,
+    "name_variants": check_name_variants,
     "map_winner_consistency": check_map_winner_consistency,
     "phantom_map_isolation": check_phantom_map_isolation,
     "display_names_searchable": check_display_names_searchable,

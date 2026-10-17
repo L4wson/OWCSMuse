@@ -97,6 +97,8 @@ def enrich(conn: psycopg.Connection, run: Run, team_map_path: str) -> EnrichResu
     if not candidates:
         return result
 
+    from .. import names
+    canon = names.load(conn)   # FACEIT's spelling of each map and mode (048)
     match_ids = [f.match_id for _, f, _lk in candidates]
     with conn.cursor() as cur:
         cur.execute("SELECT match_id, faction1_team_id, faction2_team_id FROM matches WHERE match_id = ANY(%s)",
@@ -134,7 +136,7 @@ def enrich(conn: psycopg.Connection, run: Run, team_map_path: str) -> EnrichResu
                     winner_id = t1_id if flip else t2_id
                 raw = {"liquipedia": {"map": game.map, "mode": game.mode, "winner": game.winner,
                                       "scores": list(game.scores), "page_url": lp.page_url}}
-                rows.append((f.match_id, i + 1, None, game.map, game.mode, f"{s1} / {s2}", winner_id,
+                rows.append((f.match_id, i + 1, None, canon.map(game.map), canon.mode(game.mode), f"{s1} / {s2}", winner_id,
                             t1_id, s1, t2_id, s2, None, Jsonb(raw), "liquipedia"))
             cur.executemany(
                 """INSERT INTO match_rounds
@@ -242,6 +244,8 @@ def recover_dropped_maps(conn: psycopg.Connection, run: Run, team_map_path: str,
         return []
     resolver = make_resolver(TeamMap(team_map_path), {p.key: p for p in run.proposals}, use_proposals=True,
                              team_windows=load_team_windows(conn))
+    from .. import names
+    canon = names.load(conn)
     out: list[Recovery] = []
     for lp, f in todo:
         d = detail[f.match_id]
@@ -264,7 +268,7 @@ def recover_dropped_maps(conn: psycopg.Connection, run: Run, team_map_path: str,
             if rec.action == "recovered":
                 raw = {"recovered_from": "faceit detailed_results", "entry": e,
                        "corroborated_by": {"liquipedia": rec.liquipedia, "page_url": lp.page_url}}
-                rows.append((f.match_id, n, pick["map_guid"], pick["map_name"], game.mode, f"{s1} / {s2}",
+                rows.append((f.match_id, n, pick["map_guid"], canon.map(pick["map_name"]), canon.mode(game.mode), f"{s1} / {s2}",
                              t1 if e["winner"] == "faction1" else t2, t1, s1, t2, s2, None, Jsonb(raw),
                              "faceit_results"))
         if rows and write:
