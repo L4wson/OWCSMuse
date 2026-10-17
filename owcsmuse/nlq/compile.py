@@ -459,6 +459,32 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
                        f"sum(a.sum_{col}) AS total, round(sum(a.sum_{col}) / nullif(sum(a.maps_with_{col}), 0), 2) AS avg_per_map, "
                        "array_agg(DISTINCT a.season ORDER BY a.season) AS seasons "
                        f"FROM agg_player_stats a JOIN players p ON p.player_id = a.player_id WHERE {' AND '.join(clauses)} GROUP BY a.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name)")
+        elif v.stat_kind == "derived_rate":
+            # A rate is not summed: the long view's total is NULL for one, so "zeruhh deaths per 10" answered ok with
+            # nothing to say. Time-weighted from its components, scaled as stat_leaderboard scales it (047: a "/10m"
+            # rate over Time Played in seconds is x600), so one player's figure is the leaderboard's figure.
+            clauses, params = ["f.player_id = %s"], [r.player_id]
+            _where(clauses, params, "f.season", f.season)
+            _where(clauses, params, "f.championship_id", champ)
+            both = "FILTER (WHERE b.v IS NOT NULL AND b.num IS NOT NULL AND b.den IS NOT NULL)"   # the same maps on both sides
+            rate = ("CASE WHEN (SELECT count(*) FROM comp) = 1 "
+                    f"THEN round(stat_rate_scale(%s) * sum(b.num) {both} / nullif(sum(b.den) {both}, 0), 2) "
+                    "ELSE round(avg(b.v), 2) END")
+            sql = ("WITH comp AS (SELECT numerator, denominator FROM stat_rate_components(%s)), "
+                   "base AS (SELECT f.player_id, f.season, stat_num(f.stats ->> %s) AS v, "
+                   "stat_num(f.stats ->> (SELECT numerator FROM comp)) AS num, "
+                   "stat_num(f.stats ->> (SELECT denominator FROM comp)) AS den "
+                   "FROM fact_player_maps f WHERE " + " AND ".join(clauses) + ") "
+                   "SELECT b.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, "
+                   "count(*) FILTER (WHERE b.v IS NOT NULL) AS maps_with_stat, count(*) AS maps_played, "
+                   "round(100.0 * count(*) FILTER (WHERE b.v IS NOT NULL) / nullif(count(*), 0), 1) AS coverage_pct, "
+                   f"{rate} AS total, {rate} AS avg_per_map, "
+                   "min(b.v) AS min_per_map, max(b.v) AS max_per_map, "
+                   "array_agg(DISTINCT b.season ORDER BY b.season) FILTER (WHERE b.v IS NOT NULL) AS seasons "
+                   "FROM base b JOIN players p ON p.player_id = b.player_id "
+                   "GROUP BY b.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) "
+                   "HAVING count(*) FILTER (WHERE b.v IS NOT NULL) > 0")
+            params = [stat, stat] + params + [stat, stat]
         else:
             clauses, params = ["l.player_id = %s", "l.stat_key = %s"], [r.player_id, stat]
             _where(clauses, params, "l.season", f.season)

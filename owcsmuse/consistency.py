@@ -708,7 +708,12 @@ def check_dropped_stats_maps(conn: psycopg.Connection) -> CheckResult:
 # them. A rate is never summed or averaged (it is recomputed from its components), but an answer can still print the
 # wrong column: "highest NA kd in 2026" said Attack's K/D was 77.80 - his map win % - while the row held 5.00.
 RATE_QUESTIONS = (("highest kd", "kd_ratio"), ("most eliminations per map", "avg_per_map"),
-                  ("best map win rate", "map_win_rate"), ("which team has the best series win rate", "win_rate"))
+                  ("best map win rate", "map_win_rate"), ("which team has the best series win rate", "win_rate"),
+                  ("most deaths per 10 minutes", "Deaths/10m"))
+# A per-10-minutes rate is FACEIT's own per-map figure, time-weighted: it lies between the player's smallest and largest
+# per-map value. Every "/10m" rate was once per second ("Snowl leads Deaths/10m with 0.01" for about 8), which no
+# bound on the row alone caught.
+PER10_RATES = {"Deaths/10m"}
 KD_BOUND = 15            # a season K/D above this over 3+ maps is not a real Overwatch number
 
 
@@ -723,13 +728,18 @@ def check_answer_rates(conn: psycopg.Connection) -> CheckResult:
     from .nlq.sentence import num, pct
 
     # the metric's own column, stated here rather than imported from the sentence code this checks
-    own = {"kd_ratio": "kd_ratio", "map_win_rate": "map_win_pct", "win_rate": "win_pct", "avg_per_map": "avg_per_map"}
+    own = {"kd_ratio": "kd_ratio", "map_win_rate": "map_win_pct", "win_rate": "win_pct", "avg_per_map": "avg_per_map",
+           "Deaths/10m": "total"}
 
     seasons = [r["season"] for r in _rows(conn, "SELECT DISTINCT season FROM fact_player_maps WHERE season IS NOT NULL ORDER BY 1")]
     discrepancies: list[dict[str, Any]] = []
     asked = floored = 0
+    with_key = {k: {r["season"] for r in _rows(conn, "SELECT DISTINCT season FROM stat_coverage_season WHERE stat_key = %s", [k])}
+                for k in PER10_RATES}
     for season in seasons + [None]:
         for text, metric in RATE_QUESTIONS:
+            if metric in with_key and season is not None and season not in with_key[metric]:
+                continue   # a season that never recorded the stat (2024 has 9 keys) is refused, rightly
             question = f"{text} in {season}" if season else text
             a = ask(conn, question, with_evidence=False)
             conn.rollback()
@@ -757,6 +767,13 @@ def check_answer_rates(conn: psycopg.Connection) -> CheckResult:
                     bad = f"average per map {r['avg_per_map']} exceeds the total {r['total']}"
                 if r.get("matches") is not None and r.get("maps") is not None and float(r["matches"]) > float(r["maps"]):
                     bad = f"{r['matches']} series over {r['maps']} maps"
+                if metric in PER10_RATES and r.get("total") is not None and r.get("player_id"):
+                    lo, hi = (_rows(conn, """SELECT min(stat_num(stats ->> %s)) AS lo, max(stat_num(stats ->> %s)) AS hi
+                                               FROM fact_player_maps WHERE player_id = %s AND stats ? %s
+                                                AND (%s::int IS NULL OR season = %s)""",
+                                    (metric, metric, r["player_id"], metric, season, season)) or [{}])[0].values()
+                    if lo is not None and not float(lo) - 0.01 <= float(r["total"]) <= float(hi) + 0.01:
+                        bad = f"{metric} {r['total']} outside FACEIT's own per-map values {lo}..{hi}"
                 if bad:
                     discrepancies.append({"kind": "implausible_rate", "question": question,
                                           "row": r.get("nickname") or r.get("team"), "why": bad})
