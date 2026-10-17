@@ -10,6 +10,9 @@ definition of what an answer is. Nothing is cached except the schema snapshot
 and the suggestion list, both with a short TTL: an answer is always recomputed,
 because the whole point of a shareable link is that it reflects current data.
 
+Every answer, refusal and failure writes one query_log row (`querylog.py`): the
+question and how it was read, never who asked. `owcsmuse queries` reports on it.
+
 Requires the optional `api` extra (`pip install -e ".[api]"`).
 """
 
@@ -23,12 +26,12 @@ from contextlib import asynccontextmanager, contextmanager
 from typing import Any, Iterator, Literal, Optional
 
 import psycopg
-from fastapi import Depends, FastAPI, HTTPException, Path, Query, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Path, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from . import __version__
+from . import __version__, querylog
 from .config import Settings, load_settings
 from .db import connect
 from .limitations import LIMITATIONS
@@ -227,11 +230,33 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
     def _schema(conn: psycopg.Connection) -> SchemaInfo:
         return schema_cache.get(lambda: SchemaInfo.from_db(conn))
 
+    def _log_query(row: dict[str, Any]) -> None:
+        """Write one query_log row on its own connection. Never raises."""
+        try:
+            with app.state.pool.connection() as conn:
+                querylog.record(conn, row)
+        except Exception:
+            log_event(log, logging.WARNING, "query_log_not_written", status=row.get("status"), exc_info=True)
+
     def _answer(conn: psycopg.Connection, question: str, parser: str, page: int, page_size: int,
-                evidence_for: Optional[str], with_evidence: bool) -> dict[str, Any]:
+                evidence_for: Optional[str], with_evidence: bool,
+                tasks: BackgroundTasks, source: str) -> dict[str, Any]:
         t0 = time.perf_counter()
-        answer = ask(conn, question, parser=parser, info=_schema(conn), with_evidence=with_evidence,
-                     evidence_for=evidence_for, evidence_page=page, evidence_page_size=page_size)
+        try:
+            answer = ask(conn, question, parser=parser, info=_schema(conn), with_evidence=with_evidence,
+                         evidence_for=evidence_for, evidence_page=page, evidence_page_size=page_size)
+        except Exception as exc:
+            # Background tasks do not run when the handler raises, so a failure
+            # is logged here, before the error response - and an error is the
+            # row most worth having. Not when the connection itself broke: the
+            # database is down, and a fresh connect would only delay the 503.
+            if not (conn.closed or conn.broken):
+                _log_query(querylog.row_for(question, source, round((time.perf_counter() - t0) * 1000), error=exc))
+            raise
+        latency_ms = round((time.perf_counter() - t0) * 1000)
+        # After the response is sent: the log write costs the asker no time, and
+        # cannot fail their answer.
+        tasks.add_task(_log_query, querylog.row_for(question, source, latency_ms, answer))
         slug = remember_question(conn, question, parser, answer.query)
         log_event(log, logging.INFO, "ask",
                   question=question[:200], parser=answer.parser, status=answer.status, code=answer.code,
@@ -268,10 +293,10 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
         return {"ok": True, "version": __version__}
 
     @app.post("/ask", summary="ask a question")
-    def post_ask(body: AskRequest, pool: ConnectionPool = Depends(get_pool)) -> dict[str, Any]:
+    def post_ask(body: AskRequest, tasks: BackgroundTasks, pool: ConnectionPool = Depends(get_pool)) -> dict[str, Any]:
         with pool.connection() as conn:
             return _answer(conn, body.question, body.parser, body.page, body.page_size,
-                           body.evidence_for, body.with_evidence)
+                           body.evidence_for, body.with_evidence, tasks, "ask")
 
     @app.get("/query/{slug}", summary="a shared question, re-run against current data")
     def get_query(
@@ -279,13 +304,15 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
         page: int = Query(default=1, ge=1, le=10_000),
         page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
         evidence_for: Optional[str] = Query(default=None, max_length=200),
+        *,
+        tasks: BackgroundTasks,
         pool: ConnectionPool = Depends(get_pool),
     ) -> dict[str, Any]:
         with pool.connection() as conn:
             saved = load_question(conn, slug)
             if not saved:
                 raise HTTPException(status_code=404, detail=f"no question is saved under '{slug}'")
-            payload = _answer(conn, saved.question, saved.parser, page, page_size, evidence_for, True)
+            payload = _answer(conn, saved.question, saved.parser, page, page_size, evidence_for, True, tasks, "shared")
         changes = describe_parse_change(saved.structured_query, payload.get("query"))
         payload["shared"] = {
             "times_asked": saved.times_asked,

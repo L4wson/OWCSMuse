@@ -6,6 +6,7 @@ import argparse
 import json
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Optional
 
@@ -705,6 +706,40 @@ def cmd_ask(args: argparse.Namespace, settings: Settings) -> int:
     return 0 if answer.status == "ok" else 2
 
 
+def _since(value: Optional[str]) -> Optional[datetime]:
+    """'7d', '12h' or an ISO date -> a UTC datetime; None for all time."""
+    if not value:
+        return None
+    unit = value[-1:].lower()
+    if unit in ("d", "h") and value[:-1].isdigit():
+        n = int(value[:-1])
+        return datetime.now(timezone.utc) - (timedelta(days=n) if unit == "d" else timedelta(hours=n))
+    dt = datetime.fromisoformat(value)
+    return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+
+
+def cmd_queries(args: argparse.Namespace, settings: Settings) -> int:
+    """What people asked and how it went: failures by code, unparsed, no rows, most asked, clusters."""
+    from . import querylog
+
+    since = _since(args.since)
+    with connect(settings.database_url, schema=settings.db_schema) as conn:
+        if args.from_saved:
+            items = querylog.replay_saved(conn, since)
+        else:
+            items = querylog.load(conn, since, None if args.source == "all" else args.source)
+        conn.rollback()  # read-only
+    report = querylog.build_report(items, top=args.top)
+    if args.json:
+        _print(report)
+    else:
+        if args.from_saved:
+            print("replayed from saved_queries through today's parser: outcomes are what a question gets now, "
+                  "not what its asker saw\n")
+        print(querylog.render_report(report))
+    return 0
+
+
 def _run_phases(args: argparse.Namespace, settings: Settings, do_list: bool, do_detail: bool) -> int:
     raw_conn = connect(settings.database_url, autocommit=True, schema=settings.db_schema)
     conn = connect(settings.database_url, schema=settings.db_schema)
@@ -1047,6 +1082,16 @@ def build_parser() -> argparse.ArgumentParser:
     ak.add_argument("--no-evidence", action="store_true", help="skip the rows behind the answer")
     ak.add_argument("--debug", action="store_true", help="include the compiled SQL and parameters")
     ak.set_defaults(func=cmd_ask)
+
+    qy = sub.add_parser("queries", help="the query log: failures by reason code, unparsed, no rows, most asked, clusters")
+    qy.add_argument("--since", help="window: 7d, 24h, or an ISO date (default: all time)")
+    qy.add_argument("--source", choices=["ask", "shared", "all"], default="all",
+                    help="POST /ask, shared-link re-runs, or both")
+    qy.add_argument("--top", type=int, default=15, help="rows per section")
+    qy.add_argument("--from-saved", action="store_true",
+                    help="re-ask saved_queries through today's pipeline instead (read-only; for history before query_log)")
+    qy.add_argument("--json", action="store_true")
+    qy.set_defaults(func=cmd_queries)
 
     for name, func, help_ in (
         ("list", cmd_list, "LIST phase: page championship match listings into match stubs"),

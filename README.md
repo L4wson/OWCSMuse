@@ -1014,6 +1014,56 @@ returns the verdict, so no client diffs two objects to find out:
            "parse_changed": true, "parse_change": ["intent: head_to_head -> versus"]}
 ```
 
+### Query log
+
+Every `POST /ask` and every shared-link re-run writes one `query_log` row: the
+question, its status (`ok`, `clarify`, `refusal`, or `error` for an exception),
+the reason code, the parse, the resolved entities, the aggregate row count and
+the pipeline latency. Nothing about the asker is stored: no IP, user agent,
+session or cookie. A question is text someone typed, and it stays only text.
+
+Logging never costs the asker their answer. An answer's row is written in a
+background task after the response has gone out, and `querylog.record` swallows
+any failure into a `query_log_not_written` warning. An exception's row is
+written before the error response, except when the connection itself broke:
+the database is then down, and a fresh connect would only delay the 503. A
+request rejected by validation (an empty question, or one over 500 characters)
+never reaches the pipeline and is not logged.
+
+```bash
+python -m owcsmuse queries                    # everything logged
+python -m owcsmuse queries --since 7d         # the last week
+python -m owcsmuse queries --source ask       # only POST /ask, not shared-link re-runs
+python -m owcsmuse queries --from-saved       # saved_queries re-asked through today's parser
+python -m owcsmuse queries --json
+```
+
+The report shows failures by reason code (most asked first), questions that
+parsed to nothing, questions that found no rows, the most asked questions
+overall and the most asked that failed. It also shows clusters of failing
+phrasings. A cluster is questions that failed the same way and share a shape
+once names, seasons and entity ids are taken out (`<player> series record
+against <opponent> in <season>`), so twenty variants of one bug read as one
+line. The grouping is greedy word overlap: it is a reading aid, and the
+examples under each cluster show what it joined.
+
+`--from-saved` covers the time before the log existed. `saved_queries` never
+recorded outcomes, so it asks every saved question again, read-only. The result
+is what the question gets *today*, not what its asker saw then.
+
+**Size and retention.** Measured on 3,190 rows built from real questions, a row
+costs 493 bytes with its indexes, so about **0.5 MB per thousand questions**.
+The first month of the beta was 582 asks, about 0.3 MB. Supabase's free tier
+allows 500 MB and the database held 304 MB on 2026-10-17, so the log could take
+some 400,000 questions before it mattered. No retention job runs. When the
+table passes 25 MB (about 50,000 questions), keep failures longer than
+successes, because failures are what the log is for:
+
+```sql
+DELETE FROM query_log WHERE status = 'ok' AND asked_at < now() - interval '90 days';
+DELETE FROM query_log WHERE asked_at < now() - interval '365 days';
+```
+
 ### Suggestions
 
 Built from the warehouse, not hardcoded: the stat keys, teams and players in
