@@ -87,6 +87,118 @@
       },
       "probe_raw_id": 4221,
       "note": "In scope by the owner's Stage 4 scope addition (2026-10-09). Pages are exactly those the subpage probe (raw_payloads 4221) found at or under this root; not found: Overwatch_Champions_Series/2025/Asia/Champions_Clash, Champions_Clash/2025. Display name follows the page path; not yet confirmed by the owner."
+    },
+    "Overwatch_Champions_Series/2024/North_America/Stage_3": {
+      "display_name": "OWCS 2024 NA Stage 3 Main Event",
+      "season": 2024,
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/North_America/Stage_3": 14
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 NA Stage 3 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
+    },
+    "Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage": {
+      "display_name": "OWCS 2024 NA Stage 3 Group Stage",
+      "season": 2024,
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage": 20
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 NA Stage 3 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
+    },
+    "Overwatch_Champions_Series/2024/North_America/Stage_4": {
+      "display_name": "OWCS 2024 NA Stage 4 Main Event",
+      "season": 2024,
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/North_America/Stage_4": 14
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 NA Stage 4 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
+    },
+    "Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage": {
+      "display_name": "OWCS 2024 NA Stage 4 Group Stage",
+      "season": 2024,
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage": 20
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 NA Stage 4 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
+    },
+    "Overwatch_Champions_Series/2024/EMEA/Stage_3": {
+      "display_name": "OWCS 2024 EMEA Stage 3 Main Event",
+      "season": 2024,
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/EMEA/Stage_3": 14
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 EMEA Stage 3 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
+    },
+    "Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage": {
+      "display_name": "OWCS 2024 EMEA Stage 3 Group Stage",
+      "season": 2024,
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage": 20
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 EMEA Stage 3 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
+    },
+    "Overwatch_Champions_Series/2024/EMEA/Stage_4": {
+      "display_name": "OWCS 2024 EMEA Stage 4 Main Event",
+      "season": 2024,
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/EMEA/Stage_4": 14
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 EMEA Stage 4 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
+    },
+    "Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage": {
+      "display_name": "OWCS 2024 EMEA Stage 4 Group Stage",
+      "season": 2024,
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-17",
+      "pages": {
+        "Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage": 20
+      },
+      "probe_raw_id": 5034,
+      "note": "2024 EMEA Stage 4 ran off FACEIT (only its open qualifiers are on FACEIT), so it is Liquipedia-only: results, no player stats. In scope by the owner's decision (2026-10-17). The page and its match count are exactly what the subpage probe (raw_payloads 5034) found. Named as Stages 1 and 2 are: the stage page is the Main Event; its Swiss stage, which Liquipedia keeps on /Group_Stage, is the Group Stage (owner: Swiss is the group stage)."
     }
   }
 }
