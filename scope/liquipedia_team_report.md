@@ -1,13 +1,13 @@
 # Liquipedia team names -> FACEIT orgs
 
-98 Liquipedia team names, learned from 416 matches Liquipedia ties to FACEIT by match id. 57 decided, 41 proposed strong, 3 need a person.
+121 Liquipedia team names, learned from 419 matches Liquipedia ties to FACEIT by match id. 57 decided, 42 proposed strong, 25 need a person.
 
 Nothing is matched by fuzzy string similarity. Decide with:
 
     python -m owcsmuse liquipedia teams decide "<Liquipedia name>" --org <org slug> [--region na|emea]   (or --team <FACEIT team id>)
     python -m owcsmuse liquipedia teams accept        # accept every strong proposal below, in bulk
 
-## Proposed - strong evidence (41)
+## Proposed - strong evidence (42)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -45,6 +45,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Sheer Cold | any | sheer-cold | 7 | stood opposite FACEIT org 'sheer-cold' in 7 of 7 id-linked matches (FACEIT called it 'Sheer Cold'); the folded names are identical |
 | Shikigami Hikari | any | team:ec69a520-047f-4754-b36e-b0c95e2066ff | 3 | stood opposite FACEIT org 'team:ec69a520-047f-4754-b36e-b0c95e2066ff' in 3 of 3 id-linked matches (FACEIT called it 'Shikigami') |
 | Supershy | any | team:98798472-6b02-4707-8827-0b7f5f3075b9 | 6 | stood opposite FACEIT org 'team:98798472-6b02-4707-8827-0b7f5f3075b9' in 6 of 6 id-linked matches (FACEIT called it 'SupershyOW') |
+| Team Risk | any | qadsiah | 1 | stood opposite FACEIT org 'qadsiah' in 1 of 1 id-linked matches (FACEIT called it 'Team Risk'); the folded names are identical |
 | Team Vision | any | vision-esports | 16 | stood opposite FACEIT org 'vision-esports' in 16 of 16 id-linked matches (FACEIT called it 'Vision Esports') |
 | Telacy | any | team:b50813d6-3c84-4d07-adf4-bc9df069e13a | 5 | stood opposite FACEIT org 'team:b50813d6-3c84-4d07-adf4-bc9df069e13a' in 5 of 5 id-linked matches (FACEIT called it 'Telacy'); the folded names are identical |
 | The Ultimates | any | team:3eaeefbc-6abf-4d54-aeb2-2790e3e21752 | 20 | stood opposite FACEIT org 'team:3eaeefbc-6abf-4d54-aeb2-2790e3e21752' in 20 of 20 id-linked matches (FACEIT called it 'The Ultimates'); the folded names are identical |
@@ -53,13 +54,35 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Vice (North American team) | any | team:3a72be04-0086-4831-8e2b-eb85a00cacc5 | 3 | stood opposite FACEIT org 'team:3a72be04-0086-4831-8e2b-eb85a00cacc5' in 3 of 3 id-linked matches (FACEIT called it 'Vice') |
 | Who Is Goldfish | any | who-is-goldfish | 5 | stood opposite FACEIT org 'who-is-goldfish' in 5 of 5 id-linked matches (FACEIT called it 'Who Is Goldfish', 'Who is Goldfish'); the folded names are identical |
 
-## Needs review (3)
+## Needs review (25)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
+| Absolution | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Arizona State University | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Blast Off Buds | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Citrus Nightmare | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| EXN Zenith | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| FLUFFY AIMERS | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Fries In The Bag | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Hypnos | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Negative Mental Attitude | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| O3 Splash | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Ohana Aloha | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Piece of Cake | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Rad x Avidity | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Ramattra Punch | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| SrPeakCheck | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Tanuki | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Tanuki Tapire | any | - | 0 | no id-linked match and no FACEIT team has this name |
 | Team Danteh | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Team G4mbit | any | - | 0 | no id-linked match and no FACEIT team has this name |
 | Team Hydron | any | - | 0 | no id-linked match and no FACEIT team has this name |
-| Team Risk | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Timeless Ethereal | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| TSM | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Vendetta (European team) | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| Wasp X Ohhhh No | any | - | 0 | no id-linked match and no FACEIT team has this name |
+| YFP | any | - | 0 | no id-linked match and no FACEIT team has this name |
 
 ## Already decided (57)
 

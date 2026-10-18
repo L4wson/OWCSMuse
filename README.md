@@ -415,6 +415,15 @@ ordering, twice:
   the data, Al qadsiah to qadsiah, shared **1 of 8** players, because the roster
   turned over at the same time. Merging on overlap would have made four wrong
   merges and missed the right one.
+- **A new name that shares players with an earlier team is not that team.**
+  The same rule applies to the Liquipedia-only names. Of the 2024 Stage 3/4
+  teams with no FACEIT side, TSM fielded 6 of NTMR's players, FLUFFY AIMERS 8
+  from the NTMR team id's Supernova/Team Z eras, YFP 4 of Vice's, and Vendetta
+  and Piece of Cake ex-Team Peps players. Each is its own org (owner,
+  2026-10-17). Each season stands on its own, and a roster that moved does not
+  carry its old org's record with it. Identity needs a decision that says so,
+  such as a name change on the same team id or a named pickup bounded to its
+  window like Citrus Nightmare's Stage 3. Shared players are never enough.
 - **Name identity is not enough by itself, and two applied merges proved it
   the hard way.** "SpaceStation Gaming" (NA) was merged with "SpaceStation"
   (EMEA) on a contained-name match; "Geekay Esports" (NA) was merged with an

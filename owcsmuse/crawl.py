@@ -38,6 +38,13 @@ from .scope import Classification, Decisions, classify_history_competition
 
 log = get_logger("owcsmuse.crawl")
 
+# Deliberately 2025, not an oversight. The crawl exists because FACEIT hides the 2025/2026 OWCS Central divisions
+# from every listing; their matches are only in player histories. 2024 has nothing of that kind to find, checked on
+# 2026-10-17: the OWCS organizer lists 2024 Stages 1-2 (groups and main events, ingested) and only the open
+# qualifiers of Stages 3-4. The June-December 2024 histories of players from both Stage 2 finals (M80, Toronto
+# Defiant, SpaceStation, ENCE) hold Dreamhack Dallas, FACEIT League and the Stage 4 open qualifier, and no Stage
+# 3/4 main event: those ran off FACEIT and come from Liquipedia instead (results only). Moving this earlier spends
+# requests to find nothing.
 HISTORY_START = datetime(2025, 1, 1, tzinfo=timezone.utc)
 WINDOW_DAYS = 91
 MIN_WINDOW_DAYS = 7

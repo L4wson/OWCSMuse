@@ -33,7 +33,9 @@ EVENTS_PATH = "scope/liquipedia_events.json"
 LP_CHAMPIONSHIP_PREFIX = "lp:"
 PARENT_FIELD = "parent"
 SUBPAGE_PROBE_LIMIT = 500
-REGIONS = ("international",)
+# International events first; then the regional stages that ran off FACEIT altogether (2024 NA and EMEA Stages 3
+# and 4, owner 2026-10-17) - their team names resolve per region through the same reviewed team map.
+REGIONS = ("international", "na", "emea")
 TIERS = ("main",)
 
 

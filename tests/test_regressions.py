@@ -237,3 +237,18 @@ def test_owcs_competition_names_display_reordered_and_shorn_of_central(agg_db):
     assert row["d"] == "OWCS EMEA S9 Playoffs"
     assert row["r"] == "OWCS NA S4 Regular Season"
     assert row["u"] == "Dreamhack Dallas"
+
+
+def test_a_namesake_with_no_matches_does_not_block_an_exact_name_with_data():
+    """'Timeless' (1.0, a team with series) against an org 'Timeless Ethereal' (0.9, nothing loaded) asked which; a
+    candidate with no matches in scope is not a real alternative, at a near score as at a tie. Both with data still ask."""
+    from owcsmuse.nlq.pipeline import _decide
+    from owcsmuse.resolve import Candidate
+
+    def cand(eid, score, matches):
+        return Candidate(entity_type="team", entity_id=eid, current_name=eid, matched_name=eid, name_kind="name",
+                         score=score, matches=matches)
+    chosen, ambiguous = _decide([cand("timeless", 1.0, 30), cand("timeless-ethereal", 0.9, 0)])
+    assert chosen.entity_id == "timeless" and not ambiguous
+    chosen, ambiguous = _decide([cand("timeless", 1.0, 30), cand("timeless-ethereal", 0.9, 5)])
+    assert chosen is None and ambiguous
