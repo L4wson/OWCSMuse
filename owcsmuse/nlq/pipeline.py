@@ -93,7 +93,10 @@ def _decide(cands: list[Candidate]) -> tuple[Optional[Candidate], bool]:
     if len(tied) > 1 and len(tied_with_data) == 1:
         return tied_with_data[0], False
     top = cands[0]
-    others = [c for c in cands[1:] if (c.entity_type, c.entity_id) != (top.entity_type, top.entity_id)]
+    # the same rule for a near score: a namesake with no matches in scope does not block one that has them ("Timeless"
+    # against an org "Timeless Ethereal" with no series loaded asked which). Both with data is still a real question.
+    others = [c for c in cands[1:] if (c.entity_type, c.entity_id) != (top.entity_type, top.entity_id)
+              and (c.matches or not top.matches)]
     if top.score >= ACCEPT_SCORE and (not others or others[0].score <= top.score - CLEAR_MARGIN or others[0].score < ACCEPT_SCORE):
         return top, False
     if top.score >= ACCEPT_SCORE and others and others[0].score >= ACCEPT_SCORE:
