@@ -20,6 +20,12 @@
       "decided_at": "2026-10-09T17:59:55+00:00",
       "org_name": "9z Team"
     },
+    "a one man army": {
+      "entity_type": "team",
+      "entity_id": "6c39d9d5-c34d-462c-b753-d520d48a6b45",
+      "note": "accepted strong proposal: stood opposite FACEIT org 'team:6c39d9d5-c34d-462c-b753-d520d48a6b45' in 5 of 5 id-linked matches (FACEIT called it 'A One Man Army'); the folded names are identical (owner, 2026-10-17: accepted individually)",
+      "decided_at": "2026-10-18T00:35:33+00:00"
+    },
     "al qadsiah": {
       "entity_type": "org",
       "entity_id": "qadsiah",
@@ -51,12 +57,32 @@
       "note": "same roster as Extinction, different org names; roster continuity over org branding",
       "decided_at": "2026-09-23T05:02:31+00:00"
     },
+    "aww yeah": {
+      "entity_type": "team",
+      "entity_id": "90b2fd83-bb47-4286-8f62-a16eb6ce650b",
+      "note": "accepted strong proposal: stood opposite FACEIT org 'team:90b2fd83-bb47-4286-8f62-a16eb6ce650b' in 8 of 8 id-linked matches (FACEIT called it 'AWW YEAH'); the folded names are identical (owner, 2026-10-17: accepted individually)",
+      "decided_at": "2026-10-18T00:35:33+00:00"
+    },
     "bleed esports": {
       "entity_type": "org",
       "entity_id": "bleed-esports",
       "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Pacific.",
       "decided_at": "2026-10-09T17:59:55+00:00",
       "org_name": "Bleed Esports"
+    },
+    "citrus nation": {
+      "entity_type": "team",
+      "entity_id": "35fd77ed-a916-4f76-aafd-af3d57ad84cb",
+      "note": "accepted strong proposal: stood opposite FACEIT org 'team:35fd77ed-a916-4f76-aafd-af3d57ad84cb' in 10 of 10 id-linked matches (FACEIT called it 'Citrus Nation'); the folded names are identical (owner, 2026-10-17: accepted individually)",
+      "decided_at": "2026-10-18T00:35:33+00:00"
+    },
+    "citrus nightmare": {
+      "entity_type": "team",
+      "entity_id": "35fd77ed-a916-4f76-aafd-af3d57ad84cb",
+      "note": "A temporary merge in which NTMR picked up the Citrus Nation roster for 2024 NA Stage 3 only; counted under Citrus Nation, not NTMR (owner, 2026-10-17). Bounded to Stage 3 (from its start, 2024-08-09, to Stage 4's, 2024-09-20) so the name can never absorb a later series.",
+      "decided_at": "2026-10-18T00:35:33+00:00",
+      "valid_from": "2024-08-09T00:00:00+00:00",
+      "valid_to": "2024-09-20T00:00:00+00:00"
     },
     "crazy raccoon": {
       "entity_type": "org",
@@ -83,6 +109,12 @@
       "decided_at": "2026-10-02T01:29:49+00:00",
       "valid_from": "2024-01-01T00:00:00+00:00",
       "valid_to": "2025-01-01T00:00:00+00:00"
+    },
+    "ex oblivione": {
+      "entity_type": "team",
+      "entity_id": "bb5dd404-213c-430f-8d12-8687fc3ff747",
+      "note": "accepted strong proposal: stood opposite FACEIT org 'team:bb5dd404-213c-430f-8d12-8687fc3ff747' in 11 of 11 id-linked matches (FACEIT called it 'Ex Oblivione'); the folded names are identical (owner, 2026-10-17: accepted individually); the same org through 2024, consistent with team bb5dd404's existing window, which keys it to Virtus pro only from 2025-01-31",
+      "decided_at": "2026-10-18T00:35:33+00:00"
     },
     "extinction": {
       "entity_type": "org",
@@ -180,6 +212,12 @@
       "valid_from": "2024-01-01T00:00:00+00:00",
       "valid_to": "2025-01-01T00:00:00+00:00"
     },
+    "metaboiz": {
+      "entity_type": "team",
+      "entity_id": "6c2f5887-e6e6-44a8-8f9c-3bb3bcfb9b83",
+      "note": "accepted strong proposal: stood opposite FACEIT org 'team:6c2f5887-e6e6-44a8-8f9c-3bb3bcfb9b83' in 1 of 1 id-linked matches (FACEIT called it 'Metaboiz'); the folded names are identical (owner, 2026-10-17: accepted individually)",
+      "decided_at": "2026-10-18T00:35:33+00:00"
+    },
     "mkers": {
       "entity_type": "org",
       "entity_id": "mkers",
@@ -217,6 +255,13 @@
       "entity_id": "rad",
       "note": "Rad (2025 Stages 1-2) on 0464a373, a recycled team id; anchored to the org. Owner decision (2026-10-02).",
       "decided_at": "2026-10-02T08:11:37+00:00"
+    },
+    "rad x avidity": {
+      "entity_type": "org",
+      "entity_id": "rad-x-avidity",
+      "note": "A merger of Rad Esports and Avidity for 2024 NA Stage 4. Rad and Avidity are separate orgs here (team 0464a373's Rad era; team 2b7f8ef6, Avidity). Assigning the merger to either would credit that org with series the other half played, so it is an entity of its own (owner, 2026-10-17).",
+      "decided_at": "2026-10-18T00:35:33+00:00",
+      "org_name": "Rad x Avidity"
     },
     "roc esports": {
       "note": "ROC, ROCstars and ROC 2024 were the same roster; ROC became an OWCS China partner team in 2025, a separate org, and the original ROC no longer plays (owner, 2026-10-09 (Stage 4)). 2024: the FACEIT team id 03869857, which keys to ROCstars from 2024-04-12 by org_window_decisions; from 2025: the China org, Liquipedia-only.",
@@ -274,12 +319,31 @@
       "note": "Search routing (owner, 2026-10-09; the NRG Shock and 1234 fix): was anchored to the bare team id d20d1868, whose own entity holds none of this name's series - all 7 are keyed to the org supernova over the id's Supernova era. The anchor never matched before migration 040 (SQL fold kept the parentheses), which hid it. Previously: small roster transition to/from Team Z",
       "decided_at": "2026-10-09T20:43:55+00:00"
     },
+    "supershy": {
+      "entity_type": "team",
+      "entity_id": "98798472-6b02-4707-8827-0b7f5f3075b9",
+      "note": "accepted strong proposal: stood opposite FACEIT org 'team:98798472-6b02-4707-8827-0b7f5f3075b9' in 6 of 6 id-linked matches (FACEIT called it 'SupershyOW') (owner, 2026-10-17: accepted individually)",
+      "decided_at": "2026-10-18T00:35:33+00:00"
+    },
     "t1": {
       "entity_type": "org",
       "entity_id": "t1",
       "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Korea partner team.",
       "decided_at": "2026-10-09T17:59:55+00:00",
       "org_name": "T1"
+    },
+    "tanuki": {
+      "entity_type": "org",
+      "entity_id": "tanuki",
+      "note": "Liquipedia-only org; Tanuki (NA Stage 3) and Tanuki Tapire (NA Stage 4) are the same org (owner, 2026-10-17).",
+      "decided_at": "2026-10-18T00:35:33+00:00",
+      "org_name": "Tanuki"
+    },
+    "tanuki tapire": {
+      "entity_type": "org",
+      "entity_id": "tanuki",
+      "note": "Tanuki under another name in 2024 NA Stage 4: the same org (owner, 2026-10-17).",
+      "decided_at": "2026-10-18T00:35:33+00:00"
     },
     "team cc chinese orgless team": {
       "entity_type": "org",
@@ -338,6 +402,13 @@
       "note": "Timeless is team id c5116cb3's own era (2024 Stage 1 to 2025 Stage 1); NTMR picked the roster up in 2025 Stage 2 and the NTMR org is mapped only from that window (scope/org_decisions.json). Was 'org ntmr' before the window decision, which made every Timeless-era link disagree on teams.",
       "decided_at": "2026-10-02T01:04:44+00:00"
     },
+    "timeless ethereal": {
+      "entity_type": "org",
+      "entity_id": "timeless-ethereal",
+      "note": "Timeless's sister team, treated as independent: an org of its own, not Timeless (owner, 2026-10-17).",
+      "decided_at": "2026-10-18T00:35:33+00:00",
+      "org_name": "Timeless Ethereal"
+    },
     "toronto defiant": {
       "entity_type": "team",
       "entity_id": "8f632648-b26f-4554-bae4-40f9aee1773b",
@@ -372,6 +443,12 @@
       "note": "Liquipedia-only org, no FACEIT counterpart (owner, 2026-10-09 (Stage 4)): OWCS Pacific (Japan). Liquipedia templates varrel 2023 / varrel 2026.",
       "decided_at": "2026-10-09T17:59:55+00:00",
       "org_name": "VARREL"
+    },
+    "vice north american team": {
+      "entity_type": "team",
+      "entity_id": "3a72be04-0086-4831-8e2b-eb85a00cacc5",
+      "note": "accepted strong proposal: stood opposite FACEIT org 'team:3a72be04-0086-4831-8e2b-eb85a00cacc5' in 3 of 3 id-linked matches (FACEIT called it 'Vice') (owner, 2026-10-17: accepted individually)",
+      "decided_at": "2026-10-18T00:35:33+00:00"
     },
     "virtus pro": {
       "entity_type": "org",
