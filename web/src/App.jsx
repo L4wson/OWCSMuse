@@ -177,6 +177,21 @@ export default function App() {
 
       <footer className="footer">
         <span>OWCS NA + EMEA main competition and the international events, 2024-2026. Every row links to its source.</span>
+        <span>
+          Data from the{" "}
+          <a href="https://developers.faceit.com" target="_blank" rel="noreferrer noopener">
+            FACEIT Data API
+          </a>{" "}
+          and{" "}
+          <a href="https://liquipedia.net/overwatch/" target="_blank" rel="noreferrer noopener">
+            Liquipedia
+          </a>{" "}
+          (
+          <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noreferrer noopener license">
+            CC-BY-SA 3.0
+          </a>
+          ). Not affiliated with FACEIT, Liquipedia or Blizzard Entertainment.
+        </span>
       </footer>
     </div>
   );

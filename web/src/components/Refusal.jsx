@@ -1,6 +1,7 @@
 import GrainToggle from "./GrainToggle.jsx";
 import Evidence from "./Evidence.jsx";
 import Context from "./Context.jsx";
+import Attribution from "./Attribution.jsx";
 
 /**
  * A refusal, which is a kind of answer.
@@ -47,6 +48,7 @@ export default function Refusal({ answer, suggestions = [], onAsk, onPage, busy,
           <Evidence evidence={evidence} busy={busy} onPage={onPage} pageSize={pageSize} onPageSize={onPageSize} />
         </>
       ) : null}
+      <Attribution attribution={answer.attribution} />
 
       {alternatives.length ? (
         <div className="alternatives" data-testid="alternatives">
