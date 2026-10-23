@@ -329,6 +329,16 @@ aborted minutes after. Liquipedia records every series, naming the room FACEIT o
   nor `a35f8d47`'s. Stage 3's NTMR is `d20d1868` (team_chiime, Dreamland, Supernova, Team Z): its own org, `ntmr-2026`,
   not the NTMR org, and Liquipedia's "NTMR" routes to it from Stage 3. Both windows start at Stage 3 (2026-10-09) and
   end the LuneX and Team Z windows there, which had run open-ended and credited Stage 3 results to LuneX and Team Z.
+  Both end with the stage (owner: regular season October 10-25, regional playoffs October 30 - November 1): to
+  2026-11-03, clear of November 1 in every timezone.
+- **Team Risk** (owner, 2026-10-23) is its own org on FACEIT team `97ef2653`, whose `qadsiah` era (Al Qadsiah) ends at
+  Stage 3: new players, no longer sponsored by Al Qadsiah. The linked 1234 0-3 Team Risk counts for Team Risk.
+- **The playoffs are Liquipedia-only events.** The S8/S9 regional playoffs are FACEIT "Central - Playoffs"
+  championships mapped to the stage page, where Liquipedia keeps the bracket. FACEIT has no S10 playoffs championship,
+  so nothing mapped `2026/NA/Stage_3` or `2026/EMEA/Stage_3` and the nightly run would never have fetched the
+  playoffs. Both are now `lp:` events (`scope/liquipedia_events.json`, 6 matches each in the subpage probe, raw 4463). The
+  nightly fetch requests a page it does not hold, then re-requests it while it has unfinished matches, so the bracket
+  is picked up as it is played.
 
 ### Stage 4: LAN and international events (2026-10-09)
 

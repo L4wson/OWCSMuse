@@ -1,13 +1,13 @@
 # Liquipedia team names -> FACEIT orgs
 
-122 Liquipedia team names, learned from 422 matches Liquipedia ties to FACEIT by match id. 88 decided, 35 proposed strong, 2 need a person.
+122 Liquipedia team names, learned from 422 matches Liquipedia ties to FACEIT by match id. 89 decided, 34 proposed strong, 2 need a person.
 
 Nothing is matched by fuzzy string similarity. Decide with:
 
     python -m owcsmuse liquipedia teams decide "<Liquipedia name>" --org <org slug> [--region na|emea]   (or --team <FACEIT team id>)
     python -m owcsmuse liquipedia teams accept        # accept every strong proposal below, in bulk
 
-## Proposed - strong evidence (35)
+## Proposed - strong evidence (34)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -39,7 +39,6 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | SCHMUNGUS | any | team:865c189c-702d-4896-bd99-56fae201451e | 2 | stood opposite FACEIT org 'team:865c189c-702d-4896-bd99-56fae201451e' in 2 of 2 id-linked matches (FACEIT called it 'SCHMUNGUS'); the folded names are identical |
 | Sheer Cold | any | sheer-cold | 7 | stood opposite FACEIT org 'sheer-cold' in 7 of 7 id-linked matches (FACEIT called it 'Sheer Cold'); the folded names are identical |
 | Shikigami Hikari | any | team:ec69a520-047f-4754-b36e-b0c95e2066ff | 3 | stood opposite FACEIT org 'team:ec69a520-047f-4754-b36e-b0c95e2066ff' in 3 of 3 id-linked matches (FACEIT called it 'Shikigami') |
-| Team Risk | any | qadsiah | 1 | stood opposite FACEIT org 'qadsiah' in 1 of 1 id-linked matches (FACEIT called it 'Team Risk'); the folded names are identical |
 | Team Vision | any | vision-esports | 16 | stood opposite FACEIT org 'vision-esports' in 16 of 16 id-linked matches (FACEIT called it 'Vision Esports') |
 | Telacy | any | team:b50813d6-3c84-4d07-adf4-bc9df069e13a | 5 | stood opposite FACEIT org 'team:b50813d6-3c84-4d07-adf4-bc9df069e13a' in 5 of 5 id-linked matches (FACEIT called it 'Telacy'); the folded names are identical |
 | The Ultimates | any | team:3eaeefbc-6abf-4d54-aeb2-2790e3e21752 | 20 | stood opposite FACEIT org 'team:3eaeefbc-6abf-4d54-aeb2-2790e3e21752' in 20 of 20 id-linked matches (FACEIT called it 'The Ultimates'); the folded names are identical |
@@ -54,7 +53,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Team Danteh | any | - | 0 | no id-linked match and no FACEIT team has this name |
 | Team Hydron | any | - | 0 | no id-linked match and no FACEIT team has this name |
 
-## Already decided (88)
+## Already decided (89)
 
 | Liquipedia name | region | proposed org | matches | evidence |
 |---|---|---|---|---|
@@ -126,6 +125,7 @@ Nothing is matched by fuzzy string similarity. Decide with:
 | Team G4mbit | any | team-g4mbit | 0 | decided in scope/liquipedia_team_map.json |
 | Team Liquid | any | team-liquid | 0 | decided in scope/liquipedia_team_map.json |
 | Team Peps | any | team-peps | 0 | decided in scope/liquipedia_team_map.json |
+| Team Risk | any | team-risk | 0 | decided in scope/liquipedia_team_map.json |
 | Team Secret | any | team-secret | 0 | decided in scope/liquipedia_team_map.json |
 | Team Z | any | team-z | 0 | decided in scope/liquipedia_team_map.json |
 | The Gatos Guapos | any | the-gatos-guapos | 0 | decided in scope/liquipedia_team_map.json |

@@ -1,6 +1,6 @@
 # Liquipedia <-> FACEIT reconciliation
 
-Built from 7 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219, 4222, 5035, 5037, 5320); no request was made to build this report. 772 Liquipedia records (0 placeholder rows excluded) against 482 FACEIT series in the same 49 competitions.
+Built from 7 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219, 4222, 5035, 5037, 5320); no request was made to build this report. 772 Liquipedia records (0 placeholder rows excluded) against 482 FACEIT series in the same 51 competitions.
 
 Nothing here links into an answer. Exact and strong links are proposed; ambiguous matches and team-name mappings wait for review, and the disagreements section says where either source may be wrong.
 
@@ -187,13 +187,11 @@ Either source can be wrong. `maps` tells which is more likely: FACEIT's own stat
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
   - **date**: Liquipedia '2026-10-11T23:25+00:00', FACEIT '2026-10-17T16:33+00:00' - FACEIT is +137.1 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
 
-## Liquipedia records a FACEIT id we do not hold (11)
+## Liquipedia records a FACEIT id we do not hold (9)
 
 These are FACEIT matches that exist (Liquipedia names them) but our history crawl never found.
 
 - 2024-04-12 17:30Z  Ataraxia 3-0 Metaboiz  (bo5)  FACEIT id 1-c351f92e-7422-4e9e-83ee-0a4158e1e4d1  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage
-- 2026-10-17 17:00Z  Twisted Minds 3-0 Team Risk  (bo5)  FACEIT id 1-3886ef15-2b02-48bf-b969-c9e7f0f75411  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-- 2026-10-18 17:05Z  Virtus.pro 1-3 Team Risk  (bo5)  FACEIT id 1-2f52143d-55f7-4d74-9851-0f673862722c  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-24 17:00Z  Team Risk -1--1 Team Peps  (bo5)  FACEIT id 1-726bf31a-aa6c-456f-882d-2546b54077d0  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-24 18:30Z  Geekay Esports -1--1 1234  (bo5)  FACEIT id 1-8fdd4c1e-5ffd-423a-b84a-1b2c340832a8  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-24 20:00Z  Virtus.pro -1--1 Twisted Minds  (bo5)  FACEIT id 1-0e58c86c-6a66-4732-bf63-25311b8f8471  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
@@ -203,17 +201,19 @@ These are FACEIT matches that exist (Liquipedia names them) but our history craw
 - 2026-10-25 21:30Z  Spacestation Gaming -1--1 NTMR  (bo5)  FACEIT id 1-431c8adc-4ccf-4dd0-9123-203bb65ac9c7  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
 - 2026-10-25 23:00Z  Team Liquid -1--1 Disguised  (bo5)  FACEIT id 1-51570432-9f72-4f4a-801e-3585349ab6ca  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
 
-## Liquipedia-only: the FACEIT room ended with no result (11)
+## Liquipedia-only: the FACEIT room ended with no result (13)
 
 The page names a FACEIT room opened for these two teams that FACEIT aborted or cancelled with no result, so the record is the series' only source. A result entered later links the room on the next run.
 
 - 2026-04-12 17:00Z  Geekay Esports 1-3 Virtus.pro  (bo5)  FACEIT room 1-534bdff7-baf4-40ff-8d1d-fac64ee30ce3 (cancelled_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1
 - 2026-04-12 20:30Z  Spacestation Gaming 3-0 Team Liquid  (bo5)  FACEIT room 1-fcd2bd41-967c-450b-abac-f2137bfe308b (cancelled_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
 - 2026-10-11 22:20Z  Dallas Fuel 3-0 Disguised  (bo5)  FACEIT room 1-57de1929-8c61-4d63-aab4-48238a254ecf (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-17 17:00Z  Twisted Minds 3-0 Team Risk  (bo5)  FACEIT room 1-3886ef15-2b02-48bf-b969-c9e7f0f75411 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-17 18:20Z  Virtus.pro 1-3 1234  (bo5)  FACEIT room 1-9f330dfb-9871-4389-80c5-5acc965302bd (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-17 20:00Z  Geekay Esports 3-1 Team Peps  (bo5)  FACEIT room 1-02f3a806-3cd5-423b-b8eb-1af5766a6ca0 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-17 21:40Z  Team Liquid 3-1 The Kafe  (bo5)  FACEIT room 1-9d5d5375-9913-4154-a995-22cd3ba74604 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
 - 2026-10-17 23:15Z  NTMR 3-0 Disguised  (bo5)  FACEIT room 1-5d1df29d-92fc-43f4-9b73-0de2dfa21308 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-18 17:05Z  Virtus.pro 1-3 Team Risk  (bo5)  FACEIT room 1-2f52143d-55f7-4d74-9851-0f673862722c (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-18 18:50Z  Twisted Minds 3-1 1234  (bo5)  FACEIT room 1-d1f74895-5fba-42c8-b7ab-694e5753f906 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 - 2026-10-18 20:30Z  Dallas Fuel 2-3 Team Liquid  (bo5)  FACEIT room 1-f60f5183-22a2-4808-b944-cca0b02e996f (cancelled_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
 - 2026-10-18 22:30Z  Spacestation Gaming 3-0 Disguised  (bo5)  FACEIT room 1-4a241025-42b8-4ce5-a132-c95bad60df21 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
@@ -723,10 +723,10 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 - links: 5 exact, 0 strong, 0 ambiguous; 10 Liquipedia-only; 0 FACEIT-only
 - Liquipedia matches with no FACEIT counterpart:
-  - 2026-10-17 17:00Z  Twisted Minds 3-0 Team Risk  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-17 17:00Z  Twisted Minds 3-0 Team Risk  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
   - 2026-10-17 18:20Z  Virtus.pro 1-3 1234  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
   - 2026-10-17 20:00Z  Geekay Esports 3-1 Team Peps  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-18 17:05Z  Virtus.pro 1-3 Team Risk  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-18 17:05Z  Virtus.pro 1-3 Team Risk  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
   - 2026-10-18 18:50Z  Twisted Minds 3-1 1234  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
   - 2026-10-24 17:00Z  Team Risk -1--1 Team Peps  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
   - 2026-10-24 18:30Z  Geekay Esports -1--1 1234  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
