@@ -1,5 +1,5 @@
 {
- "note": "Stage 4 records copied verbatim from raw_payloads (matches: id 4222, placements: id 4223), fetched 2026-10-09. Every 2025 World Finals match, the 2025 Champions Clash and 2025 Midseason Championship grand finals, and those three events' prize-pool placements (team rows, the team award and one individual award, so the award filter has something to leave out). Never fetched by this suite. `load_matches` is true since every team at these events is decided (owner, 2026-10-09).",
+ "note": "Stage 4 records copied verbatim from raw_payloads (matches: id 4222, placements: id 4223), fetched 2026-10-09. Every 2025 World Finals match, the 2025 Champions Clash and 2025 Midseason Championship grand finals, and those three events' prize-pool placements (team rows, the team award and one individual award, so the award filter has something to leave out). Then 11 of Toronto Defiant's 13 2024 NA Stage 3/4 series (Liquipedia-only), copied verbatim from raw_payloads id 5035, fetched 2026-10-18: four against NTMR put sug2rfree (Toronto) opposite ZSS and cjay (NTMR) on Liquipedia's line-ups. Two are left out because their opponent is a FACEIT team this warehouse has no series of: Toronto Defiant 3-0 Avidity (127207_ajHAQTjWvc_0003; team 2b7f8ef6, whose Avidity and Extinction eras are placed from FACEIT's own name history) and Toronto Defiant 3-2 Shikigami (127209_7Wkz4Gir4U_0003; team ec69a520). Production counts both; here neither opponent resolves, so each would be a record in no answer. Never fetched by this suite. `load_matches` is true since every team at these events is decided (owner, 2026-10-09; the 2024 Stage 3/4 names 2026-10-17).",
  "load_matches": true,
  "matches": [
   {
@@ -8953,6 +8953,4388 @@
     "sectionheader": "Playoffs",
     "bracketsection": "upper",
     "inheritedheader": "!r1!x"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "",
+   "date": "2024-08-16 20:00:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127207,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": [],
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Group A",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "ajHAQTjWvc_0001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "timestamp": 1723838400,
+    "timezoneid": "PDT",
+    "timezoneoffset": "-07:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127207_ajHAQTjWvc_0001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 3 Group Stage",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 3 - Group Stage",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Nepal",
+     "vod": "",
+     "date": "2024-08-16 20:00:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1723838400
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Suravasa",
+     "vod": "",
+     "date": "2024-08-16 20:00:00",
+     "game": "overwatch2",
+     "mode": "Flashpoint",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1723838400
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "Colosseo",
+     "vod": "",
+     "date": "2024-08-16 20:00:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      137.94,
+      60.06
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1723838400
+     },
+     "opponents": [
+      {
+       "score": 137.94,
+       "status": "S"
+      },
+      {
+       "score": 60.06,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "ajHAQTjWvc",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "Absolution allmode.png",
+     "name": "Absolution",
+     "type": "team",
+     "score": 0,
+     "status": "S",
+     "template": "absolution",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "Absolution",
+      "page": "Absolution",
+      "image": "Absolution allmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/3/37/Absolution_allmode.png/400px-Absolution_allmode.png",
+      "template": "absolution",
+      "imagedark": "Absolution allmode.png",
+      "shortname": "ABS",
+      "bracketname": "Absolution",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/3/37/Absolution_allmode.png/400px-Absolution_allmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "Canada",
+       "name": "Soulsay",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Soulsay"
+      },
+      {
+       "id": 2,
+       "flag": "Puerto Rico",
+       "name": "Anderp",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Anderp"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "MonkeyHappy",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "MonkeyHappy"
+      },
+      {
+       "id": 4,
+       "flag": "Germany",
+       "name": "UnluckyMain",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "UnluckyMain"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Loathen",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "ross"
+      },
+      {
+       "id": 6,
+       "flag": "United Kingdom",
+       "name": "KiWii",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "KiWii"
+      },
+      {
+       "id": 7,
+       "flag": "Canada",
+       "name": "Havoc",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Havoc"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "next": "ajHAQTjWvc_0002",
+    "type": "matchlist",
+    "header": "Opening Matches",
+    "matchIndex": 1,
+    "bracketindex": 0,
+    "inheritedheader": "Opening Matches"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=u4JOjPpbw1g",
+   "date": "2024-08-29 21:00:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127208,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "jaEjNJcB60_R01-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "United States",
+       "name": "Sugarfree",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "Sugarfree"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "australia",
+      "name": "Uber",
+      "displayName": "Uber"
+     },
+     "2": {
+      "flag": "united states",
+      "name": "Mr X",
+      "displayName": "Mr X"
+     }
+    },
+    "timestamp": 1724965200,
+    "timezoneid": "EDT",
+    "timezoneoffset": "-04:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127208_jaEjNJcB60_R01-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 3",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 3",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Busan",
+     "vod": "",
+     "date": "2024-08-29 21:00:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1724965200
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Eichenwalde",
+     "vod": "",
+     "date": "2024-08-29 21:00:00",
+     "game": "overwatch2",
+     "mode": "Hybrid",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      1,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1724965200
+     },
+     "opponents": [
+      {
+       "score": 1,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "New Queen Street",
+     "vod": "",
+     "date": "2024-08-29 21:00:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      128.11,
+      7.58
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1724965200
+     },
+     "opponents": [
+      {
+       "score": 128.11,
+       "status": "S"
+      },
+      {
+       "score": 7.58,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "jaEjNJcB60",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "TSM 2019 lightmode.png",
+     "name": "TSM",
+     "type": "team",
+     "score": 0,
+     "status": "S",
+     "template": "tsm 2020",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "TSM",
+      "page": "TSM",
+      "image": "TSM 2019 lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/c/c8/TSM_2019_lightmode.png/400px-TSM_2019_lightmode.png",
+      "template": "tsm 2020",
+      "imagedark": "TSM 2019 darkmode.png",
+      "shortname": "TSM",
+      "bracketname": "TSM",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/d/dd/TSM_2019_darkmode.png/400px-TSM_2019_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "United States",
+       "name": "Rokit",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Rokit"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Chopper",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Chopper"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "K1ng",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "k1ng"
+      },
+      {
+       "id": 4,
+       "flag": "Canada",
+       "name": "ICy",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "iCy"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Lep",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Lep"
+      },
+      {
+       "id": 6,
+       "flag": "United States",
+       "name": "Renko",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Renko"
+      },
+      {
+       "id": 7,
+       "flag": "United States",
+       "name": "RhynO",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "RhynO"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u4!2",
+    "tolower": "",
+    "toupper": "",
+    "loweredges": [],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 4,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 0,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 3,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 0
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "upperMatchId": "jaEjNJcB60_R02-M001",
+    "lowerMatchIds": [],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u4!2"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=b7g4NUeIMnY",
+   "date": "2024-08-30 20:30:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127208,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "jaEjNJcB60_R02-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "United States",
+       "name": "Sugarfree",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "Sugarfree"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "united states",
+      "name": "Nekkra",
+      "displayName": "Nekkra"
+     }
+    },
+    "timestamp": 1725049800,
+    "timezoneid": "EDT",
+    "timezoneoffset": "-04:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127208_jaEjNJcB60_R02-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 3",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 3",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Busan",
+     "vod": "",
+     "date": "2024-08-30 20:30:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725049800
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Circuit Royal",
+     "vod": "",
+     "date": "2024-08-30 20:30:00",
+     "game": "overwatch2",
+     "mode": "Escort",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      2
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725049800
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 2,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "New Junk City",
+     "vod": "",
+     "date": "2024-08-30 20:30:00",
+     "game": "overwatch2",
+     "mode": "Flashpoint",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      2
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725049800
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 2,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "jaEjNJcB60",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "NTMR July 2024 allmode.png",
+     "name": "NTMR",
+     "type": "team",
+     "score": 0,
+     "status": "S",
+     "template": "ntmr july 2024",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "NTMR",
+      "page": "NTMR",
+      "image": "NTMR July 2024 allmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "template": "ntmr july 2024",
+      "imagedark": "NTMR July 2024 allmode.png",
+      "shortname": "NTMR",
+      "bracketname": "NTMR",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "Canada",
+       "name": "Seeker",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Seeker"
+      },
+      {
+       "id": 2,
+       "flag": "Turkey",
+       "name": "Lethal",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Lethal"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "Zeruhh",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zeruhh"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Infekted",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Infekted"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "CLEAR",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "CLEAR"
+      },
+      {
+       "id": 6,
+       "flag": "Estonia",
+       "name": "Admiral",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Admiral"
+      },
+      {
+       "id": 7,
+       "flag": "United States",
+       "name": "Cjay",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Cjay"
+      },
+      {
+       "id": 8,
+       "flag": "United States",
+       "name": "Zzz",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zss"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u3!3",
+    "tolower": "jaEjNJcB60_R01-M002",
+    "toupper": "jaEjNJcB60_R01-M001",
+    "loweredges": [
+     {
+      "opponentIndex": 0,
+      "lowerMatchIndex": 0
+     },
+     {
+      "opponentIndex": 1,
+      "lowerMatchIndex": 1
+     }
+    ],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 3,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 1,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 2,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 1
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "upperMatchId": "jaEjNJcB60_R04-M001",
+    "lowerMatchIds": [
+     "jaEjNJcB60_R01-M001",
+     "jaEjNJcB60_R01-M002"
+    ],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u3!3"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=fE-uBwnruGM",
+   "date": "2024-08-31 20:45:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127208,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "2",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "jaEjNJcB60_R04-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "United States",
+       "name": "UltraViolet",
+       "team": "NRG Shock",
+       "template": "nrg shock",
+       "displayname": "UltraViolet"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "united states",
+      "name": "Nekkra",
+      "displayName": "Nekkra"
+     }
+    },
+    "timestamp": 1725137100,
+    "timezoneid": "EDT",
+    "timezoneoffset": "-04:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127208_jaEjNJcB60_R04-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 3",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 3",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Busan",
+     "vod": "",
+     "date": "2024-08-31 20:45:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725137100
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Shambali Monastery",
+     "vod": "",
+     "date": "2024-08-31 20:45:00",
+     "game": "overwatch2",
+     "mode": "Escort",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      1,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725137100
+     },
+     "opponents": [
+      {
+       "score": 1,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "Runasapi",
+     "vod": "",
+     "date": "2024-08-31 20:45:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      75.31,
+      91.39
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725137100
+     },
+     "opponents": [
+      {
+       "score": 75.31,
+       "status": "S"
+      },
+      {
+       "score": 91.39,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    },
+    {
+     "map": "Blizzard World",
+     "vod": "",
+     "date": "2024-08-31 20:45:00",
+     "game": "overwatch2",
+     "mode": "Hybrid",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      3
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "4",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725137100
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 3,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 4,
+     "participants": []
+    },
+    {
+     "map": "Suravasa",
+     "vod": "",
+     "date": "2024-08-31 20:45:00",
+     "game": "overwatch2",
+     "mode": "Flashpoint",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      1,
+      3
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "5",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725137100
+     },
+     "opponents": [
+      {
+       "score": 1,
+       "status": "S"
+      },
+      {
+       "score": 3,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 5,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "jaEjNJcB60",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 2,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "NRG_Shock_lightmode.png",
+     "name": "NRG Shock",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "nrg shock",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "NRG Shock",
+      "page": "NRG Shock",
+      "image": "NRG_Shock_lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/5/5b/NRG_Shock_lightmode.png/400px-NRG_Shock_lightmode.png",
+      "template": "nrg shock",
+      "imagedark": "NRG_Shock_darkmode.png",
+      "shortname": "NRG.S",
+      "bracketname": "NRG Shock",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/6/66/NRG_Shock_darkmode.png/400px-NRG_Shock_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "United States",
+       "name": "PGE",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "PGE"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Scissors",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "scissors"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "TR33",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "TR33"
+      },
+      {
+       "id": 4,
+       "flag": "South Korea",
+       "name": "Kellan",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Kellan"
+      },
+      {
+       "id": 5,
+       "flag": "South Korea",
+       "name": "Attack",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Attack"
+      },
+      {
+       "id": 6,
+       "flag": "United States",
+       "name": "Rakattack",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Rakattack"
+      },
+      {
+       "id": 7,
+       "flag": "Canada",
+       "name": "Cal",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "cal"
+      },
+      {
+       "id": 8,
+       "flag": "United States",
+       "name": "UltraViolet",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "UltraViolet"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u2!4",
+    "tolower": "jaEjNJcB60_R02-M002",
+    "toupper": "jaEjNJcB60_R02-M001",
+    "skipround": 1,
+    "loweredges": [
+     {
+      "opponentIndex": 0,
+      "lowerMatchIndex": 0
+     },
+     {
+      "opponentIndex": 1,
+      "lowerMatchIndex": 1
+     }
+    ],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 1,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 3,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 1,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 2
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "upperMatchId": "jaEjNJcB60_R05-M001",
+    "lowerMatchIds": [
+     "jaEjNJcB60_R02-M001",
+     "jaEjNJcB60_R02-M002"
+    ],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u2!4"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=7v2fQIZ-Gyc",
+   "date": "2024-09-01 20:55:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127208,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "jaEjNJcB60_R04-M002",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "South Korea",
+       "name": "MER1T",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "MER1T"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "united states",
+      "name": "Nekkra",
+      "displayName": "Nekkra"
+     }
+    },
+    "timestamp": 1725224100,
+    "timezoneid": "EDT",
+    "timezoneoffset": "-04:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127208_jaEjNJcB60_R04-M002",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 3",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 3",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Busan",
+     "vod": "",
+     "date": "2024-09-01 20:55:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725224100
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Runasapi",
+     "vod": "",
+     "date": "2024-09-01 20:55:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      66.13,
+      111.1
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725224100
+     },
+     "opponents": [
+      {
+       "score": 66.13,
+       "status": "S"
+      },
+      {
+       "score": 111.1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "Dorado",
+     "vod": "",
+     "date": "2024-09-01 20:55:00",
+     "game": "overwatch2",
+     "mode": "Escort",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      0,
+      1
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725224100
+     },
+     "opponents": [
+      {
+       "score": 0,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    },
+    {
+     "map": "Paraiso",
+     "vod": "",
+     "date": "2024-09-01 20:55:00",
+     "game": "overwatch2",
+     "mode": "Hybrid",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "4",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725224100
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 4,
+     "participants": []
+    },
+    {
+     "map": "New Junk City",
+     "vod": "",
+     "date": "2024-09-01 20:55:00",
+     "game": "overwatch2",
+     "mode": "Flashpoint",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "5",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725224100
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 5,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "jaEjNJcB60",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "NTMR July 2024 allmode.png",
+     "name": "NTMR",
+     "type": "team",
+     "score": 2,
+     "status": "S",
+     "template": "ntmr july 2024",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "NTMR",
+      "page": "NTMR",
+      "image": "NTMR July 2024 allmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "template": "ntmr july 2024",
+      "imagedark": "NTMR July 2024 allmode.png",
+      "shortname": "NTMR",
+      "bracketname": "NTMR",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "Canada",
+       "name": "Seeker",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Seeker"
+      },
+      {
+       "id": 2,
+       "flag": "Turkey",
+       "name": "Lethal",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Lethal"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "Zeruhh",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zeruhh"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Infekted",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Infekted"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "CLEAR",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "CLEAR"
+      },
+      {
+       "id": 6,
+       "flag": "Estonia",
+       "name": "Admiral",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Admiral"
+      },
+      {
+       "id": 7,
+       "flag": "United States",
+       "name": "Cjay",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Cjay"
+      },
+      {
+       "id": 8,
+       "flag": "United States",
+       "name": "Zzz",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zss"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!l2!4",
+    "tolower": "jaEjNJcB60_R03-M001",
+    "toupper": "",
+    "loweredges": [
+     {
+      "opponentIndex": 1,
+      "lowerMatchIndex": 0
+     }
+    ],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 1,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 3,
+     "sectionCount": 2,
+     "sectionIndex": 1,
+     "semanticDepth": 1,
+     "matchIndexInRound": 1,
+     "semanticRoundIndex": 3
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "upperMatchId": "jaEjNJcB60_R05-M001",
+    "lowerMatchIds": [
+     "jaEjNJcB60_R03-M001"
+    ],
+    "sectionheader": "Playoffs",
+    "bracketsection": "lower",
+    "inheritedheader": "!l2!4"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=OLdtWgpa5sg",
+   "date": "2024-09-01 22:30:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 7,
+   "pageid": 127208,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "2",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "jaEjNJcB60_R05-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "United States",
+       "name": "Rupal",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "Rupal"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "united states",
+      "name": "Nekkra",
+      "displayName": "Nekkra"
+     }
+    },
+    "timestamp": 1725229800,
+    "timezoneid": "EDT",
+    "timezoneoffset": "-04:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127208_jaEjNJcB60_R05-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 3",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 3",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Busan",
+     "vod": "",
+     "date": "2024-09-01 22:30:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      1,
+      2
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725229800
+     },
+     "opponents": [
+      {
+       "score": 1,
+       "status": "S"
+      },
+      {
+       "score": 2,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Runasapi",
+     "vod": "",
+     "date": "2024-09-01 22:30:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      55.15,
+      119.36
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725229800
+     },
+     "opponents": [
+      {
+       "score": 55.15,
+       "status": "S"
+      },
+      {
+       "score": 119.36,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "Shambali Monastery",
+     "vod": "",
+     "date": "2024-09-01 22:30:00",
+     "game": "overwatch2",
+     "mode": "Escort",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      3
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725229800
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 3,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    },
+    {
+     "map": "Paraiso",
+     "vod": "",
+     "date": "2024-09-01 22:30:00",
+     "game": "overwatch2",
+     "mode": "Hybrid",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      0,
+      3
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "4",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1725229800
+     },
+     "opponents": [
+      {
+       "score": 0,
+       "status": "S"
+      },
+      {
+       "score": 3,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 4,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "jaEjNJcB60",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "NRG_Shock_lightmode.png",
+     "name": "NRG Shock",
+     "type": "team",
+     "score": 0,
+     "status": "S",
+     "template": "nrg shock",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "NRG Shock",
+      "page": "NRG Shock",
+      "image": "NRG_Shock_lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/5/5b/NRG_Shock_lightmode.png/400px-NRG_Shock_lightmode.png",
+      "template": "nrg shock",
+      "imagedark": "NRG_Shock_darkmode.png",
+      "shortname": "NRG.S",
+      "bracketname": "NRG Shock",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/6/66/NRG_Shock_darkmode.png/400px-NRG_Shock_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "United States",
+       "name": "PGE",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "PGE"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Scissors",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "scissors"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "TR33",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "TR33"
+      },
+      {
+       "id": 4,
+       "flag": "South Korea",
+       "name": "Kellan",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Kellan"
+      },
+      {
+       "id": 5,
+       "flag": "South Korea",
+       "name": "Attack",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Attack"
+      },
+      {
+       "id": 6,
+       "flag": "United States",
+       "name": "Rakattack",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rakattack"
+      },
+      {
+       "id": 7,
+       "flag": "Canada",
+       "name": "Cal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "cal"
+      },
+      {
+       "id": 8,
+       "flag": "United States",
+       "name": "UltraViolet",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "UltraViolet"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 4,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u1!5",
+    "tolower": "jaEjNJcB60_R04-M002",
+    "toupper": "jaEjNJcB60_R04-M001",
+    "loweredges": [
+     {
+      "opponentIndex": 0,
+      "lowerMatchIndex": 0
+     },
+     {
+      "opponentIndex": 1,
+      "lowerMatchIndex": 1
+     }
+    ],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 0,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 4,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 0,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 3
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "lowerMatchIds": [
+     "jaEjNJcB60_R04-M001",
+     "jaEjNJcB60_R04-M002"
+    ],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u1!5"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "",
+   "date": "2024-09-27 20:00:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127209,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": [],
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Group A",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "7Wkz4Gir4U_0001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "timestamp": 1727467200,
+    "timezoneid": "CDT",
+    "timezoneoffset": "-05:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127209_7Wkz4Gir4U_0001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 4 Group Stage",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 4 - Group Stage",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Ilios",
+     "vod": "",
+     "date": "2024-09-27 20:00:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1727467200
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Suravasa",
+     "vod": "",
+     "date": "2024-09-27 20:00:00",
+     "game": "overwatch2",
+     "mode": "Flashpoint",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1727467200
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "Runasapi",
+     "vod": "",
+     "date": "2024-09-27 20:00:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      128.15,
+      85.66
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1727467200
+     },
+     "opponents": [
+      {
+       "score": 128.15,
+       "status": "S"
+      },
+      {
+       "score": 85.66,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "7Wkz4Gir4U",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "YFP Gaming 2021 allmode.png",
+     "name": "YFP",
+     "type": "team",
+     "score": 0,
+     "status": "S",
+     "template": "yfp gaming orig",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "YFP Gaming",
+      "page": "YFP Gaming",
+      "image": "YFP Gaming 2021 allmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/6/61/YFP_Gaming_2021_allmode.png/400px-YFP_Gaming_2021_allmode.png",
+      "template": "yfp gaming orig",
+      "imagedark": "YFP Gaming 2021 allmode.png",
+      "shortname": "YFP",
+      "bracketname": "YFP Gaming",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/6/61/YFP_Gaming_2021_allmode.png/400px-YFP_Gaming_2021_allmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "Ade",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Ade"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "JUTSU",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "JUTSU"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "Nvm",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "nvm"
+      },
+      {
+       "id": 4,
+       "flag": "Canada",
+       "name": "Axure",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Axure"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Hing3d",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Hing3d"
+      },
+      {
+       "id": 6,
+       "flag": "United States",
+       "name": "Skier",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "skier"
+      },
+      {
+       "id": 7,
+       "flag": "United States",
+       "name": "Luka",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "luka"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "next": "7Wkz4Gir4U_0002",
+    "type": "matchlist",
+    "header": "Opening Matches",
+    "matchIndex": 1,
+    "bracketindex": 0,
+    "inheritedheader": "Opening Matches"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=t0sKgqDeVVw",
+   "date": "2024-10-10 21:00:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127210,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "cJB1OcWlyA_R01-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "United States",
+       "name": "Sugarfree",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "Sugarfree"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "canada",
+      "name": "LemonKiwi",
+      "displayName": "LemonKiwi"
+     }
+    },
+    "timestamp": 1728594000,
+    "timezoneid": "PDT",
+    "timezoneoffset": "-07:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127210_cJB1OcWlyA_R01-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 4",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 4",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Ilios",
+     "vod": "",
+     "date": "2024-10-10 21:00:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728594000
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Runasapi",
+     "vod": "",
+     "date": "2024-10-10 21:00:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      144.86,
+      117.39
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728594000
+     },
+     "opponents": [
+      {
+       "score": 144.86,
+       "status": "S"
+      },
+      {
+       "score": 117.39,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "King's Row",
+     "vod": "",
+     "date": "2024-10-10 21:00:00",
+     "game": "overwatch2",
+     "mode": "Hybrid",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      2
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728594000
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 2,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "cJB1OcWlyA",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "NRG_Shock_lightmode.png",
+     "name": "NRG Shock",
+     "type": "team",
+     "score": 0,
+     "status": "S",
+     "template": "nrg shock",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "NRG Shock",
+      "page": "NRG Shock",
+      "image": "NRG_Shock_lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/5/5b/NRG_Shock_lightmode.png/400px-NRG_Shock_lightmode.png",
+      "template": "nrg shock",
+      "imagedark": "NRG_Shock_darkmode.png",
+      "shortname": "NRG.S",
+      "bracketname": "NRG Shock",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/6/66/NRG_Shock_darkmode.png/400px-NRG_Shock_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "United States",
+       "name": "PGE",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "PGE"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Scissors",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "scissors"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "TR33",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "TR33"
+      },
+      {
+       "id": 4,
+       "flag": "South Korea",
+       "name": "Kellan",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Kellan"
+      },
+      {
+       "id": 5,
+       "flag": "South Korea",
+       "name": "Attack",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Attack"
+      },
+      {
+       "id": 6,
+       "flag": "United States",
+       "name": "Rakattack",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Rakattack"
+      },
+      {
+       "id": 7,
+       "flag": "Canada",
+       "name": "Cal",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "cal"
+      },
+      {
+       "id": 8,
+       "flag": "United States",
+       "name": "UltraViolet",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "UltraViolet"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u4!2",
+    "tolower": "",
+    "toupper": "",
+    "loweredges": [],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 4,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 0,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 3,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 0
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "upperMatchId": "cJB1OcWlyA_R02-M001",
+    "lowerMatchIds": [],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u4!2"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=8JqkRSZsdrM",
+   "date": "2024-10-11 20:45:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127210,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "cJB1OcWlyA_R02-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "South Korea",
+       "name": "Someone",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "Someone"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "canada",
+      "name": "LemonKiwi",
+      "displayName": "LemonKiwi"
+     }
+    },
+    "timestamp": 1728679500,
+    "timezoneid": "PDT",
+    "timezoneoffset": "-07:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127210_cJB1OcWlyA_R02-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 4",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 4",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Ilios",
+     "vod": "",
+     "date": "2024-10-11 20:45:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728679500
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Hanaoka",
+     "vod": "",
+     "date": "2024-10-11 20:45:00",
+     "game": "overwatch2",
+     "mode": "Clash",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      5,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728679500
+     },
+     "opponents": [
+      {
+       "score": 5,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "Runasapi",
+     "vod": "",
+     "date": "2024-10-11 20:45:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      130.48,
+      101.22
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728679500
+     },
+     "opponents": [
+      {
+       "score": 130.48,
+       "status": "S"
+      },
+      {
+       "score": 101.22,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "cJB1OcWlyA",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "Avidity_OW_logo_2024_lightmode.png",
+     "name": "Rad x Avidity",
+     "type": "team",
+     "score": 0,
+     "status": "S",
+     "template": "rad x avidity orig",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "Rad x Avidity",
+      "page": "Rad x Avidity",
+      "image": "Avidity_OW_logo_2024_lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/5/58/Avidity_OW_logo_2024_lightmode.png/400px-Avidity_OW_logo_2024_lightmode.png",
+      "template": "rad x avidity orig",
+      "imagedark": "Avidity_OW_logo_2024_darkmode.png",
+      "shortname": "RAD.AV",
+      "bracketname": "Rad x Avidity",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/6/62/Avidity_OW_logo_2024_darkmode.png/400px-Avidity_OW_logo_2024_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "United States",
+       "name": "Wub",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "wub"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Bun",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Bun"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "Dreepy",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Dreepy"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Pela",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "pela"
+      },
+      {
+       "id": 5,
+       "flag": "Netherlands",
+       "name": "TwolzZ",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "TwolzZ"
+      },
+      {
+       "id": 6,
+       "flag": "United States",
+       "name": "NenWhy",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "NenWhy"
+      },
+      {
+       "id": 7,
+       "flag": "United States",
+       "name": "Scuffed",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "scuffed"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u3!3",
+    "tolower": "cJB1OcWlyA_R01-M002",
+    "toupper": "cJB1OcWlyA_R01-M001",
+    "loweredges": [
+     {
+      "opponentIndex": 0,
+      "lowerMatchIndex": 0
+     },
+     {
+      "opponentIndex": 1,
+      "lowerMatchIndex": 1
+     }
+    ],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 3,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 1,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 2,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 1
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "upperMatchId": "cJB1OcWlyA_R04-M001",
+    "lowerMatchIds": [
+     "cJB1OcWlyA_R01-M001",
+     "cJB1OcWlyA_R01-M002"
+    ],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u3!3"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "https://www.youtube.com/watch?v=ruoksQHj4C8",
+   "date": "2024-10-12 23:00:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 5,
+   "pageid": 127210,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "cJB1OcWlyA_R04-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "United States",
+       "name": "Sugarfree",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "Sugarfree"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "canada",
+      "name": "LemonKiwi",
+      "displayName": "LemonKiwi"
+     }
+    },
+    "timestamp": 1728774000,
+    "timezoneid": "PDT",
+    "timezoneoffset": "-07:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127210_cJB1OcWlyA_R04-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 4",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 4",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Ilios",
+     "vod": "",
+     "date": "2024-10-12 23:00:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      0,
+      2
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728774000
+     },
+     "opponents": [
+      {
+       "score": 0,
+       "status": "S"
+      },
+      {
+       "score": 2,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "Watchpoint: Gibraltar",
+     "vod": "",
+     "date": "2024-10-12 23:00:00",
+     "game": "overwatch2",
+     "mode": "Escort",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728774000
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "Runasapi",
+     "vod": "",
+     "date": "2024-10-12 23:00:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      82.03,
+      88.94
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728774000
+     },
+     "opponents": [
+      {
+       "score": 82.03,
+       "status": "S"
+      },
+      {
+       "score": 88.94,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    },
+    {
+     "map": "Suravasa",
+     "vod": "",
+     "date": "2024-10-12 23:00:00",
+     "game": "overwatch2",
+     "mode": "Flashpoint",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "4",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728774000
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 4,
+     "participants": []
+    },
+    {
+     "map": "Midtown",
+     "vod": "",
+     "date": "2024-10-12 23:00:00",
+     "game": "overwatch2",
+     "mode": "Hybrid",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      1,
+      0
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "5",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728774000
+     },
+     "opponents": [
+      {
+       "score": 1,
+       "status": "S"
+      },
+      {
+       "score": 0,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 5,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "cJB1OcWlyA",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "NTMR July 2024 allmode.png",
+     "name": "NTMR",
+     "type": "team",
+     "score": 2,
+     "status": "S",
+     "template": "ntmr july 2024",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "NTMR",
+      "page": "NTMR",
+      "image": "NTMR July 2024 allmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "template": "ntmr july 2024",
+      "imagedark": "NTMR July 2024 allmode.png",
+      "shortname": "NTMR",
+      "bracketname": "NTMR",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "Canada",
+       "name": "Seeker",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "seeker"
+      },
+      {
+       "id": 2,
+       "flag": "Turkey",
+       "name": "Lethal",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Lethal"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "Zeruhh",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zeruhh"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Infekted",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Infekted"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "CLEAR",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "CLEAR"
+      },
+      {
+       "id": 6,
+       "flag": "Estonia",
+       "name": "Admiral",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Admiral"
+      },
+      {
+       "id": 7,
+       "flag": "United States",
+       "name": "Cjay",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Cjay"
+      },
+      {
+       "id": 8,
+       "flag": "United States",
+       "name": "Zzz",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zss"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u2!4",
+    "tolower": "cJB1OcWlyA_R02-M002",
+    "toupper": "cJB1OcWlyA_R02-M001",
+    "skipround": 1,
+    "loweredges": [
+     {
+      "opponentIndex": 0,
+      "lowerMatchIndex": 0
+     },
+     {
+      "opponentIndex": 1,
+      "lowerMatchIndex": 1
+     }
+    ],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 1,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 3,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 1,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 2
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "upperMatchId": "cJB1OcWlyA_R05-M001",
+    "lowerMatchIds": [
+     "cJB1OcWlyA_R02-M001",
+     "cJB1OcWlyA_R02-M002"
+    ],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u2!4"
+   },
+   "liquipediatiertype": ""
+  },
+  {
+   "vod": "",
+   "date": "2024-10-13 21:45:00",
+   "game": "overwatch2",
+   "icon": "Overwatch_Champions_Series_lightmode.png",
+   "mode": "team",
+   "type": "Online",
+   "wiki": "overwatch",
+   "links": [],
+   "patch": "",
+   "bestof": 7,
+   "pageid": 127210,
+   "parent": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "series": "Overwatch Champions Series",
+   "status": "",
+   "stream": {
+    "twitch": "Overwatch_Esports",
+    "youtube": "overwatchleague",
+    "twitch_en_1": "Overwatch_Esports",
+    "youtube_en_1": "overwatchleague"
+   },
+   "winner": "1",
+   "iconurl": "https://liquipedia.net/commons/images/f/f1/Overwatch_Champions_Series_lightmode.png",
+   "section": "Playoffs",
+   "finished": 1,
+   "icondark": "Overwatch_Champions_Series_darkmode.png",
+   "match2id": "cJB1OcWlyA_R05-M001",
+   "pagename": "Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "walkover": "",
+   "dateexact": 1,
+   "extradata": {
+    "mvp": {
+     "points": 1,
+     "players": {
+      "1": {
+       "flag": "South Korea",
+       "name": "MER1T",
+       "team": "Toronto Defiant",
+       "template": "toronto defiant",
+       "displayname": "MER1T"
+      }
+     }
+    },
+    "casters": {
+     "1": {
+      "flag": "united kingdom",
+      "name": "Jaws",
+      "displayName": "Jaws"
+     },
+     "2": {
+      "flag": "canada",
+      "name": "LemonKiwi",
+      "displayName": "LemonKiwi"
+     }
+    },
+    "timestamp": 1728855900,
+    "timezoneid": "PDT",
+    "timezoneoffset": "-07:00"
+   },
+   "namespace": 0,
+   "shortname": "OWCS",
+   "objectname": "127210_cJB1OcWlyA_R05-M001",
+   "resulttype": "",
+   "tickername": "OWCS NA Stage 4",
+   "tournament": "Overwatch Champions Series 2024 - NA Stage 4",
+   "icondarkurl": "https://liquipedia.net/commons/images/0/01/Overwatch_Champions_Series_darkmode.png",
+   "match2games": [
+    {
+     "map": "Ilios",
+     "vod": "",
+     "date": "2024-10-13 21:45:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      0,
+      2
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "1",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728855900
+     },
+     "opponents": [
+      {
+       "score": 0,
+       "status": "S"
+      },
+      {
+       "score": 2,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 1,
+     "participants": []
+    },
+    {
+     "map": "New Queen Street",
+     "vod": "",
+     "date": "2024-10-13 21:45:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      113.73,
+      81.19
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "2",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728855900
+     },
+     "opponents": [
+      {
+       "score": 113.73,
+       "status": "S"
+      },
+      {
+       "score": 81.19,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 2,
+     "participants": []
+    },
+    {
+     "map": "New Junk City",
+     "vod": "",
+     "date": "2024-10-13 21:45:00",
+     "game": "overwatch2",
+     "mode": "Flashpoint",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      3
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "3",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728855900
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 3,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 3,
+     "participants": []
+    },
+    {
+     "map": "Watchpoint: Gibraltar",
+     "vod": "",
+     "date": "2024-10-13 21:45:00",
+     "game": "overwatch2",
+     "mode": "Escort",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      2
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "4",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728855900
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 2,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 4,
+     "participants": []
+    },
+    {
+     "map": "King's Row",
+     "vod": "",
+     "date": "2024-10-13 21:45:00",
+     "game": "overwatch2",
+     "mode": "Hybrid",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      3,
+      4
+     ],
+     "status": "",
+     "winner": "2",
+     "subgroup": "5",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728855900
+     },
+     "opponents": [
+      {
+       "score": 3,
+       "status": "S"
+      },
+      {
+       "score": 4,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 5,
+     "participants": []
+    },
+    {
+     "map": "Esperanca",
+     "vod": "",
+     "date": "2024-10-13 21:45:00",
+     "game": "overwatch2",
+     "mode": "Push",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      115.15,
+      64.01
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "6",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728855900
+     },
+     "opponents": [
+      {
+       "score": 115.15,
+       "status": "S"
+      },
+      {
+       "score": 64.01,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 6,
+     "participants": []
+    },
+    {
+     "map": "Lijiang Tower",
+     "vod": "",
+     "date": "2024-10-13 21:45:00",
+     "game": "overwatch2",
+     "mode": "Control",
+     "type": "Online",
+     "patch": "",
+     "length": "",
+     "scores": [
+      2,
+      1
+     ],
+     "status": "",
+     "winner": "1",
+     "subgroup": "7",
+     "walkover": "",
+     "extradata": {
+      "dateexact": true,
+      "timestamp": 1728855900
+     },
+     "opponents": [
+      {
+       "score": 2,
+       "status": "S"
+      },
+      {
+       "score": 1,
+       "status": "S"
+      }
+     ],
+     "resulttype": "",
+     "match2gameid": 7,
+     "participants": []
+    }
+   ],
+   "publishertier": "owcs",
+   "liquipediatier": "2",
+   "match2bracketid": "cJB1OcWlyA",
+   "match2opponents": [
+    {
+     "id": 1,
+     "icon": "Toronto Defiant lightmode.png",
+     "name": "Toronto Defiant",
+     "type": "team",
+     "score": 4,
+     "status": "S",
+     "template": "toronto defiant",
+     "extradata": [],
+     "placement": 1,
+     "teamtemplate": {
+      "name": "Toronto Defiant",
+      "page": "Toronto Defiant",
+      "image": "Toronto Defiant lightmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/e/e9/Toronto_Defiant_lightmode.png/400px-Toronto_Defiant_lightmode.png",
+      "template": "toronto defiant",
+      "imagedark": "Toronto Defiant darkmode.png",
+      "shortname": "TOR",
+      "bracketname": "Toronto Defiant",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/4/44/Toronto_Defiant_darkmode.png/400px-Toronto_Defiant_darkmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "South Korea",
+       "name": "MER1T",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "MER1T"
+      },
+      {
+       "id": 2,
+       "flag": "United States",
+       "name": "Sugarfree",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Sugarfree"
+      },
+      {
+       "id": 3,
+       "flag": "South Korea",
+       "name": "Someone",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Someone"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Vega",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Vega"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "Rupal",
+       "opid": 1,
+       "extradata": [],
+       "displayname": "Rupal"
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "icon": "NTMR July 2024 allmode.png",
+     "name": "NTMR",
+     "type": "team",
+     "score": 3,
+     "status": "S",
+     "template": "ntmr july 2024",
+     "extradata": [],
+     "placement": 2,
+     "teamtemplate": {
+      "name": "NTMR",
+      "page": "NTMR",
+      "image": "NTMR July 2024 allmode.png",
+      "imageurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "template": "ntmr july 2024",
+      "imagedark": "NTMR July 2024 allmode.png",
+      "shortname": "NTMR",
+      "bracketname": "NTMR",
+      "legacyimage": "",
+      "imagedarkurl": "https://liquipedia.net/commons/images/thumb/2/2c/NTMR_July_2024_allmode.png/386px-NTMR_July_2024_allmode.png",
+      "legacyimageurl": "",
+      "legacyimagedark": "",
+      "legacyimagedarkurl": ""
+     },
+     "match2players": [
+      {
+       "id": 1,
+       "flag": "Canada",
+       "name": "Seeker",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "seeker"
+      },
+      {
+       "id": 2,
+       "flag": "Turkey",
+       "name": "Lethal",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Lethal"
+      },
+      {
+       "id": 3,
+       "flag": "United States",
+       "name": "Zeruhh",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zeruhh"
+      },
+      {
+       "id": 4,
+       "flag": "United States",
+       "name": "Infekted",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Infekted"
+      },
+      {
+       "id": 5,
+       "flag": "United States",
+       "name": "CLEAR",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "CLEAR"
+      },
+      {
+       "id": 6,
+       "flag": "Estonia",
+       "name": "Admiral",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Admiral"
+      },
+      {
+       "id": 7,
+       "flag": "United States",
+       "name": "Cjay",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "Cjay"
+      },
+      {
+       "id": 8,
+       "flag": "United States",
+       "name": "Zzz",
+       "opid": 2,
+       "extradata": [],
+       "displayname": "zss"
+      }
+     ]
+    }
+   ],
+   "match2bracketdata": {
+    "type": "bracket",
+    "header": "!u1!5",
+    "tolower": "cJB1OcWlyA_R04-M002",
+    "toupper": "cJB1OcWlyA_R04-M001",
+    "loweredges": [
+     {
+      "opponentIndex": 0,
+      "lowerMatchIndex": 0
+     },
+     {
+      "opponentIndex": 1,
+      "lowerMatchIndex": 1
+     }
+    ],
+    "thirdplace": "",
+    "bracketType": "Bracket/8U4L2DSL1D",
+    "coordinates": {
+     "depth": 0,
+     "rootIndex": 0,
+     "depthCount": 5,
+     "roundCount": 5,
+     "roundIndex": 4,
+     "sectionCount": 2,
+     "sectionIndex": 0,
+     "semanticDepth": 0,
+     "matchIndexInRound": 0,
+     "semanticRoundIndex": 3
+    },
+    "bracketindex": 0,
+    "bracketreset": "",
+    "lowerMatchIds": [
+     "cJB1OcWlyA_R04-M001",
+     "cJB1OcWlyA_R04-M002"
+    ],
+    "sectionheader": "Playoffs",
+    "bracketsection": "upper",
+    "inheritedheader": "!u1!5"
    },
    "liquipediatiertype": ""
   }

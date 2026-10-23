@@ -622,14 +622,14 @@
     "status": "ok",
     "rows": [
      {
-      "maps": 3,
-      "matches": 1,
-      "map_wins": 3,
-      "map_losses": 0
+      "maps": 23,
+      "matches": 5,
+      "map_wins": 16,
+      "map_losses": 7
      }
     ]
    },
-   "derivation": "Maps where both appear on opposite teams: 3 over 1 series (SSG v LuneX).",
+   "derivation": "Maps where both appear on opposite teams: 23 over 5 series. FACEIT's rounds: 3 (3-0) in SSG v LuneX. Liquipedia's games: 20 (13-7) in 4 Toronto Defiant v NTMR series (2024 NA Stages 3 and 4, Liquipedia-only), each map with both on their side's line-up.",
    "status": "confirmed"
   },
   {
@@ -861,11 +861,11 @@
     "rows": [
      {
       "team": "Toronto Defiant",
-      "matches": 3,
-      "wins": 3,
-      "losses": 0,
-      "map_wins": 10,
-      "map_losses": 2
+      "matches": 14,
+      "wins": 13,
+      "losses": 1,
+      "map_wins": 44,
+      "map_losses": 12
      }
     ],
     "evidence": {
@@ -882,10 +882,10 @@
      }
     },
     "sentence_contains": [
-     "undefeated in series (3-0) and 10-2 in maps"
+     "13-1 in series and 44-12 in maps"
     ]
    },
-   "derivation": "Toronto Defiant's 3 golden series, each scored from Liquipedia where linked (the source of record) and from FACEIT otherwise: 1-4b984ffd 3-2, 1-70cff415 4-0, 1-3546e79b 3-0. The grand final is 4-0 (bo7); FACEIT stores it as 5-0 with a 5th detailed_results entry (Dorado, 1-0) nobody played.",
+   "derivation": "Toronto Defiant's 14 golden series. 3 on FACEIT, each scored from Liquipedia where linked (the source of record) and from FACEIT otherwise: 1-4b984ffd 3-2, 1-70cff415 4-0, 1-3546e79b 3-0. 11 Liquipedia-only (2024 NA Stages 3 and 4), from Liquipedia's record: 127207_ajHAQTjWvc_0001 3-0, 127208_jaEjNJcB60_R01-M001 3-0, 127208_jaEjNJcB60_R02-M001 3-0, 127208_jaEjNJcB60_R04-M001 2-3, 127208_jaEjNJcB60_R04-M002 3-2, 127208_jaEjNJcB60_R05-M001 4-0, 127209_7Wkz4Gir4U_0001 3-0, 127210_cJB1OcWlyA_R01-M001 3-0, 127210_cJB1OcWlyA_R02-M001 3-0, 127210_cJB1OcWlyA_R04-M001 3-2, 127210_cJB1OcWlyA_R05-M001 4-3. The grand final is 4-0 (bo7); FACEIT stores it as 5-0 with a 5th detailed_results entry (Dorado, 1-0) nobody played.",
    "status": "confirmed"
   },
   {
@@ -1892,13 +1892,13 @@
     "status": "cannot_answer",
     "code": "no_data",
     "sentence_contains": [
-     "game mode 'Clash'"
+     "on Clash maps"
     ],
     "sentence_lacks": [
      "Champions Clash"
     ]
    },
-   "derivation": "Only 'champions clash' names the event; the game mode keeps its word. The golden set holds no Clash map, so the answer is the mode's own no-data refusal - which is the proof it was read as the mode.",
+   "derivation": "Only 'champions clash' names the event; the game mode keeps its word. The golden set holds 1 Clash map(s) (Hanaoka in 127210_cJB1OcWlyA_R02-M001) and Twisted Minds played none, so the answer is that it has no series on Clash maps - which is the proof it was read as the mode.",
    "status": "confirmed"
   },
   {
@@ -1947,9 +1947,9 @@
     "status": "ok",
     "rows": [
      {
-      "matches": 4,
+      "matches": 8,
       "wins": 1,
-      "losses": 3
+      "losses": 7
      }
     ],
     "notes_contain": [
@@ -1957,7 +1957,7 @@
     ],
     "other_grain": "cjay map record against sugarfree"
    },
-   "derivation": "Series with cjay on one declared line-up and sugarfree on the other: 4 (1-2b2f7884, 1-0c28ddf5, 1-4b984ffd, 1-70cff415), 1-3 from cjay's side. Before: 'head-to-head needs two resolved teams'.",
+   "derivation": "Series with cjay on one line-up and sugarfree on the other: 8, 1-7 from cjay's side. On FACEIT's declared line-ups: 4 (1-2b2f7884, 1-0c28ddf5, 1-4b984ffd, 1-70cff415), 1-3. On Liquipedia's line-ups of Liquipedia-only series (NTMR v Toronto Defiant, 2024 NA Stages 3 and 4): 4 (127208_jaEjNJcB60_R02-M001, 127208_jaEjNJcB60_R04-M002, 127210_cJB1OcWlyA_R04-M001, 127210_cJB1OcWlyA_R05-M001), 0-4. Before: 'head-to-head needs two resolved teams'.",
    "status": "confirmed"
   },
   {

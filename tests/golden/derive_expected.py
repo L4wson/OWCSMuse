@@ -310,11 +310,18 @@ case("G21", "Most healing in 2025", "exact", "who had the most healing done in 2
      f"Healing Done summed over 2025 maps ({n_heal} players with the stat).")
 
 # ----------------------------------------------------------------- versus
-pv = I.versus_maps(S, pid(SUG), opponent_player_id=pid(ZSS))
+pv_fc = I.versus_maps(S, pid(SUG), opponent_player_id=pid(ZSS))
+# and the Liquipedia-only series: Toronto Defiant (sug2rfree) v NTMR (ZSS), 2024 NA Stages 3 and 4, by line-up
+pv_lp = I.event_opposed_maps(pid(SUG), pid(ZSS))
+assert pv_fc["matches"] == 1 and pv_lp["matches"] == 4
+pv = {k: pv_fc[k] + pv_lp[k] for k in ("maps", "matches", "map_wins", "map_losses")}
 case("G22", "Player vs player: sug2rfree against ZSS", "exact", "sug2rfree map record against ZSS",
      {"status": "ok", "rows": [{"maps": pv["maps"], "matches": pv["matches"], "map_wins": pv["map_wins"],
                                 "map_losses": pv["map_losses"]}]},
-     f"Maps where both appear on opposite teams: {pv['maps']} over {pv['matches']} series (SSG v LuneX).",
+     f"Maps where both appear on opposite teams: {pv['maps']} over {pv['matches']} series. FACEIT's rounds: "
+     f"{pv_fc['maps']} ({pv_fc['map_wins']}-{pv_fc['map_losses']}) in SSG v LuneX. Liquipedia's games: {pv_lp['maps']} "
+     f"({pv_lp['map_wins']}-{pv_lp['map_losses']}) in {pv_lp['matches']} Toronto Defiant v NTMR series (2024 NA Stages "
+     "3 and 4, Liquipedia-only), each map with both on their side's line-up.",
      regression="versus at map grain, player vs player")
 
 # a Geekay EMEA player who faced Virtus pro in the bo7, as player-vs-org
@@ -483,7 +490,12 @@ for x in S:
             else:
                 mine, theirs = x.score[k], x.score[o]
             tor_rows.append((x.match_id, mine, theirs, x.winner_faction == k))
-tor_rec = {"matches": len(tor_rows), "wins": sum(w for *_, w in tor_rows), "losses": sum(not w for *_, w in tor_rows),
+n_tor_fc = len(tor_rows)
+# Toronto Defiant's Liquipedia-only series (2024 NA Stages 3 and 4), scored from Liquipedia's own record
+tor_lp = I.event_rows("Toronto Defiant")
+assert n_tor_fc == 3 and len(tor_lp) == 11
+tor_rows += [(r["objectname"], r["for"], r["against"], r["won"]) for r in tor_lp]
+tor_rec ={"matches": len(tor_rows), "wins": sum(w for *_, w in tor_rows), "losses": sum(not w for *_, w in tor_rows),
            "map_wins": sum(m for _, m, _, _ in tor_rows), "map_losses": sum(t for _, _, t, _ in tor_rows)}
 case("G33", "A grand final FACEIT inflated with a phantom map presents Liquipedia's score", "exact",
      "Toronto Defiant record",
@@ -496,8 +508,11 @@ case("G33", "A grand final FACEIT inflated with a phantom map presents Liquipedi
       "sentence_contains": [(f"undefeated in series ({tor_rec['wins']}-0)" if tor_rec["losses"] == 0
                              else f"{tor_rec['wins']}-{tor_rec['losses']} in series")
                             + f" and {tor_rec['map_wins']}-{tor_rec['map_losses']} in maps"]},
-     f"Toronto Defiant's {tor_rec['matches']} golden series, each scored from Liquipedia where linked (the source of record) "
-     f"and from FACEIT otherwise: " + ", ".join(f"{mid[:10]} {mine}-{theirs}" for mid, mine, theirs, _ in tor_rows)
+     f"Toronto Defiant's {tor_rec['matches']} golden series. {n_tor_fc} on FACEIT, each scored from Liquipedia where "
+     f"linked (the source of record) and from FACEIT otherwise: "
+     + ", ".join(f"{mid[:10]} {mine}-{theirs}" for mid, mine, theirs, _ in tor_rows[:n_tor_fc])
+     + f". {len(tor_lp)} Liquipedia-only (2024 NA Stages 3 and 4), from Liquipedia's record: "
+     + ", ".join(f"{mid} {mine}-{theirs}" for mid, mine, theirs, _ in tor_rows[n_tor_fc:])
      + f". The grand final is {gf_for}-{gf_against} (bo{gf_lp['best_of']}); FACEIT stores it as "
      f"{max(faceit_gf.values())}-{min(faceit_gf.values())} with a 5th detailed_results entry (Dorado, 1-0) nobody played.",
      regression="FACEIT phantom map in a sweep's series score; Liquipedia is the source of record where linked (034)")
@@ -1011,12 +1026,20 @@ case("G78", "'who won the most series at ...' stays a leaderboard, not the event
      {"status": "ok", "rows": [{"wins": wf_wins[0][0]}]},
      f"Series wins at {WF25} from the records: the most is {wf_wins[0][0]} ({[t for w, t in wf_wins if w == wf_wins[0][0]]}).")
 
+clash_maps = [(m["objectname"], g["map"]) for m in I.load_events()["matches"] for g in m["match2games"]
+              if g.get("mode") == "Clash"] + [(x.match_id, r["map"]) for x in S for r in x.rounds if r["mode"] == "Clash"]
+tm_clash = [(m["objectname"], g["map"]) for m in I.load_events()["matches"]
+            if "Twisted Minds" in [o["name"] for o in m["match2opponents"]] for g in m["match2games"]
+            if g.get("mode") == "Clash"] + [(x.match_id, r["map"]) for x in S if "Twisted Minds" in x.name.values()
+                                            for r in x.rounds if r["mode"] == "Clash"]
+assert clash_maps and not tm_clash
 case("G79", "'clash' alone is still the Clash mode, not the Champions Clash", "invariant",
      "Twisted Minds record on clash maps",
-     {"status": "cannot_answer", "code": "no_data", "sentence_contains": ["game mode 'Clash'"],
+     {"status": "cannot_answer", "code": "no_data", "sentence_contains": ["on Clash maps"],
       "sentence_lacks": ["Champions Clash"]},
-     "Only 'champions clash' names the event; the game mode keeps its word. The golden set holds no Clash map, so the "
-     "answer is the mode's own no-data refusal - which is the proof it was read as the mode.")
+     "Only 'champions clash' names the event; the game mode keeps its word. The golden set holds "
+     f"{len(clash_maps)} Clash map(s) ({', '.join(f'{n} in {mid}' for mid, n in clash_maps)}) and Twisted Minds played "
+     "none, so the answer is that it has no series on Clash maps - which is the proof it was read as the mode.")
 
 case("G80", "'champions clash' is the event even with 'champion' in it", "exact",
      "champions clash 2025 standings",
@@ -1033,15 +1056,20 @@ CONFIRMED |= {f"G{n}" for n in range(82, 88)}
 CJ, SG = pid("cjay4"), pid(SUG)
 DF_IDS, SSG_IDS = {team_id("Dallas Fuel")}, {x.team[k] for x in S for k in x.team if x.name[k] in ("SpaceStation Gaming", "SpaceStation")}
 
-pvp = I.opposed_record(S, ("player", {CJ}), ("player", {SG}))
-assert pvp["matches"] == 4
+pvp_fc = I.opposed_record(S, ("player", {CJ}), ("player", {SG}))
+pvp_lp = I.event_opposed_record(CJ, SG)
+assert pvp_fc["matches"] == 4 and pvp_lp["matches"] == 4
+pvp = {k: pvp_fc[k] + pvp_lp[k] for k in ("matches", "wins", "losses", "match_ids")}
 case("G82", "A player's series record against a player: the series they were on opposite sides of", "exact",
      f"{pname('cjay4')} series record against {pname(SUG)}",
      {"status": "ok", "rows": [{"matches": pvp["matches"], "wins": pvp["wins"], "losses": pvp["losses"]}],
       "notes_contain": ["Players do not win series, their teams do"],
       "other_grain": f"{pname('cjay4')} map record against {pname(SUG)}"},
-     f"Series with {pname('cjay4')} on one declared line-up and {pname(SUG)} on the other: {pvp['matches']} "
-     f"({', '.join(m[:10] for m in pvp['match_ids'])}), {pvp['wins']}-{pvp['losses']} from {pname('cjay4')}'s side. "
+     f"Series with {pname('cjay4')} on one line-up and {pname(SUG)} on the other: {pvp['matches']}, "
+     f"{pvp['wins']}-{pvp['losses']} from {pname('cjay4')}'s side. On FACEIT's declared line-ups: {pvp_fc['matches']} "
+     f"({', '.join(m[:10] for m in pvp_fc['match_ids'])}), {pvp_fc['wins']}-{pvp_fc['losses']}. On Liquipedia's "
+     f"line-ups of Liquipedia-only series (NTMR v Toronto Defiant, 2024 NA Stages 3 and 4): {pvp_lp['matches']} "
+     f"({', '.join(pvp_lp['match_ids'])}), {pvp_lp['wins']}-{pvp_lp['losses']}. "
      "Before: 'head-to-head needs two resolved teams'.",
      regression="series-grain player v player demanded two teams (2026-10-10)")
 

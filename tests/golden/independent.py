@@ -382,6 +382,12 @@ def team_series_record(page: str, team: str) -> dict:
     return {"matches": w + l, "wins": w, "losses": l}
 
 
+def page_region(page: str) -> str:
+    """A Liquipedia-only event page's region, by its path: a regional stage is that region, anything else international."""
+    parts = page.split("/")
+    return "na" if "North_America" in parts else "emea" if "EMEA" in parts else "international"
+
+
 def event_record(lp_names, season=None) -> dict:
     """A team's series record at the captured Liquipedia-only events, by the names Liquipedia gives it there.
 
@@ -406,7 +412,7 @@ def event_record(lp_names, season=None) -> dict:
                 out["maps"] += sum(1 for g in m.get("match2games") or []
                                    if g.get("status") != "notplayed" and g.get("resulttype") != "np")
                 out["result_only_series"] += 1
-                out["regions"].add("international")
+                out["regions"].add(page_region(m["pagename"]))
     out["regions"] = sorted(out["regions"])
     return out
 
@@ -475,6 +481,75 @@ def same_side_series(series_list, a, b, season=None) -> int:
     """Series in which `a` and `b` were on the same side: a player and his own team, or two teammates."""
     return sum(1 for s in series_list if s.counts_as_series and (not season or s.season == season)
                and any(_on(s, k, a) and _on(s, k, b) for k in ("faction1", "faction2")))
+
+
+def event_rows(lp_name: str) -> list[dict]:
+    """Every finished series a team played at the captured Liquipedia-only events, by the name Liquipedia gives it,
+    scored from the record alone: the same series event_record counts, one row each."""
+    out = []
+    for m in load_events()["matches"]:
+        opp = m["match2opponents"]
+        names = [o["name"] for o in opp]
+        if lp_name not in names or not m.get("finished"):
+            continue
+        i = names.index(lp_name)
+        out.append({"objectname": m["objectname"], "page": m["pagename"], "for": int(opp[i]["score"]),
+                    "against": int(opp[1 - i]["score"]), "won": int(m["winner"]) == i + 1})
+    return out
+
+
+# A Liquipedia-only series has no FACEIT roster: a player is on its side by Liquipedia's line-up (match2players), read
+# through the owner's reviewed page -> FACEIT player decisions (scope/player_identity_decisions.json). A page with no
+# decision is on no side: unknown, never guessed. Liquipedia does not say who played which map, so the line-up is on
+# every map of its side (the README's every-played-map rule for a map without player rows).
+
+def lp_player_ids() -> dict[str, str]:
+    """Liquipedia player page -> FACEIT player id, from the owner's decisions (a Liquipedia-born player has none)."""
+    path = GOLDEN.parent.parent / "scope" / "player_identity_decisions.json"
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    return {page: d["entity_id"] for page, d in doc["decisions"].items() if d.get("entity_id")}
+
+
+def _event_lineups(m) -> list[set]:
+    ids = lp_player_ids()
+    return [{ids[p["name"]] for p in o.get("match2players") or [] if p.get("name") in ids} for o in m["match2opponents"]]
+
+
+def event_opposed(a_player: str, b_player: str) -> list[tuple[dict, int]]:
+    """[(record, a's side index)] for every finished Liquipedia-only event series with the two players on opposite
+    line-ups."""
+    out = []
+    for m in load_events()["matches"]:
+        if not m.get("finished"):
+            continue
+        sides = _event_lineups(m)
+        for i in (0, 1):
+            if a_player in sides[i] and b_player in sides[1 - i]:
+                out.append((m, i))
+                break
+    return out
+
+
+def event_opposed_record(a_player: str, b_player: str) -> dict:
+    """A player's series record against a player over the Liquipedia-only event series, from a's team's side."""
+    rows = event_opposed(a_player, b_player)
+    return {"matches": len(rows), "wins": sum(int(m["winner"]) == i + 1 for m, i in rows),
+            "losses": sum(int(m["winner"]) == 2 - i for m, i in rows), "match_ids": [m["objectname"] for m, _ in rows]}
+
+
+def event_opposed_maps(a_player: str, b_player: str) -> dict:
+    """Every played game of those series (a slot marked not played is no game), from a's side; a 0 winner a draw."""
+    out = {"maps": 0, "map_wins": 0, "map_losses": 0, "matches": 0}
+    for m, i in event_opposed(a_player, b_player):
+        out["matches"] += 1
+        for g in m.get("match2games") or []:
+            if not g.get("map") or g.get("status") == "notplayed" or g.get("resulttype") == "np":
+                continue
+            w = int(g.get("winner") or 0)
+            out["maps"] += 1
+            out["map_wins"] += w == i + 1
+            out["map_losses"] += w not in (0, i + 1)
+    return out
 
 
 def team_maps_against_player(series_list, team_ids, player_id, season=None) -> dict:
