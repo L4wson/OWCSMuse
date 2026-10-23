@@ -1,4 +1,5 @@
 import AnswerSentence from "./AnswerSentence.jsx";
+import Attribution from "./Attribution.jsx";
 import Clarify from "./Clarify.jsx";
 import Context from "./Context.jsx";
 import DataTable from "./DataTable.jsx";
@@ -63,6 +64,7 @@ export default function Result({ answer, suggestions, busy, onAsk, onPage, onExp
       ) : null}
 
       <Evidence evidence={evidence} busy={busy} onPage={onPage} onAsk={onAsk} pageSize={pageSize} onPageSize={onPageSize} />
+      <Attribution attribution={answer.attribution} />
     </article>
   );
 }

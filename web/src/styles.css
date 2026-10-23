@@ -571,7 +571,32 @@ table.data tbody tr:last-child td {
   overflow-wrap: anywhere;
 }
 
+.attribution {
+  margin: 18px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.attribution p {
+  margin: 0 0 4px;
+}
+
+.attribution ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.attribution a {
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
 .footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   margin-top: 32px;
   padding-top: 12px;
   border-top: 1px solid var(--line);
