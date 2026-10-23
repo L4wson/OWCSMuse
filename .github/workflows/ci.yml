@@ -7,6 +7,13 @@ on:
 
 env:
   PYTHON_VERSION: "3.11"
+  # CI's images come from this repository's GHCR mirror (.github/workflows/mirror-images.yml), pulled with the job's
+  # own token: anonymous pulls from Docker Hub and ECR Public are metered per IP, and shared runners share the IPs
+  MIRROR: ghcr.io/l4wson/owcsmuse
+
+permissions:
+  contents: read
+  packages: read
 
 jobs:
   lint:
@@ -27,7 +34,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # the deployable image builds, runs as a non-root user and carries no dev tools
-      - run: docker build -t owcsmuse-api .
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - run: docker build --build-arg BASE_IMAGE=${{ env.MIRROR }}/python:3.12-slim -t owcsmuse-api .
       - run: |
           test "$(docker image inspect owcsmuse-api --format '{{.Config.User}}')" = owcs
           for dev in pytest ruff; do
@@ -59,9 +67,11 @@ jobs:
         postgres: [16, 17]   # 17 is what Supabase runs and docker-compose uses; 16 stays covered
     services:
       postgres:
-        # Docker Hub's official image via Amazon ECR Public: identical, and not under Docker Hub's unauthenticated
-        # pull limit that shared runners keep hitting ("toomanyrequests", 2026-10-09)
-        image: public.ecr.aws/docker/library/postgres:${{ matrix.postgres }}
+        # the official image, from this repository's GHCR mirror (see MIRROR above)
+        image: ghcr.io/l4wson/owcsmuse/postgres:${{ matrix.postgres }}
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs
@@ -91,9 +101,11 @@ jobs:
         postgres: [16, 17]   # 17 is what Supabase runs and docker-compose uses; 16 stays covered
     services:
       postgres:
-        # Docker Hub's official image via Amazon ECR Public: identical, and not under Docker Hub's unauthenticated
-        # pull limit that shared runners keep hitting ("toomanyrequests", 2026-10-09)
-        image: public.ecr.aws/docker/library/postgres:${{ matrix.postgres }}
+        # the official image, from this repository's GHCR mirror (see MIRROR above)
+        image: ghcr.io/l4wson/owcsmuse/postgres:${{ matrix.postgres }}
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs
@@ -143,9 +155,11 @@ jobs:
         postgres: [16, 17]   # 17 is what Supabase runs and docker-compose uses; 16 stays covered
     services:
       postgres:
-        # Docker Hub's official image via Amazon ECR Public: identical, and not under Docker Hub's unauthenticated
-        # pull limit that shared runners keep hitting ("toomanyrequests", 2026-10-09)
-        image: public.ecr.aws/docker/library/postgres:${{ matrix.postgres }}
+        # the official image, from this repository's GHCR mirror (see MIRROR above)
+        image: ghcr.io/l4wson/owcsmuse/postgres:${{ matrix.postgres }}
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         env:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: owcs

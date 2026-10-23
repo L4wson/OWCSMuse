@@ -1,0 +1,50 @@
+name: Mirror images
+
+# CI's images, copied into this repository's GitHub Container Registry, which CI pulls from instead of a public
+# registry. Anonymous pulls from Docker Hub and from Amazon ECR Public are metered per IP, and GitHub's shared runners
+# share a hot pool of IPs: "toomanyrequests: Data limit exceeded" failed most CI runs on 2026-10-23. A pull from GHCR
+# inside GitHub's network, authenticated with the job's own token, is not under either limit.
+#
+# Weekly, so the mirror follows upstream's patch releases; on demand; and whenever this file changes (the push trigger
+# runs the file as committed, so a new image can be mirrored on a branch before CI pulls it). One pull per image from
+# upstream per run, from ECR Public, then Docker Hub, with retries.
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+  push:
+    paths: [.github/workflows/mirror-images.yml]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  mirror:
+    name: mirror ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 1            # one upstream pull at a time: the point is not to look like a burst
+      matrix:
+        image: ["postgres:16", "postgres:17", "python:3.12-slim"]
+    steps:
+      - name: copy ${{ matrix.image }} to ghcr.io/${{ github.repository_owner }}/owcsmuse/${{ matrix.image }}
+        env:
+          IMAGE: ${{ matrix.image }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          dest="docker://ghcr.io/$owner/owcsmuse/$IMAGE"
+          echo "$TOKEN" | skopeo login ghcr.io -u "${{ github.actor }}" --password-stdin
+          # linux/amd64 only: what CI's runners are. --retry-times covers a single 429; a second source covers a bad hour
+          for src in "docker://public.ecr.aws/docker/library/$IMAGE" "docker://docker.io/library/$IMAGE"; do
+            if skopeo copy --retry-times 5 --override-os linux --override-arch amd64 "$src" "$dest"; then
+              skopeo inspect --format 'mirrored {{.Digest}} from '"$src" "$dest"
+              exit 0
+            fi
+            echo "::warning::could not copy from $src, trying the next source"
+          done
+          echo "::error title=Mirror failed::$IMAGE could not be copied from any source"; exit 1
