@@ -75,6 +75,36 @@ def load_faceit_side(conn: psycopg.Connection, championship_ids: Optional[list[s
             for r in rows]
 
 
+def load_faceit_no_result(conn: psycopg.Connection, championship_ids: Optional[list[str]] = None) -> dict[str, FaceitSide]:
+    """FACEIT rooms in scope that ended with no result: ABORTED or CANCELLED, no winner and no score (ingest skipped them).
+
+    A room FACEIT configured and aborted minutes later holds nothing about the series it was opened for (2026 Stage 3:
+    12 rooms, played outside FACEIT). Keyed by match id, with the teams' org keys at the room's time so a caller can
+    check the room was opened for the same two teams the Liquipedia record names.
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT m.match_id, m.championship_id, c.name AS competition, c.scope_region AS region, c.season,
+                   match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at) AS t,
+                   m.best_of, ti1.org_key AS org1, ti2.org_key AS org2,
+                   coalesce(m.faction1_name, '') AS name1, coalesce(m.faction2_name, '') AS name2, m.status
+              FROM matches m
+              JOIN championships c ON c.championship_id = m.championship_id
+              CROSS JOIN LATERAL (SELECT match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at) AS at) x
+              LEFT JOIN LATERAL team_identity_at(m.faction1_team_id, x.at) ti1 ON true
+              LEFT JOIN LATERAL team_identity_at(m.faction2_team_id, x.at) ti2 ON true
+             WHERE c.include AND m.status IN ('ABORTED', 'CANCELLED') AND m.ingest_state = 'skipped'
+               AND m.winner_faction IS NULL AND m.faction1_score IS NULL AND m.faction2_score IS NULL
+               AND (%(cids)s::text[] IS NULL OR m.championship_id = ANY(%(cids)s))
+            """, {"cids": championship_ids})
+        rows = cur.fetchall()
+    return {r["match_id"]: FaceitSide(r["match_id"], r["championship_id"], r["competition"], r["region"], r["season"],
+                                      r["t"], r["best_of"], r["org1"], r["org2"], r["name1"], r["name2"], None, None, 0,
+                                      r["status"].lower(), 0, False)
+            for r in rows}
+
+
 def orient(lp: LPMatch, f: FaceitSide, resolve: Optional[Resolve] = None) -> tuple[Optional[bool], str]:
     """(flip, basis). flip=False: LP team 1 is FACEIT faction 1. flip=True: LP team 1 is faction 2. None: cannot tell.
 

@@ -122,6 +122,36 @@ def test_a_faceit_id_we_do_not_hold_is_a_finding_and_never_a_licence_to_link_som
     assert res.faceit_unlinked == [lookalike]
 
 
+def test_a_room_aborted_with_no_result_is_no_faceit_counterpart_and_the_record_stands_alone():
+    """2026 Stage 3: FACEIT configured the rooms and aborted them minutes later; only Liquipedia has the series."""
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 1, faceit_id=FID)
+    room = fs(FID, "SpaceStation Gaming", "Team Liquid", 0, 0, state="aborted", maps=0, reliable=False)
+    res = reconcile([m], [], MAP, no_result={FID: room})
+    lk = link_of(res, m)
+    # the series view (034) makes exactly this a Liquipedia-only series: unmatched, no FACEIT id, no_faceit_counterpart
+    assert (lk.tier, lk.faceit_id) == (UNMATCHED, None)
+    assert lk.evidence == {"kind": "no_faceit_counterpart", "faceit_match_id": FID, "faceit_room": "aborted_no_result"}
+
+
+def test_a_result_entered_later_links_the_room_like_any_other():
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 1, faceit_id=FID)
+    finished = fs(FID, "SpaceStation Gaming", "Team Liquid", 3, 1, state="result_only", maps=0, reliable=False)
+    res = reconcile([m], [finished], MAP, no_result={})
+    assert (link_of(res, m).tier, link_of(res, m).faceit_id) == (EXACT, FID)
+
+
+def test_an_aborted_room_for_other_teams_is_still_a_finding_not_a_licence_to_stand_alone():
+    """Liquipedia can name the wrong room: one opened for a different pairing proves nothing about this series."""
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 1, faceit_id=FID)
+    room = fs(FID, "Dallas Fuel", "Team Liquid", 0, 0, state="aborted", maps=0, reliable=False)
+    lk = link_of(reconcile([m], [], MAP, no_result={FID: room}), m)
+    assert lk.tier == UNMATCHED and lk.evidence["kind"] == "faceit_missing_from_warehouse"
+    # nor when a team on the record has no decided identity
+    m2 = lp("Spacestation Gaming", "Undecided Team", 3, 1, idx=2, faceit_id=FID2)
+    room2 = fs(FID2, "SpaceStation Gaming", "Undecided Team", 0, 0, state="aborted", maps=0, reliable=False)
+    assert link_of(reconcile([m2], [], MAP, no_result={FID2: room2}), m2).evidence["kind"] == "faceit_missing_from_warehouse"
+
+
 def test_two_records_claiming_one_faceit_id_are_both_ambiguous():
     a = lp("A", "B", 3, 0, idx=1, faceit_id=FID)
     b = lp("A", "B", 3, 0, idx=2, faceit_id=FID)
@@ -435,3 +465,45 @@ def test_a_run_reads_the_stored_response_and_writes_back_a_link_that_survives_a_
     with conn.cursor() as cur:
         cur.execute("SELECT count(*) AS n FROM liquipedia_matches")
         assert cur.fetchone()["n"] == 1
+
+
+def test_an_aborted_room_with_no_result_gives_one_liquipedia_only_series_until_a_result_is_entered(lp_db, tmp_path):
+    """2026 Stage 3 end to end: the stored room is ABORTED with no result, so the record is the series; when FACEIT
+    later has a result, the same record links to the room and it is still one series."""
+    import json
+
+    from owcsmuse.liquipedia.identity import PlayerDecisions, load_identity
+    conn = lp_db
+    map_path = write_map_file(tmp_path / "liquipedia_map.json")
+    team_map_path = tmp_path / "team_map.json"
+    team_map_path.write_text(json.dumps({"aliases": {
+        "dallas fuel": {"entity_type": "team", "entity_id": "team-dallas"},
+        "team liquid": {"entity_type": "team", "entity_id": "team-liquid"}}}), encoding="utf-8")
+    load_identity(conn, PlayerDecisions(tmp_path / "players.json"), TeamMap(team_map_path))
+    with conn.cursor() as cur:
+        cur.execute("DELETE FROM match_rounds")
+        cur.execute("""UPDATE matches SET status = 'ABORTED', ingest_state = 'skipped', faction1_score = NULL,
+                              faction2_score = NULL, winner_faction = NULL, started_at = NULL WHERE match_id = %s""",
+                    (DB_FACEIT_ID,))
+    conn.commit()
+
+    def reconcile_and_read():
+        run = run_reconciliation(conn, team_map_path=str(team_map_path), decisions_path=str(tmp_path / "links.json"),
+                                 map_path=str(map_path))
+        store_run(conn, run)
+        with conn.cursor() as cur:
+            cur.execute("SELECT match_id, faceit_match_id, sources, score1, score2 FROM series")
+            return run.result.links[0], cur.fetchall()
+
+    lk, series = reconcile_and_read()
+    assert lk.evidence["kind"] == "no_faceit_counterpart" and lk.evidence["faceit_room"] == "aborted_no_result"
+    assert len(series) == 1 and series[0]["faceit_match_id"] is None and series[0]["sources"] == ["liquipedia"]
+    assert (series[0]["score1"], series[0]["score2"]) == (3, 1)
+
+    with conn.cursor() as cur:           # an admin enters the result: FINISHED, as week 1's rooms were on 2026-10-17
+        cur.execute("""UPDATE matches SET status = 'FINISHED', ingest_state = 'result_only', faction1_score = 3,
+                              faction2_score = 1, winner_faction = 'faction1' WHERE match_id = %s""", (DB_FACEIT_ID,))
+    conn.commit()
+    lk, series = reconcile_and_read()
+    assert (lk.tier, lk.faceit_id) == (EXACT, DB_FACEIT_ID)
+    assert len(series) == 1 and series[0]["faceit_match_id"] == DB_FACEIT_ID

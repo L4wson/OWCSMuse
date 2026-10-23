@@ -308,6 +308,28 @@ Liquipedia's maps and schedule. The golden suite covers Liquipedia-linked result
 **Conventions it produced** are in [conventions.md](conventions.md), with the others this project learned the
 same way. **What it left open** is tracked in [open-items.md](open-items.md).
 
+### 2026 Stage 3: FACEIT rooms with no result (2026-10-23)
+
+From 2026 Stage 3's second weekend, FACEIT has nothing about the series it was meant to run. Of the 30 rooms in the S10
+NA and EMEA regular seasons (2026-10-23), 12 were configured and aborted about 8 minutes later (`ABORTED`, once
+`CANCELLED`) with empty `results` and `detailed_results`, and none was replaced: both listings hold exactly the rooms
+stored. Week 1's results were entered by hand a week late (2026-10-17, 16:28-16:34Z), and the remaining rooms were
+aborted minutes after. Liquipedia records every series, naming the room FACEIT opened for it.
+
+- **A room with no result is no FACEIT counterpart.** A Liquipedia record whose FACEIT id is a stored room that ended
+  `ABORTED` or `CANCELLED` with no winner and no score, opened for the same two teams the record resolves to, is linked
+  `unmatched` with `no_faceit_counterpart` (`faceit_room`: `aborted_no_result` / `cancelled_no_result`), so `series`
+  makes it a Liquipedia-only series. Before, it was "a FACEIT id we do not hold" and in no answer. A room opened for
+  other teams, or a record with an undecided team, stays reported, never stands alone. If FACEIT later enters a result,
+  the room's status change re-queues it, and the next reconcile links it like any other: still one series.
+- **It found two more:** the 2026 Stage 1 playoff records Geekay Esports v Virtus.pro and Spacestation Gaming v Team
+  Liquid (2026-04-12), whose rooms FACEIT cancelled with no result.
+- **Two recycled ids play Stage 3** (owner, 2026-10-23). KAFE is FACEIT team `0464a373` (UNC inc, Rad, Sakura, LuneX):
+  from Stage 3 it is its own org, `kafe`, and Liquipedia's "The Kafe" routes to it, inheriting neither that id's history
+  nor `a35f8d47`'s. Stage 3's NTMR is `d20d1868` (team_chiime, Dreamland, Supernova, Team Z): its own org, `ntmr-2026`,
+  not the NTMR org, and Liquipedia's "NTMR" routes to it from Stage 3. Both windows start at Stage 3 (2026-10-09) and
+  end the LuneX and Team Z windows there, which had run open-ended and credited Stage 3 results to LuneX and Team Z.
+
 ### Stage 4: LAN and international events (2026-10-09)
 
 The events with no FACEIT competition - EWC 2024, the 2024 and 2025 World Finals, the 2025 Champions Clash and the

@@ -229,14 +229,25 @@
           "org_id": "lunex",
           "org_name": "LuneX",
           "team_name": "LuneX",
-          "note": "Sakura Esports (2025 Stage 3) then LuneX from 2026 Stage 1. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "note": "Sakura Esports (2025 Stage 3) then LuneX from 2026 Stage 1. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load). Ends at 2026 Stage 3 (owner, 2026-10-23): the id is recycled again there and that era is not this org's.",
           "evidence": [
             "decided by the project owner (Stage 3 window review, 2026-10-01)"
           ],
-          "valid_from_name": "LuneX"
+          "valid_from_name": "LuneX",
+          "valid_to": "2026-10-09T00:00:00+00:00"
+        },
+        {
+          "org_id": "kafe",
+          "org_name": "KAFE",
+          "team_name": "KAFE",
+          "note": "KAFE, 2026 Stage 3: its own entity (owner, 2026-10-23). 0464a373 is the recycled id (UNC inc, Rad, Sakura, LuneX) and KAFE inherits none of that history. FACEIT's KAFE roster is LuneX's 2026 roster 5/5 (NenWhy, Zeb, xomba, xten, zss); roster continuity is not org identity. Bounded from 2026 Stage 3's start; the end is open until the stage ends.",
+          "evidence": [
+            "decided by the project owner (2026-10-23)"
+          ],
+          "valid_from": "2026-10-09T00:00:00+00:00"
         }
       ],
-      "decided_at": "2026-10-01T23:15:38+00:00"
+      "decided_at": "2026-10-23T18:43:04+00:00"
     },
     "03869857-7f73-4176-a27d-dafcc8d469ae": {
       "windows": [
@@ -332,14 +343,25 @@
           "org_id": "team-z",
           "org_name": "Team Z",
           "team_name": "Team Z",
-          "note": "Supernova (2025 Stage 2) then Team Z from 2025 Stage 3. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load).",
+          "note": "Supernova (2025 Stage 2) then Team Z from 2025 Stage 3. A roster pickup on a stage boundary: the earlier era is the team id's own, this era is the org's. Window from the first sighting of the name on this team id (resolved from team_names at load). Ends at 2026 Stage 3 (owner, 2026-10-23): the id is recycled again there and that era is not this org's.",
           "evidence": [
             "decided by the project owner (Stage 3 window review, 2026-10-01)"
           ],
-          "valid_from_name": "Team Z"
+          "valid_from_name": "Team Z",
+          "valid_to": "2026-10-09T00:00:00+00:00"
+        },
+        {
+          "org_id": "ntmr-2026",
+          "org_name": "NTMR",
+          "team_name": "NTMR",
+          "note": "NTMR on d20d1868, 2026 Stage 3: its own entity, not the NTMR org (owner, 2026-10-23). d20d1868 is another recycled id (team_chiime, Dreamland, Supernova, Team Z). Its Stage 3 roster (JUTSU, Le7, Painkiller, Rokit, Virtual) shares 3 of 5 with NTMR's 2025 roster; roster overlap is not identity. Bounded from 2026 Stage 3's start; the end is open until the stage ends.",
+          "evidence": [
+            "decided by the project owner (2026-10-23)"
+          ],
+          "valid_from": "2026-10-09T00:00:00+00:00"
         }
       ],
-      "decided_at": "2026-10-01T23:15:38+00:00"
+      "decided_at": "2026-10-23T18:43:04+00:00"
     },
     "2ab92d33-4c33-46e1-a13f-743a95291d0e": {
       "org_id": "team-falcons",

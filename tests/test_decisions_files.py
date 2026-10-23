@@ -9,22 +9,29 @@ from owcsmuse.orgs import OrgDecisions
 SSG_2024, SSG_NA = "a359db61-26e2-44e0-8961-e0b373f4db21", "6ddc0431-0e9c-4b95-8658-e3e5b181d0bf"
 
 
-def test_the_only_undecided_strong_proposals_are_the_four_held_for_review():
+def test_the_only_undecided_strong_proposals_are_the_ones_held_for_review():
     d = PlayerDecisions("scope/player_identity_decisions.json")
     rep = open("scope/identity_report.md", encoding="utf-8").read().splitlines()
     start = next(i for i, l in enumerate(rep) if l.startswith("## Proposed - strong"))
     end = next(i for i, l in enumerate(rep) if l.startswith("## Needs a person"))
     # held for the owner (2026-10-02): strong by the name rule, but each page sits on Liquipedia's lineup in 2024 Stage 2
     # series whose FACEIT roster on that side does not carry the proposed GUID (W1ll 6, Ailiseu 2, Aniyun 1, Niann03 1)
+    # Niann03 was decided by the owner on 2026-10-23 (scope/lp_only_identity_report.md class A: the one FACEIT namesake,
+    # who played for the same team, Vice), with the hold's reason still on record above
     held = {"W1ll", "Ailiseu", "Aniyun", "Niann03"}
+    decided_since = {"Niann03"}
     strong = set()
     for l in rep[start:end]:
         if l.startswith("| ") and not l.startswith("| page"):
             page, _handle, _real, _nat, guid, *_ = [c.strip() for c in l.strip().strip("|").split("|")]
             strong.add(page)
-            assert page not in d.data, page
+            assert (page in d.data) == (page in decided_since), page
     assert strong == held
-    assert len(d.data) == 363                                  # 166 + 183 strong + 14 unmatched decided by the owner, 2026-10-02
+    assert d.data["Niann03"]["entity_id"] == "b5fe588f-39bc-439a-bf83-ddfe2e22f0e0"
+    # 166 + 183 strong + 14 unmatched decided by the owner, 2026-10-02; then 152 Liquipedia-only-series pages, 2026-10-23
+    # (scope/lp_only_identity_report.md: class A 2, class D 150 as Liquipedia-born)
+    assert len(d.data) == 363 + 152
+    assert sum(v["entity_id"] is None and "class D" in (v.get("note") or "") for v in d.data.values()) == 150
     assert "Shaq" not in d.data and "Massivepoop" not in d.data    # left undecided by the owner
     assert not [p for p, v in d.data.items() if (v.get("real_name") or "").lower().endswith("player")]   # disambiguators
     assert d.data["Zzz"] == {**d.data["Zzz"], "entity_id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea", "display": "ZZZ", "handle": "zzz"}

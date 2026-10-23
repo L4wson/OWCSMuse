@@ -116,6 +116,15 @@ def render(run: Run) -> str:
         L.append(f"- {_lp_line(lk.lp)}  FACEIT id {lk.evidence['faceit_match_id']}  {lk.lp.page_url}")
     L.append("")
 
+    aborted = [lk for lk in res.links if lk.evidence.get("faceit_room")]
+    L += [f"## Liquipedia-only: the FACEIT room ended with no result ({len(aborted)})", "",
+          "The page names a FACEIT room opened for these two teams that FACEIT aborted or cancelled with no result, so "
+          "the record is the series' only source. A result entered later links the room on the next run.", ""]
+    for lk in aborted:
+        L.append(f"- {_lp_line(lk.lp)}  FACEIT room {lk.evidence['faceit_match_id']} ({lk.evidence['faceit_room']})  "
+                 f"{lk.lp.page_url}")
+    L.append("")
+
     if res.region_rejections:
         L += [f"## Cross-region candidates rejected ({len(res.region_rejections)})", ""]
         for r in res.region_rejections:

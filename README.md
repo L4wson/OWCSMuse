@@ -69,9 +69,14 @@ and migrations, how questions are answered, the API, the checks and tests, the d
 - **Liquipedia.** Results, maps, line-ups, schedules and placings that FACEIT lacks come from the
   [Liquipedia Overwatch wiki](https://liquipedia.net/overwatch/) through the LiquipediaDB API. Liquipedia content is
   licensed under [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Every answer that uses a
-  Liquipedia value carries the licence and the URL of each page it came from (`attribution`, in the API and CLI). The
-  web app links a Liquipedia-only series to its page but does not yet show an answer's `attribution`
-  ([open item 3](docs/open-items.md)).
+  Liquipedia value carries the licence and the URL of each page it came from (`attribution`), and the app shows them
+  with the answer.
+
+**2026 Stage 3 comes from Liquipedia alone.** FACEIT appears to have stopped running the stage now in progress: since
+its first weekend (2026-10-10), the rooms for NA and EMEA Stage 3 are configured and then aborted minutes later with no
+result, so FACEIT holds nothing about those series. Liquipedia is the only source for them: results and maps, no
+player statistics. A result FACEIT enters later is picked up on the next nightly run
+([docs/liquipedia.md](docs/liquipedia.md#2026-stage-3-faceit-rooms-with-no-result-2026-10-23)).
 
 Overwatch is a trademark of Blizzard Entertainment. This project is not affiliated with or endorsed by Blizzard
 Entertainment.
