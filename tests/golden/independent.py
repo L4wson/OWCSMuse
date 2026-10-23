@@ -5,7 +5,7 @@ layer - so it cannot inherit a bug from them. It reads the captured JSON in
 tests/golden/payloads and counts. When an answer disagrees with it, one of the
 two is wrong, and the raw payload is the tie-break.
 
-Definitions (the README's, restated so they can be checked against it):
+Definitions (docs/testing.md's, restated so they can be checked against it):
   map won        the round's round_stats.Winner is the player's/team's team id
   series won     detail.results.winner names the team's faction
   series score   detail.results.score, per faction (this is what map_wins/map_losses on a
@@ -178,7 +178,7 @@ def owner_display_names():
 
 def display_name(series_list, player_id):
     """The owner's display name when decided, else the in-game name (game_player_name) when the roster has one, else
-    the FACEIT nickname - as the README states."""
+    the FACEIT nickname - as docs/liquipedia.md states."""
     decided = owner_display_names().get(player_id)
     if decided:
         return decided
@@ -501,7 +501,7 @@ def event_rows(lp_name: str) -> list[dict]:
 # A Liquipedia-only series has no FACEIT roster: a player is on its side by Liquipedia's line-up (match2players), read
 # through the owner's reviewed page -> FACEIT player decisions (scope/player_identity_decisions.json). A page with no
 # decision is on no side: unknown, never guessed. Liquipedia does not say who played which map, so the line-up is on
-# every map of its side (the README's every-played-map rule for a map without player rows).
+# every map of its side (docs/answers.md's every-played-map rule for a map without player rows).
 
 def lp_player_ids() -> dict[str, str]:
     """Liquipedia player page -> FACEIT player id, from the owner's decisions (a Liquipedia-born player has none)."""

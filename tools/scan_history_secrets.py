@@ -10,7 +10,7 @@ included, commit messages included) and looks for:
   * well-known token shapes (GitHub, Anthropic/OpenAI-style, AWS), database URLs with an inline password, Supabase
     hosts and project refs, Authorization headers with a value, long opaque tokens;
   * committed files that should never be (.env, keys, certificates);
-  * author and committer emails other than GitHub no-reply addresses.
+  * author and committer emails other than no-reply addresses (a GitHub user's, GitHub's own, the co-author trailer's).
 
 It never prints a secret: a finding shows the file, the commit, what kind of thing it is, and the first four characters.
 It changes nothing: no rewrite, no fetch, no checkout. Exit status 1 when anything is found.
@@ -38,8 +38,11 @@ SHAPES: list[tuple[str, re.Pattern[str]]] = [
     ("key assignment with a long value", re.compile(r"\b[A-Z_]*(?:API_?KEY|SECRET|TOKEN|PASSWORD)[A-Z_]*\s*=\s*['\"]?[A-Za-z0-9\-_/+=]{20,}")),
     ("long opaque token (100+ chars)", re.compile(r"(?<![A-Za-z0-9/+_\-])[A-Za-z0-9]{100,}(?![A-Za-z0-9/+_\-])")),
 ]
+# credentials that are not secrets: docker-compose's and CI's throwaway local databases and the documentation's placeholders
+PLACEHOLDER_DB_CREDENTIALS = {("owcs", "owcs"), ("postgres", "postgres"), ("user", "password"), ("nobody", "nobody")}
 SUSPECT_PATHS = re.compile(r"(^|/)(\.env(\.(?!example$)[^/]*)?|.*\.pem|.*\.key|.*\.p12|.*\.pfx|id_rsa[^/]*|credentials(\.json)?)$")
-NOREPLY = re.compile(r"@users\.noreply\.github\.com$", re.I)
+# a GitHub user's no-reply address, GitHub's own (web merges) and the co-author trailer's: none is a person's inbox
+NOREPLY = re.compile(r"(?:@users\.noreply\.github\.com|^noreply@github\.com|^noreply@anthropic\.com)$", re.I)
 
 
 def load_env_secrets() -> dict[str, str]:
@@ -119,6 +122,10 @@ def main() -> int:
                 findings[(f"EXACT secret from .env: {name}", path, commit)].add(mask(value))
         for kind, pat in SHAPES:
             for m in pat.finditer(line):
+                if kind == "database url with inline password":
+                    u = urlparse(m.group(0))
+                    if (u.username, u.password) in PLACEHOLDER_DB_CREDENTIALS:
+                        continue
                 findings[(kind, path, commit)].add(mask(m.group(0)))
 
     if not findings:
