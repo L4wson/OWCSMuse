@@ -6,10 +6,10 @@ numbers below are from that day.
 
 ## Production
 
-1. **Team Risk (2026 EMEA Stage 3) is undecided.** FACEIT team `97ef2653` was "qadsiah" through 2026 Stage 2 and is
-   mapped to the `qadsiah` org for all time, so the linked 1234 0-3 Team Risk counts for Al Qadsiah, and two
-   Liquipedia-only Team Risk series (v Twisted Minds, v Virtus.pro) wait on a decision. The Stage 3 roster shares 1 of
-   5 players with qadsiah's (SirMajed).
+1. **"Dallas Fuel record in 2026 NA stage 3" asks which "dallas fuel na".** The same question as "Dallas Fuel record in
+   NA stage 3" answers (2-1, 8-3 in maps). With the season ahead of it, the region word is swallowed into the team's
+   name, the same class as the earlier name-swallow bugs (a name inside a question matched only as whole words, "per
+   10" and an org's own "of" kept out of names: ff5c3dc, ce89c0a). Seen on the live API 2026-10-23.
 2. **Supabase: `anon` and `authenticated` grants revoked (owner, 2026-10-23); RLS is still off.** `anon` reaches no
    table, view or sequence. PUBLIC keeps schema USAGE and `EXECUTE` on our 18 functions, as Postgres grants by
    default: the 10 that read tables refuse `anon` on the tables inside, and the 8 others compute only on their
@@ -21,30 +21,32 @@ numbers below are from that day.
    FACEIT players, 150 as Liquipedia-only players. A 2024 NA/EMEA one may later turn up on FACEIT and need merging.
    Still open from `scope/identity_report.md` (2026-10-01): W1ll (held strong proposal) and Massivepoop (no FACEIT
    name matched).
-4. **Liquipedia records in no series** (4, 2026-10-23, from 18): the two Team Risk records (item 1); Ataraxia v
+4. **Liquipedia records in no series** (2, 2026-10-23, from 18): Ataraxia v
    Metaboiz (2024 EMEA Stage 2), whose FACEIT ids are not in the warehouse; and the Dreamhack Dallas show match (Team
    Hydron v Team Danteh). The FACEIT side needs a crawl, not Liquipedia requests.
-5. **The KAFE and NTMR (2026) windows have no end.** Both are meant to be bounded to 2026 Stage 3; close them when the
-   stage ends, so a later team on either recycled id is not credited to them.
-6. **31 series have no map results from any source** (28 on 2026-10-02): Liquipedia does not cover them or has no
+5. **31 series have no map results from any source** (28 on 2026-10-02): Liquipedia does not cover them or has no
    record.
-7. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+6. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
 
 ## Tests
 
-8. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+7. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
     "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
     "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
     backs the synthetic by_match case).
-9. **Three golden cases are `proposed`, not asserted:** G27 (Twisted Minds v Geekay at map grain, Stage 2
+8. **Three golden cases are `proposed`, not asserted:** G27 (Twisted Minds v Geekay at map grain, Stage 2
     enrichment), G28 (a player on the enriched match still has no player stats from it) and G61 (a Korean team's
     record at an international event). Each waits on the owner's review.
-10. **The golden warehouse leaves out Toronto Defiant v Avidity and v Shikigami** (2024 NA Stage 3/4). Both are
+9. **The golden warehouse leaves out Toronto Defiant v Avidity and v Shikigami** (2024 NA Stage 3/4). Both are
     FACEIT teams with no series there. Capturing a series of each would let both records in.
-11. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI
+10. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI
     step.
 
 ## Done
+
+- ~~**Team Risk is undecided**~~ (97ef2653 mapped to qadsiah for all time). Decided 2026-10-23: its own org from
+  2026 Stage 3; qadsiah's era ends there.
+- ~~**The KAFE and NTMR (2026) windows have no end.**~~ Bounded to 2026 Stage 3 (to 2026-11-03), 2026-10-23.
 
 - ~~**CI jobs fail on image pulls**~~ (`toomanyrequests: Data limit exceeded`). Fixed by #29 (2026-10-23): CI pulls
   from a GHCR mirror ([deployment.md](deployment.md)).

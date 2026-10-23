@@ -154,17 +154,32 @@
       "decided_at": "2026-09-17T22:39:36+00:00"
     },
     "97ef2653-81b3-45e4-b57f-4df4c27d3ea0": {
-      "org_id": "qadsiah",
-      "org_name": "Al Qadsiah",
-      "team_name": "qadsiah",
-      "note": "merged on name identity: names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
-      "evidence": [
-        "names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
-        "roster overlap 12%: 1 of the smaller 8-player roster shared",
-        "match windows do not overlap, 145 day gap (2025-01-31..2025-10-26 then 2026-03-21..2026-07-04)",
-        "seasons 2025, 2026; 34 + 14 matches"
+      "windows": [
+        {
+          "org_id": "qadsiah",
+          "org_name": "Al Qadsiah",
+          "team_name": "qadsiah",
+          "note": "merged on name identity: names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review Ends at 2026 Stage 3 (owner, 2026-10-23): the id's Stage 3 team is Team Risk, new players no longer sponsored by Al Qadsiah.",
+          "evidence": [
+            "names differ but one name's tokens are inside the other (qadsiah in al qadsiah) - requires review",
+            "roster overlap 12%: 1 of the smaller 8-player roster shared",
+            "match windows do not overlap, 145 day gap (2025-01-31..2025-10-26 then 2026-03-21..2026-07-04)",
+            "seasons 2025, 2026; 34 + 14 matches"
+          ],
+          "valid_to": "2026-10-09T00:00:00+00:00"
+        },
+        {
+          "org_id": "team-risk",
+          "org_name": "Team Risk",
+          "team_name": "Team Risk",
+          "note": "Team Risk from 2026 Stage 3: its own entity (owner, 2026-10-23), new players no longer sponsored by the Al Qadsiah org. FACEIT's Stage 3 roster (SirMajed, WMaimone, amdp, cuFFa, sHockWave) shares 1 of 5 with qadsiah's 2026 roster. Window from 2026 Stage 3's start; qadsiah's ends there.",
+          "evidence": [
+            "decided by the project owner (2026-10-23)"
+          ],
+          "valid_from": "2026-10-09T00:00:00+00:00"
+        }
       ],
-      "decided_at": "2026-09-17T22:39:36+00:00"
+      "decided_at": "2026-10-23T20:54:32+00:00"
     },
     "cb90edf6-60cb-4f73-8172-bf944729a114": {
       "org_id": "quick-esports",
@@ -240,11 +255,12 @@
           "org_id": "kafe",
           "org_name": "KAFE",
           "team_name": "KAFE",
-          "note": "KAFE, 2026 Stage 3: its own entity (owner, 2026-10-23). 0464a373 is the recycled id (UNC inc, Rad, Sakura, LuneX) and KAFE inherits none of that history. FACEIT's KAFE roster is LuneX's 2026 roster 5/5 (NenWhy, Zeb, xomba, xten, zss); roster continuity is not org identity. Bounded from 2026 Stage 3's start; the end is open until the stage ends.",
+          "note": "KAFE, 2026 Stage 3: its own entity (owner, 2026-10-23). 0464a373 is the recycled id (UNC inc, Rad, Sakura, LuneX) and KAFE inherits none of that history. FACEIT's KAFE roster is LuneX's 2026 roster 5/5 (NenWhy, Zeb, xomba, xten, zss); roster continuity is not org identity. Bounded to 2026 Stage 3 (owner, 2026-10-23: regular season October 10-25, regional playoffs October 30 - November 1): from 2026-10-09 to 2026-11-03, clear of November 1 in every timezone.",
           "evidence": [
             "decided by the project owner (2026-10-23)"
           ],
-          "valid_from": "2026-10-09T00:00:00+00:00"
+          "valid_from": "2026-10-09T00:00:00+00:00",
+          "valid_to": "2026-11-03T00:00:00+00:00"
         }
       ],
       "decided_at": "2026-10-23T18:43:04+00:00"
@@ -354,11 +370,12 @@
           "org_id": "ntmr-2026",
           "org_name": "NTMR",
           "team_name": "NTMR",
-          "note": "NTMR on d20d1868, 2026 Stage 3: its own entity, not the NTMR org (owner, 2026-10-23). d20d1868 is another recycled id (team_chiime, Dreamland, Supernova, Team Z). Its Stage 3 roster (JUTSU, Le7, Painkiller, Rokit, Virtual) shares 3 of 5 with NTMR's 2025 roster; roster overlap is not identity. Bounded from 2026 Stage 3's start; the end is open until the stage ends.",
+          "note": "NTMR on d20d1868, 2026 Stage 3: its own entity, not the NTMR org (owner, 2026-10-23). d20d1868 is another recycled id (team_chiime, Dreamland, Supernova, Team Z). Its Stage 3 roster (JUTSU, Le7, Painkiller, Rokit, Virtual) shares 3 of 5 with NTMR's 2025 roster; roster overlap is not identity. Bounded to 2026 Stage 3 (owner, 2026-10-23: regular season October 10-25, regional playoffs October 30 - November 1): from 2026-10-09 to 2026-11-03, clear of November 1 in every timezone.",
           "evidence": [
             "decided by the project owner (2026-10-23)"
           ],
-          "valid_from": "2026-10-09T00:00:00+00:00"
+          "valid_from": "2026-10-09T00:00:00+00:00",
+          "valid_to": "2026-11-03T00:00:00+00:00"
         }
       ],
       "decided_at": "2026-10-23T18:43:04+00:00"

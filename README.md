@@ -74,8 +74,8 @@ and migrations, how questions are answered, the API, the checks and tests, the d
 
 **2026 Stage 3 comes from Liquipedia alone.** FACEIT appears to have stopped running the stage now in progress: since
 its first weekend (2026-10-10), the rooms for NA and EMEA Stage 3 are configured and then aborted minutes later with no
-result, so FACEIT holds nothing about those series. Liquipedia is the only source for them: results and maps, no
-player statistics. A result FACEIT enters later is picked up on the next nightly run
+result, so FACEIT holds nothing about those series. Liquipedia is the only source for them, the regional playoffs (October 30 - November 1)
+included: results and maps, no player statistics. A result FACEIT enters later is picked up on the next nightly run
 ([docs/liquipedia.md](docs/liquipedia.md#2026-stage-3-faceit-rooms-with-no-result-2026-10-23)).
 
 Overwatch is a trademark of Blizzard Entertainment. This project is not affiliated with or endorsed by Blizzard

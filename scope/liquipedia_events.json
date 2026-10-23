@@ -213,6 +213,34 @@
       },
       "probe_raw_id": 5036,
       "note": "In scope by the owner's decision (2026-10-17): the same kind of event as the 2025 Champions Clash, found missing by the OWCS tournament listing (raw_payloads 5033). Pages are exactly those the subpage probe (raw_payloads 5036) found at or under this root, with its match count. Display name follows the 2025 one."
+    },
+    "Overwatch_Champions_Series/2026/NA/Stage_3": {
+      "display_name": "OWCS 2026 NA Stage 3 Playoffs",
+      "season": 2026,
+      "region": "na",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-23",
+      "pages": {
+        "Overwatch_Champions_Series/2026/NA/Stage_3": 6
+      },
+      "probe_raw_id": 4463,
+      "note": "2026 NA Stage 3's regional playoffs (October 30 - November 1, owner 2026-10-23) as a Liquipedia-only event: FACEIT ran no Stage 3 room to a result after the first weekend and has no S10 playoffs championship, so nothing mapped the stage page, where the playoff bracket sits (the S8/S9 'Central - Playoffs' championships map to their stage pages). The page and its 6 matches are what the subpage probe (raw_payloads 4463) found. If FACEIT ever creates and runs the playoffs, decide which source holds them before including its championship, so no series is held twice."
+    },
+    "Overwatch_Champions_Series/2026/EMEA/Stage_3": {
+      "display_name": "OWCS 2026 EMEA Stage 3 Playoffs",
+      "season": 2026,
+      "region": "emea",
+      "tier": "main",
+      "include": true,
+      "decided_by": "owner",
+      "decided_at": "2026-10-23",
+      "pages": {
+        "Overwatch_Champions_Series/2026/EMEA/Stage_3": 6
+      },
+      "probe_raw_id": 4463,
+      "note": "2026 EMEA Stage 3's regional playoffs (October 30 - November 1, owner 2026-10-23) as a Liquipedia-only event: FACEIT ran no Stage 3 room to a result after the first weekend and has no S10 playoffs championship, so nothing mapped the stage page, where the playoff bracket sits (the S8/S9 'Central - Playoffs' championships map to their stage pages). The page and its 6 matches are what the subpage probe (raw_payloads 4463) found. If FACEIT ever creates and runs the playoffs, decide which source holds them before including its championship, so no series is held twice."
     }
   }
 }

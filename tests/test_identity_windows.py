@@ -67,10 +67,11 @@ def test_every_committed_window_is_sourced_from_a_sighting_and_named_in_the_wind
     id that carries a bounded mapping is covered by the owner's verdict in scope/org_window_decisions.json."""
     d = json.load(open("scope/org_decisions.json", encoding="utf-8"))["decisions"]
     verdicts = json.load(open("scope/org_window_decisions.json", encoding="utf-8"))["decisions"]
-    assert len(verdicts) == 18
+    assert len(verdicts) == 19
     explicit = {"2025-01-31T19:17:07+00:00",       # Virtus pro: itself a sighting, kept as a timestamp
                 "2025-05-01T00:00:00+00:00",       # Rad -> Sakura at the 2025 Stage 2 boundary: FACEIT's rename lagged a week
-                "2026-10-09T00:00:00+00:00"}       # 2026 Stage 3: KAFE and NTMR (2026) on recycled ids (owner, 2026-10-23)
+                "2026-10-09T00:00:00+00:00",       # 2026 Stage 3: KAFE and NTMR (2026) on recycled ids, Team Risk (owner, 2026-10-23)
+                "2026-11-03T00:00:00+00:00"}       # ... and the end of 2026 Stage 3 (November 1) for KAFE and NTMR (2026)
     for team_id, entry in d.items():
         for w in entry.get("windows") or [entry]:
             for side in ("valid_from", "valid_to"):
@@ -83,9 +84,10 @@ def test_every_committed_window_is_sourced_from_a_sighting_and_named_in_the_wind
             for k, v in d.items() if "windows" in v}
     assert eras == {
         "0464a373": [("rad", "Rad", "2025-05-01T00:00:00+00:00"), ("sakura", "2025-05-01T00:00:00+00:00", "LuneX"),
-                     ("lunex", "LuneX", "2026-10-09T00:00:00+00:00"), ("kafe", "2026-10-09T00:00:00+00:00", None)],
+                     ("lunex", "LuneX", "2026-10-09T00:00:00+00:00"), ("kafe", "2026-10-09T00:00:00+00:00", "2026-11-03T00:00:00+00:00")],
         "d20d1868": [("supernova", "Supernova", "Team Z"), ("team-z", "Team Z", "2026-10-09T00:00:00+00:00"),
-                     ("ntmr-2026", "2026-10-09T00:00:00+00:00", None)],
+                     ("ntmr-2026", "2026-10-09T00:00:00+00:00", "2026-11-03T00:00:00+00:00")],
+        "97ef2653": [("qadsiah", None, "2026-10-09T00:00:00+00:00"), ("team-risk", "2026-10-09T00:00:00+00:00", None)],
         "03869857": [("rocstars", "Umbrellaacademy", None)],          # the one 'Umbrellaacademy' series is ROCstars'
         "ebfd8060": [("quick-esports", None, "Ataraxia"), ("ataraxia", "Ataraxia", None)],
     }

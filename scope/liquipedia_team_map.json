@@ -288,8 +288,8 @@
       "note": "Search routing (owner, 2026-10-02): FACEIT 'SOG' at Dallas (d566d889, mapped to students-of-the-game for its whole life). Was anchored to the bare team id, whose own entity holds none of this name's series; ownership records unchanged."
     },
     "ntmr": {
-      "note": "org-level identity already resolved to ntmr From 2026 Stage 3 Liquipedia's 'NTMR' is ntmr-2026, its own entity and not the NTMR org (owner, 2026-10-23): FACEIT plays it on the recycled id d20d1868.",
-      "decided_at": "2026-10-23T18:43:14+00:00",
+      "note": "org-level identity already resolved to ntmr From 2026 Stage 3 Liquipedia's 'NTMR' is ntmr-2026, its own entity and not the NTMR org (owner, 2026-10-23): FACEIT plays it on the recycled id d20d1868. The Stage 3 era ends 2026-11-03 (the stage ends November 1, owner 2026-10-23).",
+      "decided_at": "2026-10-23T20:54:32+00:00",
       "eras": [
         {
           "entity_type": "org",
@@ -299,7 +299,8 @@
         {
           "entity_type": "org",
           "entity_id": "ntmr-2026",
-          "valid_from": "2026-10-09T00:00:00+00:00"
+          "valid_from": "2026-10-09T00:00:00+00:00",
+          "valid_to": "2026-11-03T00:00:00+00:00"
         }
       ]
     },
@@ -478,6 +479,12 @@
       "note": "Strong proposal accepted (owner, 2026-10-09 (Stage 4)): every id-linked match stood opposite this org.",
       "decided_at": "2026-10-09T18:13:17+00:00"
     },
+    "team risk": {
+      "entity_type": "org",
+      "entity_id": "team-risk",
+      "decided_at": "2026-10-23T20:54:32+00:00",
+      "note": "Team Risk, 2026 EMEA Stage 3 (owner, 2026-10-23): its own org on FACEIT team 97ef2653, whose qadsiah era (Al Qadsiah) ends at Stage 3. New players, no longer sponsored by Al Qadsiah."
+    },
     "team secret": {
       "entity_type": "org",
       "entity_id": "team-secret",
@@ -499,8 +506,8 @@
       "org_name": "The Gatos Guapos"
     },
     "the kafe": {
-      "note": "The Kafe picked up the Extinction roster on team id a35f8d47 at the start of 2026 Stage 2 (2026-06-13); its era is its own (outside the org window). Stage 1 proposed this strong (5 of 5 id-linked matches); recorded with the Stage 3 identity batch. From 2026 Stage 3 Liquipedia's 'The Kafe' is KAFE, its own entity (owner, 2026-10-23): FACEIT plays it on the recycled id 0464a373, and it inherits neither that id's history nor this one's. A name must route to the entity that holds its series.",
-      "decided_at": "2026-10-23T18:43:14+00:00",
+      "note": "The Kafe picked up the Extinction roster on team id a35f8d47 at the start of 2026 Stage 2 (2026-06-13); its era is its own (outside the org window). Stage 1 proposed this strong (5 of 5 id-linked matches); recorded with the Stage 3 identity batch. From 2026 Stage 3 Liquipedia's 'The Kafe' is KAFE, its own entity (owner, 2026-10-23): FACEIT plays it on the recycled id 0464a373, and it inherits neither that id's history nor this one's. A name must route to the entity that holds its series. The Stage 3 era ends 2026-11-03 (the stage ends November 1, owner 2026-10-23).",
+      "decided_at": "2026-10-23T20:54:32+00:00",
       "eras": [
         {
           "entity_type": "team",
@@ -510,7 +517,8 @@
         {
           "entity_type": "org",
           "entity_id": "kafe",
-          "valid_from": "2026-10-09T00:00:00+00:00"
+          "valid_from": "2026-10-09T00:00:00+00:00",
+          "valid_to": "2026-11-03T00:00:00+00:00"
         }
       ]
     },
