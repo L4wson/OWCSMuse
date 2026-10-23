@@ -7,9 +7,13 @@
 # The image carries migrations/ and scope/ so `migrate` (and its competition-name load) runs from it as the
 # release command. It carries no tests, no frontend and no dev tools, and never a .env (see .dockerignore).
 
+# The base image: the official one through Amazon ECR Public's mirror of Docker Hub, which Fly's builder pulls. CI passes
+# its own GHCR copy (`--build-arg BASE_IMAGE=...`, .github/workflows/mirror-images.yml): anonymous pulls from a shared
+# runner hit ECR Public's per-IP data limit.
+ARG BASE_IMAGE=public.ecr.aws/docker/library/python:3.12-slim
+
 # ---------------------------------------------------------------- build: the package and the api extra, in a venv
-# the official image through Amazon ECR Public's mirror of Docker Hub: identical, without Docker Hub's anonymous pull limit
-FROM public.ecr.aws/docker/library/python:3.12-slim AS build
+FROM ${BASE_IMAGE} AS build
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 RUN python -m venv /opt/venv
 ENV PATH=/opt/venv/bin:$PATH
@@ -20,7 +24,7 @@ COPY owcsmuse ./owcsmuse
 RUN pip install ".[api]"
 
 # ---------------------------------------------------------------- runtime: the venv, migrations and scope, non-root
-FROM public.ecr.aws/docker/library/python:3.12-slim
+FROM ${BASE_IMAGE}
 ENV PATH=/opt/venv/bin:$PATH \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

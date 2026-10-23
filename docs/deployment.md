@@ -115,9 +115,14 @@ commit CI tested. Pull requests never deploy; one deploy runs at a time.
   `liquipedia reconcile` and `refresh`, or run them by hand. A migration whose new table is filled by a loader (041's
   `liquipedia_rounds`, filled by `liquipedia reconcile`) is empty until then, which degrades to the previous answers,
   never wrong ones.
-- **Images** come from Amazon ECR Public's mirror of Docker Hub's official images (`public.ecr.aws/docker/library/...`)
-  in the Dockerfile, CI and `docker-compose.yml`: identical images without Docker Hub's anonymous pull limit, which
-  shared CI runners hit (`toomanyrequests`, 2026-10-09).
+- **Images.** CI pulls its three images (`postgres:16`, `postgres:17`, `python:3.12-slim`) from this repository's GHCR
+  mirror, `ghcr.io/l4wson/owcsmuse/*`, with the job's own `GITHUB_TOKEN`. `.github/workflows/mirror-images.yml` copies
+  them from upstream weekly, on demand, and when that file changes. Anonymous pulls are metered per IP and shared runners
+  share a hot pool of IPs: Docker Hub's limit failed CI on 2026-10-09, and ECR Public's "Data limit exceeded" failed
+  most runs on 2026-10-23. The Dockerfile's base is `ARG BASE_IMAGE`, ECR Public's copy by default, which Fly's builder
+  and `docker compose` pull; CI passes the mirror. A new image for CI is added to the mirror's matrix first, and CI
+  pulls it from the next commit on. Before the repository goes public, or once it is, make the three packages public
+  (each package's settings on GitHub): a pull request from a fork gets no access to a private package.
 
 ### First Fly deploy
 
