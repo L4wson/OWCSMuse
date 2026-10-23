@@ -19,6 +19,9 @@ Traps handled on purpose:
   * NA and EMEA are region-locked: a candidate in the other region is a mismatch, recorded, never a match.
   * A record that carries a FACEIT id is never re-matched by teams and time: if we do not hold that match, that is the
     finding (our crawl missed it), not a licence to link something else.
+  * A record whose FACEIT id is a room FACEIT aborted or cancelled with no result, opened for the same two teams, has
+    no FACEIT counterpart: FACEIT holds nothing about the series, so the record stands alone as a Liquipedia-only
+    series. A result entered later makes the room FINISHED, and the next run links it like any other.
   * A FACEIT match is tied to at most one Liquipedia match, so a match known to both sources is one match.
 """
 
@@ -90,6 +93,12 @@ def _region_conflict(lp: LPMatch, f: FaceitSide) -> bool:
     return bool(lp.region and f.region and f.region != "international" and lp.region != f.region)
 
 
+def _same_teams(lp: LPMatch, f: FaceitSide, resolve: Resolve) -> bool:
+    """Both of the record's teams resolve, and to the two orgs of the FACEIT room: the room was opened for this series."""
+    a, b = resolve(lp.team1, lp.region, lp.played_at), resolve(lp.team2, lp.region, lp.played_at)
+    return bool(a and b and f.org1 and f.org2 and {a[0], b[0]} == {f.org1, f.org2})
+
+
 def _implausible(score: tuple[Optional[int], Optional[int]], best_of: Optional[int]) -> bool:
     """More wins than a best-of-N allows (a 4-0 in a best-of-5): one source has counted something other than won maps."""
     return bool(best_of and score[0] is not None and score[1] is not None and max(score) > (best_of + 1) // 2)
@@ -147,10 +156,13 @@ def compare(lp: LPMatch, f: FaceitSide, resolve: Optional[Resolve], comps: Optio
 
 def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Resolve,
               comps_of_page: Optional[dict[str, set[str]]] = None, window: Window = DEFAULT_WINDOW,
-              decisions: Optional[dict[str, dict[str, Any]]] = None) -> Result:
-    """`decisions`: {lp objectname: {"faceit_match_id": id | None}} - a reviewer's word on an ambiguous match."""
+              decisions: Optional[dict[str, dict[str, Any]]] = None,
+              no_result: Optional[dict[str, FaceitSide]] = None) -> Result:
+    """`decisions`: {lp objectname: {"faceit_match_id": id | None}} - a reviewer's word on an ambiguous match.
+    `no_result`: FACEIT rooms held but ended with no result (model.load_faceit_no_result), by match id."""
     comps_of_page = comps_of_page or {}
     decisions = decisions or {}
+    no_result = no_result or {}
     faceit = list(faceit)
     by_id = {f.match_id: f for f in faceit}
     result = Result(links=[], faceit_unlinked=[], window=window)
@@ -170,6 +182,12 @@ def reconcile(lps: Iterable[LPMatch], faceit: Iterable[FaceitSide], resolve: Res
         fid = lp.faceit_match_id
         if not fid:
             idless.append(lp)
+        elif fid not in by_id and fid in no_result and _same_teams(lp, no_result[fid], resolve):
+            room = no_result[fid]
+            result.links.append(Link(lp, UNMATCHED, basis=f"its FACEIT room was {room.state} with no result: FACEIT holds "
+                                                          "nothing about this series",
+                                     evidence={"kind": "no_faceit_counterpart", "faceit_match_id": fid,
+                                               "faceit_room": f"{room.state}_no_result"}))
         elif fid not in by_id:
             result.links.append(Link(lp, UNMATCHED, basis="its FACEIT match id is not in our warehouse",
                                      evidence={"faceit_match_id": fid, "kind": "faceit_missing_from_warehouse"}))

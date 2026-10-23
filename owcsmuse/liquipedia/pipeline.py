@@ -19,7 +19,7 @@ from psycopg.types.json import Jsonb
 
 from ..resolve import fold
 from .matches import Duplicates, LPMatch, dedupe, parse_rows
-from .model import FaceitSide, load_faceit_side
+from .model import FaceitSide, load_faceit_no_result, load_faceit_side
 from .reconcile import DEFAULT_WINDOW, EXACT, Result, Window, reconcile
 from .teams import DEFAULT_TEAM_MAP_PATH, TeamMap, TeamProposal, make_resolver, propose
 
@@ -158,7 +158,8 @@ def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT
                     org_regions.setdefault(o, set()).add(f.region)
     proposals = propose(pairs, [n for lp in lps for n in (lp.team1, lp.team2)], decided, fnames, org_regions)
     resolver = make_resolver(decided, {p.key: p for p in proposals}, use_proposals, load_team_windows(conn))
-    result = reconcile(lps, faceit, resolver, comps_of_page, window, LinkDecisions(decisions_path).data)
+    no_result = load_faceit_no_result(conn, sorted({c for cs in comps_of_page.values() for c in cs}))
+    result = reconcile(lps, faceit, resolver, comps_of_page, window, LinkDecisions(decisions_path).data, no_result)
     run = Run(result, lps, faceit, proposals, dups, raw_ids, comps_of_page, page_names, use_proposals=use_proposals)
     with conn.cursor() as cur:
         cur.execute("""SELECT championship_id, coalesce(started_at, finished_at, scheduled_at) AS t FROM matches

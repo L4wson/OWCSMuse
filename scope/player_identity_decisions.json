@@ -1,6 +1,14 @@
 {
   "note": "Reviewed Liquipedia player page -> FACEIT player. entity_id null means a Liquipedia-born player with no FACEIT id (it gets id lp:player:<page>). `rejections` are page|guid pairs reviewed and turned down. Edit by hand or with `python -m owcsmuse identity decide` / `identity reject`.",
   "decisions": {
+    "ACETKILLER": {
+      "entity_id": null,
+      "handle": "ACETKILLER",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "AJMR": {
       "entity_id": "ebc2176a-5d3f-4142-b621-d14ca8195870",
       "handle": "AJMR",
@@ -57,6 +65,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Ace_(Thai_player)": {
+      "entity_id": null,
+      "handle": "Ace",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Ackyyy": {
+      "entity_id": null,
+      "handle": "Ackyyy",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Ade": {
       "entity_id": "9aa12273-c1db-4df9-a952-847d4aea8801",
       "handle": "Ade",
@@ -97,6 +121,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Alpha_(British_player)": {
+      "entity_id": null,
+      "handle": "Alpha",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Amadien": {
       "entity_id": "a460409d-4e7d-47b4-a79d-462a202525d0",
       "handle": "Amadien",
@@ -112,6 +144,46 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'amdp' stood on the same side as FACEIT f3083b81 (amdp) in 10 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Anderp": {
+      "entity_id": null,
+      "handle": "Anderp",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Anghell1c": {
+      "entity_id": null,
+      "handle": "Anghell1c",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Anhoo": {
+      "entity_id": null,
+      "handle": "Anhoo",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "AoD": {
+      "entity_id": null,
+      "handle": "DarkLordAoD",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Aresona": {
+      "entity_id": null,
+      "handle": "Aresona",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Ariel2": {
       "entity_id": "3c07c474-37ab-43dd-8d8d-e4ccb6de31ed",
@@ -153,6 +225,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Aurora": {
+      "entity_id": null,
+      "handle": "Aurora",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Avo": {
       "entity_id": "d2ac3c5b-2027-4204-b4c9-98aeb126d1a8",
       "handle": "Avo",
@@ -176,6 +256,14 @@
       "note": "accepted strong proposal: 'azruf' stood on the same side as FACEIT f306cf00 (azruf) in 5 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Azurae": {
+      "entity_id": null,
+      "handle": "Azurae",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Backbone": {
       "entity_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
@@ -217,6 +305,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Belosrea": {
+      "entity_id": null,
+      "handle": "Belosrea",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Beluga": {
       "entity_id": "066bb6ee-4703-4e16-89e9-e1f3c1cafbf5",
       "handle": "Beluga",
@@ -232,6 +328,14 @@
       "note": "accepted strong proposal: 'BenBest' stood on the same side as FACEIT 8bfff87a (BenBest) in 14 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Bernar": {
+      "entity_id": null,
+      "handle": "BERNAR",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Bizz": {
       "entity_id": "e97afce6-0095-42e9-9cbd-06504cc5a916",
@@ -257,6 +361,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Bones": {
+      "entity_id": null,
+      "handle": "Bones",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Bonkey": {
+      "entity_id": null,
+      "handle": "Bonkey",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Buddie": {
       "entity_id": "fbc26eb9-a08e-4522-b1a2-abde9c6b8e2c",
       "handle": "Buddie",
@@ -281,6 +401,14 @@
       "display": null,
       "decided_at": "2026-10-02T04:24:29+00:00"
     },
+    "CH0R0NG": {
+      "entity_id": null,
+      "handle": "CH0R0NG",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "CLEAR": {
       "entity_id": "a50e5d9c-e00c-476d-86a9-04ab1403d09d",
       "handle": "CLEAR",
@@ -297,6 +425,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Cao_Jiale": {
+      "entity_id": null,
+      "handle": "Farway2025",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Cartifan22": {
       "entity_id": "d1227d2c-f885-4729-b4de-77e20f08511d",
       "handle": "cartifan22",
@@ -304,6 +440,22 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'cartifan22' stood on the same side as FACEIT d1227d2c (cartifan22 / cartifan22_) in 6 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Centralapan": {
+      "entity_id": null,
+      "handle": "Centralapan",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Chaba": {
+      "entity_id": null,
+      "handle": "Chaba",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Chase": {
       "entity_id": "23c11b19-5748-4890-87da-7d41db6a46cd",
@@ -328,6 +480,30 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'CheckMate' stood on the same side as FACEIT c6839ee0 (CheckMate / Checkmate2) in 29 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Chen_Cheng": {
+      "entity_id": null,
+      "handle": "BILIDENG",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Chen_Jingyi": {
+      "entity_id": null,
+      "handle": "Lengsa",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "ChiYo": {
+      "entity_id": null,
+      "handle": "ChiYo",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Chime": {
       "entity_id": "04a592e5-c661-415a-a1aa-064be1cad203",
@@ -384,6 +560,14 @@
       "note": "accepted strong proposal: 'Clowd' stood on the same side as FACEIT 6694b2e6 (Clowd / Clowdeyyy) in 11 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Colourhex": {
+      "entity_id": null,
+      "handle": "Colourhex",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Coluge": {
       "entity_id": "27fd0cfe-b845-410a-a69e-797f14b4c8cd",
@@ -457,6 +641,30 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Cyber": {
+      "entity_id": null,
+      "handle": "Cyber",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "D0nghun": {
+      "entity_id": null,
+      "handle": "D0nghun",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "DONGHAK": {
+      "entity_id": null,
+      "handle": "D0NGHAK",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Daan": {
       "entity_id": "0d7d6089-6bbf-4b12-be2b-390df1f6397c",
       "handle": "Daan",
@@ -497,6 +705,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Dawson": {
+      "entity_id": null,
+      "handle": "Dawson",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Day_(American_player)": {
+      "entity_id": null,
+      "handle": "Day",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Delusion": {
       "entity_id": "587d6e40-026e-4f29-b090-25e7c395b906",
       "handle": "kai41",
@@ -504,6 +728,14 @@
       "note": "accepted strong proposal: 'kai41' stood on the same side as FACEIT 587d6e40 (kai41 / kai41ow) in 3 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Deme": {
+      "entity_id": null,
+      "handle": "Deme",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Depsi": {
       "entity_id": "c8f35360-a5cc-4687-86a8-b1c2ebae142d",
@@ -553,6 +785,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Doomed": {
+      "entity_id": null,
+      "handle": "Doomed",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Dove": {
       "entity_id": "ed2c5c0c-6348-469e-bee6-4c0def6d9f08",
       "handle": "Dove",
@@ -560,6 +800,14 @@
       "note": "accepted strong proposal: 'Dove' stood on the same side as FACEIT ed2c5c0c (Dovestopher / dove) in 3 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Dreepy": {
+      "entity_id": null,
+      "handle": "Dreepy",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Drunk": {
       "entity_id": "c28135e8-b242-4742-a723-c312258155f3",
@@ -601,6 +849,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Eden": {
+      "entity_id": null,
+      "handle": "eden",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "EgS": {
       "entity_id": "5bd0739c-4e52-49d2-b221-4da542bf0b5c",
       "handle": "EgS",
@@ -616,6 +872,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'eisgnom' stood on the same side as FACEIT 37aeeb7b (eisgnom / eisgnom9) in 44 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Elva": {
+      "entity_id": null,
+      "handle": "elva",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Emmeryn": {
       "entity_id": "36954774-9d2b-4de5-8d83-f8499f4c30e5",
@@ -673,6 +937,22 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Excal": {
+      "entity_id": null,
+      "handle": "Excal",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Ezhan": {
+      "entity_id": null,
+      "handle": "Ezhan",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "FDGod": {
       "entity_id": "1ab8c25f-15f0-4707-acc9-4718c88157da",
       "handle": "FDGod",
@@ -680,6 +960,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'FDGod' stood on the same side as FACEIT 1ab8c25f (FDGod / FDGod_OW) in 32 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Facator": {
+      "entity_id": null,
+      "handle": "Facator",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Faded": {
       "entity_id": "ba4e3eeb-7423-4a3c-a29c-6020cdd48859",
@@ -713,6 +1001,22 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Fate_(British_player)": {
+      "entity_id": null,
+      "handle": "fate",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Fearless": {
+      "entity_id": null,
+      "handle": "Fearless",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "FiNN": {
       "entity_id": "fece55bf-88e9-4234-bcbb-bef43740b491",
       "handle": "FiNN",
@@ -728,6 +1032,30 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'FiXa' stood on the same side as FACEIT e422414a (FiXa / _FiXa) in 45 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Fidel": {
+      "entity_id": null,
+      "handle": "Fidel",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Fielder": {
+      "entity_id": null,
+      "handle": "Fielder",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Fiery": {
+      "entity_id": null,
+      "handle": "fiery",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "FishCake": {
       "entity_id": "63828279-f8ad-4cdf-bd43-ab27d08f87f0",
@@ -753,6 +1081,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Flora": {
+      "entity_id": null,
+      "handle": "Flora",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Fone": {
       "entity_id": "612cb222-3bb1-4980-bcae-cf245c7c32a7",
       "handle": "Fone",
@@ -768,6 +1104,14 @@
       "note": "decided by the owner (2026-10-02): FACEIT owForeshadow, on the same side's roster in all 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T04:24:29+00:00"
+    },
+    "Froakie": {
+      "entity_id": null,
+      "handle": "Froakie",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "FrothyFilly7": {
       "entity_id": "083989e0-81a4-4f83-8dc3-e5222f0df695",
@@ -897,6 +1241,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Gurkmeister": {
+      "entity_id": null,
+      "handle": "Gurkmeister",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "H9mpe": {
       "entity_id": "5e9f5899-8ebb-419b-9feb-60f45b4e7e91",
       "handle": "h9mpe",
@@ -945,6 +1297,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Hanbin": {
+      "entity_id": null,
+      "handle": "Hanbin",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Happy": {
       "entity_id": "6831b4c5-962a-44b8-9b1b-00d60bc58314",
       "handle": "ugvuycfgb6",
@@ -961,6 +1321,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Havoc": {
+      "entity_id": null,
+      "handle": "Havoc",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Hawk": {
       "entity_id": "a940981f-c750-40b9-bb55-bd3e8e6ef986",
       "handle": "Hawk",
@@ -969,6 +1337,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "He_Chengzhi": {
+      "entity_id": null,
+      "handle": "chamomile",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Heavenly": {
       "entity_id": "0280d6ab-db07-466b-be82-b2147468230b",
       "handle": "Heavenly",
@@ -976,6 +1352,14 @@
       "note": "decided by the owner (2026-10-02): FACEIT HeavenlyOkk, on the same side's roster in all 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T04:24:29+00:00"
+    },
+    "HeeSang": {
+      "entity_id": null,
+      "handle": "HeeSang",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Helmerdrake": {
       "entity_id": "413efb56-fc30-451f-8c58-ed48b65cb393",
@@ -1025,6 +1409,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Hua_Yankai": {
+      "entity_id": null,
+      "handle": "Alphari",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Huang_Xin": {
+      "entity_id": null,
+      "handle": "Leave",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Hutch": {
       "entity_id": "2f517ce0-3954-478f-818c-69d7fbdb3eb0",
       "handle": "Hutch",
@@ -1032,6 +1432,14 @@
       "note": "accepted strong proposal: 'Hutch' stood on the same side as FACEIT 2f517ce0 (Hutch / Hutch_ow) in 3 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "HyVision": {
+      "entity_id": null,
+      "handle": "HVS",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Hybrid_(British_player)": {
       "entity_id": "76216b21-cee5-4652-9053-78a4d8d660cf",
@@ -1048,6 +1456,14 @@
       "note": "accepted strong proposal: 'Hydron' stood on the same side as FACEIT 544bb0ed (Hydron / Hydron7) in 7 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Hêv": {
+      "entity_id": null,
+      "handle": "Hêv",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "ICy": {
       "entity_id": "dfce13a7-df35-49a7-bb21-d626092da5c0",
@@ -1161,6 +1577,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Jasm1ne": {
+      "entity_id": null,
+      "handle": "Jasm1ne",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Jazza": {
       "entity_id": "210dcce0-f5fc-49bf-8b31-98dac578e6d7",
       "handle": "Jazza",
@@ -1168,6 +1592,30 @@
       "note": "accepted strong proposal: 'Jazza' stood on the same side as FACEIT 210dcce0 (JAZZA / jazza_fps) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Jeremy87": {
+      "entity_id": null,
+      "handle": "jeremy87",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Jia_Chengjie": {
+      "entity_id": null,
+      "handle": "LiGe",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Jman": {
+      "entity_id": null,
+      "handle": "Jman",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Johnowich": {
       "entity_id": "e2d9ec68-0041-45e2-b354-5bad9c2e028b",
@@ -1201,6 +1649,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "JunBin": {
+      "entity_id": null,
+      "handle": "JunBin",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "K0RTAL": {
       "entity_id": "12ceb60c-1d45-4c8e-ad95-8240be6df2f7",
       "handle": "K0RTAL",
@@ -1216,6 +1672,22 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'k1ng' stood on the same side as FACEIT 2e4fcad5 (k1ng / k1ng_ow) in 13 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "K41": {
+      "entity_id": null,
+      "handle": "K41",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "KDM": {
+      "entity_id": null,
+      "handle": "KDM",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "KIVIS": {
       "entity_id": "1ea17648-a903-4269-a4d7-aca78c3a7d56",
@@ -1249,6 +1721,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "KSG": {
+      "entity_id": null,
+      "handle": "KSG",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "KZR": {
       "entity_id": "884fe870-443a-4187-868c-31936e8e87b2",
       "handle": "KZR",
@@ -1281,6 +1761,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Kame": {
+      "entity_id": null,
+      "handle": "wntr",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Kani": {
+      "entity_id": null,
+      "handle": "Kani",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Kapey774": {
       "entity_id": "c0277cdf-bd3d-4109-87ee-f0c48d64328b",
       "handle": "Kapey774",
@@ -1296,6 +1792,30 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Karmez' stood on the same side as FACEIT a66f8843 (karmez / karmez7) in 7 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Karova": {
+      "entity_id": null,
+      "handle": "Karova",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Kashir": {
+      "entity_id": null,
+      "handle": "Kashir",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Katekomi": {
+      "entity_id": null,
+      "handle": "Katekomi",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "KayZzeR": {
       "entity_id": "c20d068e-f94e-4439-9b9f-9ebf787126d0",
@@ -1344,6 +1864,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'kevster' stood on the same side as FACEIT ef80a7e0 (kevsteer / kevster) in 44 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Khd": {
+      "entity_id": null,
+      "handle": "khd",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Khenail": {
       "entity_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
@@ -1433,6 +1961,22 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "LCŠ": {
+      "entity_id": null,
+      "handle": "LCS",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "LIP": {
+      "entity_id": null,
+      "handle": "LIP",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Lampent": {
       "entity_id": "ec7b2c06-a0b3-432f-83d6-85b60f549fa4",
       "handle": "Lampent",
@@ -1465,6 +2009,30 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "LeeJaeGon": {
+      "entity_id": null,
+      "handle": "LeeJaeGon",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "LeeSooMin": {
+      "entity_id": null,
+      "handle": "LeeSooMin",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Lenn": {
+      "entity_id": null,
+      "handle": "lenn",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Lep": {
       "entity_id": "f2359218-1265-472c-8fbc-9c91183766f0",
       "handle": "Lep",
@@ -1481,6 +2049,54 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "LhCloudy": {
+      "entity_id": null,
+      "handle": "LhCloudy",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Li_Xianyao": {
+      "entity_id": null,
+      "handle": "Mew",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Li_Zhuo": {
+      "entity_id": null,
+      "handle": "Pineapple",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Lightt": {
+      "entity_id": null,
+      "handle": "Lightt",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Liu_Nian": {
+      "entity_id": null,
+      "handle": "Kaneki",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Loathen": {
+      "entity_id": null,
+      "handle": "ross",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Loren": {
       "entity_id": "ea8d2819-d900-4331-bccc-fca01822169c",
       "handle": "loren",
@@ -1488,6 +2104,30 @@
       "note": "accepted strong proposal: 'loren' stood on the same side as FACEIT ea8d2819 (Loren / xLorenn) in 6 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Love": {
+      "entity_id": null,
+      "handle": "Love",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Lu_Weida": {
+      "entity_id": null,
+      "handle": "Diya",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Lucas42g": {
+      "entity_id": null,
+      "handle": "Lucas42g",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "LukeWarm": {
       "entity_id": "b5f1fe72-71fc-485d-8632-3a3c6c7f5f89",
@@ -1544,6 +2184,22 @@
       "note": "accepted strong proposal: 'm5ri' stood on the same side as FACEIT f9060379 (m5ri) in 3 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "MAKA": {
+      "entity_id": null,
+      "handle": "MAKA",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "MAX": {
+      "entity_id": null,
+      "handle": "MAX",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "MCD": {
       "entity_id": "e4267bc5-7ec5-4ff6-82b4-cdcfa097a92c",
@@ -1609,6 +2265,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Matriera": {
+      "entity_id": null,
+      "handle": "Matriera",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Mayh3m": {
       "entity_id": "197e3319-a25f-4a64-a98e-982799409818",
       "handle": "Mayh3m",
@@ -1616,6 +2280,14 @@
       "note": "accepted strong proposal: 'Mayh3m' stood on the same side as FACEIT 197e3319 (Mayh3m / Mayh3m_OW) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Mealgaru": {
+      "entity_id": null,
+      "handle": "Mealgaru",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Melophobia": {
       "entity_id": "9d65459b-a020-4f1b-9631-608f2a61ac3c",
@@ -1633,6 +2305,30 @@
       "display": null,
       "decided_at": "2026-10-02T04:24:29+00:00"
     },
+    "Mesopos": {
+      "entity_id": null,
+      "handle": "Mesopos",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Mickji": {
+      "entity_id": null,
+      "handle": "Mickji",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Miraculous": {
+      "entity_id": null,
+      "handle": "Miraculous",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "MirroR": {
       "entity_id": "c027aadb-ccee-4e0a-88e8-af0e451886e9",
       "handle": "MirroR",
@@ -1641,6 +2337,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Mocha": {
+      "entity_id": null,
+      "handle": "Scarione",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Momentum": {
       "entity_id": "8c6e10c2-f652-4b42-9771-60115341c436",
       "handle": "Momentum",
@@ -1648,6 +2352,22 @@
       "note": "accepted strong proposal: 'Momentum' stood on the same side as FACEIT 8c6e10c2 (Momentum / MomentumOW) in 3 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Moncholo": {
+      "entity_id": null,
+      "handle": "Moncholo",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "MonkeyHappy": {
+      "entity_id": null,
+      "handle": "MonkeyHappy",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "NKZ": {
       "entity_id": "2d88c052-dd0e-4623-abe2-c870dfed804e",
@@ -1672,6 +2392,14 @@
       "note": "accepted strong proposal: 'Naga' stood on the same side as FACEIT 981131d6 (Naga / NagaOW) in 14 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Narwhal": {
+      "entity_id": null,
+      "handle": "Narwhal",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Natlocks": {
       "entity_id": "7e757bbd-8d51-49ca-a616-7061a9b57f1b",
@@ -1737,6 +2465,30 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Neuu": {
+      "entity_id": null,
+      "handle": "Neuu",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Niann03": {
+      "entity_id": "b5fe588f-39bc-439a-bf83-ddfe2e22f0e0",
+      "handle": "Niann03",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): the one FACEIT player with this name (Niann03 / Niann03), who played FACEIT series for the same team (team:3a72be04-0086-4831-8e2b-eb85a00cacc5); scope/lp_only_identity_report.md class A",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Nico": {
+      "entity_id": null,
+      "handle": "Nico",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Nielou": {
       "entity_id": "7f9907db-7f7d-4a43-aa0e-1ff0e97f9d04",
       "handle": "Nielou",
@@ -1744,6 +2496,14 @@
       "note": "accepted strong proposal: 'Nielou' stood on the same side as FACEIT 7f9907db (Arclite / Nielou) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Nitro": {
+      "entity_id": null,
+      "handle": "Nitrao",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Noctis": {
       "entity_id": "d7a07490-9bdc-456d-a594-4df47e2b36e1",
@@ -1760,6 +2520,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'nvm' stood on the same side as FACEIT 3bf8f1b0 (nvm / nvm1_) in 14 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Nyang": {
+      "entity_id": null,
+      "handle": "Nyang",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "OPENER": {
       "entity_id": "e3e7dbf6-6968-4cd9-be0d-09a2c529650e",
@@ -1785,6 +2553,22 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Ostrix": {
+      "entity_id": null,
+      "handle": "Ostrix",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Otters": {
+      "entity_id": null,
+      "handle": "Otters",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "PGE": {
       "entity_id": "b0c2a65a-0ed7-477e-8f0f-525746469c6e",
       "handle": "PGE",
@@ -1792,6 +2576,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'PGE' stood on the same side as FACEIT b0c2a65a (pge / pge4) in 9 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "PaLee": {
+      "entity_id": null,
+      "handle": "PaLee",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Painkiller": {
       "entity_id": "23e964b7-0899-48c5-b13b-8e7c4686e817",
@@ -1905,6 +2697,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "PoroPlays": {
+      "entity_id": null,
+      "handle": "PoroPlays",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Prep": {
+      "entity_id": null,
+      "handle": "Prep",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Prota": {
       "entity_id": "f54df4d9-d608-405b-9396-44a4351c2dd8",
       "handle": "Prota",
@@ -1913,6 +2721,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Proud": {
+      "entity_id": null,
+      "handle": "Proud",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Psych0": {
       "entity_id": "95a176ef-18f6-429a-97d1-ad3663810729",
       "handle": "Psych0",
@@ -1920,6 +2736,14 @@
       "note": "accepted strong proposal: 'Psych0' stood on the same side as FACEIT 95a176ef (Psych0 / owPsych0) in 6 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Punk": {
+      "entity_id": null,
+      "handle": "Punk",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Putter": {
       "entity_id": "edb47502-4e9d-4d4a-b73f-3725e41e50e4",
@@ -1937,6 +2761,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Qiu_Jiaxin": {
+      "entity_id": null,
+      "handle": "GAGA",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Qki": {
+      "entity_id": null,
+      "handle": "qki",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Qlm": {
       "entity_id": "87034ecc-df9b-4a27-90b9-0f5c68376307",
       "handle": "Qlm",
@@ -1944,6 +2784,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Qlm' stood on the same side as FACEIT 87034ecc (Qlm / Qlmaz) in 11 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Qloud": {
+      "entity_id": null,
+      "handle": "Qloud",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Qrxu": {
       "entity_id": "a6d6c538-ec12-435b-83bd-25153c9365d0",
@@ -2009,6 +2857,22 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Redmoosegoat": {
+      "entity_id": null,
+      "handle": "Redmoosegoat",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Reinschdyret": {
+      "entity_id": null,
+      "handle": "Reinsch",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Reisu": {
       "entity_id": "0a5047e1-29b6-42f7-8391-bd263c0b2fe1",
       "handle": "Reisu",
@@ -2016,6 +2880,14 @@
       "note": "accepted strong proposal: 'Reisu' stood on the same side as FACEIT 0a5047e1 (Reisu / ReisuOW) in 4 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Ren_Yanchao": {
+      "entity_id": null,
+      "handle": "Unkn0w",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Renko": {
       "entity_id": "e9e2c1d1-77d9-4268-b06c-6bd9e6edf1b6",
@@ -2089,6 +2961,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Roxy": {
+      "entity_id": null,
+      "handle": "Roxy",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Rupal": {
       "entity_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
       "handle": "Rupal",
@@ -2129,6 +3009,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "SLEEK": {
+      "entity_id": null,
+      "handle": "SLEEK",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "SNOWDR0P": {
       "entity_id": "06d6fa17-9964-4414-b8e2-e0e9507edd6c",
       "handle": "SNOWDR0P",
@@ -2136,6 +3024,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'SNOWDR0P' stood on the same side as FACEIT 06d6fa17 (SNOWDR0P / snwdr0p) in 7 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "SP1NT": {
+      "entity_id": null,
+      "handle": "SP1NT",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "SZNS": {
       "entity_id": "86434847-2d23-40eb-9ce3-fcddda00d157",
@@ -2152,6 +3048,22 @@
       "note": "accepted strong proposal: 'salamiboi200' stood on the same side as FACEIT 4c88ec8b (Ltrain / salamiboi200) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Salmon": {
+      "entity_id": null,
+      "handle": "Salmon",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Santyx": {
+      "entity_id": null,
+      "handle": "Santyx",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Sauna": {
       "entity_id": "32755ac6-08d4-4173-a762-1263ee33465f",
@@ -2217,6 +3129,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Scylla": {
+      "entity_id": null,
+      "handle": "Scylla",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Seeker": {
       "entity_id": "826c2bd4-cb43-4b6c-90a9-21ee53b87bf9",
       "handle": "seeker",
@@ -2233,6 +3153,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Senna": {
+      "entity_id": null,
+      "handle": "senna",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "SeonJun": {
       "entity_id": "759bcdd9-e8e1-4492-95fa-77aca4cd84af",
       "handle": "SeonJun",
@@ -2240,6 +3168,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'SeonJun' stood on the same side as FACEIT 759bcdd9 (CATCATCAT23 / SeonJun) in 12 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Sgy": {
+      "entity_id": null,
+      "handle": "sgy",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "SharP": {
       "entity_id": "bf4f6030-f1bb-4950-99e5-c91c07026e13",
@@ -2265,6 +3201,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Shu": {
+      "entity_id": null,
+      "handle": "Shu",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Simple": {
       "entity_id": "635737a5-3456-43c5-aa74-d7ccb1a30da1",
       "handle": "Simple",
@@ -2288,6 +3232,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'SKAI' stood on the same side as FACEIT 5fe6035f (SKAI / Skairipa00) in 29 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Skewed": {
+      "entity_id": null,
+      "handle": "skewed",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Skier": {
       "entity_id": "880a32c5-f027-4660-a608-cd468acdc5b2",
@@ -2320,6 +3272,14 @@
       "note": "accepted strong proposal: 'Slay' stood on the same side as FACEIT a9518828 (Kenneth21 / Slay) in 11 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Sley": {
+      "entity_id": null,
+      "handle": "Sley",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Sloth": {
       "entity_id": "f75973e9-c93b-47a6-94ef-0ac526695470",
@@ -2377,6 +3337,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Social": {
+      "entity_id": null,
+      "handle": "Social",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Solo": {
       "entity_id": "20749c49-35ad-42c4-a0c3-79efffdc321d",
       "handle": "Solo",
@@ -2401,6 +3369,22 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Sonder": {
+      "entity_id": null,
+      "handle": "sonder",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Song_Chunhui": {
+      "entity_id": null,
+      "handle": "Insane",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Sonne": {
       "entity_id": "955b333d-0104-487b-818e-79951d603905",
       "handle": "Sonne",
@@ -2408,6 +3392,14 @@
       "note": "accepted strong proposal: 'Sonne' stood on the same side as FACEIT 955b333d (Sonne / Sonne_iwnl_) in 4 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Soulsay": {
+      "entity_id": null,
+      "handle": "Soulsay",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "SparkR": {
       "entity_id": "39042a9c-ac5f-47b4-8376-29c45676c2e9",
@@ -2417,6 +3409,14 @@
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
     },
+    "Spectra": {
+      "entity_id": "f0f0cae1-c527-42bc-8568-214b9a23cef2",
+      "handle": "Spectra",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): the one FACEIT player with this name (owSpectra / Spectra), who played FACEIT series for the same team (team:3aca5abd-ee5d-4542-92e9-392b6f5d0dbc); scope/lp_only_identity_report.md class A",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Squid": {
       "entity_id": "e9a591c4-f85f-4438-a7a7-72512a6666c8",
       "handle": "squid",
@@ -2424,6 +3424,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'squid' stood on the same side as FACEIT e9a591c4 (squid / squid07) in 19 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Stalk3r": {
+      "entity_id": null,
+      "handle": "Stalk3r",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Stellios": {
       "entity_id": "8aeb215f-a30e-4953-96ed-9dcdf625ce71",
@@ -2440,6 +3448,14 @@
       "note": "accepted strong proposal: 'SterbeGern' stood on the same side as FACEIT f23c3657 (SterbeGern) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "StillKIWI": {
+      "entity_id": null,
+      "handle": "StillKIWI",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Stone": {
       "entity_id": "b356bcfa-5581-4111-8489-dd66b409eb0a",
@@ -2473,6 +3489,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Sugureru": {
+      "entity_id": null,
+      "handle": "Sugureru",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Sxj": {
       "entity_id": "540be610-74a4-46f4-a63c-9e0497efda00",
       "handle": "sxj",
@@ -2488,6 +3512,22 @@
       "note": "accepted strong proposal: 'Sypeh' stood on the same side as FACEIT 9e111a73 (Sypeh / Y19251658) in 5 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Szymondki": {
+      "entity_id": null,
+      "handle": "Szymondki",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "T3MP": {
+      "entity_id": null,
+      "handle": "T3MP",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "TAP": {
       "entity_id": "aea3823e-e7e6-45f7-930c-76f78b413047",
@@ -2529,6 +3569,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Talisman_(Puerto_Rican_player)": {
+      "entity_id": null,
+      "handle": "Talisman",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Tama": {
       "entity_id": "f74933e7-58c9-4efe-81b5-899079a64109",
       "handle": "Tama",
@@ -2568,6 +3616,14 @@
       "note": "accepted strong proposal: 'Thunder' stood on the same side as FACEIT 42152a1b (Thunder / Thunder_ow) in 5 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "TommeX": {
+      "entity_id": null,
+      "handle": "TommeX",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Tred": {
       "entity_id": "2acfb6df-f298-4b92-8ab8-2141635f28e4",
@@ -2625,6 +3681,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "UnluckyMain": {
+      "entity_id": null,
+      "handle": "UnluckyMain",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Unread_(American_player)": {
       "entity_id": "fb1f9484-a84f-4205-8159-c742b4c21f7a",
       "handle": "Unread",
@@ -2665,6 +3729,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Vigilante": {
+      "entity_id": null,
+      "handle": "vigilante",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Vintage": {
       "entity_id": "f6820a69-6872-4e1a-b530-66f09c5cc83f",
       "handle": "Vintage",
@@ -2681,6 +3753,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Viper": {
+      "entity_id": null,
+      "handle": "Viper",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Vision": {
       "entity_id": "975d9b4f-6989-42c7-b474-5383da9839bd",
       "handle": "Vision",
@@ -2688,6 +3768,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Vision' stood on the same side as FACEIT 975d9b4f (Vision / VisionLIVE) in 7 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "VoltsA": {
+      "entity_id": null,
+      "handle": "VoltsA",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "WMaimone": {
       "entity_id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
@@ -2704,6 +3792,14 @@
       "note": "accepted strong proposal: 'Waynon' stood on the same side as FACEIT 8d70503f (Waynon) in 2 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Wed": {
+      "entity_id": null,
+      "handle": "Wed",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Wex": {
       "entity_id": "840a20d6-14c1-401d-88b1-31c3896acf4e",
@@ -2729,6 +3825,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "WilmaFistFit": {
+      "entity_id": null,
+      "handle": "WilmaFistFit",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Winter_(Lucy_Falmoe)": {
       "entity_id": "816a0c83-eb86-43eb-8fb3-698bcce7c4be",
       "handle": "Winter",
@@ -2736,6 +3840,30 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Winter' stood on the same side as FACEIT 816a0c83 (Winter / WinterOW) in 6 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Wolfie": {
+      "entity_id": null,
+      "handle": "Wolfie",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Wsps": {
+      "entity_id": null,
+      "handle": "wsps",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Wu_Gengtuo": {
+      "entity_id": null,
+      "handle": "HaoYoQian",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Wub": {
       "entity_id": "7606247c-6884-4a74-868b-da04417a66a3",
@@ -2769,6 +3897,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Xu_Qiulin": {
+      "entity_id": null,
+      "handle": "Guxue",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Xzodyal": {
       "entity_id": "9609be75-e561-493f-b1f1-000c4517555a",
       "handle": "xzodyal",
@@ -2776,6 +3912,22 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'xzodyal' stood on the same side as FACEIT 9609be75 (xzodyal) in 26 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Yi_Hu": {
+      "entity_id": null,
+      "handle": "JinMu",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Yimitra": {
+      "entity_id": null,
+      "handle": "Yimitra",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Yoham": {
       "entity_id": "d615be2c-19d1-49bf-a5f3-216377efb1cf",
@@ -2785,6 +3937,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Yoshinori2k": {
+      "entity_id": null,
+      "handle": "Yoshinori2k",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Youbi": {
       "entity_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
       "handle": "Youbi",
@@ -2792,6 +3952,22 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'Youbi' stood on the same side as FACEIT 9c435ffa (Youbi / Youbi1) in 38 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "Yukej": {
+      "entity_id": null,
+      "handle": "Yukej",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Z4CH": {
+      "entity_id": null,
+      "handle": "Z4CH",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "ZERO": {
       "entity_id": "ded7b307-74ba-4e6d-829f-5d5e837dc165",
@@ -2801,6 +3977,14 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "ZEST": {
+      "entity_id": null,
+      "handle": "ZEST",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "ZIYAD": {
       "entity_id": "c2c17617-77ac-4f70-8529-59a2a910cb35",
       "handle": "ZIYAD",
@@ -2808,6 +3992,14 @@
       "note": "accepted strong proposal (owner, 2026-10-02): 'ZIYAD' stood on the same side as FACEIT c2c17617 (ZIYAD / ZIYAD-OW) in 45 linked series",
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
+    },
+    "ZPanthr": {
+      "entity_id": null,
+      "handle": "zPanthr",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (2024 NA/EMEA Stage 3/4); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D). A FACEIT account may exist that this warehouse never fetched: if one appears, this page needs merging into it.",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Zeb": {
       "entity_id": "eb37ecfe-626d-4280-9d9c-316a449eddcf",
@@ -2841,6 +4033,22 @@
       "display": null,
       "decided_at": "2026-10-02T01:29:49+00:00"
     },
+    "Zhang_Jingkun": {
+      "entity_id": null,
+      "handle": "Recall",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
+    "Zheng_Yangjie": {
+      "entity_id": null,
+      "handle": "Shy",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
+    },
     "Zholik": {
       "entity_id": "80d94700-0f2f-4562-bb23-a42b4a8bf301",
       "handle": "Zholik",
@@ -2848,6 +4056,14 @@
       "note": "accepted strong proposal: 'Zholik' stood on the same side as FACEIT 80d94700 (Zholik / ZholikOW) in 11 linked series",
       "display": null,
       "decided_at": "2026-10-02T03:46:48+00:00"
+    },
+    "Zhou_Xiang": {
+      "entity_id": null,
+      "handle": "Mmonk",
+      "real_name": null,
+      "note": "decided by the owner (2026-10-23): Liquipedia-only player (international events only); no FACEIT name in the warehouse folds to the handle (scope/lp_only_identity_report.md class D).",
+      "display": null,
+      "decided_at": "2026-10-23T18:43:34+00:00"
     },
     "Zhulander": {
       "entity_id": "28c94927-18b8-4d06-b98c-01f96f54f923",

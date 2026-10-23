@@ -1,12 +1,12 @@
 # Liquipedia <-> FACEIT reconciliation
 
-Built from 5 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219, 4222, 4500); no request was made to build this report. 622 Liquipedia records (0 placeholder rows excluded) against 476 FACEIT series in the same 40 competitions.
+Built from 7 stored Liquipedia response(s) (raw_payloads id 4215, 4218, 4219, 4222, 5035, 5037, 5320); no request was made to build this report. 772 Liquipedia records (0 placeholder rows excluded) against 482 FACEIT series in the same 49 competitions.
 
 Nothing here links into an answer. Exact and strong links are proposed; ambiguous matches and team-name mappings wait for review, and the disagreements section says where either source may be wrong.
 
 ## Timezones
 
-Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly on every row). FACEIT's times are epoch seconds, so also UTC. Across the id-linked pairs FACEIT's start minus Liquipedia's scheduled time is: median 45 min, 5th-95th percentile 24 to 107, extremes -6 to 11478; 405 of 416 inside the matching window (-60 to +360 min).
+Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly on every row). FACEIT's times are epoch seconds, so also UTC. Across the id-linked pairs FACEIT's start minus Liquipedia's scheduled time is: median 45 min, 5th-95th percentile 24 to 129, extremes -6 to 11478; 405 of 422 inside the matching window (-60 to +360 min).
 
 ## Summary by competition
 
@@ -14,6 +14,14 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 |---|---|---|---|---|---|---|---|---|
 | Dreamhack Dallas | 15 | 14 | 0 | 0 | 14 | 1 | 0 | 0 |
 | Esports World Cup 2024 | 35 | 0 | 0 | 0 | 0 | 35 | 0 | 0 |
+| OWCS 2024 EMEA Stage 3 Group Stage | 20 | 0 | 0 | 0 | 0 | 20 | 0 | 0 |
+| OWCS 2024 EMEA Stage 3 Main Event | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
+| OWCS 2024 EMEA Stage 4 Group Stage | 20 | 0 | 0 | 0 | 0 | 20 | 0 | 0 |
+| OWCS 2024 EMEA Stage 4 Main Event | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
+| OWCS 2024 NA Stage 3 Group Stage | 20 | 0 | 0 | 0 | 0 | 20 | 0 | 0 |
+| OWCS 2024 NA Stage 3 Main Event | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
+| OWCS 2024 NA Stage 4 Group Stage | 20 | 0 | 0 | 0 | 0 | 20 | 0 | 0 |
+| OWCS 2024 NA Stage 4 Main Event | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
 | OWCS 2024 World Finals | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group B | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
 | OWCS 2024: EMEA Stage 1 - Group C | 0 | 6 | 0 | 0 | 0 | 0 | 1 | 0 |
@@ -37,9 +45,10 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | OWCS 2025 Champions Clash | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
 | OWCS 2025 Midseason Championship | 28 | 0 | 0 | 0 | 0 | 28 | 0 | 0 |
 | OWCS 2025 World Finals | 22 | 0 | 0 | 0 | 0 | 22 | 0 | 0 |
+| OWCS 2026 Champions Clash | 14 | 0 | 0 | 0 | 0 | 14 | 0 | 0 |
 | OWCS 2026 Midseason Championship | 28 | 0 | 0 | 0 | 0 | 28 | 0 | 0 |
-| S10 EMEA OWCS Central - Regular Season | 15 | 2 | 2 | 0 | 0 | 13 | 0 | 0 |
-| S10 NA OWCS Central - Regular Season | 15 | 1 | 1 | 0 | 0 | 14 | 0 | 0 |
+| S10 EMEA OWCS Central - Regular Season | 15 | 5 | 5 | 0 | 0 | 10 | 0 | 3 |
+| S10 NA OWCS Central - Regular Season | 15 | 4 | 4 | 0 | 0 | 11 | 0 | 3 |
 | S4 EMEA OWCS Central - Playoffs | 8 | 10 | 8 | 0 | 0 | 0 | 2 | 0 |
 | S4 EMEA OWCS Central - Regular Season | 28 | 28 | 28 | 0 | 0 | 0 | 0 | 0 |
 | S4 NA OWCS Central - Playoffs | 8 | 10 | 8 | 0 | 0 | 0 | 2 | 0 |
@@ -60,7 +69,7 @@ Liquipedia's `date` is UTC (it equals `extradata.timestamp`, an epoch, exactly o
 | S9 EMEA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
 | S9 NA OWCS Central - Playoffs | 6 | 6 | 6 | 0 | 0 | 0 | 0 | 0 |
 | S9 NA OWCS Central - Regular Season | 15 | 15 | 15 | 0 | 0 | 0 | 0 | 5 |
-| **total** | **622** | **476** | **416** | **13** | **19** | **174** | **28** | **11** |
+| **total** | **772** | **482** | **422** | **13** | **19** | **318** | **28** | **17** |
 
 ## Needs review: ambiguous matches (0)
 
@@ -89,7 +98,7 @@ None.
 - [confirmed] 2024-06-02 21:20Z  Team Falcons 2-4 Crazy Raccoon  (bo7)  -> FACEIT 1-c823aed8-9d75-44e0-a6b2-18bfa1a3e02b  (the same two teams within a day, but the records disagree)
 - [confirmed] 2024-03-24 22:30Z  Toronto Defiant 4-0 Timeless  (bo7)  -> FACEIT 1-70cff415-3817-4144-9eca-e917f89cb6e7  (the same two teams within a day, but the records disagree)
 
-## Linked pairs where the two sources disagree (15)
+## Linked pairs where the two sources disagree (21)
 
 Either source can be wrong. `maps` tells which is more likely: FACEIT's own stats count the maps played.
 
@@ -153,19 +162,62 @@ Either source can be wrong. `maps` tells which is more likely: FACEIT's own stat
   FACEIT: 2024-03-24 20:15Z  Twisted Minds 5-1 ENCE  (bo7, complete)  1-c5823143-d7e8-4efe-a957-6d54cfee1a8e
   page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1
   - **score**: Liquipedia '1-4', FACEIT '1-5 (as LP orders them)' - FACEIT has stats for 5 maps; Liquipedia lists 5 games; FACEIT's 5-1 is more wins than a best-of-7 allows
+- [exact] 2026-10-10 22:20Z  The Kafe 1-3 Disguised  (bo5)
+  FACEIT: 2026-10-17 16:28Z  KAFE 1-3 Disguised  (bo5, result_only)  1-a2f84ad7-0a00-4715-86eb-3225ad8de95e
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - **date**: Liquipedia '2026-10-10T22:20+00:00', FACEIT '2026-10-17T16:28+00:00' - FACEIT is +162.1 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
+- [exact] 2026-10-11 00:00Z  Dallas Fuel 3-0 NTMR  (bo5)
+  FACEIT: 2026-10-17 16:34Z  Dallas Fuel 3-0 NTMR  (bo5, result_only)  1-eadcb0e1-e73e-4748-acd6-a1ad2ec9a7ce
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - **date**: Liquipedia '2026-10-11T00:00+00:00', FACEIT '2026-10-17T16:34+00:00' - FACEIT is +160.6 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
+- [exact] 2026-10-11 17:00Z  Geekay Esports 2-3 Twisted Minds  (bo5)
+  FACEIT: 2026-10-17 16:37Z  Twisted Minds 3-2 Geekay Esports  (bo5, result_only)  1-fbe0734d-0018-4ede-9db8-720fb7dc81fc
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - **date**: Liquipedia '2026-10-11T17:00+00:00', FACEIT '2026-10-17T16:37+00:00' - FACEIT is +143.6 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
+- [exact] 2026-10-11 19:05Z  1234 0-3 Team Risk  (bo5)
+  FACEIT: 2026-10-17 16:37Z  1234 0-3 Team Risk  (bo5, result_only)  1-a54ce794-8b9a-421b-80b9-4fb7af11fd58
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - **date**: Liquipedia '2026-10-11T19:05+00:00', FACEIT '2026-10-17T16:37+00:00' - FACEIT is +141.5 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
+- [exact] 2026-10-11 20:15Z  Virtus.pro 2-3 Team Peps  (bo5)
+  FACEIT: 2026-10-17 16:36Z  Virtus pro 2-3 Team Peps  (bo5, result_only)  1-ff9aa928-1240-4730-b150-1718b2c3da10
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - **date**: Liquipedia '2026-10-11T20:15+00:00', FACEIT '2026-10-17T16:36+00:00' - FACEIT is +140.4 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
+- [exact] 2026-10-11 23:25Z  Spacestation Gaming 2-3 The Kafe  (bo5)
+  FACEIT: 2026-10-17 16:33Z  SpaceStation Gaming 2-3 KAFE  (bo5, result_only)  1-e859f56e-15b5-4e2e-890b-374bab5ef158
+  page: https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - **date**: Liquipedia '2026-10-11T23:25+00:00', FACEIT '2026-10-17T16:33+00:00' - FACEIT is +137.1 h from Liquipedia's time; FACEIT has no start time for this series, so its time is when the result was entered, and Liquipedia's is more likely the play time
 
-## Liquipedia records a FACEIT id we do not hold (8)
+## Liquipedia records a FACEIT id we do not hold (11)
 
 These are FACEIT matches that exist (Liquipedia names them) but our history crawl never found.
 
-- 2026-04-12 17:00Z  Geekay Esports 1-3 Virtus.pro  (bo5)  FACEIT id 1-534bdff7-baf4-40ff-8d1d-fac64ee30ce3  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1
-- 2026-04-12 20:30Z  Spacestation Gaming 3-0 Team Liquid  (bo5)  FACEIT id 1-fcd2bd41-967c-450b-abac-f2137bfe308b  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
 - 2024-04-12 17:30Z  Ataraxia 3-0 Metaboiz  (bo5)  FACEIT id 1-c351f92e-7422-4e9e-83ee-0a4158e1e4d1  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_2/Group_Stage
-- 2026-10-10 22:20Z  The Kafe 1-3 Disguised  (bo5)  FACEIT id 1-a2f84ad7-0a00-4715-86eb-3225ad8de95e  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-- 2026-10-11 00:00Z  Dallas Fuel 3-0 NTMR  (bo5)  FACEIT id 1-eadcb0e1-e73e-4748-acd6-a1ad2ec9a7ce  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-- 2026-10-11 17:00Z  Geekay Esports -1--1 Twisted Minds  (bo5)  FACEIT id 1-fbe0734d-0018-4ede-9db8-720fb7dc81fc  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-- 2026-10-11 18:30Z  1234 -1--1 Team Risk  (bo5)  FACEIT id 1-a54ce794-8b9a-421b-80b9-4fb7af11fd58  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-- 2026-10-11 20:00Z  Virtus.pro -1--1 Team Peps  (bo5)  FACEIT id 1-ff9aa928-1240-4730-b150-1718b2c3da10  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-17 17:00Z  Twisted Minds 3-0 Team Risk  (bo5)  FACEIT id 1-3886ef15-2b02-48bf-b969-c9e7f0f75411  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-18 17:05Z  Virtus.pro 1-3 Team Risk  (bo5)  FACEIT id 1-2f52143d-55f7-4d74-9851-0f673862722c  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-24 17:00Z  Team Risk -1--1 Team Peps  (bo5)  FACEIT id 1-726bf31a-aa6c-456f-882d-2546b54077d0  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-24 18:30Z  Geekay Esports -1--1 1234  (bo5)  FACEIT id 1-8fdd4c1e-5ffd-423a-b84a-1b2c340832a8  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-24 20:00Z  Virtus.pro -1--1 Twisted Minds  (bo5)  FACEIT id 1-0e58c86c-6a66-4732-bf63-25311b8f8471  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-25 17:00Z  1234 -1--1 Team Peps  (bo5)  FACEIT id 1-903079e3-2ef2-427d-81b3-12eb73221701  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-25 18:30Z  Geekay Esports -1--1 Team Risk  (bo5)  FACEIT id 1-0de585bf-bd9a-4fca-9791-143c5290ae21  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-25 20:00Z  Dallas Fuel -1--1 The Kafe  (bo5)  FACEIT id 1-4dad1b53-e3d1-4772-a29b-f42abce8f17a  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-25 21:30Z  Spacestation Gaming -1--1 NTMR  (bo5)  FACEIT id 1-431c8adc-4ccf-4dd0-9123-203bb65ac9c7  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-25 23:00Z  Team Liquid -1--1 Disguised  (bo5)  FACEIT id 1-51570432-9f72-4f4a-801e-3585349ab6ca  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+
+## Liquipedia-only: the FACEIT room ended with no result (11)
+
+The page names a FACEIT room opened for these two teams that FACEIT aborted or cancelled with no result, so the record is the series' only source. A result entered later links the room on the next run.
+
+- 2026-04-12 17:00Z  Geekay Esports 1-3 Virtus.pro  (bo5)  FACEIT room 1-534bdff7-baf4-40ff-8d1d-fac64ee30ce3 (cancelled_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1
+- 2026-04-12 20:30Z  Spacestation Gaming 3-0 Team Liquid  (bo5)  FACEIT room 1-fcd2bd41-967c-450b-abac-f2137bfe308b (cancelled_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
+- 2026-10-11 22:20Z  Dallas Fuel 3-0 Disguised  (bo5)  FACEIT room 1-57de1929-8c61-4d63-aab4-48238a254ecf (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-17 18:20Z  Virtus.pro 1-3 1234  (bo5)  FACEIT room 1-9f330dfb-9871-4389-80c5-5acc965302bd (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-17 20:00Z  Geekay Esports 3-1 Team Peps  (bo5)  FACEIT room 1-02f3a806-3cd5-423b-b8eb-1af5766a6ca0 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-17 21:40Z  Team Liquid 3-1 The Kafe  (bo5)  FACEIT room 1-9d5d5375-9913-4154-a995-22cd3ba74604 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-17 23:15Z  NTMR 3-0 Disguised  (bo5)  FACEIT room 1-5d1df29d-92fc-43f4-9b73-0de2dfa21308 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-18 18:50Z  Twisted Minds 3-1 1234  (bo5)  FACEIT room 1-d1f74895-5fba-42c8-b7ab-694e5753f906 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+- 2026-10-18 20:30Z  Dallas Fuel 2-3 Team Liquid  (bo5)  FACEIT room 1-f60f5183-22a2-4808-b944-cca0b02e996f (cancelled_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-18 22:30Z  Spacestation Gaming 3-0 Disguised  (bo5)  FACEIT room 1-4a241025-42b8-4ce5-a132-c95bad60df21 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+- 2026-10-18 23:35Z  The Kafe 3-0 NTMR  (bo5)  FACEIT room 1-81170f2d-38f2-49f9-85a7-7690e18920e7 (aborted_no_result)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
 
 ## Duplicates
 
@@ -218,6 +270,182 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
   - 2024-07-28 15:00Z  Crazy Raccoon 4-1 Team Falcons  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
   - 2024-07-28 17:00Z  ZETA DIVISION 3-4 Toronto Ultra  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
   - 2024-07-28 19:00Z  Crazy Raccoon 4-1 Toronto Ultra  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Esports_World_Cup/2024
+
+### OWCS 2024 EMEA Stage 3 Group Stage
+
+- links: 0 exact, 0 strong, 0 ambiguous; 20 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-08-16 16:00Z  ENCE 3-0 Metaboiz  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-16 16:00Z  Ex Oblivione 1-3 SrPeakCheck  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-16 16:00Z  Gaimin Gladiators 3-0 Al Qadsiah  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-16 16:00Z  Spacestation Gaming 3-0 Ohana Aloha  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-16 17:15Z  Hypnos 3-1 Vendetta (European team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-16 17:30Z  Wasp X Ohhhh No 0-3 AWW YEAH  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-16 17:30Z  Virtus.pro 3-1 Supershy  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-16 17:30Z  Twisted Minds 3-0 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-17 16:00Z  Spacestation Gaming 3-0 Hypnos  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-17 17:30Z  ENCE 3-0 AWW YEAH  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-17 18:45Z  Gaimin Gladiators 0-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-18 16:00Z  SrPeakCheck 0-3 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-18 17:30Z  Ohana Aloha 0-3 Vendetta (European team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-18 18:50Z  Metaboiz 1-3 Wasp X Ohhhh No  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-24 16:00Z  Al Qadsiah 0-3 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-24 17:30Z  Ex Oblivione 2-3 Supershy  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-24 19:00Z  Hypnos 3-2 Vendetta (European team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-25 16:00Z  AWW YEAH 3-2 Wasp X Ohhhh No  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-25 18:10Z  Gaimin Gladiators 1-3 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+  - 2024-08-25 19:30Z  SrPeakCheck 1-3 Supershy  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3/Group_Stage
+
+### OWCS 2024 EMEA Stage 3 Main Event
+
+- links: 0 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-08-29 16:00Z  Spacestation Gaming 3-0 AWW YEAH  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-29 16:00Z  Virtus.pro 3-0 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-29 16:00Z  ENCE 3-0 Hypnos  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-29 16:00Z  Twisted Minds 3-0 Supershy  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-29 17:30Z  AWW YEAH 1-3 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-29 19:00Z  Hypnos 3-2 Supershy  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-30 16:10Z  Spacestation Gaming 2-3 Virtus.pro  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-30 18:10Z  ENCE 3-0 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-30 19:30Z  Spacestation Gaming 3-1 Hypnos  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-31 16:20Z  Twisted Minds 3-0 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-31 17:30Z  Virtus.pro 0-3 ENCE  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-08-31 18:10Z  Twisted Minds 1-3 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-09-01 17:18Z  Virtus.pro 3-0 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+  - 2024-09-01 18:30Z  ENCE 4-2 Virtus.pro  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3
+
+### OWCS 2024 EMEA Stage 4 Group Stage
+
+- links: 0 exact, 0 strong, 0 ambiguous; 20 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-09-27 16:00Z  ENCE 3-0 Vendetta (European team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-27 16:00Z  Spacestation Gaming 3-0 Hypnos  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-27 16:00Z  Twisted Minds 3-2 Negative Mental Attitude  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-27 16:00Z  Virtus.pro 3-0 Metaboiz  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-27 17:00Z  Vanir Quick 3-1 Wasp X Ohhhh No  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-27 17:00Z  SrPeakCheck 0-3 Ex Oblivione  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-27 17:00Z  Team Peps 2-3 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-27 17:30Z  Piece of Cake 3-0 Team G4mbit  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-28 16:00Z  ENCE 3-0 Vanir Quick  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-28 17:00Z  Virtus.pro 3-1 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-28 18:30Z  Spacestation Gaming 3-0 Ex Oblivione  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-29 16:00Z  Twisted Minds 1-3 Piece of Cake  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-29 17:30Z  Vendetta (European team) 3-1 Wasp X Ohhhh No  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-09-29 19:00Z  Metaboiz 0-3 Team Peps  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-10-05 16:00Z  Hypnos 0-3 SrPeakCheck  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-10-05 17:25Z  Negative Mental Attitude 3-1 Team G4mbit  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-10-05 18:50Z  Vanir Quick 1-3 Vendetta (European team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-10-06 16:10Z  A One Man Army 3-1 Team Peps  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-10-06 17:35Z  Ex Oblivione 2-3 SrPeakCheck  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+  - 2024-10-06 19:25Z  Twisted Minds 3-0 Negative Mental Attitude  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4/Group_Stage
+
+### OWCS 2024 EMEA Stage 4 Main Event
+
+- links: 0 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-10-10 16:00Z  ENCE 3-0 A One Man Army  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-10 16:00Z  Piece of Cake 3-0 SrPeakCheck  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-10 16:00Z  Virtus.pro 3-1 Vendetta (European team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-10 16:20Z  Spacestation Gaming 3-1 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-10 17:45Z  A One Man Army 2-3 SrPeakCheck  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-10 19:30Z  Vendetta (European team) 1-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-11 16:00Z  ENCE 3-1 Piece of Cake  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-11 17:30Z  Virtus.pro 1-3 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-11 19:00Z  Piece of Cake 0-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-12 16:15Z  Virtus.pro 3-2 SrPeakCheck  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-12 18:10Z  ENCE 3-1 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-12 19:30Z  Virtus.pro 2-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-13 17:25Z  Spacestation Gaming 3-1 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+  - 2024-10-13 19:00Z  ENCE 0-4 Spacestation Gaming  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4
+
+### OWCS 2024 NA Stage 3 Group Stage
+
+- links: 0 exact, 0 strong, 0 ambiguous; 20 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-08-16 20:00Z  NTMR 3-0 Team Z  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-16 20:00Z  Toronto Defiant 3-0 Absolution  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-16 20:00Z  NRG Shock 3-0 Tanuki  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-16 20:00Z  Citrus Nightmare 3-1 Vice (North American team)  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-16 21:20Z  TSM 3-0 Arizona State University  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-16 21:30Z  Timeless 3-0 Fries In The Bag  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-16 21:30Z  Avidity 3-0 Timeless Ethereal  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-16 22:00Z  Shikigami 2-3 FLUFFY AIMERS  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-17 20:10Z  Toronto Defiant 3-0 Avidity  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-17 21:20Z  NRG Shock 3-1 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-17 23:00Z  Citrus Nightmare 1-3 FLUFFY AIMERS  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-18 21:00Z  NTMR 3-0 Timeless  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-18 22:15Z  Absolution 0-3 Timeless Ethereal  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-18 23:10Z  Tanuki 2-3 Arizona State University  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-24 21:00Z  Vice (North American team) 0-3 Shikigami  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-24 23:00Z  Team Z 3-1 Fries In The Bag  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-25 00:30Z  Avidity 0-3 Timeless Ethereal  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-25 21:30Z  TSM 3-0 Arizona State University  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-25 22:30Z  Citrus Nightmare 3-2 Shikigami  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+  - 2024-08-26 00:00Z  Timeless 3-1 Team Z  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3/Group_Stage
+
+### OWCS 2024 NA Stage 3 Main Event
+
+- links: 0 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-08-29 20:50Z  NTMR 3-0 Citrus Nightmare  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-29 20:55Z  NRG Shock 3-0 Timeless Ethereal  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-29 20:55Z  FLUFFY AIMERS 0-3 Timeless  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-29 21:00Z  Toronto Defiant 3-0 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-29 21:55Z  TSM 2-3 Citrus Nightmare  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-29 23:30Z  Timeless Ethereal 1-3 FLUFFY AIMERS  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-30 20:30Z  Toronto Defiant 3-0 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-30 21:40Z  NRG Shock 3-0 Timeless  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-30 22:45Z  NTMR 3-1 FLUFFY AIMERS  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-31 20:00Z  Timeless 3-0 Citrus Nightmare  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-31 20:45Z  Toronto Defiant 2-3 NRG Shock  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-08-31 22:30Z  Timeless 2-3 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-09-01 20:55Z  Toronto Defiant 3-2 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+  - 2024-09-01 22:30Z  NRG Shock 0-4 Toronto Defiant  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3
+
+### OWCS 2024 NA Stage 4 Group Stage
+
+- links: 0 exact, 0 strong, 0 ambiguous; 20 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-09-27 20:00Z  NTMR 3-0 Rad x Avidity  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-27 20:00Z  Toronto Defiant 3-0 YFP  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-27 20:00Z  Citrus Nation 3-1 Team Z  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-27 20:00Z  NRG Shock 3-0 Blast Off Buds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-27 21:00Z  Shikigami 3-0 Tanuki Tapire  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-27 21:00Z  FLUFFY AIMERS 3-1 EXN Zenith  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-27 21:10Z  O3 Splash 2-3 Ramattra Punch  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-27 21:20Z  TSM 3-0 Absolution  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-28 20:45Z  Toronto Defiant 3-2 Shikigami  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-28 22:30Z  NRG Shock 1-3 FLUFFY AIMERS  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-29 00:00Z  NTMR 3-1 Ramattra Punch  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-29 20:40Z  Citrus Nation 3-1 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-29 22:15Z  YFP 3-0 Tanuki Tapire  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-09-29 23:20Z  Blast Off Buds 3-0 EXN Zenith  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-10-05 21:00Z  Rad x Avidity 3-0 O3 Splash  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-10-05 22:15Z  Team Z 3-1 Absolution  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-10-05 23:30Z  Shikigami 3-1 YFP  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-10-06 20:40Z  NRG Shock 3-0 Blast Off Buds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-10-06 22:00Z  Ramattra Punch 1-3 Rad x Avidity  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+  - 2024-10-06 23:25Z  TSM 3-0 Team Z  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4/Group_Stage
+
+### OWCS 2024 NA Stage 4 Main Event
+
+- links: 0 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2024-10-10 20:55Z  Citrus Nation 2-3 Rad x Avidity  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-10 20:55Z  FLUFFY AIMERS 3-1 Shikigami  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-10 20:55Z  NTMR 3-1 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-10 21:00Z  Toronto Defiant 3-0 NRG Shock  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-10 22:30Z  NRG Shock 3-1 Citrus Nation  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-11 00:00Z  Shikigami 1-3 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-11 20:45Z  Toronto Defiant 3-0 Rad x Avidity  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-11 21:35Z  FLUFFY AIMERS 1-3 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-11 23:00Z  Rad x Avidity 0-3 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-12 21:00Z  FLUFFY AIMERS 3-0 NRG Shock  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-12 23:00Z  Toronto Defiant 3-2 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-13 00:30Z  FLUFFY AIMERS 2-3 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-13 20:55Z  NTMR 3-0 TSM  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
+  - 2024-10-13 21:45Z  Toronto Defiant 4-3 NTMR  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4
 
 ### OWCS 2024 World Finals
 
@@ -439,6 +667,25 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
   - 2025-11-30 12:10Z  Twisted Minds 3-1 Crazy Raccoon  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
   - 2025-11-30 15:30Z  Al Qadsiah 1-4 Twisted Minds  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals
 
+### OWCS 2026 Champions Clash
+
+- links: 0 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- Liquipedia matches with no FACEIT counterpart:
+  - 2026-05-22 03:00Z  Weibo Gaming 1-2 Virtus.pro  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-22 04:30Z  ZETA DIVISION 2-0 Spacestation Gaming  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-22 05:30Z  Dallas Fuel 0-2 Crazy Raccoon  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-22 06:35Z  Twisted Minds 2-0 All Gamers  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-22 07:40Z  Weibo Gaming 2-0 Spacestation Gaming  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-22 08:30Z  All Gamers 0-2 Dallas Fuel  (bo3)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-23 03:00Z  Twisted Minds 0-3 Crazy Raccoon  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-23 04:20Z  Virtus.pro 1-3 ZETA DIVISION  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-23 06:20Z  Virtus.pro 3-1 Dallas Fuel  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-23 08:15Z  Twisted Minds 3-1 Weibo Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-23 10:35Z  Virtus.pro 1-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-24 03:00Z  Crazy Raccoon 3-1 ZETA DIVISION  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-24 06:00Z  ZETA DIVISION 1-3 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+  - 2026-05-24 09:05Z  Crazy Raccoon 4-3 Twisted Minds  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/Champions_Clash
+
 ### OWCS 2026 Midseason Championship
 
 - links: 0 exact, 0 strong, 0 ambiguous; 28 Liquipedia-only; 0 FACEIT-only
@@ -474,40 +721,34 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 ### S10 EMEA OWCS Central - Regular Season
 
-- links: 2 exact, 0 strong, 0 ambiguous; 13 Liquipedia-only; 0 FACEIT-only
+- links: 5 exact, 0 strong, 0 ambiguous; 10 Liquipedia-only; 0 FACEIT-only
 - Liquipedia matches with no FACEIT counterpart:
-  - 2026-10-11 17:00Z  Geekay Esports -1--1 Twisted Minds  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-11 18:30Z  1234 -1--1 Team Risk  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-11 20:00Z  Virtus.pro -1--1 Team Peps  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-17 17:00Z  Twisted Minds -1--1 Team Risk  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-17 18:30Z  Virtus.pro -1--1 1234  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-17 20:00Z  Geekay Esports -1--1 Team Peps  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-18 17:00Z  Virtus.pro -1--1 Team Risk  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-18 18:30Z  Twisted Minds -1--1 1234  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-24 17:00Z  Team Risk -1--1 Team Peps  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-24 18:30Z  Geekay Esports -1--1 1234  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-24 20:00Z  Virtus.pro -1--1 Twisted Minds  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-25 17:00Z  1234 -1--1 Team Peps  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
-  - 2026-10-25 18:30Z  Geekay Esports -1--1 Team Risk  (bo5)  (team name not mapped: Team Risk)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-17 17:00Z  Twisted Minds 3-0 Team Risk  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-17 18:20Z  Virtus.pro 1-3 1234  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-17 20:00Z  Geekay Esports 3-1 Team Peps  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-18 17:05Z  Virtus.pro 1-3 Team Risk  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-18 18:50Z  Twisted Minds 3-1 1234  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-24 17:00Z  Team Risk -1--1 Team Peps  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-24 18:30Z  Geekay Esports -1--1 1234  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-24 20:00Z  Virtus.pro -1--1 Twisted Minds  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-25 17:00Z  1234 -1--1 Team Peps  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
+  - 2026-10-25 18:30Z  Geekay Esports -1--1 Team Risk  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3/Regular_Season
 
 ### S10 NA OWCS Central - Regular Season
 
-- links: 1 exact, 0 strong, 0 ambiguous; 14 Liquipedia-only; 0 FACEIT-only
+- links: 4 exact, 0 strong, 0 ambiguous; 11 Liquipedia-only; 0 FACEIT-only
 - Liquipedia matches with no FACEIT counterpart:
-  - 2026-10-10 22:20Z  The Kafe 1-3 Disguised  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-11 00:00Z  Dallas Fuel 3-0 NTMR  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-11 21:30Z  Dallas Fuel -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-11 23:00Z  Spacestation Gaming -1--1 The Kafe  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-17 21:30Z  Team Liquid -1--1 The Kafe  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-17 23:00Z  NTMR -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-18 20:00Z  Dallas Fuel -1--1 Team Liquid  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-18 21:30Z  Spacestation Gaming -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-18 23:00Z  The Kafe -1--1 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-11 22:20Z  Dallas Fuel 3-0 Disguised  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-17 21:40Z  Team Liquid 3-1 The Kafe  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-17 23:15Z  NTMR 3-0 Disguised  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-18 20:30Z  Dallas Fuel 2-3 Team Liquid  (bo5)  (its FACEIT room was cancelled with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-18 22:30Z  Spacestation Gaming 3-0 Disguised  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-18 23:35Z  The Kafe 3-0 NTMR  (bo5)  (its FACEIT room was aborted with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-25 20:00Z  Dallas Fuel -1--1 The Kafe  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-25 21:30Z  Spacestation Gaming -1--1 NTMR  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
+  - 2026-10-25 23:00Z  Team Liquid -1--1 Disguised  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
   - 2026-10-24 21:30Z  Dallas Fuel -1--1 Spacestation Gaming  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
   - 2026-10-24 23:00Z  Team Liquid -1--1 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-25 20:00Z  Dallas Fuel -1--1 The Kafe  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-25 21:30Z  Spacestation Gaming -1--1 NTMR  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
-  - 2026-10-25 23:00Z  Team Liquid -1--1 Disguised  (bo5)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3/Regular_Season
 
 ### S4 EMEA OWCS Central - Playoffs
 
@@ -591,7 +832,7 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 - links: 4 exact, 0 strong, 0 ambiguous; 2 Liquipedia-only; 0 FACEIT-only
 - Liquipedia matches with no FACEIT counterpart:
-  - 2026-04-12 17:00Z  Geekay Esports 1-3 Virtus.pro  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1
+  - 2026-04-12 17:00Z  Geekay Esports 1-3 Virtus.pro  (bo5)  (its FACEIT room was cancelled with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1
   - 2026-04-12 18:35Z  Twisted Minds 4-1 Virtus.pro  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1
 
 ### S8 EMEA OWCS Central - Regular Season
@@ -602,7 +843,7 @@ None: every record had a distinct (bracket, match2id), and no FACEIT id appears 
 
 - links: 3 exact, 0 strong, 1 ambiguous; 2 Liquipedia-only; 0 FACEIT-only
 - Liquipedia matches with no FACEIT counterpart:
-  - 2026-04-12 20:30Z  Spacestation Gaming 3-0 Team Liquid  (bo5)  (its FACEIT match id is not in our warehouse)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
+  - 2026-04-12 20:30Z  Spacestation Gaming 3-0 Team Liquid  (bo5)  (its FACEIT room was cancelled with no result: FACEIT holds nothing about this series)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
   - 2026-04-12 21:45Z  Dallas Fuel 4-1 Spacestation Gaming  (bo7)  (no FACEIT match with these two teams within 24 h in the same region)  https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1
 
 ### S8 NA OWCS Central - Regular Season
