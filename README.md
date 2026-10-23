@@ -1831,7 +1831,10 @@ in-game name `KSAA` belonged.
   (G41, DF), a full name before a role (G42), "Team" kept in a name (G43), and no raw id in anything a reader
   sees (G44, `no_raw_ids`, which scans the rendered CLI answer too). G45-G47 cover overriding and region-qualified
   aliases, G48-G50 Liquipedia attribution (`attribution_pages`), G51 display-name search, G52-G54 relative periods
-  (`notes_contain`).
+  (`notes_contain`). 11 of Toronto Defiant's 2024 NA Stage 3/4 series are Liquipedia-only records
+  (`tests/golden/liquipedia_events.json`): G33 counts them in the team's record, and G22 and G82 count the four
+  against NTMR through Liquipedia's line-ups (sug2rfree for Toronto, ZSS and cjay for NTMR). Toronto's series against
+  Avidity and Shikigami are left out: both are FACEIT teams with no series here, so neither would resolve.
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with
