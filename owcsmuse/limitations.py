@@ -6,7 +6,7 @@ records no per-map stats for offline days, so the missing maps cluster on
 playoffs and LAN - the highest-stakes series in the dataset. 2024 carries 9 stat
 keys where later seasons carry 47. Scope is NA + EMEA only.
 
-Each limitation is data, not prose scattered through the code: the README
+Each limitation is data, not prose scattered through the code: docs/scope.md
 documents the same objects, and the ask layer surfaces one when a question lands
 in the slice it affects, so an answer that is quietly partial says so.
 """
@@ -242,7 +242,7 @@ def applicable(conn: Optional[psycopg.Connection], intent: str, metric: Optional
 
 
 def render_text() -> str:
-    """The whole list, for `python -m owcsmuse limitations` and for the README."""
+    """The whole list, for `python -m owcsmuse limitations` and for docs/scope.md."""
     lines = []
     for lim in LIMITATIONS:
         lines.append(f"### {lim.title}")

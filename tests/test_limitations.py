@@ -1,4 +1,4 @@
-"""Known-limitation rules: which gap applies to which slice, and that the README says so too."""
+"""Known-limitation rules: which gap applies to which slice, and that docs/scope.md says so too."""
 
 from pathlib import Path
 
@@ -6,7 +6,7 @@ import pytest
 
 from owcsmuse.limitations import BY_ID, LIMITATIONS, applicable, render_text
 
-README = Path(__file__).resolve().parent.parent / "README.md"
+SCOPE_DOC = Path(__file__).resolve().parent.parent / "docs" / "scope.md"
 
 
 def ids(result):
@@ -21,11 +21,11 @@ def test_every_limitation_has_an_id_a_title_and_a_detail():
         assert len(lim.detail) > 80, lim.id
 
 
-def test_the_readme_documents_every_limitation():
+def test_the_scope_doc_documents_every_limitation():
     """The module is the source of truth; a limitation that is not documented is a drift bug."""
-    text = README.read_text(encoding="utf-8")
+    text = SCOPE_DOC.read_text(encoding="utf-8")
     missing = [lim.id for lim in LIMITATIONS if lim.id not in text]
-    assert not missing, f"README.md does not document: {', '.join(missing)}"
+    assert not missing, f"docs/scope.md does not document: {', '.join(missing)}"
     assert "## Known limitations" in text
 
 
