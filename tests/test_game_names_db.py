@@ -159,6 +159,23 @@ def test_an_owner_decided_cross_region_org_is_reported_not_failed(agg_db):
                            VALUES ('lp:team:x', 'x-org', 'manual', '["Liquipedia team name anchored to this org"]')""")
         res = {c.name: c for c in run_checks(agg_db, ["region_consistency"])}["region_consistency"]
         assert res.ok and res.counts["decided_cross_region_orgs"] == ["x-org"]
+        # the org's Liquipedia name in both regions (SpaceStation Gaming's, once 2024 EMEA Stage 3/4 loaded): a name
+        # key, not a roster, so a decided org's name is excused as the org is
+        with agg_db.cursor() as cur:
+            for i, r in enumerate(rows):
+                cur.execute("""INSERT INTO matches (match_id, championship_id, status, ingest_state, faction1_team_id,
+                                                    faction2_team_id, faction1_score, faction2_score, started_at)
+                               VALUES (%s, %s, 'FINISHED', 'result_only', 'lp:team:x', %s, 1, 0, now())""",
+                            (f"m-lp-name-{i}", r["championship_id"], r["team_id"]))
+        res = {c.name: c for c in run_checks(agg_db, ["region_consistency"])}["region_consistency"]
+        assert res.ok, res.discrepancies
+        assert res.counts["decided_cross_region_names"] == ["lp:team:x"]
+        # the same name with no decided org behind it still fails
+        with agg_db.cursor() as cur:
+            cur.execute("DELETE FROM team_orgs WHERE team_id = 'lp:team:x'")
+        res = {c.name: c for c in run_checks(agg_db, ["region_consistency"])}["region_consistency"]
+        assert not res.ok and any(d["kind"] == "team_id_spans_regions" and d["key"] == "lp:team:x"
+                                  for d in res.discrepancies)
         with agg_db.cursor() as cur:
             cur.execute("UPDATE team_orgs SET evidence = '[]'::jsonb WHERE org_id = 'x-org'")
         res = {c.name: c for c in run_checks(agg_db, ["region_consistency"])}["region_consistency"]

@@ -376,6 +376,7 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
     team, and 13 do in the real data.
     """
     discrepancies: list[dict[str, Any]] = []
+    excused_names: list[str] = []
     # an org the owner decided spans regions (SpaceStation Gaming: EMEA in 2024, an NA partner team from 2025) carries
     # the token in every window's evidence (scope/org_decisions.json); it is reported, not failed
     # Liquipedia-born windows (`lp:team:`) are derived from the team map by `identity load`, not merge decisions, so
@@ -383,14 +384,22 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
     decided_cross = {r["org_id"] for r in _rows(conn, """
         SELECT org_id FROM team_orgs WHERE team_id NOT LIKE 'lp:team:%' GROUP BY org_id
         HAVING bool_and(EXISTS (SELECT 1 FROM jsonb_array_elements_text(evidence) e WHERE e LIKE 'cross_region_ok%'))""")}
+    # A FACEIT team id is a roster, and a roster plays one region. A Liquipedia team id is a name (`lp:team:<name>`),
+    # and an org can carry its name in both regions: the 2024 EMEA Stage 3/4 records put SpaceStation Gaming's name,
+    # already on an NA series, in EMEA too. Such an id is excused only when every org it resolves to is decided.
     for key_col, kind in (("org_key", "org_spans_regions"), ("team_id", "team_id_spans_regions")):
         for r in _rows(conn, f"""
             SELECT {key_col} AS key, array_agg(DISTINCT region ORDER BY region) AS regions,
-                   array_agg(DISTINCT team_id) AS team_ids, count(DISTINCT match_id) AS matches
+                   array_agg(DISTINCT team_id) AS team_ids, count(DISTINCT match_id) AS matches,
+                   array_agg(DISTINCT org_key) AS org_keys
               FROM fact_team_matches
              WHERE region IN ('na', 'emea') AND {key_col} IS NOT NULL
              GROUP BY {key_col} HAVING count(DISTINCT region) > 1"""):
             if key_col == "org_key" and r["key"] in decided_cross:
+                continue
+            if (key_col == "team_id" and r["key"].startswith("lp:team:")
+                    and None not in r["org_keys"] and set(r["org_keys"]) <= decided_cross):
+                excused_names.append(r["key"])
                 continue
             discrepancies.append({"kind": kind, "key": r["key"], "regions": r["regions"],
                                   "team_ids": r["team_ids"], "matches": r["matches"],
@@ -404,6 +413,7 @@ def check_region_consistency(conn: psycopg.Connection) -> CheckResult:
         "team_ids_checked": int(_scalar(conn, "SELECT count(DISTINCT team_id) FROM fact_team_matches "
                                               "WHERE region IN ('na', 'emea')") or 0),
         "decided_cross_region_orgs": sorted(decided_cross),
+        "decided_cross_region_names": sorted(excused_names),
     }
     return _result("region_consistency", discrepancies,
                    f"none of {counts['orgs_checked']} orgs ({counts['mapped_orgs_checked']} merged) or "
