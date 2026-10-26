@@ -133,6 +133,14 @@ def test_a_room_aborted_with_no_result_is_no_faceit_counterpart_and_the_record_s
     assert lk.evidence == {"kind": "no_faceit_counterpart", "faceit_match_id": FID, "faceit_room": "aborted_no_result"}
 
 
+def test_a_paused_room_with_no_result_is_no_counterpart_either():
+    """FACEIT moved 2026 Stage 3 rooms between ABORTED, PAUSED and CANCELLED; none of them holds a result."""
+    m = lp("Spacestation Gaming", "Team Liquid", 3, 1, faceit_id=FID)
+    room = fs(FID, "SpaceStation Gaming", "Team Liquid", 0, 0, state="paused", maps=0, reliable=False)
+    lk = link_of(reconcile([m], [], MAP, no_result={FID: room}), m)
+    assert (lk.tier, lk.faceit_id, lk.evidence["faceit_room"]) == (UNMATCHED, None, "paused_no_result")
+
+
 def test_a_result_entered_later_links_the_room_like_any_other():
     m = lp("Spacestation Gaming", "Team Liquid", 3, 1, faceit_id=FID)
     finished = fs(FID, "SpaceStation Gaming", "Team Liquid", 3, 1, state="result_only", maps=0, reliable=False)
@@ -429,6 +437,27 @@ def test_a_decided_mapping_is_trusted_without_a_provisional_flag_and_regions_are
     assert again.org_key("Geekay Esports") is None                             # no region, no guess
     assert make_resolver(again)("Spacestation Gaming") == ("spacestation-gaming", "decided")
     assert entity_of_org_key("team:590b7d3b") == ("team", "590b7d3b") and entity_of_org_key("qadsiah") == ("org", "qadsiah")
+
+
+def _undated(row):
+    """Liquipedia's shape for a bracket slot not yet scheduled (the 2026 Stage 3 playoffs, raw 5372)."""
+    row["date"], row["extradata"] = "0000-01-01 00:00:00", {"timestamp": -62167219200}
+    return row
+
+
+def test_an_undated_bracket_slot_is_not_a_match_yet_and_does_not_stop_the_run():
+    """Twelve undated playoff slots stopped every nightly run from 2026-10-24: year 0 is no datetime."""
+    tbd = _undated(lp_row("", "", None, None, finished=False, opp_type="literal", status=""))
+    half = _undated(lp_row("Twisted Minds", "", None, None, idx=2, finished=False, status=""))
+    half["match2opponents"][1]["type"] = "literal"
+    played = lp_row("Spacestation Gaming", "Team Liquid", 3, 1, idx=3)
+    assert parse_rows([tbd, half, played], 1) == [parse_row(played, 1)]
+
+
+def test_a_finished_series_with_no_date_stops_the_run_by_name_rather_than_vanish():
+    row = _undated(lp_row("Spacestation Gaming", "Team Liquid", 3, 1))
+    with pytest.raises(ValueError, match="1_B1_0001 .* is finished but has no date"):
+        parse_row(row, 1)
 
 
 # ------------------------------------------------------------------------- DB round trip

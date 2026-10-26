@@ -317,8 +317,9 @@ stored. Week 1's results were entered by hand a week late (2026-10-17, 16:28-16:
 aborted minutes after. Liquipedia records every series, naming the room FACEIT opened for it.
 
 - **A room with no result is no FACEIT counterpart.** A Liquipedia record whose FACEIT id is a stored room that ended
-  `ABORTED` or `CANCELLED` with no winner and no score, opened for the same two teams the record resolves to, is linked
-  `unmatched` with `no_faceit_counterpart` (`faceit_room`: `aborted_no_result` / `cancelled_no_result`), so `series`
+  `ABORTED`, `CANCELLED` or `PAUSED` with no winner and no score, opened for the same two teams the record resolves to,
+  is linked `unmatched` with `no_faceit_counterpart` (`faceit_room`: `aborted_no_result` / `cancelled_no_result` /
+  `paused_no_result`), so `series`
   makes it a Liquipedia-only series. Before, it was "a FACEIT id we do not hold" and in no answer. A room opened for
   other teams, or a record with an undecided team, stays reported, never stands alone. If FACEIT later enters a result,
   the room's status change re-queues it, and the next reconcile links it like any other: still one series.
@@ -331,6 +332,15 @@ aborted minutes after. Liquipedia records every series, naming the room FACEIT o
   end the LuneX and Team Z windows there, which had run open-ended and credited Stage 3 results to LuneX and Team Z.
   Both end with the stage (owner: regular season October 10-25, regional playoffs October 30 - November 1): to
   2026-11-03, clear of November 1 in every timezone.
+- **PAUSED counts too** (2026-10-25). FACEIT moves Stage 3 rooms between `ABORTED`, `PAUSED` and `CANCELLED` (two rooms
+  seen `ABORTED` on 10-23 were `PAUSED` on 10-25), and week 3's rooms sat `PAUSED`: none holds a result until it is
+  `FINISHED`.
+- **An undated bracket slot is not a match yet** (2026-10-25). The playoff pages' empty slots carry Liquipedia's "no
+  date", `0000-01-01` (epoch -62167219200, year 0). Read as a date it raised in `parse_row`, and the 10-24 and 10-25
+  nightly runs stopped at `liquipedia reconcile`: nothing fetched was stored, Saturday's week 3 results among it. Such
+  a slot (a placeholder, or unfinished) now parses to nothing until Liquipedia dates it; the page is re-requested while
+  any slot is unfinished, so it is read then. A finished record between two real teams with no date still stops the
+  run, by name.
 - **Team Risk** (owner, 2026-10-23) is its own org on FACEIT team `97ef2653`, whose `qadsiah` era (Al Qadsiah) ends at
   Stage 3: new players, no longer sponsored by Al Qadsiah. The linked 1234 0-3 Team Risk counts for Team Risk.
 - **The playoffs are Liquipedia-only events.** The S8/S9 regional playoffs are FACEIT "Central - Playoffs"

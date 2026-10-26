@@ -137,12 +137,17 @@ def _int(v: Any) -> Optional[int]:
         return None
 
 
-def _played_at(row: dict[str, Any]) -> datetime:
-    """UTC. The epoch in extradata is authoritative (it matched `date` exactly); `date` is the fallback."""
+def _played_at(row: dict[str, Any]) -> Optional[datetime]:
+    """UTC. The epoch in extradata is authoritative (it matched `date` exactly); `date` is the fallback. None when
+    Liquipedia gives no date: a bracket slot not yet scheduled carries `date` 0000-01-01 and epoch -62167219200 (year 0,
+    which no datetime holds); the 2026 Stage 3 playoff brackets did, and reading it as a date stopped every run."""
     ts = (row.get("extradata") or {}).get("timestamp")
     if isinstance(ts, (int, float)) and ts > 0:
         return datetime.fromtimestamp(ts, tz=timezone.utc)
-    return datetime.strptime(row["date"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+    date = str(row.get("date") or "")
+    if not date or date.startswith("0000-"):
+        return None
+    return datetime.strptime(date, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
 
 
 def parse_row(row: dict[str, Any], raw_id: int, wiki: str = "overwatch") -> Optional[LPMatch]:
@@ -181,10 +186,19 @@ def parse_row(row: dict[str, Any], raw_id: int, wiki: str = "overwatch") -> Opti
 
     t1, pg1 = template_of(o1)
     t2, pg2 = template_of(o2)
+    played_at = _played_at(row)
+    if played_at is None:
+        # an undated slot is not a match yet: Liquipedia dates it when it is scheduled, and the page is re-requested
+        # while any slot on it is unfinished (Store.unfinished reads the raw rows), so it is parsed then. A FINISHED
+        # record between two real teams with no date would be a played series we cannot place: that stops the run,
+        # by name, rather than vanish.
+        if placeholder or not row.get("finished"):
+            return None
+        raise ValueError(f"Liquipedia record {row['objectname']} ({row['pagename']}) is finished but has no date")
     return LPMatch(
         objectname=row["objectname"], raw_id=raw_id, match2id=row["match2id"], bracket_id=row["match2bracketid"],
         pagename=row["pagename"], page_url=page_url(row["pagename"], wiki), parent=row.get("parent"),
-        region=region_of(row["pagename"]), played_at=_played_at(row), best_of=_int(row.get("bestof")),
+        region=region_of(row["pagename"]), played_at=played_at, best_of=_int(row.get("bestof")),
         finished=bool(row.get("finished")), winner=winner, walkover=row.get("walkover") or "",
         team1=(o1.get("name") or "").strip(), team2=(o2.get("name") or "").strip(),
         score1=_int(o1.get("score")) if o1.get("status") in (None, "", "S") else None,
