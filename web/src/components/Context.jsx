@@ -3,8 +3,15 @@
  *
  * A leaderboard that covers 2025 and 2026 but not 2024 is not wrong, it is
  * partial, and the difference only matters if it is said next to the number. So
- * this sits between the sentence and the table - not in a tooltip, not in a
- * footer, not behind a disclosure.
+ * this sits between the sentence and the table, and the coverage line and the
+ * notes (each a sentence about this answer: "results only for ...: that part is
+ * not in this answer") are always shown.
+ *
+ * The known limitations are the long explanations behind them - why offline and
+ * LAN days carry no map stats, why a slice is results only. Shown in full they
+ * dominated the answer (owner, 2026-10-25), so they sit behind a small "why?"
+ * that expands to the same text. A native <details>: keyboard and screen readers
+ * work, and it needs no state.
  */
 export default function Context({ coverage, notes = [], limitations = [] }) {
   const hasCoverage = coverage && coverage.stat_key && (coverage.maps_total ?? 0) > 0;
@@ -20,11 +27,21 @@ export default function Context({ coverage, notes = [], limitations = [] }) {
         </p>
       ))}
 
-      {limitations?.map((limitation) => (
-        <p className="limitation" data-testid={`limitation-${limitation.id}`} key={limitation.id}>
-          <b>{limitation.title}.</b> {limitation.note}
-        </p>
-      ))}
+      {limitations?.length ? (
+        <details className="limitations" data-testid="limitations">
+          <summary aria-label={`Why: ${limitations.length} known limitation${limitations.length === 1 ? "" : "s"} of this data`}>
+            <span aria-hidden="true" className="info-icon">
+              i
+            </span>{" "}
+            why?
+          </summary>
+          {limitations.map((limitation) => (
+            <p className="limitation" data-testid={`limitation-${limitation.id}`} key={limitation.id}>
+              <b>{limitation.title}.</b> {limitation.note}
+            </p>
+          ))}
+        </details>
+      ) : null}
     </section>
   );
 }

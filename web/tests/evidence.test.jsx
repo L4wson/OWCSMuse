@@ -178,12 +178,26 @@ describe("coverage and limitations", () => {
     expect(context.compareDocumentPosition(aggregate) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it("shows the known limitations in full, not behind a control", () => {
+  it("keeps the known limitations behind a small 'why?', collapsed, with the coverage line still shown", async () => {
     render(<Result answer={LEADERBOARD_PARTIAL} {...props} />);
+    const why = screen.getByTestId("limitations");
+    expect(why.tagName).toBe("DETAILS");
+    expect(why).not.toHaveAttribute("open");
+    expect(screen.getByTestId("coverage")).toBeVisible();
+    const summary = within(why).getByText("why?").closest("summary");
+    expect(summary).toHaveAccessibleName(/known limitation/);
+    // expanding shows the same text as before, every limitation in full
+    await userEvent.click(summary);
+    expect(why).toHaveAttribute("open");
     for (const limitation of LEADERBOARD_PARTIAL.limitations) {
       expect(screen.getByTestId(`limitation-${limitation.id}`)).toHaveTextContent(limitation.title);
     }
     expect(screen.getByTestId("limitation-stats_2024")).toHaveTextContent("9-key stat set");
+  });
+
+  it("shows no 'why?' when an answer has no limitations", () => {
+    render(<Result answer={{ ...LEADERBOARD_PARTIAL, limitations: [] }} {...props} />);
+    expect(screen.queryByTestId("limitations")).not.toBeInTheDocument();
   });
 
   it("shows the excluded-series note on a versus answer", () => {
