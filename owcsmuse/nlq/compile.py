@@ -85,6 +85,16 @@ def _primary_role(clauses: list, role: Optional[str]) -> None:
         clauses.append("EXISTS (SELECT 1 FROM player_primary_roles pr WHERE pr.player_id = fp.player_id "
                        "AND pr.season = fp.season AND pr.role = fp.role)")
 
+def _group(clauses: list[str], params: list[Any], alias: str, group: Optional[str]) -> None:
+    """Rows of a team in the group in the row's own season (043): partner status changes year to year. Every shape a
+    group can restrict - team records, team stats, player stats and records - reads it here, so none ignores it (a
+    player leaderboard and the team-stat leaderboard did, while the answer's note said 'partner teams only')."""
+    if group:
+        clauses.append(f"EXISTS (SELECT 1 FROM team_group_members g WHERE g.group_key = %s AND g.season = {alias}.season"
+                       f" AND g.org_key = {alias}.org_key)")
+        params.append(group)
+
+
 def _where(clauses: list[str], params: list[Any], col: str, value: Any, op: str = "=") -> None:
     if value is None:
         return
@@ -268,11 +278,7 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, "t.season", f.season)
         _where(clauses, params, "t.championship_id", champ)
         _where(clauses, params, "t.region", f.region)
-        if f.group:
-            # a group member counts only in a season it was one (043): partner status changes year to year
-            clauses.append("EXISTS (SELECT 1 FROM team_group_members g WHERE g.group_key = %s AND g.season = t.season"
-                           " AND g.org_key = t.org_key)")
-            params.append(f.group)
+        _group(clauses, params, "t", f.group)
         use_maps = bool(v.map_name or v.mode_name) or q.metric in ("map_wins", "map_losses", "map_win_rate", "maps")
         if use_maps:
             _where(clauses, params, "t.map_name", v.map_name)
@@ -363,6 +369,7 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, "a.region", f.region)
         _where(clauses, params, "a.map_name", v.map_name)
         _where(clauses, params, "a.game_mode", v.mode_name)
+        _group(clauses, params, "a", f.group)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         sql = (f"SELECT a.org_key, coalesce(ti.display_name, a.org_key) AS team, sum(a.sum_{col}) AS total, "
                f"sum(a.maps_with_{col}) AS player_map_rows, "
@@ -390,6 +397,7 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
         _where(clauses, params, f"{alias}.map_name", v.map_name)
         _where(clauses, params, f"{alias}.game_mode", v.mode_name)
         _where(clauses, params, f"{alias}.role", f.role)
+        _group(clauses, params, alias, f.group)
         if q.intent == "leaderboard":
             _primary_role(clauses, f.role)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
@@ -426,7 +434,8 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
     if not stat:
         return Unanswerable(code="unsupported_metric", reason=f"cannot compute '{q.metric}' for {q.entity}")
 
-    sliced = bool(v.map_name or v.mode_name or r.team_id or f.region)
+    # a group restricts by team, which stat_leaderboard() and the long view cannot: it takes the sliced paths
+    sliced = bool(v.map_name or v.mode_name or r.team_id or f.region or f.group)
     has_role = f.role is not None
     order_expr = "avg_per_map" if q.aggregation == "avg_per_map" else "total"
 
@@ -446,6 +455,7 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
             _where(clauses, params, f"{alias}.map_name", v.map_name)
             _where(clauses, params, f"{alias}.game_mode", v.mode_name)
             _where(clauses, params, f"{alias}.role", f.role)
+            _group(clauses, params, alias, f.group)
             if has_role:
                 sql = (f"SELECT fp.player_id, player_display_name(p.display_name, p.nickname, p.game_player_name) AS nickname, count(fp.{col}) AS maps_with_stat, count(*) AS maps_played, "
                        f"round(100.0 * count(fp.{col}) / nullif(count(*), 0), 1) AS coverage_pct, "
@@ -530,7 +540,7 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
                         coverage_championship=single_champ, sample_columns=("maps_with_stat", "maps_played"))
 
     if not col:
-        reason = f"'{stat}' cannot be sliced by map/mode/team/region"
+        reason = f"'{stat}' cannot be sliced by map/mode/team/region/partner group"
         if has_role:
             reason = f"'{stat}' cannot be filtered by role; role is only tracked for these stats: {', '.join(TYPED_STATS)}"
         return Unanswerable(code="unsupported_metric", reason=reason)
@@ -545,6 +555,7 @@ def _compile(v: Validated, r: Resolved) -> CompileResult:
     _where(clauses, params, f"{alias}.map_name", v.map_name)
     _where(clauses, params, f"{alias}.game_mode", v.mode_name)
     _where(clauses, params, f"{alias}.role", f.role)
+    _group(clauses, params, alias, f.group)
     _primary_role(clauses, f.role)
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
     if has_role:

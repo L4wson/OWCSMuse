@@ -865,9 +865,9 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
     if q.filters.group:
         # name every team the restriction included, season by season: a group answer that hides its members is a
         # ranking of an unknown set
-        members = _group_members(conn, q.filters.group, [q.filters.season] if q.filters.season else None)
-        a.notes = [f"{q.filters.group.capitalize()} teams only, each counted in a season it was one: "
-                   + _members_phrase(members) + "."] + list(a.notes)
+        members = _group_members(conn, q.filters.group, [q.filters.season] if q.filters.season else None, q.filters.region)
+        who = f"Players on {q.filters.group} teams" if q.entity == "player" else f"{q.filters.group.capitalize()} teams"
+        a.notes = [f"{who} only, each counted in a season it was one: " + _members_phrase(members) + "."] + list(a.notes)
     if q.intent == "head_to_head" and "player" in (r.subject_type, r.opponent_type):
         who = r.names.get("player") or r.names.get("subject") or r.names.get("team") or "the first-named"
         a.notes = [f"Players do not win series, their teams do: this counts the series the two were on opposite sides "
@@ -892,7 +892,7 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
                                                                       missing_series=q.intent == "versus")))
     if q.filters.group:
         # the membership is Liquipedia's too: its Stage 1 prize pools are owed alongside the matches'
-        members = _group_members(conn, q.filters.group, [q.filters.season] if q.filters.season else None)
+        members = _group_members(conn, q.filters.group, [q.filters.season] if q.filters.season else None, q.filters.region)
         _attribute(conn, a, lambda: attribution_block(list((a.attribution or {}).get("pages") or []) + _group_pages(members)))
     if debug:
         a.sql, a.params = c.sql, c.params

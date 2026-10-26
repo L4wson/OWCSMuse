@@ -1156,6 +1156,55 @@ case("G92", "A team that was not a partner that season is not on a partner leade
      {"status": "ok", "sentence_lacks": non[:3]},
      f"2026 teams in this warehouse that were not 2026 partners ({non[:3]}) must not appear in the sentence.")
 
+# ------------------------------------------------------- a group restricts player questions too (owner, 2026-10-25)
+# "most healing done by a partner team player in NA 2026" answered with team totals over every NA team. Healing Done
+# summed per player over the 2026 NA maps he played for a team that was a 2026 partner (FACEIT names as in G91).
+CONFIRMED |= {"G95", "G96"}
+partner_team_ids_26 = {t for ids in partner_ids_26.values() for t in ids}
+heal_tot, heal_maps, heal_team = collections.Counter(), collections.Counter(), {}
+all_na_26_healers = set()
+for x in S:
+    if not x.counts_as_series or x.season != 2026 or x.region != "na":
+        continue
+    for r in x.rounds:
+        for p in r["players"]:
+            v = I.num(p["stats"], "Healing Done")
+            if v is None:
+                continue
+            all_na_26_healers.add(p["player_id"])
+            if p["team_id"] in partner_team_ids_26:
+                heal_tot[p["player_id"]] += v
+                heal_maps[p["player_id"]] += 1
+                heal_team[p["player_id"]] = x.name[next(k for k in x.team if x.team[k] == p["team_id"])]
+heal_top = sorted(heal_tot, key=lambda k: (-heal_tot[k], k))[:3]
+assert len({heal_tot[k] for k in heal_top}) == 3
+non_partner_healers = sorted(all_na_26_healers - set(heal_tot))
+assert non_partner_healers, "the warehouse must hold a 2026 NA healer outside the partners, or the filter is untested"
+case("G95", "A partner-team player leaderboard ranks players, on partner teams only", "exact",
+     "most healing done by a partner team player in NA 2026",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, k), "total": int(heal_tot[k]), "maps_with_stat": heal_maps[k]}
+                               for k in heal_top],
+      # every ranked player played for a 2026 NA partner: none of the other NA teams' players can appear
+      "rows_only_players": sorted({I.display_name(S, k) for k in heal_tot}),
+      "notes_contain": ["Players on partner teams only"]},
+     "Healing Done summed per player over the 2026 NA maps he played for a 2026 partner ("
+     + ", ".join(sorted(f"{I.display_name(S, k)} ({heal_team[k]})" for k in heal_top)) + "). Players on other NA teams "
+     f"({', '.join(I.display_name(S, k) for k in non_partner_healers[:4])}) are not on it.",
+     regression="a partner player question ranked teams over every team (2026-10-25)")
+team_heal = collections.Counter()
+for x in S:
+    if x.counts_as_series and x.season == 2026 and x.region == "na":
+        for r in x.rounds:
+            for p in r["players"]:
+                v = I.num(p["stats"], "Healing Done")
+                if v is not None and p["team_id"] in partner_team_ids_26:
+                    team_heal[x.name[next(k for k in x.team if x.team[k] == p["team_id"])]] += v
+case("G96", "A partner-team stat leaderboard holds partner teams only", "invariant",
+     "which partner team had the most healing in NA 2026",
+     {"status": "ok", "rows_set": {"team": sorted(team_heal)}},
+     f"Teams with Healing Done on 2026 NA maps that were 2026 partners: {', '.join(sorted(team_heal))}. Before: every NA team.",
+     regression="the group filter did not reach the team-stat leaderboard (2026-10-25)")
+
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
            "cases": CASES}, open(Path(__file__).parent / "cases.json", "w", encoding="utf-8"), indent=1)
