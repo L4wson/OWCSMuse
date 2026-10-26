@@ -293,6 +293,50 @@ main {
   color: var(--muted);
 }
 
+.limitations {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.limitations > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: var(--muted);
+  list-style: none;
+}
+
+.limitations > summary::-webkit-details-marker {
+  display: none;
+}
+
+.limitations > summary:hover,
+.limitations > summary:focus-visible {
+  color: var(--accent);
+}
+
+.limitations[open] > summary {
+  margin-bottom: 6px;
+}
+
+.limitations > .limitation {
+  margin: 0 0 6px;
+}
+
+.info-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.05em;
+  height: 1.05em;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.8em;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .parse-change {
   margin: 0 0 16px;
   padding: 12px 14px;
