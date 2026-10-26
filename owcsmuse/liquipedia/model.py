@@ -76,7 +76,9 @@ def load_faceit_side(conn: psycopg.Connection, championship_ids: Optional[list[s
 
 
 def load_faceit_no_result(conn: psycopg.Connection, championship_ids: Optional[list[str]] = None) -> dict[str, FaceitSide]:
-    """FACEIT rooms in scope that ended with no result: ABORTED or CANCELLED, no winner and no score (ingest skipped them).
+    """FACEIT rooms in scope that hold no result: ABORTED, CANCELLED or PAUSED, no winner and no score (ingest skipped
+    them). PAUSED is here because FACEIT moves 2026 Stage 3 rooms between all three (rooms seen ABORTED on 2026-10-23
+    were PAUSED or CANCELLED two days later): until a room is FINISHED it says nothing about the series.
 
     A room FACEIT configured and aborted minutes later holds nothing about the series it was opened for (2026 Stage 3:
     12 rooms, played outside FACEIT). Keyed by match id, with the teams' org keys at the room's time so a caller can
@@ -94,7 +96,7 @@ def load_faceit_no_result(conn: psycopg.Connection, championship_ids: Optional[l
               CROSS JOIN LATERAL (SELECT match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at) AS at) x
               LEFT JOIN LATERAL team_identity_at(m.faction1_team_id, x.at) ti1 ON true
               LEFT JOIN LATERAL team_identity_at(m.faction2_team_id, x.at) ti2 ON true
-             WHERE c.include AND m.status IN ('ABORTED', 'CANCELLED') AND m.ingest_state = 'skipped'
+             WHERE c.include AND m.status IN ('ABORTED', 'CANCELLED', 'PAUSED') AND m.ingest_state = 'skipped'
                AND m.winner_faction IS NULL AND m.faction1_score IS NULL AND m.faction2_score IS NULL
                AND (%(cids)s::text[] IS NULL OR m.championship_id = ANY(%(cids)s))
             """, {"cids": championship_ids})

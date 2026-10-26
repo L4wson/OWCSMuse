@@ -19,7 +19,7 @@ Traps handled on purpose:
   * NA and EMEA are region-locked: a candidate in the other region is a mismatch, recorded, never a match.
   * A record that carries a FACEIT id is never re-matched by teams and time: if we do not hold that match, that is the
     finding (our crawl missed it), not a licence to link something else.
-  * A record whose FACEIT id is a room FACEIT aborted or cancelled with no result, opened for the same two teams, has
+  * A record whose FACEIT id is a room FACEIT aborted, cancelled or paused with no result, opened for the same two teams, has
     no FACEIT counterpart: FACEIT holds nothing about the series, so the record stands alone as a Liquipedia-only
     series. A result entered later makes the room FINISHED, and the next run links it like any other.
   * A FACEIT match is tied to at most one Liquipedia match, so a match known to both sources is one match.
