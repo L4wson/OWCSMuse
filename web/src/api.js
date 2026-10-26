@@ -8,7 +8,7 @@ export class ApiError extends Error {
   constructor(kind, message, status = null, detail = null) {
     super(message);
     this.name = "ApiError";
-    this.kind = kind; // offline | unavailable | not_found | invalid | server | aborted
+    this.kind = kind; // offline | unavailable | busy | rate_limited | not_found | invalid | server | aborted
     this.status = status;
     this.detail = detail;
   }
@@ -37,6 +37,14 @@ async function request(path, { method = "GET", body, signal } = {}) {
   const detail = typeof payload?.detail === "string" ? payload.detail : null;
 
   if (response.ok) return payload;
+  // Too many questions from this connection, or every database connection in use: both pass, and the service says
+  // how long to wait. Neither is the database being down.
+  if (response.status === 429) {
+    throw new ApiError("rate_limited", detail ?? "Too many questions in a short time: wait a few seconds and ask again.", 429, detail);
+  }
+  if (response.status === 503 && payload?.reason === "busy") {
+    throw new ApiError("busy", detail ?? "OWCS Muse is busy right now. Try again in a few seconds.", 503, detail);
+  }
   if (response.status === 503) {
     throw new ApiError("unavailable", "OWCS Muse is running but its database is not answering.", 503, detail);
   }

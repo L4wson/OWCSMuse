@@ -111,6 +111,9 @@ jobs:
         run: |
           set -o pipefail
           python -m owcsmuse check | tee check.txt
+      # ---- the query log's retention rule (docs/api-and-frontend.md): answered questions 90 days, everything a year
+      - name: query log retention
+        run: python -m owcsmuse queries --prune
       - name: check failed
         if: failure()
         run: |

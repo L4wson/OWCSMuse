@@ -24,6 +24,10 @@ data/
 *.dump.json
 *.ndjson
 
+# Claude Code's local settings (permissions granted in this checkout): never shared
+.claude/
+CLAUDE.local.md
+
 # editors / OS
 .vscode/
 .idea/

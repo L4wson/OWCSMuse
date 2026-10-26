@@ -192,6 +192,11 @@ export default function App() {
           </a>
           ). Not affiliated with FACEIT, Liquipedia or Blizzard Entertainment.
         </span>
+        <span data-testid="privacy">
+          Questions are logged as text, to improve the answers: no account, cookie or IP address is stored with them
+          (an IP address is held in memory for a few minutes to limit request rates). A shared link is public: anyone
+          with it can see the question. Page views are counted anonymously, without cookies.
+        </span>
       </footer>
     </div>
   );

@@ -4,7 +4,7 @@
 # Secrets (fly secrets set): DATABASE_URL only. The API never reads FACEIT_API_KEY or LIQUIPEDIA_API_KEY.
 
 app = "owcsmuse-api"
-primary_region = "sjc"            # Seattle: nearest region to Supabase us-west-2
+primary_region = "sjc"            # San Jose; Supabase is us-west-2 (Oregon)
 
 [build]
   dockerfile = "Dockerfile"

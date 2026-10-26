@@ -57,6 +57,14 @@ class Settings(BaseSettings):
     max_retries: int = 6
     backoff_base_seconds: float = 0.5
     backoff_cap_seconds: float = 60.0
+
+    # The HTTP API's protection (owcsmuse.throttle, api.ConnectionPool). Per client IP: a burst, then a steady refill.
+    # All clients together: at most this many database connections open, a request waiting up to `api_db_wait_seconds`
+    # for one before it is told the service is busy. 6 leaves the session pooler room for the nightly ingest.
+    api_rate_burst: int = Field(default=20, ge=1)
+    api_rate_per_minute: float = Field(default=30.0, gt=0)
+    api_db_max_connections: int = Field(default=6, ge=1)
+    api_db_wait_seconds: float = Field(default=10.0, ge=0)
     # Pause when the API reports this many (or fewer) requests remaining.
     rate_limit_headroom: int = 2
     # Fallback pacing when the API sends no rate-limit headers.

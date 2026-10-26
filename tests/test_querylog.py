@@ -251,3 +251,20 @@ def test_report_sections():
 
 def test_empty_report():
     assert querylog.render_report(build_report([])) == "no questions logged in this window"
+
+
+def test_retention_keeps_failures_longer_than_answers(agg_db):
+    """90 days for an answered question, a year for anything: failures are what the log is for."""
+    from owcsmuse import querylog
+    db = agg_db
+    with db.cursor() as cur:
+        cur.execute("DELETE FROM query_log")
+        for status, days in (("ok", 10), ("ok", 100), ("refusal", 100), ("error", 400), ("ok", 400)):
+            cur.execute("INSERT INTO query_log (asked_at, source, question, status, latency_ms) "
+                        "VALUES (now() - make_interval(days => %s), 'ask', %s, %s, 1)", (days, f"{status} {days}", status))
+    db.commit()
+    out = querylog.prune(db)
+    assert (out["ok_deleted"], out["older_deleted"]) == (2, 1)
+    with db.cursor() as cur:
+        cur.execute("SELECT question FROM query_log ORDER BY question")
+        assert [r["question"] for r in cur.fetchall()] == ["ok 10", "refusal 100"]
