@@ -525,6 +525,13 @@ def _find_placement(q: str, filters: Filters) -> Optional[StructuredQuery]:
 
 
 _PARTNER = re.compile(r"\bpartners?(?:\s+teams?)?\b")
+# players named with the group: "a partner team player", "partner players", "players on / from partner teams". The question
+# is then about players, restricted to those on a partner team: "most healing done by a partner team player in NA 2026"
+# was read as a team leaderboard (2026-10-25)
+# A role names a player as well ("a support on a partner team", "partner team tanks").
+_PLAYER_NOUN = r"(?:players?|supports?|tanks?|dps|healers?)"
+_PARTNER_PLAYER = re.compile(rf"\bpartners?(?:\s+teams?)?\s+(?={_PLAYER_NOUN}\b)"
+                             rf"|\b(?P<who>{_PLAYER_NOUN})\s+(?:on|from|of|in)\s+(?:the\s+|a\s+)?partners?(?:\s+teams?)?\b")
 _RANKING = re.compile(r"\b(?:most|fewest|least|top|best|worst|highest|lowest|won|wins?|losses|record|win rate|maps?|series)\b")
 
 
@@ -534,6 +541,11 @@ def parse_question(question: str) -> ParseResult:
     if not question or not question.strip():
         return Unanswerable(code="invalid_query", reason="empty question")
     q = _expand_event_words(_normalize(question))
+    if _PARTNER_PLAYER.search(q):
+        rest = re.sub(r"\s+", " ", _PARTNER_PLAYER.sub(lambda m: f" {m.group('who') or ''} ", q)).strip()
+        parsed = _parse(rest)
+        if isinstance(parsed, StructuredQuery) and parsed.entity == "player":
+            return parsed.model_copy(update={"filters": parsed.filters.model_copy(update={"group": "partner"})})
     if _PARTNER.search(q):
         season, region = _find_season(q), _find_region(q)
         rest = re.sub(r"\s+", " ", _PARTNER.sub(" team ", q)).strip()

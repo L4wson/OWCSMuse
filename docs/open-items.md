@@ -9,7 +9,9 @@ numbers below are from that day.
 1. **"Dallas Fuel record in 2026 NA stage 3" asks which "dallas fuel na".** The same question as "Dallas Fuel record in
    NA stage 3" answers (2-1, 8-3 in maps). With the season ahead of it, the region word is swallowed into the team's
    name, the same class as the earlier name-swallow bugs (a name inside a question matched only as whole words, "per
-   10" and an org's own "of" kept out of names: ff5c3dc, ce89c0a). Seen on the live API 2026-10-23.
+   10" and an org's own "of" kept out of names: ff5c3dc, ce89c0a). Seen on the live API 2026-10-23. Two more of the
+   class (2026-10-25): "highest kd of any player in 2026" answers for Anyones Legend ("any" matched as a team name,
+   wrong and with no warning), and "best kd among players in 2026" refuses with "no player or team matches 'among'".
 2. **Supabase: `anon` and `authenticated` grants revoked (owner, 2026-10-23); RLS is still off.** `anon` reaches no
    table, view or sequence. PUBLIC keeps schema USAGE and `EXECUTE` on our 18 functions, as Postgres grants by
    default: the 10 that read tables refuse `anon` on the tables inside, and the 8 others compute only on their

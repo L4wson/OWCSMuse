@@ -2172,6 +2172,81 @@
    },
    "derivation": "2026 teams in this warehouse that were not 2026 partners (['Geekay Esports', 'LuneX', 'The Kafe']) must not appear in the sentence.",
    "status": "confirmed"
+  },
+  {
+   "id": "G95",
+   "title": "A partner-team player leaderboard ranks players, on partner teams only",
+   "kind": "exact",
+   "regression": "a partner player question ranked teams over every team (2026-10-25)",
+   "question": "most healing done by a partner team player in NA 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "UltraViolet",
+      "total": 282751,
+      "maps_with_stat": 21
+     },
+     {
+      "nickname": "Admiral",
+      "total": 239141,
+      "maps_with_stat": 21
+     },
+     {
+      "nickname": "KIVIS",
+      "total": 148961,
+      "maps_with_stat": 8
+     }
+    ],
+    "rows_only_players": [
+     "Admiral",
+     "Attack",
+     "Hawk",
+     "Infekted",
+     "KIVIS",
+     "Kellan",
+     "Kronik",
+     "Lep",
+     "Lethal",
+     "Lukemino",
+     "Rokit",
+     "Scyle",
+     "SeonJun",
+     "TR33",
+     "Tred",
+     "UltraViolet",
+     "Vega",
+     "cjay",
+     "pge",
+     "sugarfree",
+     "zeruhh"
+    ],
+    "notes_contain": [
+     "Players on partner teams only"
+    ]
+   },
+   "derivation": "Healing Done summed per player over the 2026 NA maps he played for a 2026 partner (Admiral (SpaceStation Gaming), KIVIS (Team Liquid), UltraViolet (SpaceStation Gaming)). Players on other NA teams (ZZZ, scuffed, NenWhy, pdk) are not on it.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G96",
+   "title": "A partner-team stat leaderboard holds partner teams only",
+   "kind": "invariant",
+   "regression": "the group filter did not reach the team-stat leaderboard (2026-10-25)",
+   "question": "which partner team had the most healing in NA 2026",
+   "expect": {
+    "status": "ok",
+    "rows_set": {
+     "team": [
+      "Dallas Fuel",
+      "Disguised",
+      "SpaceStation Gaming",
+      "Team Liquid"
+     ]
+    }
+   },
+   "derivation": "Teams with Healing Done on 2026 NA maps that were 2026 partners: Dallas Fuel, Disguised, SpaceStation Gaming, Team Liquid. Before: every NA team.",
+   "status": "confirmed"
   }
  ]
 }

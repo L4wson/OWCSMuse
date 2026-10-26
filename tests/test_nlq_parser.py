@@ -315,3 +315,23 @@ def test_a_partner_ranking_keeps_its_intent_and_restricts_it():
     q = parse_question("which partner team won the most series in 2026")
     assert (q.intent, q.entity, q.metric, q.filters.group, q.filters.season) == ("leaderboard", "team", "wins", "partner", 2026)
     assert parse_question("twisted minds record in 2026").filters.group is None
+
+
+@pytest.mark.parametrize("question, metric, region, role", [
+    ("most healing done by a partner team player in NA 2026", "Healing Done", "na", None),
+    ("which partner team player had the most eliminations in 2026", "Eliminations", None, None),
+    ("partner players with the most damage in 2026", "Damage Dealt", None, None),
+    ("which player on a partner team had the most deaths in EMEA 2026", "Deaths", "emea", None),
+    ("most healing by a support on a partner team in 2026", "Healing Done", None, "Support"),
+    ("which partner team tank had the most damage mitigated in 2026", "Damage Mitigated", None, "Tank"),
+])
+def test_a_partner_player_question_ranks_players_restricted_to_partner_teams(question, metric, region, role):
+    """'a partner team player' is a player: it was read as a team leaderboard over every team (2026-10-25)."""
+    q = parse_question(question)
+    assert (q.intent, q.entity, q.metric, q.filters.group) == ("leaderboard", "player", metric, "partner")
+    assert (q.filters.region, q.filters.role) == (region, role)
+
+
+def test_a_partner_team_question_stays_a_team_question():
+    q = parse_question("which partner team had the most healing in NA 2026")
+    assert (q.entity, q.metric, q.filters.group) == ("team", "Healing Done", "partner")
