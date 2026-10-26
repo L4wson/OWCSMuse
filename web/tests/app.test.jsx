@@ -286,6 +286,30 @@ describe("when the service itself is the problem", () => {
     expect(screen.queryByTestId("answer")).not.toBeInTheDocument();
   });
 
+  it("says how long to wait when this connection asked too fast, not that the service failed", async () => {
+    const detail = "You are asking faster than OWCS Muse answers one person: wait 7 seconds and ask again.";
+    mount([["/ask", fail(429, detail)]]);
+    await userEvent.type(await screen.findByRole("textbox"), "who had the most eliminations{Enter}");
+
+    const error = await screen.findByTestId("error");
+    expect(error).toHaveAttribute("data-kind", "rate_limited");
+    expect(error).toHaveTextContent("Too many questions at once");
+    expect(error).toHaveTextContent("wait 7 seconds and ask again");
+    expect(error).not.toHaveTextContent("HTTP 429");
+    expect(error).not.toHaveTextContent("Wait a few seconds and ask again."); // the specific message, not both
+  });
+
+  it("says the service is busy, not that its database is down, when every connection is in use", async () => {
+    const detail = "OWCS Muse is busy answering other questions right now. Try again in a few seconds.";
+    mount([["/ask", { status: 503, payload: { detail, reason: "busy", retry_after: 5 } }]]);
+    await userEvent.type(await screen.findByRole("textbox"), "who had the most eliminations{Enter}");
+
+    const error = await screen.findByTestId("error");
+    expect(error).toHaveAttribute("data-kind", "busy");
+    expect(error).toHaveTextContent("OWCS Muse is busy");
+    expect(error).not.toHaveTextContent("database is not answering");
+  });
+
   it("distinguishes an unreachable service from an unavailable one", async () => {
     mount([["/ask", () => new TypeError("Failed to fetch")]]);
     await userEvent.type(await screen.findByRole("textbox"), "who had the most eliminations{Enter}");
@@ -322,5 +346,15 @@ describe("when the service itself is the problem", () => {
     await userEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(await screen.findByTestId("answer")).toBeInTheDocument();
     expect(fetchMock.calls.filter((call) => call.url.includes("/ask"))).toHaveLength(2);
+  });
+});
+
+describe("the footer", () => {
+  it("says what is logged and that a shared link is public", async () => {
+    mount([]);
+    const privacy = await screen.findByTestId("privacy");
+    expect(privacy).toHaveTextContent("Questions are logged as text");
+    expect(privacy).toHaveTextContent("no account, cookie or IP address is stored");
+    expect(privacy).toHaveTextContent("A shared link is public");
   });
 });

@@ -40,6 +40,7 @@ from .nlq.columns import describe as describe_columns
 from .nlq.evidence import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE
 from .nlq.pipeline import Answer, ask
 from .nlq.validate import SchemaInfo
+from .throttle import BUSY_MESSAGE, Throttle, client_key, rate_limited_message
 from .web import describe_parse_change, load_question, remember_question, slug_for, suggestions
 
 log = get_logger("owcsmuse.api")
@@ -51,16 +52,26 @@ MAX_QUESTION_LENGTH = 500
 
 # ------------------------------------------------------------------- resources
 
+class PoolBusy(Exception):
+    """Every connection the API may open is in use, and none came free in time."""
+
+
 class ConnectionPool:
-    """A few long-lived connections, handed out one per request.
+    """A few long-lived connections, handed out one per request, and a cap on how many are open at once.
 
     Small on purpose: the Supabase session pooler has a connection ceiling, and
-    every query here is a short read.
+    every query here is a short read. Without the cap every request beyond the
+    idle ones opened a new connection, up to the server's 40 worker threads, so
+    one looping client could exhaust the pooler for the site and the ingest.
     """
 
-    def __init__(self, settings: Settings, size: int = 4) -> None:
+    def __init__(self, settings: Settings, size: int = 4, max_open: Optional[int] = None,
+                 wait_seconds: Optional[float] = None) -> None:
         self.settings = settings
-        self.size = size                      # idle connections kept, not a concurrency cap
+        self.size = size                      # idle connections kept
+        self.max_open = max_open if max_open is not None else settings.api_db_max_connections
+        self.wait_seconds = wait_seconds if wait_seconds is not None else settings.api_db_wait_seconds
+        self._slots = threading.BoundedSemaphore(self.max_open)
         self._free: list[psycopg.Connection] = []
         self._lock = threading.Lock()
 
@@ -68,10 +79,16 @@ class ConnectionPool:
         return connect(self.settings.database_url, schema=self.settings.db_schema)
 
     @contextmanager
-    def connection(self) -> Iterator[psycopg.Connection]:
-        with self._lock:
-            conn = self._free.pop() if self._free else None
-        conn = conn or self._new()
+    def connection(self, wait_seconds: Optional[float] = None) -> Iterator[psycopg.Connection]:
+        if not self._slots.acquire(timeout=self.wait_seconds if wait_seconds is None else wait_seconds):
+            raise PoolBusy()
+        try:
+            with self._lock:
+                conn = self._free.pop() if self._free else None
+            conn = conn or self._new()
+        except BaseException:
+            self._slots.release()
+            raise
         try:
             yield conn
         except Exception:
@@ -81,13 +98,16 @@ class ConnectionPool:
                 conn.close()
             except Exception:
                 pass
+            self._slots.release()
             raise
         else:
             with self._lock:
-                if len(self._free) < self.size:
+                keep = len(self._free) < self.size
+                if keep:
                     self._free.append(conn)
-                    return
-            conn.close()
+            if not keep:
+                conn.close()
+            self._slots.release()
 
     def close(self) -> None:
         with self._lock:
@@ -221,8 +241,26 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
             status_code=503,
             content={"detail": f"database unavailable: {type(exc).__name__}"},
         )
+    @app.exception_handler(PoolBusy)
+    async def _busy(request: Request, exc: Exception) -> JSONResponse:
+        """503 with a message a person can act on: the service is up and will answer, just not this instant."""
+        log_event(log, logging.WARNING, "api_busy", path=request.url.path)
+        return JSONResponse(status_code=503, headers={"Retry-After": "5"},
+                            content={"detail": BUSY_MESSAGE, "reason": "busy", "retry_after": 5})
+
     app.state.pool = pool
     app.state.settings = settings
+    throttle = Throttle(settings.api_rate_burst, settings.api_rate_per_minute)
+    app.state.throttle = throttle
+
+    def per_client(request: Request) -> None:
+        """Questions and their links are throttled per client; /, /healthz and the docs are not."""
+        client = client_key({k.lower(): v for k, v in request.headers.items()}, request.client.host if request.client else None)
+        verdict = app.state.throttle.check(client)
+        if not verdict.allowed:
+            log_event(log, logging.WARNING, "rate_limited", path=request.url.path, retry_after=verdict.retry_after)
+            raise HTTPException(status_code=429, headers={"Retry-After": str(verdict.retry_after)},
+                                detail=rate_limited_message(verdict.retry_after))
 
     def get_pool() -> ConnectionPool:
         return app.state.pool
@@ -282,23 +320,27 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
     @app.get("/healthz", summary="liveness")
     def healthz(pool: ConnectionPool = Depends(get_pool)) -> dict[str, Any]:
         try:
-            with pool.connection() as conn:
+            # Fly restarts a machine that fails this check: a service that is only busy must not fail it, or a burst
+            # of questions becomes an outage. So it never queues for a connection; all in use means up, and busy.
+            with pool.connection(wait_seconds=0) as conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT 1 AS ok")
                     cur.fetchone()
                 conn.commit()
+        except PoolBusy:
+            return {"ok": True, "version": __version__, "busy": True}
         except Exception as exc:
             log_event(log, logging.ERROR, "healthz_failed", exc_info=True)
             raise HTTPException(status_code=503, detail=f"database unavailable: {type(exc).__name__}") from exc
         return {"ok": True, "version": __version__}
 
-    @app.post("/ask", summary="ask a question")
+    @app.post("/ask", summary="ask a question", dependencies=[Depends(per_client)])
     def post_ask(body: AskRequest, tasks: BackgroundTasks, pool: ConnectionPool = Depends(get_pool)) -> dict[str, Any]:
         with pool.connection() as conn:
             return _answer(conn, body.question, body.parser, body.page, body.page_size,
                            body.evidence_for, body.with_evidence, tasks, "ask")
 
-    @app.get("/query/{slug}", summary="a shared question, re-run against current data")
+    @app.get("/query/{slug}", summary="a shared question, re-run against current data", dependencies=[Depends(per_client)])
     def get_query(
         slug: str = Path(min_length=4, max_length=64),
         page: int = Query(default=1, ge=1, le=10_000),
@@ -322,7 +364,7 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
         }
         return payload
 
-    @app.get("/suggestions", summary="example questions with data behind them")
+    @app.get("/suggestions", summary="example questions with data behind them", dependencies=[Depends(per_client)])
     def get_suggestions(pool: ConnectionPool = Depends(get_pool)) -> dict[str, Any]:
         with pool.connection() as conn:
             return suggestion_cache.get(lambda: suggestions(conn).as_dict())
@@ -343,4 +385,4 @@ def app_factory() -> FastAPI:
     return create_app()
 
 
-__all__ = ["AskRequest", "ConnectionPool", "answer_payload", "app_factory", "create_app", "serve", "slug_for"]
+__all__ = ["AskRequest", "ConnectionPool", "PoolBusy", "answer_payload", "app_factory", "create_app", "serve", "slug_for"]

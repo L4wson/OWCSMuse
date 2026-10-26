@@ -39,14 +39,28 @@ under a restricted `search_path` when it plans a materialized-view refresh.
   tied rows. A `LANGUAGE sql` function that names a table must be written
   `{{schema}}.table` or carry `SET search_path`, or every materialized-view
   refresh fails on 17 (migration `033_pin_search_path.sql`).
-- **Row Level Security is not enabled on any of these tables.** Plain SQL
-  migrations bypass the Supabase dashboard's RLS prompts. On Supabase every
-  table in `public` is also exposed through the auto-generated Data API
-  (PostgREST), so with RLS off the `anon` and `authenticated` roles can read
-  and write everything the way the API's grants allow. Decide on RLS
-  policies, or revoke the Data API grants on these tables, before any client
-  connects to the project directly. The ingestion CLI uses the `postgres`
-  role over the pooler and is unaffected either way.
+- **Row Level Security is not enabled, and the Data API roles hold no grants.**
+  Plain SQL migrations bypass the Supabase dashboard's RLS prompts, and Supabase
+  grants `anon` and `authenticated` everything in `public` by default, which the
+  project's public anon key reaches through the Data API. The owner disabled the
+  Data API and revoked those grants on 2026-10-23, default privileges included,
+  so a view a migration recreates gets none:
+
+  ```sql
+  REVOKE ALL ON ALL TABLES    IN SCHEMA public FROM anon, authenticated;
+  REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM anon, authenticated;
+  REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM anon, authenticated;
+  REVOKE USAGE ON SCHEMA public FROM anon, authenticated;
+  ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE ALL ON TABLES    FROM anon, authenticated;
+  ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE ALL ON SEQUENCES FROM anon, authenticated;
+  ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE ALL ON FUNCTIONS FROM anon, authenticated;
+  ```
+
+  The consistency check `api_role_grants` fails if any comes back. PUBLIC keeps
+  `USAGE` on `public` and `EXECUTE` on the functions, as Postgres grants by
+  default; with no table grants that reaches no data, and several of Supabase's
+  own roles rely on PUBLIC's `USAGE`. The CLI, the API and ingest connect as
+  `postgres` over the pooler and are unaffected.
 
 | Table | Grain | Notes |
 | --- | --- | --- |

@@ -20,9 +20,10 @@ from owcsmuse.web import normalize_question, slug_for  # noqa: E402
 @pytest.fixture(scope="module")
 def client(agg_db):
     """An app pointed at the same scratch schema the fixtures were ingested into."""
+    # one test client asks at machine speed: the per-client throttle is tested in test_api_throttle.py, not here
     settings = Settings(_env_file=None, faceit_api_key="not-used",
                         database_url=os.environ["OWCS_TEST_DATABASE_URL"],
-                        db_schema=os.environ.get("OWCS_TEST_SCHEMA", "owcs_test"))
+                        db_schema=os.environ.get("OWCS_TEST_SCHEMA", "owcs_test"), api_rate_burst=100_000)
     app = create_app(settings, ConnectionPool(settings, size=2))
     with TestClient(app) as c:
         yield c

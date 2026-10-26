@@ -982,6 +982,65 @@ def check_placement_consistency(conn: psycopg.Connection) -> CheckResult:
                    {"events": n})
 
 
+# ------------------------------------------------------------ the public API roles
+
+API_ROLES = ("anon", "authenticated")
+
+
+def check_api_role_grants(conn: psycopg.Connection) -> CheckResult:
+    """Supabase's Data API roles hold no grant on anything in this schema, and no default privilege brings one back.
+
+    Nothing here uses the Data API (the CLI, the API and ingest connect as the owner over DATABASE_URL), and the
+    project's anon key is public, so a grant to `anon` or `authenticated` is a door: Supabase granted them everything
+    by default, and the owner revoked it on 2026-10-23, default privileges included. Explicit ACL entries are read
+    (aclexplode), not has_*_privilege: PUBLIC's default EXECUTE on a function, and role membership, are not grants to
+    them. Default privileges are judged for the roles that own this schema's objects (migrations recreate views and
+    materialized views); Supabase's own supabase_admin defaults, which the owner cannot change, are only counted.
+    Off Supabase the roles do not exist, and there is nothing to hold.
+    """
+    roles = {r["rolname"]: r["oid"] for r in _rows(conn, "SELECT rolname, oid FROM pg_roles WHERE rolname = ANY(%s)",
+                                                   [list(API_ROLES)])}
+    discrepancies: list[dict[str, Any]] = []
+    counts: dict[str, Any] = {"roles_present": sorted(roles)}
+    if roles:
+        oids = list(roles.values())
+        for kind, sql in (
+            ("relation_grant", """SELECT c.relname AS object, c.relkind::text AS relkind, a.grantee::regrole::text AS role,
+                                         a.privilege_type AS privilege
+                                    FROM pg_class c, aclexplode(c.relacl) a
+                                   WHERE c.relnamespace = current_schema()::regnamespace AND a.grantee = ANY(%s)"""),
+            ("function_grant", """SELECT p.proname AS object, a.grantee::regrole::text AS role, a.privilege_type AS privilege
+                                    FROM pg_proc p, aclexplode(p.proacl) a
+                                   WHERE p.pronamespace = current_schema()::regnamespace AND a.grantee = ANY(%s)"""),
+            ("schema_grant", """SELECT n.nspname AS object, a.grantee::regrole::text AS role, a.privilege_type AS privilege
+                                  FROM pg_namespace n, aclexplode(n.nspacl) a
+                                 WHERE n.oid = current_schema()::regnamespace AND a.grantee = ANY(%s)"""),
+        ):
+            for r in _rows(conn, sql, [oids]):
+                discrepancies.append({"kind": kind, **r})
+        owners = [r["o"] for r in _rows(conn, """
+            SELECT DISTINCT relowner AS o FROM pg_class WHERE relnamespace = current_schema()::regnamespace
+            UNION SELECT DISTINCT proowner FROM pg_proc WHERE pronamespace = current_schema()::regnamespace""")]
+        for r in _rows(conn, """
+            SELECT d.defaclrole::regrole::text AS owner, d.defaclobjtype::text AS objtype,
+                   a.grantee::regrole::text AS role, a.privilege_type AS privilege, d.defaclrole = ANY(%s) AS ours
+              FROM pg_default_acl d, aclexplode(d.defaclacl) a
+             WHERE (d.defaclnamespace = current_schema()::regnamespace OR d.defaclnamespace = 0) AND a.grantee = ANY(%s)""",
+                       [owners, oids]):
+            ours = r.pop("ours")
+            if ours:
+                discrepancies.append({"kind": "default_privilege", **r})
+            else:
+                counts.setdefault("other_owners_default_privileges", set()).add(r["owner"])
+        if "other_owners_default_privileges" in counts:
+            counts["other_owners_default_privileges"] = sorted(counts["other_owners_default_privileges"])
+    return _result("api_role_grants", discrepancies,
+                   (f"{' and '.join(sorted(roles))} hold no grant in this schema, and its owners' default privileges "
+                    "give them none" if roles else "no Supabase API roles exist here: nothing to hold"),
+                   f"{len(discrepancies)} grant(s) or default privilege(s) to {', '.join(sorted(roles))}: revoke them",
+                   counts)
+
+
 CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "fact_view_reconciliation": check_fact_view_reconciliation,
     "date_visibility": check_date_visibility,
@@ -1002,6 +1061,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "lp_name_resolution": check_lp_name_resolution,
     "placement_consistency": check_placement_consistency,
     "answer_rates": check_answer_rates,
+    "api_role_grants": check_api_role_grants,
 }
 
 

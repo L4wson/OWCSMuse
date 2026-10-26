@@ -225,9 +225,9 @@ is what the question gets *today*, not what its asker saw then.
 costs 493 bytes with its indexes, so about **0.5 MB per thousand questions**.
 The first month of the beta was 582 asks, about 0.3 MB. Supabase's free tier
 allows 500 MB and the database held 304 MB on 2026-10-17, so the log could take
-some 400,000 questions before it mattered. No retention job runs. When the
-table passes 25 MB (about 50,000 questions), keep failures longer than
-successes, because failures are what the log is for:
+some 400,000 questions before it mattered. The nightly ingest applies the retention rule anyway
+(`python -m owcsmuse queries --prune`, `querylog.prune`), keeping failures longer than successes, because failures are
+what the log is for:
 
 ```sql
 DELETE FROM query_log WHERE status = 'ok' AND asked_at < now() - interval '90 days';

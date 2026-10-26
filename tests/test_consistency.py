@@ -298,3 +298,35 @@ def test_a_liquipedia_name_pointing_at_a_missing_team_fails(agg_db):
         assert [(d["kind"], d["entity_id"]) for d in r.discrepancies] == [("lp_name_points_at_missing_entity", "ec69a520-04")]
     finally:
         agg_db.rollback()
+
+
+def test_api_roles_holding_a_grant_or_a_default_privilege_fail_the_check(agg_db):
+    """Supabase's anon and authenticated roles: no grant in this schema, none brought back by a default privilege
+    (owner revoke, 2026-10-23); a role created here exists only inside the test's transaction."""
+    try:
+        with agg_db.cursor() as cur:
+            cur.execute("SELECT current_schema() AS s, current_user AS u")
+            schema, me = (lambda r: (r["s"], r["u"]))(cur.fetchone())
+            for role in ("anon", "authenticated", "other_owner"):
+                cur.execute(f"DO $$BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = '{role}') "
+                            f"THEN CREATE ROLE {role} NOLOGIN; END IF; END$$")
+        r = _by_name(run_checks(agg_db, ["api_role_grants"]))["api_role_grants"]
+        assert r.ok, r.discrepancies
+        # another owner's defaults (Supabase's supabase_admin) are counted, not failed: the owner cannot change them
+        with agg_db.cursor() as cur:
+            cur.execute(f"ALTER DEFAULT PRIVILEGES FOR ROLE other_owner IN SCHEMA {schema} GRANT SELECT ON TABLES TO anon")
+        r = _by_name(run_checks(agg_db, ["api_role_grants"]))["api_role_grants"]
+        assert r.ok and r.counts["other_owners_default_privileges"] == ["other_owner"]
+        with agg_db.cursor() as cur:
+            cur.execute("GRANT SELECT ON matches TO anon")
+            cur.execute("GRANT EXECUTE ON FUNCTION fold_name(text) TO authenticated")
+            cur.execute(f"GRANT USAGE ON SCHEMA {schema} TO anon")
+            cur.execute(f"ALTER DEFAULT PRIVILEGES FOR ROLE {me} IN SCHEMA {schema} GRANT SELECT ON TABLES TO anon")
+        r = _by_name(run_checks(agg_db, ["api_role_grants"]))["api_role_grants"]
+        assert not r.ok
+        kinds = {(d["kind"], d.get("object"), d["role"]) for d in r.discrepancies}
+        assert {("relation_grant", "matches", "anon"), ("function_grant", "fold_name", "authenticated"),
+                ("schema_grant", schema, "anon")} <= kinds
+        assert any(d["kind"] == "default_privilege" and d["owner"] == me for d in r.discrepancies)
+    finally:
+        agg_db.rollback()

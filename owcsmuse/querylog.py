@@ -70,6 +70,25 @@ def row_for(question: str, source: str, latency_ms: int, answer: Any = None,
             "row_count": len(answer.rows or []) if status == "ok" else None, "latency_ms": latency_ms}
 
 
+# Retention (docs/api-and-frontend.md, "Size and retention"): failures are what the log is for, so they are kept
+# longer than answers that went well.
+KEEP_OK_DAYS = 90
+KEEP_ALL_DAYS = 365
+
+
+def prune(conn: psycopg.Connection, keep_ok_days: int = KEEP_OK_DAYS, keep_all_days: int = KEEP_ALL_DAYS) -> dict[str, int]:
+    """Delete answered questions older than `keep_ok_days`, and every row older than `keep_all_days`. Commits."""
+    with conn.cursor() as cur:
+        cur.execute("DELETE FROM query_log WHERE status = 'ok' AND asked_at < now() - make_interval(days => %s)",
+                    (keep_ok_days,))
+        ok = cur.rowcount
+        cur.execute("DELETE FROM query_log WHERE asked_at < now() - make_interval(days => %s)", (keep_all_days,))
+        old = cur.rowcount
+    conn.commit()
+    return {"ok_older_than_days": keep_ok_days, "ok_deleted": ok, "all_older_than_days": keep_all_days,
+            "older_deleted": old}
+
+
 def record(conn: psycopg.Connection, row: dict[str, Any]) -> bool:
     """Insert one row. Never raises: a log that cannot be written is not the asker's problem."""
     try:

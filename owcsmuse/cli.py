@@ -726,6 +726,10 @@ def cmd_queries(args: argparse.Namespace, settings: Settings) -> int:
     """What people asked and how it went: failures by code, unparsed, no rows, most asked, clusters."""
     from . import querylog
 
+    if args.prune:
+        with connect(settings.database_url, schema=settings.db_schema) as conn:
+            print(json.dumps(querylog.prune(conn), indent=2))
+        return 0
     since = _since(args.since)
     with connect(settings.database_url, schema=settings.db_schema) as conn:
         if args.from_saved:
@@ -1097,6 +1101,8 @@ def build_parser() -> argparse.ArgumentParser:
     qy.add_argument("--from-saved", action="store_true",
                     help="re-ask saved_queries through today's pipeline instead (read-only; for history before query_log)")
     qy.add_argument("--json", action="store_true")
+    qy.add_argument("--prune", action="store_true",
+                    help="apply the retention rule instead of reporting: answered questions kept 90 days, everything 365")
     qy.set_defaults(func=cmd_queries)
 
     for name, func, help_ in (

@@ -44,8 +44,8 @@ parser and `parser: "llm"` is refused; no `ANTHROPIC_API_KEY` is needed either.
   after the gate (even when it failed), and `tools/scope_report.py` lists every competition the classifier would
   include that has no reviewed decision, as a table in the run summary and a warning annotation each. Only
   `python -m owcsmuse decide` puts a competition in scope. The reports are the run's `ingest-reports` artifact.
-- **`fly.toml`**: the API on Fly.io. One `shared-cpu-1x` machine (512 MB) in `sea` (Seattle, nearest Supabase
-  `us-west-2`), `auto_stop_machines = "off"` and `min_machines_running = 1` so it never cold starts, `PORT=8000`
+- **`fly.toml`**: the API on Fly.io. One `shared-cpu-1x` machine (512 MB) in `sjc` (San Jose; Supabase is
+  `us-west-2`, Oregon), `auto_stop_machines = "off"` and `min_machines_running = 1` so it never cold starts, `PORT=8000`
   matching `internal_port = 8000`, an HTTP check on `/healthz`, and `python -m owcsmuse migrate` as the
   `release_command` (run with the app's secrets before each deploy replaces the machine).
 - **`web/vercel.json`**: the frontend on Vercel (project root `web`). Vite preset, `npm ci`, `npm run build`, output
@@ -57,6 +57,38 @@ parser and `parser: "llm"` is refused; no `ANTHROPIC_API_KEY` is needed either.
   `/_vercel/speed-insights` paths, which Vercel serves ahead of the rewrite above, so they report only from a Vercel
   deployment with Analytics and Speed Insights enabled in the project's dashboard. In `npm run dev`, the tests and any
   other host they send nothing.
+
+### Protecting the API
+
+One shared-cpu machine answers every question against a free-tier Supabase project, so the API limits what any one
+client, and all clients together, can make it do (`owcsmuse/throttle.py`, `ConnectionPool` in `owcsmuse/api.py`).
+Both limits are in the app, not in Fly: Fly's proxy has no per-IP limiting, and its per-machine `concurrency` limit
+answers with a bare proxy error rather than a message.
+
+- **Per client IP**, on `/ask`, `/query/{slug}` and `/suggestions`: a token bucket of 20 requests, refilled at 30 a
+  minute (`OWCS_API_RATE_BURST`, `OWCS_API_RATE_PER_MINUTE`). The client is Fly's `Fly-Client-IP` header, which
+  Fly's proxy sets. Over the limit, a `429` with `Retry-After` and a message the app shows: "You are asking faster
+  than OWCS Muse answers one person: wait N seconds and ask again." The limit is set from the query log: across all
+  traffic (62 questions, 2026-10-17 to 26) the busiest windows were 4 questions in 10 seconds, 7 in a minute and 14 in
+  ten minutes, with an answer taking 2 s at the median. The log stores nothing about the asker, so per-person rates
+  cannot be read from it; these are an upper bound on any one person's. A person paging evidence and toggling grains
+  stays far below the limit; a loop does not. `/`, `/healthz` and the docs are not limited.
+- **All clients together**: at most 6 database connections open at once (`OWCS_API_DB_MAX_CONNECTIONS`). Before
+  this, the pool kept 4 idle connections but opened a new one for every request beyond them, up to the server's 40
+  worker threads, so a loop, or a few IPs at once, could exhaust the Supabase session pooler for the site and the
+  nightly ingest alike. A request waits up to 10 s (`OWCS_API_DB_WAIT_SECONDS`) for a connection and is then told
+  "OWCS Muse is busy answering other questions right now" (`503`, `reason: busy`, `Retry-After: 5`); the app says
+  busy, not that the database is down.
+- **`/healthz` never waits for a connection.** All of them in use is `200` with `busy: true`: Fly restarts a machine
+  that fails its check, and a burst of questions must not become an outage.
+
+### CORS is open, on purpose
+
+`allow_origins=["*"]`, `GET` and `POST`. The API serves read-only public statistics and takes no credentials, cookies
+or authorisation of any kind, so an origin list would protect nothing: CORS only constrains browsers, and anyone can
+call the API from a script or `curl` regardless. Restricting it would only refuse Vercel's per-commit preview
+deployments and other people's front ends built on the public API. What does protect the service is the throttling
+above. Revisit this only if the API ever accepts credentials or acts on a user's behalf.
 
 ### In order
 
@@ -77,9 +109,7 @@ Steps marked **[browser]** need an account or a web console; **[command]** steps
    `web/vercel.json`), and add the environment variable `VITE_API_BASE=https://owcsmuse-api.fly.dev` (no trailing
    slash) for Production and Preview. It is baked in at build time: changing it needs a redeploy. CORS needs no
    change for the Vercel URL: `owcsmuse/api.py` (`create_app`, the `CORSMiddleware` line) allows every origin, which
-   also covers Vercel's per-commit preview URLs. The API is read-only and uses no cookies or credentials, so that is
-   deliberate; to restrict it, replace `allow_origins=["*"]` there with the production origin (e.g.
-   `["https://<project>.vercel.app"]`) and rebuild, accepting that preview deployments are then refused.
+   also covers Vercel's per-commit preview URLs. See **CORS is open, on purpose** below.
 6. **[command] Check the frontend**: ask a question, then open its shared `/q/<slug>` link in a fresh tab: it must load
    the answer, not a 404.
 7. **[browser] GitHub.** Add the three Actions secrets (`DATABASE_URL`, `FACEIT_API_KEY`, `LIQUIPEDIA_API_KEY`) under
@@ -135,7 +165,7 @@ fly auth login
 fly apps create owcsmuse-api
 fly secrets set --stage DATABASE_URL='postgresql://...'   # the Supabase session pooler string; --stage: no machine yet
 fly deploy --ha=false        # one machine: without --ha=false a first deploy creates two
-fly status                   # one machine in sea, state started, check passing
+fly status                   # one machine in sjc, state started, check passing
 fly checks list              # the /healthz check
 fly logs                     # streams JSON logs; the release_command's migrate output appears first
 curl https://owcsmuse-api.fly.dev/healthz
