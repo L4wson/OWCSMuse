@@ -39,7 +39,10 @@ parser and `parser: "llm"` is refused; no `ANTHROPIC_API_KEY` is needed either.
   -> `check`. `enrich` alone sends nothing and adds nothing new: it uses Liquipedia records already fetched and
   linked, so the fetch and the reconcile come first, and `--decided-only` keeps unreviewed team-name proposals out of
   an unattended run. A failed step or a failing `check` fails the run with an error annotation, the check output in
-  the run summary, and one open issue ("Scheduled ingest failed", commented on by each later failure).
+  the run summary, and one open issue ("Scheduled ingest failed", commented on by each later failure). A Liquipedia
+  429 is not a failure: `liquipedia run` stops sending, the rest of the run goes on with what is held, and the 429
+  is a warning annotation and a note in the run summary. A 429 whose stored body is an HTML "Rate Limited" page is
+  Liquipedia's edge blocking the runner's shared IP, not this key's allowance.
   **New competitions are a report, never an inclusion**: `discover --no-db` and `crawl competitions` run read-only
   after the gate (even when it failed), and `tools/scope_report.py` lists every competition the classifier would
   include that has no reviewed decision, as a table in the run summary and a warning annotation each. Only
