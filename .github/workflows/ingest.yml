@@ -95,9 +95,24 @@ jobs:
       # `--decided-only` keeps unreviewed team-name proposals out of an unattended run.
       # `--max-requests` caps what `run` sends (the only step here that sends anything). Reaching the cap is not a
       # failure: the batches done so far are kept, and the next night's plan starts from what is still uncovered.
+      # Nor is a 429: `run` has already stopped sending, and the steps after it send nothing, so they go on with what is
+      # held and the site still gets the night's FACEIT data. It is a warning, not an issue: on 2026-10-31 the 429 was
+      # Liquipedia's edge blocking a shared runner IP (an HTML "Rate Limited" page), not this key's allowance. The
+      # outcome is read from `run`'s JSON, not its exit code alone: a stale checkout also exits 3, and that must fail.
       - name: liquipedia
         run: |
-          python -m owcsmuse liquipedia run --execute --max-requests "$LIQUIPEDIA_MAX_REQUESTS"
+          rc=0
+          python -m owcsmuse liquipedia run --execute --max-requests "$LIQUIPEDIA_MAX_REQUESTS" > liquipedia_run.json || rc=$?
+          cat liquipedia_run.json
+          field() { python -c 'import json, sys; print(json.load(open("liquipedia_run.json"))[sys.argv[1]])' "$1" 2>/dev/null; }
+          if [ "$rc" -eq 3 ] && [ "$(field outcome)" = rate_limited ]; then
+            detail=$(field detail)
+            echo "::warning title=Liquipedia 429::$detail"
+            { echo "## Liquipedia returned 429"; echo; echo "$detail"; echo
+              echo "Nothing new was fetched from Liquipedia tonight; the rest of the run used what is held."; } >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$rc" -ne 0 ]; then
+            exit "$rc"
+          fi
           python -m owcsmuse liquipedia reconcile --decided-only
           python -m owcsmuse liquipedia enrich
         env:
