@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -179,7 +179,7 @@ def test_list_then_detail_overwrites_first_map_result_and_is_idempotent(db):
     assert (totals["maps_played"], totals["maps_won"]) == (4, 3)
 
     before = _counts(conn)
-    raw_before = _one(conn, "SELECT count(*) AS n FROM raw_payloads")["n"]
+    raw_before = _one(conn, "SELECT count(*) AS n, sum(times_seen) AS seen FROM raw_payloads")
 
     # ---- re-run everything: no duplicates, detail result survives a fresh LIST that still says first-map
     col.run_list()
@@ -189,7 +189,9 @@ def test_list_then_detail_overwrites_first_map_result_and_is_idempotent(db):
     assert col.run_detail().selected == 0     # nothing pending: resumable state honoured
     col.run_detail(refresh=True)
     assert _counts(conn) == before
-    assert _one(conn, "SELECT count(*) AS n FROM raw_payloads")["n"] > raw_before  # every request still stored
+    # every request is still recorded: identical responses as a sighting of the stored one (050), not a copy
+    raw_after = _one(conn, "SELECT count(*) AS n, sum(times_seen) AS seen FROM raw_payloads")
+    assert raw_after["n"] == raw_before["n"] and raw_after["seen"] > raw_before["seen"]
 
 
 def test_resume_processes_only_pending_and_respects_limit(db):
@@ -337,3 +339,37 @@ def test_migration_021_reclassifies_existing_bye_rows_and_is_idempotent(db):
         conn.commit()
     assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id='m-bye'")["ingest_state"] == "skipped"
     assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id='m-real'")["ingest_state"] == "result_only"
+
+
+def test_an_unchanged_faceit_response_is_recorded_as_seen_not_stored_again(db):
+    """050: the nightly re-listing stored identical pages every night (170 MB by 2026-11-03)."""
+    _, raw_conn = db
+    sink = RawPayloadStore(raw_conn)
+    t0 = datetime(2026, 11, 1, tzinfo=timezone.utc)
+    page = {"items": [{"match_id": "1-a", "status": "FINISHED"}]}
+    first = sink.store(endpoint="/championships/c/matches", params={"offset": 0}, http_status=200, payload=page,
+                       body_text=None, fetched_at=t0, championship_id="c")
+    again = sink.store(endpoint="/championships/c/matches", params={"offset": 0}, http_status=200, payload=dict(page),
+                       body_text=None, fetched_at=t0 + timedelta(days=1), championship_id="c")
+    assert again == first
+    row = _one(raw_conn, "SELECT times_seen, last_seen_at, fetched_at FROM raw_payloads WHERE id = %s", first)
+    assert row["times_seen"] == 2 and row["last_seen_at"] == t0 + timedelta(days=1) and row["fetched_at"] == t0
+    # another page, a changed page, and a change back are each stored: every distinct version is kept
+    other = sink.store(endpoint="/championships/c/matches", params={"offset": 100}, http_status=200, payload=page,
+                       body_text=None, fetched_at=t0)
+    changed = {"items": [{"match_id": "1-a", "status": "FINISHED"}, {"match_id": "1-b", "status": "FINISHED"}]}
+    v2 = sink.store(endpoint="/championships/c/matches", params={"offset": 0}, http_status=200, payload=changed,
+                    body_text=None, fetched_at=t0 + timedelta(days=2))
+    back = sink.store(endpoint="/championships/c/matches", params={"offset": 0}, http_status=200, payload=page,
+                      body_text=None, fetched_at=t0 + timedelta(days=3))
+    assert len({first, other, v2, back}) == 4
+    # an error is never folded, and Liquipedia responses always count as a request
+    e1 = sink.store(endpoint="/matches/1-a/stats", params={}, http_status=404, payload={"errors": []}, body_text=None,
+                    fetched_at=t0, match_id="1-a")
+    e2 = sink.store(endpoint="/matches/1-a/stats", params={}, http_status=404, payload={"errors": []}, body_text=None,
+                    fetched_at=t0, match_id="1-a")
+    lp1 = sink.store(endpoint="match", params={"q": 1}, http_status=200, payload={"result": []}, body_text=None,
+                     fetched_at=t0, source="liquipedia")
+    lp2 = sink.store(endpoint="match", params={"q": 1}, http_status=200, payload={"result": []}, body_text=None,
+                     fetched_at=t0, source="liquipedia")
+    assert e1 != e2 and lp1 != lp2

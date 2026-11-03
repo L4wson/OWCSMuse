@@ -7,6 +7,16 @@ import pytest
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
+def pytest_configure(config):
+    """Database tests build and drop scratch schemas: refuse a database that is not on this machine before any test
+    connects (tests/db_guard.py says why)."""
+    from db_guard import require_local
+    try:
+        require_local(os.environ.get("OWCS_TEST_DATABASE_URL"))
+    except RuntimeError as exc:
+        pytest.exit(str(exc), returncode=2)
+
+
 def load_fixture(name: str):
     with open(FIXTURES / name, encoding="utf-8") as f:
         return json.load(f)

@@ -174,8 +174,15 @@ schema named by `OWCS_TEST_SCHEMA` (default `owcs_test`) at the start of every
 test, run the migrations into it, and drive the collector with a fake client
 that serves the captured fixtures, checking the first-map override, idempotent
 re-runs, resume, failure retry, offline reprocess and nickname history. Point
-`OWCS_TEST_DATABASE_URL` at the local Docker Postgres or at Supabase; the role
-needs `CREATE SCHEMA`.
+`OWCS_TEST_DATABASE_URL` at a local Postgres (`docker compose up -d db`, then
+`postgresql://owcs:owcs@localhost:5432/owcsmuse`); the role needs `CREATE SCHEMA`.
+
+**Tests never touch a remote database.** `tests/db_guard.py` refuses any host that is not this machine (localhost, a
+loopback address or a Unix socket), whoever hosts it: pytest exits before any test connects, and the golden and
+fixture builders (so `tools/golden_report.py` and `tools/build_fixture_db.py` too) refuse as well. This corrects
+earlier guidance, which said to point the tests at Supabase: they then built 39 scratch schemas (170 MB) in the
+production database, found on 2026-11-03 with the project over its storage limit. CI's databases are service
+containers on localhost.
 
 `tests/fixtures/` holds real payloads captured on 2026-09-17 from OWCS 2024
 EMEA Stage 1 Main Event and OWCS 2026 OQ EMEA:
