@@ -56,10 +56,11 @@ export function entityQuestion(name, kind) {
   if (kind === "player" || kind === "team" || kind === "org") return `${name} record`;
   if (kind === "map" || kind === "mode") return `most played ${kind === "map" ? "maps" : "modes"}`;
   if (kind === "stat") return `which seasons have ${String(name).toLowerCase()}`;
+  if (kind === "hero") return `${name} bans`;
   return null;
 }
 
-export const LINKABLE_SPAN_KINDS = new Set(["player", "team", "org", "map", "mode", "stat"]);
+export const LINKABLE_SPAN_KINDS = new Set(["player", "team", "org", "map", "mode", "stat", "hero"]);
 
 /** How a candidate's era reads in a list of otherwise identical names. */
 export function activeRange(candidate) {

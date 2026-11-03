@@ -73,7 +73,9 @@ is about 6 KB of JSON, with structured fields already decoded (not JSON-in-a-str
   `finished`, and `match2opponents` (team `name`, `score`, `status`, `teamtemplate`, and `match2players` with page-style
   names such as `HYEON_(Kim_Seong-hyeon)`).
 - **Maps:** `match2games[]` has `map`, `mode`, `scores`, `winner`, `opponents[]` and, in `extradata`, the hero bans
-  (`team1ban1`, `team2ban1`, `banstart`): map-level results without player stats, as Stage 2 needs.
+  (`team1ban1`, `team2ban1`: the hero each team banned; `banstart`: the team that banned first): map-level results
+  without player stats, as Stage 2 needs. The bans are the source of every hero-ban answer (migration 049,
+  [answers.md](answers.md#hero-bans)); every 2025-2026 record in scope has them, always one per team.
 - **Not yet seen:** where the FACEIT match id sits. The five sample rows were Korea and China, which are not on FACEIT;
   the first NA/EMEA rows in the Stage 1 fetch will show it (candidates: `links`, `extradata`).
 

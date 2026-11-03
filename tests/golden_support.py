@@ -110,6 +110,10 @@ def build_golden_db(db_url: str, schema: str, fixtures: Path = GOLDEN):
     lp_names.load(conn, lp_names.CompetitionDecisions(ROOT / lp_names.DEFAULT_DECISIONS_PATH),
                   lp_names.propose(ROOT / lp_names.DEFAULT_MAP_PATH, ROOT / lp_names.DEFAULT_SCOPE_PATH,
                                    ROOT / lp_names.DEFAULT_EXTRA_PATH))
+    # the reviewed hero list, as `migrate` loads it in production: before the Liquipedia rebuild, which writes each ban
+    # in its canonical spelling (049)
+    from owcsmuse import heroes
+    heroes.load(conn, ROOT / "scope" / "heroes.json")
     load_liquipedia_enrichment(conn, raw_conn, fixtures)
     # Stage 3: the reviewed cross-source anchors (team names from the team map, players from their decisions file)
     from owcsmuse import groups as team_groups

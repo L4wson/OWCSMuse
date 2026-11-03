@@ -41,6 +41,7 @@ LOADERS = {
     "competition_names.json": "python -m owcsmuse competitions load",
     "liquipedia_events.json": "python -m owcsmuse liquipedia events load",
     "partner_teams.json": "python -m owcsmuse groups load",
+    "heroes.json": "python -m owcsmuse heroes load",
 }
 
 
@@ -245,6 +246,21 @@ def check(conn: psycopg.Connection, scope_dir: Path = SCOPE) -> tuple[list[dict[
                      for r in _rows(conn, "SELECT group_key, season, region, liquipedia_name, page FROM team_groups")} \
         if _rows(conn, "SELECT 1 FROM information_schema.tables WHERE table_name = 'team_groups' AND table_schema = current_schema()") else {}
     d.compare("partner_teams.json", decided_groups, loaded_groups, 0)
+
+    # ---- the hero list (049) -> heroes, hero_aliases (`heroes load`, also run by `migrate`; the file is the whole truth)
+    from .heroes import load_file as load_hero_file
+    hero_file = scope_dir / "heroes.json"
+    if hero_file.exists():
+        hl = load_hero_file(hero_file)
+        present = bool(_rows(conn, "SELECT 1 FROM information_schema.tables WHERE table_name = 'heroes' "
+                                   "AND table_schema = current_schema()"))
+        loaded_heroes = {r["hero"]: (str(r["available_from"]) if r["available_from"] else None, r["basis"])
+                         for r in _rows(conn, "SELECT hero, available_from, basis FROM heroes")} if present else {}
+        d.compare("heroes.json", {h.name: (str(h.available_from) if h.available_from else None, h.basis) for h in hl.heroes},
+                  loaded_heroes, 0)
+        d.compare("heroes.json", hl.by_key(),
+                  {r["alias_key"]: r["hero"] for r in _rows(conn, "SELECT alias_key, hero FROM hero_aliases")} if present else {},
+                  0, counted=False)
 
     # ---- competition names -> competition_names (a decision made against a FACEIT name since renamed is stale and,
     # by the loader's own rule, not applied)

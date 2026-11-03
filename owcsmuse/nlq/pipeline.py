@@ -605,6 +605,55 @@ def _group_answer(conn: psycopg.Connection, question: str, q: StructuredQuery, p
     return a
 
 
+def _bans_answer(conn: psycopg.Connection, question: str, q: StructuredQuery, r: Resolved, pre: Answer, used: str,
+                 info: SchemaInfo, with_evidence: bool, evidence_for: Optional[str], evidence_page: int,
+                 evidence_page_size: int, debug: bool) -> Answer:
+    """Hero bans (049), from Liquipedia: a hero ranking, a team's bans, the teams that ban a hero, or the heroes never
+    banned. Every value is Liquipedia's, so every page behind the slice is credited."""
+    from . import bans
+    s = bans.validate_bans(conn, q, r, info, pre.entities)
+    if isinstance(s, Unanswerable):
+        alts = []
+        intro = bans.introduced(conn)
+        if intro and "introduced" in s.reason and q.filters.season and str(q.filters.season) in question:
+            alts.append(question.replace(str(q.filters.season), str(intro)))
+        return _cannot(question, s, q, used, pre.entities, alts)
+    rows, facts = bans.run(conn, s)
+    where = bans.where_phrase(s)
+    if not facts["maps"]:
+        whose = f" for {s.team_name}" if s.team_key else ""
+        u = Unanswerable(code="no_data", reason=f"no map{where}{whose} has bans recorded",
+                         suggestions=["Bans are Liquipedia's, from 2025 on; widen the season, region or event."])
+        return _cannot(question, u, q, used, pre.entities)
+    if not rows and q.metric != "never_banned":
+        if s.hero:
+            reason = f"{s.hero} was not available on any map{where}, so it could not be banned there"
+        else:
+            reason = f"no hero was banned{where}"
+        return _cannot(question, Unanswerable(code="no_data", reason=reason), q, used, pre.entities)
+    for row in rows:
+        entity = entity_of(row)
+        if entity:
+            row["entity"] = entity
+    never = q.metric == "never_banned"
+    what = (f"teams that never banned {s.hero}" if never else f"teams that ban {s.hero}") if q.entity == "team" else \
+        ("heroes never banned" if never else "hero bans")
+    a = Answer(status="ok", question=question, query=q.compact(), entities=pre.entities, rows=rows,
+               notes=bans.notes(conn, s, rows, facts), description=f"{what} (Liquipedia, per map)", parser=used)
+    a.sentence = bans.sentence(s, rows, facts).as_dict()
+    if with_evidence:
+        try:
+            a.evidence = bans.evidence(conn, s, rows, evidence_for, evidence_page, evidence_page_size).as_dict()
+        except Exception:
+            conn.rollback()
+            log_event(log, logging.ERROR, "evidence_failed", intent=q.intent, exc_info=True)
+            a.evidence = Evidence(reason="the evidence rows could not be loaded for this answer").as_dict()
+    _attribute(conn, a, lambda: bans.attribution(s, facts))
+    if debug:
+        a.sql, a.params = bans.sql_of(s)
+    return a
+
+
 ATTRIBUTION_UNKNOWN = ("Liquipedia attribution could not be determined for this answer: values in it may come from "
                        "Liquipedia (CC-BY-SA 3.0, https://liquipedia.net/overwatch) without their page named.")
 
@@ -713,6 +762,9 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
         return _placement_answer(conn, question, q, r, pre, used, info)
     if q.intent == "team_group":
         return _group_answer(conn, question, q, pre, used, info)
+    if q.intent == "hero_bans":
+        return _bans_answer(conn, question, q, r, pre, used, info, with_evidence, evidence_for, evidence_page,
+                            evidence_page_size, debug)
 
     # 3. validate against the live schema
     v = validate(q, info)

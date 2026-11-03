@@ -216,3 +216,48 @@ distinguishes "never met" from "met, but no map results".
 
 Golden G93/G94 pin one pairing at both grains: sug2rfree v zeruhh, 11 series, 7-4, 29-21 in 50 maps. They run in a
 warehouse of their own (`tests/golden/pairs`), so the main golden set's confirmed values do not move.
+
+## Hero bans
+
+Migration `049_hero_bans.sql`, answered by `owcsmuse/nlq/bans.py`. Bans come from **Liquipedia only** (owner,
+2026-11-03): each played game in `match2games` records one ban per team in `extradata` (`team1ban1`, `team2ban1`; the
+hero that team banned) and `banstart` (the team that banned first). FACEIT's room vote (`voting.heroes`, the pool left
+after bans) is not used: it attributes no ban to a team, and in a room the series was not played in it describes other
+maps (on maps played off-FACEIT, 35 of 134 agreed with Liquipedia). Hero **picks** are recorded by neither source, so a
+picks question refuses and says so (`unsupported_question`); bans answer.
+
+```bash
+python -m owcsmuse ask "most banned hero in 2025"
+python -m owcsmuse ask "least banned hero in EMEA 2025"
+python -m owcsmuse ask "which heroes were never banned at the 2025 world finals"
+python -m owcsmuse ask "which heroes does Twisted Minds ban most"
+python -m owcsmuse ask "most banned hero against Team Liquid"
+python -m owcsmuse ask "which teams ban Tracer the most"
+python -m owcsmuse ask "how often does Team Liquid ban D.Va"
+```
+
+- **Grain: the map.** A hero is banned on a map or not (Liquipedia never records both teams banning one hero), so a
+  hero's bans count maps, and `ban_pct` is bans over the maps of the slice it was available on. With a team named, the
+  slice is the maps that team played, and the bans counted are its own (or, "against", its opponents').
+- **Source of record:** a ban is in an answer when its Liquipedia record is a series' - linked to FACEIT or
+  Liquipedia-only - which is where Liquipedia is the source of record already. It belongs to a team through the series'
+  sides: a Liquipedia-only series' side 1 is Liquipedia's team 1; a linked series' sides are FACEIT's, and
+  `series.lp_flip` says whether Liquipedia's team 1 is side 2 (the orientation the view already scores the series by).
+  Maps the warehouse holds with no Liquipedia bans (a FACEIT-only series, such as relegation) are counted and named in
+  a note, never silently left out.
+- **One spelling per hero.** `scope/heroes.json` is the hero list: Liquipedia's spelling is canonical, and FACEIT's
+  (`DVa`, `LifeWeaver`, `Lucio`, `Torbjorn`, `Soldier 76`) and short forms are aliases. A hero's key is `fold()` without
+  spaces ("d va" and "dva" are one). `liquipedia reconcile` writes every ban in canonical spelling; the check
+  `hero_bans` fails on a stored name the list does not hold.
+- **Availability decides "never banned".** A hero is available on a map played on or after its `available_from`
+  (UTC); none means before bans began. "Least banned" ranks the heroes available in the slice and banned at least
+  once (a hero never banned has zero and would lead every "least" list); **"never banned" is its own answer**: the
+  available heroes with no ban. A hero not yet released is neither: it was not available. 12 of 54 heroes carry a
+  date: the first stored evidence of the hero, with the bracket the data allows, accepted by the owner (2026-11-03)
+  as the conservative choice - a late date only drops a hero from "never banned" for a few maps, never a false claim.
+- **Before bans:** bans were introduced in 2025 (`bans_introduced_season`). A ban question about 2024 says that
+  ("Hero bans were introduced in 2025, so 2024 has none") and offers the 2025 question, rather than an empty list.
+- **Not supported:** slicing by role (the hero list records no roles: refused), Korea and China (no Liquipedia data
+  stored for their leagues; their teams' bans at the international events count).
+- Every answer credits each Liquipedia page behind its slice, and its evidence is the ban rows (one per map) of the
+  first row or the one `evidence_for` names (`hero`, or a team's `org_key`).

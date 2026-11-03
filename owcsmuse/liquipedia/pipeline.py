@@ -176,11 +176,12 @@ def run_reconciliation(conn: psycopg.Connection, *, team_map_path: str = DEFAULT
 
 def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
     """Replace liquipedia_matches / liquipedia_links with this run's. Idempotent; reviewer decisions come from the file."""
-    from .. import names
+    from .. import heroes, names
     from .enrich import _round_scores
 
     comp_by_page = {p: sorted(c)[0] for p, c in run.comps_of_page.items()}
     canon = names.load(conn)   # FACEIT's spelling of each map and mode (048), read before the rebuild below
+    hero_list = heroes.from_db(conn)   # each hero's canonical spelling (049)
     with conn.cursor() as cur:
         cur.execute("DELETE FROM liquipedia_links")
         cur.execute("DELETE FROM liquipedia_matches")
@@ -204,6 +205,13 @@ def store_run(conn: psycopg.Connection, run: Run) -> dict[str, int]:
                                                               score2, winner) VALUES (%s,%s,%s,%s,%s,%s,%s)""",
                             (m.objectname, i, canon.map(game.map), canon.mode(game.mode), s1, s2,
                              game.winner if game.winner in (1, 2) else 0))
+                # its bans (049), one hero per team, in the hero list's spelling; the same hero twice for one side
+                # of one map is one ban
+                for side, hero in dict.fromkeys(game.bans):
+                    cur.execute("""INSERT INTO liquipedia_bans (lp_objectname, round_number, side, hero, banned_first)
+                                   VALUES (%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING""",
+                                (m.objectname, i, side, hero_list.canonical(hero),
+                                 None if game.banstart not in (1, 2) else game.banstart == side))
             # the line-ups, a parsed copy like the match itself (rebuilt from raw_payloads on every run)
             for side, players in ((1, m.players1), (2, m.players2)):
                 seen: set[str] = set()

@@ -2247,6 +2247,320 @@
    },
    "derivation": "Teams with Healing Done on 2026 NA maps that were 2026 partners: Dallas Fuel, Disguised, SpaceStation Gaming, Team Liquid. Before: every NA team.",
    "status": "confirmed"
+  },
+  {
+   "id": "G97",
+   "title": "The most banned heroes of a season, each over the maps it was available on",
+   "kind": "exact",
+   "regression": null,
+   "question": "most banned hero in 2025",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "hero": "D.Va",
+      "bans": 15,
+      "maps": 82,
+      "ban_pct": "18.3"
+     },
+     {
+      "hero": "Wuyang",
+      "bans": 14,
+      "maps": 72,
+      "ban_pct": "19.4"
+     },
+     {
+      "hero": "Zarya",
+      "bans": 13,
+      "maps": 82,
+      "ban_pct": "15.9"
+     }
+    ],
+    "sentence_contains": [
+     "D.Va was the most banned hero in 2025"
+    ],
+    "attribution_pages": [
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/World_Finals",
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Champions_Clash",
+     "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/Midseason_Championship"
+    ]
+   },
+   "derivation": "Liquipedia's 2025 bans in the captured records (82 maps, one ban per team): D.Va 15 of 82; Wuyang 14 of 72; Zarya 13 of 82. Wuyang counts over its 72 maps only: available from 2025-09-06 in scope/heroes.json.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G98",
+   "title": "The least banned hero ranks heroes banned at least once, and says how many share the place",
+   "kind": "exact",
+   "regression": null,
+   "question": "least banned hero at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "hero": "Freja",
+      "bans": 1
+     }
+    ],
+    "sentence_contains": [
+     "and 4 more were the least banned heroes",
+     "1 ban each"
+    ],
+    "rows_set": {
+     "bans": [
+      "1",
+      "2"
+     ]
+    }
+   },
+   "derivation": "7 heroes were banned once at Overwatch_Champions_Series/2025/World_Finals (Freja, Genji, Hazard, Mauga, Orisa, Reinhardt, Sigma); a hero never banned there has zero and is not ranked (it is its own question, G99).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G99",
+   "title": "Never banned is its own answer: the heroes available at an event that nobody banned",
+   "kind": "exact",
+   "regression": null,
+   "question": "which heroes were never banned at the 2025 world finals",
+   "expect": {
+    "status": "ok",
+    "rows_set": {
+     "hero": [
+      "Baptiste",
+      "Bastion",
+      "Doomfist",
+      "Hanzo",
+      "Illari",
+      "Junker Queen",
+      "Junkrat",
+      "Juno",
+      "Lifeweaver",
+      "Moira",
+      "Pharah",
+      "Reaper",
+      "Soldier: 76",
+      "Sombra",
+      "Torbj\u00f6rn",
+      "Widowmaker",
+      "Zenyatta"
+     ]
+    },
+    "sentence_contains": [
+     "17 heroes available"
+    ]
+   },
+   "derivation": "Heroes on the list available on Overwatch_Champions_Series/2025/World_Finals's 72 ban maps (all of them: the newest, Wuyang, from 2025-09-06) with no ban there: Baptiste, Bastion, Doomfist, Hanzo, Illari, Junker Queen, Junkrat, Juno, Lifeweaver, Moira, Pharah, Reaper, Soldier: 76, Sombra, Torbj\u00f6rn, Widowmaker, Zenyatta.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G100",
+   "title": "Which heroes a team bans most: its own bans, on its maps",
+   "kind": "exact",
+   "regression": null,
+   "question": "which heroes does twisted minds ban most",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "hero": "Wuyang",
+      "bans": 3,
+      "maps": 26,
+      "ban_pct": "11.5"
+     }
+    ],
+    "sentence_contains": [
+     "Twisted Minds banned Wuyang most"
+    ]
+   },
+   "derivation": "Twisted Minds' bans (its side's teamNban1) on its 26 ban maps: Wuyang 3 times, then Brigitte 2.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G101",
+   "title": "The heroes banned against a team: its opponents' bans",
+   "kind": "exact",
+   "regression": null,
+   "question": "most banned hero against twisted minds",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "hero": "D.Va",
+      "bans": 3,
+      "maps": 26,
+      "ban_pct": "11.5"
+     },
+     {
+      "hero": "Symmetra",
+      "bans": 3,
+      "maps": 26,
+      "ban_pct": "11.5"
+     }
+    ],
+    "sentence_contains": [
+     "D.Va and Symmetra were the most banned heroes against Twisted Minds"
+    ]
+   },
+   "derivation": "The other side's ban on each of Twisted Minds' 26 ban maps: D.Va and Symmetra 3 times each.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G102",
+   "title": "Which teams ban a hero most, each over its own maps",
+   "kind": "exact",
+   "regression": null,
+   "question": "which teams ban d.va the most",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Weibo Gaming",
+      "bans": 4,
+      "maps": 11,
+      "ban_pct": "36.4"
+     }
+    ],
+    "sentence_contains": [
+     "Weibo Gaming banned D.Va the most"
+    ]
+   },
+   "derivation": "Each team's own bans of D.Va over its ban maps: Weibo Gaming 4 of 11; Crazy Raccoon 3 of 25; Team Liquid 2 of 9. 'd.va' is matched through the hero list.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G103",
+   "title": "A ban question about a season before bans says so, rather than an empty list",
+   "kind": "invariant",
+   "regression": null,
+   "question": "most banned hero in 2024",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "sentence_contains": [
+     "Hero bans were introduced in 2025"
+    ]
+   },
+   "derivation": "scope/heroes.json: bans were introduced in 2025 (owner, 2026-11-03); no captured 2024 record has a ban. 2024 has maps in the warehouse, so the answer is that rule, not 'nothing matches'.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G104",
+   "title": "Hero picks refuse, and say that neither source records them",
+   "kind": "invariant",
+   "regression": "the refusal said 'hero picks and bans are not in the FACEIT payloads', implying neither was recorded",
+   "question": "most picked hero",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "unsupported_question",
+    "sentence_contains": [
+     "hero picks are not recorded by either source"
+    ]
+   },
+   "derivation": "Neither FACEIT's payloads nor Liquipedia's match2games record which heroes were played; only bans are recorded.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G105",
+   "title": "A hero released after a slice's maps is not 'never banned' there",
+   "kind": "exact",
+   "regression": null,
+   "question": "which heroes were never banned in 2026",
+   "expect": {
+    "status": "ok",
+    "rows_set": {
+     "hero": [
+      "Ana",
+      "Anran",
+      "Ashe",
+      "Baptiste",
+      "Brigitte",
+      "D.Va",
+      "Domina",
+      "Doomfist",
+      "Echo",
+      "Emre",
+      "Freja",
+      "Genji",
+      "Hanzo",
+      "Hazard",
+      "Illari",
+      "Junker Queen",
+      "Junkrat",
+      "Juno",
+      "Lifeweaver",
+      "L\u00facio",
+      "Mauga",
+      "Mei",
+      "Mercy",
+      "Moira",
+      "Orisa",
+      "Pharah",
+      "Ramattra",
+      "Reaper",
+      "Roadhog",
+      "Sierra",
+      "Sojourn",
+      "Soldier: 76",
+      "Sombra",
+      "Symmetra",
+      "Torbj\u00f6rn",
+      "Tracer",
+      "Venture",
+      "Widowmaker",
+      "Winston",
+      "Wrecking Ball",
+      "Wuyang",
+      "Zarya",
+      "Zenyatta"
+     ]
+    },
+    "sentence_lacks": [
+     "D.Mon",
+     "Doctrine"
+    ]
+   },
+   "derivation": "The 2026 ban maps (5, 2026-06-27) predate D.Mon, Doctrine (available_from in scope/heroes.json), so they were not available there and are not in the list.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G106",
+   "title": "A linked series' bans belong to the team that made them",
+   "kind": "exact",
+   "regression": null,
+   "question": "which heroes does twisted minds ban most in 2026",
+   "expect": {
+    "status": "ok",
+    "rows_set": {
+     "hero": [
+      "Cassidy",
+      "Mizuki",
+      "Shion",
+      "Sigma",
+      "Vendetta"
+     ],
+     "bans": [
+      "1"
+     ]
+    }
+   },
+   "derivation": "The one 2026 record (EMEA Stage 2, linked to FACEIT 1-a823bbde) lists Twisted Minds as team 1: its team1ban1 on each of the 5 games is Cassidy, Mizuki, Shion, Sigma, Vendetta. Read by the FACEIT series' sides, which series.lp_flip orients.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G107",
+   "title": "A hero not yet available at an event could not be banned there",
+   "kind": "invariant",
+   "regression": null,
+   "question": "vendetta bans at the 2025 world finals",
+   "expect": {
+    "status": "cannot_answer",
+    "code": "no_data",
+    "sentence_contains": [
+     "Vendetta was not available"
+    ]
+   },
+   "derivation": "Vendetta is available from 2026-03-21; the 2025 World Finals ended 2025-11-30.",
+   "status": "confirmed"
   }
  ]
 }

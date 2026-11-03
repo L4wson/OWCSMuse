@@ -26,6 +26,17 @@ describe("answer sentence", () => {
     expect(onAsk).toHaveBeenCalledWith("zeruhh record");
   });
 
+  it("links a hero to its bans", async () => {
+    const onAsk = vi.fn();
+    const sentence = {
+      text: "D.Va was the most banned hero in 2025.",
+      spans: [{ start: 0, end: 4, kind: "hero", text: "D.Va", entity_id: null }],
+    };
+    render(<AnswerSentence sentence={sentence} onAsk={onAsk} />);
+    await userEvent.click(screen.getByRole("button", { name: "D.Va" }));
+    expect(onAsk).toHaveBeenCalledWith("D.Va bans");
+  });
+
   it("uses the offsets, not the words: the same name is linked only where the span says", () => {
     // "Ilios" appears twice; only the second one is an entity span.
     const sentence = {

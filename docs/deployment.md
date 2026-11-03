@@ -147,7 +147,8 @@ commit CI tested. Pull requests never deploy; one deploy runs at a time.
   `liquipedia reconcile`, `liquipedia placements load`) and `refresh` do not run on deploy; the daily ingest runs
   `liquipedia reconcile` and `refresh`, or run them by hand. A migration whose new table is filled by a loader (041's
   `liquipedia_rounds`, filled by `liquipedia reconcile`) is empty until then, which degrades to the previous answers,
-  never wrong ones.
+  never wrong ones. 049's `liquipedia_bans` is the same: until the nightly `liquipedia reconcile`, a ban question
+  answers "no map has bans recorded". Its hero list is reference data and `migrate` loads it, like competition names.
 - **Images.** CI pulls its three images (`postgres:16`, `postgres:17`, `python:3.12-slim`) from this repository's GHCR
   mirror, `ghcr.io/l4wson/owcsmuse/*`, with the job's own `GITHUB_TOKEN`. `.github/workflows/mirror-images.yml` copies
   them from upstream weekly, on demand, and when that file changes. Anonymous pulls are metered per IP and shared runners

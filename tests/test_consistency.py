@@ -63,6 +63,8 @@ def test_counts_are_reported_even_when_everything_passes(agg_db):
     assert r.ok and r.counts
     for view, c in r.counts.items():
         assert c["expected"] == c["actual"], view
+        if view == "fact_hero_bans":
+            continue      # Liquipedia's bans: these fixtures hold no Liquipedia record (tests/test_hero_bans_db.py has them)
         assert c["actual"] > 0, f"{view} is empty; the fixtures should populate every fact view"
 
 

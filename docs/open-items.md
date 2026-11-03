@@ -28,20 +28,23 @@ numbers below are from that day.
    Hydron v Team Danteh). The FACEIT side needs a crawl, not Liquipedia requests.
 5. **31 series have no map results from any source** (28 on 2026-10-02): Liquipedia does not cover them or has no
    record.
-6. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded).
+6. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded). Hero bans would come
+   with them: Liquipedia records bans for every region, but none of their leagues' pages is stored.
+7. **Hero bans by role** ("most banned support") refuse: the hero list records no roles. FACEIT's pool tags each hero
+   with one (Sombra with two), which could seed a reviewed `role` per hero.
 
 ## Tests
 
-7. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+8. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
     "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
     "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
     backs the synthetic by_match case).
-8. **Three golden cases are `proposed`, not asserted:** G27 (Twisted Minds v Geekay at map grain, Stage 2
-    enrichment), G28 (a player on the enriched match still has no player stats from it) and G61 (a Korean team's
+9. **Golden cases `proposed`, not asserted:** G27 (Twisted Minds v Geekay at map grain, Stage 2
+    enrichment), G28 (a player on the enriched match still has no player stats from it), G61 (a Korean team's
     record at an international event). Each waits on the owner's review.
-9. **The golden warehouse leaves out Toronto Defiant v Avidity and v Shikigami** (2024 NA Stage 3/4). Both are
+10. **The golden warehouse leaves out Toronto Defiant v Avidity and v Shikigami** (2024 NA Stage 3/4). Both are
     FACEIT teams with no series there. Capturing a series of each would let both records in.
-10. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI
+11. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI
     step.
 
 ## Done

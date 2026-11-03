@@ -1205,6 +1205,116 @@ case("G96", "A partner-team stat leaderboard holds partner teams only", "invaria
      f"Teams with Healing Done on 2026 NA maps that were 2026 partners: {', '.join(sorted(team_heal))}. Before: every NA team.",
      regression="the group filter did not reach the team-stat leaderboard (2026-10-25)")
 
+# ------------------------------------------------------------------ hero bans (049)
+# Confirmed by the owner on 2026-11-03. Liquipedia's bans, counted per map from the captured records and the
+# reviewed hero list (independent.ban_maps), never from ask(). Team rankings use names one identity holds: the 2025
+# events' "Geekay Esports" is the NA team and the 2026 EMEA record's is the EMEA team (two owner decisions), which the
+# records alone, keyed by name, would merge.
+CONFIRMED |= {f"G{n}" for n in range(97, 108)}
+BANS = I.ban_maps()
+assert len({(m["page"], m["date"], m["teams"]) for m in BANS}) == 25        # every 2025 event series + one 2026 linked
+
+
+def ranked(table, least=False):
+    rows = [r for r in table.values() if r["bans"] >= 1]
+    return sorted(rows, key=lambda r: ((r["bans"], r["ban_pct"]) if least else (-r["bans"], -r["ban_pct"]), r["hero"]))
+
+
+def hero_row(r):
+    return {"hero": r["hero"], "bans": r["bans"], "maps": r["maps"], "ban_pct": str(r["ban_pct"])}
+
+
+b25 = ranked(I.hero_ban_table([m for m in BANS if m["season"] == 2025]))
+assert b25[0]["bans"] > b25[1]["bans"] > b25[2]["bans"]
+case("G97", "The most banned heroes of a season, each over the maps it was available on", "exact", "most banned hero in 2025",
+     {"status": "ok", "rows": [hero_row(r) for r in b25[:3]],
+      "sentence_contains": [f"{b25[0]['hero']} was the most banned hero in 2025"],
+      "attribution_pages": [LP + WF25, LP + CC25, LP + MSC25]},
+     f"Liquipedia's 2025 bans in the captured records ({sum(m['season'] == 2025 for m in BANS)} maps, one ban per team): "
+     + "; ".join(f"{r['hero']} {r['bans']} of {r['maps']}" for r in b25[:3]) + f". {b25[1]['hero']} counts over its "
+     f"{b25[1]['maps']} maps only: available from {I._hero_list()[1][b25[1]['hero']]} in scope/heroes.json.")
+
+wf = [m for m in BANS if m["page"] == WF25]
+wf_table = I.hero_ban_table(wf)
+wf_least = ranked(wf_table, least=True)
+tied = [r for r in wf_least if r["bans"] == wf_least[0]["bans"]]
+case("G98", "The least banned hero ranks heroes banned at least once, and says how many share the place", "exact",
+     "least banned hero at the 2025 world finals",
+     {"status": "ok", "rows": [{"hero": tied[0]["hero"], "bans": tied[0]["bans"]}],
+      "sentence_contains": [f"and {len(tied) - 3} more were the least banned heroes", f"{tied[0]['bans']} ban each"],
+      "rows_set": {"bans": sorted({str(r["bans"]) for r in wf_least[:10]})}},
+     f"{len(tied)} heroes were banned once at {WF25} ({', '.join(r['hero'] for r in tied)}); a hero never banned there "
+     "has zero and is not ranked (it is its own question, G99).")
+
+wf_never = sorted(h for h, r in wf_table.items() if r["bans"] == 0)
+case("G99", "Never banned is its own answer: the heroes available at an event that nobody banned", "exact",
+     "which heroes were never banned at the 2025 world finals",
+     {"status": "ok", "rows_set": {"hero": wf_never}, "sentence_contains": [f"{len(wf_never)} heroes available"]},
+     f"Heroes on the list available on {WF25}'s {len(wf)} ban maps (all of them: the newest, Wuyang, from "
+     f"{I._hero_list()[1]['Wuyang']}) with no ban there: {', '.join(wf_never)}.")
+
+tm_by = ranked(I.hero_ban_table(BANS, team="Twisted Minds"))
+assert tm_by[0]["bans"] > tm_by[1]["bans"]
+case("G100", "Which heroes a team bans most: its own bans, on its maps", "exact", "which heroes does twisted minds ban most",
+     {"status": "ok", "rows": [hero_row(tm_by[0])], "sentence_contains": [f"Twisted Minds banned {tm_by[0]['hero']} most"]},
+     f"Twisted Minds' bans (its side's teamNban1) on its {tm_by[0]['maps']} ban maps: {tm_by[0]['hero']} "
+     f"{tm_by[0]['bans']} times, then {tm_by[1]['hero']} {tm_by[1]['bans']}.")
+
+tm_vs = ranked(I.hero_ban_table(BANS, team="Twisted Minds", against=True))
+top_vs = [r for r in tm_vs if r["bans"] == tm_vs[0]["bans"]]
+assert len(top_vs) == 2
+case("G101", "The heroes banned against a team: its opponents' bans", "exact", "most banned hero against twisted minds",
+     {"status": "ok", "rows": [hero_row(r) for r in top_vs],
+      "sentence_contains": [f"{top_vs[0]['hero']} and {top_vs[1]['hero']} were the most banned heroes against Twisted Minds"]},
+     f"The other side's ban on each of Twisted Minds' {top_vs[0]['maps']} ban maps: {top_vs[0]['hero']} and "
+     f"{top_vs[1]['hero']} {top_vs[0]['bans']} times each.")
+
+dva = sorted(I.team_ban_table(BANS, "D.Va").values(), key=lambda r: (-r["bans"], -r["ban_pct"], r["team"]))
+assert dva[0]["bans"] > dva[1]["bans"] and dva[0]["team"] == "Weibo Gaming"
+case("G102", "Which teams ban a hero most, each over its own maps", "exact", "which teams ban d.va the most",
+     {"status": "ok", "rows": [{"team": dva[0]["team"], "bans": dva[0]["bans"], "maps": dva[0]["maps"],
+                                "ban_pct": str(dva[0]["ban_pct"])}],
+      "sentence_contains": [f"{dva[0]['team']} banned D.Va the most"]},
+     "Each team's own bans of D.Va over its ban maps: " + "; ".join(f"{r['team']} {r['bans']} of {r['maps']}" for r in dva[:3])
+     + ". 'd.va' is matched through the hero list.")
+
+case("G103", "A ban question about a season before bans says so, rather than an empty list", "invariant",
+     "most banned hero in 2024",
+     {"status": "cannot_answer", "code": "no_data",
+      "sentence_contains": [f"Hero bans were introduced in {I.bans_introduced()}"]},
+     f"scope/heroes.json: bans were introduced in {I.bans_introduced()} (owner, 2026-11-03); no captured 2024 record has a "
+     "ban. 2024 has maps in the warehouse, so the answer is that rule, not 'nothing matches'.")
+
+case("G104", "Hero picks refuse, and say that neither source records them", "invariant", "most picked hero",
+     {"status": "cannot_answer", "code": "unsupported_question",
+      "sentence_contains": ["hero picks are not recorded by either source"]},
+     "Neither FACEIT's payloads nor Liquipedia's match2games record which heroes were played; only bans are recorded.",
+     regression="the refusal said 'hero picks and bans are not in the FACEIT payloads', implying neither was recorded")
+
+n26 = [m for m in BANS if m["season"] == 2026]
+never26 = sorted(h for h, r in I.hero_ban_table(n26).items() if r["bans"] == 0)
+late = sorted(h for h, d in I._hero_list()[1].items() if d and d > max(m["date"] for m in n26)[:10])
+assert late and not set(late) & set(never26)
+case("G105", "A hero released after a slice's maps is not 'never banned' there", "exact",
+     "which heroes were never banned in 2026",
+     {"status": "ok", "rows_set": {"hero": never26}, "sentence_lacks": late},
+     f"The 2026 ban maps ({len(n26)}, {max(m['date'] for m in n26)[:10]}) predate {', '.join(late)} (available_from in "
+     "scope/heroes.json), so they were not available there and are not in the list.")
+
+tm26 = sorted(r["hero"] for r in I.hero_ban_table(n26, team="Twisted Minds").values() if r["bans"])
+case("G106", "A linked series' bans belong to the team that made them", "exact",
+     "which heroes does twisted minds ban most in 2026",
+     {"status": "ok", "rows_set": {"hero": tm26, "bans": ["1"]}},
+     f"The one 2026 record (EMEA Stage 2, linked to FACEIT 1-a823bbde) lists Twisted Minds as team 1: its team1ban1 on "
+     f"each of the {len(n26)} games is {', '.join(tm26)}. Read by the FACEIT series' sides, which series.lp_flip orients.")
+
+vend = I._hero_list()[1]["Vendetta"]
+assert all(m["date"][:10] < vend for m in wf)
+case("G107", "A hero not yet available at an event could not be banned there", "invariant",
+     "vendetta bans at the 2025 world finals",
+     {"status": "cannot_answer", "code": "no_data", "sentence_contains": ["Vendetta was not available"]},
+     f"Vendetta is available from {vend}; the 2025 World Finals ended {max(m['date'] for m in wf)[:10]}.")
+
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
            "cases": CASES}, open(Path(__file__).parent / "cases.json", "w", encoding="utf-8"), indent=1)

@@ -89,6 +89,11 @@ LABELS: dict[str, str] = {
     "team2_wins": "Team 2 wins",
     "maps_with_duration": "Maps with duration",
     "avg_duration_seconds": "Avg duration (s)",
+    "hero": "Hero",
+    "bans": "Bans",
+    "ban_pct": "Ban %",
+    "available_from": "Available from",
+    "banned_first": "Banned first",
 }
 
 # Explicit types where the name alone would guess wrong.
