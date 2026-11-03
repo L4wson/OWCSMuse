@@ -115,6 +115,29 @@ class RawPayloadStore:
         headers: Optional[dict[str, str]] = None,
         source: str = "faceit",
     ) -> int:
+        """The row id holding this response. A FACEIT 200 response identical to the latest stored one for the same
+        endpoint, params and match is not stored again (050): that row records the sighting (`last_seen_at`,
+        `times_seen`) and its id is returned, so every reader of the latest payload sees the same content. Liquipedia
+        responses are always stored, because its hourly request budget counts the rows."""
+        if source == "faceit" and http_status == 200 and payload is not None:
+            with self.conn.cursor() as cur:
+                cur.execute(
+                    """
+                    UPDATE raw_payloads SET last_seen_at = %s, times_seen = times_seen + 1
+                     WHERE id = (SELECT id FROM raw_payloads
+                                  WHERE source = 'faceit' AND endpoint = %s AND params = %s
+                                    AND match_id IS NOT DISTINCT FROM %s
+                                  ORDER BY fetched_at DESC, id DESC LIMIT 1)
+                       AND http_status = 200 AND payload = %s
+                    RETURNING id
+                    """,
+                    (fetched_at, endpoint, Jsonb(params), match_id, Jsonb(payload)),
+                )
+                same = cur.fetchone()
+            if same:
+                if not self.conn.autocommit:
+                    self.conn.commit()
+                return int(same["id"])
         with self.conn.cursor() as cur:
             cur.execute(
                 """

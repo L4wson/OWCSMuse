@@ -7,6 +7,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
+from db_guard import require_local  # noqa: E402
 from owcsmuse.aggregates import refresh
 from owcsmuse.collector import Collector
 from owcsmuse.config import Settings
@@ -63,6 +64,7 @@ class FakeClient:
 def build_scratch_db(db_url: str, schema: str):
     """Drop + recreate `schema`, migrate, ingest the three fixture matches, refresh. Returns (conn, raw_conn)."""
     assert schema != "public"
+    require_local(db_url, "the database URL")   # it drops and builds schemas: never a remote database
     admin = connect(db_url, autocommit=True, schema=schema)
     admin.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
     admin.close()

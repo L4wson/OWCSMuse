@@ -64,7 +64,7 @@ under a restricted `search_path` when it plans a materialized-view refresh.
 
 | Table | Grain | Notes |
 | --- | --- | --- |
-| `raw_payloads` | one row per HTTP response | `endpoint`, `params`, `http_status`, `payload` (jsonb), `body_text`, `fetched_at`, `match_id`, `championship_id`. Every request, including 429s and 5xx |
+| `raw_payloads` | one row per distinct HTTP response | `endpoint`, `params`, `http_status`, `payload` (jsonb), `body_text`, `fetched_at`, `match_id`, `championship_id`. Every request, including 429s and 5xx. A FACEIT 200 response identical to the latest stored one for the same endpoint, params and match is recorded on that row (`last_seen_at`, `times_seen`) instead of stored again (050); Liquipedia responses are always stored, since its request budget counts rows |
 | `organizers` | FACEIT organizer | |
 | `championships` | FACEIT championship | `include` (from manifest), `region` as reported, `derived_region` from the name, `list_truncated`, `list_completed_at` |
 | `teams` / `team_names` | FACEIT team (faction) id | latest name plus name history |

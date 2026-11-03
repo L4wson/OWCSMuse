@@ -14,6 +14,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
+from db_guard import require_local  # noqa: E402
 from owcsmuse.aggregates import refresh
 from owcsmuse.aliases import AliasDecisions
 from owcsmuse.aliases import load_decisions as load_alias_decisions
@@ -78,6 +79,7 @@ def build_golden_db(db_url: str, schema: str, fixtures: Path = GOLDEN):
     `fixtures` is the directory with the manifest, championships and Liquipedia records: tests/golden for the main
     warehouse, tests/golden/pairs for one pairing's every series (G93/G94), kept apart so neither moves the other."""
     assert schema != "public"
+    require_local(db_url, "the database URL")   # it drops and builds schemas: never a remote database
     admin = connect(db_url, autocommit=True, schema=schema)
     admin.execute(f"DROP SCHEMA IF EXISTS {schema} CASCADE")
     admin.close()
