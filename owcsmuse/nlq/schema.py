@@ -18,8 +18,9 @@ Intent = Literal[
     "team_membership",    # which team a player is on now, and the teams they have been on
     "placement",          # where teams finished at one event (Liquipedia's prize pool)
     "team_group",         # the members of a season-scoped group of teams (the partner teams)
+    "hero_bans",          # which heroes were banned, by whom, and which never were (049: Liquipedia's bans)
 ]
-EntityType = Literal["player", "team", "org", "map", "mode"]
+EntityType = Literal["player", "team", "org", "map", "mode", "hero"]
 Aggregation = Literal["total", "avg_per_map", "count", "rate"]
 Region = Literal["na", "emea", "international", "korea"]
 # FACEIT's own three values (match_players.role). Recorded per player per map,
@@ -78,6 +79,10 @@ class Filters(BaseModel):
     event_read_as: Optional[Literal["world champion"]] = None
     # a season-scoped group of teams (043): restricts a team question to its members, each in a season it was one
     group: Optional[Literal["partner"]] = None
+    # hero bans (049): one hero, as typed (matched against the hero list); and, with a team named, whose bans count -
+    # the team's own ("by", the default) or its opponents' against it ("against")
+    hero: Optional[str] = None
+    ban_side: Optional[Literal["by", "against"]] = None
 
     def names(self) -> list[tuple[str, str]]:
         """(role, name) pairs that need entity resolution."""

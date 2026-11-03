@@ -365,6 +365,8 @@ def entity_of(row: dict[str, Any]) -> Optional[dict[str, Any]]:
     if row.get("org_key"):
         return {"id": row["org_key"], "type": "org", "name": row.get("team") or row.get("display_name"),
                 "column": "org_key"}
+    if row.get("hero"):
+        return {"id": row["hero"], "type": "hero", "name": row["hero"], "column": "hero"}
     if row.get("map_name"):
         return {"id": row["map_name"], "type": "map", "name": row["map_name"], "column": "map_name"}
     if row.get("game_mode"):

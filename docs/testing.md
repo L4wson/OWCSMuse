@@ -35,6 +35,7 @@ and exits 1 with the specific discrepancy:
 | `api_role_grants` | Supabase's Data API roles, `anon` and `authenticated`, hold no grant in the schema (tables, views, materialized views, sequences, functions, the schema itself), and the default privileges of the roles that own its objects give them none, so a recreated view cannot bring one back. Reads the ACLs themselves: PUBLIC's default `EXECUTE` and role membership are not grants. Supabase's own `supabase_admin` defaults are counted, not failed. Off Supabase the roles do not exist and it passes. Added 2026-10-26 after the owner revoked the grants Supabase gives by default |
 | `answer_rates` | asks the rate questions through the real parser and pipeline (highest K/D, eliminations per map, map and series win rate) for every season and all seasons: every rate in a row is plausible (K/D at most 15 over 3+ maps, a percentage within 0-100, an average at most its total, series at most maps) and the sentence quotes the metric's own column. Added 2026-10-02 after "highest NA kd in 2026" printed Attack's 77.80 map win % as his K/D (5.00); on the old code it fails five answers |
 | `liquipedia_map_isolation` | no `match_players` row joins to a `source = 'liquipedia'` round: Stage 2 map enrichment never invents player stats |
+| `hero_bans` | every stored ban is a hero on the reviewed list (`scope/heroes.json`) in its one canonical spelling (no "DVa" beside "D.Va"), no ban predates its hero's `available_from` or the season bans began, every map with bans holds exactly one per team and two different heroes, and every ban belongs to a team (a linked series' Liquipedia record oriented by `series.lp_flip`). `fact_view_reconciliation` also counts `fact_hero_bans` against `liquipedia_bans`. Added 2026-11-03 with migration 049 |
 
 ```bash
 python -m owcsmuse check
@@ -76,6 +77,12 @@ in-game name `KSAA` belonged.
   (`tests/golden/liquipedia_events.json`): G33 counts them in the team's record, and G22 and G82 count the four
   against NTMR through Liquipedia's line-ups (sug2rfree for Toronto, ZSS and cjay for NTMR). Toronto's series against
   Avidity and Shikigami are left out: both are FACEIT teams with no series here, so neither would resolve.
+  G97-G107 (confirmed by the owner, 2026-11-03) cover hero bans from the same Liquipedia records, derived by
+  `independent.ban_maps()` from the records and `scope/heroes.json` alone: rankings over the maps a hero was available on
+  (G97), "least" ranking only heroes banned at least once and saying how many tie (G98), "never banned" as its own answer
+  (G99) that leaves out a hero released after the slice (G105, G107), a team's own bans and its opponents' (G100, G101),
+  the teams that ban a hero (G102), a linked series' bans by its sides (G106), 2024 before bans (G103) and the picks
+  refusal (G104).
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with

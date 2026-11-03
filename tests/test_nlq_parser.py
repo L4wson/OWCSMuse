@@ -157,6 +157,29 @@ SUPPORTED = [
     # unambiguous shorthand "dps" names the role, so this must NOT carry a role filter
     ("who had the most damage",
      {"intent": "leaderboard", "entity": "player", "metric": "Damage Dealt", "filters": {}}),
+    # hero bans (049): Liquipedia's, per map, one per team
+    ("most banned hero in 2026",
+     {"intent": "hero_bans", "entity": "hero", "metric": "bans", "sort": "desc", "filters": {"season": 2026}}),
+    ("least banned hero in EMEA 2025",
+     {"intent": "hero_bans", "entity": "hero", "metric": "bans", "sort": "asc", "filters": {"season": 2025, "region": "emea"}}),
+    ("which heroes were never banned at the 2025 world finals",
+     {"intent": "hero_bans", "entity": "hero", "metric": "never_banned",
+      "filters": {"season": 2025, "championship": "world finals"}}),
+    ("which heroes does Twisted Minds ban most",
+     {"intent": "hero_bans", "entity": "hero", "filters": {"team": "twisted minds", "ban_side": "by"}}),
+    ("most banned hero against Team Liquid",
+     {"intent": "hero_bans", "entity": "hero", "filters": {"team": "team liquid", "ban_side": "against"}}),
+    ("which teams ban Tracer the most",
+     {"intent": "hero_bans", "entity": "team", "metric": "bans", "filters": {"hero": "Tracer"}}),
+    ("how often does Team Liquid ban D.Va",
+     {"intent": "hero_bans", "entity": "hero", "filters": {"team": "team liquid", "hero": "D.Va", "ban_side": "by"}}),
+    # a bare region word is the region, not a team
+    ("top 5 banned heroes in 2026 na stage 3",
+     {"intent": "hero_bans", "limit": 5, "filters": {"season": 2026, "region": "na", "championship": "stage 3"}}),
+    # FACEIT's spellings and short forms reach the hero list's canonical name
+    ("soldier 76 bans", {"intent": "hero_bans", "filters": {"hero": "Soldier: 76"}}),
+    ("lucio bans this stage", {"intent": "hero_bans", "filters": {"hero": "Lúcio", "period": "this_stage"}}),
+    ("who bans dva the most in na", {"intent": "hero_bans", "entity": "team", "filters": {"hero": "D.Va", "region": "na"}}),
 ]
 
 UNANSWERABLE = [
@@ -165,7 +188,9 @@ UNANSWERABLE = [
     ("When is the next match for Twisted Minds?", {"out_of_scope"}),
     ("Who will win OWCS 2026?", {"out_of_scope"}),
     ("How much prize money did Twisted Minds earn?", {"unsupported_question"}),
-    ("most banned hero in 2026", {"unsupported_question"}),
+    ("most picked hero", {"unsupported_question"}),             # picks: neither source records them
+    ("which heroes does Twisted Minds play most", {"unsupported_question"}),
+    ("most banned support", {"unsupported_question"}),           # bans, but the hero list records no roles
     ("who was the stage 2 2024 na mvp", {"unsupported_question"}),
     ("Who had the most accuracy?", {"unsupported_metric"}),
     ("Show me the open qualifier results", {"out_of_scope"}),
@@ -335,3 +360,16 @@ def test_a_partner_player_question_ranks_players_restricted_to_partner_teams(que
 def test_a_partner_team_question_stays_a_team_question():
     q = parse_question("which partner team had the most healing in NA 2026")
     assert (q.entity, q.metric, q.filters.group) == ("team", "Healing Done", "partner")
+
+
+def test_a_picks_question_says_neither_source_records_picks_and_bans_are():
+    for q in ("most picked hero", "who has the best hero pool", "hero picks and bans for Team Liquid"):
+        r = parse_question(q)
+        assert isinstance(r, Unanswerable) and r.code == "unsupported_question", (q, r)
+        assert "not recorded by either source" in r.reason and "bans are recorded" in r.reason, r.reason
+
+
+def test_a_hero_name_alone_is_not_a_ban_question():
+    # a player may share a hero's name: without a ban (or hero, or pick) word the question parses as before
+    r = parse_question("mercy record")
+    assert not (isinstance(r, StructuredQuery) and r.intent == "hero_bans")

@@ -127,6 +127,9 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
             SELECT match_id, round_number, sum(n) AS total, sum(n * n) AS same_side
               FROM per GROUP BY match_id, round_number
         ) SELECT coalesce(sum(total * total - same_side), 0) FROM tot"""),
+    # 049: a ban is in an answer when its Liquipedia record is a series' (linked or Liquipedia-only), once
+    ("fact_hero_bans", "one row per ban of a series in scope",
+     """SELECT count(*) FROM liquipedia_bans b WHERE EXISTS (SELECT 1 FROM series s WHERE s.lp_objectname = b.lp_objectname)"""),
 )
 
 
@@ -746,6 +749,64 @@ def check_name_variants(conn: psycopg.Connection) -> CheckResult:
                    counts)
 
 
+def check_hero_bans(conn: psycopg.Connection) -> CheckResult:
+    """Hero bans (049) are stored in one spelling, from a known hero, when the hero existed, one per team per map.
+
+    The way `name_variants` keeps one spelling per map: a ban written as "DVa" beside "D.Va" would split the hero's
+    count in two, and a hero the list does not hold has no availability, so it would fall out of every "never banned"
+    answer. A ban dated before its hero's `available_from` means scope/heroes.json is wrong about that hero (and every
+    "never banned" answer before that day is wrong with it); a ban before bans were introduced means the season rule is.
+    Every map with bans holds exactly one per team, two different heroes, and every ban belongs to a team.
+    """
+    from .heroes import key
+    discrepancies: list[dict[str, Any]] = []
+    if _scalar(conn, "SELECT to_regclass('liquipedia_bans') IS NOT NULL") is not True:
+        return _result("hero_bans", [], "no ban tables (before migration 049)", "", {})
+    heroes = {r["hero"] for r in _rows(conn, "SELECT hero FROM heroes")}
+    stored = _rows(conn, "SELECT hero, count(*) AS n FROM liquipedia_bans GROUP BY hero ORDER BY hero")
+    if stored and not heroes:
+        discrepancies.append({"kind": "hero_list_not_loaded", "fix": "python -m owcsmuse heroes load, then "
+                              "python -m owcsmuse liquipedia reconcile"})
+    by_key: dict[str, list] = {}
+    for r in stored:
+        by_key.setdefault(key(r["hero"]), []).append((r["hero"], int(r["n"])))
+        if heroes and r["hero"] not in heroes:
+            discrepancies.append({"kind": "unknown_hero", "hero": r["hero"], "bans": int(r["n"]),
+                                  "fix": "add it (or the spelling, as an alias) to scope/heroes.json, `heroes load`, "
+                                         "then `liquipedia reconcile`"})
+    for k, spellings in sorted(by_key.items()):
+        if len(spellings) > 1:
+            discrepancies.append({"kind": "spelling_variants", "key": k, "spellings": spellings})
+    for r in _rows(conn, """SELECT b.hero, h.available_from, min(b.played_at) AS first_ban, count(*) AS bans
+                              FROM fact_hero_bans b JOIN heroes h ON h.hero = b.hero
+                             WHERE h.available_from IS NOT NULL AND (b.played_at AT TIME ZONE 'UTC')::date < h.available_from
+                             GROUP BY b.hero, h.available_from ORDER BY b.hero"""):
+        discrepancies.append({"kind": "banned_before_available", "hero": r["hero"],
+                              "available_from": str(r["available_from"]), "first_ban": str(r["first_ban"]),
+                              "bans": int(r["bans"]), "fix": "correct its available_from in scope/heroes.json"})
+    for r in _rows(conn, """SELECT season, count(*) AS bans FROM fact_hero_bans
+                             WHERE season < (SELECT min(bans_introduced_season) FROM hero_ban_settings) GROUP BY season"""):
+        discrepancies.append({"kind": "ban_before_bans_introduced", "season": r["season"], "bans": int(r["bans"])})
+    for r in _rows(conn, """SELECT lp_objectname, round_number, count(*) FILTER (WHERE side = 1) AS side1,
+                                   count(*) FILTER (WHERE side = 2) AS side2, count(DISTINCT hero) AS heroes
+                              FROM liquipedia_bans GROUP BY lp_objectname, round_number
+                            HAVING count(*) FILTER (WHERE side = 1) <> 1 OR count(*) FILTER (WHERE side = 2) <> 1
+                                OR count(DISTINCT hero) <> count(*)
+                             ORDER BY 1, 2"""):
+        discrepancies.append({"kind": "not_one_ban_per_team", **r})
+    for r in _rows(conn, """SELECT series_id, count(*) AS bans FROM fact_hero_bans WHERE org_key IS NULL
+                             GROUP BY series_id ORDER BY series_id"""):
+        discrepancies.append({"kind": "unattributed", "series_id": r["series_id"], "bans": int(r["bans"]),
+                              "why": "a linked series whose Liquipedia record could not be oriented (series.lp_flip)"})
+    counts = {"bans": _scalar(conn, "SELECT count(*) FROM fact_hero_bans"),
+              "maps": _scalar(conn, "SELECT count(*) FROM hero_ban_maps"),
+              "heroes_banned": len(stored), "heroes_listed": len(heroes),
+              "dated_heroes": _scalar(conn, "SELECT count(*) FROM heroes WHERE available_from IS NOT NULL")}
+    return _result("hero_bans", discrepancies,
+                   "every ban is one known hero in one spelling, banned once per team per map, when it was available",
+                   f"{len(discrepancies)} hero-ban problem(s)", counts)
+
+
 # ------------------------------------------------------------ answer rates
 
 # Questions whose answer is a derived rate, asked through the real parser and pipeline for every season and for all of
@@ -1054,6 +1115,7 @@ CHECKS: dict[str, Callable[[psycopg.Connection], CheckResult]] = {
     "liquipedia_map_isolation": check_liquipedia_map_isolation,
     "dropped_stats_maps": check_dropped_stats_maps,
     "name_variants": check_name_variants,
+    "hero_bans": check_hero_bans,
     "map_winner_consistency": check_map_winner_consistency,
     "phantom_map_isolation": check_phantom_map_isolation,
     "display_names_searchable": check_display_names_searchable,

@@ -15,6 +15,7 @@ import re
 import unicodedata
 from typing import Any, Optional, Union
 
+from ..heroes import load_file as load_hero_file
 from ..resolve import fold
 from .schema import DERIVED_METRICS, Filters, StructuredQuery, Unanswerable
 
@@ -63,8 +64,6 @@ METRIC_SYNONYMS: list[tuple[str, str]] = sorted(
 # which hero, who won an award, who earns what. They were refused as unsupported_metric, which tells a client to offer
 # a stat instead ("ask `what stats are available`"); no stat answers them.
 UNSUPPORTED_QUESTION_TERMS: list[tuple[str, str]] = [
-    ("hero", "hero picks and bans are not in the FACEIT payloads"),
-    ("heroes", "hero picks and bans are not in the FACEIT payloads"),
     ("mvp", "MVP awards are not tracked"),
     ("salary", "salaries are not tracked"),
     ("earnings", "prize money is not tracked"),
@@ -524,6 +523,78 @@ def _find_placement(q: str, filters: Filters) -> Optional[StructuredQuery]:
     return None
 
 
+# ------------------------------------------------------------------ hero bans (049)
+
+PICKS_REASON = ("hero picks are not recorded by either source (FACEIT or Liquipedia), so which heroes were played cannot "
+                "be answered; hero bans are recorded, from Liquipedia")
+_BAN = re.compile(r"\bban(?:s|ned|ning)?\b")
+_PICK = re.compile(r"\bpick(?:s|ed|ing)?\b|\bpick ?rates?\b|\bmost played\b|\bplay(?:s|ed)? the most\b|\bmains?\b"
+                   r"|\bhero pool\b")
+_HERO_WORD = re.compile(r"\bhero(?:es)?\b")
+
+
+def _hero_forms() -> list[tuple[str, str]]:
+    """(how a question may write it, canonical name), longest first: each name and alias of the reviewed hero list,
+    lower-cased and unaccented as questions are, with and without its dots and colons ("d.va", "dva", "d va")."""
+    out: dict[str, str] = {}
+    for h in load_hero_file().heroes:
+        for n in (h.name, *h.aliases):
+            a = _ascii(n)
+            for form in (a, re.sub(r"[.:]", "", a), re.sub(r"\s+", " ", re.sub(r"[.:]", " ", a)).strip()):
+                if form:
+                    out.setdefault(form, h.name)
+    return sorted(out.items(), key=lambda kv: (-len(kv[0]), kv[0]))
+
+
+_HEROES = _hero_forms()
+
+
+def _find_hero(q: str) -> tuple[Optional[str], str]:
+    """(the hero a question names, the question without it)."""
+    for form, name in _HEROES:
+        m = re.search(r"(?<![a-z0-9])" + re.escape(form) + r"(?![a-z0-9])", q)
+        if m:
+            return name, re.sub(r"\s+", " ", q[: m.start()] + " " + q[m.end():]).strip()
+    return None, q
+
+
+# The words of a ban question that are not a team's name; what is left, once filters are gone, is the team.
+_BAN_WORDS = re.compile(
+    r"\b(?:ban(?:s|ned|ning)?|heroes|hero|most|least|fewest|often|frequently|rarely|never|not|been|ever|times?|many|much|"
+    r"how|which|what|who|whom|whose|top|bottom|the|a|an|by|against|opponents?|of|is|was|were|are|has|have|had|do|does|did|"
+    r"teams|orgs?|in|on|at|for|get|gets|got|their|its|maps?|matches|series|games|when|playing|played|vs|versus|they|"
+    r"them|than|any|other|unbanned|no|show|me|list|give|tell|count|number|rate|percentage|ranking|rank|ranked)\b"
+    r"|\b\d{1,3}\b")
+_TEAM_RANK = re.compile(r"\b(?:which|what) (?:teams?|orgs?)\b|^who\b|\bwho (?:bans|banned|ban)\b|\bteams? (?:that|who) ban")
+_NEVER = re.compile(r"\bnever\b|\bnot (?:been )?banned\b|\bunbanned\b|\bno bans\b")
+
+
+def _parse_bans(q: str) -> ParseResult:
+    """'most banned hero in 2025', 'least banned hero in emea', 'which heroes were never banned at the world finals',
+    'which heroes does Twisted Minds ban most', 'most banned hero against Team Liquid', 'which teams ban Tracer the most',
+    'how often does Team Liquid ban Tracer', 'how many times was Kiriko banned in 2026'."""
+    if _find_role(q):
+        return Unanswerable(code="unsupported_question",
+                            reason="hero bans cannot be sliced by role: the hero list records no roles",
+                            suggestions=["Ask without the role, e.g. `most banned hero in 2025`."])
+    filters = Filters(season=_find_season(q), mode=_find_mode(q), map=_find_map(q), region=_find_region(q),
+                      championship=_find_championship(q), period=_find_period(q))
+    hero, rest = _find_hero(q)
+    never = bool(_NEVER.search(q))
+    sort = "asc" if (_has(q, ASC_CUES) or re.search(r"\brarely\b", q)) and not never else "desc"
+    team_rank = bool(hero and _TEAM_RANK.search(rest))
+    body = _strip_filters(rest)
+    body = re.sub(r"'s\b", " ", body)
+    if filters.region:   # a bare region word ("2026 na stage 3") is the region, already read, not a team
+        body = re.sub(r"\b(?:" + "|".join(sorted(map(re.escape, REGION_TERMS), key=len, reverse=True)) + r")\b", " ", body)
+    team = None if team_rank else _clean_name(re.sub(r"\s+", " ", _BAN_WORDS.sub(" ", body)).strip())
+    against = bool(team and re.search(r"\bagainst\b|\bopponents?\b|\bvs\b|\bversus\b", q))
+    f = filters.model_copy(update={"hero": hero, "team": team, "ban_side": ("against" if against else "by") if team else None})
+    return StructuredQuery(intent="hero_bans", entity="team" if team_rank else "hero",
+                           metric="never_banned" if never else "bans", filters=f, sort=sort,
+                           limit=_find_limit(q) or (100 if never else 10))
+
+
 _PARTNER = re.compile(r"\bpartners?(?:\s+teams?)?\b")
 # players named with the group: "a partner team player", "partner players", "players on / from partner teams". The question
 # is then about players, restricted to those on a partner team: "most healing done by a partner team player in NA 2026"
@@ -565,6 +636,13 @@ def _parse(q: str) -> ParseResult:
         if re.search(r"\b" + re.escape(term) + r"\b", q):
             return Unanswerable(code="out_of_scope", reason=why,
                                 suggestions=["Scope is OWCS NA + EMEA main competition on FACEIT: regional stages, playoffs and international events."])
+    # --- heroes: bans are recorded (Liquipedia's, 049), picks are not
+    if _BAN.search(q) and not _PICK.search(q):
+        return _parse_bans(q)
+    if _HERO_WORD.search(q) or (_PICK.search(q) and (_BAN.search(q) or _find_hero(q)[0])):
+        return Unanswerable(code="unsupported_question", reason=PICKS_REASON,
+                            suggestions=["Hero bans are recorded: e.g. `most banned hero in 2025`, `which heroes does "
+                                         "Twisted Minds ban most`, `which teams ban Tracer the most`."])
     for term, why in UNSUPPORTED_QUESTION_TERMS:
         if re.search(r"\b" + re.escape(term) + r"\b", q):
             return Unanswerable(code="unsupported_question", reason=why,

@@ -36,6 +36,10 @@ Supported intents:
 - team_group: the members of a group of teams (entity=team, metric=members, filters.group="partner"): "which teams are the
   partner teams", optionally filters.season and filters.region. Any team question about partner teams ("which partner team
   won the most series in 2026") keeps its own intent and sets filters.group="partner".
+- hero_bans: hero bans (Liquipedia's; per map, one per team). metric="bans", or "never_banned" for heroes nobody banned.
+  entity=hero ranks heroes (sort=asc for least banned); entity=team ranks the teams that ban filters.hero most.
+  filters.hero names one hero; filters.team a team, with filters.ban_side "by" (the bans it made, the default) or
+  "against" (its opponents' bans against it). Slice with season, region, championship, map, mode.
 
 Metrics are FACEIT stat keys exactly as spelled: Eliminations, Final Blows, Deaths, Assists, Damage Dealt, Healing Done,
 Damage Mitigated, Solo Kills, Multi Kills, Environmental Kills, Objective Time, Time Played (append "/10m" for per-10-minute
@@ -47,8 +51,8 @@ Keep entity names exactly as the user typed them; do not guess ids.
 
 Unanswerable codes: unsupported_metric (accuracy, ultimates, ratings and other stats FACEIT does not record),
 out_of_scope (Korea/Asia/Japan/China/Pacific, Overwatch League, qualifiers, relegation, ranked/hubs, schedules, predictions),
-unsupported_question (hero picks and bans, MVP awards, prize money, salaries, and anything else). Give a one-sentence
-reason."""
+unsupported_question (hero picks, which neither FACEIT nor Liquipedia records - bans are recorded; MVP awards, prize money,
+salaries, and anything else). Give a one-sentence reason."""
 
 
 class ParsedQuestion(BaseModel):

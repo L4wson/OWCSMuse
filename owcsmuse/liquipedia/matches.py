@@ -32,6 +32,24 @@ class LPGame:
     mode: Optional[str]
     winner: int                 # 1, 2, or 0
     scores: tuple[Any, ...]
+    # (side, hero) per ban, as extradata spells it (team1ban1 is the hero team 1 banned); banstart is the side that
+    # banned first. Empty before 2025, when there were no bans.
+    bans: tuple[tuple[int, str], ...] = ()
+    banstart: Optional[int] = None
+
+
+_BAN_KEY = re.compile(r"^team([12])ban\d+$")
+
+
+def bans_of(game: dict[str, Any]) -> tuple[tuple[int, str], ...]:
+    """A game's bans from its extradata: every non-empty teamNbanK, as (N, hero), in key order."""
+    ex = game.get("extradata") or {}
+    out = []
+    for k in sorted(ex):
+        m = _BAN_KEY.match(k)
+        if m and isinstance(ex[k], str) and ex[k].strip():
+            out.append((int(m.group(1)), ex[k].strip()))
+    return tuple(out)
 
 
 @dataclass(frozen=True)
@@ -164,7 +182,8 @@ def parse_row(row: dict[str, Any], raw_id: int, wiki: str = "overwatch") -> Opti
     # 'np', no scores, no winner): 143 of them across 81 2024 records. Counted as games they inflate n_games (which
     # hides a FACEIT phantom beyond the real count) and would be enriched as 0-0 draws nobody played. A real draw is
     # resulttype 'draw' with its scores, and stays.
-    games = tuple(LPGame(g.get("map"), g.get("mode"), _int(g.get("winner")) or 0, tuple(g.get("scores") or ()))
+    games = tuple(LPGame(g.get("map"), g.get("mode"), _int(g.get("winner")) or 0, tuple(g.get("scores") or ()),
+                         bans_of(g), _int((g.get("extradata") or {}).get("banstart")))
                   for g in (row.get("match2games") or [])
                   if (g.get("map") or g.get("scores")) and not _not_played(g))
     faceit = faceit_id_of(row.get("links"))

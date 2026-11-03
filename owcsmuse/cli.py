@@ -67,7 +67,20 @@ def cmd_migrate(args: argparse.Namespace, settings: Settings) -> int:
             names = comp_names.load(conn, comp_names.CompetitionDecisions(comp_names.DEFAULT_DECISIONS_PATH))
         except FileNotFoundError:
             names = "skipped: scope/ files not found from this working directory; run `competitions load`"
-    _print({"applied": applied, "competition_names": names})
+        # the hero list (049) is reference data the same way: every deploy carries the reviewed file
+        from . import heroes
+        try:
+            hero_list = heroes.load(conn)
+        except FileNotFoundError:
+            hero_list = "skipped: scope/heroes.json not found from this working directory; run `heroes load`"
+    _print({"applied": applied, "competition_names": names, "heroes": hero_list})
+    return 0
+
+
+def cmd_heroes(args: argparse.Namespace, settings: Settings) -> int:
+    from . import heroes
+    with connect(settings.database_url, schema=settings.db_schema) as conn:
+        _print(heroes.load(conn, args.heroes))
     return 0
 
 
@@ -988,6 +1001,13 @@ def build_parser() -> argparse.ArgumentParser:
     grl = grs.add_parser("load", help="write the reviewed groups into team_groups; the file is the whole truth")
     grl.add_argument("--groups", default="scope/partner_teams.json")
     gr.set_defaults(func=cmd_groups)
+
+    he = sub.add_parser("heroes", help="the hero list hero-ban answers read: load scope/heroes.json")
+    hes = he.add_subparsers(dest="heroes_cmd", required=True)
+    hel = hes.add_parser("load", help="write the reviewed hero list into heroes; the file is the whole truth. Run "
+                                      "`liquipedia reconcile` after a spelling change so stored bans follow it")
+    hel.add_argument("--heroes", default="scope/heroes.json")
+    he.set_defaults(func=cmd_heroes)
 
     og = sub.add_parser("orgs", help="org-level team identity: propose, review, apply")
     og.add_argument("--decisions", default=str(DEFAULT_ORG_DECISIONS_PATH))

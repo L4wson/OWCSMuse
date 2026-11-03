@@ -661,3 +661,90 @@ def opposed_maps(series_list, a, b, season=None) -> dict:
             "map_losses": sum((not x["won"]) and (not x["drawn"]) for x in maps),
             "matches": len({x["match_id"] for x in maps}), "by_source": dict(Counter(x["from"] for x in maps)),
             "detail": maps}
+
+
+# ------------------------------------------------------------------- hero bans (049)
+# A ban is the hero one team banned on one played map: Liquipedia's game extradata, teamNbanK (N the record's team 1
+# or 2). Liquipedia is the only source of bans. A hero is named by the reviewed hero list's canonical spelling
+# (scope/heroes.json: a name or alias, compared with case, accents, spaces and punctuation folded away), and is
+# available on a map played on or after its available_from day. Read here from the captured records and the reviewed
+# file alone.
+
+def _hero_list() -> tuple[dict[str, str], dict[str, Optional[str]], int]:
+    doc = json.loads((GOLDEN.parent.parent / "scope" / "heroes.json").read_text(encoding="utf-8"))
+    canon = {_fold(n): h["name"] for h in doc["heroes"] for n in [h["name"], *h["aliases"]]}
+    return canon, {h["name"]: h["available_from"] for h in doc["heroes"]}, doc["bans_introduced_season"]
+
+
+def ban_maps() -> list[dict]:
+    """Every played map with bans in the captured Liquipedia records: the loaded event records and the records linked to
+    FACEIT series. {date, season, page, teams: (team 1, team 2), bans: {1: hero, 2: hero}} per map."""
+    import re as _re
+    canon, _, _ = _hero_list()
+    records = [r for r in load_events()["matches"] if r.get("finished")] if load_events().get("load_matches") else []
+    records += [m["record"] for m in json.loads((FIXTURES / "liquipedia_matches.json").read_text(encoding="utf-8"))["matches"]]
+    out = []
+    for r in records:
+        teams = tuple(o["name"] for o in r["match2opponents"])
+        played = [g for g in r.get("match2games") or []
+                  if (g.get("map") or g.get("scores")) and g.get("status") != "notplayed" and g.get("resulttype") != "np"]
+        for n, g in enumerate(played, start=1):
+            bans = {}
+            for k, v in (g.get("extradata") or {}).items():
+                m = _re.fullmatch(r"team([12])ban\d+", k)
+                if m and isinstance(v, str) and v.strip():
+                    bans[int(m.group(1))] = canon.get(_fold(v), v.strip())
+            if bans:
+                out.append({"date": r["date"], "season": int(r["date"][:4]), "page": r["pagename"], "teams": teams,
+                            "n": n, "map": g.get("map"), "bans": bans})
+    return out
+
+
+def hero_available(hero: str, date: str) -> bool:
+    _, avail, _ = _hero_list()
+    return avail.get(hero) is None or date[:10] >= avail[hero]
+
+
+def _pct(bans: int, maps: int) -> Decimal:
+    return (Decimal(100 * bans) / Decimal(maps)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+
+
+def hero_ban_table(maps: list[dict], team: Optional[str] = None, against: bool = False) -> dict[str, dict]:
+    """{hero: {bans, maps, ban_pct}} over `maps` for every hero on the list available on at least one of them. With a
+    team (Liquipedia's name), only its maps count, and only its bans (or, `against`, its opponents')."""
+    _, avail, _ = _hero_list()
+    if team:
+        maps = [m for m in maps if team in m["teams"]]
+    out = {}
+    for hero in avail:
+        on = [m for m in maps if hero_available(hero, m["date"])]
+        if not on:
+            continue
+        def counted(m):
+            if not team:
+                return list(m["bans"].values())
+            mine = m["teams"].index(team) + 1
+            return [h for side, h in m["bans"].items() if (side != mine if against else side == mine)]
+        bans = sum(counted(m).count(hero) for m in on)
+        out[hero] = {"hero": hero, "bans": bans, "maps": len(on), "ban_pct": _pct(bans, len(on))}
+    return out
+
+
+def team_ban_table(maps: list[dict], hero: str) -> dict[str, dict]:
+    """{team (Liquipedia's name): {bans, maps, ban_pct}}: how often each team banned `hero`, over its maps the hero was
+    available on."""
+    out: dict[str, dict] = {}
+    for m in maps:
+        if not hero_available(hero, m["date"]):
+            continue
+        for side, team in enumerate(m["teams"], start=1):
+            t = out.setdefault(team, {"team": team, "bans": 0, "maps": 0})
+            t["maps"] += 1
+            t["bans"] += m["bans"].get(side) == hero
+    for t in out.values():
+        t["ban_pct"] = _pct(t["bans"], t["maps"])
+    return out
+
+
+def bans_introduced() -> int:
+    return _hero_list()[2]
