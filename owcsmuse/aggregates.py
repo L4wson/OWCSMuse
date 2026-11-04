@@ -29,6 +29,7 @@ MATERIALIZED_VIEWS: tuple[str, ...] = (
     "agg_org_versus_maps",
     "entity_names",
     "source_capabilities",
+    "fact_hero_bans",            # 051: reads only plain views and tables (series, liquipedia_bans), so it can go last
 )
 
 
