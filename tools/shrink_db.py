@@ -42,8 +42,8 @@ from psycopg import sql
 from psycopg.rows import dict_row
 
 ROOT = Path(__file__).resolve().parent.parent
-# the owner's patterns, read literally: owcs_golden_* and owcs_test_* need a suffix
-APPROVED = re.compile(r"^(owcs_golden_.+|owcs_test_.+|owcs_fixture)$")
+# the owner's patterns: owcs_golden and owcs_test themselves, everything under them, and owcs_fixture (2026-11-04)
+APPROVED = re.compile(r"^(owcs_golden(_.+)?|owcs_test(_.+)?|owcs_fixture)$")
 NEAR = re.compile(r"^owcs_")            # anything else that looks like ours is listed, never dropped
 LISTING = "/championships/%/matches"
 
@@ -78,7 +78,7 @@ def connect() -> psycopg.Connection:
 
 
 def mb(n) -> str:
-    return f"{(n or 0) / 1e6:,.1f} MB"
+    return f"{float(n or 0) / 1e6:,.1f} MB"
 
 
 def sizes(conn) -> dict:
@@ -123,7 +123,7 @@ def code(obj) -> str:
 def plan(conn) -> None:
     report(conn, "now")
     drop, other = schema_plan(conn)
-    print(f"\nSTEP 1 - drop {len(drop)} schema(s) matching owcs_golden_*, owcs_test_*, owcs_fixture "
+    print(f"\nSTEP 1 - drop {len(drop)} schema(s) matching owcs_golden, owcs_golden_*, owcs_test, owcs_test_*, owcs_fixture "
           f"({mb(sum(r['bytes'] for r in drop))} in tables and materialized views, {sum(r['objects'] for r in drop):,} objects):")
     for r in drop:
         print(f"    {r['schema']:32} {mb(r['bytes']):>10}  {r['objects']:>5} objects")
@@ -209,6 +209,7 @@ def prune(conn, confirm: str) -> None:
 
 def vacuum(conn) -> None:
     report(conn, "before")
+    conn.commit()                 # VACUUM runs outside a transaction: close the one the size report opened
     conn.autocommit = True
     with conn.cursor() as cur:
         cur.execute("SET lock_timeout = '30s'")
