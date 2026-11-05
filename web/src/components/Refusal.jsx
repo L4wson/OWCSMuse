@@ -2,6 +2,7 @@ import GrainToggle from "./GrainToggle.jsx";
 import Evidence from "./Evidence.jsx";
 import Context from "./Context.jsx";
 import Attribution from "./Attribution.jsx";
+import ReadAs, { otherNotes } from "./ReadAs.jsx";
 
 /**
  * A refusal, which is a kind of answer.
@@ -38,7 +39,8 @@ export default function Refusal({ answer, suggestions = [], onAsk, onPage, busy,
         </ul>
       ) : null}
 
-      <Context coverage={answer.coverage} notes={answer.notes} limitations={answer.limitations} />
+      <ReadAs readAs={answer.read_as} />
+      <Context coverage={answer.coverage} notes={otherNotes(answer.notes, answer.read_as)} limitations={answer.limitations} />
 
       {evidence?.available ? (
         <>

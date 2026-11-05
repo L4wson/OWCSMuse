@@ -158,6 +158,35 @@ runs `ask()` end to end on the fixture data when a database is configured,
 templates and the evidence SQL offline, and `tests/test_api.py` drives the HTTP
 layer and reconciles evidence rows against the aggregates they explain.
 
+## Names in a question
+
+Names used to be whatever the parser did not recognise: each extractor removed the words it knew and kept the rest, so
+a word on no list became part of a name. "highest kd of any player" ranked Anyones Legend's players with no word about
+it, "best kd among players" refused, and a region or year beside a name was glued onto it ("which dallas fuel na?").
+Each earlier fix ("per 10", Students of the Game's "of", "partner team player") added one word to one extractor's list.
+Since 2026-11-05 (`owcsmuse/nlq/words.py`):
+
+- **One closed list of words that are never names on their own** (determiners and quantifiers, pronouns,
+  prepositions, conjunctions, question, ranking and verb words, and the question's vocabulary: regions, stages,
+  roles, the nouns it counts), and **one extractor** every name goes through: a name is a run of words not on the
+  list, with listed words allowed inside it; a run of listed words alone is never a name. "team" and "game" are not
+  listed: they begin and end real names, and "team twisted minds" resolves through the word.
+- **The warehouse's own names win** (`KnownNames`: every name in `entity_names` and every reviewed alias, cached per
+  schema for five minutes). A known name spelled out is kept whole and read around by the filters, even when it
+  begins or ends with a listed word or holds a region word: All Gamers Global, The Kafe, A One Man Army, Once Again,
+  Who Is Goldfish, nah id win, Wasp X Ohhhh No, Anyone's Legend, GK EMEA; and the players Someone, One and MAX when the
+  question names exactly them. 13 of the warehouse's names depend on this rule; without it they would be trimmed
+  ("the kafe" to "kafe").
+- **Filters are read wherever they stand**: a region with its preposition anywhere ("in 2026 NA stage 3", "NA 2025
+  Dallas Fuel record", "against Twisted Minds in 2025 NA"), not only after "in" or "for".
+- **A misread is never silent.** A name resolved by anything but an exact name, an alias or an id is reported in the
+  answer's `read_as` ("'twisted' was read as Twisted Minds (the start of the name)"): in the API response, at the top
+  of the answer in the web app, and first among the notes in the CLI. A name made only of listed words is refused
+  rather than resolved by its first letters.
+
+Golden G108-G113 ask questions other cases confirm, worded the ways that leaked, and expect the same rows; G113 asserts
+the `read_as` backstop.
+
 ## Versus queries
 
 `versus` answers "X against Y" at **map** grain for any two entities - player vs

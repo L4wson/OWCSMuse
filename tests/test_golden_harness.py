@@ -19,7 +19,7 @@ CASES_PATH = Path(__file__).parent / "golden" / "cases.json"
 
 def _answer(**kw):
     base = dict(status="ok", code=None, reason=None, entities={}, rows=[], evidence=None, limitations=[], candidates={},
-                alternatives=[], sentence={"text": "an answer"}, attribution=None, notes=[])
+                alternatives=[], sentence={"text": "an answer"}, attribution=None, notes=[], read_as=[])
     base.update(kw)
     return SimpleNamespace(**base)
 

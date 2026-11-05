@@ -2561,6 +2561,144 @@
    },
    "derivation": "Vendetta is available from 2026-03-21; the 2025 World Finals ended 2025-11-30.",
    "status": "confirmed"
+  },
+  {
+   "id": "G108",
+   "title": "A quantifier before 'player' ranks everyone, not a team named like it",
+   "kind": "exact",
+   "regression": "'any' was read as a team and resolved to Anyones Legend, silently (2026-11-05)",
+   "question": "highest kd of any player in 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Hawk",
+      "kd_ratio": "4.57"
+     }
+    ],
+    "read_as": []
+   },
+   "derivation": "The same question as G35 ('highest kd in 2026'): Hawk, 4.57. 'any' is never a name.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G109",
+   "title": "'among all players' ranks everyone",
+   "kind": "exact",
+   "regression": "'among' was read as a team name and the question refused (2026-11-05)",
+   "question": "best kd among all players in 2026",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "nickname": "Hawk",
+      "kd_ratio": "4.57"
+     }
+    ],
+    "read_as": []
+   },
+   "derivation": "The same question as G35: Hawk, 4.57.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G110",
+   "title": "A year and region after a team's name are filters, not part of it",
+   "kind": "exact",
+   "regression": "'in 2026 NA' left 'na' in the name: 'which dallas fuel na?' (2026-10-23)",
+   "question": "Dallas Fuel record in 2026 NA stage 2 playoffs",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Dallas Fuel",
+      "matches": 2,
+      "wins": 2,
+      "losses": 0,
+      "map_wins": 7,
+      "map_losses": 2,
+      "maps": 9
+     }
+    ],
+    "read_as": []
+   },
+   "derivation": "The same slice as G30 (OWCS 2026 NA Stage 2 Playoffs): 2-0 in 2 series.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G111",
+   "title": "A region and year in front of a team's name are filters",
+   "kind": "exact",
+   "regression": "a leading region was read into the name ('na dallas fuel', 2026-11-05)",
+   "question": "NA 2026 Dallas Fuel record in stage 2 playoffs",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Dallas Fuel",
+      "matches": 2,
+      "wins": 2,
+      "losses": 0,
+      "map_wins": 7,
+      "map_losses": 2,
+      "maps": 9
+     }
+    ],
+    "read_as": []
+   },
+   "derivation": "The same slice as G30: 2-0 in 2 series.",
+   "status": "confirmed"
+  },
+  {
+   "id": "G112",
+   "title": "A year and region after the opponent's name are filters",
+   "kind": "exact",
+   "regression": "'in 2025 NA' was glued onto the opponent: 'which twisted minds in 2025 na?' (2026-11-05)",
+   "question": "SpaceStation Gaming series record against Dallas Fuel in 2026 NA",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "matches": 2,
+      "wins": 1,
+      "losses": 1
+     }
+    ],
+    "read_as": []
+   },
+   "derivation": "SpaceStation Gaming v Dallas Fuel in 2026: 2 series, 1-1 (both NA).",
+   "status": "confirmed"
+  },
+  {
+   "id": "G113",
+   "title": "A name read by a partial match is always said",
+   "kind": "invariant",
+   "regression": "a partial match answered with no word about how the name was read (2026-11-05)",
+   "question": "twisted record",
+   "expect": {
+    "status": "ok",
+    "rows": [
+     {
+      "team": "Twisted Minds",
+      "matches": 9,
+      "wins": 8,
+      "losses": 1,
+      "map_wins": 26,
+      "map_losses": 11,
+      "maps": 37
+     }
+    ],
+    "read_as": [
+     {
+      "typed": "twisted",
+      "name": "Twisted Minds"
+     }
+    ],
+    "notes_contain": [
+     "'twisted' was read as Twisted Minds"
+    ]
+   },
+   "derivation": "'twisted' is the start of 'Twisted Minds' and no other name, so it resolves without asking; the answer is G08's. Whatever the parser's word list misses, a partial match is shown (read_as, and the notes for the CLI).",
+   "status": "confirmed"
   }
  ]
 }

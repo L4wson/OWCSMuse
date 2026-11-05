@@ -13,11 +13,17 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from contextvars import ContextVar
 from typing import Any, Optional, Union
 
 from ..heroes import load_file as load_hero_file
 from ..resolve import fold
 from .schema import DERIVED_METRICS, Filters, StructuredQuery, Unanswerable
+from .words import NO_NAMES, KnownNames, known_span, name_in
+
+# the warehouse's names for the question being parsed (words.KnownNames): set per parse_question() call, so concurrent
+# requests never share them
+_KNOWN: ContextVar[KnownNames] = ContextVar("known_names", default=NO_NAMES)
 
 
 def _ascii(text: str) -> str:
@@ -165,17 +171,6 @@ MODE_ENTITY_CUES = ["which mode", "what mode", "best mode", "worst mode", "by mo
 _NUM_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
               "fifteen": 15, "twenty": 20, "fifty": 50}
 
-_LEAD_STOP = {"what", "was", "is", "did", "does", "do", "has", "have", "had", "the", "how", "show", "me", "of", "for", "by", "and",
-              "many", "much", "are", "were", "who", "which", "a", "an", "player", "give", "tell", "about", "with", "to",
-              "whats", "in", "on", "at", "from", "as", "playing"}
-_TRAIL_STOP = {"do", "did", "does", "have", "has", "play", "played", "go", "went", "fare", "fared", "perform", "performed", "record",
-               "standings", "results", "result", "stats", "stat", "numbers", "team", "player", "in", "on", "at", "for", "the", "of",
-               "as", "playing"}
-_BAD_NAME_WORDS = {"most", "top", "highest", "best", "lowest", "fewest", "least", "worst", "map", "maps", "mode", "modes",
-                   "average", "total", "who", "which", "what", "there", "it", "they", "he", "she", "anyone", "someone", "everyone",
-                   "season", "overall", "leaderboard", "ranking", "rank", "many", "much", "tank", "tanks", "dps", "support",
-                   "supports", "healer", "healers"}
-
 
 ENTITY_TOKEN = re.compile(
     r"^(?:(?:player|team|org):)?"
@@ -189,25 +184,29 @@ def is_entity_token(text: Optional[str]) -> bool:
 
 
 def _clean_name(s: Optional[str]) -> Optional[str]:
+    """The name in a piece of a question, or None. Metric phrases go first; then words.name_in(): a known name spelled
+    out is kept whole, otherwise the closed list of words that are never names is trimmed from both ends, and a piece
+    made only of them is no name ("any", "among all"). Every extractor comes through here."""
     if not s:
         return None
     if is_entity_token(s):
         return s.strip()      # never stop-worded, stripped or metric-matched
     s = re.sub(r"\s+", " ", s).strip(" ?.,!'\"")
-    s = re.sub(r"'s$", "", s)
+    known = _KNOWN.get()
+    # a name the warehouse holds, spelled out, before anything is stripped from it: "Anyone's Legend" keeps its "'s"
+    span = known_span([w.strip(" ?.,!\"") for w in s.split()], known)
+    if span:
+        return span if span != "team" else None
+    s = re.sub(r"'s\b", "", s)
     for phrase, _ in METRIC_SYNONYMS:
         s = re.sub(r"\b" + re.escape(phrase) + r"\b", " ", s)
-    words = [w for w in s.split() if w]
-    while words and words[0] in _LEAD_STOP:
-        words.pop(0)
-    while words and words[-1] in _TRAIL_STOP:
-        words.pop()
-    if words == ["team"]:
-        return None           # the word, not a name; "team liquid" keeps it, and resolve() tries "liquid" if it must
-    if not words or len(words) > 5 or any(w in _BAD_NAME_WORDS for w in words):
+    words = [w.strip(" ?.,!'\"") for w in s.split()]
+    name = name_in(words, known)
+    # "team" alone is the word, not a name ("of any team" trims to it); "team liquid" keeps it, and resolve() tries
+    # "liquid" if it must
+    if not name or name == "team" or len(name.split()) > 6:
         return None
-    name = " ".join(words).strip(" ?.,!'\"")
-    return name or None
+    return name
 
 
 # ------------------------------------------------------------------ extraction
@@ -335,8 +334,20 @@ def _strip_filters(q: str, keep_years: bool = False) -> str:
     """Remove filter phrases so they are not captured as entity names.
 
     `keep_years` leaves years alone for versus parsing, where "2024 X vs 2026 X"
-    binds a year to each side rather than to the whole question.
+    binds a year to each side rather than to the whole question. A name the warehouse holds is read around, never into:
+    "GK EMEA" (an alias) keeps its region word while a region word anywhere else goes.
     """
+    held: list[str] = []
+    for a, b in sorted(_KNOWN.get().spans(q), reverse=True):
+        held.append(q[a:b])
+        q = q[:a] + f" qqknown{len(held) - 1}qq " + q[b:]
+    q = _strip_filter_words(q, keep_years)
+    for i, name in enumerate(held):
+        q = q.replace(f"qqknown{i}qq", name)
+    return re.sub(r"\s+", " ", q).strip()
+
+
+def _strip_filter_words(q: str, keep_years: bool) -> str:
     if not keep_years:
         q = re.sub(r"\b(in|during|for|of|from|the)\s+(the\s+)?20[2-3]\d(\s+season)?\b", " ", q)
         q = re.sub(r"\b20[2-3]\d\b", " ", q)
@@ -352,8 +363,10 @@ def _strip_filters(q: str, keep_years: bool = False) -> str:
     for alias in _MAP_ALIASES:
         q = re.sub(r"\b(on|at)?\s*" + re.escape(alias) + r"\b", " ", q)
     q = re.sub(r"\bowcs\b", " ", q)   # the brand word in "OWCS 2026 NA Stage 2" names no one
-    q = re.sub(r"\b(in|for)\s+(na|emea|eu|europe|north america|international|korea|south korea)\b", " ", q)
-    q = re.sub(r"\bkorean\b", " ", q)
+    # a region wherever it stands ("in 2026 NA stage 3", "NA 2025 Dallas Fuel", "Twisted Minds 2026 EMEA"), with the
+    # preposition in front of it: the year in front used to take the "in" and leave "na" in the name
+    regions = "|".join(sorted(map(re.escape, REGION_TERMS), key=len, reverse=True))
+    q = re.sub(r"\b(?:(?:in|for|from|at|of)\s+)?(?:the\s+)?(?:" + regions + r")\b", " ", q)
     q = re.sub(r"\b(at least|min(?:imum)?)\s+\d{1,4}\s+maps?\b", " ", q)
     for rx, _ in _PERIODS:
         q = re.sub(r"\b(?:in|during|for|from|of)?\s*" + rx, " ", q)
@@ -423,16 +436,12 @@ def _side_season(text: str) -> tuple[Optional[int], str]:
 # support" names no team).
 _ROLE_NOUN = r"(?:players?|tanks?|dps|damage|supports?|healers?)"
 _QUALIFIER = re.compile(r"(?:^|\b(?:which|what|a|an|the|by|among|for|from|on)\s+)(?P<n>[a-z0-9_.:\-' ]+?)\s+" + _ROLE_NOUN + r"\b")
-_QUALIFIER_LEAD = (_LEAD_STOP | _BAD_NAME_WORDS | set(REGION_TERMS) | {"north", "american", "korean", "international"}) - {"team"}
 
 
 def _find_team_qualifier(q: str) -> Optional[str]:
     q = re.sub(r"\b(?:in|during|for|of|from|the)?\s*20[2-3]\d\b", " ", q)
     for m in _QUALIFIER.finditer(q):
-        words = m.group("n").split()
-        while words and (words[0] in _QUALIFIER_LEAD or words[0] in _NUM_WORDS or words[0].isdigit()):
-            words.pop(0)            # "top 5 healers": a limit, not a team
-        name = _clean_name(" ".join(words))
+        name = _clean_name(m.group("n"))       # "top 5 healers", "of any player": no team
         if name and fold(name) not in REGION_TERMS:
             return name
     return None
@@ -558,13 +567,6 @@ def _find_hero(q: str) -> tuple[Optional[str], str]:
     return None, q
 
 
-# The words of a ban question that are not a team's name; what is left, once filters are gone, is the team.
-_BAN_WORDS = re.compile(
-    r"\b(?:ban(?:s|ned|ning)?|heroes|hero|most|least|fewest|often|frequently|rarely|never|not|been|ever|times?|many|much|"
-    r"how|which|what|who|whom|whose|top|bottom|the|a|an|by|against|opponents?|of|is|was|were|are|has|have|had|do|does|did|"
-    r"teams|orgs?|in|on|at|for|get|gets|got|their|its|maps?|matches|series|games|when|playing|played|vs|versus|they|"
-    r"them|than|any|other|unbanned|no|show|me|list|give|tell|count|number|rate|percentage|ranking|rank|ranked)\b"
-    r"|\b\d{1,3}\b")
 _TEAM_RANK = re.compile(r"\b(?:which|what) (?:teams?|orgs?)\b|^who\b|\bwho (?:bans|banned|ban)\b|\bteams? (?:that|who) ban")
 _NEVER = re.compile(r"\bnever\b|\bnot (?:been )?banned\b|\bunbanned\b|\bno bans\b")
 
@@ -583,11 +585,8 @@ def _parse_bans(q: str) -> ParseResult:
     never = bool(_NEVER.search(q))
     sort = "asc" if (_has(q, ASC_CUES) or re.search(r"\brarely\b", q)) and not never else "desc"
     team_rank = bool(hero and _TEAM_RANK.search(rest))
-    body = _strip_filters(rest)
-    body = re.sub(r"'s\b", " ", body)
-    if filters.region:   # a bare region word ("2026 na stage 3") is the region, already read, not a team
-        body = re.sub(r"\b(?:" + "|".join(sorted(map(re.escape, REGION_TERMS), key=len, reverse=True)) + r")\b", " ", body)
-    team = None if team_rank else _clean_name(re.sub(r"\s+", " ", _BAN_WORDS.sub(" ", body)).strip())
+    body = re.sub(r"'s\b", " ", _strip_filters(rest))
+    team = None if team_rank else _clean_name(body)
     against = bool(team and re.search(r"\bagainst\b|\bopponents?\b|\bvs\b|\bversus\b", q))
     f = filters.model_copy(update={"hero": hero, "team": team, "ban_side": ("against" if against else "by") if team else None})
     return StructuredQuery(intent="hero_bans", entity="team" if team_rank else "hero",
@@ -606,7 +605,17 @@ _PARTNER_PLAYER = re.compile(rf"\bpartners?(?:\s+teams?)?\s+(?={_PLAYER_NOUN}\b)
 _RANKING = re.compile(r"\b(?:most|fewest|least|top|best|worst|highest|lowest|won|wins?|losses|record|win rate|maps?|series)\b")
 
 
-def parse_question(question: str) -> ParseResult:
+def parse_question(question: str, known: KnownNames = NO_NAMES) -> ParseResult:
+    """`known` is the warehouse's names (words.KnownNames), so a name that begins or ends with a word that is never a name
+    on its own ("All Gamers Global", "The Kafe") is kept whole; without it names are trimmed by the word list alone."""
+    token = _KNOWN.set(known)
+    try:
+        return _parse_question(question)
+    finally:
+        _KNOWN.reset(token)
+
+
+def _parse_question(question: str) -> ParseResult:
     """A question about the partner teams (043) is either the group itself ("which teams are the partner teams") or any
     team question restricted to it ("which partner team won the most series in 2026"); the rest parses as before."""
     if not question or not question.strip():

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from dataclasses import asdict, dataclass, field, replace
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Any, Optional
@@ -14,7 +15,7 @@ from ..liquipedia.attribution import render_lines as render_attribution
 from ..aggregates import stat_coverage_summary
 from ..limitations import applicable as applicable_limitations
 from ..log import get_logger, log_event
-from ..resolve import Candidate, resolve
+from ..resolve import Candidate, fold, resolve
 from .columns import UNDESCRIBED
 from .compile import Compiled, Resolved, compile_query
 from .evidence import (DEFAULT_PAGE_SIZE, Evidence, answer_matches, entity_of, fetch_evidence, fetch_missing_series,
@@ -24,6 +25,7 @@ from .parser import parse_question
 from .sentence import render_sentence, render_unanswerable
 from .schema import StructuredQuery, Unanswerable
 from .validate import SchemaInfo, resolve_period, validate
+from .words import KnownNames, only_listed
 
 log = get_logger("owcsmuse.nlq")
 
@@ -53,6 +55,9 @@ class Answer:
     notes: list[str] = field(default_factory=list)
     limitations: list[dict] = field(default_factory=list)   # known gaps this slice lands in
     attribution: Optional[dict] = None   # CC-BY-SA credit + page URLs, whenever any Liquipedia value fed the answer (else None)
+    # every name resolved by anything but an exact name, an alias or an id: what was typed and who it was read as, so a
+    # misread is never silent ("any" read as Anyones Legend answered with no word about it, 2026-11-05)
+    read_as: list[dict] = field(default_factory=list)
     description: Optional[str] = None
     sql: Optional[str] = None
     params: Optional[list] = None
@@ -131,7 +136,16 @@ def resolve_entities(conn: psycopg.Connection, q: StructuredQuery,
     """Resolve every name in the filters. Returns (resolved, None) or (None, clarify/cannot answer)."""
     r = Resolved()
     entities: dict[str, dict] = {}
+    known = None
     for role, name in q.filters.names():
+        # a name made only of words that are never names ("any", "among all") is a misread, not a name: refused, never
+        # resolved by its first letters to whoever begins with them - unless the warehouse holds exactly that name
+        if only_listed(name):
+            known = known if known is not None else known_names(conn)
+            if name not in known:
+                return None, Answer(status="cannot_answer", question="", code="unknown_entity",
+                                    reason=f"'{name}' is a word of the question, not a name",
+                                    suggestions=["Name the player or team, or leave the name out to rank everyone."])
         # an org is a team-shaped entity; None lets a bare name resolve to either kind
         etype = {"player": "player", "team": None, "opponent": None, "subject": None}[role]
         cands = resolve(conn, name, etype, limit=6)
@@ -158,7 +172,7 @@ def resolve_entities(conn: psycopg.Connection, q: StructuredQuery,
                                 reason=f"'{name}' could be several {etype or 'player/team'}s; which one?",
                                 suggestions=[tip],
                                 candidates={role: [c.as_dict() for c in cands]})
-        entities[role] = chosen.as_dict()
+        entities[role] = dict(chosen.as_dict(), typed=name)    # what the question said, for read_as()
         r.names[role] = chosen.current_name or chosen.matched_name
         if role == "opponent":
             r.opponent_id, r.opponent_type = chosen.entity_id, chosen.entity_type
@@ -681,6 +695,37 @@ def run_compiled(conn: psycopg.Connection, c: Compiled) -> list[dict]:
     return rows
 
 
+_KNOWN_TTL = 300.0
+_known_cache: dict[tuple, tuple[float, KnownNames]] = {}
+
+
+def known_names(conn: psycopg.Connection) -> KnownNames:
+    """Every name the warehouse holds (entity_names), for the parser to keep a name whole that begins or ends with a word
+    that is never a name on its own ("All Gamers Global"). Cached per database and schema for five minutes: names change
+    with the nightly refresh. Empty, not an error, if it cannot be read: names are then trimmed by the word list alone."""
+    try:
+        with conn.cursor() as cur:
+            # keyed by what the names are, too: a warehouse rebuilt under the same schema (the tests) is new names
+            cur.execute("SELECT current_schema() AS s, (SELECT count(*) FROM entity_names) AS n, "
+                        "(SELECT count(*) FROM entity_aliases) AS a")
+            row = cur.fetchone()
+            key = (conn.info.dsn, row["s"], row["n"], row["a"])
+            hit = _known_cache.get(key)
+            if hit and time.monotonic() - hit[0] < _KNOWN_TTL:
+                conn.commit()
+                return hit[1]
+            # every name an entity has carried, and every reviewed alias ("GK EMEA": a region word inside a name)
+            cur.execute("SELECT name FROM entity_names UNION SELECT alias FROM entity_aliases")
+            known = KnownNames(r["name"] for r in cur.fetchall())
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        log_event(log, logging.WARNING, "known_names_failed", exc_info=True)
+        return KnownNames()
+    _known_cache[key] = (time.monotonic(), known)
+    return known
+
+
 def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Optional[SchemaInfo] = None,
         debug: bool = False, with_evidence: bool = True, evidence_for: Optional[str] = None,
         evidence_page: int = 1, evidence_page_size: int = DEFAULT_PAGE_SIZE) -> Answer:
@@ -691,8 +736,40 @@ def ask(conn: psycopg.Connection, question: str, parser: str = "rules", info: Op
              period_notes)
     if period_notes:
         a.notes = period_notes + [n for n in (a.notes or []) if n not in period_notes]
+    a.read_as = read_as(a)
+    if a.read_as:
+        a.notes = [x["text"] for x in a.read_as] + [n for n in (a.notes or []) if n not in {x["text"] for x in a.read_as}]
     a.other_grain = other_grain(a)
     return a
+
+
+_HOW = [(0.95, "spelled without its spaces"), (0.9, "the start of the name"), (0.8, "part of the name"),
+        (0.7, "the name, with more words around it")]
+
+
+def read_as(a: Answer) -> list[dict]:
+    """Each entity the answer resolved by anything but an exact name, an alias or an id, said in a sentence.
+
+    Resolution accepts a strong partial match ("twisted" for Twisted Minds) without asking, which is right for a name
+    typed short and wrong for a word that was never a name: "any" scored 0.9 as the start of "Anyones Legend" and the
+    answer ranked that team's players without a word about it. This is the backstop for whatever the parser's word list
+    misses: the reading is always shown (in `notes` for the CLI, in `read_as` for the API and the web app)."""
+    out = []
+    typed_by_role = (a.query or {}).get("filters") or {}
+    for role, e in (a.entities or {}).items():
+        score = float(e.get("score") or 0)
+        if score >= 1.0 or e.get("name_kind") in ("alias", "entity_id"):
+            continue
+        typed = e.get("typed") or typed_by_role.get(role) or e.get("matched_name")
+        name = e.get("current_name") or e.get("matched_name")
+        how = next((h for floor, h in _HOW if score >= floor), "a close spelling")
+        matched = e.get("matched_name")
+        detail = f"'{matched}'" if matched and fold(matched) != fold(name) else ""
+        out.append({"role": role, "typed": typed, "entity_type": e.get("entity_type"), "entity_id": e.get("entity_id"),
+                    "name": name, "matched_name": matched, "score": score, "how": how,
+                    "text": f"'{typed}' was read as {name} ({how}{' ' + detail if detail else ''}). If you meant "
+                            "someone else, ask with their exact name."})
+    return out
 
 
 def other_grain(a: Answer) -> Optional[dict]:
@@ -733,7 +810,7 @@ def _ask(conn: psycopg.Connection, question: str, parser: str, info: Optional[Sc
                 raise
             log_event(log, logging.WARNING, "llm_parser_unavailable", error=str(exc)[:200])
     if parsed is None:
-        parsed = parse_question(question)
+        parsed = parse_question(question, known_names(conn))
     if isinstance(parsed, Unanswerable):
         return _cannot(question, parsed, parser=used)
     q: StructuredQuery = parsed
