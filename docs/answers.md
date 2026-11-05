@@ -259,5 +259,7 @@ python -m owcsmuse ask "how often does Team Liquid ban D.Va"
   ("Hero bans were introduced in 2025, so 2024 has none") and offers the 2025 question, rather than an empty list.
 - **Not supported:** slicing by role (the hero list records no roles: refused), Korea and China (no Liquipedia data
   stored for their leagues; their teams' bans at the international events count).
+- `fact_hero_bans` is a materialized view (051), refreshed nightly after `liquipedia reconcile`: as a plain view, a
+  region-filtered answer re-ran the series view per row and took 72-92 s.
 - Every answer credits each Liquipedia page behind its slice, and its evidence is the ban rows (one per map) of the
   first row or the one `evidence_for` names (`hero`, or a team's `org_key`).

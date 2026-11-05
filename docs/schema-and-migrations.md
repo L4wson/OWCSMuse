@@ -77,7 +77,7 @@ under a restricted `search_path` when it plans a materialized-view refresh.
 | `match_player_totals` (view) | match x player | sums over `match_players` for a per-match scoreboard |
 | `heroes` / `hero_aliases` / `hero_ban_settings` | hero / spelling key / one row | the reviewed hero list (`scope/heroes.json`, `heroes load`, also run by `migrate`): canonical name, `available_from`, `basis`; every spelling's key; the season bans began (049) |
 | `liquipedia_bans` | Liquipedia record x played game x side x hero | each map's bans in canonical spelling, `banned_first` from `banstart`; rebuilt by `liquipedia reconcile` with `liquipedia_rounds` (049) |
-| `fact_hero_bans` / `hero_ban_maps` (views) | ban / map with bans | a ban with its series, competition, season, region, map and the team that made it (through `series.lp_flip`) and its opponent; the maps behind every ban rate (049) |
+| `fact_hero_bans` (materialized) / `hero_ban_maps` (view) | ban / map with bans | a ban with its series, competition, season, region, map and the team that made it (through `series.lp_flip`) and its opponent; the maps behind every ban rate (049). Materialized in 051, refreshed by `refresh` after `liquipedia reconcile`: as a view, a region-filtered answer took 72-92 s |
 
 `match_players` is per map because that is the grain FACEIT reports; per-match
 numbers are sums (the view) and per-map ratios stay in the jsonb. Player stat

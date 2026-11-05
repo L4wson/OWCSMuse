@@ -46,6 +46,14 @@ def _lp_flip(conn):
         return cur.fetchone()["lp_flip"]
 
 
+def test_the_ban_view_is_materialized_and_refreshed_with_the_aggregates(db):
+    from owcsmuse.aggregates import MATERIALIZED_VIEWS
+    with db.cursor() as cur:
+        cur.execute("SELECT count(*) AS n FROM pg_matviews WHERE matviewname = 'fact_hero_bans' AND schemaname = current_schema()")
+        assert cur.fetchone()["n"] == 1
+    assert "fact_hero_bans" in MATERIALIZED_VIEWS
+
+
 def test_every_ban_is_stored_once_known_and_attributed(db):
     assert check_hero_bans(db).ok, check_hero_bans(db).discrepancies
     fv = check_fact_view_reconciliation(db)
@@ -65,6 +73,7 @@ def test_a_linked_series_bans_follow_its_sides_whichever_order_liquipedia_lists_
         cur.execute("UPDATE liquipedia_rounds SET score1 = score2, score2 = score1, winner = (3 - winner) %% 3 "
                     "WHERE lp_objectname = %s", (obj,))
         cur.execute("UPDATE liquipedia_bans SET side = 3 - side WHERE lp_objectname = %s", (obj,))
+        cur.execute("REFRESH MATERIALIZED VIEW fact_hero_bans")     # 051: as the nightly refresh does
     assert _lp_flip(db) is True
     assert _attribution(db) == before
 
@@ -75,6 +84,7 @@ def test_a_ban_in_another_spelling_or_of_an_unknown_hero_fails_the_check(db):
         r = cur.fetchone()
         cur.execute("UPDATE liquipedia_bans SET hero = 'DVa' WHERE (lp_objectname, round_number, hero) = (%s, %s, 'D.Va')",
                     (r["lp_objectname"], r["round_number"]))
+        cur.execute("REFRESH MATERIALIZED VIEW fact_hero_bans")
     kinds = {d["kind"] for d in check_hero_bans(db).discrepancies}
     assert {"unknown_hero", "spelling_variants"} <= kinds
 
@@ -90,6 +100,7 @@ def test_a_ban_before_its_heros_available_from_fails_the_check(db):
 def test_a_map_without_one_ban_per_team_fails_the_check(db):
     with db.cursor() as cur:
         cur.execute("DELETE FROM liquipedia_bans WHERE ctid = (SELECT ctid FROM liquipedia_bans WHERE side = 2 LIMIT 1)")
+        cur.execute("REFRESH MATERIALIZED VIEW fact_hero_bans")
     assert any(d["kind"] == "not_one_ban_per_team" for d in check_hero_bans(db).discrepancies)
 
 
