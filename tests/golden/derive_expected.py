@@ -1315,6 +1315,47 @@ case("G107", "A hero not yet available at an event could not be banned there", "
      {"status": "cannot_answer", "code": "no_data", "sentence_contains": ["Vendetta was not available"]},
      f"Vendetta is available from {vend}; the 2025 World Finals ended {max(m['date'] for m in wf)[:10]}.")
 
+# ------------------------------------------------------------------ names (2026-11-05)
+CONFIRMED |= {f"G{n}" for n in range(108, 114)}     # owner, 2026-11-05: golden cases as proposed, plus the invariant
+# Names were whatever the parser did not recognise, so a word on no list became part of a name: "highest kd of any
+# player" ranked Anyones Legend's players with no word about it, "best kd among players" refused, and a region or year
+# beside a name ("Dallas Fuel record in 2026 NA stage 3") was glued onto it. Each case asks a question another case
+# already confirms, worded the way that leaked, and expects the same rows from the same derivation; `read_as` says no
+# name was read by a partial match. The last asserts the backstop: a name read by a partial match is always said.
+case("G108", "A quantifier before 'player' ranks everyone, not a team named like it", "exact",
+     "highest kd of any player in 2026",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, kd_pid), "kd_ratio": str(kd_top)}], "read_as": []},
+     f"The same question as G35 ('highest kd in 2026'): {I.display_name(S, kd_pid)}, {kd_top}. 'any' is never a name.",
+     regression="'any' was read as a team and resolved to Anyones Legend, silently (2026-11-05)")
+case("G109", "'among all players' ranks everyone", "exact", "best kd among all players in 2026",
+     {"status": "ok", "rows": [{"nickname": I.display_name(S, kd_pid), "kd_ratio": str(kd_top)}], "read_as": []},
+     f"The same question as G35: {I.display_name(S, kd_pid)}, {kd_top}.",
+     regression="'among' was read as a team name and the question refused (2026-11-05)")
+case("G110", "A year and region after a team's name are filters, not part of it", "exact",
+     "Dallas Fuel record in 2026 NA stage 2 playoffs",
+     {"status": "ok", "rows": [team_row(df_s9_po, "Dallas Fuel")], "read_as": []},
+     f"The same slice as G30 (OWCS 2026 NA Stage 2 Playoffs): {df_s9_po['wins']}-{df_s9_po['losses']} in "
+     f"{df_s9_po['matches']} series.",
+     regression="'in 2026 NA' left 'na' in the name: 'which dallas fuel na?' (2026-10-23)")
+case("G111", "A region and year in front of a team's name are filters", "exact",
+     "NA 2026 Dallas Fuel record in stage 2 playoffs",
+     {"status": "ok", "rows": [team_row(df_s9_po, "Dallas Fuel")], "read_as": []},
+     f"The same slice as G30: {df_s9_po['wins']}-{df_s9_po['losses']} in {df_s9_po['matches']} series.",
+     regression="a leading region was read into the name ('na dallas fuel', 2026-11-05)")
+h2h26 = I.opposed_record(S, ("team", SSG_IDS), ("team", DF_IDS), season=2026)
+case("G112", "A year and region after the opponent's name are filters", "exact",
+     "SpaceStation Gaming series record against Dallas Fuel in 2026 NA",
+     {"status": "ok", "rows": [{"matches": h2h26["matches"], "wins": h2h26["wins"], "losses": h2h26["losses"]}],
+      "read_as": []},
+     f"SpaceStation Gaming v Dallas Fuel in 2026: {h2h26['matches']} series, {h2h26['wins']}-{h2h26['losses']} (both NA).",
+     regression="'in 2025 NA' was glued onto the opponent: 'which twisted minds in 2025 na?' (2026-11-05)")
+case("G113", "A name read by a partial match is always said", "invariant", "twisted record",
+     {"status": "ok", "rows": [team_row(tm_all, "Twisted Minds")],
+      "read_as": [{"typed": "twisted", "name": "Twisted Minds"}],
+      "notes_contain": ["'twisted' was read as Twisted Minds"]},
+     "'twisted' is the start of 'Twisted Minds' and no other name, so it resolves without asking; the answer is G08's. "
+     "Whatever the parser's word list misses, a partial match is shown (read_as, and the notes for the CLI).",
+     regression="a partial match answered with no word about how the name was read (2026-11-05)")
 json.dump({"note": "Golden cases. status 'proposed' is NOT asserted; only 'confirmed' cases run. Expected values are derived "
                    "by tests/golden/derive_expected.py from raw payloads via independent.py, never from ask() output.",
            "cases": CASES}, open(Path(__file__).parent / "cases.json", "w", encoding="utf-8"), indent=1)

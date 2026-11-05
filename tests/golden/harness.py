@@ -157,6 +157,16 @@ def _apply(out: Outcome, exp: dict, a, ask_fn, prefix: str, src: str) -> None:
                 _check(out, f"{p}entity[{role}].{key}", e[key], got.get(field_name), source=f"{src}entity.{key}")
     if "rows" in exp:
         _check_rows(out, p, exp["rows"], a, f"{src}rows")
+    if "read_as" in exp:
+        # how each name was read when it was not read exactly: a misread is said, never silent (2026-11-05)
+        have = [{"typed": x.get("typed"), "name": x.get("name")} for x in (getattr(a, "read_as", None) or [])]
+        fields = [f"{src}read_as[{i}].{k}" for i, want in enumerate(exp["read_as"]) for k in want]
+        _check(out, f"{p}how many names were read by a partial match", len(exp["read_as"]), len(have),
+               source=fields or f"{src}read_as")
+        for i, want in enumerate(exp["read_as"]):
+            for k, v in want.items():
+                got = have[i].get(k) if i < len(have) else None
+                _check(out, f"{p}read_as[{i}].{k}", v, got, source=f"{src}read_as[{i}].{k}")
     if "rows_only_players" in exp:
         allowed = set(exp["rows_only_players"])
         stray = [r.get("nickname") for r in (a.rows or []) if r.get("nickname") not in allowed]
