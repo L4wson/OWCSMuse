@@ -8,7 +8,9 @@ DETAIL phase : for every match not yet complete, fetch /matches/{id} and
                replace the match's rounds / player rows inside one transaction.
 
 State lives in matches.ingest_state, so an interrupted run resumes where it
-stopped. Every write is an upsert or a delete+insert scoped to one match, so
+stopped. The states and their transitions are drawn in
+docs/schema-and-migrations.md; has_result() (migration 052) says which of them
+carry a series result. Every write is an upsert or a delete+insert scoped to one match, so
 re-running never duplicates rows. `reprocess` re-applies the latest stored raw
 payloads without touching FACEIT.
 """
@@ -50,6 +52,8 @@ GAME_NAME_UPSERT = """
         last_seen_at  = GREATEST(player_game_names.last_seen_at, EXCLUDED.last_seen_at)
 """
 
+# 'detail_fetched' is allowed by the CHECK constraint but nothing writes it: apply_detail goes from 'stub' straight to
+# its outcome in one transaction. It stays listed so a row that somehow holds it is still picked up.
 RESUMABLE_STATES = ("stub", "detail_fetched")
 
 
@@ -66,6 +70,7 @@ class ListRunStats:
 class DetailRunStats:
     selected: int = 0
     complete: int = 0
+    result_only: int = 0
     skipped: int = 0
     failed: int = 0
     result_flips: int = 0
@@ -333,6 +338,7 @@ class Collector:
         if states is None:
             states = list(RESUMABLE_STATES)
             if include_failed:
+                # result_only too: FACEIT's stats 404 is sometimes temporary, and a retry that finds stats completes it
                 states += ["failed", "result_only"]
             if refresh:
                 states += ["complete", "skipped"]
@@ -372,7 +378,7 @@ class Collector:
                 log_event(log, logging.INFO, "detail_phase_progress", done=i, of=len(ids),
                           complete=stats.complete, failed=stats.failed, flips=stats.result_flips)
         log_event(log, logging.INFO, "detail_phase_complete", selected=stats.selected, complete=stats.complete,
-                  skipped=stats.skipped, failed=stats.failed, result_flips=stats.result_flips,
+                  result_only=stats.result_only, skipped=stats.skipped, failed=stats.failed, result_flips=stats.result_flips,
                   result_changes=stats.result_changes)
         return stats
 
@@ -381,6 +387,8 @@ class Collector:
         state = outcome.get("state")
         if state == "complete":
             stats.complete += 1
+        elif state == "result_only":
+            stats.result_only += 1
         elif state == "skipped":
             stats.skipped += 1
         elif state == "failed":
@@ -696,6 +704,11 @@ class Collector:
     def reprocess(self, championship_ids: Optional[Sequence[str]] = None, limit: Optional[int] = None) -> DetailRunStats:
         """Re-apply the latest stored /matches/{id} (+/stats) payloads without contacting FACEIT."""
         assert self.raw_store is not None, "reprocess needs a RawPayloadStore"
+        # 'result_only' is left out on purpose. Such a match has no stored stats payload (raw_store.latest keeps only
+        # HTTP 200s, and FACEIT answered 404), so re-applying it would pass "no stored stats payload" as the stats
+        # error; apply_detail keeps result_only only for a 404 error, so the match would become 'failed', drop out
+        # of has_result() and lose its series from every record until a live `detail --include-failed` restored it.
+        # Retrying FACEIT is the only way such a match can change; that is `detail --include-failed`.
         ids = self.pending_match_ids(championship_ids, limit, states=["stub", "detail_fetched", "complete", "skipped", "failed"])
         stats = DetailRunStats(selected=len(ids))
         for mid in ids:
@@ -709,7 +722,7 @@ class Collector:
                                         None if st else "no stored stats payload")
             self._tally(stats, outcome)
         log_event(log, logging.INFO, "reprocess_complete", selected=stats.selected, complete=stats.complete,
-                  skipped=stats.skipped, failed=stats.failed, result_flips=stats.result_flips)
+                  result_only=stats.result_only, skipped=stats.skipped, failed=stats.failed, result_flips=stats.result_flips)
         return stats
 
     # =================================================================== status

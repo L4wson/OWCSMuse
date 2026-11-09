@@ -84,14 +84,40 @@ numbers are sums (the view) and per-map ratios stay in the jsonb. Player stat
 keys differ between seasons (2024 payloads have 9 keys, 2026 payloads about 50),
 so the typed columns are the stable subset and `stats` keeps everything.
 
-Ingest state machine on `matches.ingest_state`:
+Ingest state machine on `matches.ingest_state` (`owcsmuse/collector.py`):
 
 ```
-stub ──detail ok──▶ detail_fetched ──stats ok──▶ complete
-  │                        │
-  │                        ├── not FINISHED ──▶ skipped
-  └── 404 / error ─────────┴── stats error ──▶ failed   (retry with --include-failed)
+LIST (championship listing, or a player's history in the crawl) upserts the match
+   │
+   ├── a bye ──────────────▶ skipped              (ingest_error 'bye: ...'; never a series)
+   └── otherwise ──────────▶ stub ◀──────────────── LIST sees a different status (any state: ONGOING -> FINISHED)
+                              │
+          DETAIL: /matches/{id}, then /matches/{id}/stats when FINISHED, applied in one transaction
+                              │
+       ┌───────────────┬──────┴────────┬───────────────────┐
+       ▼               ▼               ▼                   ▼
+   complete       result_only       skipped              failed
+   FINISHED,      FINISHED,         a bye, or            detail error, stats error other than 404,
+   map stats      stats 404:        not FINISHED         empty rounds[], or the apply itself raised
+   stored         result kept,      (cancelled,
+                  no map stats      aborted)
 ```
 
-(`detail_fetched` is transient inside one transaction; you will normally see
-only `stub`, `complete`, `skipped`, `failed`.)
+Which states each command picks up again:
+
+| command | re-selects |
+| --- | --- |
+| `detail` / `backfill` | `stub` (and `detail_fetched`, below) |
+| `detail --include-failed` | also `failed` and `result_only`: a stats 404 is sometimes temporary, and a retry that finds stats completes the match |
+| `detail --refresh` | also `complete` and `skipped` |
+| `reprocess` (stored payloads, no FACEIT) | `stub`, `detail_fetched`, `complete`, `skipped`, `failed`. **Never `result_only`**, on purpose: such a match has no stored stats payload (FACEIT answered 404 and `RawPayloadStore.latest` keeps only 200s), so re-applying it reports "no stored stats payload", which is not a 404, and the match would become `failed`, dropping its series from every record (87 matches in production on 2026-11-08). Only a live retry can change it: `detail --include-failed`. `test_reprocess_leaves_a_result_only_match_holding_its_result` holds this. |
+
+**Has a result** means `complete` or `result_only`: the SQL function `has_result(ingest_state)` (migration 052) is the
+one definition, and the `series` view, `agg_map_modes` and every Python query call it rather than spelling the states
+out. It is inlined by the planner, so it costs nothing. Map- and player-grain facts that need FACEIT stats rows still
+ask for `complete` alone.
+
+`detail_fetched` is allowed by the CHECK constraint (001) but nothing writes it: `apply_detail` goes from `stub` to
+its outcome in one transaction. It stays in the constraint and in `RESUMABLE_STATES`, so a row that somehow held it
+would still be picked up; production has none. What you will see is `stub`, `complete`, `result_only`, `skipped` and
+`failed`.

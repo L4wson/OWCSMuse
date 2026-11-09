@@ -64,7 +64,7 @@ def load_faceit_side(conn: psycopg.Connection, championship_ids: Optional[list[s
               CROSS JOIN LATERAL (SELECT match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at) AS at) x
               LEFT JOIN LATERAL team_identity_at(m.faction1_team_id, x.at) ti1 ON true
               LEFT JOIN LATERAL team_identity_at(m.faction2_team_id, x.at) ti2 ON true
-             WHERE c.include AND m.status = 'FINISHED' AND m.ingest_state IN ('complete', 'result_only')
+             WHERE c.include AND m.status = 'FINISHED' AND has_result(m.ingest_state)
                AND (%(cids)s::text[] IS NULL OR m.championship_id = ANY(%(cids)s))
             """, {"cids": championship_ids})
         rows = cur.fetchall()

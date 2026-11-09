@@ -25,7 +25,7 @@ PLAYED_SQL = """
                                           match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at)) AS at) x
       JOIN LATERAL team_identity_at(r.team_id, x.at) ti ON true    -- who the team was on that day
      WHERE r.player_id = %s AND c.include
-       AND m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED'
+       AND has_result(m.ingest_state) AND m.status = 'FINISHED'
        AND (%s::int IS NULL OR c.season = %s)
 """
 

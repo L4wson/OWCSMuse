@@ -1134,7 +1134,7 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--championship", action="append", help="restrict to championship id (repeatable)")
         if name != "list":
             sp.add_argument("--limit", type=int, help="max matches to process this run")
-            sp.add_argument("--include-failed", action="store_true", help="retry matches in state 'failed'")
+            sp.add_argument("--include-failed", action="store_true", help="also retry matches in state 'failed' or 'result_only' (FACEIT had no map stats)")
             sp.add_argument("--refresh", action="store_true", help="also re-fetch matches already complete/skipped")
         sp.set_defaults(func=func)
 
