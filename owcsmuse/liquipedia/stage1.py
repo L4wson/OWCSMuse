@@ -49,7 +49,7 @@ def stage1_wants(conn: psycopg.Connection, map_path: str = MAP_PATH, events_path
     pages = json.loads(Path(map_path).read_text(encoding="utf-8"))["pages"]
     with conn.cursor() as cur:
         cur.execute("""SELECT championship_id, count(*) AS n FROM matches
-                        WHERE championship_id = ANY(%s) AND ingest_state IN ('complete', 'result_only')
+                        WHERE championship_id = ANY(%s) AND has_result(ingest_state)
                         GROUP BY 1""", (list(pages),))
         counts = {r["championship_id"]: int(r["n"]) for r in cur.fetchall()}
     wants: dict[str, int] = {}

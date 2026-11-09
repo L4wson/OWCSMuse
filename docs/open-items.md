@@ -52,6 +52,28 @@ numbers below are from that day.
 12. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI
     step.
 
+## Implicit state machines (structure, not defects)
+
+Found in a survey of the code on 2026-11-08. Each works today. These are notes on how the state is held, not bugs to
+fix, and are left as they are unless one of them starts causing a real problem. (`matches.ingest_state`, the
+largest, is now drawn in [schema-and-migrations.md](schema-and-migrations.md) with `has_result()` as its one
+"has a result" definition.)
+
+13. **Crawl frontier: `crawl_players.crawled_at` and `last_error` together.** The frontier is `crawled_at` null with no
+    error. Done is `crawled_at` set. A 404 or other 4xx marks the player done with an error, so they are never
+    retried. Retries exhausted leaves `crawled_at` null with an error, so they wait in the frontier. Which pair means
+    what lives only in `Crawler._mark_player`'s `crawled=` flag.
+14. **Crawl runs and generations: a null `finished_at`** means either "still running" or "died partway"
+    (`crawl_runs`, `crawl_generations`). Nothing tells the two apart afterwards.
+15. **Liquipedia link review: `liquipedia_links.tier` and `decision` together.** Whether a link counts as settled is
+    worked out inline in `liquipedia/reconcile.py` (around lines 211 and 314). The `series` view repeats its own reading
+    (`NOT provisional AND decision <> 'rejected'`).
+16. **Answer status has two vocabularies.** The pipeline says `ok`, `clarify` or `cannot_answer`, as a bare `str`
+    (`nlq/pipeline.py`, `Answer.status`). The query log says `ok`, `clarify`, `refusal` or `error`, translated
+    through `querylog._STATUS`. The web app (`Result.jsx`) and the CLI compare against string literals.
+17. **Liquipedia run outcome** (`liquipedia/runner.py`, `RunResult.outcome`): four outcomes (`complete`, `budget`,
+    `rate_limited`, `failed`), documented in the module docstring and held as a bare `str`.
+
 ## Done
 
 - ~~**Team Risk is undecided**~~ (97ef2653 mapped to qadsiah for all time). Decided 2026-10-23: its own org from

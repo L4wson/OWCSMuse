@@ -236,16 +236,17 @@ class Crawler:
             with self.conn.cursor() as cur:
                 # Every history item is archived, but one INSERT per item is a round trip
                 # per item against a remote pooler; batch them first.
-                batch: list[tuple[dict[str, Any], MatchRecord, bool]] = []
+                # Each item carries its own classification: a championship row is created from the item that
+                # names it, never from whichever item the classifying loop happened to end on.
+                batch: list[tuple[dict[str, Any], MatchRecord, Classification]] = []
                 for it in seen.values():
                     rec = parse_history_item(it)
                     cls = self._classify(rec.championship_id or "", rec.competition_name or "", rec.started_at, rec.region)
-                    is_main = cls.include
-                    main_items += int(is_main)
-                    batch.append((it, rec, is_main))
+                    main_items += int(cls.include)
+                    batch.append((it, rec, cls))
                 self._record_history_matches(cur, batch, generation, pid)
-                for _item, rec, is_main in batch:
-                    if is_main:
+                for _item, rec, cls in batch:
+                    if cls.include:
                         self._ensure_history_championship(cur, rec, cls)
                         self.collector._upsert_teams(cur, rec)
                         if self.collector._upsert_stub(cur, rec, rec.championship_id):
@@ -295,18 +296,18 @@ class Crawler:
             )
         self.conn.commit()
 
-    def _record_history_matches(self, cur: psycopg.Cursor, batch: list[tuple[dict[str, Any], MatchRecord, bool]],
+    def _record_history_matches(self, cur: psycopg.Cursor, batch: list[tuple[dict[str, Any], MatchRecord, Classification]],
                                 generation: int, pid: str) -> None:
         """Archive every history item seen, in one round trip."""
         if not batch:
             return
         rows = []
-        for item, rec, is_main in batch:
+        for item, rec, cls in batch:
             teams = [{"team_id": t.team_id, "name": t.name} for t in (rec.faction1, rec.faction2) if t]
             rows.append((
                 rec.match_id, rec.championship_id, rec.competition_name, item.get("competition_type"), rec.organizer_id,
                 rec.region, rec.status, rec.started_at, rec.finished_at, Jsonb(item.get("results")), Jsonb(teams),
-                list(item.get("playing_players") or [e.player_id for e in rec.roster]), is_main, generation, pid,
+                list(item.get("playing_players") or [e.player_id for e in rec.roster]), cls.include, generation, pid,
             ))
         cur.executemany(
             """

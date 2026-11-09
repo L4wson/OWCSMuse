@@ -182,7 +182,7 @@ def test_team_membership_current_team_and_history_with_date_ranges(agg_db):
             SELECT r.player_id, p.nickname, array_agg(r.match_id ORDER BY m.started_at) AS matches, min(r.team_id) AS team
               FROM match_rosters r JOIN matches m USING (match_id) JOIN players p USING (player_id)
               JOIN championships c ON c.championship_id = m.championship_id
-             WHERE c.include AND m.status = 'FINISHED' AND m.ingest_state IN ('complete', 'result_only')
+             WHERE c.include AND m.status = 'FINISHED' AND has_result(m.ingest_state)
              GROUP BY r.player_id, p.nickname HAVING count(DISTINCT m.match_id) >= 2
              ORDER BY count(*) DESC LIMIT 1""")
         who = cur.fetchone()

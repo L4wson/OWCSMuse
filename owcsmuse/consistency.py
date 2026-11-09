@@ -98,7 +98,7 @@ _FACT_EXPECTATIONS: tuple[tuple[str, str, str], ...] = (
                   FROM match_rounds r
                   JOIN matches m ON m.match_id = r.match_id
                   JOIN championships c ON c.championship_id = m.championship_id
-                 WHERE m.ingest_state IN ('complete', 'result_only') AND c.include)
+                 WHERE has_result(m.ingest_state) AND c.include)
              + (SELECT coalesce(sum((s.side1_team_id IS NOT NULL)::int + (s.side2_team_id IS NOT NULL)::int), 0)
                   FROM liquipedia_rounds lr
                   JOIN series s ON s.lp_objectname = lr.lp_objectname AND s.sources = ARRAY['liquipedia'::text])"""),
@@ -176,7 +176,7 @@ def check_date_visibility(conn: psycopg.Connection) -> CheckResult:
     undated = _rows(conn, """
         SELECT m.match_id, m.championship_id, m.ingest_state
           FROM matches m JOIN championships c ON c.championship_id = m.championship_id
-         WHERE c.include AND m.status = 'FINISHED' AND m.ingest_state IN ('complete', 'result_only')
+         WHERE c.include AND m.status = 'FINISHED' AND has_result(m.ingest_state)
            AND match_time(m.started_at, m.finished_at, m.configured_at, m.scheduled_at) IS NULL""")
     for r in undated:
         discrepancies.append({"kind": "match_with_no_usable_time", **r})
@@ -190,7 +190,7 @@ def check_date_visibility(conn: psycopg.Connection) -> CheckResult:
         SELECT m.match_id, m.championship_id, m.ingest_state,
                m.faction1_team_id, m.faction2_team_id
           FROM matches m JOIN championships c ON c.championship_id = m.championship_id
-         WHERE c.include AND m.status = 'FINISHED' AND m.ingest_state IN ('complete', 'result_only')
+         WHERE c.include AND m.status = 'FINISHED' AND has_result(m.ingest_state)
            AND NOT EXISTS (SELECT 1 FROM fact_team_matches f WHERE f.match_id = m.match_id)""")
     for r in missing:
         discrepancies.append({"kind": "finished_match_absent_from_fact_team_matches", **r})
@@ -198,10 +198,10 @@ def check_date_visibility(conn: psycopg.Connection) -> CheckResult:
     counts = {
         "matches_in_scope": int(_scalar(conn, """
             SELECT count(*) FROM matches m JOIN championships c ON c.championship_id = m.championship_id
-             WHERE c.include AND m.status = 'FINISHED' AND m.ingest_state IN ('complete', 'result_only')""") or 0),
+             WHERE c.include AND m.status = 'FINISHED' AND has_result(m.ingest_state)""") or 0),
         "matches_dated_only_by_fallback": int(_scalar(conn, """
             SELECT count(*) FROM matches m JOIN championships c ON c.championship_id = m.championship_id
-             WHERE c.include AND m.status = 'FINISHED' AND m.ingest_state IN ('complete', 'result_only')
+             WHERE c.include AND m.status = 'FINISHED' AND has_result(m.ingest_state)
                AND m.started_at IS NULL""") or 0),
     }
     return _result("date_visibility", discrepancies,
@@ -443,7 +443,7 @@ def check_series_integrity(conn: psycopg.Connection) -> CheckResult:
             discrepancies.append({"kind": kind, **r})
     faceit_n = int(_scalar(conn, """
         SELECT count(*) FROM matches m JOIN championships c ON c.championship_id = m.championship_id
-         WHERE m.ingest_state IN ('complete', 'result_only') AND m.status = 'FINISHED' AND c.include""") or 0)
+         WHERE has_result(m.ingest_state) AND m.status = 'FINISHED' AND c.include""") or 0)
     lp_only = int(_scalar(conn, "SELECT count(*) FROM series WHERE faceit_match_id IS NULL") or 0)
     linked = int(_scalar(conn, "SELECT count(*) FROM series WHERE faceit_match_id IS NOT NULL AND lp_objectname IS NOT NULL") or 0)
     total = int(_scalar(conn, "SELECT count(*) FROM series") or 0)

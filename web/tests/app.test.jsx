@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import App from "../src/App.jsx";
@@ -346,6 +346,96 @@ describe("when the service itself is the problem", () => {
     await userEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(await screen.findByTestId("answer")).toBeInTheDocument();
     expect(fetchMock.calls.filter((call) => call.url.includes("/ask"))).toHaveLength(2);
+  });
+});
+
+// What the browser does on Back or Forward: the URL is already the new one when popstate arrives.
+function traverseTo(path) {
+  act(() => {
+    window.history.replaceState({}, "", path);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+}
+
+describe("navigating", () => {
+  it("stays on the landing page when the wordmark is clicked while a question is in flight", async () => {
+    let release;
+    const gate = new Promise((resolve) => {
+      release = resolve;
+    });
+    mount([["/ask", async () => { await gate; return ok(VERSUS); }]]);
+    await userEvent.type(await screen.findByRole("textbox"), "Sugarfree map record against Zeruhh{Enter}");
+    await screen.findByTestId("loading");
+
+    await userEvent.click(screen.getByRole("button", { name: "OWCS Muse" }));
+    expect(await screen.findByTestId("suggestions")).toBeInTheDocument();
+
+    // the abandoned answer arrives: it is dropped, not shown, and the URL stays put
+    release();
+    await act(async () => {
+      await gate;
+    });
+    expect(window.location.pathname).toBe("/");
+    expect(screen.queryByTestId("answer")).not.toBeInTheDocument();
+    expect(screen.getByTestId("suggestions")).toBeInTheDocument();
+  });
+
+  it("shows the landing page, not the last answer, on Back from an answer", async () => {
+    mount([["/ask", ok(VERSUS)]]);
+    await userEvent.type(await screen.findByRole("textbox"), "Sugarfree map record against Zeruhh{Enter}");
+    await screen.findByTestId("answer");
+
+    traverseTo("/");
+
+    expect(await screen.findByTestId("suggestions")).toBeInTheDocument();
+    expect(screen.queryByTestId("answer")).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: /ask about owcs/i })).toHaveValue("");
+  });
+
+  it("runs the question again on Forward after Back", async () => {
+    const { fetchMock } = mount([["/ask", ok(VERSUS)], [`/query/${VERSUS.slug}`, ok(VERSUS)]]);
+    await userEvent.type(await screen.findByRole("textbox"), "Sugarfree map record against Zeruhh{Enter}");
+    await screen.findByTestId("answer");
+
+    traverseTo("/");
+    await screen.findByTestId("suggestions");
+    traverseTo(`/q/${VERSUS.slug}`);
+
+    expect(await screen.findByTestId("answer-sentence")).toHaveTextContent("sug2rfree is 22-20 in maps");
+    expect(fetchMock.calls.some((call) => call.url.includes(`/query/${VERSUS.slug}`))).toBe(true);
+  });
+
+  it("does not leave an abandoned question's answer on the landing page after Back", async () => {
+    let release;
+    const gate = new Promise((resolve) => {
+      release = resolve;
+    });
+    window.history.replaceState({}, "", `/q/${VERSUS.slug}`);
+    mount([[`/query/${VERSUS.slug}`, async () => { await gate; return ok(VERSUS); }]]);
+    await screen.findByTestId("loading");
+
+    traverseTo("/");
+    release();
+    await act(async () => {
+      await gate;
+    });
+
+    expect(window.location.pathname).toBe("/");
+    expect(screen.queryByTestId("answer")).not.toBeInTheDocument();
+    expect(screen.getByTestId("suggestions")).toBeInTheDocument();
+  });
+
+  it("offers to copy the new link, not 'copied', once a different answer replaces the copied one", async () => {
+    mount([["/ask", async ({ body }) => ok(body.question.startsWith("who") ? LEADERBOARD : VERSUS)]]);
+    await userEvent.type(await screen.findByRole("textbox"), "Sugarfree map record against Zeruhh{Enter}");
+    await screen.findByTestId("answer");
+    await userEvent.click(within(screen.getByTestId("share")).getByRole("button", { name: "copy link" }));
+    expect(within(screen.getByTestId("share")).getByRole("button", { name: "copied" })).toBeInTheDocument();
+
+    await userEvent.clear(screen.getByRole("textbox"));
+    await userEvent.type(screen.getByRole("textbox"), "who had the most eliminations{Enter}");
+    await waitFor(() => expect(screen.getByTestId("share")).toHaveTextContent(`/q/${LEADERBOARD.slug}`));
+    expect(within(screen.getByTestId("share")).getByRole("button", { name: "copy link" })).toBeInTheDocument();
   });
 });
 

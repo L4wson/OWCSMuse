@@ -222,7 +222,7 @@ def test_stats_404_marks_failed_and_retry_flag_reprocesses(db):
     col = Collector(conn, client, _settings(), sink)
     col.run_list()
     ds = col.run_detail()
-    assert ds.complete == 1 and ds.failed == 0
+    assert ds.complete == 1 and ds.result_only == 1 and ds.failed == 0
     row = _one(conn, "SELECT ingest_state, ingest_error, winner_faction, result_source FROM matches WHERE match_id=%s", PLAIN)
     # series result known, map stats absent on FACEIT: kept for team records, retried with --include-failed
     assert row["ingest_state"] == "result_only" and "404" in row["ingest_error"]
@@ -254,6 +254,24 @@ def test_reprocess_from_raw_payloads_without_client(db):
     row = _one(conn, "SELECT winner_faction, maps_played FROM matches WHERE match_id=%s", FLIP)
     assert (row["winner_faction"], row["maps_played"]) == ("faction1", 4)
     assert _one(conn, "SELECT count(*) AS n FROM match_rounds")["n"] == 8
+
+
+def test_reprocess_leaves_a_result_only_match_holding_its_result(db):
+    """A result_only match has no stored stats payload to re-apply (FACEIT answered 404, and only 200s are kept).
+    Reprocessing it would demote it to 'failed' and drop its series from every record, so reprocess skips it."""
+    conn, raw_conn = db
+    _seed_championship(conn)
+    sink = RawPayloadStore(raw_conn)
+    col = Collector(conn, FakeClient(sink, stats_404={PLAIN}), _settings(), sink)
+    col.run_list()
+    col.run_detail()
+    assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id=%s", PLAIN)["ingest_state"] == "result_only"
+
+    rs = Collector(conn, None, _settings(), sink).reprocess()
+
+    assert rs.selected == 1 and rs.complete == 1 and rs.failed == 0  # FLIP only
+    assert _one(conn, "SELECT ingest_state FROM matches WHERE match_id=%s", PLAIN)["ingest_state"] == "result_only"
+    assert _one(conn, "SELECT has_result(ingest_state) AS r FROM matches WHERE match_id=%s", PLAIN)["r"] is True
 
 
 def test_player_identity_is_guid_with_nickname_history(db):

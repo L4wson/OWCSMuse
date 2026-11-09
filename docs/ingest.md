@@ -60,9 +60,11 @@ Pulling FACEIT data into the warehouse: the backfill and its two resumable phase
    python -m owcsmuse status                   # progress per state and championship
    ```
 
-   Interrupt at any time. `detail` picks up matches still in `stub` /
-   `detail_fetched`; `--include-failed` retries `failed` ones; `--refresh`
-   re-fetches everything. Re-running never duplicates rows.
+   Interrupt at any time. `detail` picks up matches still in `stub`;
+   `--include-failed` also retries `failed` and `result_only` ones; `--refresh`
+   also re-fetches `complete` and `skipped` ones. Re-running never duplicates
+   rows. The full state machine is in
+   [schema-and-migrations.md](schema-and-migrations.md#schema).
 
 8. **Reprocess** after a parser change, without touching FACEIT:
 
@@ -95,9 +97,11 @@ in `list_winner_faction` / `list_faction1_score` / `list_faction2_score`.
    different winner, and sets `matches.result_flipped = true`;
 3. for `FINISHED` matches fetches `/matches/{id}/stats` and replaces the
    match's `match_rounds` and `match_players` rows in the same transaction;
-4. moves the match to `complete` (stats applied), `skipped` (not played, e.g.
-   `CANCELLED`) or `failed` (`ingest_error` says why, `--include-failed`
-   retries).
+4. moves the match to `complete` (stats applied), `result_only` (FINISHED, but
+   FACEIT answered the stats with 404: the result is kept, with no map stats),
+   `skipped` (a bye, or not played, e.g. `CANCELLED`) or `failed`
+   (`ingest_error` says why). `--include-failed` retries `failed` and
+   `result_only` matches.
 
 A later LIST run never clobbers a DETAIL-sourced result. If the listing shows a
 changed `status` (say ONGOING became FINISHED) the match is re-queued as `stub`.

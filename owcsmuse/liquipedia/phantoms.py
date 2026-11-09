@@ -158,11 +158,11 @@ def placeholder_rows(conn: psycopg.Connection, lp_games_by_match: Optional[dict[
               FROM match_rounds r
               JOIN matches m ON m.match_id = r.match_id
               JOIN championships c ON c.championship_id = m.championship_id
-             WHERE c.include AND m.ingest_state IN ('complete', 'result_only') AND coalesce(r.source, 'faceit') <> 'liquipedia'
+             WHERE c.include AND has_result(m.ingest_state) AND coalesce(r.source, 'faceit') <> 'liquipedia'
              ORDER BY r.match_id, r.round_number""")
         rows = cur.fetchall()
         cur.execute("""SELECT count(*) AS n FROM matches m JOIN championships c ON c.championship_id = m.championship_id
-                        WHERE c.include AND m.ingest_state IN ('complete', 'result_only')
+                        WHERE c.include AND has_result(m.ingest_state)
                           AND least(m.faction1_score, m.faction2_score) = 0 AND greatest(m.faction1_score, m.faction2_score) > 0""")
         sweeps = int(cur.fetchone()["n"])
     out: list[PlaceholderRow] = []
