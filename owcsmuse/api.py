@@ -198,6 +198,7 @@ def answer_payload(answer: Answer, slug: str) -> dict[str, Any]:
         "limitations": answer.limitations,
         "attribution": answer.attribution,
         "notes": answer.notes,
+        "read_as": answer.read_as,   # names read as an entity by a partial match: shown, never silent
         "entities": answer.entities,
         "candidates": answer.candidates,
         "query": answer.query,

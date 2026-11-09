@@ -82,7 +82,9 @@ in-game name `KSAA` belonged.
   (G97), "least" ranking only heroes banned at least once and saying how many tie (G98), "never banned" as its own answer
   (G99) that leaves out a hero released after the slice (G105, G107), a team's own bans and its opponents' (G100, G101),
   the teams that ban a hero (G102), a linked series' bans by its sides (G106), 2024 before bans (G103) and the picks
-  refusal (G104).
+  refusal (G104). G108-G113 (2026-11-05) ask confirmed questions worded the ways names leaked (a quantifier before
+  "player", a region or year before or after a name or an opponent) and expect the same rows; G113 asserts that a
+  name read by a partial match is said (`read_as`), and `read_as` is a harness expectation.
 - **The expected values** come from `tests/golden/independent.py`, which reads the
   raw payload JSON and imports nothing from `owcsmuse`, and are written by
   `tests/golden/derive_expected.py` into `tests/golden/cases.json` together with

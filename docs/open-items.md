@@ -6,50 +6,44 @@ numbers below are from that day.
 
 ## Production
 
-1. **"Dallas Fuel record in 2026 NA stage 3" asks which "dallas fuel na".** The same question as "Dallas Fuel record in
-   NA stage 3" answers (2-1, 8-3 in maps). With the season ahead of it, the region word is swallowed into the team's
-   name, the same class as the earlier name-swallow bugs (a name inside a question matched only as whole words, "per
-   10" and an org's own "of" kept out of names: ff5c3dc, ce89c0a). Seen on the live API 2026-10-23. Two more of the
-   class (2026-10-25): "highest kd of any player in 2026" answers for Anyones Legend ("any" matched as a team name,
-   wrong and with no warning), and "best kd among players in 2026" refuses with "no player or team matches 'among'".
-2. **Supabase: `anon` and `authenticated` grants revoked (owner, 2026-10-23); RLS is still off.** `anon` reaches no
+1. **Supabase: `anon` and `authenticated` grants revoked (owner, 2026-10-23); RLS is still off.** `anon` reaches no
    table, view or sequence. PUBLIC keeps schema USAGE and `EXECUTE` on our 18 functions, as Postgres grants by
    default: the 10 that read tables refuse `anon` on the tables inside, and the 8 others compute only on their
    arguments. Supabase's own default privileges (`FOR ROLE supabase_admin`) still grant `anon` on objects that role
    creates in `public`; none of ours are.
-3. **12 Liquipedia player pages are undecided:** class C of `scope/lp_only_identity_report.md`, each with a FACEIT
+2. **12 Liquipedia player pages are undecided:** class C of `scope/lp_only_identity_report.md`, each with a FACEIT
    namesake who never played for the same org (among them the pages held on 2026-10-01: Ailiseu, Aniyun, Shaq). The
    other 152 of the 164 pages on Liquipedia-only series were decided on 2026-10-23: Spectra and Niann03 to their
    FACEIT players, 150 as Liquipedia-only players. A 2024 NA/EMEA one may later turn up on FACEIT and need merging.
    Still open from `scope/identity_report.md` (2026-10-01): W1ll (held strong proposal) and Massivepoop (no FACEIT
    name matched).
-4. **Liquipedia records in no series** (2, 2026-10-23, from 18): Ataraxia v
+3. **Liquipedia records in no series** (2, 2026-10-23, from 18): Ataraxia v
    Metaboiz (2024 EMEA Stage 2), whose FACEIT ids are not in the warehouse; and the Dreamhack Dallas show match (Team
    Hydron v Team Danteh). The FACEIT side needs a crawl, not Liquipedia requests.
-5. **31 series have no map results from any source** (28 on 2026-10-02): Liquipedia does not cover them or has no
+4. **31 series have no map results from any source** (28 on 2026-10-02): Liquipedia does not cover them or has no
    record.
-6. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded). Hero bans would come
+5. **Stage 5:** Korea and China, results only (`region_sources` is declared; no data loaded). Hero bans would come
    with them: Liquipedia records bans for every region, but none of their leagues' pages is stored.
-7. **The nightly ingest starts hours after its cron.** `ingest.yml` is scheduled for 05:35 / 06:35 UTC (22:35
+6. **The nightly ingest starts hours after its cron.** `ingest.yml` is scheduled for 05:35 / 06:35 UTC (22:35
    Pacific), but real runs started between 11:00 and 16:30 UTC over 2026-10-29 to 11-04, and the 2026-10-31 run took
    nine hours (11:06 to 19:59 UTC, failed). Worth understanding on its own: GitHub's schedule lag, a queue, or something
    in the run. It matters for anything timed around the ingest (the VACUUM FULL of 2026-11-05 was run at 00:09 UTC,
    outside every observed run).
-8. **Hero bans by role** ("most banned support") refuse: the hero list records no roles. FACEIT's pool tags each hero
+7. **Hero bans by role** ("most banned support") refuse: the hero list records no roles. FACEIT's pool tags each hero
    with one (Sombra with two), which could seed a reviewed `role` per hero.
 
 ## Tests
 
-9. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
+8. **Two task-3 fixes have only a DB test, no golden case:** an alias following its team into an org, and the
     "team" fallback in `resolve()` ("team twisted minds"). The golden warehouse has no alias at a merged team and no
     "Team X" that resolves only without the word. A real case is worth more than the synthetic one (as G33 now
     backs the synthetic by_match case).
-10. **Golden cases `proposed`, not asserted:** G27 (Twisted Minds v Geekay at map grain, Stage 2
+9. **Golden cases `proposed`, not asserted:** G27 (Twisted Minds v Geekay at map grain, Stage 2
     enrichment), G28 (a player on the enriched match still has no player stats from it), G61 (a Korean team's
     record at an international event). Each waits on the owner's review.
-11. **The golden warehouse leaves out Toronto Defiant v Avidity and v Shikigami** (2024 NA Stage 3/4). Both are
+10. **The golden warehouse leaves out Toronto Defiant v Avidity and v Shikigami** (2024 NA Stage 3/4). Both are
     FACEIT teams with no series there. Capturing a series of each would let both records in.
-12. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI
+11. **No guard against a decision stranded on a merged branch** (how Astro's display name was lost): a git-level CI
     step.
 
 ## Implicit state machines (structure, not defects)
@@ -75,6 +69,10 @@ largest, is now drawn in [schema-and-migrations.md](schema-and-migrations.md) wi
     `rate_limited`, `failed`), documented in the module docstring and held as a bare `str`.
 
 ## Done
+
+- ~~**Names swallowed filter and quantifier words**~~ ("which dallas fuel na", "highest kd of any player" read as
+  Anyones Legend, "best kd among players" refused). Fixed 2026-11-05: one closed word list and one name extractor,
+  filters read wherever they stand, and every partial match said in `read_as` ([answers.md](answers.md#names-in-a-question)).
 
 - ~~**Team Risk is undecided**~~ (97ef2653 mapped to qadsiah for all time). Decided 2026-10-23: its own org from
   2026 Stage 3; qadsiah's era ends there.
