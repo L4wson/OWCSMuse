@@ -117,13 +117,26 @@ export default function App() {
   );
   const onExpand = useCallback((id) => reload({ page: 1, evidenceFor: id }), [reload]);
 
-  const goHome = useCallback(() => {
+  // The landing page holds no answer. Whatever brings it back - the wordmark, Back, a retry with nothing to
+  // retry - also cancels the question in flight, so an answer that arrives afterwards is dropped rather than
+  // shown (or navigated to) on top of the page the reader chose.
+  const reset = useCallback(() => {
+    inFlight.current?.abort();
+    inFlight.current = null;
     setAnswer(null);
     setQuestion("");
     setError(null);
     setPhase("idle");
+  }, []);
+
+  useEffect(() => {
+    if (route.name === "home") reset();
+  }, [route.name, reset]);
+
+  const goHome = useCallback(() => {
+    reset();
     navigate("/");
-  }, [navigate]);
+  }, [reset, navigate]);
 
   const showLanding = route.name === "home" && phase === "idle";
 
@@ -168,7 +181,8 @@ export default function App() {
                   onPageSize={onPageSize}
                   onExpand={onExpand}
                 />
-                <ShareLine slug={answer.slug} />
+                {/* keyed: "copied" belongs to one link, and a new answer's link has not been copied */}
+                <ShareLine key={answer.slug} slug={answer.slug} />
               </div>
             ) : null}
           </>
