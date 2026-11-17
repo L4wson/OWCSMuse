@@ -5,8 +5,15 @@
 import { useCallback, useEffect, useState } from "react";
 
 const SLUG = /^\/q\/([A-Za-z0-9_-]{4,64})\/?$/;
+// OWCS Grid (docs/grid/BETA.md): /grid is today's puzzle, /grid/<n> an earlier one, /grid/archive the list.
+const GRID = /^\/grid(?:\/(archive|[1-9][0-9]{0,5}))?\/?$/;
 
 export function pathToRoute(path) {
+  const grid = GRID.exec(path || "/");
+  if (grid) {
+    if (grid[1] === "archive") return { name: "grid", view: "archive" };
+    return grid[1] ? { name: "grid", view: "puzzle", number: Number(grid[1]) } : { name: "grid", view: "today" };
+  }
   const match = SLUG.exec(path || "/");
   return match ? { name: "query", slug: match[1] } : { name: "home" };
 }

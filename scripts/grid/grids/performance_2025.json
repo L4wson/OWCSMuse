@@ -1,0 +1,6 @@
+{
+  "name": "e. performance: 2025 per-10 leaders by role x where they played",
+  "entity": "player",
+  "rows": ["per10_top:eliminations:15:2025:dps", "per10_top:healing_done:15:2025:support", "per10_top:damage_mitigated:15:2025:tank"],
+  "cols": ["region:na", "region:emea", "min_seasons:3"]
+}

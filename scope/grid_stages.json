@@ -1,0 +1,746 @@
+{
+ "note": "OWCS NA and EMEA stage results for Grid's 'Won a stage' and 'Stage finalist' clues, derived by scripts/grid/build_facts.py from the playoff brackets: the last series of a stage's playoffs is its grand final. 'checks' holds what each other record says; 'agree' is false when any disagrees, and a clue never uses such a stage. Set 'reviewed' to true once checked against the source page. A rebuild keeps 'reviewed' and 'note'.",
+ "generated_at": "2026-11-17T06:51:39Z",
+ "stages": [
+  {
+   "key": "2024-emea-1",
+   "name": "OWCS 2024 EMEA Stage 1",
+   "season": 2024,
+   "region": "emea",
+   "stage": 1,
+   "playoff_championships": [
+    "f57f9c5f-7840-4a49-8c32-24682dece3fc"
+   ],
+   "final": {
+    "series_id": "faceit:1-c5823143-d7e8-4efe-a957-6d54cfee1a8e",
+    "played_at": "2024-03-24T20:15Z",
+    "score": "4-1"
+   },
+   "winner": {
+    "org_key": "team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "name": "Twisted Minds"
+   },
+   "runner_up": {
+    "org_key": "team:62f7752b-0b79-4fa8-9a23-78800e2b4539",
+    "name": "ENCE"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Twisted Minds",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Twisted Minds",
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 14,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_1",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2024-emea-2",
+   "name": "OWCS 2024 EMEA Stage 2",
+   "season": 2024,
+   "region": "emea",
+   "stage": 2,
+   "playoff_championships": [
+    "32271a28-7b4c-465d-a928-9e84e9391495"
+   ],
+   "final": {
+    "series_id": "faceit:1-9866418a-e962-49bf-889c-19c2054f6771",
+    "played_at": "2024-04-28T20:12Z",
+    "score": "4-3"
+   },
+   "winner": {
+    "org_key": "spacestation-gaming",
+    "name": "SpaceStation Gaming"
+   },
+   "runner_up": {
+    "org_key": "team:62f7752b-0b79-4fa8-9a23-78800e2b4539",
+    "name": "ENCE"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Spacestation Gaming",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "SpaceStation Gaming",
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 14,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_2",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2024-emea-3",
+   "name": "OWCS 2024 EMEA Stage 3",
+   "season": 2024,
+   "region": "emea",
+   "stage": 3,
+   "playoff_championships": [
+    "lp:Overwatch_Champions_Series/2024/EMEA/Stage_3"
+   ],
+   "final": {
+    "series_id": "lp:127218_BnHjAjXeCN_R05-M001",
+    "played_at": "2024-09-01T18:30Z",
+    "score": "4-2"
+   },
+   "winner": {
+    "org_key": "team:62f7752b-0b79-4fa8-9a23-78800e2b4539",
+    "name": "ENCE"
+   },
+   "runner_up": {
+    "org_key": "virtus-pro",
+    "name": "Virtus pro"
+   },
+   "checks": {
+    "liquipedia_match_winner": "ENCE",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 0,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_3",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2024-emea-4",
+   "name": "OWCS 2024 EMEA Stage 4",
+   "season": 2024,
+   "region": "emea",
+   "stage": 4,
+   "playoff_championships": [
+    "lp:Overwatch_Champions_Series/2024/EMEA/Stage_4"
+   ],
+   "final": {
+    "series_id": "lp:127219_kSJJ0ElJWJ_R05-M001",
+    "played_at": "2024-10-13T19:00Z",
+    "score": "4-0"
+   },
+   "winner": {
+    "org_key": "spacestation-gaming",
+    "name": "SpaceStation Gaming"
+   },
+   "runner_up": {
+    "org_key": "team:62f7752b-0b79-4fa8-9a23-78800e2b4539",
+    "name": "ENCE"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Spacestation Gaming",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 0,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/EMEA/Stage_4",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2024-na-1",
+   "name": "OWCS 2024 NA Stage 1",
+   "season": 2024,
+   "region": "na",
+   "stage": 1,
+   "playoff_championships": [
+    "7af2d2fa-f8ec-4819-a3d6-f3c9cfcc06a1"
+   ],
+   "final": {
+    "series_id": "faceit:1-70cff415-3817-4144-9eca-e917f89cb6e7",
+    "played_at": "2024-03-24T23:40Z",
+    "score": "4-0"
+   },
+   "winner": {
+    "org_key": "team:8f632648-b26f-4554-bae4-40f9aee1773b",
+    "name": "Toronto Defiant"
+   },
+   "runner_up": {
+    "org_key": "team:c5116cb3-1e5d-457f-9c4a-52a5dd75ab6e",
+    "name": "Timeless"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Toronto Defiant",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Toronto Defiant",
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 14,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_1",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2024-na-2",
+   "name": "OWCS 2024 NA Stage 2",
+   "season": 2024,
+   "region": "na",
+   "stage": 2,
+   "playoff_championships": [
+    "72922677-c191-48fc-aaac-1db52c410a26"
+   ],
+   "final": {
+    "series_id": "faceit:1-857a125c-4f36-4a9a-8500-ce0b2b229a70",
+    "played_at": "2024-04-28T23:32Z",
+    "score": "4-1"
+   },
+   "winner": {
+    "org_key": "team:8f632648-b26f-4554-bae4-40f9aee1773b",
+    "name": "Toronto Defiant"
+   },
+   "runner_up": {
+    "org_key": "team:3aca5abd-ee5d-4542-92e9-392b6f5d0dbc",
+    "name": "M80"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Toronto Defiant",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Toronto Defiant",
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 14,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_2",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2024-na-3",
+   "name": "OWCS 2024 NA Stage 3",
+   "season": 2024,
+   "region": "na",
+   "stage": 3,
+   "playoff_championships": [
+    "lp:Overwatch_Champions_Series/2024/North_America/Stage_3"
+   ],
+   "final": {
+    "series_id": "lp:127208_jaEjNJcB60_R05-M001",
+    "played_at": "2024-09-01T22:30Z",
+    "score": "4-0"
+   },
+   "winner": {
+    "org_key": "team:8f632648-b26f-4554-bae4-40f9aee1773b",
+    "name": "Toronto Defiant"
+   },
+   "runner_up": {
+    "org_key": "students-of-the-game",
+    "name": "Students of the Game"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Toronto Defiant",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 0,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_3",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2024-na-4",
+   "name": "OWCS 2024 NA Stage 4",
+   "season": 2024,
+   "region": "na",
+   "stage": 4,
+   "playoff_championships": [
+    "lp:Overwatch_Champions_Series/2024/North_America/Stage_4"
+   ],
+   "final": {
+    "series_id": "lp:127210_cJB1OcWlyA_R05-M001",
+    "played_at": "2024-10-13T21:45Z",
+    "score": "4-3"
+   },
+   "winner": {
+    "org_key": "team:8f632648-b26f-4554-bae4-40f9aee1773b",
+    "name": "Toronto Defiant"
+   },
+   "runner_up": {
+    "org_key": "ntmr",
+    "name": "NTMR"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Toronto Defiant",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 14,
+   "playoff_series_with_player_stats": 0,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2024/North_America/Stage_4",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2025-emea-1",
+   "name": "OWCS 2025 EMEA Stage 1",
+   "season": 2025,
+   "region": "emea",
+   "stage": 1,
+   "playoff_championships": [
+    "f0d5002c-dc08-43ef-818b-402dac458056"
+   ],
+   "final": {
+    "series_id": "faceit:1-0fab4c5e-1b85-4b91-a43d-e5a1991c300e",
+    "played_at": "2025-03-09T21:34Z",
+    "score": "4-2"
+   },
+   "winner": {
+    "org_key": "virtus-pro",
+    "name": "Virtus pro"
+   },
+   "runner_up": {
+    "org_key": "qadsiah",
+    "name": "Al Qadsiah"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Virtus.pro",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Virtus pro",
+    "liquipedia_placement_first": "Virtus.pro",
+    "liquipedia_placement_second": "Al Qadsiah"
+   },
+   "agree": true,
+   "playoff_series": 10,
+   "playoff_series_with_player_stats": 8,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/EMEA/Stage_1",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2025-emea-2",
+   "name": "OWCS 2025 EMEA Stage 2",
+   "season": 2025,
+   "region": "emea",
+   "stage": 2,
+   "playoff_championships": [
+    "db6fa8ba-c929-4470-a785-e2d5bf7edb07"
+   ],
+   "final": {
+    "series_id": "faceit:1-da7e0ab3-cb56-4318-8a2e-78249fbc609a",
+    "played_at": "2025-06-29T20:52Z",
+    "score": "4-2"
+   },
+   "winner": {
+    "org_key": "qadsiah",
+    "name": "Al Qadsiah"
+   },
+   "runner_up": {
+    "org_key": "team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "name": "Twisted Minds"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Al Qadsiah",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Al Qadsiah",
+    "liquipedia_placement_first": "Al Qadsiah",
+    "liquipedia_placement_second": "Twisted Minds"
+   },
+   "agree": true,
+   "playoff_series": 10,
+   "playoff_series_with_player_stats": 8,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/EMEA/Stage_2",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2025-emea-3",
+   "name": "OWCS 2025 EMEA Stage 3",
+   "season": 2025,
+   "region": "emea",
+   "stage": 3,
+   "playoff_championships": [
+    "144f67c6-d4e9-4c58-a122-0bba755c5201"
+   ],
+   "final": {
+    "series_id": "faceit:1-3e78e269-28b7-481c-9ccc-46c173314ab9",
+    "played_at": "2025-10-26T19:29Z",
+    "score": "4-1"
+   },
+   "winner": {
+    "org_key": "team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "name": "Twisted Minds"
+   },
+   "runner_up": {
+    "org_key": "qadsiah",
+    "name": "Al Qadsiah"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Twisted Minds",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Twisted Minds",
+    "liquipedia_placement_first": "Twisted Minds",
+    "liquipedia_placement_second": "Al Qadsiah"
+   },
+   "agree": true,
+   "playoff_series": 10,
+   "playoff_series_with_player_stats": 8,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/EMEA/Stage_3",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2025-na-1",
+   "name": "OWCS 2025 NA Stage 1",
+   "season": 2025,
+   "region": "na",
+   "stage": 1,
+   "playoff_championships": [
+    "f976d341-4447-41ca-8782-7c5d1790db99"
+   ],
+   "final": {
+    "series_id": "faceit:1-ef7ae93b-100b-4113-afb7-9175eca7cd7f",
+    "played_at": "2025-03-10T02:05Z",
+    "score": "4-2"
+   },
+   "winner": {
+    "org_key": "ntmr",
+    "name": "NTMR"
+   },
+   "runner_up": {
+    "org_key": "spacestation-gaming",
+    "name": "SpaceStation Gaming"
+   },
+   "checks": {
+    "liquipedia_match_winner": "NTMR",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "NTMR",
+    "liquipedia_placement_first": "NTMR",
+    "liquipedia_placement_second": "Spacestation Gaming"
+   },
+   "agree": true,
+   "playoff_series": 10,
+   "playoff_series_with_player_stats": 8,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/NA/Stage_1",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2025-na-2",
+   "name": "OWCS 2025 NA Stage 2",
+   "season": 2025,
+   "region": "na",
+   "stage": 2,
+   "playoff_championships": [
+    "4a55d40d-6160-4297-a212-1e81098b15f5"
+   ],
+   "final": {
+    "series_id": "faceit:1-e767c613-4294-4af5-90ba-18299fa8404d",
+    "played_at": "2025-06-30T01:07Z",
+    "score": "4-3"
+   },
+   "winner": {
+    "org_key": "team:590b7d3b-a200-47b9-a967-f02274c1977b",
+    "name": "Geekay Esports"
+   },
+   "runner_up": {
+    "org_key": "team-liquid",
+    "name": "Team Liquid"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Geekay Esports",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Geekay Esports",
+    "liquipedia_placement_first": "Geekay Esports",
+    "liquipedia_placement_second": "Team Liquid"
+   },
+   "agree": true,
+   "playoff_series": 10,
+   "playoff_series_with_player_stats": 8,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/NA/Stage_2",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2025-na-3",
+   "name": "OWCS 2025 NA Stage 3",
+   "season": 2025,
+   "region": "na",
+   "stage": 3,
+   "playoff_championships": [
+    "f350948c-b338-41d3-a063-8702026dd008"
+   ],
+   "final": {
+    "series_id": "faceit:1-31a11066-f2c2-4636-b392-bd1429f00b4e",
+    "played_at": "2025-10-27T00:29Z",
+    "score": "4-3"
+   },
+   "winner": {
+    "org_key": "team-liquid",
+    "name": "Team Liquid"
+   },
+   "runner_up": {
+    "org_key": "spacestation-gaming",
+    "name": "SpaceStation Gaming"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Team Liquid",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Team Liquid",
+    "liquipedia_placement_first": "Team Liquid",
+    "liquipedia_placement_second": "Spacestation Gaming"
+   },
+   "agree": true,
+   "playoff_series": 10,
+   "playoff_series_with_player_stats": 8,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2025/NA/Stage_3",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2026-emea-1",
+   "name": "OWCS 2026 EMEA Stage 1",
+   "season": 2026,
+   "region": "emea",
+   "stage": 1,
+   "playoff_championships": [
+    "7803fa53-82c0-409a-b8ab-7f693c57886f"
+   ],
+   "final": {
+    "series_id": "lp:136253_wVHcKvLz60_R03-M001",
+    "played_at": "2026-04-12T18:35Z",
+    "score": "4-1"
+   },
+   "winner": {
+    "org_key": "team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "name": "Twisted Minds"
+   },
+   "runner_up": {
+    "org_key": "virtus-pro",
+    "name": "Virtus pro"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Twisted Minds",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": "Twisted Minds",
+    "liquipedia_placement_second": "Virtus.pro"
+   },
+   "agree": true,
+   "playoff_series": 6,
+   "playoff_series_with_player_stats": 4,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_1",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2026-emea-2",
+   "name": "OWCS 2026 EMEA Stage 2",
+   "season": 2026,
+   "region": "emea",
+   "stage": 2,
+   "playoff_championships": [
+    "f2f36b25-2979-4681-bc74-6a4d869cd1d5"
+   ],
+   "final": {
+    "series_id": "faceit:1-5a5ff7bb-ef8c-4c59-ab19-a740d8dac594",
+    "played_at": "2026-07-05T21:39Z",
+    "score": "4-3"
+   },
+   "winner": {
+    "org_key": "virtus-pro",
+    "name": "Virtus pro"
+   },
+   "runner_up": {
+    "org_key": "team:46f8e560-76fe-4b5f-85e7-397957e0dc74",
+    "name": "Geekay Esports"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Virtus.pro",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Virtus pro",
+    "liquipedia_placement_first": "Virtus.pro",
+    "liquipedia_placement_second": "Geekay Esports"
+   },
+   "agree": true,
+   "playoff_series": 6,
+   "playoff_series_with_player_stats": 6,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_2",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2026-emea-3",
+   "name": "OWCS 2026 EMEA Stage 3",
+   "season": 2026,
+   "region": "emea",
+   "stage": 3,
+   "playoff_championships": [
+    "lp:Overwatch_Champions_Series/2026/EMEA/Stage_3"
+   ],
+   "final": {
+    "series_id": "lp:136255_PFxlJbDmfx_R03-M001",
+    "played_at": "2026-11-01T19:35Z",
+    "score": "4-1"
+   },
+   "winner": {
+    "org_key": "team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e",
+    "name": "Twisted Minds"
+   },
+   "runner_up": {
+    "org_key": "team-peps",
+    "name": "Team Peps"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Twisted Minds",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 6,
+   "playoff_series_with_player_stats": 0,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/EMEA/Stage_3",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2026-na-1",
+   "name": "OWCS 2026 NA Stage 1",
+   "season": 2026,
+   "region": "na",
+   "stage": 1,
+   "playoff_championships": [
+    "51740a2d-0e80-4faa-9b47-06085b9b4a35"
+   ],
+   "final": {
+    "series_id": "lp:136256_j4vauw9a8D_R03-M001",
+    "played_at": "2026-04-12T21:45Z",
+    "score": "4-1"
+   },
+   "winner": {
+    "org_key": "dallas-fuel",
+    "name": "Dallas Fuel"
+   },
+   "runner_up": {
+    "org_key": "spacestation-gaming",
+    "name": "SpaceStation Gaming"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Dallas Fuel",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": "Dallas Fuel",
+    "liquipedia_placement_second": "Spacestation Gaming"
+   },
+   "agree": true,
+   "playoff_series": 6,
+   "playoff_series_with_player_stats": 2,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_1",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2026-na-2",
+   "name": "OWCS 2026 NA Stage 2",
+   "season": 2026,
+   "region": "na",
+   "stage": 2,
+   "playoff_championships": [
+    "32d9f289-5c3f-4ea9-b6b4-a62987c36d9a"
+   ],
+   "final": {
+    "series_id": "faceit:1-0c28ddf5-09e3-4d63-88fc-55e0dc30dc13",
+    "played_at": "2026-07-06T01:20Z",
+    "score": "4-2"
+   },
+   "winner": {
+    "org_key": "dallas-fuel",
+    "name": "Dallas Fuel"
+   },
+   "runner_up": {
+    "org_key": "spacestation-gaming",
+    "name": "SpaceStation Gaming"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Dallas Fuel",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": "Dallas Fuel",
+    "liquipedia_placement_first": "Dallas Fuel",
+    "liquipedia_placement_second": "Spacestation Gaming"
+   },
+   "agree": true,
+   "playoff_series": 6,
+   "playoff_series_with_player_stats": 6,
+   "final_has_player_stats": true,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_2",
+   "reviewed": false,
+   "note": ""
+  },
+  {
+   "key": "2026-na-3",
+   "name": "OWCS 2026 NA Stage 3",
+   "season": 2026,
+   "region": "na",
+   "stage": 3,
+   "playoff_championships": [
+    "lp:Overwatch_Champions_Series/2026/NA/Stage_3"
+   ],
+   "final": {
+    "series_id": "lp:136258_O3AiXvX9rI_R03-M001",
+    "played_at": "2026-11-01T23:00Z",
+    "score": "4-0"
+   },
+   "winner": {
+    "org_key": "dallas-fuel",
+    "name": "Dallas Fuel"
+   },
+   "runner_up": {
+    "org_key": "team-liquid",
+    "name": "Team Liquid"
+   },
+   "checks": {
+    "liquipedia_match_winner": "Dallas Fuel",
+    "liquipedia_match_is_bracket_final": true,
+    "faceit_result": null,
+    "liquipedia_placement_first": null,
+    "liquipedia_placement_second": null
+   },
+   "agree": true,
+   "playoff_series": 6,
+   "playoff_series_with_player_stats": 0,
+   "final_has_player_stats": false,
+   "source": "https://liquipedia.net/overwatch/Overwatch_Champions_Series/2026/NA/Stage_3",
+   "reviewed": false,
+   "note": ""
+  }
+ ]
+}

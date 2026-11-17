@@ -1,0 +1,732 @@
+/* OWCS Grid. Muse's tokens (styles.css), a different job: a board you tap, sized for a phone held in one hand.
+   Everything is scoped under .grid-page so nothing here reaches the question pages. */
+
+.grid-page {
+  --grid-fill: color-mix(in srgb, var(--won) 16%, var(--panel));
+  --grid-fill-line: color-mix(in srgb, var(--won) 55%, var(--line));
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+}
+
+.grid-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 4px 0 12px;
+}
+
+.grid-tabs a {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.grid-tabs a[aria-current="page"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.grid-head {
+  margin-bottom: 12px;
+}
+
+.grid-head h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.grid-head p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+}
+
+.grid-number {
+  color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ board */
+
+.grid-board {
+  display: grid;
+  grid-template-columns: minmax(3.6rem, 0.62fr) repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.grid-colhead,
+.grid-rowhead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.grid-colhead {
+  min-height: 2.6rem;
+  padding: 4px 2px;
+  font-size: 0.95rem;
+}
+
+.grid-rowhead {
+  font-size: 0.72rem; /* "SUPPORT" must fit the narrow first column on a 360px phone without breaking */
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+  overflow-wrap: normal;
+}
+
+.grid-cell {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px;
+  font: inherit;
+  color: var(--muted);
+  background: var(--panel);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  text-align: center;
+  overflow: hidden;
+}
+
+button.grid-cell {
+  cursor: pointer;
+  font-size: 1.5rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.grid-cell:disabled {
+  cursor: default;
+  background: transparent;
+  border-style: dashed;
+}
+
+button.grid-cell:not(:disabled):hover,
+button.grid-cell:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.grid-cell--selected {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.grid-cell--filled {
+  color: var(--ink);
+  background: var(--grid-fill);
+  border-color: var(--grid-fill-line);
+}
+
+.grid-cell-name {
+  max-width: 100%;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.grid-cell-why {
+  max-width: 100%;
+  font-size: 0.62rem;
+  line-height: 1.2;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------ under board */
+
+.grid-status {
+  margin: 14px 0 0;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.grid-status strong {
+  font-size: 1.15rem;
+}
+
+.grid-hint {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.grid-notice {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.grid-notice--wrong,
+.grid-notice--error {
+  color: var(--lost);
+  background: color-mix(in srgb, var(--lost) 10%, var(--panel));
+}
+
+.grid-notice--cannot_verify {
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.grid-guess {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.grid-guess-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.grid-guess-help {
+  margin: 2px 0 8px;
+  font-size: 0.82rem;
+}
+
+.grid-guess input {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  font-size: 1rem; /* 16px: a smaller input makes iOS zoom the page on focus */
+  color: var(--ink);
+  background: var(--bg);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.grid-guess input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.grid-options {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grid-options button {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6px 12px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.grid-options button:not(:disabled):hover,
+.grid-options button:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.grid-options button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.grid-option-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.grid-option-detail {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.grid-link,
+.grid-giveup {
+  padding: 4px 0;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.grid-giveup {
+  display: block;
+  margin: 16px auto 0;
+}
+
+/* -------------------------------------------------------------------- end */
+
+.grid-end {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.grid-end p {
+  margin: 4px 0;
+}
+
+.grid-score {
+  font-size: 1.4rem;
+  color: var(--muted);
+}
+
+.grid-score strong {
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.grid-share-text {
+  display: inline-block;
+  margin: 10px 0 0;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.grid-share {
+  display: block;
+  width: 100%;
+  margin: 12px 0 4px;
+  padding: 14px;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--panel);
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.grid-reveal {
+  margin: 20px 0 12px;
+  text-align: left;
+}
+
+.grid-reveal h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.grid-reveal ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.grid-reveal li {
+  display: flex;
+  flex-direction: column;
+  padding: 7px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.88rem;
+}
+
+.grid-reveal li span {
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------- notes, archive */
+
+.grid-how {
+  margin-top: 22px;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.grid-how summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.grid-how ul {
+  margin: 8px 0 2px;
+  padding-left: 18px;
+}
+
+.grid-how li + li {
+  margin-top: 4px;
+}
+
+.grid-coverage {
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.grid-empty {
+  margin: 32px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.grid-empty a,
+.grid-end a {
+  color: var(--accent);
+}
+
+.grid-archive {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.grid-archive a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 4px;
+  color: var(--ink);
+  text-decoration: none;
+  border-top: 1px solid var(--line);
+}
+
+.grid-archive-no {
+  min-width: 2.6rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.grid-archive-what {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.grid-archive-what .muted {
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.grid-archive-score {
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* the nav link in Muse's masthead, shown only when VITE_GRID_NAV is on */
+.masthead-link {
+  margin-left: auto;
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+@media (min-width: 30rem) {
+  .grid-cell-name {
+    font-size: 1.02rem;
+  }
+
+  .grid-cell-why {
+    font-size: 0.7rem;
+  }
+
+  .grid-rowhead {
+    font-size: 0.9rem;
+  }
+}
+
+/* ------------------------------------------------------ mixed-clue puzzles */
+
+/* long row clues ("Teammate of sHockWave", "Played for SpaceStation Gaming") get a full column of their own */
+.grid-board--wide {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+button.grid-colhead,
+button.grid-rowhead {
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 4px 2px;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.grid-colhead {
+  font-size: 0.95rem;
+  justify-content: flex-end;
+}
+
+button.grid-rowhead {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.grid-head-label {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.grid-board--wide button.grid-rowhead {
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+button.grid-head-long,
+.grid-board--wide button.grid-head-long {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.grid-head-open,
+button.grid-colhead:focus-visible,
+button.grid-rowhead:focus-visible {
+  background: var(--accent-soft);
+  outline: none;
+}
+
+.grid-head-i {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.grid-head-i::after {
+  content: "i";
+}
+
+.grid-info {
+  margin-top: 10px;
+  padding: 10px 12px;
+  font-size: 0.88rem;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.grid-info p {
+  margin: 4px 0 0;
+}
+
+.grid-difficulty {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 9px;
+  vertical-align: middle;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+.grid-difficulty--easy {
+  color: var(--won);
+  background: color-mix(in srgb, var(--won) 14%, var(--panel));
+}
+
+.grid-difficulty--medium {
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.grid-difficulty--hard {
+  color: var(--lost);
+  background: color-mix(in srgb, var(--lost) 12%, var(--panel));
+}
+
+.grid-cell-count {
+  max-width: 100%;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--muted);
+}
+
+.grid-reveal-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* a long reason must not push the name out of a filled cell */
+.grid-cell-why {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+/* in a mixed grid every header is a phrase: one size for all of them, whatever their length */
+.grid-board--wide button.grid-colhead,
+.grid-board--wide button.grid-rowhead,
+.grid-board--wide button.grid-head-long {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.grid-yours {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.grid-yours li {
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+}
+
+.grid-yours li span:last-child {
+  display: block;
+}
+
+.grid-muse {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.grid-reveal a {
+  color: var(--accent);
+}
+
+/* the way back to Muse's search, at the far end of Grid's tabs */
+.grid-tabs .grid-tabs-back {
+  margin-left: auto;
+  color: var(--accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------- the entry on Muse's landing page */
+
+.grid-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.grid-entry:hover,
+.grid-entry:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.grid-entry-mark {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, 7px);
+  gap: 2px;
+}
+
+.grid-entry-mark i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.grid-entry-mark i:nth-child(1),
+.grid-entry-mark i:nth-child(5),
+.grid-entry-mark i:nth-child(6),
+.grid-entry-mark i:nth-child(8) {
+  background: var(--won);
+}
+
+.grid-entry-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.grid-entry-text strong {
+  font-size: 0.95rem;
+}
+
+.grid-entry-text .muted {
+  font-size: 0.8rem;
+}
+
+.grid-entry-level {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.grid-entry-go {
+  flex: none;
+  color: var(--accent);
+  font-size: 1.1rem;
+}

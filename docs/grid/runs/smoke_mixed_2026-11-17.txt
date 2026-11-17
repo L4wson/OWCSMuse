@@ -1,0 +1,65 @@
+OWCS Grid mixed-clue smoke test, 2026-11-17 (UTC)
+
+API: `python -m owcsmuse serve --port 8010`, the code on grid/categories, started from a scratch directory holding a copy
+of scope/grid_puzzles.json with every date moved back ten days (so #10 was today's and #1 to #9 were in the archive) and
+scope/grid_players.json unchanged. Frontend: `VITE_API_BASE=http://127.0.0.1:8010 npx vite --port 5183`.
+The database was reached only by /healthz. Nothing was written anywhere but the browser's localStorage.
+
+--- through the endpoints
+GET /api/grid/today    #10 Medium mixed
+    rows: Top 25% elims/10, 2026 NA/EMEA | Teammate of zeruhh | Teammate of seeker
+    cols: 150+ OWCS maps | Played in 2024 | Rostered at 2025 Champions Clash
+GET /api/grid/archive  #10 Medium, #9 Medium, #8 Medium, #7 Easy, #6 Easy, #5 Hard, #4 Hard, #3 Medium, #2 Medium, #1 (no difficulty)
+
+#6 Easy    rows: Played for Team Peps | Teammate of Vega | EMEA stage finalist
+           cols: Played in 2025 | Rostered at Esports World Cup 2024 | 100+ OWCS maps
+    correct        cell 0  cookie084  "26 maps for Team Peps, 2025. 50 maps in 2025"
+    wrong          cell 0  Neutral    uses_guess true
+    cannot_verify  cell 0  KroxZ      uses_guess false
+                   "They were rostered for Team Peps only in series we have no map data for. It didn't use a guess."
+    reveal counts  12, 5, 5, 7, 10, 5, 24, 17, 19; at most 5 examples a cell
+
+#2 Medium  rows: Rostered at 2025 Champions Clash | Played in 2024 | 150+ OWCS maps
+           cols: NA stage finalist | Played for Virtus pro | Teammate of Landon
+    correct        cell 0  Admiral    "On NTMR's roster at 2025 Champions Clash. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 3 more"
+    wrong          cell 0  Neutral    uses_guess true
+    cannot_verify  cell 3  cal        uses_guess false
+                   "They were on a stage finalist's playoff roster, but we have no map data for those playoffs, so we
+                    can't tell whether they played. It didn't use a guess."
+    reveal counts  10, 6, 6, 26, 7, 12, 14, 6, 6
+
+#4 Hard    rows: Top 25% fewest deaths/10, 2025 NA/EMEA | Rostered at 2026 Champions Clash | Won an OWCS stage
+           cols: Teammate of kevster | Played for NTMR | Teammate of Admiral
+    correct        cell 0  Chase      "4.3 deaths/10 as Tank in 2025, #3 of 28. 21 maps together, most on The Ultimates in 2025 EMEA Stage 1"
+    wrong          cell 0  Neutral    uses_guess true
+    cannot_verify  cell 0  WMaimone   uses_guess false
+                   "They were rostered with kevster only in series we have no map data for, so we can't tell whether
+                    they played together. It didn't use a guess."
+    reveal counts  8, 4, 5, 5, 5, 6, 9, 7, 10
+
+#1 (beta)  rows: Tank | DPS | Support   cols: EMEA | Played all 3 seasons | 2026
+    correct        cell 0  amdp       "11 Tank maps in EMEA (FACEIT map stats)"
+    wrong          cell 0  Neutral
+    cannot_verify  cell 0  Scraine    "There is no role data for Scraine in this column (EMEA), so the guess can't be checked. It didn't use a guess."
+    reveal counts  27, 14, 12, 51, 23, 25, 53, 21, 27
+
+No answer id appeared in GET /{n} or /archive for any of the four.
+
+--- through the page (headless browser)
+#6 at 390 px: badge EASY; no horizontal scroll; no header clipped.
+    tapping "Played in 2025": "1+ map in OWCS NA/EMEA main series in the 2025 season (FACEIT map stats)."
+    wrong:          "Neutral is not a Played for Team Peps x Played in 2025 answer."
+    can't verify:   the Team Peps sentence above; guesses unchanged
+    correct:        cell shows "cookie084 | 26 maps for Team Peps, 2025. 50 maps in 2025"
+    status:         7 guesses left, 1/9 filled
+    after End game: every cell shows its count (12, 5, 5, 7, 10, 5, 24, 17, 19 possible);
+                    "Played for Team Peps x Played in 2025 -> 12 possible answers -> Dip, eisgnom, FDGod, Tred, Xerion"
+    share text:     OWCS Grid #6  1/9 / three rows of squares / http://localhost:5183/grid/6
+#2 at 360 px: badge MEDIUM; no horizontal scroll; no header clipped. Same three results as through the endpoints.
+#4 at 390 px: badge HARD; no horizontal scroll; no header clipped; the longest header,
+    "Top 25% fewest deaths/10, 2025 NA/EMEA", wraps inside its column. Same three results.
+Archive at 360 px: "#10 ... 2026-11-17 · Medium · today"; older rows show their difficulty.
+Puzzle 1 at 360 px: no difficulty badge; headers EMEA | Played all 3 seasons | 2026 and TANK | DPS | SUPPORT.
+
+Changed after seeing the first screenshots, then checked again at 360 and 390 px: every header in a mixed grid now uses
+one font size, and each answer's full reason is listed under the board (a cell clips a long one).

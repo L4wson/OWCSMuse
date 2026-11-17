@@ -1,0 +1,107 @@
+# c2. org x season
+answer entity: player; min maps for a role or stat cell: 4; flag below 5 answers
+
+                                Competed in 2024  Competed in 2025  Competed in 2026  
+Played for Team Peps            15                11                8                 
+Played for SpaceStation Gaming  7                 10                7                 
+Played for Al Qadsiah           4 (!)             9                 7                 
+
+[0,0] Played for Team Peps x Competed in 2024: 15
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      BenBest  [8bfff87a-25e5-428f-ae28-19fabe8718c4]
+      FDGod  [1ab8c25f-15f0-4707-acc9-4718c88157da]
+      gogo  [bb203e79-b78d-4144-9e28-be9c06ab0dd6]
+      Hybrid  [76216b21-cee5-4652-9053-78a4d8d660cf]
+      Kilaa  [7e0e5b2a-973b-46ed-b27f-c1867b2f9447]
+      kronus  [1e38a76f-e8a1-41a6-b400-a33a0e677744]
+      KroxZ  [06481b72-092d-43c3-a686-13c92f03616f]
+      Lv1Crook  [a6ee9fe7-52a7-44a4-9d58-901973c2b55b]
+      Naga  [981131d6-8276-404c-9ea7-87dcedf77765]
+      PAK  [a9d3c8c4-f562-4009-b4f5-ba60a0523102]
+      ... 5 more
+[0,1] Played for Team Peps x Competed in 2025: 11
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      cookie084  [59643d3f-fad7-4182-87be-63d2371bedae]
+      Dip  [05e09403-6d01-4ea5-bd1e-3e9dabf8957b]
+      eisgnom  [37aeeb7b-b183-4fae-b25d-d1de03a58191]
+      FDGod  [1ab8c25f-15f0-4707-acc9-4718c88157da]
+      Ken  [0c9b85a6-9818-4ab8-a19f-932ae80ec814]
+      SoOn  [9e1d3b6a-3b87-4640-97c0-22ed3791ff9c]
+      Tred  [2acfb6df-f298-4b92-8ab8-2141635f28e4]
+      Willys  [39cada54-4c21-4421-8bc5-baca66c525dc]
+      Xerion  [e01e90ce-eb0a-4a94-a797-9a1e8d5539ed]
+      xzodyal  [9609be75-e561-493f-b1f1-000c4517555a]
+      ... 1 more
+[0,2] Played for Team Peps x Competed in 2026: 8
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      Dip  [05e09403-6d01-4ea5-bd1e-3e9dabf8957b]
+      FDGod  [1ab8c25f-15f0-4707-acc9-4718c88157da]
+      KroxZ  [06481b72-092d-43c3-a686-13c92f03616f]
+      Rav  [6e2b678b-5b3c-4d77-8385-a9c9e3d0e140]
+      Willys  [39cada54-4c21-4421-8bc5-baca66c525dc]
+      Xerion  [e01e90ce-eb0a-4a94-a797-9a1e8d5539ed]
+      xzodyal  [9609be75-e561-493f-b1f1-000c4517555a]
+      Zorrow  [27150b56-fd01-4385-84ee-11798be33cfe]
+[1,0] Played for SpaceStation Gaming x Competed in 2024: 7
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      Backbone  [a12c7612-d162-4a26-8053-ece68c1f67f7]
+      FunnyAstro  [423b8943-30c9-4436-8a22-51ca77aa7fca]
+      Hadi  [5f60ca5b-92be-4673-b2c6-06623b111467]
+      KSAA  [92695183-d00e-4c31-9707-ff9d8500f52a]
+      Landon  [a332d27e-fe19-4077-89f8-27391a581460]
+      Seicoe  [016d21e3-fe55-4f07-ba4f-b61e7339bd18]
+      SparkR  [39042a9c-ac5f-47b4-8376-29c45676c2e9]
+[1,1] Played for SpaceStation Gaming x Competed in 2025: 10
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      Bliss  [4a7be6fa-3e22-4584-b131-5444c608a385]
+      cjay  [2ede0b37-1352-47d2-9547-7d0f9f07abaa]
+      Hawk  [a940981f-c750-40b9-bb55-bd3e8e6ef986]
+      Kellan  [19298c75-9d48-4dc5-9970-75509c11246c]
+      Kronik  [1daf63bc-70f3-479f-b030-b2699fbbe118]
+      Le7  [f2359218-1265-472c-8fbc-9c91183766f0]
+      seeker  [826c2bd4-cb43-4b6c-90a9-21ee53b87bf9]
+      squid  [e9a591c4-f85f-4438-a7a7-72512a6666c8]
+      sugarfree  [58239fd5-cf2f-4894-a2ec-30fd026c262a]
+      Ƕscissors  [8429e08f-a227-4d3d-859c-d7246a6f1394]
+[1,2] Played for SpaceStation Gaming x Competed in 2026: 7
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      Admiral  [41c50d1a-3a08-40ad-9746-ecd52ff9e5c6]
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      Hawk  [a940981f-c750-40b9-bb55-bd3e8e6ef986]
+      Infekted  [3d7e3522-9ef9-4c31-abe2-e10dd1c14270]
+      Lethal  [9adfc2f2-3851-4c98-a29b-5b4ed95e9beb]
+      sugarfree  [58239fd5-cf2f-4894-a2ec-30fd026c262a]
+      UltraViolet  [43d39898-d853-4e75-b249-9b41d638a2b0]
+[2,0] Played for Al Qadsiah x Competed in 2024: 4  ** under 5 **
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      Facator  [lp:player:Facator]
+      Haku  [7928a18c-bbe9-403b-936a-d5df7355b6e3]
+      Psych0  [95a176ef-18f6-429a-97d1-ad3663810729]
+      Scyle  [ad12d7b8-4843-4a95-a468-97e28901ce2b]
+[2,1] Played for Al Qadsiah x Competed in 2025: 9
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      Chase  [23c11b19-5748-4890-87da-7d41db6a46cd]
+      CheckMate  [c6839ee0-654b-4b77-90ab-11ba3b56bb49]
+      Haku  [7928a18c-bbe9-403b-936a-d5df7355b6e3]
+      kellex  [b273a710-800f-4638-9858-461d81ac55b9]
+      Landon  [a332d27e-fe19-4077-89f8-27391a581460]
+      LBBD7  [462c6480-274d-48a6-a5cf-d29d3b2dd786]
+      Qlm  [87034ecc-df9b-4a27-90b9-0f5c68376307]
+      Tred  [2acfb6df-f298-4b92-8ab8-2141635f28e4]
+      ZIYAD  [c2c17617-77ac-4f70-8529-59a2a910cb35]
+[2,2] Played for Al Qadsiah x Competed in 2026: 7
+      counted by: series line-ups (>= 1); both conditions on the same rows
+      Ade  [9aa12273-c1db-4df9-a952-847d4aea8801]
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      KORZ  [526fd1e1-c48f-45f6-8789-813a93e61369]
+      SirMajed  [51bd468c-463e-43c9-be25-3d23803c3ee9]
+      Taejong  [cc65de21-58d0-4534-81a2-7316a15cb2dd]
+      Vestola  [1661fa93-eee8-4cd5-98a8-f7478bbe87e2]
+      zox  [a1fb03ff-9977-4d0b-b4bd-82fa6085f0ed]
+
+overlap
+  distinct answers across the grid: 61
+  cells fillable with no answer reused: 9 of 9
+  answers by number of cells they fit: {1: 48, 2: 9, 3: 4}
+  answers that fit a whole row: [3, 0, 0]; a whole column: [0, 0, 0]
+  most reusable: FDGod (3), Tred (3), Xerion (3), xzodyal (3), Dip (2), Galaa (2), Haku (2), Hawk (2)

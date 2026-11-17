@@ -1,0 +1,141 @@
+# f. role x where and when: NA, EMEA, and 3+ seasons
+answer entity: player; min maps for a role or stat cell: 10; flag below 5 answers
+
+                Played in NA            Played in EMEA          Competed in 3+ seasons  
+Played Tank     29                      28                      19                      
+Played DPS      46                      51                      30                      
+Played Support  47                      53                      25                      
+
+[0,0] Played Tank x Played in NA: 29
+      counted by: maps with FACEIT stats (>= 10); both conditions on the same rows
+      coverage: player stats in 21 of 27 competitions of this slice; none for: OWCS 2024 NA Stage 3 Group Stage, OWCS 2024 NA Stage 3 Main Event, OWCS 2024 NA Stage 4 Group Stage, OWCS 2024 NA Stage 4 Main Event, and 2 more
+      ariel2  [3c07c474-37ab-43dd-8d8d-e4ccb6de31ed]
+      aspect  [51bde807-1c27-452b-8ce7-6bc04d90a879]
+      Astro  [e78965e3-6fdc-437d-ab8f-b859e283dfdf]
+      Axure  [b9abed30-d5cf-4d09-a5d1-931055a70327]
+      Baz  [029bf891-4c0b-4153-a386-b7ff9f3ad2f8]
+      CLEAR  [a50e5d9c-e00c-476d-86a9-04ab1403d09d]
+      cuFFa  [e6fc96f5-c5a1-4d76-9086-17a0b9743d83]
+      Danteh  [46188f5b-1eab-423e-981d-314048803e60]
+      dust  [19e6c974-d10f-4375-a8a8-a11b854582e1]
+      False  [babf94ba-ab1f-45cd-ada2-10fe89b16bc0]
+      ... 19 more
+[0,1] Played Tank x Played in EMEA: 28
+      counted by: maps with FACEIT stats (>= 10); both conditions on the same rows
+      coverage: player stats in 21 of 27 competitions of this slice; none for: OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, OWCS 2024 EMEA Stage 4 Group Stage, OWCS 2024 EMEA Stage 4 Main Event, and 2 more
+      amdp  [f3083b81-66f3-4ea5-a509-f2d92f299624]
+      BenBest  [8bfff87a-25e5-428f-ae28-19fabe8718c4]
+      Chase  [23c11b19-5748-4890-87da-7d41db6a46cd]
+      chazm  [0bcc2a42-ed64-4a35-ae31-e376cc2ba987]
+      Daan  [0d7d6089-6bbf-4b12-be2b-390df1f6397c]
+      DarkSydePhil  [a78ebb0b-5dc8-4d71-b32d-a8d8121ab5d9]
+      Doge  [526a5c34-abcd-4768-9b46-c289a673658c]
+      eisgnom  [37aeeb7b-b183-4fae-b25d-d1de03a58191]
+      Erikek  [6f61666c-4afd-48f8-8e29-0d762151b2fe]
+      Hadi  [5f60ca5b-92be-4673-b2c6-06623b111467]
+      ... 18 more
+[0,2] Played Tank x Competed in 3+ seasons: 19
+      counted by: maps with FACEIT stats (>= 10) x stated by the condition; each condition on its own rows
+      coverage: player stats in 42 of 62 competitions of this slice; none for: Esports World Cup 2024, OWCS 2024 Dreamhack Dallas, OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, and 16 more
+      CLEAR  [a50e5d9c-e00c-476d-86a9-04ab1403d09d]
+      cuFFa  [e6fc96f5-c5a1-4d76-9086-17a0b9743d83]
+      eisgnom  [37aeeb7b-b183-4fae-b25d-d1de03a58191]
+      Hawk  [a940981f-c750-40b9-bb55-bd3e8e6ef986]
+      Hitori  [60ad5972-64e6-434b-ad31-648f43d30735]
+      Infekted  [3d7e3522-9ef9-4c31-abe2-e10dd1c14270]
+      Kellan  [19298c75-9d48-4dc5-9970-75509c11246c]
+      KroxZ  [06481b72-092d-43c3-a686-13c92f03616f]
+      KSAA  [92695183-d00e-4c31-9707-ff9d8500f52a]
+      Majīn  [dd6c03b0-7c8b-4004-b11d-ccb439d65cb5]
+      ... 9 more
+[1,0] Played DPS x Played in NA: 46
+      counted by: maps with FACEIT stats (>= 10); both conditions on the same rows
+      coverage: player stats in 21 of 27 competitions of this slice; none for: OWCS 2024 NA Stage 3 Group Stage, OWCS 2024 NA Stage 3 Main Event, OWCS 2024 NA Stage 4 Group Stage, OWCS 2024 NA Stage 4 Main Event, and 2 more
+      azruf  [f306cf00-683c-4861-9b91-f74fbb379d27]
+      Bizz  [e97afce6-0095-42e9-9cbd-06504cc5a916]
+      chime  [04a592e5-c661-415a-a1aa-064be1cad203]
+      Chopper  [3607f331-5426-45d9-91a0-7fdb42243262]
+      Danny  [16e56097-3541-4700-9115-9063bc6c3fd9]
+      Dantwist  [0ffb0c24-48f1-4c8a-90fc-05b1a19db740]
+      Drunk  [c28135e8-b242-4742-a723-c312258155f3]
+      Fone  [612cb222-3bb1-4980-bcae-cf245c7c32a7]
+      Happy  [6831b4c5-962a-44b8-9b1b-00d60bc58314]
+      Haven  [e7aad827-0344-4945-8a26-50703eda4c74]
+      ... 36 more
+[1,1] Played DPS x Played in EMEA: 51
+      counted by: maps with FACEIT stats (>= 10); both conditions on the same rows
+      coverage: player stats in 21 of 27 competitions of this slice; none for: OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, OWCS 2024 EMEA Stage 4 Group Stage, OWCS 2024 EMEA Stage 4 Main Event, and 2 more
+      Ade  [9aa12273-c1db-4df9-a952-847d4aea8801]
+      AlphaYi  [944c0b7e-c518-43e7-bed2-4de2a1d4e336]
+      Avo  [d2ac3c5b-2027-4204-b4c9-98aeb126d1a8]
+      Backbone  [a12c7612-d162-4a26-8053-ece68c1f67f7]
+      CheckMate  [c6839ee0-654b-4b77-90ab-11ba3b56bb49]
+      China  [fcf7a717-4ee5-4944-a10b-75d8be749ea1]
+      ChoiSehwan  [bfb7d179-6904-497b-a4ac-cf158aa8b24e]
+      Clowd  [6694b2e6-0a14-469b-aeee-2deaf3903eb5]
+      cookie084  [59643d3f-fad7-4182-87be-63d2371bedae]
+      Dip  [05e09403-6d01-4ea5-bd1e-3e9dabf8957b]
+      ... 41 more
+[1,2] Played DPS x Competed in 3+ seasons: 30
+      counted by: maps with FACEIT stats (>= 10) x stated by the condition; each condition on its own rows
+      coverage: player stats in 42 of 62 competitions of this slice; none for: Esports World Cup 2024, OWCS 2024 Dreamhack Dallas, OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, and 16 more
+      Ade  [9aa12273-c1db-4df9-a952-847d4aea8801]
+      CheckMate  [c6839ee0-654b-4b77-90ab-11ba3b56bb49]
+      Dip  [05e09403-6d01-4ea5-bd1e-3e9dabf8957b]
+      JUTSU  [c783deb8-d629-49f0-8a21-59db04e090ba]
+      Kai  [b7a281ed-48ba-4f05-93d3-27ed9355c504]
+      karmez  [a66f8843-56d7-49a7-94a1-44b3593bcd0e]
+      kevster  [ef80a7e0-27ad-4c55-a2d7-52b687ba3b23]
+      knife  [bd7d5a35-03c8-45f8-8242-e3a63f5c33e7]
+      Kronik  [1daf63bc-70f3-479f-b030-b2699fbbe118]
+      LBBD7  [462c6480-274d-48a6-a5cf-d29d3b2dd786]
+      ... 20 more
+[2,0] Played Support x Played in NA: 47
+      counted by: maps with FACEIT stats (>= 10); both conditions on the same rows
+      coverage: player stats in 21 of 27 competitions of this slice; none for: OWCS 2024 NA Stage 3 Group Stage, OWCS 2024 NA Stage 3 Main Event, OWCS 2024 NA Stage 4 Group Stage, OWCS 2024 NA Stage 4 Main Event, and 2 more
+      Admiral  [41c50d1a-3a08-40ad-9746-ecd52ff9e5c6]
+      alba  [d046fee2-3480-4c15-981c-08ea0e4a99da]
+      Aniyun  [dd08333b-550b-4217-922d-cf06b0910c03]
+      Bliss  [4a7be6fa-3e22-4584-b131-5444c608a385]
+      cal  [063527f2-708b-4e98-b93b-afe4b4652fb6]
+      cinnabar  [e30fab51-bf10-4391-9c9b-f99276414110]
+      cjay  [2ede0b37-1352-47d2-9547-7d0f9f07abaa]
+      CrazyCat  [6f4ddf6b-51f4-4036-bb1e-7330102b3017]
+      Divinity  [c8388028-b720-4ce6-8970-f7f0d4b7b5b9]
+      escanor  [2e4db6df-0964-4e01-8b6d-20b29f8544dd]
+      ... 37 more
+[2,1] Played Support x Played in EMEA: 53
+      counted by: maps with FACEIT stats (>= 10); both conditions on the same rows
+      coverage: player stats in 21 of 27 competitions of this slice; none for: OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, OWCS 2024 EMEA Stage 4 Group Stage, OWCS 2024 EMEA Stage 4 Main Event, and 2 more
+      abheek  [d144c074-bb21-4af9-9a19-8509c933003d]
+      Admiral  [41c50d1a-3a08-40ad-9746-ecd52ff9e5c6]
+      AOY  [a7babcdd-924d-405b-b47b-36c0d2669e5a]
+      Buddie  [fbc26eb9-a08e-4522-b1a2-abde9c6b8e2c]
+      coolboy163  [5e9f5899-8ebb-419b-9feb-60f45b4e7e91]
+      Crimzo  [1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa]
+      Crispy  [9da88fbd-ebcb-4f7b-88ce-a79d6d55386d]
+      Dolla  [bc05ef66-4fa6-47ed-af76-c2c92627b1ee]
+      EGS  [5bd0739c-4e52-49d2-b221-4da542bf0b5c]
+      Eula  [1a85c584-7864-4ee1-8667-d8a57cbe8d17]
+      ... 43 more
+[2,2] Played Support x Competed in 3+ seasons: 25
+      counted by: maps with FACEIT stats (>= 10) x stated by the condition; each condition on its own rows
+      coverage: player stats in 42 of 62 competitions of this slice; none for: Esports World Cup 2024, OWCS 2024 Dreamhack Dallas, OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, and 16 more
+      Admiral  [41c50d1a-3a08-40ad-9746-ecd52ff9e5c6]
+      Bliss  [4a7be6fa-3e22-4584-b131-5444c608a385]
+      cjay  [2ede0b37-1352-47d2-9547-7d0f9f07abaa]
+      Crispy  [9da88fbd-ebcb-4f7b-88ce-a79d6d55386d]
+      FDGod  [1ab8c25f-15f0-4707-acc9-4718c88157da]
+      FrothyFilly7  [083989e0-81a4-4f83-8dc3-e5222f0df695]
+      FunnyAstro  [423b8943-30c9-4436-8a22-51ca77aa7fca]
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      Grapes  [7d81b5d2-eef0-4341-961f-f203d45f65df]
+      Haku  [7928a18c-bbe9-403b-936a-d5df7355b6e3]
+      ... 15 more
+
+overlap
+  distinct answers across the grid: 247
+  cells fillable with no answer reused: 9 of 9
+  answers by number of cells they fit: {1: 172, 2: 69, 3: 6}
+  answers that fit a whole row: [2, 1, 3]; a whole column: [0, 0, 0]
+  most reusable: Admiral (3), Hitori (3), KiWii (3), Scyle (3), Tred (3), WMaimone (3), Ade (2), Bliss (2)

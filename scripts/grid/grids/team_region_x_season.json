@@ -1,0 +1,6 @@
+{
+  "name": "d1. team answers: region x season",
+  "entity": "team",
+  "rows": ["region:na", "region:emea", "region:international"],
+  "cols": ["season:2024", "season:2025", "season:2026"]
+}

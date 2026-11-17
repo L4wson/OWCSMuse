@@ -1,0 +1,6 @@
+{
+  "name": "f. role x where and when: NA, EMEA, and 3+ seasons",
+  "entity": "player",
+  "rows": ["role:tank", "role:dps", "role:support"],
+  "cols": ["region:na", "region:emea", "min_seasons:3"]
+}

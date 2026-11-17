@@ -1,0 +1,6 @@
+{
+  "name": "c1. org x role",
+  "entity": "player",
+  "rows": ["org:team-peps", "org:spacestation-gaming", "org:qadsiah"],
+  "cols": ["role:tank", "role:dps", "role:support"]
+}

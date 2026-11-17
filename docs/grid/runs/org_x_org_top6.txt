@@ -1,0 +1,45 @@
+# b. org x org (played for both), the 6 team identities with the most distinct players
+answer entity: player; min maps for a role or stat cell: 4; flag below 5 answers
+
+                                Played for Shikigami     Played for Al Qadsiah    Played for Ex Oblivione  
+Played for Team Peps            0 (!)                    1 (!)                    4 (!)                    
+Played for Quick Esports        0 (!)                    0 (!)                    5                        
+Played for SpaceStation Gaming  0 (!)                    2 (!)                    0 (!)                    
+
+[0,0] Played for Team Peps x Played for Shikigami: 0  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+[0,1] Played for Team Peps x Played for Al Qadsiah: 1  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+      Tred  [2acfb6df-f298-4b92-8ab8-2141635f28e4]
+[0,2] Played for Team Peps x Played for Ex Oblivione: 4  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+      cookie084  [59643d3f-fad7-4182-87be-63d2371bedae]
+      eisgnom  [37aeeb7b-b183-4fae-b25d-d1de03a58191]
+      Xerion  [e01e90ce-eb0a-4a94-a797-9a1e8d5539ed]
+      Zorrow  [27150b56-fd01-4385-84ee-11798be33cfe]
+[1,0] Played for Quick Esports x Played for Shikigami: 0  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+[1,1] Played for Quick Esports x Played for Al Qadsiah: 0  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+[1,2] Played for Quick Esports x Played for Ex Oblivione: 5
+      counted by: series line-ups (>= 1); each condition on its own rows
+      abheek  [d144c074-bb21-4af9-9a19-8509c933003d]
+      Daan  [0d7d6089-6bbf-4b12-be2b-390df1f6397c]
+      Loren  [ea8d2819-d900-4331-bccc-fca01822169c]
+      skytorr  [41d949e5-16eb-4ee1-ba62-c8906118c616]
+      Twolzz  [243f8468-6f3a-4607-b151-53da202fdd22]
+[2,0] Played for SpaceStation Gaming x Played for Shikigami: 0  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+[2,1] Played for SpaceStation Gaming x Played for Al Qadsiah: 2  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      Landon  [a332d27e-fe19-4077-89f8-27391a581460]
+[2,2] Played for SpaceStation Gaming x Played for Ex Oblivione: 0  ** under 5 **
+      counted by: series line-ups (>= 1); each condition on its own rows
+
+overlap
+  distinct answers across the grid: 12
+  cells fillable with no answer reused: 4 of 9
+  answers by number of cells they fit: {1: 12}
+  answers that fit a whole row: [0, 0, 0]; a whole column: [0, 0, 0]
+  most reusable: abheek (1), cookie084 (1), Daan (1), eisgnom (1), Galaa (1), Landon (1), Loren (1), skytorr (1)

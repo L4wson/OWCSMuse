@@ -1,0 +1,6 @@
+{
+  "name": "b. org x org (played for both), the 6 team identities with the most distinct players",
+  "entity": "player",
+  "rows": ["org:team-peps", "org:quick-esports", "org:spacestation-gaming"],
+  "cols": ["org:team:ec69a520-047f-4754-b36e-b0c95e2066ff", "org:qadsiah", "org:team:bb5dd404-213c-430f-8d12-8687fc3ff747"]
+}

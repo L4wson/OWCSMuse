@@ -1,0 +1,131 @@
+# d1. team answers: region x season
+answer entity: team; min maps for a role or stat cell: 4; flag below 5 answers
+
+                                  Competed in 2024  Competed in 2025  Competed in 2026  
+Played in NA                      39                14                11                
+Played in EMEA                    34                11                10                
+Played in an international event  17                19                16                
+
+[0,0] Played in NA x Competed in 2024: 39
+      counted by: series (>= 1); both conditions on the same rows
+      Absolution  [absolution]
+      Arizona State University  [arizona-state-university]
+      Avidity  [team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae]
+      Blast Off Buds  [blast-off-buds]
+      Citrus Nation  [team:35fd77ed-a916-4f76-aafd-af3d57ad84cb]
+      Daybreak  [team:cce69e3f-b11e-4635-8370-8ddd371f690a]
+      Dhillducks  [dhillducks]
+      Dreamland  [team:d20d1868-8937-4a85-8706-bf936d265392]
+      EXN Zenith  [exn-zenith]
+      Final Gambit  [team:6ec39b17-1e07-41df-b720-5a0588b5fcae]
+      ... 29 more
+[0,1] Played in NA x Competed in 2025: 14
+      counted by: series (>= 1); both conditions on the same rows
+      Amplify  [team:c34ba98e-8985-4140-903a-82ecacdf1485]
+      Avidity  [team:2b7f8ef6-bb71-4d2f-a66c-5d2a571138ae]
+      Dhillducks  [dhillducks]
+      Extinction  [extinction]
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      NTMR  [ntmr]
+      Rad  [rad]
+      Sakura  [sakura]
+      Shikigami  [team:ec69a520-047f-4754-b36e-b0c95e2066ff]
+      SpaceStation Gaming  [spacestation-gaming]
+      ... 4 more
+[0,2] Played in NA x Competed in 2026: 11
+      counted by: series (>= 1); both conditions on the same rows
+      Dallas Fuel  [dallas-fuel]
+      Dhillducks  [dhillducks]
+      Disguised  [disguised]
+      Extinction  [extinction]
+      KAFE  [kafe]
+      Kintsugi  [team:a791e2fa-32bd-418f-b7c8-e924e30da4e7]
+      LuneX  [lunex]
+      NTMR  [ntmr-2026]
+      SpaceStation Gaming  [spacestation-gaming]
+      Team Liquid  [team-liquid]
+      ... 1 more
+[1,0] Played in EMEA x Competed in 2024: 34
+      counted by: series (>= 1); both conditions on the same rows
+      A One Man Army  [team:6c39d9d5-c34d-462c-b753-d520d48a6b45]
+      A-Square Tengu  [team:ed0289e5-5c95-4da2-a966-e7ae72040595]
+      Al Qadsiah  [qadsiah]
+      Ataraxia  [ataraxia]
+      AWW YEAH  [team:90b2fd83-bb47-4286-8f62-a16eb6ce650b]
+      Bingus  [team:d2e11bea-41a3-43ea-91df-b6f05e4bde93]
+      Celtas  [team:0dcea68d-6624-4ae8-bbbb-a63c3e6546a1]
+      Deimpero  [team:c82570d6-ded9-4678-8d32-398db37faa98]
+      EF Flexodiax  [team:241bb1a3-7e39-46ba-8ff0-672a7a7796d6]
+      ENCE  [team:62f7752b-0b79-4fa8-9a23-78800e2b4539]
+      ... 24 more
+[1,1] Played in EMEA x Competed in 2025: 11
+      counted by: series (>= 1); both conditions on the same rows
+      Al Qadsiah  [qadsiah]
+      Frost Tails  [frost-tails]
+      Gen.G Esports  [gen-g]
+      Goud Guys ANM  [team:602d3c11-ccee-404d-858e-b03267c83d47]
+      Quick Esports  [quick-esports]
+      Sakura  [team:b6e7f5e3-cfed-4d10-9a58-fa7a0e3812f0]
+      Team Peps  [team-peps]
+      The Ultimates  [team:3eaeefbc-6abf-4d54-aeb2-2790e3e21752]
+      Twisted Minds  [team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e]
+      Virtus pro  [virtus-pro]
+      ... 1 more
+[1,2] Played in EMEA x Competed in 2026: 10
+      counted by: series (>= 1); both conditions on the same rows
+      1234  [1234]
+      Al Qadsiah  [qadsiah]
+      Anyones Legend  [team:75516399-4c1d-40fc-bb46-a887edadc5a2]
+      Geekay Esports  [team:46f8e560-76fe-4b5f-85e7-397957e0dc74]
+      Star Bits x Hypnos  [team:444668eb-3722-42e6-8e1e-ed7e1134c522]
+      Team Peps  [team-peps]
+      Team Risk  [team-risk]
+      Telacy  [team:b50813d6-3c84-4d07-adf4-bc9df069e13a]
+      Twisted Minds  [team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e]
+      Virtus pro  [virtus-pro]
+[2,0] Played in an international event x Competed in 2024: 17
+      counted by: series (>= 1); both conditions on the same rows
+      Bleed Esports  [bleed-esports]
+      Crazy Raccoon  [crazy-raccoon]
+      ENCE  [team:62f7752b-0b79-4fa8-9a23-78800e2b4539]
+      Fnatic  [fnatic]
+      Gaimin Gladiators  [gaimin-gladiators]
+      LGD.OA  [lgd-oa]
+      M80  [team:3aca5abd-ee5d-4542-92e9-392b6f5d0dbc]
+      Mkers  [mkers]
+      NTMR  [ntmr]
+      ROCstars  [rocstars]
+      ... 7 more
+[2,1] Played in an international event x Competed in 2025: 19
+      counted by: series (>= 1); both conditions on the same rows
+      Al Qadsiah  [qadsiah]
+      All Gamers Global  [all-gamers-global]
+      Crazy Raccoon  [crazy-raccoon]
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      NTMR  [ntmr]
+      Once Again  [once-again]
+      ROC Esports  [roc-esports-china]
+      SpaceStation Gaming  [spacestation-gaming]
+      T1  [t1]
+      Team CC  [team-cc]
+      ... 9 more
+[2,2] Played in an international event x Competed in 2026: 16
+      counted by: series (>= 1); both conditions on the same rows
+      9z Team  [9z-team]
+      All Gamers Global  [all-gamers-global]
+      Crazy Raccoon  [crazy-raccoon]
+      Dallas Fuel  [dallas-fuel]
+      Geekay Esports  [team:46f8e560-76fe-4b5f-85e7-397957e0dc74]
+      JD Gaming  [jd-gaming]
+      SpaceStation Gaming  [spacestation-gaming]
+      T1  [t1]
+      Team Falcons  [team-falcons]
+      Team Liquid  [team-liquid]
+      ... 6 more
+
+overlap
+  distinct answers across the grid: 118
+  cells fillable with no answer reused: 9 of 9
+  answers by number of cells they fit: {1: 88, 2: 20, 3: 3, 4: 4, 6: 3}
+  answers that fit a whole row: [1, 4, 5]; a whole column: [0, 0, 0]
+  most reusable: SpaceStation Gaming (6), Twisted Minds (6), Virtus pro (6), Al Qadsiah (4), NTMR (4), Team Liquid (4), Team Peps (4), Crazy Raccoon (3)

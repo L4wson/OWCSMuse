@@ -1,0 +1,123 @@
+# e. performance: 2025 per-10 leaders by role x where they played
+answer entity: player; min maps for a role or stat cell: 10; flag below 5 answers
+
+                                                         Played in NA            Played in EMEA          Competed in 3+ seasons  
+Top 15 Eliminations per 10 among Damage players in 2025  9                       7                       11                      
+Top 15 Healing per 10 among Support players in 2025      8                       9                       7                       
+Top 15 Mitigation per 10 among Tank players in 2025      8                       11                      12                      
+
+[0,0] Top 15 Eliminations per 10 among Damage players in 2025 x Played in NA: 9
+      counted by: maps with FACEIT stats (>= 10) x series line-ups (>= 1); each condition on its own rows
+      coverage: player stats in 6 of 6 competitions of this slice
+      Chopper  [3607f331-5426-45d9-91a0-7fdb42243262]
+      knife  [bd7d5a35-03c8-45f8-8242-e3a63f5c33e7]
+      Rokit  [2d50f1c4-8643-426c-9d5c-6f73a06e4bdc]
+      seeker  [826c2bd4-cb43-4b6c-90a9-21ee53b87bf9]
+      sugarfree  [58239fd5-cf2f-4894-a2ec-30fd026c262a]
+      TR33  [88cb75a1-b0ff-49c2-8046-11e744f2f5d8]
+      WMaimone  [731b1930-f9d7-4a8d-829c-a048b65a9cf8]
+      xomba  [f55f084e-23ae-47a4-a3ba-efbda8194bd7]
+      zeruhh  [58faa695-b501-4642-a4d9-0e4c2ed8526d]
+[0,1] Top 15 Eliminations per 10 among Damage players in 2025 x Played in EMEA: 7
+      counted by: maps with FACEIT stats (>= 10) x series line-ups (>= 1); each condition on its own rows
+      coverage: player stats in 6 of 6 competitions of this slice
+      CheckMate  [c6839ee0-654b-4b77-90ab-11ba3b56bb49]
+      JaeWoo  [34d11d57-a8f1-4f15-996d-e1776c525f93]
+      kevster  [ef80a7e0-27ad-4c55-a2d7-52b687ba3b23]
+      LBBD7  [462c6480-274d-48a6-a5cf-d29d3b2dd786]
+      Quartz  [9adef42b-599b-41ff-9893-1942ac6a4402]
+      Seicoe  [016d21e3-fe55-4f07-ba4f-b61e7339bd18]
+      WMaimone  [731b1930-f9d7-4a8d-829c-a048b65a9cf8]
+[0,2] Top 15 Eliminations per 10 among Damage players in 2025 x Competed in 3+ seasons: 11
+      counted by: maps with FACEIT stats (>= 10) x stated by the condition; each condition on its own rows
+      coverage: player stats in 12 of 15 competitions of this slice; none for: OWCS 2025 Champions Clash, OWCS 2025 Midseason Championship, OWCS 2025 World Finals
+      CheckMate  [c6839ee0-654b-4b77-90ab-11ba3b56bb49]
+      kevster  [ef80a7e0-27ad-4c55-a2d7-52b687ba3b23]
+      knife  [bd7d5a35-03c8-45f8-8242-e3a63f5c33e7]
+      LBBD7  [462c6480-274d-48a6-a5cf-d29d3b2dd786]
+      Quartz  [9adef42b-599b-41ff-9893-1942ac6a4402]
+      Rokit  [2d50f1c4-8643-426c-9d5c-6f73a06e4bdc]
+      Seicoe  [016d21e3-fe55-4f07-ba4f-b61e7339bd18]
+      sugarfree  [58239fd5-cf2f-4894-a2ec-30fd026c262a]
+      TR33  [88cb75a1-b0ff-49c2-8046-11e744f2f5d8]
+      WMaimone  [731b1930-f9d7-4a8d-829c-a048b65a9cf8]
+      ... 1 more
+[1,0] Top 15 Healing per 10 among Support players in 2025 x Played in NA: 8
+      counted by: maps with FACEIT stats (>= 10) x series line-ups (>= 1); each condition on its own rows
+      coverage: player stats in 6 of 6 competitions of this slice
+      cjay  [2ede0b37-1352-47d2-9547-7d0f9f07abaa]
+      CrazyCat  [6f4ddf6b-51f4-4036-bb1e-7330102b3017]
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      KiWii  [31417126-50e7-486e-b00d-15e61a110ab8]
+      Renko  [e9e2c1d1-77d9-4268-b06c-6bd9e6edf1b6]
+      Rupal  [ba42f8ef-51a8-486b-a1e8-46954a4859ea]
+      scuffed  [1d7c1096-c876-426b-a89a-8be16b8c9092]
+      ZZZ  [0a7555bc-8cd2-44bd-b1d5-df0c528dddea]
+[1,1] Top 15 Healing per 10 among Support players in 2025 x Played in EMEA: 9
+      counted by: maps with FACEIT stats (>= 10) x series line-ups (>= 1); each condition on its own rows
+      coverage: player stats in 6 of 6 competitions of this slice
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      irony  [95090451-b118-4d11-a693-20dafae48c01]
+      KiWii  [31417126-50e7-486e-b00d-15e61a110ab8]
+      Landon  [a332d27e-fe19-4077-89f8-27391a581460]
+      One  [23313d5a-4db0-4e8a-890b-c04cf7ff43fe]
+      Simple  [635737a5-3456-43c5-aa74-d7ccb1a30da1]
+      Xerion  [e01e90ce-eb0a-4a94-a797-9a1e8d5539ed]
+      yoham  [d615be2c-19d1-49bf-a5f3-216377efb1cf]
+      zox  [a1fb03ff-9977-4d0b-b4bd-82fa6085f0ed]
+[1,2] Top 15 Healing per 10 among Support players in 2025 x Competed in 3+ seasons: 7
+      counted by: maps with FACEIT stats (>= 10) x stated by the condition; each condition on its own rows
+      coverage: player stats in 12 of 15 competitions of this slice; none for: OWCS 2025 Champions Clash, OWCS 2025 Midseason Championship, OWCS 2025 World Finals
+      cjay  [2ede0b37-1352-47d2-9547-7d0f9f07abaa]
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      KiWii  [31417126-50e7-486e-b00d-15e61a110ab8]
+      Landon  [a332d27e-fe19-4077-89f8-27391a581460]
+      scuffed  [1d7c1096-c876-426b-a89a-8be16b8c9092]
+      Xerion  [e01e90ce-eb0a-4a94-a797-9a1e8d5539ed]
+      ZZZ  [0a7555bc-8cd2-44bd-b1d5-df0c528dddea]
+[2,0] Top 15 Mitigation per 10 among Tank players in 2025 x Played in NA: 8
+      counted by: maps with FACEIT stats (>= 10) x series line-ups (>= 1); each condition on its own rows
+      coverage: player stats in 6 of 6 competitions of this slice
+      CLEAR  [a50e5d9c-e00c-476d-86a9-04ab1403d09d]
+      cuFFa  [e6fc96f5-c5a1-4d76-9086-17a0b9743d83]
+      Hawk  [a940981f-c750-40b9-bb55-bd3e8e6ef986]
+      Hitori  [60ad5972-64e6-434b-ad31-648f43d30735]
+      Kellan  [19298c75-9d48-4dc5-9970-75509c11246c]
+      Painkiller  [23e964b7-0899-48c5-b13b-8e7c4686e817]
+      Tred  [2acfb6df-f298-4b92-8ab8-2141635f28e4]
+      Twolzz  [243f8468-6f3a-4607-b151-53da202fdd22]
+[2,1] Top 15 Mitigation per 10 among Tank players in 2025 x Played in EMEA: 11
+      counted by: maps with FACEIT stats (>= 10) x series line-ups (>= 1); each condition on its own rows
+      coverage: player stats in 6 of 6 competitions of this slice
+      cuFFa  [e6fc96f5-c5a1-4d76-9086-17a0b9743d83]
+      Hitori  [60ad5972-64e6-434b-ad31-648f43d30735]
+      KSAA  [92695183-d00e-4c31-9707-ff9d8500f52a]
+      Majīn  [dd6c03b0-7c8b-4004-b11d-ccb439d65cb5]
+      skytorr  [41d949e5-16eb-4ee1-ba62-c8906118c616]
+      Tama  [f74933e7-58c9-4efe-81b5-899079a64109]
+      Tred  [2acfb6df-f298-4b92-8ab8-2141635f28e4]
+      TVNT  [b371a120-4be1-4677-aeee-81f5ebc80731]
+      Twolzz  [243f8468-6f3a-4607-b151-53da202fdd22]
+      Vestola  [1661fa93-eee8-4cd5-98a8-f7478bbe87e2]
+      ... 1 more
+[2,2] Top 15 Mitigation per 10 among Tank players in 2025 x Competed in 3+ seasons: 12
+      counted by: maps with FACEIT stats (>= 10) x stated by the condition; each condition on its own rows
+      coverage: player stats in 12 of 15 competitions of this slice; none for: OWCS 2025 Champions Clash, OWCS 2025 Midseason Championship, OWCS 2025 World Finals
+      CLEAR  [a50e5d9c-e00c-476d-86a9-04ab1403d09d]
+      cuFFa  [e6fc96f5-c5a1-4d76-9086-17a0b9743d83]
+      Hawk  [a940981f-c750-40b9-bb55-bd3e8e6ef986]
+      Hitori  [60ad5972-64e6-434b-ad31-648f43d30735]
+      Kellan  [19298c75-9d48-4dc5-9970-75509c11246c]
+      KSAA  [92695183-d00e-4c31-9707-ff9d8500f52a]
+      Majīn  [dd6c03b0-7c8b-4004-b11d-ccb439d65cb5]
+      Painkiller  [23e964b7-0899-48c5-b13b-8e7c4686e817]
+      Tama  [f74933e7-58c9-4efe-81b5-899079a64109]
+      Tred  [2acfb6df-f298-4b92-8ab8-2141635f28e4]
+      ... 2 more
+
+overlap
+  distinct answers across the grid: 45
+  cells fillable with no answer reused: 9 of 9
+  answers by number of cells they fit: {1: 14, 2: 25, 3: 6}
+  answers that fit a whole row: [1, 2, 3]; a whole column: [0, 0, 0]
+  most reusable: cuFFa (3), Galaa (3), Hitori (3), KiWii (3), Tred (3), WMaimone (3), CheckMate (2), cjay (2)

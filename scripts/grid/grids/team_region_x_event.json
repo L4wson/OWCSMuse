@@ -1,0 +1,6 @@
+{
+  "name": "d2. team answers: region x international event and placement",
+  "entity": "team",
+  "rows": ["region:na", "region:emea", "region:international"],
+  "cols": ["event:World Finals", "event:Midseason Championship", "placed_top:8"]
+}

@@ -1,0 +1,58 @@
+OWCS Grid beta smoke test, 2026-11-17 (UTC)
+
+API: `python -m owcsmuse serve --port 8010`, the code on grid/beta, started from a scratch directory holding a copy
+of scope/grid_puzzles.json with every date moved back two days (so #1 = 2026-11-16, #2 = 2026-11-17 = today) and
+scope/grid_players.json unchanged. Frontend: `VITE_API_BASE=http://127.0.0.1:8010 npx vite --port 5183`.
+The database was reached only by /healthz (SELECT 1). Nothing was written anywhere but this browser's localStorage.
+
+--- the real file, before any puzzle's date
+GET /api/grid/today    404 {"detail":"no puzzle is published for 2026-11-17"}
+GET /api/grid/archive  200 {"puzzles":[]}
+GET /api/grid/1        404 {"detail":"puzzle 1 is not published"}
+GET /api/grid/players?q=danny  200
+  Danny  Shikigami, 2024-2025      16e56097-3541-4700-9115-9063bc6c3fd9
+  Danny  Team Liquid, 2024-2025    2d211a8f-8b67-456b-b776-cebbff6a644a
+  Danny  Citrus Nation, 2024       b41cf21b-66ba-4c4a-9626-6ecf520ba36c
+
+--- the date-shifted copy: puzzle 2 is today's
+GET /api/grid/today    200 number 2, date 2026-11-17, is_today true
+                           rows Tank / DPS / Support; cols EMEA / Played all 3 seasons / 2025; guesses 9; min_maps 10
+GET /api/grid/archive  200 #2 (today), #1 2026-11-16
+
+search "tvnt"      -> TVNT, Twisted Minds, 2024-2026
+POST /2/guess {cell 0, TVNT}       correct        maps 107  "107 Tank maps in EMEA (FACEIT map stats)"  link null
+search "sugarfree" -> sugarfree, SpaceStation Gaming, 2024-2026
+POST /2/guess {cell 0, sugarfree}  wrong          uses_guess true
+search "MER1T"     -> MER1T, Team Falcons, 2024-2026
+POST /2/guess {cell 2, MER1T}      cannot_verify  uses_guess false
+    "There is no role data for MER1T in this column (2025), so the guess can't be checked. It didn't use a guess."
+search "zss"       -> ZZZ, KAFE, 2024-2026, matched "zss"
+POST /2/guess {cell 8, ZZZ}        correct        maps 80   "80 Support maps in 2025 (FACEIT map stats)"
+POST /2/guess {cell 9, TVNT}       422  "Input should be less than or equal to 8"
+POST /3/guess {cell 0, TVNT}       404  "puzzle 3 is not published"
+GET /api/grid/2/reveal             200  5 examples in each of 9 cells
+    Tank x EMEA: Vestola, ZIYAD, eisgnom, KSAA, TVNT
+
+--- the page, in a browser 390 px wide (http://localhost:5183/grid)
+status on load:            9 guesses left · 0/9 filled; no horizontal scroll; no nav link (flag off)
+Tank x EMEA, TVNT:         cell shows "TVNT | 107 Tank maps in EMEA (FACEIT map stats)"
+Tank x all 3, sugarfree:   "sugarfree is not a Tank × Played all 3 seasons answer."
+Tank x all 3, MER1T:       "MER1T is not a Tank × Played all 3 seasons answer."   (he has role data elsewhere in scope)
+Tank x 2025, MER1T:        "There is no role data for MER1T in this column (2025) ... It didn't use a guess."
+status:                    6 guesses left · 1/9 filled
+typing "dan":              Danny / Shikigami, 2024-2025 ; Danny / Team Liquid, 2024-2025 ; Dannedd / SrPeakCheck, 2024 ;
+                           Danny / Citrus Nation, 2024 ; Danteh / Luminosity, 2024 ; Dantwist / Shikigami, 2024
+                           (search now lists same-named players together; changed after this run)
+Support x 2025, "zss":     cell shows "ZZZ | 80 Support maps in 2025 (FACEIT map stats)"
+after a reload:            5 guesses left · 2/9 filled
+End game:                  2/9; examples for all nine cells; share text:
+                               OWCS Grid #2  2/9
+                               🟩⬜⬜
+                               ⬜⬜⬜
+                               ⬜⬜🟩
+                               http://localhost:5183/grid/2
+Archive:                   #2 EMEA · Played all 3 seasons · 2025, today, 2/9 ; #1 EMEA · Played all 3 seasons · 2026, play
+localStorage keys:         owcs-grid:v1:puzzle:2, owcs-grid:v1:stats
+console:                   one 404, for /favicon.ico (not Grid's)
+
+Fixed after seeing it: the row header "SUPPORT" broke onto two lines at 390 px; checked again at 360 and 390 px.
