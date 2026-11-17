@@ -715,18 +715,23 @@ class StatClue:
 
     def ranked(self, f: Facts, role: str) -> list[tuple[str, float, int]]:
         """(player, rate, maps), best first, for everyone with enough maps in the role that season."""
-        rates = per10_rates(f.scoped, self.stat, self.season, role, STAT_MIN_MAPS)
+        try:
+            rates = per10_rates(f.scoped, self.stat, self.season, role, STAT_MIN_MAPS)
+        except ValueError:
+            return []       # nobody played this role with Time Played that season; outcome() refuses if no role has any
         return sorted(((p, rate, maps) for p, (rate, maps) in rates.items()),
                       key=lambda x: (x[1] if self.lowest else -x[1], x[0]))
 
     def outcome(self, f: Facts) -> Outcome:
         answers: dict[str, str] = {}
         eligible: set[str] = set()
+        any_ranked = False
         for role in ROLES:
             ranked = self.ranked(f, role)
             eligible |= {p for p, _, _ in ranked}
             if not ranked:
                 continue
+            any_ranked = True
             take = math.ceil(len(ranked) * STAT_TOP_SHARE)
             cutoff = ranked[take - 1][1]
             for rank, (player, rate, _maps) in enumerate(ranked, start=1):
@@ -734,6 +739,10 @@ class StatClue:
                     line = (f"{rate:.1f} {STAT_WORDS[self.stat]}/10 as {ROLE_LABEL[role]} in {self.season}, "
                             f"#{rank} of {len(ranked)}")
                     answers.setdefault(player, line)
+        if not any_ranked:
+            # 2024 has no Time Played at all: a per-10 clue for it is refused, never answered with nobody
+            raise ValueError(f"no player has {STAT_MIN_MAPS}+ maps with Time Played in a role in {self.season}: "
+                             "a per-10 clue cannot be stated for it")
         in_season = lambda a: a.season == self.season  # noqa: E731
         maybe = {p for p in f.lineups_by_player
                  if p not in eligible and any(in_season(a) for a in f.lineups_by_player[p])

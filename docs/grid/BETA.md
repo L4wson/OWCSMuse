@@ -4,7 +4,73 @@ A small, playable beta of the daily grid, built on branch `grid/beta` on 2026-11
 nothing to the database, and stores nothing about visitors. Background: [AUDIT.md](AUDIT.md),
 [CELL_COUNTS.md](CELL_COUNTS.md), [PLAN.md](PLAN.md).
 
-## What it is
+## Mixed clues (added 2026-11-17, branch `grid/categories`)
+
+The role x season grids of the first beta were too easy and too alike. From puzzle 2 (2026-11-19) a puzzle is six
+clues from at least four families, in the style of Immaculate Grid. Everything else in this document still holds:
+no migration, no database writes, no visitor data, the same routes.
+
+- **Clue types in use:** teammate of a player, played for a (mapped) org, won a stage, reached a stage final,
+  rostered at an international LAN, played in both regions, N+ maps, top 25% in a per-10 stat, and the beta's
+  role, season and region. What each means, what data it rests on and what it cannot see:
+  [CATEGORIES.md](CATEGORIES.md).
+- **Not in any puzzle:** awards (written to `scope/grid_awards.json`, none reviewed), "3+ orgs" (too many unmapped
+  teams) and hero clues (no hero data).
+- **A cell** is the players who fit both clues, each on its own evidence. One exception from the beta: a role
+  beside a season or a region means that role in that season or region.
+- **Difficulty** is Easy, Medium or Hard by the median number of answers a cell: 9+, 7 to 8, under 7. Monday and
+  Tuesday aim for Easy, Wednesday to Friday Medium, the weekend Hard. About one day in eight is a role grid.
+- **Every clue has a definition**, shown when its header is tapped, and its own sentence for a guess it cannot
+  check ("They were rostered for Team Peps only in series we have no map data for").
+- **After the game**, each cell shows how many answers it had.
+
+### The rules a puzzle must pass
+
+`scripts/grid/mixed.py`, one test each in `tests/grid/test_categories.py`. A grid is rejected if:
+
+| Rule | Value |
+|---|---|
+| a cell is empty (two clues of one family that cannot overlap, or otherwise) | 0 answers |
+| a cell has too few answers | under 3 |
+| too many thin cells | more than 2 cells with 3 or 4 answers |
+| one clue all but implies the other | a cell holds 90% or more of either clue's own answers |
+| one player fits too many cells | more than 5 |
+| it cannot be filled without reusing a player | fewer than 9 distinct |
+| it has too few families | under 4 of the six clues |
+| a clue was used recently | in the previous 7 days |
+| a teammate clue's player was used recently | in the previous 14 days |
+
+The search judges 40 random grids a day for the record (nearly all fail), then builds grids a clue at a time so
+that every cell already has 3+ answers. The run report lists how many candidates failed each rule every day and a
+few rejected grids in full: `runs/generate_2026-11-19_30d_seed20261119.txt`.
+
+### New files
+
+| File | What |
+|---|---|
+| `scripts/grid/clues.py` | the typed clue classes: answers with a reason each, the can't-verify set, label, definition |
+| `scripts/grid/mixed.py` | the clue pool, the rules (`Judge`), difficulty, the day-by-day search |
+| `scripts/grid/build_facts.py` | derives stage results and awards into `scope/`, read-only on the database |
+| `scope/grid_stages.json` | 20 stage results with a source link and cross-checks each |
+| `scope/grid_awards.json` | 21 awards, all `reviewed: false` |
+| `CATEGORIES.md`, `VERIFY.md`, `proposed_org_mappings.md` | verdicts per clue type; what to check by hand; unapplied org proposals |
+
+### What needs a person before these puzzles publish
+
+1. **[VERIFY.md](VERIFY.md)**: two answers from every cell of puzzles 2 to 8, all 20 stage winners, all 21 awards.
+2. **[proposed_org_mappings.md](proposed_org_mappings.md)**: 49 unmapped team ids, each with evidence and a
+   confidence. Nothing is applied. Mapping Twisted Minds alone adds a "Played for" clue with 15 players.
+3. **`scope/grid_awards.json`**: set `"reviewed": true` on the awards you accept; fill in Proper's `player_id`.
+
+### Puzzle file format
+
+An entry with `"format": 2` is a mixed puzzle. Each clue carries `family`, `label`, `help`, `cannot_verify` and
+typed `params` (`{"type": "teammate", "player_id": ...}`). Each cell carries `count`, `answers` (id to name and
+`why`) and `unverifiable` (id to `"row"` or `"col"`: which clue lacks the data). An entry without `format` is a
+beta puzzle and is read exactly as before; puzzle 1 is one, and `test_an_old_beta_puzzle_still_loads_and_plays_beside_a_mixed_one`
+holds that.
+
+## What it is (the first beta, and still true of role grids)
 
 - A 3x3 grid. Rows are always Tank, DPS, Support. Columns are three of: 2024, 2025, 2026, NA, EMEA, "Played all 3
   seasons".
@@ -40,12 +106,12 @@ patterns in `web/src/router.js`; the page, the flagged nav link and one guard on
 
 | Route | Returns |
 |---|---|
-| `GET /api/grid/today` | number, date, row and column labels with help text, guesses, the coverage note. No answers, no ids |
-| `GET /api/grid/archive` | every published puzzle, newest first: number, date, column labels |
+| `GET /api/grid/today` | number, date, `kind`, `difficulty`, each clue's label, family and definition (`help`), guesses, the coverage note. No answers, no ids: a mixed clue's stored key can hold a teammate anchor's id, so the page gets positional keys |
+| `GET /api/grid/archive` | every published puzzle, newest first: number, date, difficulty, row and column labels |
 | `GET /api/grid/{n}` | a published puzzle, same shape as today's. 404 for a number that is not published yet |
 | `GET /api/grid/players?q=` | up to 8 players matching a current or earlier name: `id`, `name`, `detail` ("Team Liquid, 2024-2025"), and `matched` when an earlier name is what matched |
 | `POST /api/grid/{n}/guess` | body `{"cell": 0-8, "player_id": "..."}` where cell is row x 3 + column. `result` is `correct`, `wrong` or `cannot_verify`; `uses_guess` says whether it costs one. A correct guess carries `explanation` ("23 Tank maps in 2025 (FACEIT map stats)") |
-| `GET /api/grid/{n}/reveal` | up to 5 example answers a cell, most maps first |
+| `GET /api/grid/{n}/reveal` | up to 5 example answers a cell, and `count`: how many answers the cell had. Beta puzzles list most maps first; mixed ones the players with the most seasons on record |
 
 A wrong guess is a 200. 404 is a puzzle that is not published. 422 is a cell outside 0-8, an id not in the player
 index, or a name sent where an id belongs. Guess and reveal sit behind the app's existing per-IP throttle (20
@@ -79,7 +145,7 @@ test below was run. Do not edit dates in the real file.
 Tests:
 
 ```bash
-pytest tests/grid -q          # 35 tests, under a second
+pytest tests/grid -q          # 74 tests, about two seconds
 pytest -q                     # the whole offline suite
 cd web && npm test && npm run build
 ```
@@ -87,10 +153,22 @@ cd web && npm test && npm run build
 ## Generate more puzzles
 
 ```bash
-python scripts/grid/generate_puzzles.py --start-date 2026-12-02 --days 14
-python scripts/grid/generate_puzzles.py --start-date 2026-12-02 --days 14 --dry-run     # report only
+python scripts/grid/build_facts.py                                                      # refresh stage results and awards first
+python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14               # mixed clues (the default)
+python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --dry-run     # report only
 python scripts/grid/generate_puzzles.py --start-date 2026-11-25 --replace-future        # redo unpublished ones
+python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --classic     # the first beta's role x column grids
+python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --dry-run --include-unreviewed   # see what awards would add
 ```
+
+- `build_facts.py` rewrites `scope/grid_stages.json` and `scope/grid_awards.json` from the database and keeps every
+  `reviewed` flag and `note` already set. Run it after a new stage finishes.
+- `--replace-future` starts the day after tomorrow at the earliest: today's and tomorrow's puzzles are left alone.
+- `--include-unreviewed` is refused without `--dry-run`. An unreviewed award is never published.
+- `--attempts` (default 15,000) is how many grids are built per day. A run of 30 days takes about a minute.
+- If any requested day has no valid grid, nothing is written and the exit code is 3.
+- The bullets below about seeds, the report and immutability apply to both modes; the rejection rules listed there
+  are the classic mode's. The mixed rules are in the table near the top.
 
 - `--seed` defaults to the start date as a number; the same seed and data give the same puzzles.
 - It prints the nine counts of every puzzle and writes the same report, with every rejected candidate and why, to
@@ -107,8 +185,10 @@ The database is read on one connection that cannot write (`scripts/grid/db.py`):
 Before generating, check that the nightly ingest has run recently; a puzzle is a snapshot of the warehouse at
 generation, and each entry records the last series date it saw.
 
-**The supply is 14 puzzles, 2026-11-18 to 2026-12-01.** Nothing generates more automatically. On 2026-12-02 `/grid`
-will say there is no puzzle unless more have been generated, committed and deployed.
+**The supply is 31 puzzles, 2026-11-18 to 2026-12-18**: puzzle 1 from the first beta, then 30 mixed ones. Nothing
+generates more automatically. On 2026-12-19 `/grid` will say there is no puzzle unless more have been generated,
+committed and deployed. `runs/generate_2026-11-18_14d_seed20261118.txt` is the first beta's run; its puzzles 2 to 14
+were replaced before any was published.
 
 ## Deploy it hidden, and share the link
 
@@ -153,6 +233,25 @@ today's date before 2026-11-18), and the response contains no `answers`.
 - **Not checked here:** the Docker image build (Docker was not running; CI's `API image` job builds it), and real
   phones. The page was driven in a desktop browser at 360 and 390 px wide.
 
+### Added with mixed clues
+
+- **Nothing in the mixed puzzles has been verified by a person.** Not the answers, not the 20 stage winners (which
+  are in use), not the awards (which are not). See VERIFY.md.
+- **Stage winners were cross-checked only against records already stored.** Ten of the twenty have no Liquipedia
+  placement table to compare with: fetching one writes to the database, which this work could not do.
+- **"Played for" clues are limited to 14 mapped orgs**, and the best-known teams are not among them.
+- **A stage clue needs a playoff map on record.** Six stages have none, so their winners return "can't verify".
+- **"Rostered at" is a roster, not an appearance**, and the clue says so.
+- **"N+ maps" is loose about what it cannot see**: it assumes 7 maps for every series with no map stats, so more
+  players return "can't verify" than strictly need to.
+- **Stats clues are 2025 and 2026 only**, and 2026 has 3 qualifying Tanks.
+- **Small cells.** The floor is 3 answers, not the first beta's 5, and 35 of the 270 cells in the 30 puzzles have 3
+  or 4. A Hard puzzle is hard.
+- **A teammate anchor's id is in the puzzle file** and nowhere in a response. The anchor is named in the clue, so
+  this hides nothing; it only keeps ids out of the page.
+- **One puzzle missed its target difficulty**: 2026-12-07 wanted Easy and is Medium.
+- **Checked in a desktop browser at 360 and 390 px**, not on phones.
+
 ## What Phase 2 would add
 
 - **Aggregate guess counts** in a `grid_guess_counts` table (puzzle, cell, player, count). The first schema
@@ -170,7 +269,24 @@ today's date before 2026-11-18), and the response contains no `answers`.
 - **A real Muse link** per answer: a player page, or a pre-filled question URL.
 - **`/api` in the dev proxy**, one line in `vite.config.js`.
 
-## Smoke test, 2026-11-17
+## Smoke test of the mixed puzzles, 2026-11-17
+
+Same method as below: the real API code and the real generated data, in a scratch copy with every date moved back
+ten days so that puzzles 1 to 10 were published. Transcript: [runs/smoke_mixed_2026-11-17.txt](runs/smoke_mixed_2026-11-17.txt).
+
+| Puzzle | Correct | Wrong | Can't verify |
+|---|---|---|---|
+| 6, Easy, 390 px | cookie084, Team Peps x 2025: "26 maps for Team Peps, 2025. 50 maps in 2025" | Neutral, one guess spent | KroxZ: "They were rostered for Team Peps only in series we have no map data for." No guess spent |
+| 2, Medium, 360 px | Admiral, 2025 Champions Clash x NA stage finalist | Neutral | cal: "They were on a stage finalist's playoff roster, but we have no map data for those playoffs" |
+| 4, Hard, 390 px | Chase, fewest deaths 2025 x teammate of kevster: "4.3 deaths/10 as Tank in 2025, #3 of 28. 21 maps together, most on The Ultimates in 2025 EMEA Stage 1" | Neutral | WMaimone: "They were rostered with kevster only in series we have no map data for" |
+| 1, the beta puzzle | amdp, Tank x EMEA: "11 Tank maps in EMEA (FACEIT map stats)" | Neutral | Scraine |
+
+Also checked in the page: no horizontal scroll and no clipped header at either width; tapping a header opens its
+definition; the difficulty badge; after "End game", every cell shows its count ("8 possible") and the list shows
+"8 possible answers" with up to five names; the share text is unchanged in shape and holds no names; the archive
+lists difficulty; puzzle 1 has no badge and plays as before.
+
+## Smoke test of the first beta, 2026-11-17
 
 Run against the real API code and the real generated data, with the puzzle dates moved back two days in a scratch
 copy so that puzzle 2 (EMEA / Played all 3 seasons / 2025) was "today". Transcript:

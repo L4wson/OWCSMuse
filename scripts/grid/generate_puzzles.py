@@ -445,7 +445,8 @@ def main(argv: list[str] | None = None) -> int:
             f"clue within {mixed.CLUE_GAP_DAYS} days, no teammate anchor within {mixed.ANCHOR_GAP_DAYS}",
             f"difficulty by median answers a cell: Easy {mixed.EASY_MEDIAN}+, Hard under {mixed.HARD_MEDIAN}, Medium between",
             snapshot,
-            f"stages used: {len(facts.stages)}; reviewed awards used: {len(facts.awards)}",
+            f"stages used: {len(facts.stages)}; awards used: {len(facts.awards)}"
+            + (" INCLUDING UNREVIEWED (dry run only)" if args.include_unreviewed else " (reviewed only)"),
             f"new puzzles: {len(new)}" + (f"; NO VALID GRID for {', '.join(missing)}" if missing else ""),
         ]
         text = mixed_report(results, skipped, header)

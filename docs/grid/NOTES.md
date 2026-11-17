@@ -1,36 +1,40 @@
 # Grid Phase 0: working notes
 
-## State: mixed clues, IN PROGRESS on `grid/categories` (stopped 2026-11-17, usage limit)
+## State: mixed clues built on `grid/categories`, not pushed, not deployed (2026-11-17)
 
-Done and committed as work in progress:
+Read [BETA.md](BETA.md) (top section) and [CATEGORIES.md](CATEGORIES.md) first.
 
-- `scripts/grid/build_facts.py` -> `scope/grid_stages.json` (20 stages, every winner agrees with Liquipedia's match
-  record, FACEIT's result and Liquipedia's placement table where held) and `scope/grid_awards.json` (21 awards, all
-  `reviewed: false`, 3 unresolved: Proper).
-- `scripts/grid/clues.py`: the typed clue classes (role, season, region, teammate, org, org count, stage win, stage
-  final, award, LAN roster, experience, stats) with answers, reasons and can't-verify sets; `cell()`.
-- `scripts/grid/mixed.py`: clue pool, the quality rules (`Judge`), difficulty, the day search.
-- `scripts/grid/generate_puzzles.py`: mixed by default, `--classic` for beta grids, `--include-unreviewed` (dry run
-  only). A 30-day dry run from 2026-11-19 produced a valid puzzle every day, 29 on the target difficulty.
-- `owcsmuse/grid/store.py` and `router.py`: format 2 puzzles (clue reasons, clue can't-verify messages, difficulty,
-  answer count in reveal). The 35 beta tests still pass.
+- Branch `grid/categories`, cut from `grid/beta`. Still no migration, no database writes, no visitor data.
+- 31 puzzles in `scope/grid_puzzles.json`: puzzle 1 (2026-11-18, a beta role grid, untouched) and 30 mixed-clue
+  puzzles, 2026-11-19 to 2026-12-18. **Nothing generates more automatically.** Before 2026-12-19: run
+  `build_facts.py`, then `generate_puzzles.py`, commit, deploy.
+- Decisions the owner made for this step (do not reopen): mixed clues from at least 4 families; the rejection rules
+  in BETA.md; difficulty by median cell, easier early in the week; awards only when reviewed; never apply an org
+  mapping; every clue states its scope.
+- **Waiting on the owner:** [VERIFY.md](VERIFY.md) (answers to hand-check, 20 stage winners, 21 awards),
+  [proposed_org_mappings.md](proposed_org_mappings.md) (49 unmapped team ids, nothing applied), and the `reviewed`
+  flags in `scope/grid_awards.json` and `scope/grid_stages.json`.
+- Existing files touched in this step: none outside Grid's own (`owcsmuse/grid/`, `scripts/grid/`, `web/src/grid/`,
+  `tests/grid/`, `web/tests/grid.test.jsx`, `scope/grid_*.json`, `docs/grid/`).
 
-NOT done yet:
+Easy to forget:
 
-- Frontend: header info tooltips, difficulty badge, answer count after reveal, long-label wrapping at 360-390 px.
-- Tests for the new clues, each rejection rule, format 2 routes, old puzzles still playing. Nothing new is tested.
-- The real 30-day generation (2026-11-19 on; leave #1, 2026-11-18, alone) and its saved run output.
-- Smoke test of an Easy, a Medium and a Hard puzzle at phone width.
-- docs: CATEGORIES.md (verdicts), proposed_org_mappings.md, VERIFY.md, BETA.md update.
-- Full offline suite, frontend tests, build, lint.
+- A cell is two clues judged separately, except a role beside a season or region (that role, there).
+- `clues.py` counts maps for season and region clues; the beta's column conditions counted line-ups for "all 3
+  seasons". Puzzle 1 keeps the beta's meaning.
+- The stage clues use every stage in `scope/grid_stages.json` whose `agree` is true, reviewed or not. Awards need
+  `reviewed: true` and a `player_id`.
+- Liquipedia was not called. Muse's client stores each response in `raw_payloads`, which is a database write.
+  Everything Liquipedia-sourced here was read from responses already stored.
+- A teammate clue's stored key holds the anchor's player id; the API sends positional keys (`row0`, `col2`).
+- Heredocs with long quoted content fail in this shell: write a patch script to a file and run it.
 
-Verdicts so far (numbers from 2026-11-17): teammate Ship (47 anchors with 12+ teammates); played-for-org Ship with
-limits (14 mapped orgs with 8+ players); won a stage / finalist Ship (41 / 61 answers); award Not yet in puzzles (12
-players, unreviewed); LAN roster Ship; both regions Ship with limits (13); 3+ orgs Not yet (15 answers, 283 can't
-verify until teams are mapped); experience Ship (50-150+; 200+ has 4); stats Ship with limits (2025: 32, 2026: 15);
-hero specialist Not yet (FACEIT map stats have no hero field).
+Not done:
 
-Resume file for the Phase 0 session. Read this first if picking the work up again.
+- Ten stages have no Liquipedia placement table to cross-check against (not fetched: it needs a write).
+- "N+ maps" bounds unrecorded series at 7 maps each; the real count is in Muse and could be loaded.
+- No independent derivation of any answer from raw payloads; nothing is confirmed by a person.
+- Not tried on real phones; the Docker image was not built locally.
 
 ## State: beta built on `grid/beta`, not pushed, not deployed (2026-11-17)
 

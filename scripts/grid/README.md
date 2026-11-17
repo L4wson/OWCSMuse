@@ -88,19 +88,31 @@ a per-10 condition on 2024 is refused.
 A grid file is `{"name": ..., "entity": "player" | "team", "rows": [3 specs], "cols": [3 specs]}`. The candidate
 grids from Phase 0 are in `grids/`.
 
-## The puzzle generator (beta)
+## The puzzle generator
 
-`generate_puzzles.py` builds the daily puzzles the beta serves, with these same modules:
+`generate_puzzles.py` builds the daily puzzles the site serves:
 
 ```bash
-python scripts/grid/generate_puzzles.py --start-date 2026-12-02 --days 14            # append 14 days
-python scripts/grid/generate_puzzles.py --start-date 2026-12-02 --days 14 --dry-run  # the report, nothing written
+python scripts/grid/build_facts.py                                                # stage results and awards -> scope/
+python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14         # mixed-clue puzzles
+python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --dry-run
+python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --classic    # the first beta's role x column grids
 ```
 
-It writes `scope/grid_puzzles.json` and `scope/grid_players.json`, and a report under `docs/grid/runs/`. Rows are
-Tank / DPS / Support; columns are three of 2024, 2025, 2026, NA, EMEA and "Played all 3 seasons"; the floor is 10
-maps; the scope is NA and EMEA main series. A date that is today or earlier (UTC) is refused. Everything else about
-it, and how the API and the page use the files, is in [docs/grid/BETA.md](../../docs/grid/BETA.md).
+It writes `scope/grid_puzzles.json` and `scope/grid_players.json`, and a report under `docs/grid/runs/`. A date that
+is today or earlier (UTC) is refused.
+
+- **Mixed puzzles** (the default) are six clues from at least four families. The clue types are the classes in
+  `clues.py`: each returns its answers with a reason apiece, the players it cannot judge, a short label and a
+  one-line definition. `mixed.py` holds the clue pool, the rules a grid must pass, and the search.
+- **Classic puzzles** (`--classic`) use the Phase 0 conditions in `conditions.py` through `cell_counter.py`,
+  unchanged: Tank / DPS / Support against three of 2024, 2025, 2026, NA, EMEA and "Played all 3 seasons".
+- `build_facts.py` derives what Muse's database does not hold as a column, stage winners and individual awards,
+  into `scope/grid_stages.json` and `scope/grid_awards.json`, each entry with a source link. It keeps `reviewed`
+  flags already set.
+
+What every clue means and how the API and page use the files: [docs/grid/CATEGORIES.md](../../docs/grid/CATEGORIES.md)
+and [docs/grid/BETA.md](../../docs/grid/BETA.md).
 
 ## Files
 
@@ -111,8 +123,12 @@ it, and how the API and the page use the files, is in [docs/grid/BETA.md](../../
 | `conditions.py` | the condition classes and `cell_answers()` |
 | `cell_counter.py` | spec parsing, the report, the CLI |
 | `grids/*.json` | candidate grids |
-| `generate_puzzles.py` | the beta's puzzle generator |
+| `generate_puzzles.py` | the puzzle generator: mixed clues by default, `--classic` for role grids |
+| `clues.py` | the mixed-clue types |
+| `mixed.py` | the clue pool, the quality rules, the day search |
+| `build_facts.py` | stage results and awards into `scope/` |
 | `../../tests/grid/test_conditions.py` | the semantics above on a hand-built warehouse; no database |
+| `../../tests/grid/test_beta.py`, `test_categories.py` | the generator, every clue type, every rule, both puzzle formats through the routes |
 
 ## Known limits
 

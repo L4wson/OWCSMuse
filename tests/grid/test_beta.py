@@ -410,7 +410,7 @@ def test_the_app_serves_grid_without_a_database_and_throttles_guesses(files, mon
 
 
 def test_the_committed_puzzle_file_is_well_formed():
-    """scope/grid_puzzles.json as committed: nine cells, each at its floor, numbered in date order."""
+    """scope/grid_puzzles.json as committed: numbered in date order, and every beta puzzle at its floors."""
     path = Path(__file__).resolve().parents[2] / "scope" / "grid_puzzles.json"
     if not path.exists():
         pytest.skip("no puzzles have been generated")
@@ -418,6 +418,8 @@ def test_the_committed_puzzle_file_is_well_formed():
     assert [p["number"] for p in puzzles] == list(range(1, len(puzzles) + 1))
     assert [p["date"] for p in puzzles] == sorted(p["date"] for p in puzzles)
     for p in puzzles:
+        if p.get("format") == 2:
+            continue        # a mixed-clue puzzle: test_categories.py holds those to the generator's rules
         assert [r["key"] for r in p["rows"]] == ["tank", "dps", "support"]
         assert len({c["key"] for c in p["cols"]}) == 3 and len(p["cells"]) == 9 and len(p["unverifiable"]) == 3
         for i, c in enumerate(p["cells"]):

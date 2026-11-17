@@ -60,6 +60,7 @@ function Game({ number, go }) {
   const [notice, setNotice] = useState(null); // {kind: "wrong" | "cannot_verify" | "error", text}
   const [reveal, setReveal] = useState(null);
   const [stats, setStats] = useState(() => loadStats());
+  const [info, setInfo] = useState(null); // the clue whose definition is open: "row0", "col2", ...
 
   useEffect(() => {
     const controller = new AbortController();
@@ -133,6 +134,11 @@ function Game({ number, go }) {
       <header className="grid-head">
         <h1>
           OWCS Grid <span className="grid-number">#{puzzle.number}</span>
+          {puzzle.difficulty ? (
+            <span className={`grid-difficulty grid-difficulty--${puzzle.difficulty.toLowerCase()}`} data-testid="grid-difficulty">
+              {puzzle.difficulty}
+            </span>
+          ) : null}
         </h1>
         <p className="muted">
           {puzzle.date}
@@ -140,7 +146,17 @@ function Game({ number, go }) {
         </p>
       </header>
 
-      <Board puzzle={puzzle} game={game} selected={over ? null : selected} onSelect={over ? null : setSelected} />
+      <Board
+        puzzle={puzzle}
+        game={game}
+        selected={over ? null : selected}
+        onSelect={over ? null : setSelected}
+        info={info}
+        onInfo={(place) => setInfo((open) => (open === place ? null : place))}
+        counts={over && reveal ? Object.fromEntries(reveal.cells.map((entry) => [entry.cell, entry.count])) : null}
+      />
+      <ClueInfo puzzle={puzzle} info={info} onClose={() => setInfo(null)} />
+      <YourAnswers puzzle={puzzle} game={game} />
 
       {over ? (
         <EndScreen puzzle={puzzle} game={game} reveal={reveal} stats={stats} go={go} />
@@ -185,37 +201,67 @@ function Game({ number, go }) {
   );
 }
 
-function Board({ puzzle, game, selected, onSelect }) {
+// A header is a button: tapping it opens the clue's exact definition under the board. A hover title cannot be
+// reached on a phone, so the definition is never only a tooltip.
+function Header({ clue, place, role, className, info, onInfo }) {
+  const long = clue.label.length > 16;
   return (
-    <div className="grid-board" role="grid" aria-label={`OWCS Grid ${puzzle.number}`} data-testid="grid-board">
+    <button
+      type="button"
+      role={role}
+      className={`${className}${long ? " grid-head-long" : ""}${info === place ? " grid-head-open" : ""}`}
+      title={clue.help || undefined}
+      aria-expanded={info === place}
+      data-testid={`head-${place}`}
+      onClick={() => onInfo(place)}
+    >
+      <span className="grid-head-label">{clue.label}</span>
+      <span className="grid-head-i" aria-hidden="true" />
+    </button>
+  );
+}
+
+function Board({ puzzle, game, selected, onSelect, info, onInfo, counts }) {
+  // a role grid's row labels are one short word; a mixed grid's can be "Teammate of sHockWave" and need the room
+  const wide = puzzle.rows.some((row) => row.label.length > 8);
+  return (
+    <div
+      className={`grid-board${wide ? " grid-board--wide" : ""}`}
+      role="grid"
+      aria-label={`OWCS Grid ${puzzle.number}`}
+      data-testid="grid-board"
+    >
       <div className="grid-corner" aria-hidden="true" />
-      {puzzle.cols.map((col) => (
-        <div key={col.key} className="grid-colhead" role="columnheader" title={col.help}>
-          {col.label}
-        </div>
+      {puzzle.cols.map((col, c) => (
+        <Header key={col.key} clue={col} place={`col${c}`} role="columnheader" className="grid-colhead" info={info} onInfo={onInfo} />
       ))}
       {puzzle.rows.map((row, r) => (
-        <Row key={row.key} row={row} r={r} puzzle={puzzle} game={game} selected={selected} onSelect={onSelect} />
+        <Row key={row.key} row={row} r={r} puzzle={puzzle} game={game} selected={selected} onSelect={onSelect} info={info} onInfo={onInfo} counts={counts} />
       ))}
     </div>
   );
 }
 
-function Row({ row, r, puzzle, game, selected, onSelect }) {
+function Row({ row, r, puzzle, game, selected, onSelect, info, onInfo, counts }) {
   return (
     <>
-      <div className={`grid-rowhead grid-rowhead--${row.key}`} role="rowheader">
-        {row.label}
-      </div>
+      <Header clue={row} place={`row${r}`} role="rowheader" className="grid-rowhead" info={info} onInfo={onInfo} />
       {puzzle.cols.map((col, c) => {
         const cell = r * 3 + c;
         const answer = game.filled[cell];
         const label = `${row.label} × ${col.label}`;
+        const possible =
+          counts && counts[cell] !== undefined ? (
+            <span className="grid-cell-count" data-testid={`count-${cell}`}>
+              {counts[cell]} possible
+            </span>
+          ) : null;
         if (answer) {
           return (
             <div key={col.key} className="grid-cell grid-cell--filled" role="gridcell" data-testid={`cell-${cell}`}>
               <span className="grid-cell-name">{answer.name}</span>
               <span className="grid-cell-why">{answer.explanation}</span>
+              {possible}
             </div>
           );
         }
@@ -232,10 +278,50 @@ function Row({ row, r, puzzle, game, selected, onSelect }) {
             onClick={() => onSelect?.(selected === cell ? null : cell)}
           >
             <span aria-hidden="true">{onSelect ? "+" : ""}</span>
+            {possible}
           </button>
         );
       })}
     </>
+  );
+}
+
+// A cell is small and a mixed clue's reason can be two sentences, so each answer's reason is also written out in full.
+function YourAnswers({ puzzle, game }) {
+  const filled = Object.keys(game.filled)
+    .map(Number)
+    .sort((x, y) => x - y);
+  if (!filled.length) return null;
+  return (
+    <ul className="grid-yours" data-testid="grid-yours" aria-label="Your answers">
+      {filled.map((cell) => (
+        <li key={cell}>
+          <strong>{game.filled[cell].name}</strong>{" "}
+          <span className="muted">
+            {puzzle.rows[Math.floor(cell / 3)].label} × {puzzle.cols[cell % 3].label}
+          </span>
+          <span>{game.filled[cell].explanation}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function ClueInfo({ puzzle, info, onClose }) {
+  if (!info) return null;
+  const index = Number(info.slice(3));
+  const clue = info.startsWith("row") ? puzzle.rows[index] : puzzle.cols[index];
+  if (!clue) return null;
+  return (
+    <section className="grid-info" role="note" data-testid="grid-info">
+      <div className="grid-guess-head">
+        <strong>{clue.label}</strong>
+        <button type="button" className="grid-link" onClick={onClose}>
+          close
+        </button>
+      </div>
+      <p>{clue.help || "No definition for this clue."}</p>
+    </section>
   );
 }
 
@@ -298,7 +384,7 @@ function GuessBox({ puzzle, game, cell, onVerdict, onError, onCancel }) {
           cancel
         </button>
       </div>
-      <p className="muted grid-guess-help">{col.help}</p>
+      <p className="muted grid-guess-help">{[row.help, col.help].filter(Boolean).join(" ")}</p>
       <input
         ref={input}
         type="text"
@@ -382,14 +468,23 @@ function EndScreen({ puzzle, game, reveal, stats, go }) {
       {reveal ? (
         <div className="grid-reveal" data-testid="grid-reveal">
           <h2>Some answers</h2>
-          <p className="muted">Up to {reveal.per_cell} examples a cell, most maps first. There are more.</p>
+          <p className="muted">Up to {reveal.per_cell} examples a cell. The count is every answer the cell had.</p>
           <ul>
             {reveal.cells.map((entry) => (
               <li key={entry.cell}>
                 <strong>
                   {puzzle.rows[Math.floor(entry.cell / 3)].label} × {puzzle.cols[entry.cell % 3].label}
                 </strong>
-                <span>{entry.examples.map((example) => `${example.name} (${example.maps})`).join(", ")}</span>
+                {entry.count !== undefined ? (
+                  <span className="grid-reveal-count">
+                    {entry.count} possible {entry.count === 1 ? "answer" : "answers"}
+                  </span>
+                ) : null}
+                <span>
+                  {entry.examples
+                    .map((example) => (example.maps !== undefined ? `${example.name} (${example.maps})` : example.name))
+                    .join(", ")}
+                </span>
               </li>
             ))}
           </ul>
@@ -412,18 +507,26 @@ function HowToPlay({ puzzle }) {
     <details className="grid-how">
       <summary>How to play</summary>
       <ul>
-        <li>Each cell wants one player who fits both its row (a role) and its column.</li>
-        <li>
-          A player fits if they have {puzzle.min_maps} or more maps in that role inside the column: that season, that
-          region, or their whole OWCS career for "Played all 3 seasons".
-        </li>
+        <li>Each cell wants one player who fits both its row clue and its column clue.</li>
+        <li>Tap a clue to see exactly what it means and what it counts.</li>
+        {puzzle.min_maps ? (
+          <li>
+            A player fits a role if they have {puzzle.min_maps} or more maps in it inside the column: that season,
+            that region, or their whole OWCS career for "Played all 3 seasons".
+          </li>
+        ) : (
+          <li>
+            The two clues are checked separately, except a role beside a season or region, which means that role in
+            that season or region.
+          </li>
+        )}
         <li>
           You have {puzzle.guesses} guesses for the whole grid. Right or wrong, a guess is spent. A player can fill
           only one cell.
         </li>
         <li>
-          If there is no role data for a player in that column, the guess "can't be verified": the cell stays open and
-          no guess is spent.
+          If the data that would settle a guess is missing, the guess "can't be verified": the cell stays open and no
+          guess is spent.
         </li>
         <li>Pick the player from the list: it shows their last team and seasons, to tell same-named players apart.</li>
       </ul>
@@ -477,9 +580,10 @@ function Archive({ go }) {
               <a href={path} onClick={go(path)}>
                 <span className="grid-archive-no">#{entry.number}</span>
                 <span className="grid-archive-what">
-                  {entry.cols.join(" · ")}
+                  {entry.kind === "mixed" ? [...entry.rows, ...entry.cols].join(" · ") : entry.cols.join(" · ")}
                   <span className="muted">
                     {entry.date}
+                    {entry.difficulty ? ` · ${entry.difficulty}` : ""}
                     {entry.is_today ? " · today" : ""}
                   </span>
                 </span>

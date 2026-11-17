@@ -286,6 +286,127 @@ describe("the grid page", () => {
   });
 });
 
+// A mixed-clue puzzle, in the shape /api/grid returns for one (captured 2026-11-17, cut down).
+const MIXED = {
+  number: 4,
+  date: "2026-11-21",
+  is_today: true,
+  kind: "mixed",
+  difficulty: "Hard",
+  rows: [
+    { key: "row0", family: "stats", label: "Top 25% fewest deaths/10, 2025 NA/EMEA", help: "In the lowest 25% for deaths per 10 minutes among players of the same role, 2025 season, OWCS NA/EMEA main series." },
+    { key: "row1", family: "lan", label: "Rostered at 2026 Champions Clash", help: "On a team's roster at 2026 Champions Clash, per Liquipedia's line-ups. Rostered, not necessarily played." },
+    { key: "row2", family: "stage", label: "Won an OWCS stage", help: "Played 1+ playoff map for the team that won an OWCS NA or EMEA stage's playoffs (FACEIT map stats)." },
+  ],
+  cols: [
+    { key: "col0", family: "teammate", label: "Teammate of kevster", help: "Played 1+ map on the same team as kevster in OWCS NA/EMEA main series (FACEIT map stats). kevster is not an answer." },
+    { key: "col1", family: "org", label: "Played for NTMR", help: "Played 1+ map for NTMR in OWCS NA/EMEA main series (FACEIT map stats)." },
+    { key: "col2", family: "teammate", label: "Teammate of Admiral", help: "Played 1+ map on the same team as Admiral in OWCS NA/EMEA main series (FACEIT map stats). Admiral is not an answer." },
+  ],
+  guesses: 9,
+  min_maps: null,
+  coverage: "Unless a clue says otherwise, answers come from FACEIT map stats. Tap a clue to see exactly what it means.",
+};
+const MIXED_REVEAL = {
+  puzzle: 4,
+  per_cell: 5,
+  cells: [8, 4, 5, 5, 5, 6, 9, 7, 10].map((count, cell) => ({
+    cell,
+    count,
+    examples: [{ id: `x${cell}`, name: `Example${cell}`, why: "a reason" }],
+  })),
+};
+const CHASE_WHY = "4.3 deaths/10 as Tank in 2025, #3 of 28. 21 maps together, most on The Ultimates in 2025 EMEA Stage 1";
+
+function mountMixed() {
+  window.history.replaceState({}, "", "/grid");
+  const fetchMock = mockFetch([
+    ["/api/grid/today", ok(MIXED)],
+    ["/api/grid/players?q=haw", ok({ query: "haw", players: [HAWK] })],
+    ["/api/grid/players?q=late", ok({ query: "late", players: [LATE] })],
+    [
+      /\/api\/grid\/4\/guess$/,
+      ({ body }) =>
+        body.player_id === HAWK.id
+          ? ok(verdict(body.cell, HAWK, "correct", { explanation: CHASE_WHY, link: null }))
+          : ok(verdict(body.cell, LATE, "cannot_verify", { clue: "Teammate of kevster", explanation: "They were rostered with kevster only in series we have no map data for, so we can't tell whether they played together. It didn't use a guess." })),
+    ],
+    [/\/api\/grid\/4\/reveal$/, ok(MIXED_REVEAL)],
+  ]);
+  vi.stubGlobal("fetch", fetchMock);
+  return { ...render(<App />), fetchMock };
+}
+
+describe("a mixed-clue puzzle", () => {
+  it("shows its difficulty and every clue as a header, long ones included", async () => {
+    mountMixed();
+    const board = await screen.findByTestId("grid-board");
+    expect(screen.getByTestId("grid-difficulty")).toHaveTextContent("Hard");
+    expect(within(board).getAllByRole("columnheader").map((h) => h.textContent)).toEqual(["Teammate of kevster", "Played for NTMR", "Teammate of Admiral"]);
+    expect(within(board).getAllByRole("rowheader").map((h) => h.textContent)).toEqual([
+      "Top 25% fewest deaths/10, 2025 NA/EMEA",
+      "Rostered at 2026 Champions Clash",
+      "Won an OWCS stage",
+    ]);
+    expect(board.className).toContain("grid-board--wide");
+    expect(screen.getByTestId("grid-coverage")).toHaveTextContent("Tap a clue");
+  });
+
+  it("opens a clue's definition when its header is tapped, and closes it again", async () => {
+    mountMixed();
+    const header = await screen.findByTestId("head-row1");
+    expect(header).toHaveAttribute("title", expect.stringContaining("Rostered, not necessarily played"));
+    expect(screen.queryByTestId("grid-info")).not.toBeInTheDocument();
+    await userEvent.click(header);
+    expect(screen.getByTestId("grid-info")).toHaveTextContent("Rostered at 2026 Champions Clash");
+    expect(screen.getByTestId("grid-info")).toHaveTextContent("per Liquipedia's line-ups");
+    expect(header).toHaveAttribute("aria-expanded", "true");
+    await userEvent.click(screen.getByTestId("head-col0")); // another clue replaces it
+    expect(screen.getByTestId("grid-info")).toHaveTextContent("kevster is not an answer");
+    await userEvent.click(screen.getByTestId("head-col0"));
+    expect(screen.queryByTestId("grid-info")).not.toBeInTheDocument();
+  });
+
+  it("writes out the reason the service gave, in the cell and in full under the board", async () => {
+    mountMixed();
+    await guess(0, "haw", "Hawk");
+    await waitFor(() => expect(screen.getByTestId("cell-0")).toHaveTextContent("Hawk"));
+    expect(screen.getByTestId("grid-yours")).toHaveTextContent(CHASE_WHY);
+    expect(screen.getByTestId("grid-yours")).toHaveTextContent("Top 25% fewest deaths/10, 2025 NA/EMEA × Teammate of kevster");
+  });
+
+  it("shows the clue's own can't-verify sentence and spends no guess", async () => {
+    mountMixed();
+    await guess(0, "late", "Late");
+    expect(await screen.findByTestId("grid-notice")).toHaveTextContent("rostered with kevster only in series we have no map data for");
+    expect(screen.getByTestId("grid-status")).toHaveTextContent("9 guesses left · 0/9 filled");
+  });
+
+  it("shows how many answers each cell had only once the game is over", async () => {
+    mountMixed();
+    await screen.findByTestId("grid-board");
+    expect(screen.queryByTestId("count-0")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /end game/i }));
+    expect(await screen.findByTestId("count-0")).toHaveTextContent("8 possible");
+    expect(screen.getByTestId("count-8")).toHaveTextContent("10 possible");
+    const reveal = screen.getByTestId("grid-reveal");
+    expect(reveal).toHaveTextContent("4 possible answers");
+    expect(reveal).toHaveTextContent("Example1");
+    expect(reveal).not.toHaveTextContent("undefined");
+  });
+});
+
+describe("a beta puzzle after the change", () => {
+  it("has no difficulty badge, keeps its short headers, and still explains them", async () => {
+    mountGrid();
+    const board = await screen.findByTestId("grid-board");
+    expect(screen.queryByTestId("grid-difficulty")).not.toBeInTheDocument();
+    expect(board.className).not.toContain("grid-board--wide");
+    await userEvent.click(screen.getByTestId("head-col1"));
+    expect(screen.getByTestId("grid-info")).toHaveTextContent("10+ maps in the role in the 2025 season");
+  });
+});
+
 describe("the nav link", () => {
   it("is hidden unless VITE_GRID_NAV is true, and /grid works either way", async () => {
     vi.stubEnv("VITE_GRID_NAV", "true");

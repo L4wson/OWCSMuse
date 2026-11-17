@@ -474,3 +474,172 @@ button.grid-cell:focus-visible {
     font-size: 0.9rem;
   }
 }
+
+/* ------------------------------------------------------ mixed-clue puzzles */
+
+/* long row clues ("Teammate of sHockWave", "Played for SpaceStation Gaming") get a full column of their own */
+.grid-board--wide {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+button.grid-colhead,
+button.grid-rowhead {
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 4px 2px;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.grid-colhead {
+  font-size: 0.95rem;
+  justify-content: flex-end;
+}
+
+button.grid-rowhead {
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.grid-head-label {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.grid-board--wide button.grid-rowhead {
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+}
+
+button.grid-head-long,
+.grid-board--wide button.grid-head-long {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.grid-head-open,
+button.grid-colhead:focus-visible,
+button.grid-rowhead:focus-visible {
+  background: var(--accent-soft);
+  outline: none;
+}
+
+.grid-head-i {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.grid-head-i::after {
+  content: "i";
+}
+
+.grid-info {
+  margin-top: 10px;
+  padding: 10px 12px;
+  font-size: 0.88rem;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.grid-info p {
+  margin: 4px 0 0;
+}
+
+.grid-difficulty {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 9px;
+  vertical-align: middle;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+
+.grid-difficulty--easy {
+  color: var(--won);
+  background: color-mix(in srgb, var(--won) 14%, var(--panel));
+}
+
+.grid-difficulty--medium {
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.grid-difficulty--hard {
+  color: var(--lost);
+  background: color-mix(in srgb, var(--lost) 12%, var(--panel));
+}
+
+.grid-cell-count {
+  max-width: 100%;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--muted);
+}
+
+.grid-reveal-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* a long reason must not push the name out of a filled cell */
+.grid-cell-why {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+/* in a mixed grid every header is a phrase: one size for all of them, whatever their length */
+.grid-board--wide button.grid-colhead,
+.grid-board--wide button.grid-rowhead,
+.grid-board--wide button.grid-head-long {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.grid-yours {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.grid-yours li {
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+}
+
+.grid-yours li span:last-child {
+  display: block;
+}
