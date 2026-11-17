@@ -1,0 +1,100 @@
+# d2. team answers: region x international event and placement
+answer entity: team; min maps for a role or stat cell: 4; flag below 5 answers
+
+                                  Competed at World Finals                  Competed at Midseason Championship        Finished top 8 at an international event  
+Played in NA                      6                                         5                                         7                                         
+Played in EMEA                    5                                         5                                         6                                         
+Played in an international event  16                                        23                                        19                                        
+
+[0,0] Played in NA x Competed at World Finals: 6
+      counted by: series (>= 1); each condition on its own rows
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      NTMR  [ntmr]
+      SpaceStation Gaming  [spacestation-gaming]
+      Students of the Game  [students-of-the-game]
+      Team Liquid  [team-liquid]
+      Toronto Defiant  [team:8f632648-b26f-4554-bae4-40f9aee1773b]
+[0,1] Played in NA x Competed at Midseason Championship: 5
+      counted by: series (>= 1); each condition on its own rows
+      Dallas Fuel  [dallas-fuel]
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      NTMR  [ntmr]
+      SpaceStation Gaming  [spacestation-gaming]
+      Team Liquid  [team-liquid]
+[0,2] Played in NA x Finished top 8 at an international event: 7
+      counted by: series (>= 1) x stated by the condition; each condition on its own rows
+      Dallas Fuel  [dallas-fuel]
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      NTMR  [ntmr]
+      SpaceStation Gaming  [spacestation-gaming]
+      Students of the Game  [students-of-the-game]
+      Team Liquid  [team-liquid]
+      Toronto Defiant  [team:8f632648-b26f-4554-bae4-40f9aee1773b]
+[1,0] Played in EMEA x Competed at World Finals: 5
+      counted by: series (>= 1); each condition on its own rows
+      Al Qadsiah  [qadsiah]
+      ENCE  [team:62f7752b-0b79-4fa8-9a23-78800e2b4539]
+      SpaceStation Gaming  [spacestation-gaming]
+      Team Peps  [team-peps]
+      Twisted Minds  [team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e]
+[1,1] Played in EMEA x Competed at Midseason Championship: 5
+      counted by: series (>= 1); each condition on its own rows
+      Al Qadsiah  [qadsiah]
+      Geekay Esports  [team:46f8e560-76fe-4b5f-85e7-397957e0dc74]
+      SpaceStation Gaming  [spacestation-gaming]
+      Twisted Minds  [team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e]
+      Virtus pro  [virtus-pro]
+[1,2] Played in EMEA x Finished top 8 at an international event: 6
+      counted by: series (>= 1) x stated by the condition; each condition on its own rows
+      Al Qadsiah  [qadsiah]
+      ENCE  [team:62f7752b-0b79-4fa8-9a23-78800e2b4539]
+      Geekay Esports  [team:46f8e560-76fe-4b5f-85e7-397957e0dc74]
+      SpaceStation Gaming  [spacestation-gaming]
+      Twisted Minds  [team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e]
+      Virtus pro  [virtus-pro]
+[2,0] Played in an international event x Competed at World Finals: 16
+      counted by: series (>= 1); each condition on its own rows
+      Al Qadsiah  [qadsiah]
+      Crazy Raccoon  [crazy-raccoon]
+      ENCE  [team:62f7752b-0b79-4fa8-9a23-78800e2b4539]
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      NTMR  [ntmr]
+      SpaceStation Gaming  [spacestation-gaming]
+      Students of the Game  [students-of-the-game]
+      T1  [t1]
+      Team CC  [team-cc]
+      Team Falcons  [team-falcons]
+      ... 6 more
+[2,1] Played in an international event x Competed at Midseason Championship: 23
+      counted by: series (>= 1); each condition on its own rows
+      9z Team  [9z-team]
+      Al Qadsiah  [qadsiah]
+      All Gamers Global  [all-gamers-global]
+      Crazy Raccoon  [crazy-raccoon]
+      Dallas Fuel  [dallas-fuel]
+      Geekay Esports  [team:46f8e560-76fe-4b5f-85e7-397957e0dc74]
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      JD Gaming  [jd-gaming]
+      NTMR  [ntmr]
+      ROC Esports  [roc-esports-china]
+      ... 13 more
+[2,2] Played in an international event x Finished top 8 at an international event: 19
+      counted by: series (>= 1) x stated by the condition; each condition on its own rows
+      Al Qadsiah  [qadsiah]
+      Crazy Raccoon  [crazy-raccoon]
+      Dallas Fuel  [dallas-fuel]
+      ENCE  [team:62f7752b-0b79-4fa8-9a23-78800e2b4539]
+      Geekay Esports  [team:46f8e560-76fe-4b5f-85e7-397957e0dc74]
+      Geekay Esports  [team:590b7d3b-a200-47b9-a967-f02274c1977b]
+      NTMR  [ntmr]
+      Once Again  [once-again]
+      SpaceStation Gaming  [spacestation-gaming]
+      Students of the Game  [students-of-the-game]
+      ... 9 more
+
+overlap
+  distinct answers across the grid: 28
+  cells fillable with no answer reused: 9 of 9
+  answers by number of cells they fit: {1: 8, 2: 3, 3: 5, 4: 6, 6: 5, 9: 1}
+  answers that fit a whole row: [4, 3, 11]; a whole column: [1, 1, 1]
+  most reusable: SpaceStation Gaming (9), Al Qadsiah (6), Geekay Esports (6), NTMR (6), Team Liquid (6), Twisted Minds (6), Dallas Fuel (4), ENCE (4)

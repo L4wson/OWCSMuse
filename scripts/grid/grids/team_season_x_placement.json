@@ -1,0 +1,6 @@
+{
+  "name": "d3. team answers: season x international results",
+  "entity": "team",
+  "rows": ["season:2024", "season:2025", "season:2026"],
+  "cols": ["region:international", "placed_top:8", "placed_top:4"]
+}

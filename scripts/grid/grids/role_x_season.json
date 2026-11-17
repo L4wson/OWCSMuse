@@ -1,0 +1,6 @@
+{
+  "name": "a. role x season",
+  "entity": "player",
+  "rows": ["role:tank", "role:dps", "role:support"],
+  "cols": ["season:2024", "season:2025", "season:2026"]
+}

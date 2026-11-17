@@ -1,0 +1,6 @@
+{
+  "name": "c2. org x season",
+  "entity": "player",
+  "rows": ["org:team-peps", "org:spacestation-gaming", "org:qadsiah"],
+  "cols": ["season:2024", "season:2025", "season:2026"]
+}

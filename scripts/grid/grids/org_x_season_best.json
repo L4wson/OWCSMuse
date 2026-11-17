@@ -1,0 +1,6 @@
+{
+  "name": "c3. org x season, the three identities with the deepest rosters in every season",
+  "entity": "player",
+  "rows": ["org:team-peps", "org:spacestation-gaming", "org:team:2b9f2e7a-f91a-4597-b2fa-d413eaed605e"],
+  "cols": ["season:2024", "season:2025", "season:2026"]
+}

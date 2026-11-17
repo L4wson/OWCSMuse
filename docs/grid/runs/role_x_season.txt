@@ -1,0 +1,141 @@
+# a. role x season
+answer entity: player; min maps for a role or stat cell: 4; flag below 5 answers
+
+                Competed in 2024  Competed in 2025  Competed in 2026  
+Played Tank     54                34                21                
+Played DPS      100               57                32                
+Played Support  96                54                34                
+
+[0,0] Played Tank x Competed in 2024: 54
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 20 of 31 competitions of this slice; none for: Esports World Cup 2024, OWCS 2024 Dreamhack Dallas, OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, and 7 more
+      Ailiseu  [b24a4011-c009-4fe2-8c28-01d96c604981]
+      ariel2  [3c07c474-37ab-43dd-8d8d-e4ccb6de31ed]
+      aspect  [51bde807-1c27-452b-8ce7-6bc04d90a879]
+      Astro  [e78965e3-6fdc-437d-ab8f-b859e283dfdf]
+      Axure  [b9abed30-d5cf-4d09-a5d1-931055a70327]
+      Baz  [029bf891-4c0b-4153-a386-b7ff9f3ad2f8]
+      BenBest  [8bfff87a-25e5-428f-ae28-19fabe8718c4]
+      bogur  [eb191ccf-341b-4858-a2f7-5d44e0ffe7a3]
+      Chase  [23c11b19-5748-4890-87da-7d41db6a46cd]
+      chazm  [0bcc2a42-ed64-4a35-ae31-e376cc2ba987]
+      ... 44 more
+[0,1] Played Tank x Competed in 2025: 34
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 12 of 15 competitions of this slice; none for: OWCS 2025 Champions Clash, OWCS 2025 Midseason Championship, OWCS 2025 World Finals
+      Astro  [e78965e3-6fdc-437d-ab8f-b859e283dfdf]
+      Baz  [029bf891-4c0b-4153-a386-b7ff9f3ad2f8]
+      Chase  [23c11b19-5748-4890-87da-7d41db6a46cd]
+      CLEAR  [a50e5d9c-e00c-476d-86a9-04ab1403d09d]
+      cuFFa  [e6fc96f5-c5a1-4d76-9086-17a0b9743d83]
+      eisgnom  [37aeeb7b-b183-4fae-b25d-d1de03a58191]
+      False  [babf94ba-ab1f-45cd-ada2-10fe89b16bc0]
+      GAP  [925028a0-be74-4f09-87d1-d62a6aa2bc7b]
+      Hadi  [5f60ca5b-92be-4673-b2c6-06623b111467]
+      Hawk  [a940981f-c750-40b9-bb55-bd3e8e6ef986]
+      ... 24 more
+[0,2] Played Tank x Competed in 2026: 21
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 10 of 16 competitions of this slice; none for: OWCS 2026 Champions Clash, OWCS 2026 EMEA Stage 3 Playoffs, OWCS 2026 EMEA Stage 3 Regular Season, OWCS 2026 Midseason Championship, and 2 more
+      amdp  [f3083b81-66f3-4ea5-a509-f2d92f299624]
+      Attack  [232fdb58-fe04-4a4d-bae1-31671cd371b8]
+      cartifan22  [d1227d2c-f885-4729-b4de-77e20f08511d]
+      Coluge  [27fd0cfe-b845-410a-a69e-797f14b4c8cd]
+      eisgnom  [37aeeb7b-b183-4fae-b25d-d1de03a58191]
+      GoldenPants  [0c88427e-d146-4fea-a383-431ddd8ee3e2]
+      Hawk  [a940981f-c750-40b9-bb55-bd3e8e6ef986]
+      Hitori  [60ad5972-64e6-434b-ad31-648f43d30735]
+      Infekted  [3d7e3522-9ef9-4c31-abe2-e10dd1c14270]
+      Kellan  [19298c75-9d48-4dc5-9970-75509c11246c]
+      ... 11 more
+[1,0] Played DPS x Competed in 2024: 100
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 20 of 31 competitions of this slice; none for: Esports World Cup 2024, OWCS 2024 Dreamhack Dallas, OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, and 7 more
+      Amadien  [a460409d-4e7d-47b4-a79d-462a202525d0]
+      Arclite  [7f9907db-7f7d-4a43-aa0e-1ff0e97f9d04]
+      Avo  [d2ac3c5b-2027-4204-b4c9-98aeb126d1a8]
+      azruf  [f306cf00-683c-4861-9b91-f74fbb379d27]
+      Backbone  [a12c7612-d162-4a26-8053-ece68c1f67f7]
+      Bastionmain  [0ac2a7d3-04ca-4f60-a39c-2c4047a5b9d2]
+      Bizz  [e97afce6-0095-42e9-9cbd-06504cc5a916]
+      Bun  [3362bf2b-8883-4695-88c6-c6d0ccda38a3]
+      CheckMate  [c6839ee0-654b-4b77-90ab-11ba3b56bb49]
+      chime  [04a592e5-c661-415a-a1aa-064be1cad203]
+      ... 90 more
+[1,1] Played DPS x Competed in 2025: 57
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 12 of 15 competitions of this slice; none for: OWCS 2025 Champions Clash, OWCS 2025 Midseason Championship, OWCS 2025 World Finals
+      Backbone  [a12c7612-d162-4a26-8053-ece68c1f67f7]
+      CheckMate  [c6839ee0-654b-4b77-90ab-11ba3b56bb49]
+      China  [fcf7a717-4ee5-4944-a10b-75d8be749ea1]
+      ChoiSehwan  [bfb7d179-6904-497b-a4ac-cf158aa8b24e]
+      Chopper  [3607f331-5426-45d9-91a0-7fdb42243262]
+      cookie084  [59643d3f-fad7-4182-87be-63d2371bedae]
+      Danny  [16e56097-3541-4700-9115-9063bc6c3fd9]
+      Dip  [05e09403-6d01-4ea5-bd1e-3e9dabf8957b]
+      Drunk  [c28135e8-b242-4742-a723-c312258155f3]
+      Evil  [9c092bbb-1d8d-4d51-a395-7ab41720965d]
+      ... 47 more
+[1,2] Played DPS x Competed in 2026: 32
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 10 of 16 competitions of this slice; none for: OWCS 2026 Champions Clash, OWCS 2026 EMEA Stage 3 Playoffs, OWCS 2026 EMEA Stage 3 Regular Season, OWCS 2026 Midseason Championship, and 2 more
+      Ade  [9aa12273-c1db-4df9-a952-847d4aea8801]
+      AlphaYi  [944c0b7e-c518-43e7-bed2-4de2a1d4e336]
+      Dip  [05e09403-6d01-4ea5-bd1e-3e9dabf8957b]
+      icav  [e96d60b7-b272-4b27-95c4-95980d864a18]
+      JaeWoo  [34d11d57-a8f1-4f15-996d-e1776c525f93]
+      JUTSU  [c783deb8-d629-49f0-8a21-59db04e090ba]
+      Kai  [b7a281ed-48ba-4f05-93d3-27ed9355c504]
+      karmez  [a66f8843-56d7-49a7-94a1-44b3593bcd0e]
+      kevster  [ef80a7e0-27ad-4c55-a2d7-52b687ba3b23]
+      KORZ  [526fd1e1-c48f-45f6-8789-813a93e61369]
+      ... 22 more
+[2,0] Played Support x Competed in 2024: 96
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 20 of 31 competitions of this slice; none for: Esports World Cup 2024, OWCS 2024 Dreamhack Dallas, OWCS 2024 EMEA Stage 3 Group Stage, OWCS 2024 EMEA Stage 3 Main Event, and 7 more
+      abheek  [d144c074-bb21-4af9-9a19-8509c933003d]
+      Abyss  [c214bd8a-96f8-4c6e-9588-0f80b8f8e489]
+      Admiral  [41c50d1a-3a08-40ad-9746-ecd52ff9e5c6]
+      ajmr  [ebc2176a-5d3f-4142-b621-d14ca8195870]
+      Aniyun  [dd08333b-550b-4217-922d-cf06b0910c03]
+      ANJ  [f5e063fe-e0b0-4a86-b7b4-a9903b0de26a]
+      AOY  [a7babcdd-924d-405b-b47b-36c0d2669e5a]
+      BallerSteve  [859b1444-8791-4aef-9d22-25ad4a6ff606]
+      Buddie  [fbc26eb9-a08e-4522-b1a2-abde9c6b8e2c]
+      cal  [063527f2-708b-4e98-b93b-afe4b4652fb6]
+      ... 86 more
+[2,1] Played Support x Competed in 2025: 54
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 12 of 15 competitions of this slice; none for: OWCS 2025 Champions Clash, OWCS 2025 Midseason Championship, OWCS 2025 World Finals
+      Admiral  [41c50d1a-3a08-40ad-9746-ecd52ff9e5c6]
+      alba  [d046fee2-3480-4c15-981c-08ea0e4a99da]
+      AOY  [a7babcdd-924d-405b-b47b-36c0d2669e5a]
+      Bliss  [4a7be6fa-3e22-4584-b131-5444c608a385]
+      cinnabar  [e30fab51-bf10-4391-9c9b-f99276414110]
+      cjay  [2ede0b37-1352-47d2-9547-7d0f9f07abaa]
+      CrazyCat  [6f4ddf6b-51f4-4036-bb1e-7330102b3017]
+      Crispy  [9da88fbd-ebcb-4f7b-88ce-a79d6d55386d]
+      EGS  [5bd0739c-4e52-49d2-b221-4da542bf0b5c]
+      Ewan  [fe2edff3-b816-42d4-bb7c-be6e285e77b5]
+      ... 44 more
+[2,2] Played Support x Competed in 2026: 34
+      counted by: maps with FACEIT stats (>= 4); both conditions on the same rows
+      coverage: player stats in 10 of 16 competitions of this slice; none for: OWCS 2026 Champions Clash, OWCS 2026 EMEA Stage 3 Playoffs, OWCS 2026 EMEA Stage 3 Regular Season, OWCS 2026 Midseason Championship, and 2 more
+      Admiral  [41c50d1a-3a08-40ad-9746-ecd52ff9e5c6]
+      cjay  [2ede0b37-1352-47d2-9547-7d0f9f07abaa]
+      Crispy  [9da88fbd-ebcb-4f7b-88ce-a79d6d55386d]
+      escanor  [2e4db6df-0964-4e01-8b6d-20b29f8544dd]
+      FDGod  [1ab8c25f-15f0-4707-acc9-4718c88157da]
+      FiNN  [fece55bf-88e9-4234-bcbb-bef43740b491]
+      FiXa  [e422414a-72ec-4e83-8264-6a54b39414b8]
+      FrothyFilly7  [083989e0-81a4-4f83-8dc3-e5222f0df695]
+      FunnyAstro  [423b8943-30c9-4436-8a22-51ca77aa7fca]
+      Galaa  [04d8399b-8ae4-4142-92dd-512021980e5f]
+      ... 24 more
+
+overlap
+  distinct answers across the grid: 326
+  cells fillable with no answer reused: 9 of 9
+  answers by number of cells they fit: {1: 217, 2: 62, 3: 47}
+  answers that fit a whole row: [10, 16, 18]; a whole column: [0, 0, 0]
+  most reusable: Admiral (3), cjay (3), Crispy (3), Dip (3), eisgnom (3), FDGod (3), FrothyFilly7 (3), FunnyAstro (3)
