@@ -88,6 +88,20 @@ a per-10 condition on 2024 is refused.
 A grid file is `{"name": ..., "entity": "player" | "team", "rows": [3 specs], "cols": [3 specs]}`. The candidate
 grids from Phase 0 are in `grids/`.
 
+## The puzzle generator (beta)
+
+`generate_puzzles.py` builds the daily puzzles the beta serves, with these same modules:
+
+```bash
+python scripts/grid/generate_puzzles.py --start-date 2026-12-02 --days 14            # append 14 days
+python scripts/grid/generate_puzzles.py --start-date 2026-12-02 --days 14 --dry-run  # the report, nothing written
+```
+
+It writes `scope/grid_puzzles.json` and `scope/grid_players.json`, and a report under `docs/grid/runs/`. Rows are
+Tank / DPS / Support; columns are three of 2024, 2025, 2026, NA, EMEA and "Played all 3 seasons"; the floor is 10
+maps; the scope is NA and EMEA main series. A date that is today or earlier (UTC) is refused. Everything else about
+it, and how the API and the page use the files, is in [docs/grid/BETA.md](../../docs/grid/BETA.md).
+
 ## Files
 
 | file | what |
@@ -97,6 +111,7 @@ grids from Phase 0 are in `grids/`.
 | `conditions.py` | the condition classes and `cell_answers()` |
 | `cell_counter.py` | spec parsing, the report, the CLI |
 | `grids/*.json` | candidate grids |
+| `generate_puzzles.py` | the beta's puzzle generator |
 | `../../tests/grid/test_conditions.py` | the semantics above on a hand-built warehouse; no database |
 
 ## Known limits

@@ -34,6 +34,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from . import __version__, querylog
 from .config import Settings, load_settings
 from .db import connect
+from .grid.router import build_router as build_grid_router
 from .limitations import LIMITATIONS
 from .log import get_logger, log_event
 from .nlq.columns import describe as describe_columns
@@ -302,6 +303,9 @@ def create_app(settings: Optional[Settings] = None, pool: Optional[ConnectionPoo
                   rows=len(answer.rows), evidence_rows=len((answer.evidence or {}).get("rows") or []),
                   slug=slug, seconds=round(time.perf_counter() - t0, 3))
         return answer_payload(answer, slug)
+
+    # OWCS Grid (docs/grid/BETA.md): its routes read two JSON files in scope/ and never the database
+    app.include_router(build_grid_router(throttled=per_client))
 
     @app.get("/", summary="what this service is")
     def root() -> dict[str, Any]:

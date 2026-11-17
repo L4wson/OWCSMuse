@@ -2,7 +2,22 @@
 
 Resume file for the Phase 0 session. Read this first if picking the work up again.
 
-## State: Phase 0 complete, waiting for the owner's decisions (2026-11-16)
+## State: beta built on `grid/beta`, not pushed, not deployed (2026-11-17)
+
+Read [BETA.md](BETA.md) first: what was built, how to run it, how to generate puzzles, what is not done.
+
+- Branch `grid/beta`, cut from `grid/phase-0`. No migration, no database writes, no visitor data on the server.
+- 14 puzzles generated, 2026-11-18 to 2026-12-01 (`scope/grid_puzzles.json`). **Nothing generates more
+  automatically**: run `scripts/grid/generate_puzzles.py` before 2026-12-02, commit, deploy.
+- Decisions the owner made for the beta (do not reopen): role x column only; 10-map floor everywhere; players only;
+  "can't verify" for no role data; 9 guesses, one cell per player, score out of 9; NA and EMEA main series only;
+  00:00 UTC rollover; all progress in localStorage.
+- Existing files touched: `owcsmuse/api.py` (router registration), `web/src/router.js`, `web/src/App.jsx`,
+  `web/.env.example`. Nothing else.
+- Still open from Phase 0: the three golden cells are unconfirmed; PLAN.md sections 3 and 6 describe the
+  table-backed version this beta deliberately is not.
+
+## Phase 0 (2026-11-16)
 
 Deliverables, all on branch `grid/phase-0`:
 

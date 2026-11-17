@@ -1,0 +1,83 @@
+OWCS Grid generation, 2026-11-17T00:20:14Z
+start 2026-11-18, 14 days, seed 20261118; floor 10 maps; 5+ answers a cell; no column set within 7 days
+warehouse as read 2026-11-17T00:20:14Z; last series played 2026-11-01; 14467 player-map rows and 7032 line-up rows in scope (OWCS NA and EMEA main series (stages and playoffs); relegation and international events are not counted)
+new puzzles: 14
+
+#1  2026-11-18  columns: EMEA | Played all 3 seasons | 2026   smallest cell: 12
+    Tank        27    14    12
+    DPS         51    23    25
+    Support     53    21    27
+    can't verify (per column): 44, 16, 66
+#2  2026-11-19  columns: EMEA | Played all 3 seasons | 2025   smallest cell: 14
+    Tank        27    14    31
+    DPS         51    23    55
+    Support     53    21    52
+    can't verify (per column): 44, 16, 61
+#3  2026-11-20  columns: Played all 3 seasons | 2026 | NA   smallest cell: 12
+    Tank        14    12    28
+    DPS         23    25    44
+    Support     21    27    45
+    can't verify (per column): 16, 66, 54
+#4  2026-11-21  columns: 2026 | 2025 | EMEA   smallest cell: 12
+    Tank        12    31    27
+    DPS         25    55    51
+    Support     27    52    53
+    can't verify (per column): 66, 61, 44
+#5  2026-11-22  columns: Played all 3 seasons | 2026 | 2024   smallest cell: 12
+    Tank        14    12    33
+    DPS         23    25    66
+    Support     21    27    65
+    can't verify (per column): 16, 66, 159
+#6  2026-11-23  columns: NA | 2024 | 2025   smallest cell: 28
+    Tank        28    33    31
+    DPS         44    66    55
+    Support     45    65    52
+    can't verify (per column): 54, 159, 61
+#7  2026-11-24  columns: EMEA | 2024 | 2025   smallest cell: 27
+    Tank        27    33    31
+    DPS         51    66    55
+    Support     53    65    52
+    can't verify (per column): 44, 159, 61
+#8  2026-11-25  columns: 2026 | 2025 | 2024   smallest cell: 12
+    Tank        12    31    33
+    DPS         25    55    66
+    Support     27    52    65
+    can't verify (per column): 66, 61, 159
+#9  2026-11-26  columns: EMEA | Played all 3 seasons | 2025   smallest cell: 14
+    Tank        27    14    31
+    DPS         51    23    55
+    Support     53    21    52
+    can't verify (per column): 44, 16, 61
+#10  2026-11-27  columns: NA | 2024 | 2026   smallest cell: 12
+    Tank        28    33    12
+    DPS         44    66    25
+    Support     45    65    27
+    can't verify (per column): 54, 159, 66
+#11  2026-11-28  columns: NA | EMEA | Played all 3 seasons   smallest cell: 14
+    Tank        28    27    14
+    DPS         44    51    23
+    Support     45    53    21
+    can't verify (per column): 54, 44, 16
+#12  2026-11-29  columns: NA | 2025 | EMEA   smallest cell: 27
+    Tank        28    31    27
+    DPS         44    55    51
+    Support     45    52    53
+    can't verify (per column): 54, 61, 44
+#13  2026-11-30  columns: Played all 3 seasons | 2024 | 2025   smallest cell: 14
+    Tank        14    33    31
+    DPS         23    66    55
+    Support     21    65    52
+    can't verify (per column): 16, 159, 61
+#14  2026-12-01  columns: EMEA | 2026 | 2024   smallest cell: 12
+    Tank        27    12    33
+    DPS         51    25    66
+    Support     53    27    65
+    can't verify (per column): 44, 66, 159
+
+rejected candidates: 3
+    2026-11-21  2026 | na | all3
+        the same columns were used on 2026-11-20, within 7 days
+    2026-11-23  2025 | emea | all3
+        the same columns were used on 2026-11-19, within 7 days
+    2026-11-30  2024 | 2025 | emea
+        the same columns were used on 2026-11-24, within 7 days

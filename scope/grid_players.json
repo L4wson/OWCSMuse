@@ -1,0 +1,5550 @@
+{
+ "note": "The OWCS Grid autocomplete index: every player seen in a line-up, written by scripts/grid/generate_puzzles.py. Not answers: the same list whatever the puzzle.",
+ "generated_at": "2026-11-17T00:20:14Z",
+ "players": [
+  {
+   "id": "d144c074-bb21-4af9-9a19-8509c933003d",
+   "name": "abheek",
+   "names": [
+    "abheekq"
+   ],
+   "team": "Ex Oblivione",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f54720fe-041c-4a8f-8f22-4fdead10c74f",
+   "name": "Abstract",
+   "names": [
+    "Abstract1147"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c214bd8a-96f8-4c6e-9588-0f80b8f8e489",
+   "name": "Abyss",
+   "names": [
+    "Abyss_OW"
+   ],
+   "team": "Daybreak",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Ace_(Thai_player)",
+   "name": "Ace",
+   "names": [],
+   "team": "Bleed Esports",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:ACETKILLER",
+   "name": "ACETKILLER",
+   "names": [],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Ackyyy",
+   "name": "Ackyyy",
+   "names": [],
+   "team": "The Gatos Guapos",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "9aa12273-c1db-4df9-a952-847d4aea8801",
+   "name": "Ade",
+   "names": [
+    "Ade417"
+   ],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
+   "name": "Admiral",
+   "names": [
+    "AdmiralRaptr"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "b24a4011-c009-4fe2-8c28-01d96c604981",
+   "name": "Ailiseu",
+   "names": [
+    "ailiseu-"
+   ],
+   "team": "Peace and Love",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ebc2176a-5d3f-4142-b621-d14ca8195870",
+   "name": "ajmr",
+   "names": [
+    "ajmr_ow"
+   ],
+   "team": "Obsidian",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "d046fee2-3480-4c15-981c-08ea0e4a99da",
+   "name": "alba",
+   "names": [
+    "albavxz"
+   ],
+   "team": "Extinction",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "ac6ed509-eabe-411f-8bc7-0a8cc702884b",
+   "name": "Alin",
+   "names": [],
+   "team": "Team Falcons",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Alpha_(British_player)",
+   "name": "Alpha",
+   "names": [],
+   "team": "A One Man Army",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Hua_Yankai",
+   "name": "Alphari",
+   "names": [],
+   "team": "All Gamers Global",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "944c0b7e-c518-43e7-bed2-4de2a1d4e336",
+   "name": "AlphaYi",
+   "names": [
+    "AlphaYi02"
+   ],
+   "team": "Geekay Esports",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "56e591fb-01ef-4cbc-8653-7d1cc6de9c67",
+   "name": "alvicate",
+   "names": [],
+   "team": "1234",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "a460409d-4e7d-47b4-a79d-462a202525d0",
+   "name": "Amadien",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "efbec093-e11c-41fa-b0dd-36d10dd26630",
+   "name": "AMADOU",
+   "names": [
+    "Amadou_"
+   ],
+   "team": "Ramattra Punch",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f3083b81-66f3-4ea5-a509-f2d92f299624",
+   "name": "amdp",
+   "names": [],
+   "team": "Team Risk",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Anderp",
+   "name": "Anderp",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Anghell1c",
+   "name": "Anghell1c",
+   "names": [],
+   "team": "Ramattra Punch",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Anhoo",
+   "name": "Anhoo",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "dd08333b-550b-4217-922d-cf06b0910c03",
+   "name": "Aniyun",
+   "names": [],
+   "team": "PxG PiP",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f5e063fe-e0b0-4a86-b7b4-a9903b0de26a",
+   "name": "ANJ",
+   "names": [
+    "ANJ_ow"
+   ],
+   "team": "Vendetta",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a7babcdd-924d-405b-b47b-36c0d2669e5a",
+   "name": "AOY",
+   "names": [
+    "AOY_"
+   ],
+   "team": "Vision Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "7f9907db-7f7d-4a43-aa0e-1ff0e97f9d04",
+   "name": "Arclite",
+   "names": [
+    "Nielou"
+   ],
+   "team": "A-Square Tengu",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Aresona",
+   "name": "Aresona",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "3c07c474-37ab-43dd-8d8d-e4ccb6de31ed",
+   "name": "ariel2",
+   "names": [
+    "arieltwo"
+   ],
+   "team": "FMCL",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "20a8d5c4-82bc-4a73-8182-d9be1c8ee413",
+   "name": "Arise",
+   "names": [
+    "Arise_OW"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "51bde807-1c27-452b-8ce7-6bc04d90a879",
+   "name": "aspect",
+   "names": [
+    "Sexyman69",
+    "aspect_ow"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e78965e3-6fdc-437d-ab8f-b859e283dfdf",
+   "name": "Astro",
+   "names": [
+    "Astronexz"
+   ],
+   "team": "Team Z",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "232fdb58-fe04-4a4d-bae1-31671cd371b8",
+   "name": "Attack",
+   "names": [
+    "Atttack"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Aurora",
+   "name": "Aurora",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "806989ae-a589-4327-84a5-e74088f3d055",
+   "name": "Aventurier",
+   "names": [
+    "Simdto"
+   ],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "d2ac3c5b-2027-4204-b4c9-98aeb126d1a8",
+   "name": "Avo",
+   "names": [
+    "Avoria_"
+   ],
+   "team": "A One Man Army",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b9abed30-d5cf-4d09-a5d1-931055a70327",
+   "name": "Axure",
+   "names": [
+    "Axur3e"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "f306cf00-683c-4861-9b91-f74fbb379d27",
+   "name": "azruf",
+   "names": [],
+   "team": "Who Is Goldfish",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Azurae",
+   "name": "Azurae",
+   "names": [],
+   "team": "Ramattra Punch",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+   "name": "Backbone",
+   "names": [
+    "Backboneee"
+   ],
+   "team": "Gen.G Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "859b1444-8791-4aef-9d22-25ad4a6ff606",
+   "name": "BallerSteve",
+   "names": [
+    "waveGod1"
+   ],
+   "team": "Daybreak",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0ac2a7d3-04ca-4f60-a39c-2c4047a5b9d2",
+   "name": "Bastionmain",
+   "names": [
+    "niamnoitsab"
+   ],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "029bf891-4c0b-4153-a386-b7ff9f3ad2f8",
+   "name": "Baz",
+   "names": [
+    "BazOdub"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Belosrea",
+   "name": "Belosrea",
+   "names": [],
+   "team": "JD Gaming",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "8bfff87a-25e5-428f-ae28-19fabe8718c4",
+   "name": "BenBest",
+   "names": [],
+   "team": "Team Peps",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Bernar",
+   "name": "BERNAR",
+   "names": [],
+   "team": "ZETA DIVISION",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Chen_Cheng",
+   "name": "BILIDENG",
+   "names": [
+    "Sunzo"
+   ],
+   "team": "Weibo Gaming",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "e97afce6-0095-42e9-9cbd-06504cc5a916",
+   "name": "Bizz",
+   "names": [
+    "Bizzantine"
+   ],
+   "team": "Fries In The Bag",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "4a7be6fa-3e22-4584-b131-5444c608a385",
+   "name": "Bliss",
+   "names": [
+    "bliss05"
+   ],
+   "team": "T1",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "eb191ccf-341b-4858-a2f7-5d44e0ffe7a3",
+   "name": "bogur",
+   "names": [],
+   "team": "SCHMUNGUS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Bones",
+   "name": "Bones",
+   "names": [],
+   "team": "Hypnos",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Bonkey",
+   "name": "Bonkey",
+   "names": [],
+   "team": "A One Man Army",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "fbc26eb9-a08e-4522-b1a2-abde9c6b8e2c",
+   "name": "Buddie",
+   "names": [
+    "Budst3r"
+   ],
+   "team": "nuage",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "3362bf2b-8883-4695-88c6-c6d0ccda38a3",
+   "name": "Bun",
+   "names": [
+    "bunhime"
+   ],
+   "team": "Rad x Avidity",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "063527f2-708b-4e98-b93b-afe4b4652fb6",
+   "name": "cal",
+   "names": [
+    "CALFPS1"
+   ],
+   "team": "Students of the Game",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "d1227d2c-f885-4729-b4de-77e20f08511d",
+   "name": "cartifan22",
+   "names": [
+    "cartifan22_"
+   ],
+   "team": "LuneX",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Centralapan",
+   "name": "Centralapan",
+   "names": [],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:CH0R0NG",
+   "name": "CH0R0NG",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Chaba",
+   "name": "Chaba",
+   "names": [],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:He_Chengzhi",
+   "name": "chamomile",
+   "names": [],
+   "team": "ROC Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "23c11b19-5748-4890-87da-7d41db6a46cd",
+   "name": "Chase",
+   "names": [
+    "Chaseeeeeee_",
+    "Chasetorch"
+   ],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "0bcc2a42-ed64-4a35-ae31-e376cc2ba987",
+   "name": "chazm",
+   "names": [
+    "chazmball"
+   ],
+   "team": "AWW YEAH",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c6839ee0-654b-4b77-90ab-11ba3b56bb49",
+   "name": "CheckMate",
+   "names": [
+    "Checkmate2"
+   ],
+   "team": "Team Falcons",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "04a592e5-c661-415a-a1aa-064be1cad203",
+   "name": "chime",
+   "names": [
+    "chiime"
+   ],
+   "team": "FLUFFY AIMERS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "fcf7a717-4ee5-4944-a10b-75d8be749ea1",
+   "name": "China",
+   "names": [
+    "china_ow"
+   ],
+   "team": "Sakura",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:ChiYo",
+   "name": "ChiYo",
+   "names": [],
+   "team": "Team Falcons",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "bfb7d179-6904-497b-a4ac-cf158aa8b24e",
+   "name": "ChoiSehwan",
+   "names": [],
+   "team": "Vision Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "3607f331-5426-45d9-91a0-7fdb42243262",
+   "name": "Chopper",
+   "names": [
+    "chcpper"
+   ],
+   "team": "Timeless",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "e30fab51-bf10-4391-9c9b-f99276414110",
+   "name": "cinnabar",
+   "names": [
+    "cinnabarr",
+    "v2lv2t",
+    "velvet"
+   ],
+   "team": "Team Z",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+   "name": "cjay",
+   "names": [
+    "cjay4"
+   ],
+   "team": "Dallas Fuel",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "a50e5d9c-e00c-476d-86a9-04ab1403d09d",
+   "name": "CLEAR",
+   "names": [
+    "CLEAROW"
+   ],
+   "team": "9z Team",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "6694b2e6-0a14-469b-aeee-2deaf3903eb5",
+   "name": "Clowd",
+   "names": [
+    "Clowdeyyy"
+   ],
+   "team": "Virtus pro",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Colourhex",
+   "name": "Colourhex",
+   "names": [],
+   "team": "The Gatos Guapos",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "27fd0cfe-b845-410a-a69e-797f14b4c8cd",
+   "name": "Coluge",
+   "names": [],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "59643d3f-fad7-4182-87be-63d2371bedae",
+   "name": "cookie084",
+   "names": [
+    "cookie"
+   ],
+   "team": "Vision Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "5e9f5899-8ebb-419b-9feb-60f45b4e7e91",
+   "name": "coolboy163",
+   "names": [
+    "h9mpe",
+    "h9mpinator"
+   ],
+   "team": "AWW YEAH",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ac134a52-4918-42a3-8f2c-76e900c0f1b8",
+   "name": "COPPETSAN",
+   "names": [
+    "COPPET"
+   ],
+   "team": "Team Falcons",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "6f4ddf6b-51f4-4036-bb1e-7330102b3017",
+   "name": "CrazyCat",
+   "names": [
+    "CrazyCat191"
+   ],
+   "team": "Amplify",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "0e96ec27-505e-459d-86a3-6245ff9bbb0a",
+   "name": "Crime",
+   "names": [
+    "LeeBakes"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "1a7e9c4e-be1a-4994-a7e1-1abeff30cdfa",
+   "name": "Crimzo",
+   "names": [
+    "iCrimzo"
+   ],
+   "team": "ENCE",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+   "name": "Crispy",
+   "names": [
+    "zzcrispy"
+   ],
+   "team": "1234",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83",
+   "name": "cuFFa",
+   "names": [
+    "cuFFah"
+   ],
+   "team": "Team Risk",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Cyber",
+   "name": "Cyber",
+   "names": [],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:DONGHAK",
+   "name": "D0NGHAK",
+   "names": [
+    "DONGHAK"
+   ],
+   "team": "T1",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:D0nghun",
+   "name": "D0nghun",
+   "names": [],
+   "team": "A One Man Army",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0d7d6089-6bbf-4b12-be2b-390df1f6397c",
+   "name": "Daan",
+   "names": [
+    "Daanow"
+   ],
+   "team": "Ex Oblivione",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "351d0911-6c56-47a1-8e23-d571479fdb40",
+   "name": "Dannedd",
+   "names": [
+    "Danneddbror"
+   ],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "16e56097-3541-4700-9115-9063bc6c3fd9",
+   "name": "Danny",
+   "names": [
+    "dannyow"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "2d211a8f-8b67-456b-b776-cebbff6a644a",
+   "name": "Danny",
+   "names": [
+    "Danny_OW"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "b41cf21b-66ba-4c4a-9626-6ecf520ba36c",
+   "name": "Danny",
+   "names": [
+    "DDD77",
+    "kinkyladder4"
+   ],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "46188f5b-1eab-423e-981d-314048803e60",
+   "name": "Danteh",
+   "names": [
+    "notdanteh"
+   ],
+   "team": "Luminosity",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0ffb0c24-48f1-4c8a-90fc-05b1a19db740",
+   "name": "Dantwist",
+   "names": [
+    "DantwistOW"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:AoD",
+   "name": "DarkLordAoD",
+   "names": [],
+   "team": "Quick Esports",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a78ebb0b-5dc8-4d71-b32d-a8d8121ab5d9",
+   "name": "DarkSydePhil",
+   "names": [
+    "Isack",
+    "Isak",
+    "IsakTriesIt"
+   ],
+   "team": "AWW YEAH",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Dawson",
+   "name": "Dawson",
+   "names": [],
+   "team": "Ohana Aloha",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Day_(American_player)",
+   "name": "Day",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Deme",
+   "name": "Deme",
+   "names": [],
+   "team": "Ohana Aloha",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c8f35360-a5cc-4687-86a8-b1c2ebae142d",
+   "name": "Depsi",
+   "names": [
+    "Depsi_ow"
+   ],
+   "team": "Celtas",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "05e09403-6d01-4ea5-bd1e-3e9dabf8957b",
+   "name": "Dip",
+   "names": [
+    "Dip_impact",
+    "Dip_ow"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "deeefb8b-cdb7-4437-b0b5-ab05a36c17a4",
+   "name": "Dirt",
+   "names": [
+    "Dirtgaming"
+   ],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c8388028-b720-4ce6-8970-f7f0d4b7b5b9",
+   "name": "Divinity",
+   "names": [
+    "owDivinity"
+   ],
+   "team": "FLUFFY AIMERS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Lu_Weida",
+   "name": "Diya",
+   "names": [],
+   "team": "ROC Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "526a5c34-abcd-4768-9b46-c289a673658c",
+   "name": "Doge",
+   "names": [
+    "DogeBicepz"
+   ],
+   "team": "nuage",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "bc05ef66-4fa6-47ed-af76-c2c92627b1ee",
+   "name": "Dolla",
+   "names": [
+    "DollaRisti"
+   ],
+   "team": "Ataraxia",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Doomed",
+   "name": "Doomed",
+   "names": [],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ed2c5c0c-6348-469e-bee6-4c0def6d9f08",
+   "name": "dove",
+   "names": [
+    "Dovestopher"
+   ],
+   "team": "Obsidian",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Dreepy",
+   "name": "Dreepy",
+   "names": [],
+   "team": "Rad x Avidity",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c28135e8-b242-4742-a723-c312258155f3",
+   "name": "Drunk",
+   "names": [
+    "drunkow"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "1af02501-81a7-4121-b1c9-854dfddcdea6",
+   "name": "durpee",
+   "names": [
+    "cleopatra"
+   ],
+   "team": "Ramattra Punch",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "19e6c974-d10f-4375-a8a8-a11b854582e1",
+   "name": "dust",
+   "names": [
+    "dustdt"
+   ],
+   "team": "Fries In The Bag",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "6ab4a616-d2ca-44c8-9937-e5b97adfd20a",
+   "name": "Dynasty",
+   "names": [
+    "DynastyOw"
+   ],
+   "team": "Obsidian",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Eden",
+   "name": "eden",
+   "names": [],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "5bd0739c-4e52-49d2-b221-4da542bf0b5c",
+   "name": "EGS",
+   "names": [
+    "-EgS"
+   ],
+   "team": "Goud Guys ANM",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "37aeeb7b-b183-4fae-b25d-d1de03a58191",
+   "name": "eisgnom",
+   "names": [
+    "eis",
+    "eisgnom9"
+   ],
+   "team": "Virtus pro",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Elva",
+   "name": "elva",
+   "names": [],
+   "team": "O3 Splash",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "36954774-9d2b-4de5-8d83-f8499f4c30e5",
+   "name": "Emmeryn",
+   "names": [],
+   "team": "Blast Off Buds",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "6f61666c-4afd-48f8-8e29-0d762151b2fe",
+   "name": "Erikek",
+   "names": [],
+   "team": "Ataraxia",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "2e4db6df-0964-4e01-8b6d-20b29f8544dd",
+   "name": "escanor",
+   "names": [
+    "escanor1161"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "e2260096-b1cb-496a-8d68-97ebd3063b4a",
+   "name": "Eskay",
+   "names": [
+    "EskayOW"
+   ],
+   "team": "SCHMUNGUS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "1a85c584-7864-4ee1-8667-d8a57cbe8d17",
+   "name": "Eula",
+   "names": [
+    "Bya",
+    "Byaaa"
+   ],
+   "team": "Peace and Love",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9c092bbb-1d8d-4d51-a395-7ab41720965d",
+   "name": "Evil",
+   "names": [
+    "Evil8871"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "fe2edff3-b816-42d4-bb7c-be6e285e77b5",
+   "name": "Ewan",
+   "names": [
+    "Ewan1657"
+   ],
+   "team": "Amplify",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Excal",
+   "name": "Excal",
+   "names": [],
+   "team": "Team Z",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Ezhan",
+   "name": "Ezhan",
+   "names": [],
+   "team": "All Gamers Global",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Facator",
+   "name": "Facator",
+   "names": [],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ba4e3eeb-7423-4a3c-a29c-6020cdd48859",
+   "name": "Faded",
+   "names": [
+    "FadeddFps"
+   ],
+   "team": "Daybreak",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "76a75eed-3164-48d6-875c-82b1195bec68",
+   "name": "Faith",
+   "names": [
+    "Faith33"
+   ],
+   "team": "The Ultimates",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "f0b0cfd9-029c-4b5f-9e93-328197b7eebf",
+   "name": "FakeJake",
+   "names": [
+    "FJake"
+   ],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "babf94ba-ab1f-45cd-ada2-10fe89b16bc0",
+   "name": "False",
+   "names": [
+    "Fal2e"
+   ],
+   "team": "Supernova",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Cao_Jiale",
+   "name": "Farway2025",
+   "names": [],
+   "team": "Team CC",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Fate_(British_player)",
+   "name": "fate",
+   "names": [],
+   "team": "Team G4mbit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "1ab8c25f-15f0-4707-acc9-4718c88157da",
+   "name": "FDGod",
+   "names": [
+    "FDGod_OW"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Fearless",
+   "name": "Fearless",
+   "names": [],
+   "team": "ZETA DIVISION",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Fidel",
+   "name": "Fidel",
+   "names": [],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Fielder",
+   "name": "Fielder",
+   "names": [],
+   "team": "Team Falcons",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Fiery",
+   "name": "fiery",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "fece55bf-88e9-4234-bcbb-bef43740b491",
+   "name": "FiNN",
+   "names": [
+    "SEjFiNN"
+   ],
+   "team": "Geekay Esports",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "63828279-f8ad-4cdf-bd43-ab27d08f87f0",
+   "name": "FishCake",
+   "names": [
+    "FishCake5"
+   ],
+   "team": "team_POUNDTOWNBOW",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e422414a-72ec-4e83-8264-6a54b39414b8",
+   "name": "FiXa",
+   "names": [
+    "_FiXa"
+   ],
+   "team": "Virtus pro",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "cb87197e-46d5-4fe8-ada1-88c47c6260c8",
+   "name": "Fl4k",
+   "names": [
+    "Fl4k-Drift"
+   ],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9c61aefb-fb8d-4c69-86ff-3a19ea9b1003",
+   "name": "flipper",
+   "names": [
+    "Flipper_OW"
+   ],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Flora",
+   "name": "Flora",
+   "names": [],
+   "team": "ZETA DIVISION",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "612cb222-3bb1-4980-bcae-cf245c7c32a7",
+   "name": "Fone",
+   "names": [
+    "FoneOW"
+   ],
+   "team": "Amplify",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "c0277cdf-bd3d-4109-87ee-f0c48d64328b",
+   "name": "FOREVER774",
+   "names": [
+    "Kapey774",
+    "emilia"
+   ],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Froakie",
+   "name": "Froakie",
+   "names": [],
+   "team": "ROCstars",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "083989e0-81a4-4f83-8dc3-e5222f0df695",
+   "name": "FrothyFilly7",
+   "names": [],
+   "team": "Dhillducks",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+   "name": "FunnyAstro",
+   "names": [
+    "FunnyAstro1"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Qiu_Jiaxin",
+   "name": "GAGA",
+   "names": [],
+   "team": "Team CC",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "04d8399b-8ae4-4142-92dd-512021980e5f",
+   "name": "Galaa",
+   "names": [
+    "Galaavv"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "925028a0-be74-4f09-87d1-d62a6aa2bc7b",
+   "name": "GAP",
+   "names": [
+    "gap_ow"
+   ],
+   "team": "Amplify",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "fde38cde-e928-4d21-9b11-382d0ed34b4f",
+   "name": "Garchomp",
+   "names": [
+    "Garchomp_"
+   ],
+   "team": "nah id win",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "7e9c46cc-e531-494b-8d08-95ba544d4a5e",
+   "name": "gcb",
+   "names": [
+    "_gcb"
+   ],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "450a4f71-55ed-4815-a638-cc8ff9df42dd",
+   "name": "ghost91",
+   "names": [
+    "ghost91-"
+   ],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b525e893-7d89-45df-b84b-01be763da16c",
+   "name": "Glacial",
+   "names": [
+    "Glacialfps"
+   ],
+   "team": "nah id win",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "bb203e79-b78d-4144-9e28-be9c06ab0dd6",
+   "name": "gogo",
+   "names": [
+    "GOGOOGOOO"
+   ],
+   "team": "Frost Tails",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "0c88427e-d146-4fea-a383-431ddd8ee3e2",
+   "name": "GoldenPants",
+   "names": [
+    "goldenpants2"
+   ],
+   "team": "1234",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "c5b8eea3-d4ec-4182-bed7-464e8aa2283e",
+   "name": "goldfish",
+   "names": [
+    "g2ldfish"
+   ],
+   "team": "Who Is Goldfish",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "137941ed-5fec-40e6-90d2-5b8444b032f2",
+   "name": "Gorilla",
+   "names": [
+    "G0orilla"
+   ],
+   "team": "The Kafe",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "7d81b5d2-eef0-4341-961f-f203d45f65df",
+   "name": "Grapes",
+   "names": [
+    "GrappesOW"
+   ],
+   "team": "The Kafe",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "945d0963-2674-4848-963f-f5459e9e9ac7",
+   "name": "Graveyard",
+   "names": [
+    "GraveyardOW"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "c149fea3-60f7-4982-ba2a-6ab81aeb2523",
+   "name": "gucci",
+   "names": [
+    "gucci444"
+   ],
+   "team": "Negative Mental Attitude",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Gurkmeister",
+   "name": "Gurkmeister",
+   "names": [],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Xu_Qiulin",
+   "name": "Guxue",
+   "names": [],
+   "team": "Weibo Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+   "name": "Hadi",
+   "names": [
+    "HadiOW2"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "7928a18c-bbe9-403b-936a-d5df7355b6e3",
+   "name": "Haku",
+   "names": [
+    "iHAKUi"
+   ],
+   "team": "Geekay Esports",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "119975fb-935d-4e3b-9d7e-b3115a835202",
+   "name": "Halo",
+   "names": [
+    "HelloImHalo"
+   ],
+   "team": "Timeless Ethereal",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "832e46b6-d337-412b-acd7-cfc4e5bd5467",
+   "name": "Hanbei",
+   "names": [
+    "Hanbei_"
+   ],
+   "team": "Team Z",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Hanbin",
+   "name": "Hanbin",
+   "names": [],
+   "team": "Team Falcons",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Wu_Gengtuo",
+   "name": "HaoYoQian",
+   "names": [],
+   "team": "Team CC",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "6831b4c5-962a-44b8-9b1b-00d60bc58314",
+   "name": "Happy",
+   "names": [
+    "owhappy",
+    "ugvuycfgb6"
+   ],
+   "team": "Team Falcons",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e7aad827-0344-4945-8a26-50703eda4c74",
+   "name": "Haven",
+   "names": [
+    "Haventhedude"
+   ],
+   "team": "FLUFFY AIMERS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Havoc",
+   "name": "Havoc",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a940981f-c750-40b9-bb55-bd3e8e6ef986",
+   "name": "Hawk",
+   "names": [
+    "TheeHawk"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "0280d6ab-db07-466b-be82-b2147468230b",
+   "name": "HeavenlyOk",
+   "names": [
+    "Heavenly",
+    "HeavenlyOkk"
+   ],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:HeeSang",
+   "name": "HeeSang",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "eeb4e46f-723d-4a37-ae68-685c237627c8",
+   "name": "HEESUNG",
+   "names": [],
+   "team": "The Ultimates",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "413efb56-fc30-451f-8c58-ed48b65cb393",
+   "name": "Helmerdrake",
+   "names": [],
+   "team": "Bingus",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "4f9d677c-8e66-4263-bf88-24a21779d765",
+   "name": "Hing3d",
+   "names": [],
+   "team": "YFP",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "60ad5972-64e6-434b-ad31-648f43d30735",
+   "name": "Hitori",
+   "names": [
+    "Hitoriow",
+    "Reiner"
+   ],
+   "team": "Extinction",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "f0456730-675e-4dd6-885b-6fac5e8431de",
+   "name": "hkey",
+   "names": [
+    "Hkeybroke"
+   ],
+   "team": "Daybreak",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "fc66dfcb-b814-41bd-b66d-7149149e9585",
+   "name": "hotbabe35",
+   "names": [
+    "Abbs",
+    "Abbs_"
+   ],
+   "team": "ZoKorp Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "4742daa3-62a6-4a90-9a31-638d37e1cc52",
+   "name": "HowsYourDay",
+   "names": [
+    "HowsYourDay0"
+   ],
+   "team": "Final Gambit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:HyVision",
+   "name": "HVS",
+   "names": [
+    "hyvisi0n"
+   ],
+   "team": "Team Secret",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "76216b21-cee5-4652-9053-78a4d8d660cf",
+   "name": "Hybrid",
+   "names": [
+    "HybridOW"
+   ],
+   "team": "Vendetta",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "544bb0ed-7b05-4e0a-842d-e54ebaf31460",
+   "name": "Hydron",
+   "names": [
+    "Hydron7"
+   ],
+   "team": "9z Team",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "772f03e6-fa50-4639-b223-ff19daf1b769",
+   "name": "Hyohyun",
+   "names": [
+    "Foreshadow",
+    "owForeshadow"
+   ],
+   "team": "Final Gambit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Hêv",
+   "name": "Hêv",
+   "names": [],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e96d60b7-b272-4b27-95c4-95980d864a18",
+   "name": "icav",
+   "names": [
+    "icav1_",
+    "ŦūŦ"
+   ],
+   "team": "Telacy",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "dfce13a7-df35-49a7-bb21-d626092da5c0",
+   "name": "iCy",
+   "names": [
+    "FrozenWings",
+    "iCy_OW"
+   ],
+   "team": "TSM",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "dde301bd-5327-4ab9-ac13-808e10c3b375",
+   "name": "ilppi13",
+   "names": [],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f5ceb061-150c-44ad-b723-2bbad0fb3d93",
+   "name": "iMOH97",
+   "names": [],
+   "team": "Vision Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "3d7e3522-9ef9-4c31-abe2-e10dd1c14270",
+   "name": "Infekted",
+   "names": [
+    "Infektedow"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Song_Chunhui",
+   "name": "Insane",
+   "names": [],
+   "team": "All Gamers Global",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "95090451-b118-4d11-a693-20dafae48c01",
+   "name": "irony",
+   "names": [
+    "ir0ny"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "90fe2fed-f96c-4ded-8a2f-d16cd5cdc89d",
+   "name": "IZaYaKI",
+   "names": [
+    "IZaYaKI222"
+   ],
+   "team": "Fnatic",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "10271a28-71d5-4d0b-aea1-0ebf59978c6b",
+   "name": "Jack",
+   "names": [
+    "Spracko"
+   ],
+   "team": "Bingus",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "683fd553-2850-41c9-bed0-4a7815eda629",
+   "name": "Jacob",
+   "names": [
+    "jacob5511"
+   ],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "34d11d57-a8f1-4f15-996d-e1776c525f93",
+   "name": "JaeWoo",
+   "names": [
+    "kimjaewoo1"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Jasm1ne",
+   "name": "Jasm1ne",
+   "names": [],
+   "team": "T1",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "210dcce0-f5fc-49bf-8b31-98dac578e6d7",
+   "name": "JAZZA",
+   "names": [
+    "jazza_fps"
+   ],
+   "team": "nah id win",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Jeremy87",
+   "name": "jeremy87",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Yi_Hu",
+   "name": "JinMu",
+   "names": [],
+   "team": "ROC Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Jman",
+   "name": "Jman",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e2d9ec68-0041-45e2-b354-5bad9c2e028b",
+   "name": "Johnowich",
+   "names": [],
+   "team": "Telacy",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "b1fc31bb-4f73-4f50-9440-41b1ebad535d",
+   "name": "JOLLYGUY9474",
+   "names": [
+    "Raajaro"
+   ],
+   "team": "Virtus pro",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "67e334a1-0d09-48ff-8879-4d099b84aa08",
+   "name": "jonte",
+   "names": [
+    "jonte--"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "abcbc9aa-e647-46d7-843e-873a388d79d9",
+   "name": "joobi",
+   "names": [],
+   "team": "Luminosity",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "57332b98-6b03-4438-b9d7-3001908cc302",
+   "name": "JSugarPapa",
+   "names": [
+    "cowman711"
+   ],
+   "team": "UNC inc",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ae1be40f-a8f7-42c6-b568-a110bcc85ef3",
+   "name": "juice",
+   "names": [
+    "juiiccee"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:JunBin",
+   "name": "JunBin",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "c783deb8-d629-49f0-8a21-59db04e090ba",
+   "name": "JUTSU",
+   "names": [
+    "J0otsu"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "12ceb60c-1d45-4c8e-ad95-8240be6df2f7",
+   "name": "K0RTAL",
+   "names": [],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "2e4fcad5-e753-47c2-b242-ce54859ee09b",
+   "name": "k1ng",
+   "names": [
+    "k1ngLOLXD",
+    "k1ng_ow"
+   ],
+   "team": "Extinction",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:K41",
+   "name": "K41",
+   "names": [],
+   "team": "O3 Splash",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "bf3ce8e0-1680-4e8f-a304-cedcb1ab18d9",
+   "name": "Kabeǃ",
+   "names": [
+    "Kabetaijin"
+   ],
+   "team": "A-Square Tengu",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+   "name": "Kai",
+   "names": [
+    "yung_kai"
+   ],
+   "team": "1234",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "587d6e40-026e-4f29-b090-25e7c395b906",
+   "name": "kai41",
+   "names": [
+    "delusion",
+    "kai41ow"
+   ],
+   "team": "Hypnos",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c7ef197b-0ddb-4048-ad84-099c40ceff92",
+   "name": "kaiBa",
+   "names": [
+    "kaiBa_ow"
+   ],
+   "team": "Ex Oblivione",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Liu_Nian",
+   "name": "Kaneki",
+   "names": [],
+   "team": "JD Gaming",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Kani",
+   "name": "Kani",
+   "names": [],
+   "team": "ZoKorp Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "a66f8843-56d7-49a7-94a1-44b3593bcd0e",
+   "name": "karmez",
+   "names": [
+    "karmez7",
+    "vyese"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Karova",
+   "name": "Karova",
+   "names": [],
+   "team": "Vice",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Kashir",
+   "name": "Kashir",
+   "names": [],
+   "team": "Ramattra Punch",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Katekomi",
+   "name": "Katekomi",
+   "names": [],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "4354e433-7152-43ad-ae52-e9eb23cb5147",
+   "name": "kaya",
+   "names": [
+    "kaya1ow"
+   ],
+   "team": "AWW YEAH",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c20d068e-f94e-4439-9b9f-9ebf787126d0",
+   "name": "KayZzeR",
+   "names": [
+    "KayZzeeR"
+   ],
+   "team": "AWW YEAH",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:KDM",
+   "name": "KDM",
+   "names": [],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "02f074b3-79fe-44ac-a539-d6093bda7651",
+   "name": "keeponliving",
+   "names": [
+    "Eve",
+    "SONNETiCA",
+    "SONNETiCAow"
+   ],
+   "team": "Avidity",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "19298c75-9d48-4dc5-9970-75509c11246c",
+   "name": "Kellan",
+   "names": [
+    "Kellannn"
+   ],
+   "team": "Dallas Fuel",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "b273a710-800f-4638-9858-461d81ac55b9",
+   "name": "kellex",
+   "names": [
+    "kellemanden"
+   ],
+   "team": "Geekay Esports",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "0c9b85a6-9818-4ab8-a19f-932ae80ec814",
+   "name": "Ken",
+   "names": [
+    "KenSoo"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+   "name": "kevster",
+   "names": [
+    "Proper",
+    "kevsteer"
+   ],
+   "team": "Virtus pro",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Khd",
+   "name": "khd",
+   "names": [],
+   "team": "O3 Splash",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+   "name": "Khenail",
+   "names": [],
+   "team": "1234",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "7e0e5b2a-973b-46ed-b27f-c1867b2f9447",
+   "name": "Kilaa",
+   "names": [
+    "Kilaa10"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0ce0d2fa-d449-4f39-ab92-0e69f7598904",
+   "name": "Kio",
+   "names": [
+    "Kiioo0"
+   ],
+   "team": "Goud Guys ANM",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "1ea17648-a903-4269-a4d7-aca78c3a7d56",
+   "name": "KIVIS",
+   "names": [
+    "KIVIS04"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "31417126-50e7-486e-b00d-15e61a110ab8",
+   "name": "KiWii",
+   "names": [
+    "KiWii__"
+   ],
+   "team": "Disguised",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "bd7d5a35-03c8-45f8-8242-e3a63f5c33e7",
+   "name": "knife",
+   "names": [
+    "Knife222"
+   ],
+   "team": "ZETA DIVISION",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "526fd1e1-c48f-45f6-8789-813a93e61369",
+   "name": "KORZ",
+   "names": [
+    "KORZ2"
+   ],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "d7952438-251e-4ad0-aa66-4b4a13200146",
+   "name": "Krawi",
+   "names": [
+    "Kraw1"
+   ],
+   "team": "Fries In The Bag",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "1daf63bc-70f3-479f-b030-b2699fbbe118",
+   "name": "Kronik",
+   "names": [
+    "KronikFPS"
+   ],
+   "team": "Dallas Fuel",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "1e38a76f-e8a1-41a6-b400-a33a0e677744",
+   "name": "kronus",
+   "names": [
+    "kronus_ow"
+   ],
+   "team": "Vendetta",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "06481b72-092d-43c3-a686-13c92f03616f",
+   "name": "KroxZ",
+   "names": [],
+   "team": "Team Peps",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+   "name": "KSAA",
+   "names": [
+    "KSAA0"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:KSG",
+   "name": "KSG",
+   "names": [],
+   "team": "VARREL",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "483488e4-f55f-4216-bc75-7c802226b597",
+   "name": "kurama",
+   "names": [
+    "KuramaOW"
+   ],
+   "team": "EF Flexodiax",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "2fad9fa7-8be7-49c7-967f-ea8ab0fa4d4b",
+   "name": "kyidk",
+   "names": [
+    "kyidk1"
+   ],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "884fe870-443a-4187-868c-31936e8e87b2",
+   "name": "KZR",
+   "names": [
+    "KZR_OW"
+   ],
+   "team": "A-Square Tengu",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a332d27e-fe19-4077-89f8-27391a581460",
+   "name": "Landon",
+   "names": [
+    "LandonOW"
+   ],
+   "team": "Virtus pro",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "2f42ce49-7f74-41ef-9867-998f0e714735",
+   "name": "Lars",
+   "names": [
+    "IaFish"
+   ],
+   "team": "Telacy",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "665f89fe-c9c0-4400-ba97-64b6c2b1d7cb",
+   "name": "Lava",
+   "names": [
+    "LavaOW"
+   ],
+   "team": "Blast Off Buds",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "462c6480-274d-48a6-a5cf-d29d3b2dd786",
+   "name": "LBBD7",
+   "names": [],
+   "team": "Geekay Esports",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:LCŠ",
+   "name": "LCS",
+   "names": [],
+   "team": "9z Team",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "f2359218-1265-472c-8fbc-9c91183766f0",
+   "name": "Le7",
+   "names": [
+    "Lep",
+    "Leptx",
+    "Wybietx",
+    "joseph_-"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Huang_Xin",
+   "name": "Leave",
+   "names": [],
+   "team": "Weibo Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:LeeJaeGon",
+   "name": "LeeJaeGon",
+   "names": [],
+   "team": "Fnatic",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:LeeSooMin",
+   "name": "LeeSooMin",
+   "names": [],
+   "team": "Weibo Gaming",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Chen_Jingyi",
+   "name": "Lengsa",
+   "names": [],
+   "team": "All Gamers Global",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Lenn",
+   "name": "lenn",
+   "names": [],
+   "team": "Team Z",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+   "name": "Lethal",
+   "names": [
+    "IHaveLethal"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:LhCloudy",
+   "name": "LhCloudy",
+   "names": [],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Jia_Chengjie",
+   "name": "LiGe",
+   "names": [],
+   "team": "All Gamers Global",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Lightt",
+   "name": "Lightt",
+   "names": [],
+   "team": "9z Team",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "370f72b0-09d7-428f-a405-e723de152880",
+   "name": "Linaaa",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:LIP",
+   "name": "LIP",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "ea8d2819-d900-4331-bccc-fca01822169c",
+   "name": "Loren",
+   "names": [
+    "xLorenn"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "09ffdf32-6407-41c6-868b-4b16614c0632",
+   "name": "Lotsha",
+   "names": [],
+   "team": "ROCstars",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Love",
+   "name": "Love",
+   "names": [],
+   "team": "ZoKorp Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "4c88ec8b-e214-4efe-9a19-28365bb02e78",
+   "name": "Ltrain",
+   "names": [
+    "salamiboi200"
+   ],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Lucas42g",
+   "name": "Lucas42g",
+   "names": [],
+   "team": "ROCstars",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "482cb7a6-687c-47a4-bb07-6fd02e604ed3",
+   "name": "Lukemino",
+   "names": [],
+   "team": "Dallas Fuel",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "b5f1fe72-71fc-485d-8632-3a3c6c7f5f89",
+   "name": "LukeWarm",
+   "names": [
+    "LukasWarm"
+   ],
+   "team": "PxG PiP",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c8cfe450-80cd-4197-a296-4c86204c3327",
+   "name": "Lutu",
+   "names": [
+    "Lutuleilei"
+   ],
+   "team": "Bingus",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a6ee9fe7-52a7-44a4-9d58-901973c2b55b",
+   "name": "Lv1Crook",
+   "names": [
+    "Lv1Croook"
+   ],
+   "team": "Vendetta",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "abc5de9a-28a8-4915-a273-a9cc5c2e9299",
+   "name": "Lyar",
+   "names": [
+    "Lyarr"
+   ],
+   "team": "TSM",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b9106c5a-795d-4a85-bfb4-9bf34c0e86c2",
+   "name": "M3WS",
+   "names": [
+    "M3WSS"
+   ],
+   "team": "Sheer Cold",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f9060379-f27a-411c-92f5-e7a5d07a0229",
+   "name": "m5ri",
+   "names": [],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "65d1a22d-63a6-48c6-9fc9-bf26c0209018",
+   "name": "Mag",
+   "names": [
+    "MAG200"
+   ],
+   "team": "All Gamers Global",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "125aa2ab-90d1-4f76-8bf5-e3873dd34e06",
+   "name": "MagicM8ball",
+   "names": [],
+   "team": "PxG PiP",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "dd6c03b0-7c8b-4004-b11d-ccb439d65cb5",
+   "name": "Majīn",
+   "names": [
+    "MajinOW"
+   ],
+   "team": "Frost Tails",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:MAKA",
+   "name": "MAKA",
+   "names": [],
+   "team": "Weibo Gaming",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "cacbae93-6a4a-4c49-9953-acacb5243fff",
+   "name": "manually",
+   "names": [
+    "manyuhlee"
+   ],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "62fe43ad-afb1-4ca9-bcb2-09ad8fdff606",
+   "name": "Masaa",
+   "names": [
+    "tappomasa666"
+   ],
+   "team": "ENCE",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Matriera",
+   "name": "Matriera",
+   "names": [],
+   "team": "Hypnos",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:MAX",
+   "name": "MAX",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "197e3319-a25f-4a64-a98e-982799409818",
+   "name": "Mayh3m",
+   "names": [
+    "Mayh3m_OW"
+   ],
+   "team": "nah id win",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e4267bc5-7ec5-4ff6-82b4-cdcfa097a92c",
+   "name": "MCD",
+   "names": [
+    "MCDOW"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Mealgaru",
+   "name": "Mealgaru",
+   "names": [],
+   "team": "ZETA DIVISION",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "9d65459b-a020-4f1b-9631-608f2a61ac3c",
+   "name": "Melophobia",
+   "names": [
+    "Melophobiah"
+   ],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0bbd8bc1-3c85-464b-8133-64ea55125f98",
+   "name": "MER1T",
+   "names": [
+    "realMer1t"
+   ],
+   "team": "Team Falcons",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Mesopos",
+   "name": "Mesopos",
+   "names": [],
+   "team": "Negative Mental Attitude",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Li_Xianyao",
+   "name": "Mew",
+   "names": [
+    "Mewtwo"
+   ],
+   "team": "JD Gaming",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Mickji",
+   "name": "Mickji",
+   "names": [],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Miraculous",
+   "name": "Miraculous",
+   "names": [],
+   "team": "Negative Mental Attitude",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c027aadb-ccee-4e0a-88e8-af0e451886e9",
+   "name": "MirroR",
+   "names": [
+    "MirroRbluu"
+   ],
+   "team": "ENCE",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "64c76e94-e25c-4aff-9e62-0a98468d7c40",
+   "name": "mL7",
+   "names": [
+    "mL7support"
+   ],
+   "team": "SCHMUNGUS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Zhou_Xiang",
+   "name": "Mmonk",
+   "names": [],
+   "team": "JD Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "8c6e10c2-f652-4b42-9771-60115341c436",
+   "name": "Momentum",
+   "names": [
+    "MomentumOW"
+   ],
+   "team": "Obsidian",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Moncholo",
+   "name": "Moncholo",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:MonkeyHappy",
+   "name": "MonkeyHappy",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "981131d6-8276-404c-9ea7-87dcedf77765",
+   "name": "Naga",
+   "names": [
+    "NagaOW",
+    "Niko"
+   ],
+   "team": "Piece of Cake",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "59b9c5bf-ba6e-4c3c-b418-16107c2aec15",
+   "name": "Namem",
+   "names": [
+    "Just_Meman",
+    "Meman"
+   ],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Narwhal",
+   "name": "Narwhal",
+   "names": [],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "7e757bbd-8d51-49ca-a616-7061a9b57f1b",
+   "name": "Natlocks",
+   "names": [],
+   "team": "Sheer Cold",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "62c18bf3-9135-498d-afb0-35321017496b",
+   "name": "Natsuki",
+   "names": [
+    "NatsukiOW"
+   ],
+   "team": "Sakura",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "7fd10a70-f478-424c-8e98-637c426c6a3a",
+   "name": "Neb",
+   "names": [
+    "Neb_ow"
+   ],
+   "team": "Avidity",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "12921a63-b33f-4aa7-8d70-2b5affa596cc",
+   "name": "Necros",
+   "names": [
+    "Necr0s"
+   ],
+   "team": "AWW YEAH",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "4fa4ba39-094a-43b2-94d6-f12ecf612c06",
+   "name": "Neliozu2",
+   "names": [
+    "Neliozu"
+   ],
+   "team": "Hypnos",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "1f27cd97-1764-475c-9a30-eb95b4a8fbdf",
+   "name": "NenWhy",
+   "names": [],
+   "team": "KAFE",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "010b263a-4559-4c67-a38c-17fae426ef4e",
+   "name": "Neutral",
+   "names": [
+    "n3utrai"
+   ],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Neuu",
+   "name": "Neuu",
+   "names": [],
+   "team": "Mkers",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b5fe588f-39bc-439a-bf83-ddfe2e22f0e0",
+   "name": "Niann03",
+   "names": [],
+   "team": "Vice",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Nico",
+   "name": "Nico",
+   "names": [],
+   "team": "VARREL",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Nitro",
+   "name": "Nitrao",
+   "names": [],
+   "team": "ROCstars",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "2d88c052-dd0e-4623-abe2-c870dfed804e",
+   "name": "NKZ",
+   "names": [
+    "NKZ_OW"
+   ],
+   "team": "Sheer Cold",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "d7a07490-9bdc-456d-a594-4df47e2b36e1",
+   "name": "Noctis",
+   "names": [
+    "NoctisUST"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "d3c6580e-9452-4da0-b898-4fbf869432b8",
+   "name": "nos",
+   "names": [
+    "Cynibuns"
+   ],
+   "team": "Fries In The Bag",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "3bf8f1b0-e1d7-43b9-a405-41b5fcdf685f",
+   "name": "nvm",
+   "names": [
+    "nvm1_"
+   ],
+   "team": "Extinction",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Nyang",
+   "name": "Nyang",
+   "names": [],
+   "team": "The Gatos Guapos",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "d1ff514f-c261-485e-b8bc-b08a092afbd9",
+   "name": "Olli",
+   "names": [
+    "Olliow"
+   ],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "23313d5a-4db0-4e8a-890b-c04cf7ff43fe",
+   "name": "One",
+   "names": [
+    "OneOW-",
+    "m5rbh2"
+   ],
+   "team": "Vision Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "e3e7dbf6-6968-4cd9-be0d-09a2c529650e",
+   "name": "OPENER",
+   "names": [
+    "OPENER43"
+   ],
+   "team": "Mkers",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Ostrix",
+   "name": "Ostrix",
+   "names": [],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Otters",
+   "name": "Otters",
+   "names": [],
+   "team": "O3 Splash",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "23e964b7-0899-48c5-b13b-8e7c4686e817",
+   "name": "Painkiller",
+   "names": [
+    "Painkilllr"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "52e02aa6-bedd-4d78-90c2-30f7dea32d7b",
+   "name": "Paintbrush",
+   "names": [
+    "Paintbrushie"
+   ],
+   "team": "UNC inc",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a9d3c8c4-f562-4009-b4f5-ba60a0523102",
+   "name": "PAK",
+   "names": [
+    "Pak_Oww"
+   ],
+   "team": "Frost Tails",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:PaLee",
+   "name": "PaLee",
+   "names": [],
+   "team": "Team Secret",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "78d14f86-6d4f-4007-b9d2-a583d631555d",
+   "name": "Paradoxed",
+   "names": [
+    "Paradoxed2"
+   ],
+   "team": "nah id win",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "1eb2c50e-db20-4e0e-8c6c-fbc3dc68683b",
+   "name": "Passenger",
+   "names": [
+    "Passenger-Wy"
+   ],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "53a87c13-870c-4c2f-bde1-c96a67df37c9",
+   "name": "pdk",
+   "names": [
+    "pdkk_"
+   ],
+   "team": "The Kafe",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "112a9fa6-cd16-4e54-9db7-6a012cc8db39",
+   "name": "peace",
+   "names": [
+    "peace7k"
+   ],
+   "team": "Team Z",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "7ec3e4c6-6af0-4d3c-b08c-3b05ec1b1271",
+   "name": "pela",
+   "names": [
+    "pela_OW"
+   ],
+   "team": "Avidity",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "f240e547-e5d9-4edc-992a-a48237ba3876",
+   "name": "PELICAN",
+   "names": [
+    "PELICAN75"
+   ],
+   "team": "M80",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b0c2a65a-0ed7-477e-8f0f-525746469c6e",
+   "name": "pge",
+   "names": [
+    "pge4"
+   ],
+   "team": "Disguised",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "d8f35c30-6487-40c2-ac9d-5c4cb738031b",
+   "name": "phi",
+   "names": [
+    "phi8"
+   ],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "2d2896ef-1f8f-4779-a7d9-fdadcd8bc16b",
+   "name": "Philion",
+   "names": [],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Li_Zhuo",
+   "name": "Pineapple",
+   "names": [],
+   "team": "JD Gaming",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "ee1e2a33-8e2e-438e-aa03-4d1c83ae6557",
+   "name": "podonova2",
+   "names": [
+    "Podonova"
+   ],
+   "team": "SupershyOW",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:PoroPlays",
+   "name": "PoroPlays",
+   "names": [],
+   "team": "Metaboiz",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Prep",
+   "name": "Prep",
+   "names": [],
+   "team": "SrPeakCheck",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f54df4d9-d608-405b-9396-44a4351c2dd8",
+   "name": "Prota",
+   "names": [
+    "ProtaFPS"
+   ],
+   "team": "Sakura",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Proud",
+   "name": "Proud",
+   "names": [],
+   "team": "T1",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "95a176ef-18f6-429a-97d1-ad3663810729",
+   "name": "Psych0",
+   "names": [
+    "owPsych0"
+   ],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Punk",
+   "name": "Punk",
+   "names": [],
+   "team": "The Gatos Guapos",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "edb47502-4e9d-4d4a-b73f-3725e41e50e4",
+   "name": "Putter",
+   "names": [
+    "PutterOW"
+   ],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ea555a64-7fe3-473e-9749-1f096be3bfef",
+   "name": "Q2c",
+   "names": [
+    "q2c_ow"
+   ],
+   "team": "Bingus",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Qki",
+   "name": "qki",
+   "names": [],
+   "team": "VARREL",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "87034ecc-df9b-4a27-90b9-0f5c68376307",
+   "name": "Qlm",
+   "names": [
+    "Qlmaz"
+   ],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Qloud",
+   "name": "Qloud",
+   "names": [],
+   "team": "VARREL",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "a6d6c538-ec12-435b-83bd-25153c9365d0",
+   "name": "qrxu",
+   "names": [
+    "qrxu7972"
+   ],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+   "name": "Quartz",
+   "names": [
+    "Quartz03"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "5e9557ef-b5be-4ebd-a42a-c27c1c009c65",
+   "name": "RAIKKER",
+   "names": [
+    "JulianBubble"
+   ],
+   "team": "Timeless",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "5d4fdbd0-8fee-4f40-93a7-09fd4c4743ff",
+   "name": "Rajeem",
+   "names": [],
+   "team": "Shikigami",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "4000db8e-bf02-4fe9-8838-675aa3e26ad6",
+   "name": "Rakattack",
+   "names": [
+    "Rakattack__"
+   ],
+   "team": "The Gatos Guapos",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "6e2b678b-5b3c-4d77-8385-a9c9e3d0e140",
+   "name": "Rav",
+   "names": [
+    "RavOW"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Zhang_Jingkun",
+   "name": "Recall",
+   "names": [],
+   "team": "All Gamers Global",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "bf69c0b9-f068-41bf-a0b9-c88aa083edbb",
+   "name": "redex",
+   "names": [
+    "RedexLCO"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Redmoosegoat",
+   "name": "Redmoosegoat",
+   "names": [],
+   "team": "Wasp X Ohhhh No",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Reinschdyret",
+   "name": "Reinsch",
+   "names": [],
+   "team": "Team G4mbit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0a5047e1-29b6-42f7-8391-bd263c0b2fe1",
+   "name": "Reisu",
+   "names": [
+    "ReisuOW"
+   ],
+   "team": "EF Flexodiax",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e9e2c1d1-77d9-4268-b06c-6bd9e6edf1b6",
+   "name": "Renko",
+   "names": [
+    "renko_ow"
+   ],
+   "team": "Supernova",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "55a757c4-841d-4edf-aa88-17b5ad3c32d0",
+   "name": "reverse",
+   "names": [
+    "reverse094-"
+   ],
+   "team": "Who Is Goldfish",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "bcd9737d-3295-450d-a20e-94d8815c6d2f",
+   "name": "Reyzr",
+   "names": [
+    "ReyzrOW",
+    "rzr"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "e2ab56e6-ca09-4d4c-8254-73a5cbe818e6",
+   "name": "RhynO",
+   "names": [
+    "RhynO_OW"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "9d969193-90a3-4f2b-94d4-17f025f14501",
+   "name": "Rodfd",
+   "names": [
+    "Rodfd_ow"
+   ],
+   "team": "EF Flexodiax",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "52571b21-aacf-4a7a-b26c-560702201195",
+   "name": "roho123",
+   "names": [
+    "loljkhaha",
+    "roho"
+   ],
+   "team": "Ohana Aloha",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+   "name": "Rokit",
+   "names": [
+    "Rokit600"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "89b3f44f-dc33-4fde-b15a-416a6c21bac6",
+   "name": "Romani",
+   "names": [
+    "RomaniOW"
+   ],
+   "team": "O3 Splash",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Loathen",
+   "name": "ross",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Roxy",
+   "name": "Roxy",
+   "names": [],
+   "team": "JD Gaming",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+   "name": "Rupal",
+   "names": [
+    "rupalzaman"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "a6f8e69e-9ca1-4466-809e-ca6ab1e5879d",
+   "name": "Ryan",
+   "names": [
+    "-Ryyan-"
+   ],
+   "team": "Disguised",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "0c36778a-32dd-4498-b7ef-389bd37033c7",
+   "name": "Rymazing",
+   "names": [],
+   "team": "Vice",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ab75ab00-fce8-4c90-ae97-f778e33c168b",
+   "name": "s9mm",
+   "names": [
+    "s9mm9"
+   ],
+   "team": "Supernova",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Salmon",
+   "name": "Salmon",
+   "names": [],
+   "team": "Ramattra Punch",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Santyx",
+   "name": "Santyx",
+   "names": [],
+   "team": "Team G4mbit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "32755ac6-08d4-4173-a762-1263ee33465f",
+   "name": "Sauna",
+   "names": [
+    "Saun4"
+   ],
+   "team": "Gen.G Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "46c931df-5174-4ded-9bb3-96a51efaa06c",
+   "name": "sawhill",
+   "names": [],
+   "team": "Timeless Ethereal",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Mocha",
+   "name": "Scarione",
+   "names": [],
+   "team": "ROCstars",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "2184e43e-7e47-4dca-8fbd-8a8533153487",
+   "name": "Schef",
+   "names": [
+    "Schef02"
+   ],
+   "team": "Ohana Aloha",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "18cda0e6-bfdd-4f92-ad3d-3c423b6f10ef",
+   "name": "Schwartzy",
+   "names": [
+    "Schwartzyz"
+   ],
+   "team": "TML Nightmare",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0d288019-386c-44aa-ba5f-72740a021669",
+   "name": "Scraine",
+   "names": [],
+   "team": "Goud Guys ANM",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "1d7c1096-c876-426b-a89a-8be16b8c9092",
+   "name": "scuffed",
+   "names": [
+    "scuffedhaha"
+   ],
+   "team": "The Kafe",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "ad12d7b8-4843-4a95-a468-97e28901ce2b",
+   "name": "Scyle",
+   "names": [],
+   "team": "Disguised",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Scylla",
+   "name": "Scylla",
+   "names": [],
+   "team": "Arizona State University",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "826c2bd4-cb43-4b6c-90a9-21ee53b87bf9",
+   "name": "seeker",
+   "names": [
+    "seekerow"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "18f62f7a-a4c1-49bb-b01c-66d6df5dbec5",
+   "name": "Seele",
+   "names": [
+    "Zelos",
+    "ZelosFPS"
+   ],
+   "team": "Final Gambit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+   "name": "Seicoe",
+   "names": [
+    "seic0e"
+   ],
+   "team": "Virtus pro",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Senna",
+   "name": "senna",
+   "names": [],
+   "team": "Ramattra Punch",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "759bcdd9-e8e1-4492-95fa-77aca4cd84af",
+   "name": "SeonJun",
+   "names": [
+    "CATCATCAT23"
+   ],
+   "team": "Dallas Fuel",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Sgy",
+   "name": "sgy",
+   "names": [],
+   "team": "Team Secret",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "bf4f6030-f1bb-4950-99e5-c91c07026e13",
+   "name": "SharP",
+   "names": [
+    "SharP1337"
+   ],
+   "team": "nuage",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "a0e6cbad-b77b-4807-8e6f-cb997b5ec279",
+   "name": "Shax",
+   "names": [
+    "Abaou"
+   ],
+   "team": "Ataraxia",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+   "name": "sHockWave",
+   "names": [
+    "sHockWaveOW"
+   ],
+   "team": "Team Risk",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Shu",
+   "name": "Shu",
+   "names": [],
+   "team": "ZETA DIVISION",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Zheng_Yangjie",
+   "name": "Shy",
+   "names": [],
+   "team": "Weibo Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "635737a5-3456-43c5-aa74-d7ccb1a30da1",
+   "name": "Simple",
+   "names": [
+    "SimpleOW"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "51bd468c-463e-43c9-be25-3d23803c3ee9",
+   "name": "SirMajed",
+   "names": [
+    "sirmajed9"
+   ],
+   "team": "Team Risk",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "5fe6035f-0dd7-4003-abd2-392aef32351f",
+   "name": "SKAI",
+   "names": [
+    "Skairipa",
+    "Skairipa00"
+   ],
+   "team": "Gen.G Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Skewed",
+   "name": "skewed",
+   "names": [],
+   "team": "T1",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "880a32c5-f027-4660-a608-cd468acdc5b2",
+   "name": "Skier",
+   "names": [
+    "_Skier"
+   ],
+   "team": "YFP",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "0965f1c2-4af1-468e-852a-88252d1d53a9",
+   "name": "skitsa",
+   "names": [
+    "SkitsaILS"
+   ],
+   "team": "A One Man Army",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "41d949e5-16eb-4ee1-ba62-c8906118c616",
+   "name": "skytorr",
+   "names": [],
+   "team": "Quick Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "a9518828-6359-4b76-926f-b0d9be499a46",
+   "name": "Slay",
+   "names": [
+    "Kenneth21"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:SLEEK",
+   "name": "SLEEK",
+   "names": [],
+   "team": "Hypnos",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Sley",
+   "name": "Sley",
+   "names": [],
+   "team": "VARREL",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "28f62de7-cba3-4d0c-825d-8b6c00c5ae1f",
+   "name": "Slowdive",
+   "names": [
+    "slowdive0"
+   ],
+   "team": "Vision Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "1b8fd753-75b3-4049-9efe-561d23cc1955",
+   "name": "smurf",
+   "names": [
+    "myeonghwan"
+   ],
+   "team": "Disguised",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "b529dff3-f4c1-485d-b070-32fda58883db",
+   "name": "sniper",
+   "names": [
+    "Esc_DeadShot"
+   ],
+   "team": "The Kafe",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "06d6fa17-9964-4414-b8e2-e0e9507edd6c",
+   "name": "SNOWDR0P",
+   "names": [
+    "snwdr0p"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "ab85f66d-e350-4f51-a212-8204182c1380",
+   "name": "Snozlar",
+   "names": [],
+   "team": "team_sawhill",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "4634e176-004c-4145-a5c6-3ce8e761e5e8",
+   "name": "Soax",
+   "names": [
+    "SoaxOW"
+   ],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "728a1f13-3823-43a0-8581-cc30d2637400",
+   "name": "Sobek",
+   "names": [
+    "sobek188"
+   ],
+   "team": "SupershyOW",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Social",
+   "name": "Social",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "20749c49-35ad-42c4-a0c3-79efffdc321d",
+   "name": "Solo",
+   "names": [
+    "owSolo"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "e0408964-2c60-4ae9-944e-516dcfc1c2ee",
+   "name": "SoloZen",
+   "names": [],
+   "team": "Amplify",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "4ab4cc54-197d-4095-ab31-9456f02f0eaf",
+   "name": "Someone",
+   "names": [
+    "SomeoneHam"
+   ],
+   "team": "Team Falcons",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Sonder",
+   "name": "sonder",
+   "names": [],
+   "team": "Team G4mbit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "955b333d-0104-487b-818e-79951d603905",
+   "name": "Sonne",
+   "names": [
+    "Sonne_iwnl_"
+   ],
+   "team": "EF Flexodiax",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9e1d3b6a-3b87-4640-97c0-22ed3791ff9c",
+   "name": "SoOn",
+   "names": [],
+   "team": "Team Peps",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Soulsay",
+   "name": "Soulsay",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:SP1NT",
+   "name": "SP1NT",
+   "names": [],
+   "team": "Team Falcons",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "39042a9c-ac5f-47b4-8376-29c45676c2e9",
+   "name": "SparkR",
+   "names": [
+    "SparkRow"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f0f0cae1-c527-42bc-8568-214b9a23cef2",
+   "name": "Spectra",
+   "names": [
+    "owSpectra"
+   ],
+   "team": "M80",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e9a591c4-f85f-4438-a7a7-72512a6666c8",
+   "name": "squid",
+   "names": [
+    "squid07"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Stalk3r",
+   "name": "Stalk3r",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "8aeb215f-a30e-4953-96ed-9dcdf625ce71",
+   "name": "Stellios",
+   "names": [
+    "StelliosOW"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f23c3657-8fe0-4a3b-8178-33966c67c1e8",
+   "name": "SterbeGern",
+   "names": [],
+   "team": "Bingus",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:StillKIWI",
+   "name": "StillKIWI",
+   "names": [],
+   "team": "ZoKorp Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "b356bcfa-5581-4111-8489-dd66b409eb0a",
+   "name": "Stone",
+   "names": [
+    "Stone_xd"
+   ],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "5d70bdcd-a488-4a82-bd1e-ed1b2324e6c9",
+   "name": "Strebor",
+   "names": [
+    "Streborman"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "f0b72eec-7fd7-4236-bd8f-a59ff10a00ef",
+   "name": "Stryder",
+   "names": [
+    "StryderOW"
+   ],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+   "name": "sugarfree",
+   "names": [
+    "sug2rfree"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Sugureru",
+   "name": "Sugureru",
+   "names": [],
+   "team": "O3 Splash",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "540be610-74a4-46f4-a63c-9e0497efda00",
+   "name": "sxj",
+   "names": [
+    "sxj_ow"
+   ],
+   "team": "Telacy",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "9e111a73-a533-4d0f-b797-a8f50b032667",
+   "name": "Sypeh",
+   "names": [
+    "Y19251658"
+   ],
+   "team": "AWW YEAH",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Szymondki",
+   "name": "Szymondki",
+   "names": [],
+   "team": "Team G4mbit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:T3MP",
+   "name": "T3MP",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "cc65de21-58d0-4534-81a2-7316a15cb2dd",
+   "name": "Taejong",
+   "names": [
+    "Taejong2"
+   ],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Talisman_(Puerto_Rican_player)",
+   "name": "Talisman",
+   "names": [],
+   "team": "Team Z",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "f74933e7-58c9-4efe-81b5-899079a64109",
+   "name": "Tama",
+   "names": [
+    "Tummer",
+    "tamaow"
+   ],
+   "team": "Anyones Legend",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "aea3823e-e7e6-45f7-930c-76f78b413047",
+   "name": "TAP",
+   "names": [
+    "TAP_OW"
+   ],
+   "team": "Citrus Nation",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "e5581905-11cb-4c88-9b2b-3ac80fe21097",
+   "name": "teksol",
+   "names": [],
+   "team": "Telacy",
+   "seasons": [
+    2024,
+    2026
+   ]
+  },
+  {
+   "id": "7d47834d-6f71-4171-a6b6-9261f1b4f9be",
+   "name": "tekuno",
+   "names": [
+    "Tekun0"
+   ],
+   "team": "Ex Oblivione",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "80c52713-98e1-41c3-943d-7e777b3bb287",
+   "name": "Theomatic",
+   "names": [
+    "Uncle-Sven"
+   ],
+   "team": "A One Man Army",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "42152a1b-e2a2-43cf-8ddf-959541c5c7c7",
+   "name": "Thunder",
+   "names": [
+    "Thunder_ow"
+   ],
+   "team": "Daybreak",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:TommeX",
+   "name": "TommeX",
+   "names": [],
+   "team": "Negative Mental Attitude",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "81835e75-67cf-426c-90b5-70e537f4d9e6",
+   "name": "TOPDRAGON",
+   "names": [
+    "TOPDRAGONow"
+   ],
+   "team": "VARREL",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "88cb75a1-b0ff-49c2-8046-11e744f2f5d8",
+   "name": "TR33",
+   "names": [
+    "TR33ow"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "2acfb6df-f298-4b92-8ab8-2141635f28e4",
+   "name": "Tred",
+   "names": [
+    "TRED2474"
+   ],
+   "team": "Disguised",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "5650b2dd-b49b-4174-82c5-3c4cb0bddc45",
+   "name": "Tricky",
+   "names": [
+    "Tricky0410"
+   ],
+   "team": "EF Flexodiax",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "d123f921-3579-46ca-948f-73c26135bd48",
+   "name": "Tristan",
+   "names": [
+    "SolvedMender"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b371a120-4be1-4677-aeee-81f5ebc80731",
+   "name": "TVNT",
+   "names": [
+    "TVNT_"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "e350f779-9212-4716-b412-159c416f7c16",
+   "name": "Twilight",
+   "names": [
+    "twilight0208"
+   ],
+   "team": "The Ultimates",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "e9913f19-e59e-4cda-927a-57babc6c1d8c",
+   "name": "TwoFish",
+   "names": [
+    "TwoFishHere"
+   ],
+   "team": "Visored",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "243f8468-6f3a-4607-b151-53da202fdd22",
+   "name": "Twolzz",
+   "names": [],
+   "team": "Extinction",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "76a5a4f3-d139-42af-9f02-a422bd9a2c45",
+   "name": "UberEats",
+   "names": [
+    "Iszhtar"
+   ],
+   "team": "nah id win",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "43d39898-d853-4e75-b249-9b41d638a2b0",
+   "name": "UltraViolet",
+   "names": [
+    "ultraviol3t"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Ren_Yanchao",
+   "name": "Unkn0w",
+   "names": [],
+   "team": "Team CC",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:UnluckyMain",
+   "name": "UnluckyMain",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "fb1f9484-a84f-4205-8159-c742b4c21f7a",
+   "name": "Unread",
+   "names": [
+    "Unreadow"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c7a821fd-9e93-402f-85e4-ad2cc23ee9af",
+   "name": "unto",
+   "names": [
+    "untovainen"
+   ],
+   "team": "EF Flexodiax",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "b6fe4cb9-95b7-439c-a94e-d97d66d3e4fd",
+   "name": "v1ctory",
+   "names": [
+    "victoryfps"
+   ],
+   "team": "Dhillducks",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+   "name": "Vega",
+   "names": [
+    "VegaOW"
+   ],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+   "name": "Vestola",
+   "names": [],
+   "team": "Al Qadsiah",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Vigilante",
+   "name": "vigilante",
+   "names": [],
+   "team": "Crazy Raccoon",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "f6820a69-6872-4e1a-b530-66f09c5cc83f",
+   "name": "Vintage",
+   "names": [
+    "Vintage_"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "172bb593-d71a-437b-8433-30087bca18c8",
+   "name": "Viol2t",
+   "names": [
+    "Viol2tOW"
+   ],
+   "team": "ZETA DIVISION",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Viper",
+   "name": "Viper",
+   "names": [],
+   "team": "T1",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "3dd76706-c7ba-42c9-acc6-bb1888774ff7",
+   "name": "Virtual",
+   "names": [
+    "vVirtuaI"
+   ],
+   "team": "NTMR",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "ec7b2c06-a0b3-432f-83d6-85b60f549fa4",
+   "name": "Virtue",
+   "names": [
+    "Lampent",
+    "Lampent_"
+   ],
+   "team": "Shikigami",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "975d9b4f-6989-42c7-b474-5383da9839bd",
+   "name": "Vision",
+   "names": [
+    "IlluSiOnZ_V",
+    "VisionLIVE"
+   ],
+   "team": "Extinction",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:VoltsA",
+   "name": "VoltsA",
+   "names": [],
+   "team": "Hypnos",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "aea7406b-5ae1-4077-8ddd-94295af5dc65",
+   "name": "w1LL",
+   "names": [
+    "w1ll_ow"
+   ],
+   "team": "Sheer Cold",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "8d70503f-988f-4bcf-a911-e95f39f485f3",
+   "name": "Waynon",
+   "names": [],
+   "team": "Bingus",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Wed",
+   "name": "Wed",
+   "names": [],
+   "team": "9z Team",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "067301e8-d757-4439-815e-e8fdf653fa43",
+   "name": "Whoru",
+   "names": [
+    "Whoru01"
+   ],
+   "team": "Gen.G Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "39cada54-4c21-4421-8bc5-baca66c525dc",
+   "name": "Willys",
+   "names": [
+    "Willys07"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:WilmaFistFit",
+   "name": "WilmaFistFit",
+   "names": [],
+   "team": "ZoKorp Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "816a0c83-eb86-43eb-8fb3-698bcce7c4be",
+   "name": "Winter",
+   "names": [
+    "Lucy Falmoe",
+    "WinterOW"
+   ],
+   "team": "Amplify",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
+   "name": "WMaimone",
+   "names": [],
+   "team": "Team Risk",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Kame",
+   "name": "wntr",
+   "names": [],
+   "team": "Team Secret",
+   "seasons": [
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Wolfie",
+   "name": "Wolfie",
+   "names": [],
+   "team": "EXN Zenith",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Wsps",
+   "name": "wsps",
+   "names": [],
+   "team": "FLUFFY AIMERS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "7606247c-6884-4a74-868b-da04417a66a3",
+   "name": "wub",
+   "names": [
+    "wubxii"
+   ],
+   "team": "Extinction",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "e01e90ce-eb0a-4a94-a797-9a1e8d5539ed",
+   "name": "Xerion",
+   "names": [
+    "Xerion_gdh",
+    "Xeriongdh"
+   ],
+   "team": "Team Peps",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "f55f084e-23ae-47a4-a3ba-efbda8194bd7",
+   "name": "xomba",
+   "names": [
+    "xombaow"
+   ],
+   "team": "KAFE",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "b9e58b59-2c18-41f6-9297-3f8285fecf51",
+   "name": "xten",
+   "names": [
+    "xtenOW"
+   ],
+   "team": "KAFE",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "9609be75-e561-493f-b1f1-000c4517555a",
+   "name": "xzodyal",
+   "names": [],
+   "team": "Team Peps",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Yimitra",
+   "name": "Yimitra",
+   "names": [],
+   "team": "Fries In The Bag",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "d615be2c-19d1-49bf-a5f3-216377efb1cf",
+   "name": "yoham",
+   "names": [
+    "yoham_"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lp:player:Yoshinori2k",
+   "name": "Yoshinori2k",
+   "names": [],
+   "team": "Bleed Esports",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+   "name": "Youbi",
+   "names": [
+    "Youbi1"
+   ],
+   "team": "Twisted Minds",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:Yukej",
+   "name": "Yukej",
+   "names": [],
+   "team": "Team G4mbit",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "lp:player:Z4CH",
+   "name": "Z4CH",
+   "names": [],
+   "team": "Absolution",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "791b7543-8e7f-412b-8913-ae0a7ead9127",
+   "name": "ZaryaEnjoyer",
+   "names": [
+    "ImScared22"
+   ],
+   "team": "A-Square Tengu",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "eb37ecfe-626d-4280-9d9c-316a449eddcf",
+   "name": "Zeb",
+   "names": [
+    "Zeb_ow"
+   ],
+   "team": "KAFE",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "7c248289-1789-4e12-901e-d075b1e0914e",
+   "name": "Zerggy",
+   "names": [
+    "Zerggyes"
+   ],
+   "team": "SCHMUNGUS",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "ded7b307-74ba-4e6d-829f-5d5e837dc165",
+   "name": "ZERO",
+   "names": [
+    "ZERO_0W"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2025
+   ]
+  },
+  {
+   "id": "58faa695-b501-4642-a4d9-0e4c2ed8526d",
+   "name": "zeruhh",
+   "names": [],
+   "team": "Team Liquid",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:ZEST",
+   "name": "ZEST",
+   "names": [],
+   "team": "T1",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "28c94927-18b8-4d06-b98c-01f96f54f923",
+   "name": "Zhulander",
+   "names": [
+    "zhulanders"
+   ],
+   "team": "Fries In The Bag",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "c2c17617-77ac-4f70-8529-59a2a910cb35",
+   "name": "ZIYAD",
+   "names": [
+    "ZIYAD-OW"
+   ],
+   "team": "Geekay Esports",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "27150b56-fd01-4385-84ee-11798be33cfe",
+   "name": "Zorrow",
+   "names": [
+    "Zorrow_ow"
+   ],
+   "team": "1234",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "a1fb03ff-9977-4d0b-b4bd-82fa6085f0ed",
+   "name": "zox",
+   "names": [
+    "zox1509",
+    "zox_ow"
+   ],
+   "team": "Team Risk",
+   "seasons": [
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "lp:player:ZPanthr",
+   "name": "zPanthr",
+   "names": [],
+   "team": "Tanuki",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "1a3153d4-825b-4c8f-bdd6-f3d6d826280c",
+   "name": "Zydra",
+   "names": [
+    "zydra_ow"
+   ],
+   "team": "Quick Esports",
+   "seasons": [
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
+   "name": "ZZZ",
+   "names": [
+    "z_ow",
+    "zman",
+    "zss"
+   ],
+   "team": "KAFE",
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "f75973e9-c93b-47a6-94ef-0ac526695470",
+   "name": "ŚŁØTH",
+   "names": [
+    "SlothLogic"
+   ],
+   "team": "Avidity",
+   "seasons": [
+    2024
+   ]
+  },
+  {
+   "id": "8429e08f-a227-4d3d-859c-d7246a6f1394",
+   "name": "Ƕscissors",
+   "names": [
+    "Scissorssz"
+   ],
+   "team": "SpaceStation Gaming",
+   "seasons": [
+    2024,
+    2025
+   ]
+  }
+ ]
+}

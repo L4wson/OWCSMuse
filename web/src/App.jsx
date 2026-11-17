@@ -6,6 +6,7 @@ import QuestionBar from "./components/QuestionBar.jsx";
 import Result from "./components/Result.jsx";
 import Suggestions from "./components/Suggestions.jsx";
 import { ErrorState, Loading } from "./components/States.jsx";
+import GridPage from "./grid/GridPage.jsx";
 
 const DEFAULT_PAGE_SIZE = 25;
 
@@ -18,6 +19,10 @@ const DEFAULT_PAGE_SIZE = 25;
 const ID_TOKEN = /\b(?:player|team|org):[A-Za-z0-9._-]+/;
 const displayable = (text) => (typeof text === "string" && !ID_TOKEN.test(text) ? text : undefined);
 
+// OWCS Grid is always reachable at /grid. Its link in the masthead appears only when the build sets
+// VITE_GRID_NAV=true (web/.env.example), so the beta can ship hidden and be shared by its direct link.
+const GRID_NAV = import.meta.env?.VITE_GRID_NAV === "true";
+
 export default function App() {
   const [route, navigate] = useRoute();
   const [phase, setPhase] = useState("idle"); // idle | loading | ready | error
@@ -29,14 +34,18 @@ export default function App() {
   const sizeRef = useRef(DEFAULT_PAGE_SIZE); // read inside callbacks that must not re-create on a change
   const inFlight = useRef(null);
 
-  // Examples come from the service so they always have data behind them.
+  const onGrid = route.name === "grid";
+
+  // Examples come from the service so they always have data behind them. The Grid page shows none, so a visitor
+  // who only plays the grid never costs the service that query.
   useEffect(() => {
+    if (onGrid) return undefined;
     const controller = new AbortController();
     getSuggestions({ signal: controller.signal })
       .then(setSuggestions)
       .catch(() => setSuggestions(null)); // examples are a nicety, never an error state
     return () => controller.abort();
-  }, []);
+  }, [onGrid]);
 
   const load = useCallback(
     async (run, { question: asked, keepPhase = false } = {}) => {
@@ -147,10 +156,17 @@ export default function App() {
           OWCS Muse
         </button>
         <span className="beta-tag">beta</span>
+        {GRID_NAV && !onGrid ? (
+          <button type="button" className="masthead-link" onClick={() => navigate("/grid")} data-testid="grid-nav">
+            Daily Grid
+          </button>
+        ) : null}
       </header>
 
       <main>
-        {showLanding ? (
+        {onGrid ? (
+          <GridPage route={route} navigate={navigate} />
+        ) : showLanding ? (
           <div className="landing">
             <QuestionBar onSubmit={runQuestion} autoFocus busy={phase === "loading"} />
             <Suggestions suggestions={suggestions} onAsk={runQuestion} />
