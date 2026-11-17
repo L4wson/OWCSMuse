@@ -11,6 +11,14 @@ or a number of playoff finals, and that gap is behind almost every "can't verify
 "Can't verify" in the tables is the number of players the clue cannot judge because the deciding data is missing.
 They cost no guess. A player the clue plainly fails is "wrong", not "can't verify".
 
+**After the polish round (`grid/polish`):** the verdicts and the per-clue counts below are unchanged, but the
+puzzles were regenerated under stricter rules and a wider pool, so the "In the 30 puzzles" column and the last
+section describe a set that no longer exists. Current figures for the 35 puzzles (2026-11-17 to 2026-12-21): clue
+uses by family are teammate 59 (37 anchors, all approved in `scope/grid_anchors.json`), LAN roster 30, org 25 (8
+orgs), stage 23, experience 22, stats 20, season 16, region 9 (2 of them "NA and EMEA"), role 6. The pool is now
+101 clues: 43 anchors (approved, 10+ teammates), 21 mapped orgs (6+ players), "N+ maps" at seven steps from 25 (157
+answers) to 175 (12), and the rest as below.
+
 ## Verdicts
 
 | # | Clue type | Verdict | In the 30 puzzles | The short reason |

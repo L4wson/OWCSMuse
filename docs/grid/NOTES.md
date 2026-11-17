@@ -1,18 +1,22 @@
 # Grid Phase 0: working notes
 
-## State: polish, IN PROGRESS on `grid/polish` (stopped 2026-11-17, usage limit)
+## State: polish done on `grid/polish`, not pushed, not deployed (2026-11-17)
 
-Done and committed: the new generator rules (3+ shared clues within 21 days, one "N+ maps" clue, two teammate clues,
-one stat clue an axis; difficulty by median and smallest cell), backtracking in the day search, a wider clue pool,
-`scope/grid_anchors.json` (60 candidates, 52 approved by rule; the generator uses approved ones only), `/?q=` in the
-Muse frontend, a Muse link on every Grid answer with a FACEIT id, `--rebuild-all`, and all 35 puzzles regenerated
-(2026-11-17 to 2026-12-21, run output in `runs/generate_2026-11-17_35d_seed20261117.txt`). Grid tests (88) and
-frontend tests (125) pass; lint is clean.
+Read the "Polish" section at the top of [BETA.md](BETA.md) first. This is the latest state; the sections below are
+history.
 
-NOT done: VERIFY.md still lists the old puzzles 2-8 (regenerate it for the new puzzles 1-7); BETA.md and
-CATEGORIES.md do not yet describe the new rules, the anchor file, the links or the 35-puzzle supply; the full
-offline suite and the frontend build were not rerun after these changes; the two older run files in `runs/`
-describe discarded puzzles. Step 3 (org mappings) was skipped: the list in the request was left as a placeholder.
+- 35 puzzles, 2026-11-17 to 2026-12-21, all regenerated with `--rebuild-all` (safe only because nothing was
+  deployed). Run output: `runs/generate_2026-11-17_35d_seed20261117.txt`. **Nothing generates more automatically:**
+  before 2026-12-22 run `build_facts.py`, then `generate_puzzles.py`, commit, deploy.
+- New rules: no 3 shared clues with a puzzle of the previous 21 days; one "N+ maps" clue; two teammate clues; one
+  stat clue an axis; difficulty by median and smallest cell. The day search backtracks when a day has no grid.
+- `scope/grid_anchors.json`: 60 candidates, 52 approved by rule. The generator uses approved ones only. The owner
+  prunes it by hand; a rebuild keeps `approved` and `note`.
+- Muse frontend: `/?q=` asks a prefilled question (`web/src/App.jsx`, `web/tests/prefill.test.jsx`). Grid answers
+  with a FACEIT id link to `/?q=player:<id> record`. Not tried against the live site (asking writes to the database).
+- Org mappings: none applied. The request's list was a placeholder. `proposed_org_mappings.md` is unchanged.
+- Waiting on the owner: VERIFY.md (now puzzles 1 to 7, stage winners, awards), the anchor list, the org proposals.
+- The smoke transcripts in `runs/` are from the earlier, discarded puzzle sets.
 
 ## State: mixed clues built on `grid/categories`, not pushed, not deployed (2026-11-17)
 

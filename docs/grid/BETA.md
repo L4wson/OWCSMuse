@@ -4,6 +4,54 @@ A small, playable beta of the daily grid, built on branch `grid/beta` on 2026-11
 nothing to the database, and stores nothing about visitors. Background: [AUDIT.md](AUDIT.md),
 [CELL_COUNTS.md](CELL_COUNTS.md), [PLAN.md](PLAN.md).
 
+## Polish (2026-11-17, branch `grid/polish`)
+
+The latest state. It changes the rules, the anchors, the links and every puzzle; where a later section disagrees,
+this one is right.
+
+- **Every puzzle was regenerated**, today's included: 35 puzzles, 2026-11-17 to 2026-12-21, numbered from 1. That
+  breaks the "a published puzzle never changes" rule on purpose and was safe only because nothing had been deployed.
+  `generate_puzzles.py --rebuild-all` did it; do not use that flag once anyone has been served a puzzle.
+- **Three more rules** (table below): no puzzle shares 3 of its 6 clues with one from the previous 21 days; at most
+  one "N+ maps" clue, two "Teammate of" clues, and one stat clue among the rows and one among the columns.
+- **Difficulty needs the smallest cell too.** Easy: median 9+ and no cell under 5. Medium: median 7+ and no cell
+  under 4. Anything else is Hard, down to the floor of 3. A grid carries the label it earns: 6 of the 35 missed
+  their weekday's target and are labelled as what they are (the run file says which).
+- **Anchors are curated.** `scope/grid_anchors.json` lists 60 candidates ranked by maps, seasons, stage finals and
+  international rosters, each with a one-line reason. `approved` starts true for 2+ seasons and a final or a LAN
+  (52 of 60). The generator names approved anchors only. Edit the flags by hand; `build_facts.py` keeps them.
+- **Answers link to Muse.** `/?q=<question>` on the Muse site now asks that question as if it had been typed. A
+  correct answer and each revealed example link to `/?q=player:<id> record`.
+- **The search backtracks.** When a day has no valid grid, the run steps back a day and chooses differently.
+- **The pool is wider**, because the stricter rules need more to choose from: mapped orgs with 6+ players (21, was
+  8+), anchors with 10+ teammates (was 12), and "N+ maps" at 25, 50, 75, 100, 125, 150 and 175.
+
+| Largest clue overlap between two puzzles within 21 days | 2 of 6 (59 pairs share 2, 59 share 1, 386 share none) |
+|---|---|
+| Difficulty | 17 Medium, 12 Hard, 6 Easy |
+| Role grids | 2 (2026-11-17, 2026-12-09) |
+| Distinct clues used | 82, of them 37 anchors |
+| Cells with 3 or 4 answers | 34 of 315 |
+
+### The prefilled question and the links
+
+- `web/src/App.jsx`: on the landing page, a `?q=` in the URL is asked through the same `load()` and `/ask` call a
+  typed question uses, and the answer's `/q/<slug>` replaces the `/?q=` entry in the history, so Back does not ask
+  again. Nothing else in the search flow changed, and nothing in the query pipeline. Tests:
+  `web/tests/prefill.test.jsx` (7).
+- The link is by id, never by name: three players are called Danny. Muse's parser reads `player:<FACEIT id>` as
+  exactly that player, and the app already keeps such ids out of the search box.
+- **Only players with a FACEIT id get a link.** A Liquipedia-born id (`lp:player:...`) is not something the parser
+  accepts in a question, so those answers carry `"link": null` and show none.
+- **Not verified live.** Asking Muse writes the question to `saved_queries` and `query_log`, and this work could
+  not write to the database. What is tested: the parser reads the question as a record for that id, and the page
+  sends exactly what a typed question sends. Click one link after deploying.
+
+### Step skipped
+
+The request's list of org mappings to apply was left as its placeholder, so none was applied and the golden suite
+was not run for that purpose.
+
 ## Mixed clues (added 2026-11-17, branch `grid/categories`)
 
 The role x season grids of the first beta were too easy and too alike. From puzzle 2 (2026-11-19) a puzzle is six
@@ -18,8 +66,8 @@ no migration, no database writes, no visitor data, the same routes.
   teams) and hero clues (no hero data).
 - **A cell** is the players who fit both clues, each on its own evidence. One exception from the beta: a role
   beside a season or a region means that role in that season or region.
-- **Difficulty** is Easy, Medium or Hard by the median number of answers a cell: 9+, 7 to 8, under 7. Monday and
-  Tuesday aim for Easy, Wednesday to Friday Medium, the weekend Hard. About one day in eight is a role grid.
+- **Difficulty** is Easy, Medium or Hard by the median and the smallest cell (see the polish section). Monday and
+  Tuesday aim for Easy, Wednesday to Friday Medium, the weekend Hard. A role grid can recur every eight days.
 - **Every clue has a definition**, shown when its header is tapped, and its own sentence for a guess it cannot
   check ("They were rostered for Team Peps only in series we have no map data for").
 - **After the game**, each cell shows how many answers it had.
@@ -39,10 +87,14 @@ no migration, no database writes, no visitor data, the same routes.
 | it has too few families | under 4 of the six clues |
 | a clue was used recently | in the previous 7 days |
 | a teammate clue's player was used recently | in the previous 14 days |
+| it is a near-repeat (added in the polish) | 3 or more clues shared with any puzzle of the previous 21 days |
+| too many "N+ maps" clues (polish) | more than 1 |
+| too many "Teammate of" clues (polish) | more than 2 |
+| too many stat clues on one axis (polish) | more than 1 among the rows, or among the columns |
 
 The search judges 40 random grids a day for the record (nearly all fail), then builds grids a clue at a time so
 that every cell already has 3+ answers. The run report lists how many candidates failed each rule every day and a
-few rejected grids in full: `runs/generate_2026-11-19_30d_seed20261119.txt`.
+few rejected grids in full: `runs/generate_2026-11-17_35d_seed20261117.txt`.
 
 ### New files
 
@@ -117,9 +169,8 @@ A wrong guess is a 200. 404 is a puzzle that is not published. 422 is a cell out
 index, or a name sent where an id belongs. Guess and reveal sit behind the app's existing per-IP throttle (20
 burst, 30 a minute); the other four do not, because typing in the guess box calls `/players` repeatedly.
 
-**No Muse link on a correct answer.** Muse has no player page and no URL that pre-fills a question. A `/q/<slug>`
-link resolves only after that exact question has been asked once, so building one could give a dead link. The
-response carries `"link": null` and the page shows none.
+**Muse links.** A correct guess and each revealed example carry `link`: `/?q=player:<id> record` for a player with
+a FACEIT id, `null` otherwise (see the polish section).
 
 ## Run it locally
 
@@ -154,8 +205,8 @@ cd web && npm test && npm run build
 
 ```bash
 python scripts/grid/build_facts.py                                                      # refresh stage results and awards first
-python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14               # mixed clues (the default)
-python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --dry-run     # report only
+python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14               # mixed clues (the default)
+python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14 --dry-run     # report only
 python scripts/grid/generate_puzzles.py --start-date 2026-11-25 --replace-future        # redo unpublished ones
 python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --classic     # the first beta's role x column grids
 python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --dry-run --include-unreviewed   # see what awards would add
@@ -185,10 +236,10 @@ The database is read on one connection that cannot write (`scripts/grid/db.py`):
 Before generating, check that the nightly ingest has run recently; a puzzle is a snapshot of the warehouse at
 generation, and each entry records the last series date it saw.
 
-**The supply is 31 puzzles, 2026-11-18 to 2026-12-18**: puzzle 1 from the first beta, then 30 mixed ones. Nothing
-generates more automatically. On 2026-12-19 `/grid` will say there is no puzzle unless more have been generated,
-committed and deployed. `runs/generate_2026-11-18_14d_seed20261118.txt` is the first beta's run; its puzzles 2 to 14
-were replaced before any was published.
+**The supply is 35 puzzles, 2026-11-17 to 2026-12-21.** Nothing generates more automatically. On 2026-12-22 `/grid`
+will say there is no puzzle unless more have been generated, committed and deployed. The run outputs of the two
+earlier, discarded sets were removed; the smoke-test transcripts in `runs/` are from those sets, so their puzzle
+numbers no longer match the file.
 
 ## Deploy it hidden, and share the link
 
@@ -223,7 +274,7 @@ today's date before 2026-11-18), and the response contains no `answers`.
   not "can't verify".
 - **A line-up is not proof of playing** for Liquipedia-only series, which list the roster. This affects only
   "Played all 3 seasons" and who counts as "seen" for can't-verify. Role maps are FACEIT's per-map record.
-- **No link from an answer to Muse** (above).
+- **No Muse link for a player without a FACEIT id**, and the links were not tried against the live site.
 - **No streak across devices**, and private windows or in-app browsers that block storage play without saving.
 - **The end-screen examples show names as they were at generation.** A filled cell and the guess box show the
   name in the current player index.
@@ -239,17 +290,20 @@ today's date before 2026-11-18), and the response contains no `answers`.
   are in use), not the awards (which are not). See VERIFY.md.
 - **Stage winners were cross-checked only against records already stored.** Ten of the twenty have no Liquipedia
   placement table to compare with: fetching one writes to the database, which this work could not do.
-- **"Played for" clues are limited to 14 mapped orgs**, and the best-known teams are not among them.
+- **"Played for" clues are limited to mapped orgs** (21 with 6+ players), and the best-known teams are not among
+  them.
 - **A stage clue needs a playoff map on record.** Six stages have none, so their winners return "can't verify".
 - **"Rostered at" is a roster, not an appearance**, and the clue says so.
 - **"N+ maps" is loose about what it cannot see**: it assumes 7 maps for every series with no map stats, so more
   players return "can't verify" than strictly need to.
 - **Stats clues are 2025 and 2026 only**, and 2026 has 3 qualifying Tanks.
-- **Small cells.** The floor is 3 answers, not the first beta's 5, and 35 of the 270 cells in the 30 puzzles have 3
+- **Small cells.** The floor is 3 answers, not the first beta's 5, and 34 of the 315 cells in the 35 puzzles have 3
   or 4. A Hard puzzle is hard.
 - **A teammate anchor's id is in the puzzle file** and nowhere in a response. The anchor is named in the clue, so
   this hides nothing; it only keeps ids out of the page.
-- **One puzzle missed its target difficulty**: 2026-12-07 wanted Easy and is Medium.
+- **Six puzzles missed their weekday's target difficulty** and carry the label they earned instead.
+- **Easy is scarce.** Under the stricter definition only 6 of 35 are Easy; several Mondays and Tuesdays are Medium
+  or Hard.
 - **Checked in a desktop browser at 360 and 390 px**, not on phones.
 
 ## What Phase 2 would add
@@ -266,7 +320,7 @@ today's date before 2026-11-18), and the response contains no `answers`.
   own answers, so it needs its own review and golden cases.
 - **A role source for the gaps**: a reviewed per-season role from Liquipedia player pages, to shrink "can't
   verify".
-- **A real Muse link** per answer: a player page, or a pre-filled question URL.
+- **A real player page** in Muse to link to, in place of a record question; and links for Liquipedia-only players.
 - **`/api` in the dev proxy**, one line in `vite.config.js`.
 
 ## Smoke test of the mixed puzzles, 2026-11-17

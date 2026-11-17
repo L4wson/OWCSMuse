@@ -1,6 +1,7 @@
 # OWCS Grid: what to check by hand
 
-Written 2026-11-17 on `grid/categories`. Three lists: two answers from every cell of the first seven mixed puzzles,
+Updated 2026-11-17 on `grid/polish`, after every puzzle was regenerated. Three lists: two answers from every cell of the
+first week's puzzles,
 every stage result the stage clues rest on, and every award. Each row has the Liquipedia page to check against.
 
 **Nothing below has been verified by a person.** The puzzle answers are what the warehouse says. A wrong one means
@@ -9,8 +10,9 @@ knowing before these puzzles publish.
 
 How to report a problem: note the puzzle number, the cell and the player. A published puzzle is never edited, so a
 fix before the date is `generate_puzzles.py --replace-future`, and after the date it is a note for next time.
+Puzzle 1 is today's (2026-11-17) and puzzle 2 tomorrow's, so those two are the ones to look at first.
 
-## 1. Two answers a cell, puzzles 2 to 8
+## 1. Two answers a cell, puzzles 1 to 7 (2026-11-17 to 2026-11-23)
 
 For each cell: the answer with the most seasons on record (the one players will guess) and the one with the fewest
 (the one most likely to be wrong). "Reason" is the line a player sees. Check that the person is who the page says,
@@ -20,166 +22,166 @@ What Liquipedia can confirm: team, season, event rosters, stage results. What it
 rates, which are FACEIT's. For a stats clue, check the team and season and treat the number as FACEIT's.
 
 
-### Puzzle 2, 2026-11-19 (Medium)
+### Puzzle 1, 2026-11-17 (Easy)
 
 | Cell | Answers | Player | Reason shown | Liquipedia |
 |---|---|---|---|---|
-| Rostered at 2025 Champions Clash × NA stage finalist | 10 | Admiral | On NTMR's roster at 2025 Champions Clash. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 3 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Rostered at 2025 Champions Clash × NA stage finalist | 10 | seeker | On SpaceStation Gaming's roster at 2025 Champions Clash. Runner-up in 2025 NA Stage 1 with SpaceStation Gaming (14 playoff maps) | [Seeker](https://liquipedia.net/overwatch/Seeker) |
-| Rostered at 2025 Champions Clash × Played for Virtus pro | 6 | Galaa | On Virtus pro's roster at 2025 Champions Clash. 109 maps for Virtus pro, 2025 | [Galaa](https://liquipedia.net/overwatch/Galaa) |
-| Rostered at 2025 Champions Clash × Played for Virtus pro | 6 | JaeWoo | On Virtus pro's roster at 2025 Champions Clash. 92 maps for Virtus pro, 2025 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-| Rostered at 2025 Champions Clash × Teammate of Landon | 6 | CheckMate | On Al Qadsiah's roster at 2025 Champions Clash. 109 maps together, most on Al Qadsiah in 2025 EMEA Stage 1 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
-| Rostered at 2025 Champions Clash × Teammate of Landon | 6 | ZIYAD | On Al Qadsiah's roster at 2025 Champions Clash. 94 maps together, most on Al Qadsiah in 2025 EMEA Stage 2 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
-| Played in 2024 × NA stage finalist | 26 | Admiral | 18 maps in 2024. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 3 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played in 2024 × NA stage finalist | 26 | PELICAN | 48 maps in 2024. Runner-up in 2024 NA Stage 2 with M80 (15 playoff maps) | [Pelican](https://liquipedia.net/overwatch/Pelican) |
-| Played in 2024 × Played for Virtus pro | 7 | eisgnom | 12 maps in 2024. 81 maps for Virtus pro, 2025-2026 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Played in 2024 × Played for Virtus pro | 7 | Vestola | 43 maps in 2024. 74 maps for Virtus pro, 2025 | [Vestola](https://liquipedia.net/overwatch/Vestola) |
-| Played in 2024 × Teammate of Landon | 12 | CheckMate | 12 maps in 2024. 109 maps together, most on Al Qadsiah in 2025 EMEA Stage 1 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
-| Played in 2024 × Teammate of Landon | 12 | SparkR | 42 maps in 2024. 42 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2 | [SparkR](https://liquipedia.net/overwatch/SparkR) |
-| 150+ OWCS maps × NA stage finalist | 14 | Admiral | 184 OWCS maps. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 3 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| 150+ OWCS maps × NA stage finalist | 14 | Rupal | 153 OWCS maps. Won 2024 NA Stage 1 with Toronto Defiant (16 playoff maps), and 3 more | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| 150+ OWCS maps × Played for Virtus pro | 6 | Galaa | 158 OWCS maps. 109 maps for Virtus pro, 2025 | [Galaa](https://liquipedia.net/overwatch/Galaa) |
-| 150+ OWCS maps × Played for Virtus pro | 6 | FiXa | 155 OWCS maps. 155 maps for Virtus pro, 2025-2026 | [FiXa](https://liquipedia.net/overwatch/FiXa) |
-| 150+ OWCS maps × Teammate of Landon | 6 | FunnyAstro | 198 OWCS maps. 45 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2 | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
-| 150+ OWCS maps × Teammate of Landon | 6 | ZIYAD | 150 OWCS maps. 94 maps together, most on Al Qadsiah in 2025 EMEA Stage 2 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Tank × Teammate of xzodyal | 6 | eisgnom | 126 Tank maps. 29 maps together on Team Peps, 2025 EMEA Stage 1 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
+| Tank × Teammate of xzodyal | 6 | NKZ | 20 Tank maps. 20 maps together on Sheer Cold, 2024 EMEA Stage 1 | [NKZ](https://liquipedia.net/overwatch/NKZ) |
+| Tank × EMEA stage finalist | 7 | eisgnom | 126 Tank maps. Runner-up in 2026 EMEA Stage 1 with Virtus pro (8 playoff maps), and 1 more | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
+| Tank × EMEA stage finalist | 7 | ZIYAD | 148 Tank maps. Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 3 more | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Tank × Rostered at Esports World Cup 2024 | 8 | CLEAR | 27 Tank maps. On Bleed Esports's roster at Esports World Cup 2024 | [CLEAR](https://liquipedia.net/overwatch/CLEAR) |
+| Tank × Rostered at Esports World Cup 2024 | 8 | MirroR | 20 Tank maps. On ENCE's roster at Esports World Cup 2024 | [MirroR](https://liquipedia.net/overwatch/MirroR) |
+| DPS × Teammate of xzodyal | 6 | Backbone | 52 DPS maps. 31 maps together on Gen.G Esports, 2025 EMEA Stage 3 | [Backbone](https://liquipedia.net/overwatch/Backbone) |
+| DPS × Teammate of xzodyal | 6 | Whoru | 27 DPS maps. 27 maps together on Gen.G Esports, 2025 EMEA Stage 2 | [WhoRU](https://liquipedia.net/overwatch/WhoRU) |
+| DPS × EMEA stage finalist | 12 | CheckMate | 121 DPS maps. Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 2 more | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| DPS × EMEA stage finalist | 12 | SparkR | 42 DPS maps. Won 2024 EMEA Stage 2 with SpaceStation Gaming (17 playoff maps) | [SparkR](https://liquipedia.net/overwatch/SparkR) |
+| DPS × Rostered at Esports World Cup 2024 | 22 | CheckMate | 121 DPS maps. On Fnatic's roster at Esports World Cup 2024 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| DPS × Rostered at Esports World Cup 2024 | 22 | ŚŁØTH | 10 DPS maps. On ROCstars's roster at Esports World Cup 2024 | [Sloth](https://liquipedia.net/overwatch/Sloth) |
+| Support × Teammate of xzodyal | 9 | Crispy | 145 Support maps. 45 maps together, most on Gen.G Esports in 2025 EMEA Stage 3 | [Crispy](https://liquipedia.net/overwatch/Crispy) |
+| Support × Teammate of xzodyal | 9 | Lv1Crook | 26 Support maps. 26 maps together on Team Peps, 2024 EMEA Stage 2 | [Lv1Crook](https://liquipedia.net/overwatch/Lv1Crook) |
+| Support × EMEA stage finalist | 11 | FunnyAstro | 198 Support maps. Won 2024 EMEA Stage 2 with SpaceStation Gaming (17 playoff maps), and 3 more | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
+| Support × EMEA stage finalist | 11 | Slay | 42 Support maps. Won 2024 EMEA Stage 1 with Twisted Minds (20 playoff maps) | [Slay](https://liquipedia.net/overwatch/Slay) |
+| Support × Rostered at Esports World Cup 2024 | 20 | Admiral | 184 Support maps. On NTMR's roster at Esports World Cup 2024 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Support × Rostered at Esports World Cup 2024 | 20 | OPENER | 43 Support maps. On Mkers's roster at Esports World Cup 2024 | [OPENER](https://liquipedia.net/overwatch/OPENER) |
 
-### Puzzle 3, 2026-11-20 (Medium)
-
-| Cell | Answers | Player | Reason shown | Liquipedia |
-|---|---|---|---|---|
-| Played in NA and EMEA × Stage grand finalist | 3 | Admiral | 166 maps in NA, 18 in EMEA. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 3 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played in NA and EMEA × Stage grand finalist | 3 | WMaimone | 92 maps in NA, 33 in EMEA. Won 2025 NA Stage 2 with Geekay Esports (18 playoff maps) | [WMaimone](https://liquipedia.net/overwatch/WMaimone) |
-| Played in NA and EMEA × Rostered at an international LAN | 7 | Admiral | 166 maps in NA, 18 in EMEA. On NTMR's roster at Esports World Cup 2024, and 6 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played in NA and EMEA × Rostered at an international LAN | 7 | MCD | 20 maps in NA, 5 in EMEA. On Twisted Minds's roster at 2024 World Finals | [MCD](https://liquipedia.net/overwatch/MCD) |
-| Played in NA and EMEA × 50+ OWCS maps | 8 | Admiral | 166 maps in NA, 18 in EMEA. 184 OWCS maps | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played in NA and EMEA × 50+ OWCS maps | 8 | Natsuki | 28 maps in NA, 40 in EMEA. 68 OWCS maps | [Natsuki](https://liquipedia.net/overwatch/Natsuki) |
-| Played for Team Liquid × Stage grand finalist | 6 | Infekted | 137 maps for Team Liquid, 2025-2026. Runner-up in 2025 NA Stage 2 with Team Liquid (15 playoff maps), and 1 more | [Infekted](https://liquipedia.net/overwatch/Infekted) |
-| Played for Team Liquid × Stage grand finalist | 6 | Rupal | 108 maps for Team Liquid, 2025. Won 2024 NA Stage 1 with Toronto Defiant (16 playoff maps), and 3 more | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| Played for Team Liquid × Rostered at an international LAN | 9 | Infekted | 137 maps for Team Liquid, 2025-2026. On NTMR's roster at Esports World Cup 2024, and 3 more | [Infekted](https://liquipedia.net/overwatch/Infekted) |
-| Played for Team Liquid × Rostered at an international LAN | 9 | KIVIS | 19 maps for Team Liquid, 2026. On Team Liquid's roster at 2026 Midseason Championship | [KIVIS](https://liquipedia.net/overwatch/KIVIS) |
-| Played for Team Liquid × 50+ OWCS maps | 5 | Infekted | 137 maps for Team Liquid, 2025-2026. 174 OWCS maps | [Infekted](https://liquipedia.net/overwatch/Infekted) |
-| Played for Team Liquid × 50+ OWCS maps | 5 | Rupal | 108 maps for Team Liquid, 2025. 153 OWCS maps | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| Teammate of Galaa × Stage grand finalist | 6 | eisgnom | 35 maps together, most on Virtus pro in 2025 EMEA Stage 3. Runner-up in 2026 EMEA Stage 1 with Virtus pro (8 playoff maps), and 1 more | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Teammate of Galaa × Stage grand finalist | 6 | JaeWoo | 92 maps together, most on Virtus pro in 2025 EMEA Stage 2. Won 2025 EMEA Stage 1 with Virtus pro (14 playoff maps), and 1 more | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-| Teammate of Galaa × Rostered at an international LAN | 11 | Ade | 40 maps together, most on Al Qadsiah in 2026 EMEA Stage 1. On All Gamers Global's roster at 2025 Midseason Championship | [Ade](https://liquipedia.net/overwatch/Ade) |
-| Teammate of Galaa × Rostered at an international LAN | 11 | MCD | 2 maps together on Ataraxia, 2024 EMEA Stage 2. On Twisted Minds's roster at 2024 World Finals | [MCD](https://liquipedia.net/overwatch/MCD) |
-| Teammate of Galaa × 50+ OWCS maps | 7 | eisgnom | 35 maps together, most on Virtus pro in 2025 EMEA Stage 3. 126 OWCS maps | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Teammate of Galaa × 50+ OWCS maps | 7 | JaeWoo | 92 maps together, most on Virtus pro in 2025 EMEA Stage 2. 120 OWCS maps | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-
-### Puzzle 4, 2026-11-21 (Hard)
+### Puzzle 2, 2026-11-18 (Medium)
 
 | Cell | Answers | Player | Reason shown | Liquipedia |
 |---|---|---|---|---|
-| Top 25% fewest deaths/10, 2025 NA/EMEA × Teammate of kevster | 8 | eisgnom | 4.7 deaths/10 as Tank in 2025, #6 of 28. 69 maps together, most on Virtus pro in 2026 EMEA Stage 1 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Top 25% fewest deaths/10, 2025 NA/EMEA × Teammate of kevster | 8 | JaeWoo | 4.6 deaths/10 as DPS in 2025, #7 of 50. 11 maps together on Virtus pro, 2025 EMEA Stage 3 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-| Top 25% fewest deaths/10, 2025 NA/EMEA × Played for NTMR | 4 | Admiral | 5.0 deaths/10 as Support in 2025, #10 of 48. 46 maps for NTMR, 2025 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Top 25% fewest deaths/10, 2025 NA/EMEA × Played for NTMR | 4 | squid | 5.0 deaths/10 as Support in 2025, #12 of 48. 9 maps for NTMR, 2025 | [Squid](https://liquipedia.net/overwatch/Squid) |
-| Top 25% fewest deaths/10, 2025 NA/EMEA × Teammate of Admiral | 5 | Hawk | 4.4 deaths/10 as Tank in 2025, #4 of 28. 41 maps together, most on SpaceStation Gaming in 2026 NA Stage 1 | [Hawk](https://liquipedia.net/overwatch/Hawk) |
-| Top 25% fewest deaths/10, 2025 NA/EMEA × Teammate of Admiral | 5 | zeruhh | 4.5 deaths/10 as DPS in 2025, #5 of 50. 46 maps together on NTMR, 2025 NA Stage 1 | [Zeruhh](https://liquipedia.net/overwatch/Zeruhh) |
-| Rostered at 2026 Champions Clash × Teammate of kevster | 5 | eisgnom | On Virtus pro's roster at 2026 Champions Clash. 69 maps together, most on Virtus pro in 2026 EMEA Stage 1 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Rostered at 2026 Champions Clash × Teammate of kevster | 5 | JaeWoo | On Twisted Minds's roster at 2026 Champions Clash. 11 maps together on Virtus pro, 2025 EMEA Stage 3 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-| Rostered at 2026 Champions Clash × Played for NTMR | 5 | Admiral | On SpaceStation Gaming's roster at 2026 Champions Clash. 46 maps for NTMR, 2025 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Rostered at 2026 Champions Clash × Played for NTMR | 5 | UltraViolet | On SpaceStation Gaming's roster at 2026 Champions Clash. 46 maps for NTMR, 2025 | [UltraViolet](https://liquipedia.net/overwatch/UltraViolet) |
-| Rostered at 2026 Champions Clash × Teammate of Admiral | 6 | Hawk | On SpaceStation Gaming's roster at 2026 Champions Clash. 41 maps together, most on SpaceStation Gaming in 2026 NA Stage 1 | [Hawk](https://liquipedia.net/overwatch/Hawk) |
-| Rostered at 2026 Champions Clash × Teammate of Admiral | 6 | Youbi | On Twisted Minds's roster at 2026 Champions Clash. 9 maps together on Twisted Minds, 2024 EMEA Stage 2 | [Youbi](https://liquipedia.net/overwatch/Youbi) |
-| Won an OWCS stage × Teammate of kevster | 9 | eisgnom | Won 2026 EMEA Stage 2 with Virtus pro (15 playoff maps). 69 maps together, most on Virtus pro in 2026 EMEA Stage 1 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Won an OWCS stage × Teammate of kevster | 9 | JaeWoo | Won 2025 EMEA Stage 1 with Virtus pro (14 playoff maps), and 1 more. 11 maps together on Virtus pro, 2025 EMEA Stage 3 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-| Won an OWCS stage × Played for NTMR | 7 | Admiral | Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more. 46 maps for NTMR, 2025 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Won an OWCS stage × Played for NTMR | 7 | zeruhh | Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more. 46 maps for NTMR, 2025 | [Zeruhh](https://liquipedia.net/overwatch/Zeruhh) |
-| Won an OWCS stage × Teammate of Admiral | 10 | cuFFa | Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more. 124 maps together, most on NTMR in 2025 NA Stage 1 | [CuFFa](https://liquipedia.net/overwatch/CuFFa) |
-| Won an OWCS stage × Teammate of Admiral | 10 | Slay | Won 2024 EMEA Stage 1 with Twisted Minds (20 playoff maps). 9 maps together on Twisted Minds, 2024 EMEA Stage 2 | [Slay](https://liquipedia.net/overwatch/Slay) |
-
-### Puzzle 5, 2026-11-22 (Hard)
-
-| Cell | Answers | Player | Reason shown | Liquipedia |
-|---|---|---|---|---|
-| Top 25% elims/10, 2025 NA/EMEA × Teammate of Youbi | 6 | FunnyAstro | 13.3 elims/10 as Support in 2025, #8 of 48. 48 maps together, most on Twisted Minds in 2025 EMEA Stage 2 | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
-| Top 25% elims/10, 2025 NA/EMEA × Teammate of Youbi | 6 | Simple | 12.4 elims/10 as Support in 2025, #12 of 48. 46 maps together, most on Twisted Minds in 2025 EMEA Stage 2 | [Simple](https://liquipedia.net/overwatch/Simple) |
 | Top 25% elims/10, 2025 NA/EMEA × Won an NA stage | 8 | cjay | 12.6 elims/10 as Support in 2025, #11 of 48. Won 2026 NA Stage 1 with Dallas Fuel (3 playoff maps), and 1 more | [Cjay](https://liquipedia.net/overwatch/Cjay) |
 | Top 25% elims/10, 2025 NA/EMEA × Won an NA stage | 8 | Rupal | 12.7 elims/10 as Support in 2025, #10 of 48. Won 2024 NA Stage 1 with Toronto Defiant (16 playoff maps), and 2 more | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| Top 25% elims/10, 2025 NA/EMEA × Teammate of FunnyAstro | 6 | Landon | 14.3 elims/10 as Support in 2025, #2 of 48. 45 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2 | [Landon](https://liquipedia.net/overwatch/Landon) |
-| Top 25% elims/10, 2025 NA/EMEA × Teammate of FunnyAstro | 6 | Simple | 12.4 elims/10 as Support in 2025, #12 of 48. 123 maps together, most on Twisted Minds in 2025 EMEA Stage 2 | [Simple](https://liquipedia.net/overwatch/Simple) |
-| Played for SpaceStation Gaming × Teammate of Youbi | 3 | Admiral | 41 maps for SpaceStation Gaming, 2026. 9 maps together on Twisted Minds, 2024 EMEA Stage 2 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played for SpaceStation Gaming × Teammate of Youbi | 3 | Hadi | 45 maps for SpaceStation Gaming, 2024. 2 maps together on Twisted Minds, 2025 EMEA Stage 1 | [Hadi](https://liquipedia.net/overwatch/Hadi) |
-| Played for SpaceStation Gaming × Won an NA stage | 7 | Admiral | 41 maps for SpaceStation Gaming, 2026. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played for SpaceStation Gaming × Won an NA stage | 7 | UltraViolet | 41 maps for SpaceStation Gaming, 2026. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [UltraViolet](https://liquipedia.net/overwatch/UltraViolet) |
-| Played for SpaceStation Gaming × Teammate of FunnyAstro | 5 | Landon | 45 maps for SpaceStation Gaming, 2024. 45 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2 | [Landon](https://liquipedia.net/overwatch/Landon) |
-| Played for SpaceStation Gaming × Teammate of FunnyAstro | 5 | SparkR | 42 maps for SpaceStation Gaming, 2024. 42 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2 | [SparkR](https://liquipedia.net/overwatch/SparkR) |
-| Rostered at 2024 World Finals × Teammate of Youbi | 8 | Admiral | On NTMR's roster at 2024 World Finals. 9 maps together on Twisted Minds, 2024 EMEA Stage 2 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Rostered at 2024 World Finals × Teammate of Youbi | 8 | SKAI | On ENCE's roster at 2024 World Finals. 7 maps together on Twisted Minds, 2024 EMEA Stage 2 | [Skairipa](https://liquipedia.net/overwatch/Skairipa) |
-| Rostered at 2024 World Finals × Won an NA stage | 12 | Admiral | On NTMR's roster at 2024 World Finals. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Rostered at 2024 World Finals × Won an NA stage | 12 | Rupal | On Toronto Defiant's roster at 2024 World Finals. Won 2024 NA Stage 1 with Toronto Defiant (16 playoff maps), and 2 more | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| Rostered at 2024 World Finals × Teammate of FunnyAstro | 6 | Landon | On SpaceStation Gaming's roster at 2024 World Finals. 45 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2 | [Landon](https://liquipedia.net/overwatch/Landon) |
-| Rostered at 2024 World Finals × Teammate of FunnyAstro | 6 | Hadi | On SpaceStation Gaming's roster at 2024 World Finals. 57 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2 | [Hadi](https://liquipedia.net/overwatch/Hadi) |
+| Top 25% elims/10, 2025 NA/EMEA × Teammate of Youbi | 6 | FunnyAstro | 13.3 elims/10 as Support in 2025, #8 of 48. 48 maps together, most on Twisted Minds in 2025 EMEA Stage 2 | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
+| Top 25% elims/10, 2025 NA/EMEA × Teammate of Youbi | 6 | Simple | 12.4 elims/10 as Support in 2025, #12 of 48. 46 maps together, most on Twisted Minds in 2025 EMEA Stage 2 | [Simple](https://liquipedia.net/overwatch/Simple) |
+| Top 25% elims/10, 2025 NA/EMEA × Played for Virtus pro | 8 | eisgnom | 19.7 elims/10 as Tank in 2025, #6 of 28. 81 maps for Virtus pro, 2025-2026 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
+| Top 25% elims/10, 2025 NA/EMEA × Played for Virtus pro | 8 | JaeWoo | 20.3 elims/10 as DPS in 2025, #2 of 50. 92 maps for Virtus pro, 2025 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
+| Rostered at 2025 Midseason Championship × Won an NA stage | 15 | Admiral | On Geekay Esports's roster at 2025 Midseason Championship. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Rostered at 2025 Midseason Championship × Won an NA stage | 15 | Rupal | On Team Liquid's roster at 2025 Midseason Championship. Won 2024 NA Stage 1 with Toronto Defiant (16 playoff maps), and 2 more | [Rupal](https://liquipedia.net/overwatch/Rupal) |
+| Rostered at 2025 Midseason Championship × Teammate of Youbi | 7 | Admiral | On Geekay Esports's roster at 2025 Midseason Championship. 9 maps together on Twisted Minds, 2024 EMEA Stage 2 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Rostered at 2025 Midseason Championship × Teammate of Youbi | 7 | Simple | On Twisted Minds's roster at 2025 Midseason Championship. 46 maps together, most on Twisted Minds in 2025 EMEA Stage 2 | [Simple](https://liquipedia.net/overwatch/Simple) |
+| Rostered at 2025 Midseason Championship × Played for Virtus pro | 7 | eisgnom | On Virtus pro's roster at 2025 Midseason Championship. 81 maps for Virtus pro, 2025-2026 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
+| Rostered at 2025 Midseason Championship × Played for Virtus pro | 7 | JaeWoo | On Virtus pro's roster at 2025 Midseason Championship. 92 maps for Virtus pro, 2025 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
+| Played in 2026 × Won an NA stage | 14 | Admiral | 41 maps in 2026. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Played in 2026 × Won an NA stage | 14 | zeruhh | 44 maps in 2026. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [Zeruhh](https://liquipedia.net/overwatch/Zeruhh) |
+| Played in 2026 × Teammate of Youbi | 8 | Admiral | 41 maps in 2026. 9 maps together on Twisted Minds, 2024 EMEA Stage 2 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Played in 2026 × Teammate of Youbi | 8 | Simple | 41 maps in 2026. 46 maps together, most on Twisted Minds in 2025 EMEA Stage 2 | [Simple](https://liquipedia.net/overwatch/Simple) |
+| Played in 2026 × Played for Virtus pro | 8 | eisgnom | 46 maps in 2026. 81 maps for Virtus pro, 2025-2026 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
+| Played in 2026 × Played for Virtus pro | 8 | JaeWoo | 28 maps in 2026. 92 maps for Virtus pro, 2025 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
 
-### Puzzle 6, 2026-11-23 (Easy)
+### Puzzle 3, 2026-11-19 (Medium)
 
 | Cell | Answers | Player | Reason shown | Liquipedia |
 |---|---|---|---|---|
-| Played for Team Peps × Played in 2025 | 12 | Dip | 50 maps for Team Peps, 2025-2026. 61 maps in 2025 | [Dip](https://liquipedia.net/overwatch/Dip) |
-| Played for Team Peps × Played in 2025 | 12 | SoOn | 12 maps for Team Peps, 2025. 12 maps in 2025 | [SoOn](https://liquipedia.net/overwatch/SoOn) |
-| Played for Team Peps × Rostered at Esports World Cup 2024 | 5 | FDGod | 160 maps for Team Peps, 2024-2026. On Gaimin Gladiators's roster at Esports World Cup 2024 | [FDGod](https://liquipedia.net/overwatch/FDGod) |
-| Played for Team Peps × Rostered at Esports World Cup 2024 | 5 | Naga | 49 maps for Team Peps, 2024. On Gaimin Gladiators's roster at Esports World Cup 2024 | [Naga](https://liquipedia.net/overwatch/Naga) |
+| Rostered at an international LAN × Teammate of CheckMate | 8 | Haku | On Al Qadsiah's roster at 2025 Champions Clash. 43 maps together on Al Qadsiah, 2025 EMEA Stage 1 | [Haku (Saudi Arabian player)](https://liquipedia.net/overwatch/Haku_(Saudi_Arabian_player)) |
+| Rostered at an international LAN × Teammate of CheckMate | 8 | IZaYaKI | On Fnatic's roster at Esports World Cup 2024. 12 maps together on ROC ESPORT, 2024 EMEA Stage 1 | [Izayaki](https://liquipedia.net/overwatch/Izayaki) |
+| Rostered at an international LAN × Teammate of Khenail | 9 | Kai | On ENCE's roster at Esports World Cup 2024, and 1 more. 24 maps together, most on Anyones Legend in 2026 EMEA Stage 1 | [Kai](https://liquipedia.net/overwatch/Kai) |
+| Rostered at an international LAN × Teammate of Khenail | 9 | Sauna | On Virtus pro's roster at Esports World Cup 2024. 33 maps together on Gen.G Esports, 2025 EMEA Stage 1 | [Sauna](https://liquipedia.net/overwatch/Sauna) |
+| Rostered at an international LAN × Played for Team Liquid | 9 | Infekted | On NTMR's roster at Esports World Cup 2024, and 3 more. 137 maps for Team Liquid, 2025-2026 | [Infekted](https://liquipedia.net/overwatch/Infekted) |
+| Rostered at an international LAN × Played for Team Liquid | 9 | KIVIS | On Team Liquid's roster at 2026 Midseason Championship. 19 maps for Team Liquid, 2026 | [KIVIS](https://liquipedia.net/overwatch/KIVIS) |
+| Stage grand finalist × Teammate of CheckMate | 7 | Haku | Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps). 43 maps together on Al Qadsiah, 2025 EMEA Stage 1 | [Haku (Saudi Arabian player)](https://liquipedia.net/overwatch/Haku_(Saudi_Arabian_player)) |
+| Stage grand finalist × Teammate of CheckMate | 7 | ZIYAD | Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 3 more. 94 maps together, most on Al Qadsiah in 2025 EMEA Stage 2 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Stage grand finalist × Teammate of Khenail | 5 | Kai | Runner-up in 2024 EMEA Stage 1 with ENCE (15 playoff maps), and 1 more. 24 maps together, most on Anyones Legend in 2026 EMEA Stage 1 | [Kai](https://liquipedia.net/overwatch/Kai) |
+| Stage grand finalist × Teammate of Khenail | 5 | Chase | Runner-up in 2024 EMEA Stage 2 with ENCE (6 playoff maps). 30 maps together on Ex Oblivione, 2024 EMEA Stage 1 | [Chase](https://liquipedia.net/overwatch/Chase) |
+| Stage grand finalist × Played for Team Liquid | 6 | Infekted | Runner-up in 2025 NA Stage 2 with Team Liquid (15 playoff maps), and 1 more. 137 maps for Team Liquid, 2025-2026 | [Infekted](https://liquipedia.net/overwatch/Infekted) |
+| Stage grand finalist × Played for Team Liquid | 6 | Rupal | Won 2024 NA Stage 1 with Toronto Defiant (16 playoff maps), and 3 more. 108 maps for Team Liquid, 2025 | [Rupal](https://liquipedia.net/overwatch/Rupal) |
+| 50+ OWCS maps × Teammate of CheckMate | 8 | Haku | 71 OWCS maps. 43 maps together on Al Qadsiah, 2025 EMEA Stage 1 | [Haku (Saudi Arabian player)](https://liquipedia.net/overwatch/Haku_(Saudi_Arabian_player)) |
+| 50+ OWCS maps × Teammate of CheckMate | 8 | ZIYAD | 150 OWCS maps. 94 maps together, most on Al Qadsiah in 2025 EMEA Stage 2 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| 50+ OWCS maps × Teammate of Khenail | 10 | Crispy | 145 OWCS maps. 134 maps together, most on Gen.G Esports in 2025 EMEA Stage 1 | [Crispy](https://liquipedia.net/overwatch/Crispy) |
+| 50+ OWCS maps × Teammate of Khenail | 10 | Mag | 61 OWCS maps. 61 maps together, most on Gen.G Esports in 2025 EMEA Stage 1 | [Mag](https://liquipedia.net/overwatch/Mag) |
+| 50+ OWCS maps × Played for Team Liquid | 5 | Infekted | 174 OWCS maps. 137 maps for Team Liquid, 2025-2026 | [Infekted](https://liquipedia.net/overwatch/Infekted) |
+| 50+ OWCS maps × Played for Team Liquid | 5 | Rupal | 153 OWCS maps. 108 maps for Team Liquid, 2025 | [Rupal](https://liquipedia.net/overwatch/Rupal) |
+
+### Puzzle 4, 2026-11-20 (Medium)
+
+| Cell | Answers | Player | Reason shown | Liquipedia |
+|---|---|---|---|---|
+| Teammate of Infekted × 100+ OWCS maps | 4 | TR33 | 136 maps together, most on Team Liquid in 2025 NA Stage 1. 151 OWCS maps | [TR33](https://liquipedia.net/overwatch/TR33) |
+| Teammate of Infekted × 100+ OWCS maps | 4 | Rupal | 108 maps together, most on Team Liquid in 2025 NA Stage 3. 153 OWCS maps | [Rupal](https://liquipedia.net/overwatch/Rupal) |
+| Teammate of Infekted × Rostered at 2025 World Finals | 4 | TR33 | 136 maps together, most on Team Liquid in 2025 NA Stage 1. On Team Liquid's roster at 2025 World Finals | [TR33](https://liquipedia.net/overwatch/TR33) |
+| Teammate of Infekted × Rostered at 2025 World Finals | 4 | Rupal | 108 maps together, most on Team Liquid in 2025 NA Stage 3. On Team Liquid's roster at 2025 World Finals | [Rupal](https://liquipedia.net/overwatch/Rupal) |
+| Teammate of Infekted × Played in 2024 | 9 | Vega | 137 maps together, most on Team Liquid in 2025 NA Stage 3. 46 maps in 2024 | [Vega](https://liquipedia.net/overwatch/Vega) |
+| Teammate of Infekted × Played in 2024 | 9 | MirroR | 2 maps together on Students of the Game, 2024 NA Stage 2. 22 maps in 2024 | [MirroR](https://liquipedia.net/overwatch/MirroR) |
 | Played for Team Peps × 100+ OWCS maps | 5 | eisgnom | 33 maps for Team Peps, 2025. 126 OWCS maps | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
 | Played for Team Peps × 100+ OWCS maps | 5 | xzodyal | 57 maps for Team Peps, 2024-2025. 137 OWCS maps | [Xzodyal](https://liquipedia.net/overwatch/Xzodyal) |
-| Teammate of Vega × Played in 2025 | 7 | Infekted | 137 maps together, most on Team Liquid in 2025 NA Stage 3. 108 maps in 2025 | [Infekted](https://liquipedia.net/overwatch/Infekted) |
-| Teammate of Vega × Played in 2025 | 7 | Rupal | 153 maps together, most on Team Liquid in 2025 NA Stage 3. 108 maps in 2025 | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| Teammate of Vega × Rostered at Esports World Cup 2024 | 10 | Infekted | 137 maps together, most on Team Liquid in 2025 NA Stage 3. On NTMR's roster at Esports World Cup 2024 | [Infekted](https://liquipedia.net/overwatch/Infekted) |
-| Teammate of Vega × Rostered at Esports World Cup 2024 | 10 | Rupal | 153 maps together, most on Team Liquid in 2025 NA Stage 3. On Toronto Defiant's roster at Esports World Cup 2024 | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| Teammate of Vega × 100+ OWCS maps | 5 | Infekted | 137 maps together, most on Team Liquid in 2025 NA Stage 3. 174 OWCS maps | [Infekted](https://liquipedia.net/overwatch/Infekted) |
-| Teammate of Vega × 100+ OWCS maps | 5 | Rupal | 153 maps together, most on Team Liquid in 2025 NA Stage 3. 153 OWCS maps | [Rupal](https://liquipedia.net/overwatch/Rupal) |
-| EMEA stage finalist × Played in 2025 | 24 | CheckMate | Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 2 more. 109 maps in 2025 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
-| EMEA stage finalist × Played in 2025 | 24 | ZIYAD | Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 3 more. 94 maps in 2025 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
-| EMEA stage finalist × Rostered at Esports World Cup 2024 | 17 | CheckMate | Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 2 more. On Fnatic's roster at Esports World Cup 2024 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
-| EMEA stage finalist × Rostered at Esports World Cup 2024 | 17 | SparkR | Won 2024 EMEA Stage 2 with SpaceStation Gaming (17 playoff maps). On SpaceStation Gaming's roster at Esports World Cup 2024 | [SparkR](https://liquipedia.net/overwatch/SparkR) |
-| EMEA stage finalist × 100+ OWCS maps | 19 | CheckMate | Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 2 more. 121 OWCS maps | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
-| EMEA stage finalist × 100+ OWCS maps | 19 | ZIYAD | Runner-up in 2025 EMEA Stage 1 with Al Qadsiah (16 playoff maps), and 3 more. 150 OWCS maps | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Played for Team Peps × Rostered at 2025 World Finals | 5 | Dip | 50 maps for Team Peps, 2025-2026. On Team Peps's roster at 2025 World Finals | [Dip](https://liquipedia.net/overwatch/Dip) |
+| Played for Team Peps × Rostered at 2025 World Finals | 5 | Willys | 50 maps for Team Peps, 2025-2026. On Team Peps's roster at 2025 World Finals | [Willys07](https://liquipedia.net/overwatch/Willys07) |
+| Played for Team Peps × Played in 2024 | 15 | Dip | 50 maps for Team Peps, 2025-2026. 10 maps in 2024 | [Dip](https://liquipedia.net/overwatch/Dip) |
+| Played for Team Peps × Played in 2024 | 15 | Stellios | 6 maps for Team Peps, 2024. 6 maps in 2024 | [Stellios](https://liquipedia.net/overwatch/Stellios) |
+| Won an EMEA stage × 100+ OWCS maps | 18 | CheckMate | Won 2025 EMEA Stage 2 with Al Qadsiah (14 playoff maps). 121 OWCS maps | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| Won an EMEA stage × 100+ OWCS maps | 18 | ZIYAD | Won 2025 EMEA Stage 2 with Al Qadsiah (14 playoff maps). 150 OWCS maps | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Won an EMEA stage × Rostered at 2025 World Finals | 11 | CheckMate | Won 2025 EMEA Stage 2 with Al Qadsiah (14 playoff maps). On Al Qadsiah's roster at 2025 World Finals | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| Won an EMEA stage × Rostered at 2025 World Finals | 11 | ZIYAD | Won 2025 EMEA Stage 2 with Al Qadsiah (14 playoff maps). On Al Qadsiah's roster at 2025 World Finals | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Won an EMEA stage × Played in 2024 | 19 | CheckMate | Won 2025 EMEA Stage 2 with Al Qadsiah (14 playoff maps). 12 maps in 2024 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| Won an EMEA stage × Played in 2024 | 19 | SparkR | Won 2024 EMEA Stage 2 with SpaceStation Gaming (17 playoff maps). 42 maps in 2024 | [SparkR](https://liquipedia.net/overwatch/SparkR) |
 
-### Puzzle 7, 2026-11-24 (Easy)
+### Puzzle 5, 2026-11-21 (Hard)
 
 | Cell | Answers | Player | Reason shown | Liquipedia |
 |---|---|---|---|---|
-| Teammate of Simple × Top 25% fewest deaths/10, 2026 NA/EMEA | 4 | FunnyAstro | 123 maps together, most on Twisted Minds in 2025 EMEA Stage 2. 4.6 deaths/10 as Support in 2026, #4 of 23 | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
-| Teammate of Simple × Top 25% fewest deaths/10, 2026 NA/EMEA | 4 | JaeWoo | 28 maps together, most on Twisted Minds in 2026 EMEA Stage 1. 3.9 deaths/10 as DPS in 2026, #1 of 22 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-| Teammate of Simple × Rostered at 2026 Midseason Championship | 5 | FunnyAstro | 123 maps together, most on Twisted Minds in 2025 EMEA Stage 2. On Twisted Minds's roster at 2026 Midseason Championship | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
-| Teammate of Simple × Rostered at 2026 Midseason Championship | 5 | Youbi | 46 maps together, most on Twisted Minds in 2025 EMEA Stage 2. On Twisted Minds's roster at 2026 Midseason Championship | [Youbi](https://liquipedia.net/overwatch/Youbi) |
-| Teammate of Simple × Top 25% damage/10, 2025 NA/EMEA | 3 | KSAA | 57 maps together, most on Twisted Minds in 2025 EMEA Stage 2. 10356.9 damage/10 as Tank in 2025, #4 of 28 | [KSAA](https://liquipedia.net/overwatch/KSAA) |
-| Teammate of Simple × Top 25% damage/10, 2025 NA/EMEA | 3 | Slowdive | 26 maps together on Vision Esports, 2025 EMEA Stage 1. 8935.7 damage/10 as DPS in 2025, #13 of 50 | [Slowdive](https://liquipedia.net/overwatch/Slowdive) |
-| Won an EMEA stage × Top 25% fewest deaths/10, 2026 NA/EMEA | 5 | FunnyAstro | Won 2024 EMEA Stage 2 with SpaceStation Gaming (17 playoff maps), and 2 more. 4.6 deaths/10 as Support in 2026, #4 of 23 | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
-| Won an EMEA stage × Top 25% fewest deaths/10, 2026 NA/EMEA | 5 | JaeWoo | Won 2025 EMEA Stage 1 with Virtus pro (14 playoff maps), and 1 more. 3.9 deaths/10 as DPS in 2026, #1 of 22 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
-| Won an EMEA stage × Rostered at 2026 Midseason Championship | 14 | CheckMate | Won 2025 EMEA Stage 2 with Al Qadsiah (14 playoff maps). On Team Falcons's roster at 2026 Midseason Championship | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
-| Won an EMEA stage × Rostered at 2026 Midseason Championship | 14 | ZIYAD | Won 2025 EMEA Stage 2 with Al Qadsiah (14 playoff maps). On Geekay Esports's roster at 2026 Midseason Championship | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
-| Won an EMEA stage × Top 25% damage/10, 2025 NA/EMEA | 10 | eisgnom | Won 2026 EMEA Stage 2 with Virtus pro (15 playoff maps). 10296.2 damage/10 as Tank in 2025, #5 of 28 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Won an EMEA stage × Top 25% damage/10, 2025 NA/EMEA | 10 | Simple | Won 2025 EMEA Stage 3 with Twisted Minds (16 playoff maps), and 1 more. 4954.5 damage/10 as Support in 2025, #6 of 48 | [Simple](https://liquipedia.net/overwatch/Simple) |
-| Played in NA × Top 25% fewest deaths/10, 2026 NA/EMEA | 9 | Admiral | 166 maps in NA. 4.6 deaths/10 as Support in 2026, #3 of 23 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played in NA × Top 25% fewest deaths/10, 2026 NA/EMEA | 9 | zeruhh | 183 maps in NA. 4.6 deaths/10 as DPS in 2026, #2 of 22 | [Zeruhh](https://liquipedia.net/overwatch/Zeruhh) |
-| Played in NA × Rostered at 2026 Midseason Championship | 23 | Admiral | 166 maps in NA. On SpaceStation Gaming's roster at 2026 Midseason Championship | [Admiral](https://liquipedia.net/overwatch/Admiral) |
-| Played in NA × Rostered at 2026 Midseason Championship | 23 | KIVIS | 19 maps in NA. On Team Liquid's roster at 2026 Midseason Championship | [KIVIS](https://liquipedia.net/overwatch/KIVIS) |
-| Played in NA × Top 25% damage/10, 2025 NA/EMEA | 14 | cjay | 207 maps in NA. 4623.9 damage/10 as Support in 2025, #12 of 48 | [Cjay](https://liquipedia.net/overwatch/Cjay) |
-| Played in NA × Top 25% damage/10, 2025 NA/EMEA | 14 | GAP | 25 maps in NA. 10518.2 damage/10 as Tank in 2025, #2 of 28 | [GAP](https://liquipedia.net/overwatch/GAP) |
+| Teammate of eisgnom × Played all 3 seasons | 5 | FDGod | 33 maps together on Team Peps, 2025 EMEA Stage 1. 160 maps across 2024, 2025 and 2026 | [FDGod](https://liquipedia.net/overwatch/FDGod) |
+| Teammate of eisgnom × Played all 3 seasons | 5 | Seicoe | 46 maps together, most on Virtus pro in 2026 EMEA Stage 1. 150 maps across 2024, 2025 and 2026 | [Seicoe](https://liquipedia.net/overwatch/Seicoe) |
+| Teammate of eisgnom × Won an OWCS stage | 7 | Galaa | 35 maps together, most on Virtus pro in 2025 EMEA Stage 3. Won 2025 EMEA Stage 1 with Virtus pro (14 playoff maps) | [Galaa](https://liquipedia.net/overwatch/Galaa) |
+| Teammate of eisgnom × Won an OWCS stage | 7 | JaeWoo | 18 maps together, most on Virtus pro in 2025 EMEA Stage 2. Won 2025 EMEA Stage 1 with Virtus pro (14 playoff maps), and 1 more | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
+| Teammate of eisgnom × Top 25% fewest deaths/10, 2025 NA/EMEA | 6 | Galaa | 35 maps together, most on Virtus pro in 2025 EMEA Stage 3. 4.6 deaths/10 as Support in 2025, #3 of 48 | [Galaa](https://liquipedia.net/overwatch/Galaa) |
+| Teammate of eisgnom × Top 25% fewest deaths/10, 2025 NA/EMEA | 6 | JaeWoo | 18 maps together, most on Virtus pro in 2025 EMEA Stage 2. 4.6 deaths/10 as DPS in 2025, #7 of 50 | [JaeWoo](https://liquipedia.net/overwatch/JaeWoo) |
+| Played for NTMR × Played all 3 seasons | 8 | Admiral | 46 maps for NTMR, 2025. 184 maps across 2024, 2025 and 2026 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Played for NTMR × Played all 3 seasons | 8 | zeruhh | 46 maps for NTMR, 2025. 183 maps across 2024, 2025 and 2026 | [Zeruhh](https://liquipedia.net/overwatch/Zeruhh) |
+| Played for NTMR × Won an OWCS stage | 7 | Admiral | 46 maps for NTMR, 2025. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Played for NTMR × Won an OWCS stage | 7 | zeruhh | 46 maps for NTMR, 2025. Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 1 more | [Zeruhh](https://liquipedia.net/overwatch/Zeruhh) |
+| Played for NTMR × Top 25% fewest deaths/10, 2025 NA/EMEA | 4 | Admiral | 46 maps for NTMR, 2025. 5.0 deaths/10 as Support in 2025, #10 of 48 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| Played for NTMR × Top 25% fewest deaths/10, 2025 NA/EMEA | 4 | squid | 9 maps for NTMR, 2025. 5.0 deaths/10 as Support in 2025, #12 of 48 | [Squid](https://liquipedia.net/overwatch/Squid) |
+| Teammate of cjay × Played all 3 seasons | 6 | Hawk | 45 maps together on SpaceStation Gaming, 2025 NA Stage 3. 134 maps across 2024, 2025 and 2026 | [Hawk](https://liquipedia.net/overwatch/Hawk) |
+| Teammate of cjay × Played all 3 seasons | 6 | sugarfree | 119 maps together, most on SpaceStation Gaming in 2025 NA Stage 3. 206 maps across 2024, 2025 and 2026 | [Sugarfree](https://liquipedia.net/overwatch/Sugarfree) |
+| Teammate of cjay × Won an OWCS stage | 5 | Kellan | 119 maps together, most on SpaceStation Gaming in 2025 NA Stage 1. Won 2026 NA Stage 1 with Dallas Fuel (3 playoff maps), and 1 more | [Kellan](https://liquipedia.net/overwatch/Kellan) |
+| Teammate of cjay × Won an OWCS stage | 5 | sugarfree | 119 maps together, most on SpaceStation Gaming in 2025 NA Stage 3. Won 2024 NA Stage 1 with Toronto Defiant (16 playoff maps), and 1 more | [Sugarfree](https://liquipedia.net/overwatch/Sugarfree) |
+| Teammate of cjay × Top 25% fewest deaths/10, 2025 NA/EMEA | 6 | Bliss | 68 maps together, most on SpaceStation Gaming in 2025 NA Stage 1. 5.0 deaths/10 as Support in 2025, #11 of 48 | [Bliss](https://liquipedia.net/overwatch/Bliss) |
+| Teammate of cjay × Top 25% fewest deaths/10, 2025 NA/EMEA | 6 | squid | 6 maps together on SpaceStation Gaming, 2025 NA Stage 2. 5.0 deaths/10 as Support in 2025, #12 of 48 | [Squid](https://liquipedia.net/overwatch/Squid) |
 
-### Puzzle 8, 2026-11-25 (Medium)
+### Puzzle 6, 2026-11-22 (Hard)
 
 | Cell | Answers | Player | Reason shown | Liquipedia |
 |---|---|---|---|---|
-| Teammate of Seicoe × Top 25% damage/10, 2026 NA/EMEA | 5 | eisgnom | 46 maps together, most on Virtus pro in 2026 EMEA Stage 1. 12205.9 damage/10 as Tank in 2026, #1 of 10 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Teammate of Seicoe × Top 25% damage/10, 2026 NA/EMEA | 5 | Simple | 49 maps together, most on Twisted Minds in 2025 EMEA Stage 3. 4553.6 damage/10 as Support in 2026, #3 of 23 | [Simple](https://liquipedia.net/overwatch/Simple) |
-| Teammate of Seicoe × 75+ OWCS maps | 9 | eisgnom | 46 maps together, most on Virtus pro in 2026 EMEA Stage 1. 126 OWCS maps | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Teammate of Seicoe × 75+ OWCS maps | 9 | Simple | 49 maps together, most on Twisted Minds in 2025 EMEA Stage 3. 149 OWCS maps | [Simple](https://liquipedia.net/overwatch/Simple) |
-| Teammate of Seicoe × Rostered at 2025 Midseason Championship | 7 | eisgnom | 46 maps together, most on Virtus pro in 2026 EMEA Stage 1. On Virtus pro's roster at 2025 Midseason Championship | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
-| Teammate of Seicoe × Rostered at 2025 Midseason Championship | 7 | Simple | 49 maps together, most on Twisted Minds in 2025 EMEA Stage 3. On Twisted Minds's roster at 2025 Midseason Championship | [Simple](https://liquipedia.net/overwatch/Simple) |
-| Played for Al Qadsiah × Top 25% damage/10, 2026 NA/EMEA | 3 | Ade | 40 maps for Al Qadsiah, 2026. 11568.2 damage/10 as DPS in 2026, #3 of 22 | [Ade](https://liquipedia.net/overwatch/Ade) |
-| Played for Al Qadsiah × Top 25% damage/10, 2026 NA/EMEA | 3 | ZIYAD | 94 maps for Al Qadsiah, 2025. 10354.9 damage/10 as Tank in 2026, #3 of 10 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
-| Played for Al Qadsiah × 75+ OWCS maps | 8 | CheckMate | 109 maps for Al Qadsiah, 2025. 121 OWCS maps | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
-| Played for Al Qadsiah × 75+ OWCS maps | 8 | ZIYAD | 94 maps for Al Qadsiah, 2025. 150 OWCS maps | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
-| Played for Al Qadsiah × Rostered at 2025 Midseason Championship | 9 | Ade | 40 maps for Al Qadsiah, 2026. On All Gamers Global's roster at 2025 Midseason Championship | [Ade](https://liquipedia.net/overwatch/Ade) |
-| Played for Al Qadsiah × Rostered at 2025 Midseason Championship | 9 | ZIYAD | 94 maps for Al Qadsiah, 2025. On Al Qadsiah's roster at 2025 Midseason Championship | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
-| Teammate of Le7 × Top 25% damage/10, 2026 NA/EMEA | 3 | cjay | 45 maps together on SpaceStation Gaming, 2025 NA Stage 3. 4603.4 damage/10 as Support in 2026, #2 of 23 | [Cjay](https://liquipedia.net/overwatch/Cjay) |
-| Teammate of Le7 × Top 25% damage/10, 2026 NA/EMEA | 3 | Zeb | 1 map together on Rad, 2025 NA Stage 1. 10367.5 damage/10 as Tank in 2026, #2 of 10 | [Zeb](https://liquipedia.net/overwatch/Zeb) |
-| Teammate of Le7 × 75+ OWCS maps | 15 | cjay | 45 maps together on SpaceStation Gaming, 2025 NA Stage 3. 207 OWCS maps | [Cjay](https://liquipedia.net/overwatch/Cjay) |
-| Teammate of Le7 × 75+ OWCS maps | 15 | seeker | 16 maps together on FMCL, 2024 NA Stage 2. 129 OWCS maps | [Seeker](https://liquipedia.net/overwatch/Seeker) |
-| Teammate of Le7 × Rostered at 2025 Midseason Championship | 7 | Kronik | 112 maps together, most on SpaceStation Gaming in 2025 NA Stage 3. On NTMR's roster at 2025 Midseason Championship | [Kronik](https://liquipedia.net/overwatch/Kronik) |
-| Teammate of Le7 × Rostered at 2025 Midseason Championship | 7 | zeruhh | 7 maps together on FMCL, 2024 NA Stage 2. On Team Liquid's roster at 2025 Midseason Championship | [Zeruhh](https://liquipedia.net/overwatch/Zeruhh) |
+| Top 25% elims/10, 2026 NA/EMEA × Top 25% damage/10, 2026 NA/EMEA | 8 | eisgnom | 21.0 elims/10 as Tank in 2026, #2 of 10. 12205.9 damage/10 as Tank in 2026, #1 of 10 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
+| Top 25% elims/10, 2026 NA/EMEA × Top 25% damage/10, 2026 NA/EMEA | 8 | ZIYAD | 18.7 elims/10 as Tank in 2026, #3 of 10. 10354.9 damage/10 as Tank in 2026, #3 of 10 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Top 25% elims/10, 2026 NA/EMEA × Played for SpaceStation Gaming | 3 | FunnyAstro | 14.3 elims/10 as Support in 2026, #2 of 23. 45 maps for SpaceStation Gaming, 2024 | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
+| Top 25% elims/10, 2026 NA/EMEA × Played for SpaceStation Gaming | 3 | Seicoe | 18.8 elims/10 as DPS in 2026, #5 of 22. 27 maps for SpaceStation Gaming, 2024 | [Seicoe](https://liquipedia.net/overwatch/Seicoe) |
+| Top 25% elims/10, 2026 NA/EMEA × Rostered at 2025 Champions Clash | 5 | Landon | 12.7 elims/10 as Support in 2026, #4 of 23. On Al Qadsiah's roster at 2025 Champions Clash | [Landon](https://liquipedia.net/overwatch/Landon) |
+| Top 25% elims/10, 2026 NA/EMEA × Rostered at 2025 Champions Clash | 5 | ZIYAD | 18.7 elims/10 as Tank in 2026, #3 of 10. On Al Qadsiah's roster at 2025 Champions Clash | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Teammate of Landon × Top 25% damage/10, 2026 NA/EMEA | 5 | eisgnom | 46 maps together, most on Virtus pro in 2026 EMEA Stage 1. 12205.9 damage/10 as Tank in 2026, #1 of 10 | [Eisgnom](https://liquipedia.net/overwatch/Eisgnom) |
+| Teammate of Landon × Top 25% damage/10, 2026 NA/EMEA | 5 | ZIYAD | 94 maps together, most on Al Qadsiah in 2025 EMEA Stage 2. 10354.9 damage/10 as Tank in 2026, #3 of 10 | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| Teammate of Landon × Played for SpaceStation Gaming | 5 | FunnyAstro | 45 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2. 45 maps for SpaceStation Gaming, 2024 | [FunnyAstro](https://liquipedia.net/overwatch/FunnyAstro) |
+| Teammate of Landon × Played for SpaceStation Gaming | 5 | SparkR | 42 maps together, most on SpaceStation Gaming in 2024 EMEA Stage 2. 42 maps for SpaceStation Gaming, 2024 | [SparkR](https://liquipedia.net/overwatch/SparkR) |
+| Teammate of Landon × Rostered at 2025 Champions Clash | 6 | CheckMate | 109 maps together, most on Al Qadsiah in 2025 EMEA Stage 1. On Al Qadsiah's roster at 2025 Champions Clash | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| Teammate of Landon × Rostered at 2025 Champions Clash | 6 | ZIYAD | 94 maps together, most on Al Qadsiah in 2025 EMEA Stage 2. On Al Qadsiah's roster at 2025 Champions Clash | [ZIYAD](https://liquipedia.net/overwatch/ZIYAD) |
+| NA stage finalist × Top 25% damage/10, 2026 NA/EMEA | 3 | cjay | Runner-up in 2024 NA Stage 1 with Timeless (25 playoff maps), and 4 more. 4603.4 damage/10 as Support in 2026, #2 of 23 | [Cjay](https://liquipedia.net/overwatch/Cjay) |
+| NA stage finalist × Top 25% damage/10, 2026 NA/EMEA | 3 | Lukemino | Won 2026 NA Stage 1 with Dallas Fuel (3 playoff maps), and 1 more. 5602.0 damage/10 as Support in 2026, #1 of 23 | [Lukemino](https://liquipedia.net/overwatch/Lukemino) |
+| NA stage finalist × Played for SpaceStation Gaming | 11 | Admiral | Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 3 more. 41 maps for SpaceStation Gaming, 2026 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| NA stage finalist × Played for SpaceStation Gaming | 11 | seeker | Runner-up in 2025 NA Stage 1 with SpaceStation Gaming (14 playoff maps). 73 maps for SpaceStation Gaming, 2025 | [Seeker](https://liquipedia.net/overwatch/Seeker) |
+| NA stage finalist × Rostered at 2025 Champions Clash | 10 | Admiral | Won 2025 NA Stage 1 with NTMR (22 playoff maps), and 3 more. On NTMR's roster at 2025 Champions Clash | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| NA stage finalist × Rostered at 2025 Champions Clash | 10 | seeker | Runner-up in 2025 NA Stage 1 with SpaceStation Gaming (14 playoff maps). On SpaceStation Gaming's roster at 2025 Champions Clash | [Seeker](https://liquipedia.net/overwatch/Seeker) |
+
+### Puzzle 7, 2026-11-23 (Easy)
+
+| Cell | Answers | Player | Reason shown | Liquipedia |
+|---|---|---|---|---|
+| Teammate of Taejong × Played for Al Qadsiah | 5 | Ade | 32 maps together, most on Al Qadsiah in 2026 EMEA Stage 1. 40 maps for Al Qadsiah, 2026 | [Ade](https://liquipedia.net/overwatch/Ade) |
+| Teammate of Taejong × Played for Al Qadsiah | 5 | zox | 6 maps together on Al Qadsiah, 2026 EMEA Stage 2. 14 maps for Al Qadsiah, 2026 | [Zox](https://liquipedia.net/overwatch/Zox) |
+| Teammate of Taejong × Played in NA | 6 | Kronik | 4 maps together, most on PxG PiP in 2024 NA Stage 1. 197 maps in NA | [Kronik](https://liquipedia.net/overwatch/Kronik) |
+| Teammate of Taejong × Played in NA | 6 | Stryder | 7 maps together, most on PxG PiP in 2024 NA Stage 1. 44 maps in NA | [Stryder](https://liquipedia.net/overwatch/Stryder) |
+| Teammate of Taejong × Played in 2025 | 9 | Galaa | 32 maps together, most on Al Qadsiah in 2026 EMEA Stage 1. 109 maps in 2025 | [Galaa](https://liquipedia.net/overwatch/Galaa) |
+| Teammate of Taejong × Played in 2025 | 9 | Slowdive | 26 maps together on Vision Esports, 2025 EMEA Stage 1. 26 maps in 2025 | [Slowdive](https://liquipedia.net/overwatch/Slowdive) |
+| 25+ OWCS maps × Played for Al Qadsiah | 14 | Ade | 40 OWCS maps. 40 maps for Al Qadsiah, 2026 | [Ade](https://liquipedia.net/overwatch/Ade) |
+| 25+ OWCS maps × Played for Al Qadsiah | 14 | zox | 29 OWCS maps. 14 maps for Al Qadsiah, 2026 | [Zox](https://liquipedia.net/overwatch/Zox) |
+| 25+ OWCS maps × Played in NA | 84 | Admiral | 184 OWCS maps. 166 maps in NA | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| 25+ OWCS maps × Played in NA | 84 | Winter | 25 OWCS maps. 25 maps in NA | [Winter (Lucy Falmoe)](https://liquipedia.net/overwatch/Winter_(Lucy_Falmoe)) |
+| 25+ OWCS maps × Played in 2025 | 120 | Admiral | 184 OWCS maps. 125 maps in 2025 | [Admiral](https://liquipedia.net/overwatch/Admiral) |
+| 25+ OWCS maps × Played in 2025 | 120 | Winter | 25 OWCS maps. 25 maps in 2025 | [Winter (Lucy Falmoe)](https://liquipedia.net/overwatch/Winter_(Lucy_Falmoe)) |
+| Teammate of Tred × Played for Al Qadsiah | 5 | CheckMate | 8 maps together on Al Qadsiah, 2025 EMEA Stage 1. 109 maps for Al Qadsiah, 2025 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| Teammate of Tred × Played for Al Qadsiah | 5 | Qlm | 1 map together on Al Qadsiah, 2025 EMEA Stage 1. 1 maps for Al Qadsiah, 2025 | [Qlm](https://liquipedia.net/overwatch/Qlm) |
+| Teammate of Tred × Played in NA | 9 | KiWii | 4 maps together on Disguised, 2026 NA Stage 2. 4 maps in NA | [KiWii](https://liquipedia.net/overwatch/KiWii) |
+| Teammate of Tred × Played in NA | 9 | Momentum | 9 maps together on Obsidian, 2024 NA Stage 1. 9 maps in NA | [Momentum](https://liquipedia.net/overwatch/Momentum) |
+| Teammate of Tred × Played in 2025 | 20 | CheckMate | 8 maps together on Al Qadsiah, 2025 EMEA Stage 1. 109 maps in 2025 | [Checkmate](https://liquipedia.net/overwatch/Checkmate) |
+| Teammate of Tred × Played in 2025 | 20 | SoOn | 6 maps together on Team Peps, 2025 EMEA Stage 2. 12 maps in 2025 | [SoOn](https://liquipedia.net/overwatch/SoOn) |
 
 ## 2. Stage results (all 20)
 

@@ -93,10 +93,10 @@ grids from Phase 0 are in `grids/`.
 `generate_puzzles.py` builds the daily puzzles the site serves:
 
 ```bash
-python scripts/grid/build_facts.py                                                # stage results and awards -> scope/
-python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14         # mixed-clue puzzles
-python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --dry-run
-python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --classic    # the first beta's role x column grids
+python scripts/grid/build_facts.py                                                # stage results, awards, anchors -> scope/
+python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14         # mixed-clue puzzles
+python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14 --dry-run
+python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14 --classic    # the first beta's role x column grids
 ```
 
 It writes `scope/grid_puzzles.json` and `scope/grid_players.json`, and a report under `docs/grid/runs/`. A date that
@@ -108,8 +108,11 @@ is today or earlier (UTC) is refused.
 - **Classic puzzles** (`--classic`) use the Phase 0 conditions in `conditions.py` through `cell_counter.py`,
   unchanged: Tank / DPS / Support against three of 2024, 2025, 2026, NA, EMEA and "Played all 3 seasons".
 - `build_facts.py` derives what Muse's database does not hold as a column, stage winners and individual awards,
-  into `scope/grid_stages.json` and `scope/grid_awards.json`, each entry with a source link. It keeps `reviewed`
-  flags already set.
+  into `scope/grid_stages.json` and `scope/grid_awards.json`, each entry with a source link, and the candidate
+  "Teammate of" anchors into `scope/grid_anchors.json`. It keeps `reviewed` and `approved` flags already set. The
+  generator names approved anchors only.
+- `--rebuild-all` discards every puzzle and starts again, today included. It is only for a file no visitor has
+  been served.
 
 What every clue means and how the API and page use the files: [docs/grid/CATEGORIES.md](../../docs/grid/CATEGORIES.md)
 and [docs/grid/BETA.md](../../docs/grid/BETA.md).
