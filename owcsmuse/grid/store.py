@@ -5,6 +5,11 @@ module only reads them: which puzzle is today's, whether a guess is right, a few
 over, and name search for the guess box. Nothing here returns a cell's full answer set.
 
 A puzzle is published from 00:00 UTC on its date. Before that it does not exist as far as any caller can tell.
+
+Two puzzle formats live in the file. A beta puzzle (no `format`) is role x column: its answers carry maps-in-role and
+its can't-verify lists are per column. A mixed-clue puzzle (`"format": 2`) carries, per clue, a definition and the
+sentence for a guess it cannot check, and per cell every answer's reason and which clue cannot judge each
+unverifiable player. Both are served through the same routes.
 """
 
 from __future__ import annotations
@@ -140,14 +145,26 @@ class GridStore:
     @staticmethod
     def public(puzzle: dict[str, Any], now: datetime) -> dict[str, Any]:
         """The puzzle as a player sees it before guessing: the clues, the rules, the coverage. No answers, no ids."""
+        mixed = is_mixed(puzzle)
+
+        def header(clue: dict[str, Any], place: str, default_help: str) -> dict[str, Any]:
+            # A mixed clue's stored key and params can name a player id (a teammate clue's anchor), so the page gets
+            # a positional key instead, with the family, the label and the definition.
+            return {"key": place if mixed else clue["key"], "family": clue.get("family"),
+                    "label": clue["label"], "help": clue.get("help") or default_help}
+
+        floor = puzzle["rules"].get("min_maps")
+        role_help = f"{floor}+ maps in this role inside the column (FACEIT map stats)." if floor else ""
         return {
             "number": puzzle["number"],
             "date": puzzle["date"],
             "is_today": puzzle["date"] == utc_date(now).isoformat(),
-            "rows": [{"key": r["key"], "label": r["label"]} for r in puzzle["rows"]],
-            "cols": [{"key": c["key"], "label": c["label"], "help": c["help"]} for c in puzzle["cols"]],
+            "kind": puzzle.get("kind", "role"),
+            "difficulty": puzzle.get("difficulty"),
+            "rows": [header(r, f"row{i}", role_help) for i, r in enumerate(puzzle["rows"])],
+            "cols": [header(c, f"col{i}", "") for i, c in enumerate(puzzle["cols"])],
             "guesses": puzzle["rules"]["guesses"],
-            "min_maps": puzzle["rules"]["min_maps"],
+            "min_maps": floor,
             "coverage": coverage_note(puzzle),
         }
 
@@ -166,6 +183,16 @@ class GridStore:
         row, col = divmod(cell, 3)
         answer = puzzle["cells"][cell]["answers"].get(player_id)
         out: dict[str, Any] = {"puzzle": number, "cell": cell, "player": {"id": player.id, "name": player.name}}
+        if is_mixed(puzzle):
+            # the reason and the can't-verify sentence are the clue's own, written when the puzzle was generated
+            if answer is not None:
+                return {**out, "result": "correct", "uses_guess": True, "explanation": answer["why"], "link": None}
+            side = puzzle["cells"][cell].get("unverifiable", {}).get(player_id)
+            if side is not None:
+                clue = puzzle["rows"][row] if side == "row" else puzzle["cols"][col]
+                return {**out, "result": "cannot_verify", "uses_guess": False, "clue": clue["label"],
+                        "explanation": f"{clue['cannot_verify']} It didn't use a guess."}
+            return {**out, "result": "wrong", "uses_guess": True}
         if answer is not None:
             role = ROLE_WORDS.get(puzzle["rows"][row]["key"], puzzle["rows"][row]["label"])
             reason = puzzle["cols"][col]["explain"].format(maps=answer["maps"], role=role)
@@ -182,15 +209,25 @@ class GridStore:
         return {**out, "result": "wrong", "uses_guess": True}
 
     def reveal(self, number: int, now: datetime) -> dict[str, Any]:
-        """A few example answers per cell, for the end screen: the players with the most maps. Never the full set."""
+        """A few example answers per cell, for the end screen, and how many answers each cell had. Never the full set.
+
+        A beta puzzle shows its players with the most maps in the role. A mixed-clue puzzle has no one number to rank
+        by, so it shows the best-known answers: those who appear most across OWCS (the most seasons, then by name).
+        """
         puzzle = self.get(number, now)
+        mixed = is_mixed(puzzle)
         cells = []
         for cell in puzzle["cells"]:
-            ranked = sorted(cell["answers"].items(), key=lambda kv: (-kv[1]["maps"], kv[1]["name"].casefold(), kv[0]))
-            cells.append({
-                "cell": cell["row"] * 3 + cell["col"],
-                "examples": [{"id": pid, "name": a["name"], "maps": a["maps"]} for pid, a in ranked[:REVEAL_PER_CELL]],
-            })
+            if mixed:
+                def fame(item: tuple[str, dict[str, Any]]) -> tuple:
+                    known = self._players.get(item[0])
+                    return (-len(known.seasons) if known else 0, item[1]["name"].casefold(), item[0])
+                ranked = sorted(cell["answers"].items(), key=fame)
+                examples = [{"id": pid, "name": a["name"], "why": a["why"]} for pid, a in ranked[:REVEAL_PER_CELL]]
+            else:
+                ranked = sorted(cell["answers"].items(), key=lambda kv: (-kv[1]["maps"], kv[1]["name"].casefold(), kv[0]))
+                examples = [{"id": pid, "name": a["name"], "maps": a["maps"]} for pid, a in ranked[:REVEAL_PER_CELL]]
+            cells.append({"cell": cell["row"] * 3 + cell["col"], "count": len(cell["answers"]), "examples": examples})
         return {"puzzle": number, "per_cell": REVEAL_PER_CELL, "cells": cells}
 
     # ---- name search --------------------------------------------------------------------------------------------
@@ -227,8 +264,25 @@ class GridStore:
         ]
 
 
+def is_mixed(puzzle: dict[str, Any]) -> bool:
+    """A mixed-clue puzzle (format 2), as against a beta role x column one."""
+    return puzzle.get("format") == 2
+
+
+MIXED_COVERAGE = (
+    "Unless a clue says otherwise, answers come from FACEIT map stats for OWCS North America and EMEA main series "
+    "(stages and playoffs), 2024-2026: relegation and international events are not counted, and \"a map\" is one "
+    "with player stats on record. There are none for 2024 Stages 3-4 or 2026 Stage 3, and several playoff finals. "
+    "\"Rostered at\" clues use Liquipedia's line-ups, which list a roster, not who played. When the data that "
+    "would settle a guess is missing, the guess \"can't be verified\" and costs nothing. Tap a clue to see exactly "
+    "what it means."
+)
+
+
 def coverage_note(puzzle: dict[str, Any]) -> str:
     """One paragraph under the board: what the answers were counted from, and what they cannot see."""
+    if is_mixed(puzzle):
+        return MIXED_COVERAGE
     floor = puzzle["rules"]["min_maps"]
     return (
         f"Answers are players with {floor} or more maps in the role inside the column, from FACEIT map stats for "

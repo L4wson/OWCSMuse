@@ -54,7 +54,8 @@ def build_router(store: Optional[GridStore] = None, throttled: Optional[Callable
         now = clock()
         return {"puzzles": [
             {"number": p["number"], "date": p["date"], "is_today": view["is_today"],
-             "cols": [c["label"] for c in p["cols"]]}
+             "difficulty": view["difficulty"], "kind": view["kind"],
+             "rows": [r["label"] for r in p["rows"]], "cols": [c["label"] for c in p["cols"]]}
             for p in store.published(now) for view in (GridStore.public(p, now),)
         ]}
 

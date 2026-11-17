@@ -1,8 +1,16 @@
 """Generate daily OWCS Grid puzzles into scope/grid_puzzles.json. Reads the warehouse read-only; writes two files.
 
-    python scripts/grid/generate_puzzles.py --start-date 2026-11-18 --days 14 --seed 7
+    python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14
+    python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --classic     # the beta's role x column grids
 
-Each puzzle is role x column: the rows are always Tank / DPS / Support, the columns are three of the six in
+By default a puzzle is a mixed-clue grid: six clues from at least four families (teammates, teams, stage results,
+international rosters, experience, stats, seasons, regions, roles), chosen and checked by `mixed.py` from the clue
+types in `clues.py`. Stage results come from scope/grid_stages.json and awards from scope/grid_awards.json
+(`build_facts.py` writes both; only reviewed awards are used).
+
+`--classic` keeps the beta's format, described next, and the functions for it below are unchanged.
+
+Each classic puzzle is role x column: the rows are always Tank / DPS / Support, the columns are three of the six in
 `COLUMN_POOL`. A player answers a cell with at least `MIN_MAPS` maps in that role inside the column's scope (that
 season, that region, or the whole in-scope career for "Played all 3 seasons"). The scope is OWCS NA and EMEA main
 series: relegation and international events are left out.
@@ -32,6 +40,8 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+import clues  # noqa: E402
+import mixed  # noqa: E402
 from cell_counter import distinct_solution, evaluate, parse_condition  # noqa: E402
 from conditions import Region, Role, Season, stats_coverage  # noqa: E402
 from data import Appearance, Warehouse, load  # noqa: E402
@@ -39,6 +49,8 @@ from data import Appearance, Warehouse, load  # noqa: E402
 REPO = Path(__file__).resolve().parents[2]
 PUZZLES_PATH = REPO / "scope" / "grid_puzzles.json"
 PLAYERS_PATH = REPO / "scope" / "grid_players.json"
+STAGES_PATH = REPO / "scope" / "grid_stages.json"
+AWARDS_PATH = REPO / "scope" / "grid_awards.json"
 RUNS_DIR = REPO / "docs" / "grid" / "runs"
 
 MIN_MAPS = 10           # maps in the role, inside the column's scope, for a player to be an answer
@@ -291,8 +303,10 @@ def player_index(wh: Warehouse, other_names: dict[str, set[str]]) -> list[dict]:
 FILE_NOTE = (
     "OWCS Grid puzzles, written by scripts/grid/generate_puzzles.py and served as-is by the API "
     "(owcsmuse/grid). A puzzle whose date is today or earlier (UTC) is published and never edited: the generator "
-    "refuses to, and nobody should by hand. Each cell holds every accepted player id with the name and maps-in-role "
-    "at generation; 'unverifiable' holds, per column, the players seen there with no role on record."
+    "refuses to, and nobody should by hand. An entry with 'format': 2 is a mixed-clue puzzle: each clue carries "
+    "typed 'params', each cell every accepted player id with the name and the reason at generation, and "
+    "'unverifiable' the players that cell cannot judge, by which clue ('row' or 'col') lacks the data. An entry "
+    "without 'format' is a beta role x column puzzle: answers carry maps-in-role, and 'unverifiable' is per column."
 )
 
 
@@ -330,6 +344,45 @@ def report(new: list[dict], rejected: list[dict], skipped: list[date], header: l
     return "\n".join(lines) + "\n"
 
 
+def mixed_report(results: list, skipped: list[date], header: list[str]) -> str:
+    """The run as text: every new puzzle with its nine counts, then what was rejected each day and why."""
+    lines = list(header)
+    if skipped:
+        lines.append(f"already in the file, left alone: {skipped[0].isoformat()} to {skipped[-1].isoformat()}")
+    lines.append("")
+    for r in results:
+        if r.entry is None:
+            lines.append(f"--  {r.day.isoformat()} {r.day:%a}  NO PUZZLE: {r.note}")
+            continue
+        p = r.entry
+        counts = [[p["cells"][i * 3 + j]["count"] for j in range(3)] for i in range(3)]
+        cant = [[len(p["cells"][i * 3 + j]["unverifiable"]) for j in range(3)] for i in range(3)]
+        lines.append(f"#{p['number']}  {p['date']} {r.day:%a}  {p['difficulty']} (wanted {r.target})  {p['kind']} grid  "
+                     f"median {p['median_answers']:g}  smallest cell {min(min(line) for line in counts)}")
+        lines.append("    columns: " + " | ".join(c["label"] for c in p["cols"]))
+        for i, row in enumerate(p["rows"]):
+            lines.append(f"    {row['label'][:38]:38s}" + "".join(f"{n:>5d}" for n in counts[i])
+                         + "    can't verify:" + "".join(f"{n:>4d}" for n in cant[i]))
+        if r.note:
+            lines.append(f"    note: {r.note}")
+    lines.append("")
+    lines.append("Rejected candidates. Each day judges 40 random grids, then grids built so that every cell already has")
+    lines.append("3+ answers and neither clue implies the other; the counts are grids failing each rule (a grid can")
+    lines.append("fail several), and a few rejected grids are listed in full.")
+    for r in results:
+        lines.append("")
+        lines.append(f"{r.day.isoformat()} {r.day:%a}: {r.tried} candidates judged")
+        for kind, n in r.reason_counts.most_common():
+            lines.append(f"    {n:6d}  {kind}")
+        for sample in r.samples:
+            lines.append(f"    rejected: rows {' / '.join(sample['rows'])}  x  cols {' / '.join(sample['cols'])}  counts {sample['counts']}")
+            for reason in sample["reasons"][:6]:
+                lines.append(f"        {reason}")
+            if len(sample["reasons"]) > 6:
+                lines.append(f"        ... and {len(sample['reasons']) - 6} more reasons")
+    return "\n".join(lines) + "\n"
+
+
 def main(argv: list[str] | None = None) -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description="Generate OWCS Grid puzzles (reads the database read-only).")
@@ -339,11 +392,21 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--replace-future", action="store_true",
                    help="regenerate unpublished puzzles from the start date on (never a published one)")
     p.add_argument("--dry-run", action="store_true", help="print the report; write nothing")
+    p.add_argument("--classic", action="store_true", help="the beta's role x column grids instead of mixed clues")
+    p.add_argument("--attempts", type=int, default=15000, help="candidate grids to build per day (mixed)")
+    p.add_argument("--include-unreviewed", action="store_true",
+                   help="let unreviewed awards into the clue pool; only with --dry-run")
     args = p.parse_args(argv)
     if args.days < 1:
         p.error("--days must be at least 1")
+    if args.include_unreviewed and not args.dry_run:
+        p.error("--include-unreviewed is for --dry-run only: an unreviewed fact is never published")
     seed = args.seed if args.seed is not None else int(args.start_date.strftime("%Y%m%d"))
     now = datetime.now(timezone.utc)
+    if args.replace_future and args.start_date <= now.date() + timedelta(days=1):
+        print("refused: --replace-future starts the day after tomorrow at the earliest; today's and tomorrow's "
+              "puzzles are left alone", file=sys.stderr)
+        return 2
 
     try:
         kept, dates, skipped = plan_dates(read_puzzles(PUZZLES_PATH), args.start_date, args.days, now.date(),
@@ -369,6 +432,31 @@ def main(argv: list[str] | None = None) -> int:
     snapshot = (f"warehouse as read {generated_at}; last series played {last_series:%Y-%m-%d}; "
                 f"{len(scoped.map_rows)} player-map rows and {len(scoped.appearances)} line-up rows in scope "
                 f"({SCOPE_NOTE})")
+    if not args.classic:
+        facts = clues.Facts(wh, clues.load_stages(STAGES_PATH), clues.load_awards(AWARDS_PATH, args.include_unreviewed))
+        results = mixed.generate_days(facts, kept, dates, seed, generated_at, snapshot, attempts=args.attempts,
+                                      include_awards=bool(facts.awards))
+        new = [r.entry for r in results if r.entry is not None]
+        missing = [r.day.isoformat() for r in results if r.entry is None]
+        header = [
+            f"OWCS Grid generation (mixed clues), {generated_at}",
+            f"start {args.start_date.isoformat()}, {args.days} days, seed {seed}; every cell {mixed.MIN_CELL}+ answers, at "
+            f"most {mixed.MAX_THIN_CELLS} cells with {mixed.MIN_CELL}-{mixed.THIN_CELL}; {mixed.MIN_FAMILIES}+ clue families; no "
+            f"clue within {mixed.CLUE_GAP_DAYS} days, no teammate anchor within {mixed.ANCHOR_GAP_DAYS}",
+            f"difficulty by median answers a cell: Easy {mixed.EASY_MEDIAN}+, Hard under {mixed.HARD_MEDIAN}, Medium between",
+            snapshot,
+            f"stages used: {len(facts.stages)}; reviewed awards used: {len(facts.awards)}",
+            f"new puzzles: {len(new)}" + (f"; NO VALID GRID for {', '.join(missing)}" if missing else ""),
+        ]
+        text = mixed_report(results, skipped, header)
+        print(text, end="")
+        if args.dry_run:
+            return 0
+        if missing:
+            print("nothing written: every requested day needs a puzzle", file=sys.stderr)
+            return 3
+        return _write(args, seed, text, kept, new, wh, other_names, generated_at)
+
     new, rejected = generate(scoped, presence_rows(wh), kept, dates, seed, generated_at, snapshot)
 
     header = [
@@ -382,6 +470,11 @@ def main(argv: list[str] | None = None) -> int:
     print(text, end="")
     if args.dry_run:
         return 0
+    return _write(args, seed, text, kept, new, wh, other_names, generated_at)
+
+
+def _write(args, seed: int, text: str, kept: list[dict], new: list[dict], wh: Warehouse, other_names: dict[str, set[str]],
+           generated_at: str) -> int:
     if new:
         write_json(PUZZLES_PATH, {"version": 1, "note": FILE_NOTE, "puzzles": kept + new})
         write_json(PLAYERS_PATH, {
