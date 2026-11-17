@@ -653,3 +653,80 @@ button.grid-rowhead:focus-visible {
 .grid-reveal a {
   color: var(--accent);
 }
+
+/* the way back to Muse's search, at the far end of Grid's tabs */
+.grid-tabs .grid-tabs-back {
+  margin-left: auto;
+  color: var(--accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------- the entry on Muse's landing page */
+
+.grid-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.grid-entry:hover,
+.grid-entry:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.grid-entry-mark {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, 7px);
+  gap: 2px;
+}
+
+.grid-entry-mark i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.grid-entry-mark i:nth-child(1),
+.grid-entry-mark i:nth-child(5),
+.grid-entry-mark i:nth-child(6),
+.grid-entry-mark i:nth-child(8) {
+  background: var(--won);
+}
+
+.grid-entry-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.grid-entry-text strong {
+  font-size: 0.95rem;
+}
+
+.grid-entry-text .muted {
+  font-size: 0.8rem;
+}
+
+.grid-entry-level {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.grid-entry-go {
+  flex: none;
+  color: var(--accent);
+  font-size: 1.1rem;
+}

@@ -94,9 +94,9 @@ grids from Phase 0 are in `grids/`.
 
 ```bash
 python scripts/grid/build_facts.py                                                # stage results, awards, anchors -> scope/
-python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14         # mixed-clue puzzles
-python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14 --dry-run
-python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14 --classic    # the first beta's role x column grids
+python scripts/grid/generate_puzzles.py --start-date 2027-01-01 --days 14         # mixed-clue puzzles
+python scripts/grid/generate_puzzles.py --start-date 2027-01-01 --days 14 --dry-run
+python scripts/grid/generate_puzzles.py --start-date 2027-01-01 --days 14 --classic    # the first beta's role x column grids
 ```
 
 It writes `scope/grid_puzzles.json` and `scope/grid_players.json`, and a report under `docs/grid/runs/`. A date that

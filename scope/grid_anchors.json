@@ -1,6 +1,6 @@
 {
- "note": "Candidate anchor players for Grid's 'Teammate of' clue, written by scripts/grid/build_facts.py and curated by the owner. Ranked by score = maps/50 + 2 x seasons + 1.5 x stage finals + international rosters, all in OWCS NA/EMEA main series except the rosters. 'approved' starts true for a player with 2+ seasons and a stage final or an international roster; edit it by hand. The generator uses approved anchors only, and skips one with fewer than 12 teammates on record ('teammates'). A rebuild keeps 'approved' and 'note' for players already listed; a player new to the list gets the starting value.",
- "generated_at": "2026-11-17T02:03:21Z",
+ "note": "Candidate anchor players for Grid's 'Teammate of' clue, written by scripts/grid/build_facts.py and curated by the owner. Ranked by score = maps/50 + 2 x seasons + 1.5 x stage finals + international rosters, all in OWCS NA/EMEA main series except the rosters. 'approved' starts true for a player with 2+ seasons, a stage final and an international roster, for the 35 such players with the most maps (the owner's default, 2026-11-17); edit it by hand. The generator uses approved anchors only, and skips one with fewer than 10 teammates on record ('teammates'). A rebuild keeps 'approved' and 'note' for players already listed; a player new to the list gets the starting value.",
+ "generated_at": "2026-11-17T06:51:39Z",
  "anchors": [
   {
    "key": "a332d27e-fe19-4077-89f8-27391a581460",
@@ -26,7 +26,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 16,
-   "reason": "3 seasons, 200 maps, 6 stage finals (3 won), 7 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 200 maps, 6 stage finals (3 won), 7 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -53,7 +53,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 17,
-   "reason": "3 seasons, 206 maps, 6 stage finals (2 won), 6 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 206 maps, 6 stage finals (2 won), 6 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -81,7 +81,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 15,
-   "reason": "3 seasons, 213 maps, 5 stage finals (2 won), 7 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 213 maps, 5 stage finals (2 won), 7 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -109,7 +109,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 14,
-   "reason": "3 seasons, 184 maps, 4 stage finals (2 won), 7 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 184 maps, 4 stage finals (2 won), 7 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -162,7 +162,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 12,
-   "reason": "3 seasons, 198 maps, 4 stage finals (3 won), 6 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 198 maps, 4 stage finals (3 won), 6 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -189,7 +189,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 14,
-   "reason": "3 seasons, 195 maps, 4 stage finals (3 won), 6 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 195 maps, 4 stage finals (3 won), 6 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -215,7 +215,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 13,
-   "reason": "3 seasons, 198 maps, 4 stage finals (3 won), 5 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 198 maps, 4 stage finals (3 won), 5 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -294,7 +294,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 23,
-   "reason": "3 seasons, 183 maps, 3 stage finals (2 won), 6 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 183 maps, 3 stage finals (2 won), 6 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -320,7 +320,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 13,
-   "reason": "3 seasons, 150 maps, 4 stage finals (3 won), 5 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 150 maps, 4 stage finals (3 won), 5 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -345,7 +345,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 18,
-   "reason": "3 seasons, 197 maps, 4 stage finals (1 won), 4 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 197 maps, 4 stage finals (1 won), 4 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -444,7 +444,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 13,
-   "reason": "3 seasons, 157 maps, 3 stage finals (1 won), 4 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 157 maps, 3 stage finals (1 won), 4 LANs incl. 2025 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -470,8 +470,8 @@
     "Esports World Cup 2024"
    ],
    "teammates": 14,
-   "reason": "3 seasons, 107 maps, 3 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "reason": "3 seasons, 107 maps, 3 stage finals (2 won), 5 LANs incl. 2026 Midseason Championship",
+   "approved": false,
    "note": ""
   },
   {
@@ -496,8 +496,8 @@
     "Esports World Cup 2024"
    ],
    "teammates": 12,
-   "reason": "3 seasons, 90 maps, 3 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "reason": "3 seasons, 90 maps, 3 stage finals (2 won), 5 LANs incl. 2026 Midseason Championship",
+   "approved": false,
    "note": ""
   },
   {
@@ -520,7 +520,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 9,
-   "reason": "2 seasons, 153 maps, 4 stage finals (3 won), 4 LANs incl. Esports World Cup 2024",
+   "reason": "2 seasons, 153 maps, 4 stage finals (3 won), 4 LANs incl. 2025 World Finals",
    "approved": true,
    "note": ""
   },
@@ -569,7 +569,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 13,
-   "reason": "3 seasons, 174 maps, 2 stage finals (1 won), 4 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 174 maps, 2 stage finals (1 won), 4 LANs incl. 2025 World Finals",
    "approved": true,
    "note": ""
   },
@@ -594,7 +594,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 12,
-   "reason": "2 seasons, 121 maps, 3 stage finals (1 won), 5 LANs incl. Esports World Cup 2024",
+   "reason": "2 seasons, 121 maps, 3 stage finals (1 won), 5 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -667,7 +667,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 9,
-   "reason": "2 seasons, 151 maps, 2 stage finals (1 won), 5 LANs incl. Esports World Cup 2024",
+   "reason": "2 seasons, 151 maps, 2 stage finals (1 won), 5 LANs incl. 2026 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -786,7 +786,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 18,
-   "reason": "3 seasons, 158 maps, 1 stage final (1 won), 3 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 158 maps, 1 stage final (1 won), 3 LANs incl. 2025 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -810,7 +810,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 16,
-   "reason": "3 seasons, 125 maps, 1 stage final (1 won), 3 LANs incl. Esports World Cup 2024",
+   "reason": "3 seasons, 125 maps, 1 stage final (1 won), 3 LANs incl. 2025 World Finals",
    "approved": true,
    "note": ""
   },
@@ -857,7 +857,7 @@
    ],
    "teammates": 9,
    "reason": "2 seasons, 64 maps, 3 stage finals (2 won), 3 LANs incl. 2026 Midseason Championship",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -902,7 +902,7 @@
    ],
    "teammates": 14,
    "reason": "3 seasons, 115 maps, 2 stage finals (1 won), 1 LAN incl. 2025 Midseason Championship",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -969,8 +969,8 @@
     "Esports World Cup 2024"
    ],
    "teammates": 17,
-   "reason": "3 seasons, 160 maps, 2 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "reason": "3 seasons, 160 maps, 2 LANs incl. 2025 World Finals",
+   "approved": false,
    "note": ""
   },
   {
@@ -992,7 +992,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 13,
-   "reason": "2 seasons, 134 maps, 1 stage final (1 won), 3 LANs incl. Esports World Cup 2024",
+   "reason": "2 seasons, 134 maps, 1 stage final (1 won), 3 LANs incl. 2025 Midseason Championship",
    "approved": true,
    "note": ""
   },
@@ -1015,7 +1015,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 18,
-   "reason": "2 seasons, 129 maps, 1 stage final, 3 LANs incl. Esports World Cup 2024",
+   "reason": "2 seasons, 129 maps, 1 stage final, 3 LANs incl. 2025 Champions Clash",
    "approved": true,
    "note": ""
   },
@@ -1039,7 +1039,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 5,
-   "reason": "1 season, 46 maps, 2 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
+   "reason": "1 season, 46 maps, 2 stage finals (2 won), 5 LANs incl. 2026 Midseason Championship",
    "approved": false,
    "note": ""
   },
@@ -1063,7 +1063,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 5,
-   "reason": "1 season, 46 maps, 2 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
+   "reason": "1 season, 46 maps, 2 stage finals (2 won), 5 LANs incl. 2026 Midseason Championship",
    "approved": false,
    "note": ""
   },
@@ -1086,8 +1086,8 @@
     "Esports World Cup 2024"
    ],
    "teammates": 27,
-   "reason": "3 seasons, 126 maps, 2 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "reason": "3 seasons, 126 maps, 2 LANs incl. 2025 Champions Clash",
+   "approved": false,
    "note": ""
   },
   {
@@ -1109,7 +1109,7 @@
    ],
    "teammates": 20,
    "reason": "3 seasons, 148 maps, 1 LAN incl. Esports World Cup 2024",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1131,7 +1131,7 @@
    ],
    "teammates": 17,
    "reason": "3 seasons, 126 maps, 1 LAN incl. Esports World Cup 2024",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1153,7 +1153,7 @@
    ],
    "teammates": 11,
    "reason": "3 seasons, 98 maps, 1 LAN incl. 2025 World Finals",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1195,7 +1195,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 5,
-   "reason": "1 season, 68 maps, 1 stage final, 4 LANs incl. Esports World Cup 2024",
+   "reason": "1 season, 68 maps, 1 stage final, 4 LANs incl. 2026 Midseason Championship",
    "approved": false,
    "note": ""
   },
@@ -1218,7 +1218,7 @@
    ],
    "teammates": 11,
    "reason": "3 seasons, 90 maps, 1 LAN incl. 2025 World Finals",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1241,8 +1241,8 @@
     "Esports World Cup 2024"
    ],
    "teammates": 8,
-   "reason": "2 seasons, 35 maps, 4 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "reason": "2 seasons, 35 maps, 4 LANs incl. 2026 Midseason Championship",
+   "approved": false,
    "note": ""
   },
   {
@@ -1264,7 +1264,7 @@
    ],
    "teammates": 8,
    "reason": "2 seasons, 57 maps, 1 stage final (1 won), 2 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1286,7 +1286,7 @@
    ],
    "teammates": 10,
    "reason": "2 seasons, 52 maps, 1 stage final (1 won), 2 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1308,7 +1308,7 @@
     "Esports World Cup 2024"
    ],
    "teammates": 4,
-   "reason": "1 season, 42 maps, 1 stage final, 4 LANs incl. Esports World Cup 2024",
+   "reason": "1 season, 42 maps, 1 stage final, 4 LANs incl. 2026 Midseason Championship",
    "approved": false,
    "note": ""
   },
@@ -1331,7 +1331,7 @@
    ],
    "teammates": 16,
    "reason": "3 seasons, 65 maps, 1 LAN incl. 2025 Midseason Championship",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1352,7 +1352,7 @@
    ],
    "teammates": 8,
    "reason": "2 seasons, 71 maps, 1 stage final, 1 LAN incl. 2025 Champions Clash",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1393,7 +1393,7 @@
    ],
    "teammates": 22,
    "reason": "2 seasons, 137 maps, 1 LAN incl. Esports World Cup 2024",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {
@@ -1415,7 +1415,7 @@
    ],
    "teammates": 16,
    "reason": "2 seasons, 86 maps, 2 LANs incl. Esports World Cup 2024",
-   "approved": true,
+   "approved": false,
    "note": ""
   },
   {

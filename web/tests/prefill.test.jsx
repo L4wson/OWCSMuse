@@ -54,7 +54,45 @@ describe("a prefilled question", () => {
     const { fetchMock } = mountAt(`/?q=${encodeURIComponent(question)}`, [["/ask", ok({ ...VERSUS, question })]]);
     await screen.findByTestId("answer");
     expect(asks(fetchMock)[0].body.question).toBe(question);
-    expect(screen.getByRole("textbox").value).not.toContain("player:");
+    // the service resolved nobody by that id in this answer, so there is no name to show: the box stays empty
+    expect(screen.getByRole("textbox").value).toBe("");
+  });
+
+  it("shows a question asked by id under the player's name, as the service resolved it", async () => {
+    // the link OWCS Grid puts on an answer: nobody typed it, so without this the box above the answer is empty
+    const id = VERSUS.entities.subject.entity_id;
+    const question = `player:${id} record`;
+    const { fetchMock } = mountAt(`/?q=${encodeURIComponent(question)}`, [["/ask", ok({ ...VERSUS, question })]]);
+    await screen.findByTestId("answer");
+    expect(asks(fetchMock)[0].body.question).toBe(question); // what was asked is still the id
+    const box = screen.getByRole("textbox");
+    expect(box.value).toBe(`${VERSUS.entities.subject.current_name} record`);
+    expect(box.value).not.toContain(id);
+    expect(document.body.textContent).not.toContain(`player:${id}`);
+  });
+
+  it("names every id or none: a question with one unresolved id is not half translated", async () => {
+    const id = VERSUS.entities.subject.entity_id;
+    const question = `player:${id} record against player:00000000-0000-4000-8000-000000000000`;
+    mountAt(`/?q=${encodeURIComponent(question)}`, [["/ask", ok({ ...VERSUS, question })]]);
+    await screen.findByTestId("answer");
+    expect(screen.getByRole("textbox").value).toBe("");
+  });
+
+  it("shows a shared link to a question asked by id under the player's name too", async () => {
+    const question = `player:${VERSUS.entities.subject.entity_id} record`;
+    mountAt(`/q/${VERSUS.slug}`, [[`/query/${VERSUS.slug}`, ok({ ...VERSUS, question })]]);
+    await screen.findByTestId("answer");
+    await waitFor(() => expect(screen.getByRole("textbox").value).toBe(`${VERSUS.entities.subject.current_name} record`));
+  });
+
+  it("leaves a typed question alone when the service echoes ids back", async () => {
+    // only a prefilled question is renamed: what someone typed stays what they typed
+    const question = `player:${VERSUS.entities.subject.entity_id} record`;
+    mountAt("/", [["/ask", ok({ ...VERSUS, question })]]);
+    await userEvent.type(await screen.findByRole("textbox"), "sugarfree record{Enter}");
+    await screen.findByTestId("answer");
+    expect(screen.getByRole("textbox").value).toBe("sugarfree record");
   });
 
   it("shows a failure the way a typed question's failure is shown", async () => {

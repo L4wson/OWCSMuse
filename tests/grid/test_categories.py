@@ -535,11 +535,19 @@ def test_clue_sets_reads_both_formats_in_the_same_keys():
 
 # ---- anchors ----------------------------------------------------------------------------------------------------
 
-def test_an_anchor_starts_approved_with_two_seasons_and_a_final_or_a_lan():
-    assert build_facts.anchor_approved(seasons=2, finals=1, lans=0)
-    assert build_facts.anchor_approved(seasons=3, finals=0, lans=2)
-    assert not build_facts.anchor_approved(seasons=1, finals=3, lans=4)     # one season, however decorated
-    assert not build_facts.anchor_approved(seasons=3, finals=0, lans=0)     # three seasons and nothing else
+def test_an_anchor_qualifies_with_two_seasons_a_final_and_a_lan():
+    assert build_facts.anchor_qualifies(seasons=2, finals=1, lans=1)
+    assert not build_facts.anchor_qualifies(seasons=2, finals=1, lans=0)    # a final and no international roster
+    assert not build_facts.anchor_qualifies(seasons=3, finals=0, lans=2)    # rosters and no final
+    assert not build_facts.anchor_qualifies(seasons=1, finals=3, lans=4)    # one season, however decorated
+
+
+def test_only_the_qualifying_players_with_the_most_maps_start_approved():
+    def cand(player, maps, seasons=(2024, 2025), finals=1, lans=("x",)):
+        return {"player_id": player, "maps": maps, "seasons": list(seasons), "stage_finals": finals, "lans": list(lans)}
+    pool = [cand("a", 100), cand("b", 300), cand("c", 200), cand("big", 900, finals=0), cand("d", 50)]
+    assert build_facts.starting_approvals(pool, cap=2) == {"b", "c"}        # the two with the most maps who qualify
+    assert build_facts.starting_approvals(pool, cap=35) == {"a", "b", "c", "d"}     # big has the maps, not the final
 
 
 def test_anchor_candidates_are_ranked_with_a_reason_and_the_starting_approval():
@@ -552,9 +560,11 @@ def test_anchor_candidates_are_ranked_with_a_reason_and_the_starting_approval():
     by_id = {a["player_id"]: a for a in build_facts.anchor_candidates(f)}
     assert [a["player_id"] for a in build_facts.anchor_candidates(f)][0] == "vet"
     assert by_id["vet"]["reason"] == "3 seasons, 65 maps, 1 stage final (1 won)"
-    assert by_id["vet"]["approved"] is True and by_id["vet"]["stage_finals"] == 1
-    assert by_id["lan"]["reason"] == "2 seasons, 40 maps, 1 LAN incl. 2025 World Finals" and by_id["lan"]["approved"] is True
+    assert by_id["vet"]["approved"] is False and by_id["vet"]["stage_finals"] == 1          # a final, no LAN
+    assert by_id["lan"]["reason"] == "2 seasons, 40 maps, 1 LAN incl. 2025 World Finals" and by_id["lan"]["approved"] is False
     assert by_id["mate"]["approved"] is False and by_id["mate"]["reason"] == "1 season, 30 maps"
+    both = facts(maps + played("lan", "final", "na25po", "beta", 4), [lineup("lan", "w", "worlds", "beta")], stages=[stage])
+    assert {a["player_id"]: a["approved"] for a in build_facts.anchor_candidates(both)}["lan"] is True   # now both
     assert [a["rank"] for a in build_facts.anchor_candidates(f)] == [1, 2, 3]
 
 
@@ -587,10 +597,14 @@ def test_the_committed_anchor_file_follows_the_rule_it_states():
     anchors = json.loads((REPO / "scope" / "grid_anchors.json").read_text(encoding="utf-8"))["anchors"]
     assert 50 <= len(anchors) <= 70 and [a["rank"] for a in anchors] == list(range(1, len(anchors) + 1))
     assert len({a["player_id"] for a in anchors}) == len(anchors)
+    assert all(a["reason"] and isinstance(a["approved"], bool) for a in anchors)
+    approved = {a["player_id"] for a in anchors if a["approved"]}
+    assert len(approved) <= build_facts.ANCHOR_APPROVED_CAP
+    if not any(a["note"] for a in anchors):     # until the owner edits it by hand, it is exactly the starting value
+        assert approved == build_facts.starting_approvals(anchors)
     for a in anchors:
-        assert a["reason"] and isinstance(a["approved"], bool)
-        if not a["note"]:       # an entry the owner has not touched still carries the starting value
-            assert a["approved"] == build_facts.anchor_approved(len(a["seasons"]), a["stage_finals"], len(a["lans"])), a["name"]
+        if a["approved"] and not a["note"]:
+            assert build_facts.anchor_qualifies(len(a["seasons"]), a["stage_finals"], len(a["lans"])), a["name"]
 
 
 # ---- links to Muse ----------------------------------------------------------------------------------------------
@@ -756,6 +770,7 @@ def test_every_committed_mixed_puzzle_obeys_the_generator_rules():
     used, anchors, _ = M.history([p for p in puzzles if p.get("format") != 2])
     sets = M.clue_sets(puzzles)
     approved = set(gen.approved_anchors(REPO / "scope" / "grid_anchors.json"))
+    anchors_built = json.loads((REPO / "scope" / "grid_anchors.json").read_text(encoding="utf-8"))["generated_at"]
     for p in sorted(mixed, key=lambda p: p["date"]):
         day, where = date.fromisoformat(p["date"]), f"puzzle {p['number']}"
         clues = p["rows"] + p["cols"]
@@ -781,7 +796,9 @@ def test_every_committed_mixed_puzzle_obeys_the_generator_rules():
         for when, keys in sets:
             if 0 < (day - when).days <= M.OVERLAP_DAYS:
                 assert len(mine & keys) <= M.MAX_SHARED_CLUES, f"{where} shares {len(mine & keys)} clues with {when}"
-        if "teammate" in families:
+        # a puzzle generated before the anchor list was last rebuilt keeps the anchors it was given: it may already
+        # be published, and a published puzzle never changes
+        if "teammate" in families and p["generated_at"] >= anchors_built:
             assert {c["key"].split(":", 1)[1] for c in clues if c["family"] == "teammate"} <= approved, where
         assert gen.distinct_solution([frozenset(c["answers"]) for c in p["cells"]]) == 9, where
         for c in clues:

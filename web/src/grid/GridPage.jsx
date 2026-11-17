@@ -41,6 +41,9 @@ export default function GridPage({ route, navigate }) {
         <a href="/grid/archive" onClick={go("/grid/archive")} aria-current={route.view === "archive" ? "page" : undefined}>
           Archive
         </a>
+        <a href="/" onClick={go("/")} className="grid-tabs-back" data-testid="grid-back">
+          Ask Muse a question
+        </a>
       </nav>
       {route.view === "archive" ? (
         <Archive go={go} />

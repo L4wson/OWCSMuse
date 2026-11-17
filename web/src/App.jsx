@@ -6,6 +6,7 @@ import QuestionBar from "./components/QuestionBar.jsx";
 import Result from "./components/Result.jsx";
 import Suggestions from "./components/Suggestions.jsx";
 import { ErrorState, Loading } from "./components/States.jsx";
+import GridEntry from "./grid/GridEntry.jsx";
 import GridPage from "./grid/GridPage.jsx";
 
 const DEFAULT_PAGE_SIZE = 25;
@@ -19,9 +20,29 @@ const DEFAULT_PAGE_SIZE = 25;
 const ID_TOKEN = /\b(?:player|team|org):[A-Za-z0-9._-]+/;
 const displayable = (text) => (typeof text === "string" && !ID_TOKEN.test(text) ? text : undefined);
 
-// OWCS Grid is always reachable at /grid. Its link in the masthead appears only when the build sets
-// VITE_GRID_NAV=true (web/.env.example), so the beta can ship hidden and be shared by its direct link.
-const GRID_NAV = import.meta.env?.VITE_GRID_NAV === "true";
+// OWCS Grid is always reachable at /grid, and Muse points at it by default: a link in the masthead and one line
+// under the landing page's question box. A build that sets VITE_GRID_NAV=false (web/.env.example) hides both,
+// leaving Grid reachable only by its direct link.
+const GRID_NAV = import.meta.env?.VITE_GRID_NAV !== "false";
+
+// A question asked by id, as a link from OWCS Grid asks it ("player:<id> record"), in words: each id replaced by
+// the name the service resolved it to. Undefined unless every id in it was resolved: half a translation would
+// still show an id.
+function namedQuestion(text, entities) {
+  if (typeof text !== "string") return undefined;
+  const names = new Map(
+    Object.values(entities ?? {})
+      .filter((entity) => entity?.entity_id && entity?.current_name)
+      .map((entity) => [String(entity.entity_id).toLowerCase(), entity.current_name]),
+  );
+  let complete = true;
+  const named = text.replace(new RegExp(ID_TOKEN.source, "g"), (token) => {
+    const name = names.get(token.slice(token.indexOf(":") + 1).toLowerCase());
+    if (!name) complete = false;
+    return name ?? token;
+  });
+  return complete && named !== text ? named : undefined;
+}
 
 export default function App() {
   const [route, navigate] = useRoute();
@@ -48,7 +69,7 @@ export default function App() {
   }, [onGrid]);
 
   const load = useCallback(
-    async (run, { question: asked, keepPhase = false } = {}) => {
+    async (run, { question: asked, keepPhase = false, nameIds = false } = {}) => {
       inFlight.current?.abort();
       const controller = new AbortController();
       inFlight.current = controller;
@@ -65,6 +86,11 @@ export default function App() {
         // back is itself human-readable; otherwise leave whatever is showing.
         const echoed = displayable(payload.question);
         if (echoed !== undefined) setQuestion(echoed);
+        else if (nameIds) {
+          // a prefilled question by id: nobody typed it, so the box would be empty. Show it by name instead.
+          const named = namedQuestion(payload.question ?? asked, payload.entities);
+          if (named !== undefined) setQuestion(named);
+        }
         setPhase("ready");
         return payload;
       } catch (thrown) {
@@ -91,7 +117,8 @@ export default function App() {
   useEffect(() => {
     if (route.name !== "query") return;
     if (answer?.slug === route.slug && phase === "ready") return;
-    load((signal) => askSlug(route.slug, { pageSize: sizeRef.current, signal }));
+    // a shared link can be a question asked by id (one opened from OWCS Grid): show it by name, as the prefill does
+    load((signal) => askSlug(route.slug, { pageSize: sizeRef.current, signal }), { nameIds: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.name, route.slug]);
 
@@ -148,7 +175,10 @@ export default function App() {
   const prefilled = route.name === "home" ? new URLSearchParams(window.location.search).get("q")?.trim() || null : null;
   useEffect(() => {
     if (!prefilled) return;
-    load((signal) => askApi({ question: prefilled, pageSize: sizeRef.current, signal }), { question: prefilled }).then(
+    load((signal) => askApi({ question: prefilled, pageSize: sizeRef.current, signal }), {
+      question: prefilled,
+      nameIds: true,
+    }).then(
       (payload) => {
         if (payload?.slug) navigate(`/q/${payload.slug}`, { replace: true });
       },
@@ -182,6 +212,7 @@ export default function App() {
         ) : showLanding ? (
           <div className="landing">
             <QuestionBar onSubmit={runQuestion} autoFocus busy={phase === "loading"} />
+            {GRID_NAV ? <GridEntry navigate={navigate} /> : null}
             <Suggestions suggestions={suggestions} onAsk={runQuestion} />
           </div>
         ) : (

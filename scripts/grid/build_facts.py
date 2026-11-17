@@ -16,8 +16,9 @@ entry, and reviewed by a person there:
 
 - **Anchors** (`scope/grid_anchors.json`). The players a "Teammate of" clue may name: about sixty candidates, ranked by
   career maps, seasons, stage finals and international rosters, each with the reason in a line. A candidate starts
-  `"approved": true` with two or more seasons and a stage final or an international roster; the owner prunes the
-  list by hand, and the generator uses approved anchors only.
+  `"approved": true` with two or more seasons, a stage final and an international roster, for the 35 such players
+  with the most maps (the owner's default, 2026-11-17); the owner prunes the list by hand, and the generator uses
+  approved anchors only. `--reset-approvals` puts every flag back to that starting value.
 
 This sends nothing to Liquipedia: it reads responses Muse already stored. Running it again keeps every `reviewed`
 or `approved` flag and `note` a person has set, matched by the entry's key.
@@ -41,6 +42,7 @@ STAGES_PATH = REPO / "scope" / "grid_stages.json"
 AWARDS_PATH = REPO / "scope" / "grid_awards.json"
 ANCHORS_PATH = REPO / "scope" / "grid_anchors.json"
 ANCHOR_CANDIDATES = 60
+ANCHOR_APPROVED_CAP = 35        # at most this many candidates start approved: those with the most career maps
 LIQUIPEDIA = "https://liquipedia.net/overwatch/"
 
 STAGE_NAME = re.compile(r"^OWCS (\d{4}) (NA|EMEA) Stage (\d)(?: (.+))?$")
@@ -208,9 +210,16 @@ def anchor_score(maps: int, seasons: int, finals: int, lans: int) -> float:
     return round(maps / 50 + 2 * seasons + 1.5 * finals + lans, 2)
 
 
-def anchor_approved(seasons: int, finals: int, lans: int) -> bool:
-    """The starting value of `approved`: two or more seasons, and a stage final or an international roster."""
-    return seasons >= 2 and (finals >= 1 or lans >= 1)
+def anchor_qualifies(seasons: int, finals: int, lans: int) -> bool:
+    """Well known enough to start approved: two or more seasons, a stage final and an international roster."""
+    return seasons >= 2 and finals >= 1 and lans >= 1
+
+
+def starting_approvals(candidates: list[dict], cap: int = ANCHOR_APPROVED_CAP) -> set[str]:
+    """The players who start approved: those who qualify, the `cap` with the most career maps among them."""
+    qualifying = [a for a in candidates if anchor_qualifies(len(a["seasons"]), a["stage_finals"], len(a["lans"]))]
+    qualifying.sort(key=lambda a: (-a["maps"], a["player_id"]))
+    return {a["player_id"] for a in qualifying[:cap]}
 
 
 def anchor_candidates(facts, limit: int = ANCHOR_CANDIDATES) -> list[dict]:
@@ -255,8 +264,11 @@ def anchor_candidates(facts, limit: int = ANCHOR_CANDIDATES) -> list[dict]:
             "maps": maps[player], "seasons": sorted(seasons[player]), "stage_finals": n_finals, "stages_won": won,
             "lans": sorted(lans[player]), "teammates": teammates,
             "reason": ", ".join(parts),
-            "approved": anchor_approved(n_seasons, n_finals, n_lans), "note": "",
+            "approved": False, "note": "",
         })
+    approved = starting_approvals(out)
+    for entry in out:
+        entry["approved"] = entry["player_id"] in approved
     return out
 
 
@@ -264,6 +276,8 @@ def main(argv: list[str] | None = None) -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description="Derive stage results and awards into scope/ (reads the database read-only).")
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--reset-approvals", action="store_true",
+                   help="put every anchor's 'approved' back to its starting value, discarding edits made by hand")
     args = p.parse_args(argv)
 
     from db import connect_readonly
@@ -306,15 +320,18 @@ def main(argv: list[str] | None = None) -> int:
     facts = C.Facts(warehouse, [
         C.Stage(s["key"], s["name"], s["season"], s["region"], frozenset(s["playoff_championships"]),
                 s["winner"]["org_key"], s["runner_up"]["org_key"], s["source"]) for s in stages if s["agree"]])
-    anchors = keep_reviews(anchor_candidates(facts), ANCHORS_PATH, "anchors", flag="approved")
+    anchors = anchor_candidates(facts)
+    if not args.reset_approvals:
+        anchors = keep_reviews(anchors, ANCHORS_PATH, "anchors", flag="approved")
 
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     anchor_doc = {
         "note": "Candidate anchor players for Grid's 'Teammate of' clue, written by scripts/grid/build_facts.py and "
                 "curated by the owner. Ranked by score = maps/50 + 2 x seasons + 1.5 x stage finals + international "
                 "rosters, all in OWCS NA/EMEA main series except the rosters. 'approved' starts true for a player with "
-                "2+ seasons and a stage final or an international roster; edit it by hand. The generator uses approved "
-                "anchors only, and skips one with fewer than 12 teammates on record ('teammates'). A rebuild keeps "
+                "2+ seasons, a stage final and an international roster, for the 35 such players with the most maps "
+                "(the owner's default, 2026-11-17); edit it by hand. The generator uses approved "
+                "anchors only, and skips one with fewer than 10 teammates on record ('teammates'). A rebuild keeps "
                 "'approved' and 'note' for players already listed; a player new to the list gets the starting value.",
         "generated_at": generated, "anchors": anchors,
     }

@@ -4,6 +4,50 @@ A small, playable beta of the daily grid, built on branch `grid/beta` on 2026-11
 nothing to the database, and stores nothing about visitors. Background: [AUDIT.md](AUDIT.md),
 [CELL_COUNTS.md](CELL_COUNTS.md), [PLAN.md](PLAN.md).
 
+## Final pass before the PR (2026-11-17, branch `grid/polish`)
+
+The latest state. Where a later section disagrees, this one is right.
+
+- **Muse points at Grid by default.** A "Daily Grid" link in the masthead and one line under the landing page's
+  question box ("Daily Grid · Puzzle #N · difficulty", linking to `/grid`). `VITE_GRID_NAV=false` hides both;
+  unset or any other value shows them. The landing-page line renders at once as a plain link and adds the puzzle
+  number when `/api/grid/today` answers (no database query behind it); nothing waits on it. `/grid` has an "Ask
+  Muse a question" link back to the search.
+- **Anchors, the owner's default:** approved only with 2+ seasons, a stage final *and* an international roster,
+  capped at the 35 with the most career maps. 35 of the 60 candidates are approved.
+  `build_facts.py --reset-approvals` restores that starting value; a plain rebuild keeps edits made by hand.
+- **Org mappings and awards:** none applied, none marked reviewed (the owner's defaults).
+- **Puzzles 1 and 2 (2026-11-17, -18) are unchanged; 2026-11-19 to 2026-12-31 were regenerated** (puzzles 3 to 45)
+  with `--replace-future`. Run output: `runs/generate_2026-11-19_43d_seed20261119.txt`. Largest clue overlap between
+  any two puzzles within 21 days: 2 of 6. 25 Medium, 12 Hard, 8 Easy; 5 days missed their target and are relabelled.
+- **Season-scoped clues**, added because 35 anchors were too few to fill every day under the variety rules: "Won a
+  stage in 2025", "Stage finalist in 2024", "Rostered at a 2026 LAN" and so on, offered when they have 8+ answers.
+  Anchors with 7+ teammates are now offered (was 10).
+- **A question asked by id reads by name.** A Grid link (`/?q=player:<id> record`) and a shared link to one show
+  "sug2rfree record" in the question box, not an empty box, using the names the answer itself resolved. Only when
+  every id in the question resolved; a typed question is never rewritten. Frontend only.
+- Screenshots of the homepage and `/grid` at 360, 390 and 1280 px: `runs/home_*.png`, `runs/grid_*.png`.
+
+### What Grid's links do to Muse (checked read-only)
+
+- **Suggestions are not affected.** `/suggestions` (`owcsmuse/web.py`, `suggestions()`) is built from the
+  aggregates only: top players by maps, top teams by matches, stats by coverage. It never reads `saved_queries` or
+  `query_log`.
+- **Nothing public lists saved questions.** The API has five routes; the only one that reads `saved_queries` is
+  `GET /query/{slug}`, by exact slug, and it returns that one question with `times_asked`. There is no "popular
+  questions" view.
+- **The owner's own report is affected.** `python -m owcsmuse queries` (`querylog.build_report`) ranks the most
+  asked questions and clusters phrasings. Grid links will put many `player:<id> record` rows into the log, all
+  `source = ask`, and they will crowd the "most asked" lists. Each is about 0.5 KB; retention prunes answered
+  questions after 90 days.
+- **Proposed fix (backend, not made):** let `/ask` take an optional `source` (for example `"grid"`), store it in
+  the existing `query_log.source` column, and have the report filter or group by it. The frontend would send it
+  when a question arrives through `/?q=` with a referrer of `/grid`. That is an API and query-log change, so it is
+  left to a later PR.
+- **How such a question looks to a visitor:** the answer sentence names the player ("sug2rfree is ...") from the
+  answer's own entity spans, and the question box now shows the name too. The id appears only in the URL bar
+  before it is replaced by the answer's `/q/<slug>`.
+
 ## Polish (2026-11-17, branch `grid/polish`)
 
 The latest state. It changes the rules, the anchors, the links and every puzzle; where a later section disagrees,
@@ -186,7 +230,7 @@ VITE_API_BASE=http://127.0.0.1:8000 npm run dev            # http://localhost:51
 
 `VITE_API_BASE` is needed in development: the dev server's proxy lists Muse's paths (`/ask`, `/query`, ...) and not
 `/api`, and `vite.config.js` was outside what this beta was allowed to change. CORS is open, so pointing the page
-straight at the API works. Add `VITE_GRID_NAV=true` to see the nav link.
+straight at the API works. The nav link and the landing-page entry show by default; `VITE_GRID_NAV=false` hides them.
 
 `/grid` shows "no puzzle for today yet" until the first puzzle's date (2026-11-18 UTC). To play before then, copy
 `scope/grid_puzzles.json` and `scope/grid_players.json` into `<some dir>/scope/`, move the dates back in the copy,
@@ -205,8 +249,8 @@ cd web && npm test && npm run build
 
 ```bash
 python scripts/grid/build_facts.py                                                      # refresh stage results and awards first
-python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14               # mixed clues (the default)
-python scripts/grid/generate_puzzles.py --start-date 2026-12-22 --days 14 --dry-run     # report only
+python scripts/grid/generate_puzzles.py --start-date 2027-01-01 --days 14               # mixed clues (the default)
+python scripts/grid/generate_puzzles.py --start-date 2027-01-01 --days 14 --dry-run     # report only
 python scripts/grid/generate_puzzles.py --start-date 2026-11-25 --replace-future        # redo unpublished ones
 python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --days 14 --classic     # the first beta's role x column grids
 python scripts/grid/generate_puzzles.py --start-date 2026-12-19 --dry-run --include-unreviewed   # see what awards would add
@@ -236,25 +280,25 @@ The database is read on one connection that cannot write (`scripts/grid/db.py`):
 Before generating, check that the nightly ingest has run recently; a puzzle is a snapshot of the warehouse at
 generation, and each entry records the last series date it saw.
 
-**The supply is 35 puzzles, 2026-11-17 to 2026-12-21.** Nothing generates more automatically. On 2026-12-22 `/grid`
+**The supply is 45 puzzles, 2026-11-17 to 2026-12-31.** Nothing generates more automatically. On 2027-01-01 `/grid`
 will say there is no puzzle unless more have been generated, committed and deployed. The run outputs of the two
 earlier, discarded sets were removed; the smoke-test transcripts in `runs/` are from those sets, so their puzzle
 numbers no longer match the file.
 
-## Deploy it hidden, and share the link
+## Deploy it
 
-1. Merge `grid/beta` to `main`. CI runs; `deploy.yml` deploys the API to Fly. There is no migration, so
-   `release_command` finds nothing to apply. Vercel builds the frontend from the same merge.
-2. Leave `VITE_GRID_NAV` unset in Vercel. The masthead shows no link to Grid, and nothing else on Muse changes.
-3. Share `https://owcsmuse.vercel.app/grid` directly. `/grid/<n>` opens a specific puzzle; `/grid/archive` lists
-   them. `web/vercel.json` already rewrites every path to the app.
-4. To show the nav link later: set `VITE_GRID_NAV=true` (exactly that string) in Vercel for Production and
-   redeploy. It is read at build time.
-5. To take Grid away: remove the two `scope/grid_*.json` files and deploy. Every Grid route then answers 404 or an
-   empty list and the page says there is no puzzle.
+1. Merge to `main`. CI runs; `deploy.yml` deploys the API to Fly. There is no migration, so `release_command` finds
+   nothing to apply. Vercel builds the frontend from the same merge.
+2. Grid is visible by default: the masthead link and the landing-page line. To ship it hidden instead, set
+   `VITE_GRID_NAV=false` in Vercel for Production before the build; `/grid` still works by direct link. The flag is
+   read at build time, so changing it needs a redeploy.
+3. `/grid/<n>` opens a specific puzzle and `/grid/archive` lists them. `web/vercel.json` already rewrites every path
+   to the app.
+4. To take Grid away: remove the two `scope/grid_*.json` puzzle and player files and set `VITE_GRID_NAV=false`.
+   Every Grid route then answers 404 or an empty list.
 
-Check after deploying: `curl https://owcsmuse-api.fly.dev/api/grid/today` returns the puzzle (or a 404 naming
-today's date before 2026-11-18), and the response contains no `answers`.
+Check after deploying: `curl https://owcsmuse-api.fly.dev/api/grid/today` returns today's puzzle with a number that
+matches the date (puzzle 1 is 2026-11-17), and the response contains no `answers`.
 
 ## Known limitations
 

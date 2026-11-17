@@ -43,8 +43,9 @@ RANDOM_PROBES = 40          # random grids judged each day before the guided sea
 
 # the pool's own floors: a clue too narrow to fill three cells is not offered to the search at all
 TEAMMATE_ANCHORS = 60       # the players with the most maps
-TEAMMATE_MIN_ANSWERS = 10
+TEAMMATE_MIN_ANSWERS = 7
 ORG_MIN_ANSWERS = 6
+SCOPED_MIN_ANSWERS = 8      # a stage or roster clue narrowed to one season needs this many answers to be offered
 EXPERIENCE_STEPS = (25, 50, 75, 100, 125, 150, 175)
 STAT_SEASONS = (2025, 2026)
 STATS_OFFERED = ("eliminations", "damage_dealt", "deaths")
@@ -94,8 +95,16 @@ def build_pool(f: Facts, include_awards: bool = False, anchors: Optional[list[st
     if f.stages:
         pool += [StageWinClue(), StageWinClue("na"), StageWinClue("emea"),
                  StageFinalClue(), StageFinalClue("na"), StageFinalClue("emea")]
+        for season in sorted({s.season for s in f.stages}):
+            for clue in (StageWinClue(season=season), StageFinalClue(season=season)):
+                if len(clue.outcome(f).answers) >= SCOPED_MIN_ANSWERS:
+                    pool.append(clue)
 
     pool.append(LanClue())
+    for season in sorted({c.season for c in f.full.championships.values() if c.region == "international"}):
+        clue = LanClue(season=season)
+        if len(clue.outcome(f).answers) >= SCOPED_MIN_ANSWERS:
+            pool.append(clue)
     for cid, c in sorted(f.full.championships.items(), key=lambda kv: kv[1].name):
         if c.region == "international" and c.tier == "main" and c.name != DALLAS:
             pool.append(LanClue(cid, c.name.removeprefix("OWCS ")))
@@ -411,7 +420,7 @@ class _DaySearch:
                     self.offer(*grid)
 
 
-MAX_BACKTRACKS = 40         # times a run may step back a day to choose differently, when a later day has no grid
+MAX_BACKTRACKS = 150        # times a run may step back a day to choose differently, when a later day has no grid
 
 
 def generate_days(f: Facts, kept: list[dict], dates: list[date], seed: int, generated_at: str, snapshot: str,

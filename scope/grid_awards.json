@@ -2,7 +2,7 @@
  "note": "Individual OWCS awards for Grid's 'Won an award' clue: the solo rows of Liquipedia's prize pools (CC-BY-SA 3.0), from responses Muse already stored. Written by scripts/grid/build_facts.py. The generator uses an entry only when 'reviewed' is true and 'player_id' is set. A rebuild keeps 'reviewed' and 'note'.",
  "license": "CC-BY-SA 3.0",
  "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
- "generated_at": "2026-11-17T02:03:21Z",
+ "generated_at": "2026-11-17T06:51:39Z",
  "awards": [
   {
    "key": "Esports_World_Cup/2024|MVP|Shu",

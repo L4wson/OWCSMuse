@@ -506,63 +506,86 @@ def _stage_players(f: Facts, stages: list[Stage], finalists: bool) -> Outcome:
     return Outcome(answers, frozenset(listed - set(answers)))
 
 
+def _stage_scope(region: Optional[str], season: Optional[int]) -> tuple[str, str]:
+    """("an NA stage in 2025", "an OWCS NA stage's playoffs in the 2025 season"): the label's and the definition's words."""
+    which = f"an {REGION_LABEL[region]} stage" if region else "a stage"
+    where = f"OWCS {REGION_LABEL[region]}" if region else "OWCS NA or EMEA"
+    when = f" in {season}" if season else ""
+    return f"{which}{when}", f"an {where} stage's playoffs" + (f" in the {season} season" if season else "")
+
+
+def _stage_key(kind: str, region: Optional[str], season: Optional[int]) -> str:
+    return f"{kind}:{region or 'any'}" + (f":{season}" if season else "")
+
+
 @dataclass(frozen=True)
 class StageWinClue:
     region: Optional[str] = None            # None: either region
+    season: Optional[int] = None            # None: any season
     family = "stage"
     anchor = None
 
     @property
     def key(self) -> str:
-        return f"stage_win:{self.region or 'any'}"
+        return _stage_key("stage_win", self.region, self.season)
 
     @property
     def label(self) -> str:
-        return f"Won an {REGION_LABEL[self.region]} stage" if self.region else "Won an OWCS stage"
+        if not self.region and not self.season:
+            return "Won an OWCS stage"
+        return f"Won {_stage_scope(self.region, self.season)[0]}"
 
     @property
     def definition(self) -> str:
-        where = f"OWCS {REGION_LABEL[self.region]}" if self.region else "OWCS NA or EMEA"
-        return f"Played 1+ playoff map for the team that won an {where} stage's playoffs (FACEIT map stats)."
+        return (f"Played 1+ playoff map for the team that won {_stage_scope(self.region, self.season)[1]} "
+                "(FACEIT map stats).")
 
     cannot_verify = ("They were on a stage winner's playoff roster, but we have no map data for those playoffs, "
                      "so we can't tell whether they played.")
 
     def params(self) -> dict:
-        return {"type": "stage_win", "region": self.region}
+        return {"type": "stage_win", "region": self.region, "season": self.season}
+
+    def stages(self, f: Facts) -> list[Stage]:
+        return [s for s in f.stages if self.region in (None, s.region) and self.season in (None, s.season)]
 
     def outcome(self, f: Facts) -> Outcome:
-        return _stage_players(f, [s for s in f.stages if self.region in (None, s.region)], finalists=False)
+        return _stage_players(f, self.stages(f), finalists=False)
 
 
 @dataclass(frozen=True)
 class StageFinalClue:
     region: Optional[str] = None
+    season: Optional[int] = None
     family = "stage"
     anchor = None
 
     @property
     def key(self) -> str:
-        return f"stage_final:{self.region or 'any'}"
+        return _stage_key("stage_final", self.region, self.season)
 
     @property
     def label(self) -> str:
+        if self.season:
+            return (f"{REGION_LABEL[self.region]} stage" if self.region else "Stage") + f" finalist in {self.season}"
         return f"{REGION_LABEL[self.region]} stage finalist" if self.region else "Stage grand finalist"
 
     @property
     def definition(self) -> str:
-        where = f"OWCS {REGION_LABEL[self.region]}" if self.region else "OWCS NA or EMEA"
-        return (f"Played 1+ playoff map for a team that reached an {where} stage's grand final, win or lose "
-                "(FACEIT map stats).")
+        scope = _stage_scope(self.region, self.season)[1].replace("'s playoffs", "'s grand final")
+        return f"Played 1+ playoff map for a team that reached {scope}, win or lose (FACEIT map stats)."
 
     cannot_verify = ("They were on a stage finalist's playoff roster, but we have no map data for those playoffs, "
                      "so we can't tell whether they played.")
 
     def params(self) -> dict:
-        return {"type": "stage_final", "region": self.region}
+        return {"type": "stage_final", "region": self.region, "season": self.season}
+
+    def stages(self, f: Facts) -> list[Stage]:
+        return [s for s in f.stages if self.region in (None, s.region) and self.season in (None, s.season)]
 
     def outcome(self, f: Facts) -> Outcome:
-        return _stage_players(f, [s for s in f.stages if self.region in (None, s.region)], finalists=True)
+        return _stage_players(f, self.stages(f), finalists=True)
 
 
 @dataclass(frozen=True)
@@ -591,36 +614,51 @@ class AwardClue:
 
 @dataclass(frozen=True)
 class LanClue:
-    championship_id: Optional[str] = None   # None: any international event held
+    championship_id: Optional[str] = None   # None: any international event held ...
     name: str = ""
+    season: Optional[int] = None            # ... or, with a season, any of that season's
     family = "lan"
     anchor = None
 
+    def __post_init__(self):
+        if self.championship_id and self.season:
+            raise ValueError("a roster clue names one event or one season, not both")
+
     @property
     def key(self) -> str:
-        return f"lan:{self.championship_id or 'any'}"
+        return f"lan:{self.championship_id or 'any'}" + (f":{self.season}" if self.season else "")
 
     @property
     def label(self) -> str:
-        return f"Rostered at {self.name}" if self.championship_id else "Rostered at an international LAN"
+        if self.championship_id:
+            return f"Rostered at {self.name}"
+        return f"Rostered at a {self.season} LAN" if self.season else "Rostered at an international LAN"
 
     @property
     def definition(self) -> str:
-        what = self.name if self.championship_id else "an OWCS international event (World Finals, Midseason Championship, Champions Clash, EWC 2024)"
+        if self.championship_id:
+            what = self.name
+        elif self.season:
+            what = f"an OWCS international event held in {self.season}"
+        else:
+            what = "an OWCS international event (World Finals, Midseason Championship, Champions Clash, EWC 2024)"
         return (f"On a team's roster at {what}, per Liquipedia's line-ups. Rostered, not necessarily played. "
                 "Dreamhack Dallas 2024 is not counted: its line-ups are incomplete.")
 
     cannot_verify = "They were at Dreamhack Dallas 2024, whose line-ups we hold incompletely, so we can't count it."
 
     def params(self) -> dict:
-        return {"type": "lan", "championship_id": self.championship_id}
+        return {"type": "lan", "championship_id": self.championship_id, "season": self.season}
 
     def outcome(self, f: Facts) -> Outcome:
         events = {cid: c for cid, c in f.full.championships.items() if c.region == "international" and c.tier == "main"}
         dallas = {cid for cid, c in events.items() if c.name == DALLAS}
         if self.championship_id is not None and (self.championship_id not in events or self.championship_id in dallas):
             raise ValueError(f"{self.championship_id} is not an international event a roster clue can use")
-        wanted = {self.championship_id} if self.championship_id else set(events) - dallas
+        if self.championship_id:
+            wanted = {self.championship_id}
+        else:
+            wanted = {cid for cid, c in events.items() if cid not in dallas and self.season in (None, c.season)}
         at: dict[str, list[Appearance]] = defaultdict(list)
         for a in f.full.appearances:
             if a.championship_id in wanted:
@@ -631,7 +669,9 @@ class LanClue:
             n = len({a.championship_id for a in rows})
             more = f", and {n - 1} more" if n > 1 else ""
             answers[player] = f"On {f.org(first.org_key)}'s roster at {f.competition(first.championship_id).removeprefix('OWCS ')}{more}"
-        at_dallas = set() if self.championship_id else {a.player_id for a in f.full.appearances if a.championship_id in dallas}
+        # Dallas was a 2024 event: only a clue that could have counted it leaves its players unjudged
+        counts_dallas = not self.championship_id and self.season in (None, 2024)
+        at_dallas = {a.player_id for a in f.full.appearances if a.championship_id in dallas} if counts_dallas else set()
         return Outcome(answers, frozenset(at_dallas - set(answers)))
 
 
@@ -824,14 +864,14 @@ def from_params(f: Facts, params: dict) -> Clue:
     if kind == "org_count":
         return OrgCountClue(params["n"])
     if kind == "stage_win":
-        return StageWinClue(params.get("region"))
+        return StageWinClue(params.get("region"), params.get("season"))
     if kind == "stage_final":
-        return StageFinalClue(params.get("region"))
+        return StageFinalClue(params.get("region"), params.get("season"))
     if kind == "award":
         return AwardClue()
     if kind == "lan":
         cid = params.get("championship_id")
-        return LanClue(cid, f.competition(cid).removeprefix("OWCS ") if cid else "")
+        return LanClue(cid, f.competition(cid).removeprefix("OWCS ") if cid else "", params.get("season"))
     if kind == "experience":
         return ExperienceClue(params["n"])
     if kind == "stat":

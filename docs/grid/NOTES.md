@@ -1,6 +1,13 @@
 # Grid Phase 0: working notes
 
-## State: polish done on `grid/polish`, not pushed, not deployed (2026-11-17)
+## State: final pass done; branch `grid/polish` pushed with a PR to main, not merged, not deployed (2026-11-17)
+
+Read "Final pass before the PR" at the top of [BETA.md](BETA.md). In short: Muse links to Grid by default
+(`VITE_GRID_NAV=false` hides it); 35 anchors approved by the owner's default; no org mapping or award applied;
+puzzles 1-2 kept and 3-45 regenerated through 2026-12-31; questions asked by id read by name. **Before 2027-01-01**
+generate more puzzles, or `/grid` has none.
+
+## Earlier: polish (2026-11-17)
 
 Read the "Polish" section at the top of [BETA.md](BETA.md) first. This is the latest state; the sections below are
 history.

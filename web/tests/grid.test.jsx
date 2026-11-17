@@ -465,18 +465,3 @@ describe("a beta puzzle after the change", () => {
     expect(screen.getByTestId("grid-info")).toHaveTextContent("10+ maps in the role in the 2025 season");
   });
 });
-
-describe("the nav link", () => {
-  it("is hidden unless VITE_GRID_NAV is true, and /grid works either way", async () => {
-    vi.stubEnv("VITE_GRID_NAV", "true");
-    vi.resetModules();
-    const { default: FlaggedApp } = await import("../src/App.jsx");
-    window.history.replaceState({}, "", "/");
-    vi.stubGlobal("fetch", mockFetch([["/suggestions", ok(SUGGESTIONS)], ["/api/grid/today", ok(PUZZLE)]]));
-    render(<FlaggedApp />);
-    await userEvent.click(await screen.findByTestId("grid-nav"));
-    expect(window.location.pathname).toBe("/grid");
-    expect(await screen.findByTestId("grid-board")).toBeInTheDocument();
-    vi.unstubAllEnvs();
-  });
-});

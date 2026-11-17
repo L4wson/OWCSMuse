@@ -1,6 +1,6 @@
 {
  "note": "OWCS NA and EMEA stage results for Grid's 'Won a stage' and 'Stage finalist' clues, derived by scripts/grid/build_facts.py from the playoff brackets: the last series of a stage's playoffs is its grand final. 'checks' holds what each other record says; 'agree' is false when any disagrees, and a clue never uses such a stage. Set 'reviewed' to true once checked against the source page. A rebuild keeps 'reviewed' and 'note'.",
- "generated_at": "2026-11-17T02:03:21Z",
+ "generated_at": "2026-11-17T06:51:39Z",
  "stages": [
   {
    "key": "2024-emea-1",
