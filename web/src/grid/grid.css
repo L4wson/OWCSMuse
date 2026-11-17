@@ -643,3 +643,13 @@ button.grid-rowhead:focus-visible {
 .grid-yours li span:last-child {
   display: block;
 }
+
+.grid-muse {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.grid-reveal a {
+  color: var(--accent);
+}

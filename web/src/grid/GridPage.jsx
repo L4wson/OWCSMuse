@@ -301,9 +301,21 @@ function YourAnswers({ puzzle, game }) {
             {puzzle.rows[Math.floor(cell / 3)].label} × {puzzle.cols[cell % 3].label}
           </span>
           <span>{game.filled[cell].explanation}</span>
+          <MuseLink link={game.filled[cell].link} name={game.filled[cell].name} />
         </li>
       ))}
     </ul>
+  );
+}
+
+// The service says where an answer's Muse page is (a question about that player, by id). It sends none for a
+// player Muse cannot be asked about by id, and then there is no link: never one that might not resolve.
+function MuseLink({ link, name }) {
+  if (!link) return null;
+  return (
+    <a className="grid-muse" href={link} data-testid="grid-muse-link">
+      Ask Muse about {name}
+    </a>
   );
 }
 
@@ -481,9 +493,21 @@ function EndScreen({ puzzle, game, reveal, stats, go }) {
                   </span>
                 ) : null}
                 <span>
-                  {entry.examples
-                    .map((example) => (example.maps !== undefined ? `${example.name} (${example.maps})` : example.name))
-                    .join(", ")}
+                  {entry.examples.map((example, index) => {
+                    const text = example.maps !== undefined ? `${example.name} (${example.maps})` : example.name;
+                    return (
+                      <span key={example.id}>
+                        {index ? ", " : ""}
+                        {example.link ? (
+                          <a href={example.link} title={`Ask Muse about ${example.name}`}>
+                            {text}
+                          </a>
+                        ) : (
+                          text
+                        )}
+                      </span>
+                    );
+                  })}
                 </span>
               </li>
             ))}

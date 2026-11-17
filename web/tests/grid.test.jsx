@@ -396,6 +396,65 @@ describe("a mixed-clue puzzle", () => {
   });
 });
 
+describe("links from an answer to Muse", () => {
+  const LINK = "/?q=player%3Aa940981f-c750-40b9-bb55-bd3e8e6ef986%20record";
+
+  function mountLinked() {
+    window.history.replaceState({}, "", "/grid");
+    const fetchMock = mockFetch([
+      ["/api/grid/today", ok(MIXED)],
+      ["/api/grid/players?q=haw", ok({ query: "haw", players: [HAWK] })],
+      [/\/api\/grid\/4\/guess$/, ({ body }) => ok(verdict(body.cell, HAWK, "correct", { explanation: CHASE_WHY, link: LINK }))],
+      [
+        /\/api\/grid\/4\/reveal$/,
+        ok({
+          ...MIXED_REVEAL,
+          cells: MIXED_REVEAL.cells.map((entry) => ({
+            ...entry,
+            examples: [
+              { id: "g", name: "Linked", why: "a reason", link: LINK },
+              { id: "lp:player:Shu", name: "Unlinked", why: "a reason", link: null },
+            ],
+          })),
+        }),
+      ],
+    ]);
+    vi.stubGlobal("fetch", fetchMock);
+    return { ...render(<App />), fetchMock };
+  }
+
+  it("links a filled answer to the question the service named, and keeps it across a reload", async () => {
+    const first = mountLinked();
+    await guess(0, "haw", "Hawk");
+    const link = await screen.findByTestId("grid-muse-link");
+    expect(link).toHaveTextContent("Ask Muse about Hawk");
+    expect(link).toHaveAttribute("href", LINK);
+    expect(loadGame(4).filled[0].link).toBe(LINK);
+    first.unmount();
+    mountLinked();
+    expect(await screen.findByTestId("grid-muse-link")).toHaveAttribute("href", LINK);
+  });
+
+  it("links each revealed example that has a link, and leaves the others as plain names", async () => {
+    mountLinked();
+    await screen.findByTestId("grid-board");
+    await userEvent.click(screen.getByRole("button", { name: /end game/i }));
+    const reveal = await screen.findByTestId("grid-reveal");
+    const linked = within(reveal).getAllByRole("link", { name: "Linked" });
+    expect(linked).toHaveLength(9);
+    expect(linked[0]).toHaveAttribute("href", LINK);
+    expect(within(reveal).queryByRole("link", { name: "Unlinked" })).not.toBeInTheDocument();
+    expect(reveal).toHaveTextContent("Linked, Unlinked");
+  });
+
+  it("shows no link when the service sent none", async () => {
+    mountMixed(); // its correct verdict carries link: null
+    await guess(0, "haw", "Hawk");
+    await waitFor(() => expect(screen.getByTestId("cell-0")).toHaveTextContent("Hawk"));
+    expect(screen.queryByTestId("grid-muse-link")).not.toBeInTheDocument();
+  });
+});
+
 describe("a beta puzzle after the change", () => {
   it("has no difficulty badge, keeps its short headers, and still explains them", async () => {
     mountGrid();

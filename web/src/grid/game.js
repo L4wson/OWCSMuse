@@ -75,7 +75,10 @@ export function applyGuess(game, budget, verdict) {
       ? {
           ...game,
           used,
-          filled: { ...game.filled, [cell]: { id: player.id, name: player.name, explanation: verdict.explanation } },
+          filled: {
+            ...game.filled,
+            [cell]: { id: player.id, name: player.name, explanation: verdict.explanation, link: verdict.link ?? null },
+          },
         }
       : { ...game, used, misses: [...game.misses, { cell, id: player.id, name: player.name, result: "wrong" }] };
   return { ...next, over: used >= budget || score(next) >= 9 };

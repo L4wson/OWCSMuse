@@ -1,6 +1,7 @@
-"""Write the two reviewed fact files Grid's clues read: stage results and individual awards. Read-only on the database.
+"""Write the reviewed fact files Grid's clues read: stage results, individual awards and teammate anchors.
+Read-only on the database.
 
-    python scripts/grid/build_facts.py            # writes scope/grid_stages.json and scope/grid_awards.json
+    python scripts/grid/build_facts.py            # writes scope/grid_stages.json, grid_awards.json, grid_anchors.json
     python scripts/grid/build_facts.py --dry-run  # prints what it would write
 
 Neither fact is a column in Muse's warehouse, so each is derived once, written to `scope/` with a source link on every
@@ -13,8 +14,13 @@ entry, and reviewed by a person there:
 - **Awards** (`scope/grid_awards.json`). The individual rows of Liquipedia's prize pools, which Muse's placements
   parser leaves out. Every entry is written `"reviewed": false`; the generator uses reviewed entries only.
 
+- **Anchors** (`scope/grid_anchors.json`). The players a "Teammate of" clue may name: about sixty candidates, ranked by
+  career maps, seasons, stage finals and international rosters, each with the reason in a line. A candidate starts
+  `"approved": true` with two or more seasons and a stage final or an international roster; the owner prunes the
+  list by hand, and the generator uses approved anchors only.
+
 This sends nothing to Liquipedia: it reads responses Muse already stored. Running it again keeps every `reviewed`
-flag and `note` a person has set, matched by the entry's key.
+or `approved` flag and `note` a person has set, matched by the entry's key.
 """
 
 from __future__ import annotations
@@ -33,6 +39,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 REPO = Path(__file__).resolve().parents[2]
 STAGES_PATH = REPO / "scope" / "grid_stages.json"
 AWARDS_PATH = REPO / "scope" / "grid_awards.json"
+ANCHORS_PATH = REPO / "scope" / "grid_anchors.json"
+ANCHOR_CANDIDATES = 60
 LIQUIPEDIA = "https://liquipedia.net/overwatch/"
 
 STAGE_NAME = re.compile(r"^OWCS (\d{4}) (NA|EMEA) Stage (\d)(?: (.+))?$")
@@ -183,16 +191,73 @@ def award_entries(rows: list[dict], pages: dict[str, str], lineups: dict[str, se
     return out
 
 
-def keep_reviews(new: list[dict], path: Path, list_key: str) -> list[dict]:
-    """Carry `reviewed` and `note` over from the file on disk, so a rebuild never undoes a person's review."""
+def keep_reviews(new: list[dict], path: Path, list_key: str, flag: str = "reviewed") -> list[dict]:
+    """Carry the review flag and `note` over from the file on disk, so a rebuild never undoes a person's review."""
     if not path.exists():
         return new
     old = {e["key"]: e for e in json.loads(path.read_text(encoding="utf-8")).get(list_key, [])}
     for entry in new:
         before = old.get(entry["key"])
         if before:
-            entry["reviewed"], entry["note"] = bool(before.get("reviewed")), before.get("note", "")
+            entry[flag], entry["note"] = bool(before.get(flag)), before.get("note", "")
     return new
+
+
+def anchor_score(maps: int, seasons: int, finals: int, lans: int) -> float:
+    """How well known a player is likely to be, for ordering the candidates. Not a rule: the owner has the last word."""
+    return round(maps / 50 + 2 * seasons + 1.5 * finals + lans, 2)
+
+
+def anchor_approved(seasons: int, finals: int, lans: int) -> bool:
+    """The starting value of `approved`: two or more seasons, and a stage final or an international roster."""
+    return seasons >= 2 and (finals >= 1 or lans >= 1)
+
+
+def anchor_candidates(facts, limit: int = ANCHOR_CANDIDATES) -> list[dict]:
+    """The best-known players, ranked, each with what a person needs to decide whether to keep them as an anchor."""
+    import clues as C
+
+    maps: dict[str, int] = defaultdict(int)
+    seasons: dict[str, set[int]] = defaultdict(set)
+    for m in facts.maps:
+        maps[m.player_id] += 1
+        seasons[m.player_id].add(m.season)
+    finals: dict[str, list[tuple[str, bool]]] = defaultdict(list)        # (stage, won)
+    for stage in facts.stages:
+        sides = {(cid, org) for cid in stage.playoff_championships for org in (stage.winner, stage.runner_up)}
+        seen: dict[str, str] = {}
+        for m in facts.maps:
+            if (m.championship_id, m.org_key) in sides:
+                seen[m.player_id] = m.org_key
+        for player, org in seen.items():
+            finals[player].append((stage.name, org == stage.winner))
+    lans: dict[str, set[str]] = defaultdict(set)
+    for a in facts.full.appearances:
+        c = facts.full.championships.get(a.championship_id)
+        if c and c.region == "international" and c.tier == "main" and c.name != C.DALLAS:
+            lans[a.player_id].add(c.name.removeprefix("OWCS "))
+
+    ranked = sorted(maps, key=lambda p: (-anchor_score(maps[p], len(seasons[p]), len(finals[p]), len(lans[p])), p))
+    out = []
+    for rank, player in enumerate(ranked[:limit], start=1):
+        n_seasons, n_finals, n_lans = len(seasons[player]), len(finals[player]), len(lans[player])
+        won = sum(1 for _, w in finals[player] if w)
+        parts = [f"{n_seasons} season{'s' if n_seasons != 1 else ''}", f"{maps[player]} maps"]
+        if n_finals:
+            parts.append(f"{n_finals} stage final{'s' if n_finals != 1 else ''}" + (f" ({won} won)" if won else ""))
+        if n_lans:
+            latest = sorted(lans[player], key=lambda name: (re.search(r"\d{4}", name).group(), name))[-1]
+            parts.append(f"{n_lans} LAN{'s' if n_lans != 1 else ''} incl. {latest}")
+        teammates = len(C.TeammateClue(player, facts.name(player)).outcome(facts).answers)
+        out.append({
+            "key": player, "player_id": player, "name": facts.name(player), "rank": rank,
+            "score": anchor_score(maps[player], n_seasons, n_finals, n_lans),
+            "maps": maps[player], "seasons": sorted(seasons[player]), "stage_finals": n_finals, "stages_won": won,
+            "lans": sorted(lans[player]), "teammates": teammates,
+            "reason": ", ".join(parts),
+            "approved": anchor_approved(n_seasons, n_finals, n_lans), "note": "",
+        })
+    return out
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -215,6 +280,8 @@ def main(argv: list[str] | None = None) -> int:
         for r in rows(EVENT_LINEUPS_SQL):
             lineups[r["championship_id"]].add(r["player_id"])
         championships = rows(CHAMPIONSHIP_NAMES_SQL)
+        from data import load
+        warehouse = load(conn)
     finally:
         conn.close()
 
@@ -235,7 +302,22 @@ def main(argv: list[str] | None = None) -> int:
             names[page] = f"OWCS {m.group(1)} {m.group(2)} Stage {m.group(3)}"
     awards = keep_reviews(award_entries(award_rows, pages, lineups, championship_of, names), AWARDS_PATH, "awards")
 
+    import clues as C
+    facts = C.Facts(warehouse, [
+        C.Stage(s["key"], s["name"], s["season"], s["region"], frozenset(s["playoff_championships"]),
+                s["winner"]["org_key"], s["runner_up"]["org_key"], s["source"]) for s in stages if s["agree"]])
+    anchors = keep_reviews(anchor_candidates(facts), ANCHORS_PATH, "anchors", flag="approved")
+
     generated = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    anchor_doc = {
+        "note": "Candidate anchor players for Grid's 'Teammate of' clue, written by scripts/grid/build_facts.py and "
+                "curated by the owner. Ranked by score = maps/50 + 2 x seasons + 1.5 x stage finals + international "
+                "rosters, all in OWCS NA/EMEA main series except the rosters. 'approved' starts true for a player with "
+                "2+ seasons and a stage final or an international roster; edit it by hand. The generator uses approved "
+                "anchors only, and skips one with fewer than 12 teammates on record ('teammates'). A rebuild keeps "
+                "'approved' and 'note' for players already listed; a player new to the list gets the starting value.",
+        "generated_at": generated, "anchors": anchors,
+    }
     stage_doc = {
         "note": "OWCS NA and EMEA stage results for Grid's 'Won a stage' and 'Stage finalist' clues, derived by "
                 "scripts/grid/build_facts.py from the playoff brackets: the last series of a stage's playoffs is its "
@@ -260,10 +342,15 @@ def main(argv: list[str] | None = None) -> int:
     print()
     for a in awards:
         print(f"{a['event']:36s} {a['award']:34s} {a['player']:12s} -> {a['player_id'] or 'UNRESOLVED'}")
+    print()
+    for a in anchors:
+        print(f"{a['rank']:3d}  {'yes' if a['approved'] else 'no ':3s}  {a['name']:16s} {a['reason']}  ({a['teammates']} teammates)")
+    print(f"approved: {sum(1 for a in anchors if a['approved'])} of {len(anchors)}")
     if not args.dry_run:
-        for path, doc in ((STAGES_PATH, stage_doc), (AWARDS_PATH, award_doc)):
+        for path, doc in ((STAGES_PATH, stage_doc), (AWARDS_PATH, award_doc), (ANCHORS_PATH, anchor_doc)):
             path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-        print(f"\nwrote {STAGES_PATH.relative_to(REPO)} ({len(stages)} stages) and {AWARDS_PATH.relative_to(REPO)} ({len(awards)} awards)")
+        print(f"\nwrote {STAGES_PATH.relative_to(REPO)} ({len(stages)} stages), {AWARDS_PATH.relative_to(REPO)} "
+              f"({len(awards)} awards) and {ANCHORS_PATH.relative_to(REPO)} ({len(anchors)} anchors)")
     return 0
 
 

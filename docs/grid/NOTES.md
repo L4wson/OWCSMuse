@@ -1,5 +1,19 @@
 # Grid Phase 0: working notes
 
+## State: polish, IN PROGRESS on `grid/polish` (stopped 2026-11-17, usage limit)
+
+Done and committed: the new generator rules (3+ shared clues within 21 days, one "N+ maps" clue, two teammate clues,
+one stat clue an axis; difficulty by median and smallest cell), backtracking in the day search, a wider clue pool,
+`scope/grid_anchors.json` (60 candidates, 52 approved by rule; the generator uses approved ones only), `/?q=` in the
+Muse frontend, a Muse link on every Grid answer with a FACEIT id, `--rebuild-all`, and all 35 puzzles regenerated
+(2026-11-17 to 2026-12-21, run output in `runs/generate_2026-11-17_35d_seed20261117.txt`). Grid tests (88) and
+frontend tests (125) pass; lint is clean.
+
+NOT done: VERIFY.md still lists the old puzzles 2-8 (regenerate it for the new puzzles 1-7); BETA.md and
+CATEGORIES.md do not yet describe the new rules, the anchor file, the links or the 35-puzzle supply; the full
+offline suite and the frontend build were not rerun after these changes; the two older run files in `runs/`
+describe discarded puzzles. Step 3 (org mappings) was skipped: the list in the request was left as a placeholder.
+
 ## State: mixed clues built on `grid/categories`, not pushed, not deployed (2026-11-17)
 
 Read [BETA.md](BETA.md) (top section) and [CATEGORIES.md](CATEGORIES.md) first.

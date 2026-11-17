@@ -33,36 +33,55 @@ MAX_CELLS_ONE_PLAYER = 5    # no player may fit more cells than this
 CLUE_GAP_DAYS = 7           # a clue is not reused within this many days
 ANCHOR_GAP_DAYS = 14        # nor a teammate clue's player within this many
 ROLE_GRID_GAP_DAYS = 8      # a role grid uses all three role clues, so it can recur only after the clue gap
+OVERLAP_DAYS = 21           # a puzzle may not share ...
+MAX_SHARED_CLUES = 2        # ... more than this many of its six clues with any puzzle in that many days before it
+MAX_EXPERIENCE_CLUES = 1    # "N+ maps" clues in one puzzle: two of them nest, and one implies the other
+MAX_TEAMMATE_CLUES = 2      # "Teammate of" clues in one puzzle
+MAX_STAT_CLUES_AN_AXIS = 1  # stat clues among the rows, and among the columns
 GUESSES = 9
 RANDOM_PROBES = 40          # random grids judged each day before the guided search, for the rejection record
 
 # the pool's own floors: a clue too narrow to fill three cells is not offered to the search at all
 TEAMMATE_ANCHORS = 60       # the players with the most maps
-TEAMMATE_MIN_ANSWERS = 12
-ORG_MIN_ANSWERS = 8
-EXPERIENCE_STEPS = (50, 75, 100, 125, 150)
+TEAMMATE_MIN_ANSWERS = 10
+ORG_MIN_ANSWERS = 6
+EXPERIENCE_STEPS = (25, 50, 75, 100, 125, 150, 175)
 STAT_SEASONS = (2025, 2026)
 STATS_OFFERED = ("eliminations", "damage_dealt", "deaths")
 
 EASY, MEDIUM, HARD = "Easy", "Medium", "Hard"
-EASY_MEDIAN = 9             # median answers per cell at or above this is Easy ...
-HARD_MEDIAN = 7             # ... below this is Hard, between is Medium
+EASY_MEDIAN = 9             # Easy: the median cell has this many answers or more ...
+EASY_MIN_CELL = 5           # ... and no cell has fewer than this
+MEDIUM_MEDIAN = 7           # Medium: the median cell has this many or more ...
+MEDIUM_MIN_CELL = 4         # ... and no cell has fewer than this
+HARD_MEDIAN = MEDIUM_MEDIAN  # anything else is Hard, down to the 3-answer floor every cell has
 WEEKDAY_TARGET = {0: EASY, 1: EASY, 2: MEDIUM, 3: MEDIUM, 4: MEDIUM, 5: HARD, 6: HARD}     # Monday is 0
 
 
 def difficulty(counts: list[int]) -> str:
-    median = statistics.median(counts)
-    return EASY if median >= EASY_MEDIAN else HARD if median < HARD_MEDIAN else MEDIUM
+    """The label a grid has earned, by its median cell and its smallest. A grid is never labelled by the day it
+    was wanted for: one that misses its weekday's target carries the label it actually deserves."""
+    median, smallest = statistics.median(counts), min(counts)
+    if median >= EASY_MEDIAN and smallest >= EASY_MIN_CELL:
+        return EASY
+    if median >= MEDIUM_MEDIAN and smallest >= MEDIUM_MIN_CELL:
+        return MEDIUM
+    return HARD
 
 
-def build_pool(f: Facts, include_awards: bool = False) -> list[Clue]:
-    """Every clue the search may use, built from the data: anchors and orgs are chosen by what they have played."""
+def build_pool(f: Facts, include_awards: bool = False, anchors: Optional[list[str]] = None) -> list[Clue]:
+    """Every clue the search may use, built from the data.
+
+    `anchors` is the owner's approved list (scope/grid_anchors.json): the only players a "Teammate of" clue may name.
+    Without one, the players with the most maps stand in, which is for tests and experiments, never for publishing.
+    """
     pool: list[Clue] = [RoleClue(r) for r in ROLES]
     pool += [SeasonClue(s) for s in (2024, 2025, 2026)] + [AllSeasonsClue()]
     pool += [RegionClue("na"), RegionClue("emea"), BothRegionsClue()]
 
     maps = Counter(m.player_id for m in f.maps)
-    for player_id, _ in sorted(maps.items(), key=lambda kv: (-kv[1], kv[0]))[:TEAMMATE_ANCHORS]:
+    by_maps = [p for p, _ in sorted(maps.items(), key=lambda kv: (-kv[1], kv[0]))[:TEAMMATE_ANCHORS]]
+    for player_id in (by_maps if anchors is None else anchors):
         clue = TeammateClue(player_id, f.name(player_id))
         if len(clue.outcome(f).answers) >= TEAMMATE_MIN_ANSWERS:
             pool.append(clue)
@@ -140,6 +159,7 @@ class Judge:
             reasons.append(f"only {len(families)} clue families ({', '.join(sorted(families))}); needs {MIN_FAMILIES}")
         if len({c.key for c in rows + cols}) < 6:
             reasons.append("the same clue is used twice")
+        reasons += shape_reasons(rows, cols)
 
         thin = 0
         for r, row in enumerate(rows):
@@ -174,10 +194,47 @@ class Judge:
         return Verdict(cells, counts, reasons)
 
 
-def recency_reasons(rows: list[Clue], cols: list[Clue], day: date, used: dict[str, date], anchors: dict[str, date]
-                    ) -> list[str]:
-    """A clue used in the previous 7 days, or a teammate anchor in the previous 14, rules the grid out."""
+def shape_reasons(rows: list[Clue], cols: list[Clue]) -> list[str]:
+    """Limits on what kinds of clue one puzzle may hold, whatever their answers."""
     reasons = []
+    families = Counter(c.family for c in rows + cols)
+    if families["experience"] > MAX_EXPERIENCE_CLUES:
+        reasons.append(f"{families['experience']} 'N+ maps' clues (at most {MAX_EXPERIENCE_CLUES})")
+    if families["teammate"] > MAX_TEAMMATE_CLUES:
+        reasons.append(f"{families['teammate']} 'Teammate of' clues (at most {MAX_TEAMMATE_CLUES})")
+    for axis, clues in (("rows", rows), ("columns", cols)):
+        stats = sum(1 for c in clues if c.family == "stats")
+        if stats > MAX_STAT_CLUES_AN_AXIS:
+            reasons.append(f"{stats} stat clues among the {axis} (at most {MAX_STAT_CLUES_AN_AXIS})")
+    return reasons
+
+
+def overlap_reasons(rows: list[Clue], cols: list[Clue], day: date, past: list[tuple[date, frozenset[str]]]) -> list[str]:
+    """A puzzle sharing three or more of its six clues with one from the previous 21 days is a near-repeat."""
+    mine = {c.key for c in rows + cols}
+    reasons = []
+    for when, keys in past:
+        shared = len(mine & keys)
+        if 0 < (day - when).days <= OVERLAP_DAYS and shared > MAX_SHARED_CLUES:
+            reasons.append(f"shares {shared} of its 6 clues with the puzzle of {when.isoformat()}, within {OVERLAP_DAYS} days "
+                           f"(at most {MAX_SHARED_CLUES})")
+    return reasons
+
+
+def clue_sets(puzzles: list[dict]) -> list[tuple[date, frozenset[str]]]:
+    """(day, the six clue keys) for each puzzle, in the keys mixed puzzles use, for the overlap rule."""
+    out = []
+    for p in puzzles:
+        keys = frozenset(c["key"] if p.get("format") == 2 else LEGACY_KEYS.get(c["key"], c["key"]) for c in p["rows"] + p["cols"])
+        out.append((date.fromisoformat(p["date"]), keys))
+    return out
+
+
+def recency_reasons(rows: list[Clue], cols: list[Clue], day: date, used: dict[str, date], anchors: dict[str, date],
+                    past: Optional[list[tuple[date, frozenset[str]]]] = None) -> list[str]:
+    """A clue used in the previous 7 days, a teammate anchor in the previous 14, or three clues shared with a
+    puzzle of the previous 21 (when `past` is given), rules the grid out."""
+    reasons = overlap_reasons(rows, cols, day, past) if past else []
     for clue in rows + cols:
         last = used.get(clue.key)
         if last is not None and 0 < (day - last).days <= CLUE_GAP_DAYS:
@@ -269,6 +326,10 @@ def _reason_kind(reason: str) -> str:
                          ("implies the other", "one clue implies the other"), ("cells have only", "too many thin cells"),
                          ("fits", "one player fits too many cells"), ("can be filled", "not fillable by 9 players"),
                          ("clue families", "too few families"), ("was used on", "a clue used in the last 7 days"),
+                         ("of its 6 clues", "three clues shared with a puzzle of the last 21 days"),
+                         ("'N+ maps' clues", "more than one 'N+ maps' clue"),
+                         ("'Teammate of' clues", "more than two 'Teammate of' clues"),
+                         ("stat clues among", "two stat clues on one axis"),
                          ("was an anchor", "an anchor used in the last 14 days"), ("used twice", "a repeated clue")):
         if needle in reason:
             return kind
@@ -276,19 +337,21 @@ def _reason_kind(reason: str) -> str:
 
 
 def _interest(rows: list[Clue], cols: list[Clue], verdict: Verdict) -> tuple:
-    """Between two valid grids for a day: more families first, then a teammate clue, then fewer thin cells."""
+    """Between two valid grids of one difficulty: a Hard one that is hard throughout (a low median, not one thin cell
+    in an easy grid) first; then more families, a teammate clue, and fewer thin cells."""
     families = {c.family for c in rows + cols}
     thin = sum(1 for n in verdict.flat if n <= THIN_CELL)
-    return (len(families), "teammate" in families, len(families & {"org", "stage", "lan", "stats"}), -thin)
+    hard_throughout = difficulty(verdict.flat) == HARD and statistics.median(verdict.flat) < MEDIUM_MEDIAN
+    return (hard_throughout, len(families), "teammate" in families, len(families & {"org", "stage", "lan", "stats"}), -thin)
 
 
 class _DaySearch:
     """The candidates judged for one day: the valid ones, and a record of what failed and why."""
 
     def __init__(self, judge: Judge, rng: random.Random, day: date, target: str, used: dict[str, date],
-                 anchors: dict[str, date], samples_kept: int):
+                 anchors: dict[str, date], samples_kept: int, past: Optional[list[tuple[date, frozenset[str]]]] = None):
         self.judge, self.rng, self.day, self.target = judge, rng, day, target
-        self.used, self.anchors, self.samples_kept = used, anchors, samples_kept
+        self.used, self.anchors, self.samples_kept, self.past = used, anchors, samples_kept, past or []
         self.valid: list[tuple[tuple, list[Clue], list[Clue], Verdict]] = []
         self.reason_counts: Counter = Counter()
         self.samples: list[dict] = []
@@ -301,7 +364,7 @@ class _DaySearch:
             return
         self.seen.add(signature)
         self.tried += 1
-        reasons = recency_reasons(rows, cols, self.day, self.used, self.anchors)
+        reasons = recency_reasons(rows, cols, self.day, self.used, self.anchors, self.past)
         verdict = self.judge.judge(rows, cols)
         reasons += verdict.reasons
         if reasons:
@@ -325,7 +388,7 @@ class _DaySearch:
         # A role grid, when one is due: the three roles against every usable trio of columns.
         if roles:
             usable = [c for c in free if all(self.judge.pair_ok(r, c) for r in roles)]
-            triples = list(itertools.combinations(usable, 3))
+            triples = [t for t in itertools.combinations(usable, 3) if not shape_reasons(list(roles), list(t))]
             self.rng.shuffle(triples)
             for cols in triples[:attempts]:
                 self.offer(list(roles), list(cols))
@@ -333,31 +396,58 @@ class _DaySearch:
             return
         # Otherwise build grids a clue at a time: each one added must already make a usable cell with those opposite.
         fits = {a.key: [b for b in free if b.key != a.key and self.judge.pair_ok(a, b)] for a in free}
+        recent = tuple(keys for when, keys in self.past if 0 < (self.day - when).days <= OVERLAP_DAYS)
         for _ in range(attempts):
-            grid = _grow(self.rng, free, fits)
+            grid = _grow(self.rng, free, fits, recent)
             if grid:
                 self.offer(*grid)
+        # nothing at all yet: keep building for as long again, three times, before giving the day up
+        for _ in range(3):
+            if self.valid:
+                break
+            for _ in range(attempts):
+                grid = _grow(self.rng, free, fits, recent)
+                if grid:
+                    self.offer(*grid)
+
+
+MAX_BACKTRACKS = 40         # times a run may step back a day to choose differently, when a later day has no grid
 
 
 def generate_days(f: Facts, kept: list[dict], dates: list[date], seed: int, generated_at: str, snapshot: str,
-                  attempts: int = 15000, samples_kept: int = 8, include_awards: bool = False) -> list[DayResult]:
-    """One puzzle per date, each passing every rule and no clue-recency conflict with the days before it."""
+                  attempts: int = 15000, samples_kept: int = 8, include_awards: bool = False,
+                  anchors: Optional[list[str]] = None) -> list[DayResult]:
+    """One puzzle per date, each passing every rule and no clue-recency conflict with the days before it.
+
+    Days are chosen in order, and a day's choice uses up clues the following week needs. When a day has no valid
+    grid at all, the run steps back one day, sets aside the puzzle it chose there, and chooses again.
+    """
     rng = random.Random(seed)
     judge = Judge(f)
-    pool = build_pool(f, include_awards)
+    pool = build_pool(f, include_awards, anchors)
     roles = [c for c in pool if isinstance(c, RoleClue)]
     others = [c for c in pool if not isinstance(c, RoleClue)]
-    used, anchors, last_role = history(kept)
-    number = max((p["number"] for p in kept), default=0)
+    used, anchor_days, last_role = history(kept)
+    past = clue_sets(kept)
+    first_number = max((p["number"] for p in kept), default=0) + 1
     results: list[DayResult] = []
+    before: list[tuple] = []                            # the state each day started from, to step back to
+    set_aside: dict[int, set[frozenset[str]]] = {}      # day index -> puzzles tried there that led to a dead end
+    backtracks = 0
 
-    for day in dates:
+    i = 0
+    while i < len(dates):
+        day = dates[i]
+        if len(before) == i:
+            before.append((dict(used), dict(anchor_days), last_role, list(past)))
         target = WEEKDAY_TARGET[day.weekday()]
         role_day = target != HARD and (last_role is None or (day - last_role).days >= ROLE_GRID_GAP_DAYS)
-        free = [c for c in others if not recency_reasons([c], [], day, used, anchors)]
-        search = _DaySearch(judge, rng, day, target, used, anchors, samples_kept)
+        free = [c for c in others if not recency_reasons([c], [], day, used, anchor_days)]
+        search = _DaySearch(judge, rng, day, target, used, anchor_days, samples_kept, past)
         search.run(free, roles if role_day else [], attempts)
-        valid, tried, reason_counts, samples = search.valid, search.tried, search.reason_counts, search.samples
+        tried, reason_counts, samples = search.tried, search.reason_counts, search.samples
+        barred = set_aside.get(i, set())
+        valid = [v for v in search.valid if frozenset(c.key for c in v[1] + v[2]) not in barred]
         note = ""
         chosen = [v for v in valid if difficulty(v[3].flat) == target]
         if not chosen and valid:
@@ -365,35 +455,68 @@ def generate_days(f: Facts, kept: list[dict], dates: list[date], seed: int, gene
             nearest = min(valid, key=lambda v: abs(order.index(difficulty(v[3].flat)) - order.index(target)))
             near = difficulty(nearest[3].flat)
             chosen = [v for v in valid if difficulty(v[3].flat) == near]
-            note = f"no valid {target} grid in {tried} candidates; the nearest valid difficulty is {near}"
+            note = f"no valid {target} grid in {tried} candidates; relabelled {near}, the nearest valid difficulty"
         if not chosen:
+            if i > 0 and results[i - 1].entry is not None and backtracks < MAX_BACKTRACKS:
+                # a dead end: undo yesterday, set its puzzle aside, and choose yesterday again
+                backtracks += 1
+                set_aside.pop(i, None)
+                gone = results.pop()
+                set_aside.setdefault(i - 1, set()).add(frozenset(c["key"] for c in gone.entry["rows"] + gone.entry["cols"]))
+                before.pop()
+                used, anchor_days, last_role, past = (dict(before[i - 1][0]), dict(before[i - 1][1]), before[i - 1][2],
+                                                      list(before[i - 1][3]))
+                i -= 1
+                continue
             results.append(DayResult(day, target, None, tried, reason_counts, samples,
                                      f"no valid grid in {tried} candidates"))
+            i += 1
             continue
         best = max(v[0] for v in chosen)
         _, rows, cols, verdict = rng.choice([v for v in chosen if v[0] == best])
-        number += 1
-        entry = puzzle_entry(f, verdict, rows, cols, number, day, generated_at, snapshot, seed)
+        entry = puzzle_entry(f, verdict, rows, cols, first_number + i, day, generated_at, snapshot, seed)
         for clue in rows + cols:
             used[clue.key] = day
             if clue.anchor:
-                anchors[clue.anchor] = day
+                anchor_days[clue.anchor] = day
         if entry["kind"] == "role":
             last_role = day
+        past.append((day, frozenset(c.key for c in rows + cols)))
+        if backtracks and set_aside.get(i):
+            note = (note + "; " if note else "") + f"chosen again after a later day had no valid grid ({len(set_aside[i])} set aside)"
         results.append(DayResult(day, target, entry, tried, reason_counts, samples, note))
+        i += 1
     return results
 
 
-def _grow(rng: random.Random, free: list[Clue], fits: dict[str, list[Clue]]) -> Optional[tuple[list[Clue], list[Clue]]]:
-    """Seat six clues one at a time, row and column in turn, each fitting every clue already opposite it."""
+def _grow(rng: random.Random, free: list[Clue], fits: dict[str, list[Clue]],
+          recent: tuple[frozenset[str], ...] = ()) -> Optional[tuple[list[Clue], list[Clue]]]:
+    """Seat six clues one at a time, row and column in turn, each fitting every clue already opposite it.
+
+    A clue is not seated if the rules would refuse the grid for it whatever came next: a shape limit, too few
+    families left to reach four, or a third clue shared with one of the `recent` puzzles.
+    """
     if not free:
         return None
     rows, cols = [rng.choice(free)], []
     for step in range(5):
         side, opposite = (cols, rows) if step % 2 == 0 else (rows, cols)
-        taken = {c.key for c in rows + cols}
-        options = [c for c in fits[opposite[0].key]
-                   if c.key not in taken and all(c in fits[o.key] for o in opposite[1:])]
+        seated = rows + cols
+        taken = {c.key for c in seated}
+        families = {c.family for c in seated}
+        slots_after = 5 - len(seated)               # seats still empty once this one is filled
+        options = []
+        for c in fits[opposite[0].key]:
+            if c.key in taken or not all(c in fits[o.key] for o in opposite[1:]):
+                continue
+            if len(families | {c.family}) + slots_after < MIN_FAMILIES:
+                continue
+            if shape_reasons(rows + ([c] if side is rows else []), cols + ([c] if side is cols else [])):
+                continue
+            keys = taken | {c.key}
+            if any(len(keys & past) > MAX_SHARED_CLUES for past in recent):
+                continue
+            options.append(c)
         if not options:
             return None
         side.append(rng.choice(options))

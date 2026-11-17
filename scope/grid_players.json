@@ -1,6 +1,6 @@
 {
  "note": "The OWCS Grid autocomplete index: every player seen in a line-up, written by scripts/grid/generate_puzzles.py. Not answers: the same list whatever the puzzle.",
- "generated_at": "2026-11-17T01:01:42Z",
+ "generated_at": "2026-11-17T02:17:03Z",
  "players": [
   {
    "id": "d144c074-bb21-4af9-9a19-8509c933003d",

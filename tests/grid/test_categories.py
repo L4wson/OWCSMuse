@@ -16,12 +16,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts" / "grid"))
 
+import build_facts  # noqa: E402
 import clues as C  # noqa: E402
 import generate_puzzles as gen  # noqa: E402
 import mixed as M  # noqa: E402
 from data import Appearance, Championship, MapRow, Warehouse  # noqa: E402
 
-from owcsmuse.grid.store import GridStore  # noqa: E402
+from owcsmuse.grid.store import GridStore, muse_link  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
 
@@ -449,11 +450,181 @@ def test_rule_a_clue_used_in_the_last_seven_days_and_an_anchor_in_the_last_fourt
     assert blocked(anchor_days_ago=15) == [] and blocked(anchor_days_ago=14, clues=(clue, other)) == []
 
 
-def test_difficulty_is_by_the_median_cell():
-    assert M.difficulty([3, 3, 9, 9, 9, 9, 9, 20, 30]) == "Easy"        # median 9
-    assert M.difficulty([3, 4, 7, 7, 7, 8, 8, 8, 30]) == "Medium"       # median 7
-    assert M.difficulty([3, 3, 5, 6, 6, 6, 9, 9, 40]) == "Hard"         # median 6
+def test_difficulty_needs_the_smallest_cell_as_well_as_the_median():
+    assert M.difficulty([5, 5, 9, 9, 9, 9, 9, 20, 30]) == "Easy"        # median 9, smallest 5
+    assert M.difficulty([4, 5, 9, 9, 9, 9, 9, 20, 30]) == "Medium"      # the same grid with one cell of 4: not Easy
+    assert M.difficulty([4, 4, 7, 7, 7, 8, 8, 8, 30]) == "Medium"       # median 7, smallest 4
+    assert M.difficulty([3, 4, 7, 7, 7, 8, 8, 8, 30]) == "Hard"         # the same grid with one cell of 3: not Medium
+    assert M.difficulty([3, 5, 9, 9, 9, 9, 9, 20, 30]) == "Hard"        # an easy median does not excuse a 3-answer cell
+    assert M.difficulty([4, 4, 5, 6, 6, 6, 9, 9, 40]) == "Hard"         # median 6
+    assert M.difficulty([3, 3, 3, 3, 3, 3, 3, 3, 3]) == "Hard"          # the floor every cell already has
     assert M.WEEKDAY_TARGET[0] == "Easy" and M.WEEKDAY_TARGET[5] == M.WEEKDAY_TARGET[6] == "Hard"
+
+
+def test_a_grid_that_misses_its_day_is_relabelled_never_mislabelled():
+    # the label stored with a puzzle is computed from its nine counts, whatever day it was wanted for
+    f = mixed_facts()
+    rows = [C.OrgClue("alpha", "Alpha"), C.OrgClue("beta", "Beta"), C.OrgClue("gamma", "Gamma")]
+    cols = [C.RoleClue("Tank"), C.RoleClue("Damage"), C.TeammateClue("a0", "A0")]
+    verdict = M.Judge(f).judge(rows, cols)
+    monday = date(2026, 11, 23)                                         # a Monday wants Easy
+    assert M.WEEKDAY_TARGET[monday.weekday()] == "Easy"
+    entry = M.puzzle_entry(f, verdict, rows, cols, 1, monday, "x", "y", 1)
+    assert entry["difficulty"] == M.difficulty(verdict.flat) != "Easy"   # cells of 2: it is what it is
+
+
+def shape(rows_families, cols_families) -> list[str]:
+    rows = [Fixed(f"R{i}", fam, frozenset()) for i, fam in enumerate(rows_families)]
+    cols = [Fixed(f"C{i}", fam, frozenset()) for i, fam in enumerate(cols_families)]
+    return M.shape_reasons(rows, cols)
+
+
+def test_rule_at_most_one_n_plus_maps_clue():
+    assert shape(("experience", "org", "stage"), ("lan", "teammate", "season")) == []
+    assert shape(("experience", "org", "stage"), ("experience", "teammate", "season")) == ["2 'N+ maps' clues (at most 1)"]
+    assert shape(("experience", "experience", "stage"), ("lan", "teammate", "season")) == ["2 'N+ maps' clues (at most 1)"]
+
+
+def test_rule_at_most_two_teammate_clues():
+    assert shape(("teammate", "org", "stage"), ("teammate", "lan", "season")) == []
+    assert shape(("teammate", "teammate", "stage"), ("teammate", "lan", "season")) == ["3 'Teammate of' clues (at most 2)"]
+
+
+def test_rule_at_most_one_stat_clue_on_an_axis():
+    assert shape(("stats", "org", "stage"), ("stats", "lan", "season")) == []                 # one a side is allowed
+    assert shape(("stats", "stats", "stage"), ("org", "lan", "season")) == ["2 stat clues among the rows (at most 1)"]
+    assert shape(("org", "lan", "stage"), ("stats", "season", "stats")) == ["2 stat clues among the columns (at most 1)"]
+
+
+def test_the_shape_rules_reject_an_otherwise_sound_grid():
+    # the grid that passes every other rule, with two of its clues made 'N+ maps' clues
+    found = reasons(good_cells(), families=("experience", "b", "c", "experience", "e", "f"))
+    assert found == ["2 'N+ maps' clues (at most 1)"]
+
+
+def test_rule_three_clues_shared_with_a_puzzle_of_the_last_21_days():
+    day = date(2026, 12, 20)
+    mine = [Fixed(k, "x", frozenset()) for k in ("a", "b", "c", "d", "e", "f")]
+    rows, cols = mine[:3], mine[3:]
+
+    def past(days_ago, keys):
+        return [(day - timedelta(days=days_ago), frozenset(keys))]
+
+    assert M.overlap_reasons(rows, cols, day, past(10, "abxyzw")) == []                 # two shared: allowed
+    assert M.overlap_reasons(rows, cols, day, past(10, "abcxyz")) == [
+        "shares 3 of its 6 clues with the puzzle of 2026-12-10, within 21 days (at most 2)"]
+    assert M.overlap_reasons(rows, cols, day, past(21, "abcdef"))                       # the 21st day back still counts
+    assert M.overlap_reasons(rows, cols, day, past(22, "abcdef")) == []                 # the 22nd does not
+    # it is three clues of one earlier puzzle, not three clues seen across several
+    spread = past(9, "axyzwv") + past(10, "bxyzwv") + past(11, "cxyzwv")
+    assert M.overlap_reasons(rows, cols, day, spread) == []
+    # and it reaches the generator's verdict through recency_reasons
+    assert M.recency_reasons(rows, cols, day, {}, {}, past(10, "abcxyz"))
+    assert M.recency_reasons(rows, cols, day, {}, {}) == []
+
+
+def test_clue_sets_reads_both_formats_in_the_same_keys():
+    old = {"date": "2026-11-18", "rows": [{"key": k} for k in ("tank", "dps", "support")],
+           "cols": [{"key": k} for k in ("emea", "all3", "2026")]}
+    new = {"format": 2, "date": "2026-11-19", "rows": [{"key": "role:tank"}, {"key": "org:x"}, {"key": "maps:100"}],
+           "cols": [{"key": "season:2026"}, {"key": "lan:any"}, {"key": "stage_win:any"}]}
+    (d1, k1), (d2, k2) = M.clue_sets([old, new])
+    assert k1 == {"role:tank", "role:dps", "role:support", "region:emea", "season:all3", "season:2026"}
+    assert len(k1 & k2) == 2 and (d1, d2) == (date(2026, 11, 18), date(2026, 11, 19))
+
+
+# ---- anchors ----------------------------------------------------------------------------------------------------
+
+def test_an_anchor_starts_approved_with_two_seasons_and_a_final_or_a_lan():
+    assert build_facts.anchor_approved(seasons=2, finals=1, lans=0)
+    assert build_facts.anchor_approved(seasons=3, finals=0, lans=2)
+    assert not build_facts.anchor_approved(seasons=1, finals=3, lans=4)     # one season, however decorated
+    assert not build_facts.anchor_approved(seasons=3, finals=0, lans=0)     # three seasons and nothing else
+
+
+def test_anchor_candidates_are_ranked_with_a_reason_and_the_starting_approval():
+    stage = C.Stage("2025-na-1", "OWCS 2025 NA Stage 1", 2025, "na", frozenset({"na25po"}), "alpha", "beta", "https://example")
+    maps = (played("vet", "a", "na24", "alpha", 30) + played("vet", "final", "na25po", "alpha", 5)
+            + played("vet", "c", "na26", "alpha", 30)
+            + played("mate", "a", "na24", "alpha", 30)                       # one season, no final, no LAN
+            + played("lan", "b", "na25", "beta", 20) + played("lan", "d", "na26", "beta", 20))
+    f = facts(maps, [lineup("lan", "w", "worlds", "beta")], stages=[stage])
+    by_id = {a["player_id"]: a for a in build_facts.anchor_candidates(f)}
+    assert [a["player_id"] for a in build_facts.anchor_candidates(f)][0] == "vet"
+    assert by_id["vet"]["reason"] == "3 seasons, 65 maps, 1 stage final (1 won)"
+    assert by_id["vet"]["approved"] is True and by_id["vet"]["stage_finals"] == 1
+    assert by_id["lan"]["reason"] == "2 seasons, 40 maps, 1 LAN incl. 2025 World Finals" and by_id["lan"]["approved"] is True
+    assert by_id["mate"]["approved"] is False and by_id["mate"]["reason"] == "1 season, 30 maps"
+    assert [a["rank"] for a in build_facts.anchor_candidates(f)] == [1, 2, 3]
+
+
+def test_a_rebuild_keeps_the_owners_approvals(tmp_path):
+    path = tmp_path / "anchors.json"
+    path.write_text(json.dumps({"anchors": [{"key": "p", "approved": False, "note": "not well known"}]}), encoding="utf-8")
+    rebuilt = build_facts.keep_reviews([{"key": "p", "approved": True, "note": ""}, {"key": "new", "approved": True, "note": ""}],
+                                       path, "anchors", flag="approved")
+    assert rebuilt[0] == {"key": "p", "approved": False, "note": "not well known"}      # the owner said no: still no
+    assert rebuilt[1]["approved"] is True                                                # new to the list: the rule's value
+
+
+def test_the_pool_names_only_approved_anchors(tmp_path, monkeypatch):
+    monkeypatch.setattr(M, "TEAMMATE_MIN_ANSWERS", 3)                  # these fixture teams have six players each
+    f = mixed_facts()
+    everyone = {c.player_id for c in M.build_pool(f) if c.family == "teammate"}
+    assert len(everyone) > 2                                           # with no list, the players with the most maps
+    only = {c.player_id for c in M.build_pool(f, anchors=["a0", "b1"]) if c.family == "teammate"}
+    assert only == {"a0", "b1"}
+    assert {c.player_id for c in M.build_pool(f, anchors=[]) if c.family == "teammate"} == set()
+    path = tmp_path / "anchors.json"
+    path.write_text(json.dumps({"anchors": [{"player_id": "a0", "approved": True}, {"player_id": "a1", "approved": False},
+                                            {"player_id": "b1", "approved": True}]}), encoding="utf-8")
+    assert gen.approved_anchors(path) == ["a0", "b1"]
+    with pytest.raises(FileNotFoundError, match="build_facts"):
+        gen.approved_anchors(tmp_path / "missing.json")
+
+
+def test_the_committed_anchor_file_follows_the_rule_it_states():
+    anchors = json.loads((REPO / "scope" / "grid_anchors.json").read_text(encoding="utf-8"))["anchors"]
+    assert 50 <= len(anchors) <= 70 and [a["rank"] for a in anchors] == list(range(1, len(anchors) + 1))
+    assert len({a["player_id"] for a in anchors}) == len(anchors)
+    for a in anchors:
+        assert a["reason"] and isinstance(a["approved"], bool)
+        if not a["note"]:       # an entry the owner has not touched still carries the starting value
+            assert a["approved"] == build_facts.anchor_approved(len(a["seasons"]), a["stage_finals"], len(a["lans"])), a["name"]
+
+
+# ---- links to Muse ----------------------------------------------------------------------------------------------
+
+def test_a_muse_link_is_a_prefilled_question_by_id_and_only_for_a_faceit_id():
+    assert muse_link("58239fd5-cf2f-4894-a2ec-30fd026c262a") == "/?q=player%3A58239fd5-cf2f-4894-a2ec-30fd026c262a%20record"
+    assert muse_link("lp:player:Shu") is None           # Muse's parser does not take a Liquipedia-born id in a question
+    assert muse_link("t0") is None and muse_link("") is None
+    # the question is one Muse's parser reads as a record for exactly that id
+    from urllib.parse import unquote
+    from owcsmuse.nlq.parser import is_entity_token, parse_question
+    question = unquote(muse_link("58239fd5-cf2f-4894-a2ec-30fd026c262a").removeprefix("/?q="))
+    parsed = parse_question(question).compact()
+    assert parsed["intent"] == "team_record" and parsed["filters"]["subject"] == "player:58239fd5-cf2f-4894-a2ec-30fd026c262a"
+    assert is_entity_token(parsed["filters"]["subject"]) and not is_entity_token("player:lp:player:Shu")
+
+
+def test_a_correct_guess_and_the_reveal_carry_the_link(tmp_path):
+    guid, born = "58239fd5-cf2f-4894-a2ec-30fd026c262a", "lp:player:Shu"
+    clue = {"key": "k", "family": "lan", "label": "L", "help": "h.", "cannot_verify": "c.", "params": {"type": "lan"}}
+    cells = [{"row": i // 3, "col": i % 3, "count": 2, "unverifiable": {},
+              "answers": {guid: {"name": "sugarfree", "why": "a reason"}, born: {"name": "Shu", "why": "another"}}} for i in range(9)]
+    puzzle = {"format": 2, "number": 1, "date": "2026-11-17", "kind": "mixed", "difficulty": "Hard", "rows": [clue] * 3,
+              "cols": [clue] * 3, "rules": {"min_answers": 3, "guesses": 9}, "cells": cells}
+    (tmp_path / "p.json").write_text(json.dumps({"puzzles": [puzzle]}), encoding="utf-8")
+    players = [{"id": guid, "name": "sugarfree", "names": [], "team": "T", "seasons": [2025]},
+               {"id": born, "name": "Shu", "names": [], "team": "T", "seasons": [2025]}]
+    (tmp_path / "pl.json").write_text(json.dumps({"players": players}), encoding="utf-8")
+    store = GridStore(tmp_path / "p.json", tmp_path / "pl.json")
+    now = datetime(2026, 11, 17, 12, tzinfo=timezone.utc)
+    assert store.guess(1, 0, guid, now)["link"] == muse_link(guid)
+    assert store.guess(1, 0, born, now)["link"] is None                # correct, with no link: never a dead one
+    links = {e["name"]: e["link"] for e in store.reveal(1, now)["cells"][0]["examples"]}
+    assert links == {"sugarfree": muse_link(guid), "Shu": None}
 
 
 def test_history_reads_both_formats_and_knows_a_role_grid():
@@ -583,6 +754,8 @@ def test_every_committed_mixed_puzzle_obeys_the_generator_rules():
     assert [p["number"] for p in puzzles] == list(range(1, len(puzzles) + 1))
     assert [p["date"] for p in puzzles] == sorted({p["date"] for p in puzzles})
     used, anchors, _ = M.history([p for p in puzzles if p.get("format") != 2])
+    sets = M.clue_sets(puzzles)
+    approved = set(gen.approved_anchors(REPO / "scope" / "grid_anchors.json"))
     for p in sorted(mixed, key=lambda p: p["date"]):
         day, where = date.fromisoformat(p["date"]), f"puzzle {p['number']}"
         clues = p["rows"] + p["cols"]
@@ -599,6 +772,17 @@ def test_every_committed_mixed_puzzle_obeys_the_generator_rules():
             for player in c["answers"]:
                 fits[player] = fits.get(player, 0) + 1
         assert max(fits.values()) <= M.MAX_CELLS_ONE_PLAYER, where
+        families = [c["family"] for c in clues]
+        assert families.count("experience") <= M.MAX_EXPERIENCE_CLUES, where
+        assert families.count("teammate") <= M.MAX_TEAMMATE_CLUES, where
+        for axis in (p["rows"], p["cols"]):
+            assert sum(1 for c in axis if c["family"] == "stats") <= M.MAX_STAT_CLUES_AN_AXIS, where
+        mine = {c["key"] for c in clues}
+        for when, keys in sets:
+            if 0 < (day - when).days <= M.OVERLAP_DAYS:
+                assert len(mine & keys) <= M.MAX_SHARED_CLUES, f"{where} shares {len(mine & keys)} clues with {when}"
+        if "teammate" in families:
+            assert {c["key"].split(":", 1)[1] for c in clues if c["family"] == "teammate"} <= approved, where
         assert gen.distinct_solution([frozenset(c["answers"]) for c in p["cells"]]) == 9, where
         for c in clues:
             last = used.get(c["key"])

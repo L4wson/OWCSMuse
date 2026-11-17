@@ -142,6 +142,19 @@ export default function App() {
     if (route.name === "home") reset();
   }, [route.name, reset]);
 
+  // A prefilled question (/?q=...), as a link from elsewhere can carry: asked exactly as if it had been typed and
+  // submitted. It runs after the reset above, and the answer's /q/<slug> replaces this entry in the history, so
+  // Back leaves the site instead of landing here and asking again.
+  const prefilled = route.name === "home" ? new URLSearchParams(window.location.search).get("q")?.trim() || null : null;
+  useEffect(() => {
+    if (!prefilled) return;
+    load((signal) => askApi({ question: prefilled, pageSize: sizeRef.current, signal }), { question: prefilled }).then(
+      (payload) => {
+        if (payload?.slug) navigate(`/q/${payload.slug}`, { replace: true });
+      },
+    );
+  }, [prefilled, load, navigate]);
+
   const goHome = useCallback(() => {
     reset();
     navigate("/");

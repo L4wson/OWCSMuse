@@ -51,6 +51,7 @@ PUZZLES_PATH = REPO / "scope" / "grid_puzzles.json"
 PLAYERS_PATH = REPO / "scope" / "grid_players.json"
 STAGES_PATH = REPO / "scope" / "grid_stages.json"
 AWARDS_PATH = REPO / "scope" / "grid_awards.json"
+ANCHORS_PATH = REPO / "scope" / "grid_anchors.json"
 RUNS_DIR = REPO / "docs" / "grid" / "runs"
 
 MIN_MAPS = 10           # maps in the role, inside the column's scope, for a player to be an answer
@@ -344,6 +345,13 @@ def report(new: list[dict], rejected: list[dict], skipped: list[date], header: l
     return "\n".join(lines) + "\n"
 
 
+def approved_anchors(path: Path) -> list[str]:
+    """The player ids the owner has approved as "Teammate of" anchors, in the file's ranked order."""
+    if not path.exists():
+        raise FileNotFoundError(f"{path.name} is missing: run scripts/grid/build_facts.py, then review its 'approved' flags")
+    return [a["player_id"] for a in json.loads(path.read_text(encoding="utf-8"))["anchors"] if a.get("approved")]
+
+
 def mixed_report(results: list, skipped: list[date], header: list[str]) -> str:
     """The run as text: every new puzzle with its nine counts, then what was rejected each day and why."""
     lines = list(header)
@@ -391,6 +399,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--seed", type=int, default=None, help="default: the start date as a number")
     p.add_argument("--replace-future", action="store_true",
                    help="regenerate unpublished puzzles from the start date on (never a published one)")
+    p.add_argument("--rebuild-all", action="store_true",
+                   help="DISCARD every puzzle in the file and generate afresh from the start date, which may be today. "
+                        "Only for a file no visitor has ever been served: it breaks the rule that a published puzzle "
+                        "never changes")
     p.add_argument("--dry-run", action="store_true", help="print the report; write nothing")
     p.add_argument("--classic", action="store_true", help="the beta's role x column grids instead of mixed clues")
     p.add_argument("--attempts", type=int, default=15000, help="candidate grids to build per day (mixed)")
@@ -408,12 +420,24 @@ def main(argv: list[str] | None = None) -> int:
               "puzzles are left alone", file=sys.stderr)
         return 2
 
-    try:
-        kept, dates, skipped = plan_dates(read_puzzles(PUZZLES_PATH), args.start_date, args.days, now.date(),
-                                          args.replace_future)
-    except PublishedError as e:
-        print(f"refused: {e}", file=sys.stderr)
-        return 2
+    if args.rebuild_all:
+        if args.replace_future:
+            p.error("--rebuild-all already replaces everything; drop --replace-future")
+        if args.start_date < now.date():
+            print("refused: --rebuild-all starts today (UTC) at the earliest: a past date is never filled in", file=sys.stderr)
+            return 2
+        discarded = read_puzzles(PUZZLES_PATH)
+        print(f"--rebuild-all: discarding {len(discarded)} puzzles and starting again at #{1} on {args.start_date.isoformat()}. "
+              "Only safe while nothing has been deployed.", file=sys.stderr)
+        kept, skipped = [], []
+        dates = [args.start_date + timedelta(days=i) for i in range(args.days)]
+    else:
+        try:
+            kept, dates, skipped = plan_dates(read_puzzles(PUZZLES_PATH), args.start_date, args.days, now.date(),
+                                              args.replace_future)
+        except PublishedError as e:
+            print(f"refused: {e}", file=sys.stderr)
+            return 2
 
     from db import connect_readonly     # imported here so the offline tests never need a database driver configured
     conn = connect_readonly()
@@ -434,8 +458,9 @@ def main(argv: list[str] | None = None) -> int:
                 f"({SCOPE_NOTE})")
     if not args.classic:
         facts = clues.Facts(wh, clues.load_stages(STAGES_PATH), clues.load_awards(AWARDS_PATH, args.include_unreviewed))
+        anchors = approved_anchors(ANCHORS_PATH)
         results = mixed.generate_days(facts, kept, dates, seed, generated_at, snapshot, attempts=args.attempts,
-                                      include_awards=bool(facts.awards))
+                                      include_awards=bool(facts.awards), anchors=anchors)
         new = [r.entry for r in results if r.entry is not None]
         missing = [r.day.isoformat() for r in results if r.entry is None]
         header = [
@@ -446,7 +471,8 @@ def main(argv: list[str] | None = None) -> int:
             f"difficulty by median answers a cell: Easy {mixed.EASY_MEDIAN}+, Hard under {mixed.HARD_MEDIAN}, Medium between",
             snapshot,
             f"stages used: {len(facts.stages)}; awards used: {len(facts.awards)}"
-            + (" INCLUDING UNREVIEWED (dry run only)" if args.include_unreviewed else " (reviewed only)"),
+            + (" INCLUDING UNREVIEWED (dry run only)" if args.include_unreviewed else " (reviewed only)")
+            + f"; approved teammate anchors: {len(anchors)}",
             f"new puzzles: {len(new)}" + (f"; NO VALID GRID for {', '.join(missing)}" if missing else ""),
         ]
         text = mixed_report(results, skipped, header)

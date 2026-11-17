@@ -1,0 +1,1442 @@
+{
+ "note": "Candidate anchor players for Grid's 'Teammate of' clue, written by scripts/grid/build_facts.py and curated by the owner. Ranked by score = maps/50 + 2 x seasons + 1.5 x stage finals + international rosters, all in OWCS NA/EMEA main series except the rosters. 'approved' starts true for a player with 2+ seasons and a stage final or an international roster; edit it by hand. The generator uses approved anchors only, and skips one with fewer than 12 teammates on record ('teammates'). A rebuild keeps 'approved' and 'note' for players already listed; a player new to the list gets the starting value.",
+ "generated_at": "2026-11-17T02:03:21Z",
+ "anchors": [
+  {
+   "key": "a332d27e-fe19-4077-89f8-27391a581460",
+   "player_id": "a332d27e-fe19-4077-89f8-27391a581460",
+   "name": "Landon",
+   "rank": 1,
+   "score": 26.0,
+   "maps": 200,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 6,
+   "stages_won": 3,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 16,
+   "reason": "3 seasons, 200 maps, 6 stage finals (3 won), 7 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+   "player_id": "58239fd5-cf2f-4894-a2ec-30fd026c262a",
+   "name": "sugarfree",
+   "rank": 2,
+   "score": 25.12,
+   "maps": 206,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 6,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 17,
+   "reason": "3 seasons, 206 maps, 6 stage finals (2 won), 6 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "43d39898-d853-4e75-b249-9b41d638a2b0",
+   "player_id": "43d39898-d853-4e75-b249-9b41d638a2b0",
+   "name": "UltraViolet",
+   "rank": 3,
+   "score": 24.76,
+   "maps": 213,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 5,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 15,
+   "reason": "3 seasons, 213 maps, 5 stage finals (2 won), 7 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
+   "player_id": "41c50d1a-3a08-40ad-9746-ecd52ff9e5c6",
+   "name": "Admiral",
+   "rank": 4,
+   "score": 22.68,
+   "maps": 184,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 14,
+   "reason": "3 seasons, 184 maps, 4 stage finals (2 won), 7 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+   "player_id": "2ede0b37-1352-47d2-9547-7d0f9f07abaa",
+   "name": "cjay",
+   "rank": 5,
+   "score": 22.64,
+   "maps": 207,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 5,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 16,
+   "reason": "3 seasons, 207 maps, 5 stage finals (2 won), 5 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+   "player_id": "423b8943-30c9-4436-8a22-51ca77aa7fca",
+   "name": "FunnyAstro",
+   "rank": 6,
+   "score": 21.96,
+   "maps": 198,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 3,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 12,
+   "reason": "3 seasons, 198 maps, 4 stage finals (3 won), 6 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "9adef42b-599b-41ff-9893-1942ac6a4402",
+   "player_id": "9adef42b-599b-41ff-9893-1942ac6a4402",
+   "name": "Quartz",
+   "rank": 7,
+   "score": 21.9,
+   "maps": 195,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 3,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 14,
+   "reason": "3 seasons, 195 maps, 4 stage finals (3 won), 6 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+   "player_id": "80fd30f8-18d4-4aa9-a94b-644f155a50e4",
+   "name": "Vega",
+   "rank": 8,
+   "score": 20.96,
+   "maps": 198,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 3,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 13,
+   "reason": "3 seasons, 198 maps, 4 stage finals (3 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+   "player_id": "9adfc2f2-3851-4c98-a29b-5b4ed95e9beb",
+   "name": "Lethal",
+   "rank": 9,
+   "score": 20.94,
+   "maps": 197,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 2,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 17,
+   "reason": "3 seasons, 197 maps, 4 stage finals (2 won), 5 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "462c6480-274d-48a6-a5cf-d29d3b2dd786",
+   "player_id": "462c6480-274d-48a6-a5cf-d29d3b2dd786",
+   "name": "LBBD7",
+   "rank": 10,
+   "score": 20.42,
+   "maps": 171,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 1,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 13,
+   "reason": "3 seasons, 171 maps, 4 stage finals (1 won), 5 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "58faa695-b501-4642-a4d9-0e4c2ed8526d",
+   "player_id": "58faa695-b501-4642-a4d9-0e4c2ed8526d",
+   "name": "zeruhh",
+   "rank": 11,
+   "score": 20.16,
+   "maps": 183,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 23,
+   "reason": "3 seasons, 183 maps, 3 stage finals (2 won), 6 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+   "player_id": "016d21e3-fe55-4f07-ba4f-b61e7339bd18",
+   "name": "Seicoe",
+   "rank": 12,
+   "score": 20.0,
+   "maps": 150,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 3,
+   "lans": [
+    "2024 World Finals",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 13,
+   "reason": "3 seasons, 150 maps, 4 stage finals (3 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+   "player_id": "ef80a7e0-27ad-4c55-a2d7-52b687ba3b23",
+   "name": "kevster",
+   "rank": 13,
+   "score": 19.94,
+   "maps": 197,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 1,
+   "lans": [
+    "2024 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 18,
+   "reason": "3 seasons, 197 maps, 4 stage finals (1 won), 4 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "1daf63bc-70f3-479f-b030-b2699fbbe118",
+   "player_id": "1daf63bc-70f3-479f-b030-b2699fbbe118",
+   "name": "Kronik",
+   "rank": 14,
+   "score": 18.44,
+   "maps": 197,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 20,
+   "reason": "3 seasons, 197 maps, 3 stage finals (2 won), 4 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "b273a710-800f-4638-9858-461d81ac55b9",
+   "player_id": "b273a710-800f-4638-9858-461d81ac55b9",
+   "name": "kellex",
+   "rank": 15,
+   "score": 18.4,
+   "maps": 120,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 11,
+   "reason": "3 seasons, 120 maps, 4 stage finals (2 won), 4 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "a940981f-c750-40b9-bb55-bd3e8e6ef986",
+   "player_id": "a940981f-c750-40b9-bb55-bd3e8e6ef986",
+   "name": "Hawk",
+   "rank": 16,
+   "score": 17.68,
+   "maps": 134,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 0,
+   "lans": [
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 13,
+   "reason": "3 seasons, 134 maps, 4 stage finals, 3 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+   "player_id": "1661fa93-eee8-4cd5-98a8-f7478bbe87e2",
+   "name": "Vestola",
+   "rank": 17,
+   "score": 17.64,
+   "maps": 157,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 1,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 13,
+   "reason": "3 seasons, 157 maps, 3 stage finals (1 won), 4 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "b371a120-4be1-4677-aeee-81f5ebc80731",
+   "player_id": "b371a120-4be1-4677-aeee-81f5ebc80731",
+   "name": "TVNT",
+   "rank": 18,
+   "score": 17.64,
+   "maps": 107,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 14,
+   "reason": "3 seasons, 107 maps, 3 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+   "player_id": "9c435ffa-fa38-4754-93aa-259dd8732a3f",
+   "name": "Youbi",
+   "rank": 19,
+   "score": 17.3,
+   "maps": 90,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 12,
+   "reason": "3 seasons, 90 maps, 3 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+   "player_id": "ba42f8ef-51a8-486b-a1e8-46954a4859ea",
+   "name": "Rupal",
+   "rank": 20,
+   "score": 17.06,
+   "maps": 153,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 4,
+   "stages_won": 3,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 9,
+   "reason": "2 seasons, 153 maps, 4 stage finals (3 won), 4 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "c2c17617-77ac-4f70-8529-59a2a910cb35",
+   "player_id": "c2c17617-77ac-4f70-8529-59a2a910cb35",
+   "name": "ZIYAD",
+   "rank": 21,
+   "score": 17.0,
+   "maps": 150,
+   "seasons": [
+    2025,
+    2026
+   ],
+   "stage_finals": 4,
+   "stages_won": 1,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 7,
+   "reason": "2 seasons, 150 maps, 4 stage finals (1 won), 4 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "3d7e3522-9ef9-4c31-abe2-e10dd1c14270",
+   "player_id": "3d7e3522-9ef9-4c31-abe2-e10dd1c14270",
+   "name": "Infekted",
+   "rank": 22,
+   "score": 16.48,
+   "maps": 174,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 2,
+   "stages_won": 1,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 13,
+   "reason": "3 seasons, 174 maps, 2 stage finals (1 won), 4 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "c6839ee0-654b-4b77-90ab-11ba3b56bb49",
+   "player_id": "c6839ee0-654b-4b77-90ab-11ba3b56bb49",
+   "name": "CheckMate",
+   "rank": 23,
+   "score": 15.92,
+   "maps": 121,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 3,
+   "stages_won": 1,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 12,
+   "reason": "2 seasons, 121 maps, 3 stage finals (1 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "e422414a-72ec-4e83-8264-6a54b39414b8",
+   "player_id": "e422414a-72ec-4e83-8264-6a54b39414b8",
+   "name": "FiXa",
+   "rank": 24,
+   "score": 15.6,
+   "maps": 155,
+   "seasons": [
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 8,
+   "reason": "2 seasons, 155 maps, 3 stage finals (2 won), 4 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "635737a5-3456-43c5-aa74-d7ccb1a30da1",
+   "player_id": "635737a5-3456-43c5-aa74-d7ccb1a30da1",
+   "name": "Simple",
+   "rank": 25,
+   "score": 15.48,
+   "maps": 149,
+   "seasons": [
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 12,
+   "reason": "2 seasons, 149 maps, 3 stage finals (2 won), 4 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "88cb75a1-b0ff-49c2-8046-11e744f2f5d8",
+   "player_id": "88cb75a1-b0ff-49c2-8046-11e744f2f5d8",
+   "name": "TR33",
+   "rank": 26,
+   "score": 15.02,
+   "maps": 151,
+   "seasons": [
+    2025,
+    2026
+   ],
+   "stage_finals": 2,
+   "stages_won": 1,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 9,
+   "reason": "2 seasons, 151 maps, 2 stage finals (1 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "482cb7a6-687c-47a4-bb07-6fd02e604ed3",
+   "player_id": "482cb7a6-687c-47a4-bb07-6fd02e604ed3",
+   "name": "Lukemino",
+   "rank": 27,
+   "score": 15.0,
+   "maps": 150,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 2,
+   "stages_won": 2,
+   "lans": [
+    "2025 Midseason Championship",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 17,
+   "reason": "3 seasons, 150 maps, 2 stage finals (2 won), 3 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "19298c75-9d48-4dc5-9970-75509c11246c",
+   "player_id": "19298c75-9d48-4dc5-9970-75509c11246c",
+   "name": "Kellan",
+   "rank": 28,
+   "score": 14.88,
+   "maps": 119,
+   "seasons": [
+    2025,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 9,
+   "reason": "2 seasons, 119 maps, 3 stage finals (2 won), 4 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "37aeeb7b-b183-4fae-b25d-d1de03a58191",
+   "player_id": "37aeeb7b-b183-4fae-b25d-d1de03a58191",
+   "name": "eisgnom",
+   "rank": 29,
+   "score": 14.52,
+   "maps": 126,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 2,
+   "stages_won": 1,
+   "lans": [
+    "2025 Midseason Championship",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 16,
+   "reason": "3 seasons, 126 maps, 2 stage finals (1 won), 3 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+   "player_id": "b7a281ed-48ba-4f05-93d3-27ed9355c504",
+   "name": "Kai",
+   "rank": 30,
+   "score": 13.94,
+   "maps": 147,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 2,
+   "stages_won": 0,
+   "lans": [
+    "2024 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 17,
+   "reason": "3 seasons, 147 maps, 2 stage finals, 2 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "04d8399b-8ae4-4142-92dd-512021980e5f",
+   "player_id": "04d8399b-8ae4-4142-92dd-512021980e5f",
+   "name": "Galaa",
+   "rank": 31,
+   "score": 13.66,
+   "maps": 158,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 1,
+   "stages_won": 1,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 18,
+   "reason": "3 seasons, 158 maps, 1 stage final (1 won), 3 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
+   "player_id": "731b1930-f9d7-4a8d-829c-a048b65a9cf8",
+   "name": "WMaimone",
+   "rank": 32,
+   "score": 13.0,
+   "maps": 125,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 1,
+   "stages_won": 1,
+   "lans": [
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 16,
+   "reason": "3 seasons, 125 maps, 1 stage final (1 won), 3 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "f2359218-1265-472c-8fbc-9c91183766f0",
+   "player_id": "f2359218-1265-472c-8fbc-9c91183766f0",
+   "name": "Le7",
+   "rank": 33,
+   "score": 12.96,
+   "maps": 173,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 1,
+   "stages_won": 0,
+   "lans": [
+    "2025 Midseason Championship",
+    "2025 World Finals"
+   ],
+   "teammates": 24,
+   "reason": "3 seasons, 173 maps, 1 stage final, 2 LANs incl. 2025 World Finals",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "759bcdd9-e8e1-4492-95fa-77aca4cd84af",
+   "player_id": "759bcdd9-e8e1-4492-95fa-77aca4cd84af",
+   "name": "SeonJun",
+   "rank": 34,
+   "score": 12.78,
+   "maps": 64,
+   "seasons": [
+    2024,
+    2026
+   ],
+   "stage_finals": 3,
+   "stages_won": 2,
+   "lans": [
+    "2025 Midseason Championship",
+    "2026 Champions Clash",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 9,
+   "reason": "2 seasons, 64 maps, 3 stage finals (2 won), 3 LANs incl. 2026 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "34d11d57-a8f1-4f15-996d-e1776c525f93",
+   "player_id": "34d11d57-a8f1-4f15-996d-e1776c525f93",
+   "name": "JaeWoo",
+   "rank": 35,
+   "score": 12.4,
+   "maps": 120,
+   "seasons": [
+    2025,
+    2026
+   ],
+   "stage_finals": 2,
+   "stages_won": 2,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2026 Champions Clash"
+   ],
+   "teammates": 11,
+   "reason": "2 seasons, 120 maps, 2 stage finals (2 won), 3 LANs incl. 2026 Champions Clash",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "92695183-d00e-4c31-9707-ff9d8500f52a",
+   "player_id": "92695183-d00e-4c31-9707-ff9d8500f52a",
+   "name": "KSAA",
+   "rank": 36,
+   "score": 12.3,
+   "maps": 115,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 2,
+   "stages_won": 1,
+   "lans": [
+    "2025 Midseason Championship"
+   ],
+   "teammates": 14,
+   "reason": "3 seasons, 115 maps, 2 stage finals (1 won), 1 LAN incl. 2025 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+   "player_id": "2d50f1c4-8643-426c-9d5c-6f73a06e4bdc",
+   "name": "Rokit",
+   "rank": 37,
+   "score": 11.82,
+   "maps": 166,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 1,
+   "stages_won": 0,
+   "lans": [
+    "2025 Midseason Championship"
+   ],
+   "teammates": 18,
+   "reason": "3 seasons, 166 maps, 1 stage final, 1 LAN incl. 2025 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83",
+   "player_id": "e6fc96f5-c5a1-4d76-9086-17a0b9743d83",
+   "name": "cuFFa",
+   "rank": 38,
+   "score": 11.48,
+   "maps": 124,
+   "seasons": [
+    2025
+   ],
+   "stage_finals": 2,
+   "stages_won": 2,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship"
+   ],
+   "teammates": 5,
+   "reason": "1 season, 124 maps, 2 stage finals (2 won), 4 LANs incl. 2026 Midseason Championship",
+   "approved": false,
+   "note": ""
+  },
+  {
+   "key": "1ab8c25f-15f0-4707-acc9-4718c88157da",
+   "player_id": "1ab8c25f-15f0-4707-acc9-4718c88157da",
+   "name": "FDGod",
+   "rank": 39,
+   "score": 11.2,
+   "maps": 160,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "2025 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 17,
+   "reason": "3 seasons, 160 maps, 2 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+   "player_id": "7e9fe5f8-31af-495d-a53d-f18fb1f3cfb1",
+   "name": "sHockWave",
+   "rank": 40,
+   "score": 11.18,
+   "maps": 134,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 1,
+   "stages_won": 1,
+   "lans": [
+    "2025 Champions Clash",
+    "2025 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 13,
+   "reason": "2 seasons, 134 maps, 1 stage final (1 won), 3 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "826c2bd4-cb43-4b6c-90a9-21ee53b87bf9",
+   "player_id": "826c2bd4-cb43-4b6c-90a9-21ee53b87bf9",
+   "name": "seeker",
+   "rank": 41,
+   "score": 11.08,
+   "maps": 129,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 1,
+   "stages_won": 0,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 18,
+   "reason": "2 seasons, 129 maps, 1 stage final, 3 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "0bbd8bc1-3c85-464b-8133-64ea55125f98",
+   "player_id": "0bbd8bc1-3c85-464b-8133-64ea55125f98",
+   "name": "MER1T",
+   "rank": 42,
+   "score": 10.92,
+   "maps": 46,
+   "seasons": [
+    2024
+   ],
+   "stage_finals": 2,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 5,
+   "reason": "1 season, 46 maps, 2 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": false,
+   "note": ""
+  },
+  {
+   "key": "4ab4cc54-197d-4095-ab31-9456f02f0eaf",
+   "player_id": "4ab4cc54-197d-4095-ab31-9456f02f0eaf",
+   "name": "Someone",
+   "rank": 43,
+   "score": 10.92,
+   "maps": 46,
+   "seasons": [
+    2024
+   ],
+   "stage_finals": 2,
+   "stages_won": 2,
+   "lans": [
+    "2024 World Finals",
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 5,
+   "reason": "1 season, 46 maps, 2 stage finals (2 won), 5 LANs incl. Esports World Cup 2024",
+   "approved": false,
+   "note": ""
+  },
+  {
+   "key": "2acfb6df-f298-4b92-8ab8-2141635f28e4",
+   "player_id": "2acfb6df-f298-4b92-8ab8-2141635f28e4",
+   "name": "Tred",
+   "rank": 44,
+   "score": 10.52,
+   "maps": 126,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "2025 Champions Clash",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 27,
+   "reason": "3 seasons, 126 maps, 2 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+   "player_id": "9d58d137-dd65-43c8-9f84-1ae3d063a11d",
+   "name": "Khenail",
+   "rank": 45,
+   "score": 9.96,
+   "maps": 148,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "Esports World Cup 2024"
+   ],
+   "teammates": 20,
+   "reason": "3 seasons, 148 maps, 1 LAN incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
+   "player_id": "0a7555bc-8cd2-44bd-b1d5-df0c528dddea",
+   "name": "ZZZ",
+   "rank": 46,
+   "score": 9.52,
+   "maps": 126,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "Esports World Cup 2024"
+   ],
+   "teammates": 17,
+   "reason": "3 seasons, 126 maps, 1 LAN incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "27150b56-fd01-4385-84ee-11798be33cfe",
+   "player_id": "27150b56-fd01-4385-84ee-11798be33cfe",
+   "name": "Zorrow",
+   "rank": 47,
+   "score": 8.96,
+   "maps": 98,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "2025 World Finals"
+   ],
+   "teammates": 11,
+   "reason": "3 seasons, 98 maps, 1 LAN incl. 2025 World Finals",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+   "player_id": "9da88fbd-ebcb-4f7b-88ce-a79d6d55386d",
+   "name": "Crispy",
+   "rank": 48,
+   "score": 8.9,
+   "maps": 145,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [],
+   "teammates": 21,
+   "reason": "3 seasons, 145 maps",
+   "approved": false,
+   "note": ""
+  },
+  {
+   "key": "4a7be6fa-3e22-4584-b131-5444c608a385",
+   "player_id": "4a7be6fa-3e22-4584-b131-5444c608a385",
+   "name": "Bliss",
+   "rank": 49,
+   "score": 8.86,
+   "maps": 68,
+   "seasons": [
+    2025
+   ],
+   "stage_finals": 1,
+   "stages_won": 0,
+   "lans": [
+    "2024 World Finals",
+    "2025 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 5,
+   "reason": "1 season, 68 maps, 1 stage final, 4 LANs incl. Esports World Cup 2024",
+   "approved": false,
+   "note": ""
+  },
+  {
+   "key": "05e09403-6d01-4ea5-bd1e-3e9dabf8957b",
+   "player_id": "05e09403-6d01-4ea5-bd1e-3e9dabf8957b",
+   "name": "Dip",
+   "rank": 50,
+   "score": 8.8,
+   "maps": 90,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "2025 World Finals"
+   ],
+   "teammates": 11,
+   "reason": "3 seasons, 90 maps, 1 LAN incl. 2025 World Finals",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "81835e75-67cf-426c-90b5-70e537f4d9e6",
+   "player_id": "81835e75-67cf-426c-90b5-70e537f4d9e6",
+   "name": "TOPDRAGON",
+   "rank": 51,
+   "score": 8.7,
+   "maps": 35,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "2025 Midseason Championship",
+    "2025 World Finals",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 8,
+   "reason": "2 seasons, 35 maps, 4 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "5f60ca5b-92be-4673-b2c6-06623b111467",
+   "player_id": "5f60ca5b-92be-4673-b2c6-06623b111467",
+   "name": "Hadi",
+   "rank": 52,
+   "score": 8.64,
+   "maps": 57,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 1,
+   "stages_won": 1,
+   "lans": [
+    "2024 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 8,
+   "reason": "2 seasons, 57 maps, 1 stage final (1 won), 2 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+   "player_id": "a12c7612-d162-4a26-8053-ece68c1f67f7",
+   "name": "Backbone",
+   "rank": 53,
+   "score": 8.54,
+   "maps": 52,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 1,
+   "stages_won": 1,
+   "lans": [
+    "2024 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 10,
+   "reason": "2 seasons, 52 maps, 1 stage final (1 won), 2 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "bd7d5a35-03c8-45f8-8242-e3a63f5c33e7",
+   "player_id": "bd7d5a35-03c8-45f8-8242-e3a63f5c33e7",
+   "name": "knife",
+   "rank": 54,
+   "score": 8.34,
+   "maps": 42,
+   "seasons": [
+    2025
+   ],
+   "stage_finals": 1,
+   "stages_won": 0,
+   "lans": [
+    "2025 Midseason Championship",
+    "2026 Champions Clash",
+    "2026 Midseason Championship",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 4,
+   "reason": "1 season, 42 maps, 1 stage final, 4 LANs incl. Esports World Cup 2024",
+   "approved": false,
+   "note": ""
+  },
+  {
+   "key": "cc65de21-58d0-4534-81a2-7316a15cb2dd",
+   "player_id": "cc65de21-58d0-4534-81a2-7316a15cb2dd",
+   "name": "Taejong",
+   "rank": 55,
+   "score": 8.3,
+   "maps": 65,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "2025 Midseason Championship"
+   ],
+   "teammates": 16,
+   "reason": "3 seasons, 65 maps, 1 LAN incl. 2025 Midseason Championship",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "7928a18c-bbe9-403b-936a-d5df7355b6e3",
+   "player_id": "7928a18c-bbe9-403b-936a-d5df7355b6e3",
+   "name": "Haku",
+   "rank": 56,
+   "score": 7.92,
+   "maps": 71,
+   "seasons": [
+    2025,
+    2026
+   ],
+   "stage_finals": 1,
+   "stages_won": 0,
+   "lans": [
+    "2025 Champions Clash"
+   ],
+   "teammates": 8,
+   "reason": "2 seasons, 71 maps, 1 stage final, 1 LAN incl. 2025 Champions Clash",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "eb37ecfe-626d-4280-9d9c-316a449eddcf",
+   "player_id": "eb37ecfe-626d-4280-9d9c-316a449eddcf",
+   "name": "Zeb",
+   "rank": 57,
+   "score": 7.86,
+   "maps": 93,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [],
+   "teammates": 15,
+   "reason": "3 seasons, 93 maps",
+   "approved": false,
+   "note": ""
+  },
+  {
+   "key": "9609be75-e561-493f-b1f1-000c4517555a",
+   "player_id": "9609be75-e561-493f-b1f1-000c4517555a",
+   "name": "xzodyal",
+   "rank": 58,
+   "score": 7.74,
+   "maps": 137,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "Esports World Cup 2024"
+   ],
+   "teammates": 22,
+   "reason": "2 seasons, 137 maps, 1 LAN incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "5fe6035f-0dd7-4003-abd2-392aef32351f",
+   "player_id": "5fe6035f-0dd7-4003-abd2-392aef32351f",
+   "name": "SKAI",
+   "rank": 59,
+   "score": 7.72,
+   "maps": 86,
+   "seasons": [
+    2024,
+    2025
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [
+    "2024 World Finals",
+    "Esports World Cup 2024"
+   ],
+   "teammates": 16,
+   "reason": "2 seasons, 86 maps, 2 LANs incl. Esports World Cup 2024",
+   "approved": true,
+   "note": ""
+  },
+  {
+   "key": "a6f8e69e-9ca1-4466-809e-ca6ab1e5879d",
+   "player_id": "a6f8e69e-9ca1-4466-809e-ca6ab1e5879d",
+   "name": "Ryan",
+   "rank": 60,
+   "score": 7.6,
+   "maps": 80,
+   "seasons": [
+    2024,
+    2025,
+    2026
+   ],
+   "stage_finals": 0,
+   "stages_won": 0,
+   "lans": [],
+   "teammates": 18,
+   "reason": "3 seasons, 80 maps",
+   "approved": false,
+   "note": ""
+  }
+ ]
+}

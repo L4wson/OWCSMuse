@@ -15,11 +15,13 @@ unverifiable player. Both are served through the same routes.
 from __future__ import annotations
 
 import json
+import re
 import threading
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
+from urllib.parse import quote
 
 from ..resolve import fold
 
@@ -31,6 +33,21 @@ PLAYERS_PATH = Path("scope") / "grid_players.json"
 REVEAL_PER_CELL = 5
 SEARCH_LIMIT = 8
 ROLE_WORDS = {"tank": "Tank", "dps": "DPS", "support": "Support"}
+
+
+FACEIT_ID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+
+
+def muse_link(player_id: str) -> Optional[str]:
+    """The Muse page for a question about this player: `/?q=player:<id> record`, which the app asks on arrival.
+
+    By id, never by name: two players share "Danny", and a name would ask Muse which one. Only for a FACEIT id.
+    Muse's parser reads `player:<FACEIT id>` as exactly that player; a Liquipedia-born id (`lp:player:...`) is not an
+    id it accepts in a question, so those players get no link rather than one that might not resolve.
+    """
+    if not FACEIT_ID.match(player_id or ""):
+        return None
+    return "/?q=" + quote(f"player:{player_id} record", safe="")
 
 
 class UnknownPuzzle(LookupError):
@@ -186,7 +203,8 @@ class GridStore:
         if is_mixed(puzzle):
             # the reason and the can't-verify sentence are the clue's own, written when the puzzle was generated
             if answer is not None:
-                return {**out, "result": "correct", "uses_guess": True, "explanation": answer["why"], "link": None}
+                return {**out, "result": "correct", "uses_guess": True, "explanation": answer["why"],
+                        "link": muse_link(player_id)}
             side = puzzle["cells"][cell].get("unverifiable", {}).get(player_id)
             if side is not None:
                 clue = puzzle["rows"][row] if side == "row" else puzzle["cols"][col]
@@ -197,10 +215,8 @@ class GridStore:
             role = ROLE_WORDS.get(puzzle["rows"][row]["key"], puzzle["rows"][row]["label"])
             reason = puzzle["cols"][col]["explain"].format(maps=answer["maps"], role=role)
             source = "FACEIT map stats and series line-ups" if puzzle["cols"][col]["key"] == "all3" else "FACEIT map stats"
-            # no link: Muse has no player page and no prefilled-question URL, and a /q/<slug> link resolves only
-            # once that question has been asked. A link that might not resolve is worse than none.
             return {**out, "result": "correct", "uses_guess": True, "maps": answer["maps"],
-                    "explanation": f"{reason} ({source})", "link": None}
+                    "explanation": f"{reason} ({source})", "link": muse_link(player_id)}
         if player_id in puzzle["unverifiable"][col]:
             where = puzzle["cols"][col]["label"]
             return {**out, "result": "cannot_verify", "uses_guess": False,
@@ -223,10 +239,12 @@ class GridStore:
                     known = self._players.get(item[0])
                     return (-len(known.seasons) if known else 0, item[1]["name"].casefold(), item[0])
                 ranked = sorted(cell["answers"].items(), key=fame)
-                examples = [{"id": pid, "name": a["name"], "why": a["why"]} for pid, a in ranked[:REVEAL_PER_CELL]]
+                examples = [{"id": pid, "name": a["name"], "why": a["why"], "link": muse_link(pid)}
+                            for pid, a in ranked[:REVEAL_PER_CELL]]
             else:
                 ranked = sorted(cell["answers"].items(), key=lambda kv: (-kv[1]["maps"], kv[1]["name"].casefold(), kv[0]))
-                examples = [{"id": pid, "name": a["name"], "maps": a["maps"]} for pid, a in ranked[:REVEAL_PER_CELL]]
+                examples = [{"id": pid, "name": a["name"], "maps": a["maps"], "link": muse_link(pid)}
+                            for pid, a in ranked[:REVEAL_PER_CELL]]
             cells.append({"cell": cell["row"] * 3 + cell["col"], "count": len(cell["answers"]), "examples": examples})
         return {"puzzle": number, "per_cell": REVEAL_PER_CELL, "cells": cells}
 
